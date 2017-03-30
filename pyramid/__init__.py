@@ -20,6 +20,7 @@ if __PYRAMID_SETUP__:
     sys.stderr.write('Partial import of pyramid during the build process.' + os.linesep)
 else:
     __all__ = [
+        'arima',
         'utils'
     ]
 
