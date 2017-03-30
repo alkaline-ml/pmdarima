@@ -1,0 +1,25 @@
+sudo: required
+dist: trusty
+language: python
+
+before_install: source build_tools/travis/before_install.sh
+
+env:
+  global:
+    # Directory where tests are run from
+    - TEST_DIR=/tmp/pyramid
+    - OMP_NUM_THREADS=4
+    - OPENBLAS_NUM_THREADS=4
+  matrix:
+   - DISTRIB="conda" PYTHON_VERSION="2.7" SCIKIT_LEARN_VERSION="0.17.1" COVERAGE="true"
+   - DISTRIB="conda" PYTHON_VERSION="2.7" SCIKIT_LEARN_VERSION="0.18" COVERAGE="true"
+   - DISTRIB="conda" PYTHON_VERSION="3.5" SCIKIT_LEARN_VERSION="0.17.1" COVERAGE="true"
+   - DISTRIB="conda" PYTHON_VERSION="3.5" SCIKIT_LEARN_VERSION="0.18" COVERAGE="true"
+
+install: source build_tools/travis/install.sh
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 5 # give xvfb some time to start by sleeping for 5 seconds
+script: bash build_tools/travis/test_script.sh
+after_success: source build_tools/travis/after_success.sh
