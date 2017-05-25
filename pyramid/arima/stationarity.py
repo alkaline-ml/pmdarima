@@ -5,23 +5,14 @@
 # Tests for stationarity
 
 from __future__ import print_function, absolute_import, division
-from sklearn.utils.validation import column_or_1d
-from sklearn.externals import six
 import numpy as np
 
 __all__ = [
     'adf_test',
-    'check_test',
     'is_constant',
     'kpss_test',
     'pp_test'
 ]
-
-
-def check_test(test):
-    if not isinstance(test, six.string_types) or test not in VALID_TESTS:
-        raise ValueError('test must be a string in %r' % list(VALID_TESTS.keys()))
-    return VALID_TESTS[test]
 
 
 def is_constant(x):
