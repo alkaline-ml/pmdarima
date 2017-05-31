@@ -166,7 +166,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         raise ValueError('max p & q must be less than their starting values')
 
     # validate max_order
-    if max_order is not None:
+    if max_order is None:
         max_order = np.inf
     elif max_order < 0:
         raise ValueError('max_order must be None or a positive integer (>= 0)')
