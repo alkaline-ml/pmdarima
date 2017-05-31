@@ -25,3 +25,6 @@ def test_diff():
 def test_concatenate():
     assert_array_equal(c(1, np.zeros(3)), np.array([1.0, 0.0, 0.0, 0.0]))
     assert_array_equal(c([1], np.zeros(3)), np.array([1.0, 0.0, 0.0, 0.0]))
+    assert_array_equal(c(1), np.ones(1))
+    assert c() is None
+    assert_array_equal(c([1]), np.ones(1))

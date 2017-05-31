@@ -19,6 +19,22 @@ def c(*args):
     Python what R has already done so well, why not add a ``c`` function
     that wraps ``numpy.concatenate``?
     """
+    # R returns NULL for this
+    if not args:
+        return None
+
+    # just an array of len 1
+    if len(args) == 1:
+        element = args[0]
+
+        # if it's iterable, make it an array
+        if hasattr(element, '__iter__'):
+            return np.asarray(element)
+
+        # otherwise it's not iterable, put it in an array
+        return np.asarray([element])
+
+    # concat all
     return np.concatenate([a if hasattr(a, '__iter__') else [a] for a in args])
 
 

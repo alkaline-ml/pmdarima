@@ -34,7 +34,7 @@ if [[ "$DISTRIB" == "conda" ]]; then
 
     # Configure the conda environment and put it in the path using the
     # provided versions
-    conda create -n testenv --yes python=$PYTHON_VERSION numpy scipy coverage cython
+    conda create -n testenv --yes python=$PYTHON_VERSION numpy scipy coverage cython statsmodels
 
     source activate testenv
     if [[ "$PYTHON_VERSION" == "2.7" ]]; then
@@ -47,5 +47,5 @@ if [[ "$DISTRIB" == "conda" ]]; then
     # Install nose-timer via pip
     pip install nose-timer
 
-    python setup.py install;
+    python setup.py develop;
 fi

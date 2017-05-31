@@ -5,12 +5,25 @@
 # Common ARIMA functions
 
 from __future__ import absolute_import
-from sklearn.externals import six
+from sklearn.utils.validation import check_array, column_or_1d
+import numpy as np
+
+from ..utils import get_callable
+from ..utils.array import diff
+from .stationarity import KPSSTest, ADFTest, PPTest
 
 __all__ = [
     'frequency',
-    'get_callable'
+    'get_callable',
+    'is_constant',
+    'ndiffs'
 ]
+
+VALID_TESTS = {
+    'kpss': KPSSTest,
+    'adf': ADFTest,
+    'pp': PPTest
+}
 
 
 def frequency(x):
@@ -18,19 +31,72 @@ def frequency(x):
     return 1
 
 
-def get_callable(key, dct):
-    """Get the callable mapped by a key from a dictionary. This is
-    necessary for pickling (so we don't try to pickle an unbound method).
+def is_constant(x):
+    """Determine whether a vector is composed of all of the
+    same elements and nothing else.
 
     Parameters
     ----------
-    key : str
-        The key for the ``dct`` dictionary.
-
-    dct : dict
-        The dictionary of callables.
+    x : array-like, shape=(n_samples,)
+        The time series vector.
     """
-    fun = dct.get(key, None)
-    if not isinstance(key, six.string_types) or fun is None:  # ah, that's no fun :(
-        raise ValueError('key must be a string in one in %r, but got %r' % (dct, key))
-    return fun
+    return (x == x[0]).all()
+
+
+def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
+    """Functions to estimate the number of differences required to
+    make a given time series stationary.
+
+    Parameters
+    ----------
+    x : array-like, shape=(n_samples, [n_features])
+        The array to difference.
+
+    alpha : float, optional (default=0.05)
+        Level of the test
+
+    test : str, optional (default='kpss')
+        Type of unit root test to use in order to detect
+        stationarity.
+
+    max_d : int, optional (default=2)
+        Maximum number of non-seasonal differences allowed. Must
+        be a positive integer.
+    """
+    if max_d <= 0:
+        raise ValueError('max_d must be a positive integer')
+
+    # get the test
+    testfunc = get_callable(test, VALID_TESTS)(alpha, **kwargs).is_stationary
+    x = column_or_1d(check_array(x, ensure_2d=False, force_all_finite=True))
+    d = 0
+
+    # base case
+    if is_constant(x):
+        return d
+
+    # get initial diff
+    pval, dodiff = testfunc(x)
+
+    # if initially NaN, return 0
+    if np.isnan(pval):
+        return 0  # (d is zero, but this is more explicit to the reader)
+
+    # Begin loop.
+    while dodiff and d < max_d:
+        d += 1
+
+        # do differencing
+        x = diff(x)
+        if is_constant(x):
+            return d
+
+        # get new result
+        pval, dodiff = testfunc(x)
+
+        # if it's NaN now, take the last non-null one
+        if np.isnan(pval):
+            return d - 1
+
+    # when d >= max_d
+    return d
