@@ -7,7 +7,6 @@
 from __future__ import absolute_import
 from sklearn.utils.validation import check_array, column_or_1d
 import numpy as np
-import warnings
 
 from ..utils.array import c
 from ..utils import get_callable
@@ -34,7 +33,7 @@ VALID_TIES = {
 }
 
 
-def _regularize(x, y, ties, warn=False):
+def _regularize(x, y, ties):
     """Regularize the values, make them ordered and remove duplicates.
     If the ``ties`` parameter is explicitly set to 'ordered' then order
     is already assumed. Otherwise, the removal process will happen.
@@ -74,13 +73,12 @@ def _regularize(x, y, ties, warn=False):
         ux = np.unique(x)
         if ux.shape[0] < nx:
             # Do we want to warn for this?
-            if warn:
-                warnings.warn('collapsing to unique "x" values')
+            # warnings.warn('collapsing to unique "x" values')
 
             # vectorize this function to apply to each "cell" in the array
-            def tie_apply(func, u_val):
+            def tie_apply(f, u_val):
                 vals = y[x == u_val]  # mask y where x == the unique value
-                return func(vals)
+                return f(vals)
 
             # replace the duplicates in the y array with the "tie" func
             func = VALID_TIES.get(ties, lambda t: t)
@@ -91,7 +89,7 @@ def _regularize(x, y, ties, warn=False):
 
 
 def approx(x, y, xout, method='linear', rule=1, n=50, f=0, yleft=None,
-           yright=None, ties='mean', warn=False):
+           yright=None, ties='mean'):
     """Linear and Constant Interpolation"""
     if method not in VALID_APPROX:
         raise ValueError('method must be one of %r' % VALID_APPROX)
@@ -103,7 +101,7 @@ def approx(x, y, xout, method='linear', rule=1, n=50, f=0, yleft=None,
     method = get_callable(method, VALID_APPROX)  # not a callable, actually...
 
     # copy/regularize vectors
-    x, y = _regularize(x, y, ties, warn=warn)
+    x, y = _regularize(x, y, ties)
     nx = x.shape[0]
 
     # if len 1?

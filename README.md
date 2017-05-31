@@ -3,7 +3,7 @@
 ![Supported versions](https://img.shields.io/badge/python-2.7-blue.svg)
 ![Supported versions](https://img.shields.io/badge/python-3.5-blue.svg)
 
-# pyramid
+# pyramid :chart_with_upwards_trend:
 Pyramid is a no-nonsense statistical Python library with a solitary objective: bring R's
 [`auto.arima`](https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima)
 functionality to Python. Pyramid operates by wrapping

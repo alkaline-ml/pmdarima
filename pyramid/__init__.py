@@ -21,7 +21,6 @@ if __PYRAMID_SETUP__:
 else:
     __all__ = [
         'arima',
-        'stats',
         'utils'
     ]
 

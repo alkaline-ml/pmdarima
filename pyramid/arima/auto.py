@@ -28,11 +28,6 @@ __all__ = [
 VALID_CRITERIA = {'aic', 'bic'}
 
 
-def _residuals(a, p):
-    """Get the residuals"""
-    return a - p
-
-
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2, max_q=5, max_order=None,
                stationary=False, information_criterion='aic', alpha=0.05, test='kpss', n_jobs=1,
                start_params=None, trend='c', method="css-mle", transparams=True, solver='lbfgs',
@@ -188,8 +183,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     if is_constant(y):
         warnings.warn('Input time-series is completely constant; returning a (0, 0, 0) ARMA.')
         return ARIMA(order=(0, 0, 0), start_params=start_params, trend=trend, method=method,
-                    transparams=transparams, solver=solver, maxiter=maxiter, disp=disp,
-                    callback=callback, suppress_warnings=suppress_warnings)\
+                     transparams=transparams, solver=solver, maxiter=maxiter, disp=disp,
+                     callback=callback, suppress_warnings=suppress_warnings)\
             .fit(y, exogenous, **fit_args)
 
     # test ic, and use AIC if n <= 3
@@ -213,7 +208,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     xx = y.copy()
     if exogenous is not None:
         lm = LinearRegression().fit(exogenous, y)
-        xx = _residuals(y, lm.predict(exogenous))
+        xx = y - lm.predict(exogenous)
 
     # is the TS stationary?
     if stationary:
