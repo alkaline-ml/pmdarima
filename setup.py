@@ -6,7 +6,7 @@
 
 from __future__ import print_function, absolute_import, division
 from distutils.command.clean import clean
-# from setuptools import setup  # DO NOT use setuptools!!!!!!
+import subprocess
 import shutil
 import os
 import sys
@@ -36,6 +36,26 @@ VERSION = pyramid.__version__
 # get the installation requirements:
 with open('requirements.txt') as req:
     REQUIREMENTS = req.read().split(os.linesep)
+
+SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
+    'develop', 'release', 'bdist_egg', 'bdist_rpm',
+    'bdist_wininst', 'install_egg_info', 'build_sphinx',
+    'egg_info', 'easy_install', 'upload', 'bdist_wheel',
+    '--single-version-externally-managed'
+}
+
+if SETUPTOOLS_COMMANDS.intersection(sys.argv):
+    import setuptools
+
+    extra_setuptools_args = dict(
+        zip_safe=False,  # the package can run out of an .egg file
+        include_package_data=True,
+        extras_require={
+            'alldeps': REQUIREMENTS,
+        },
+    )
+else:
+    extra_setuptools_args = dict()
 
 
 # Custom clean command to remove build artifacts -- adopted from sklearn
@@ -93,6 +113,15 @@ def configuration(parent_package='', top_path=None):
     return config
 
 
+def generate_cython():
+    cwd = os.path.abspath(os.path.dirname(__file__))
+    print("Generating Cython modules")
+    p = subprocess.call([sys.executable, os.path.join(cwd, 'build_tools', 'cythonize.py'), DISTNAME], cwd=cwd)
+
+    if p != 0:
+        raise RuntimeError("Running cythonize failed!")
+
+
 def do_setup():
     # setup the config
     metadata = dict(name=DISTNAME,
@@ -104,6 +133,7 @@ def do_setup():
                     classifiers=['Intended Audience :: Science/Research',
                                  'Intended Audience :: Developers',
                                  'Intended Audience :: Scikit-learn users',
+                                 'Intended Audience :: R users',
                                  'Programming Language :: Python',
                                  'Topic :: Machine Learning',
                                  'Topic :: Software Development',
@@ -125,7 +155,10 @@ def do_setup():
                                                     'egg-info',
                                                     '--version',
                                                     'clean'))):
-        # For these actions, NumPy is not required
+        # For these actions, NumPy is not required, so we can import the
+        # setuptools module. However this is not preferable... the moment
+        # setuptools is imported, it monkey-patches distutils' setup and
+        # changes its behavior... (https://github.com/scikit-learn/scikit-learn/issues/1016)
         try:
             from setuptools import setup
         except ImportError:
@@ -139,6 +172,14 @@ def do_setup():
 
         # add the config to the metadata
         metadata['configuration'] = configuration
+
+        # build cython modules
+        print('Generating cython files')
+
+        cwd = os.path.abspath(os.path.dirname(__file__))
+        if not os.path.exists(os.path.join(cwd, 'PKG-INFO')):
+            # Generate Cython sources, unless building from source release
+            generate_cython()
 
     # call setup on the dict
     setup(**metadata)
