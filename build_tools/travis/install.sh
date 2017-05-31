@@ -47,5 +47,5 @@ if [[ "$DISTRIB" == "conda" ]]; then
     # Install nose-timer via pip
     pip install nose-timer
 
-    python setup.py install;
+    python setup.py develop;
 fi

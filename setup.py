@@ -37,6 +37,26 @@ VERSION = pyramid.__version__
 with open('requirements.txt') as req:
     REQUIREMENTS = req.read().split(os.linesep)
 
+SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
+    'develop', 'release', 'bdist_egg', 'bdist_rpm',
+    'bdist_wininst', 'install_egg_info', 'build_sphinx',
+    'egg_info', 'easy_install', 'upload', 'bdist_wheel',
+    '--single-version-externally-managed'
+}
+
+if SETUPTOOLS_COMMANDS.intersection(sys.argv):
+    import setuptools
+
+    extra_setuptools_args = dict(
+        zip_safe=False,  # the package can run out of an .egg file
+        include_package_data=True,
+        extras_require={
+            'alldeps': REQUIREMENTS,
+        },
+    )
+else:
+    extra_setuptools_args = dict()
+
 
 # Custom clean command to remove build artifacts -- adopted from sklearn
 class CleanCommand(clean):

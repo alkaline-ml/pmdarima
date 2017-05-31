@@ -4,4 +4,9 @@
 ![Supported versions](https://img.shields.io/badge/python-3.5-blue.svg)
 
 # pyramid
-Python's equivalent to R's auto.arima
+Pyramid is a no-nonsense statistical Python library with a solitary objective: bring R's
+[`auto.arima`](https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima)
+functionality to Python. Pyramid operates by wrapping
+[`statsmodels.tsa.arima_model`](https://github.com/statsmodels/statsmodels) and creating a more
+user-friendly estimator interface for programmers familiar with scikit-learn. Unfortunately, since
+statsmodels does not currently support seasonal ARIMA models, neither does Pyramid.
