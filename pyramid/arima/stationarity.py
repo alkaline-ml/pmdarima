@@ -29,9 +29,6 @@ __all__ = [
 
 
 class _BaseStationarityTest(six.with_metaclass(ABCMeta, BaseEstimator)):
-    def __init__(self, alpha=0.05):
-        self.alpha = alpha
-
     def _base_case(self, x):
         # if x is empty, return false so the other methods return False
         if (x is None) or (x.shape[0] == 0):
@@ -48,12 +45,22 @@ class _BaseStationarityTest(six.with_metaclass(ABCMeta, BaseEstimator)):
         return np.asarray(rows)
         # return np.array([x[1:], x[:m]])
 
+
+class _DifferencingStationarityTest(six.with_metaclass(ABCMeta, _BaseStationarityTest)):
+    """Provides the base class for stationarity tests such as the
+    Kwiatkowski–Phillips–Schmidt–Shin, Augmented Dickey-Fuller and the
+    Phillips–Perron tests. These tests are used to determine whether a time
+    series is stationary.
+    """
+    def __init__(self, alpha):
+        self.alpha = alpha
+
     @abstractmethod
     def is_stationary(self, x):
         """Test whether the time series is stationary"""
 
 
-class KPSSTest(_BaseStationarityTest):
+class KPSSTest(_DifferencingStationarityTest):
     """In econometrics, Kwiatkowski–Phillips–Schmidt–Shin (KPSS) tests are used
     for testing a null hypothesis that an observable time series is stationary
     around a deterministic trend (i.e. trend-stationary) against the alternative
@@ -138,7 +145,7 @@ class KPSSTest(_BaseStationarityTest):
         return pval[0], pval[0] < self.alpha
 
 
-class ADFTest(_BaseStationarityTest):
+class ADFTest(_DifferencingStationarityTest):
     """In statistics and econometrics, an augmented Dickey–Fuller test (ADF) tests
     the null hypothesis of a unit root is present in a time series sample. The alternative
     hypothesis is different depending on which version of the test is used, but is usually
@@ -236,7 +243,7 @@ class ADFTest(_BaseStationarityTest):
         return pval, pval < self.alpha
 
 
-class PPTest(_BaseStationarityTest):
+class PPTest(_DifferencingStationarityTest):
     """In statistics, the Phillips–Perron test (named after Peter C. B. Phillips
     and Pierre Perron) is a unit root test. It is used in time series analysis to test the null
     hypothesis that a time series is integrated of order 1. It builds on the Dickey–Fuller test

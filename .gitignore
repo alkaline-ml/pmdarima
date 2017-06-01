@@ -2,6 +2,9 @@
 .DS_Store
 .idea/
 
+# custom extension
+*.pmdpkl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

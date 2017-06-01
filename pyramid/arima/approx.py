@@ -98,7 +98,8 @@ def approx(x, y, xout, method='linear', rule=1, n=50, f=0, yleft=None,
     xout = c(xout).astype(np.float64)  # ensure double
 
     # check method
-    method = get_callable(method, VALID_APPROX)  # not a callable, actually...
+    method_key = method
+    method = get_callable(method_key, VALID_APPROX)  # not a callable, actually...
 
     # copy/regularize vectors
     x, y = _regularize(x, y, ties)
@@ -106,7 +107,7 @@ def approx(x, y, xout, method='linear', rule=1, n=50, f=0, yleft=None,
 
     # if len 1?
     if nx <= 1:
-        if method == 'linear':
+        if method_key == 'linear':
             raise ValueError('need at least two points to linearly interpolate')
         if nx == 0:
             raise ValueError('empty array')
