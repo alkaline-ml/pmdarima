@@ -11,6 +11,7 @@ from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_array, check_is_fitted
 from sklearn.utils.metaestimators import if_delegate_has_method
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
+from statsmodels import api as sm
 import warnings
 
 # The DTYPE we'll use for everything here. Since there are
@@ -59,6 +60,17 @@ class ARIMA(BaseEstimator):
         had past values subtracted), and is a non-negative integer. ``q`` is the order of the moving-
         average model, and is a non-negative integer.
 
+    seasonal_order : iterable or array-like, shape=(4,), optional (default=None)
+        The (P,D,Q,s) order of the seasonal component of the model for the
+        AR parameters, differences, MA parameters, and periodicity.
+        ``D`` must be an integer indicating the integration order of the process,
+        while ``P`` and ``Q`` may either be an integers indicating the AR and MA
+        orders (so that all lags up to those orders are included) or else
+        iterables giving specific AR and / or MA lags to include. ``S`` is an
+        integer giving the periodicity (number of periods in season), often it
+        is 4 for quarterly data or 12 for monthly data. Default is no seasonal
+        effect.
+
     start_params : array-like, optional (default=None)
         Starting parameters for ``ARMA(p,q)``.  If None, the default is given
         by ``ARMA._fit_start_params``.
@@ -68,7 +80,7 @@ class ARIMA(BaseEstimator):
         Uses the transformation suggested in Jones (1980).  If False,
         no checking for stationarity or invertibility is done.
 
-    method : str, one of {'css-mle','mle','css'}, optional (default='css-mle')
+    method : str, one of {'css-mle','mle','css'}, optional (default=None)
         This is the loglikelihood to maximize.  If "css-mle", the
         conditional sum of squares likelihood is maximized and its values
         are used as starting values for the computation of the exact
@@ -76,11 +88,15 @@ class ARIMA(BaseEstimator):
         is maximized via the Kalman Filter.  If "css" the conditional sum
         of squares likelihood is maximized.  All three methods use
         `start_params` as starting parameters.  See above for more
-        information.
+        information. If fitting a seasonal ARIMA, the default is 'lbfgs'
 
-    trend : str {'c','nc'}, optional (default='c')
-        Whether to include a constant or not.  'c' includes constant,
-        'nc' no constant.
+    trend : str or iterable, optional (default='c')
+        Parameter controlling the deterministic trend polynomial :math:`A(t)`.
+        Can be specified as a string where 'c' indicates a constant (i.e. a
+        degree zero component of the trend polynomial), 't' indicates a
+        linear trend with time, and 'ct' is both. Can also be specified as an
+        iterable defining the polynomial as in ``numpy.poly1d``, where
+        ``[1,1,0,1]`` would denote :math:`a + bt + ct^3`.
 
     solver : str or None, optional (default='lbfgs')
         Solver to be used.  The default is 'lbfgs' (limited memory
@@ -101,7 +117,7 @@ class ARIMA(BaseEstimator):
 
     callback : callable, optional (default=None)
         Called after each iteration as callback(xk) where xk is the current
-        parameter vector.
+        parameter vector. This is only used in non-seasonal ARIMA models.
 
     suppress_warnings : bool, optional (default=False)
         Many warnings might be thrown inside of statsmodels. If ``suppress_warnings``
@@ -123,11 +139,13 @@ class ARIMA(BaseEstimator):
     [1] https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average
     [2] http://www.statsmodels.org/0.6.1/generated/statsmodels.tsa.arima_model.ARIMA.html
     """
-    def __init__(self, order, start_params=None, trend='c', method="css-mle", transparams=True,
-                 solver='lbfgs', maxiter=50, disp=0, callback=None, suppress_warnings=False):
+    def __init__(self, order, seasonal_order=None, start_params=None, trend='c',
+                 method=None, transparams=True, solver='lbfgs', maxiter=50,
+                 disp=0, callback=None, suppress_warnings=False):
         super(ARIMA, self).__init__()
 
         self.order = order
+        self.seasonal_order = seasonal_order
         self.start_params = start_params
         self.trend = trend
         self.method = method
@@ -157,23 +175,43 @@ class ARIMA(BaseEstimator):
             exogenous = check_array(exogenous, ensure_2d=True, force_all_finite=False,
                                     copy=False, dtype=DTYPE)
 
-        # create and fit the statsmodels ARIMA
-        self.arima_ = _ARIMA(endog=y, order=self.order, missing='none', exog=exogenous, dates=None, freq=None)
-
         def _fit_wrapper():
-            return self.arima_.fit(start_params=self.start_params,
-                                   trend=self.trend, method=self.method,
-                                   transparams=self.transparams,
-                                   solver=self.solver, maxiter=self.maxiter,
-                                   disp=self.disp, callback=self.callback, **fit_args)
+            # these might change depending on which one
+            method = self.method
+
+            # if not seasonal:
+            if self.seasonal_order is None:
+                if method is None:
+                    method = "css-mle"
+
+                # create the statsmodels ARIMA
+                arima = _ARIMA(endog=y, order=self.order, missing='none',
+                               exog=exogenous, dates=None, freq=None)
+            else:
+                if method is None:
+                    method = 'lbfgs'
+
+                # create the SARIMAX
+                arima = sm.tsa.statespace.SARIMAX(endog=y, exog=exogenous, order=self.order,
+                                                  seasonal_order=self.seasonal_order, trend=self.trend,
+                                                  enforce_stationarity=self.transparams)
+
+            # actually fit the model, now...
+            return arima, arima.fit(start_params=self.start_params,
+                                    trend=self.trend, method=method,
+                                    transparams=self.transparams,
+                                    solver=self.solver, maxiter=self.maxiter,
+                                    disp=self.disp, callback=self.callback,
+                                    **fit_args)
+
 
         # sometimes too many warnings...
         if self.suppress_warnings:
             with warnings.catch_warnings(record=False):
                 warnings.simplefilter('ignore')
-                self.arima_res_ = _fit_wrapper()
+                self.arima_, self.arima_res_ = _fit_wrapper()
         else:
-            self.arima_res_ = _fit_wrapper()
+            self.arima_, self.arima_res_ = _fit_wrapper()
 
         return self
 
@@ -413,17 +451,6 @@ class ARIMA(BaseEstimator):
             The number of MA coefficients.
         """
         return self.arima_res_.k_ma
-
-    @if_delegate_has_method('arima_')
-    def loglike(self):
-        """Get the log-likelihood
-
-        Returns
-        -------
-        loglike : float
-            The log likelihood
-        """
-        return self.arima_.loglike
 
     @if_delegate_has_method('arima_res_')
     def maparams(self):

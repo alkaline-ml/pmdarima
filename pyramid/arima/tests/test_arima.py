@@ -48,7 +48,7 @@ abc = np.array([4.439524, 4.769823, 6.558708, 5.070508, 5.129288, 6.715065, 5.46
 
 
 def test_basic_arima():
-    arima = ARIMA(order=(0, 0, 0)).fit(y)
+    arima = ARIMA(order=(0, 0, 0), trend='c').fit(y)
 
     # test some of the attrs
     assert_almost_equal(arima.aic(), 11.201308403566909, decimal=5)
@@ -99,13 +99,13 @@ def test_basic_arima():
 
 def test_more_elaborate():
     # show we can fit this with a non-zero order
-    arima = ARIMA(order=(2, 1, 2)).fit(hr)
+    arima = ARIMA(order=(2, 1, 2)).fit(y=hr)
 
     # show we can get all these attrs without getting an error
     attrs = {
         'aic', 'arparams', 'arroots', 'bic', 'bse', 'df_model',
         'df_resid', 'hqic', 'k_ar', 'k_exog', 'k_ma', 'maparams',
-        'maroots', 'params', 'pvalues', 'resid', 'sigma2', 'loglike'
+        'maroots', 'params', 'pvalues', 'resid', 'sigma2'
     }
 
     # this just shows all of these attrs work.
@@ -115,7 +115,7 @@ def test_more_elaborate():
 
 def test_the_r_src():
     # this is the test the R code provides
-    fit = ARIMA(order=(2, 0, 1)).fit(abc)
+    fit = ARIMA(order=(2, 0, 1), trend='c').fit(abc)
 
     # the R code's AIC = ~135
     assert abs(135 - fit.aic()) < 1.0
@@ -132,7 +132,8 @@ def test_the_r_src():
     assert_almost_equal(params, np.array([5.0370, -0.6515, -0.2449, 0.8012]), decimal=2)
 
     # > fit = forecast::auto.arima(abc, max.p=5, max.d=5, max.q=5, max.order=100)
-    fit = auto_arima(abc, max_p=5, max_d=5, max_q=5, max_order=100, suppress_warnings=True)
+    fit = auto_arima(abc, max_p=5, max_d=5, max_q=5, max_order=100, seasonal=False,
+                     trend='c', suppress_warnings=True, error_action='ignore')
 
     # this differs from the R fit, but has a higher AIC, so the objective was achieved...
     assert abs(140 - fit.aic()) < 1.0
@@ -164,3 +165,6 @@ def test_errors():
 
     # show error for bad IC
     _assert_val_error(auto_arima, abc, information_criterion='bad-value')
+
+    # show bad m value
+    _assert_val_error(auto_arima, abc, m=0)

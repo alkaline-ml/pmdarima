@@ -11,9 +11,15 @@ from sklearn.linear_model import LinearRegression
 import numpy as np
 import warnings
 
-from .utils import ndiffs, is_constant
+from .utils import ndiffs, is_constant, nsdiffs
 from ..utils.array import diff
 from .arima import ARIMA
+
+# for python 3
+try:
+    xrange
+except NameError:
+    xrange = range
 
 # The DTYPE we'll use for everything here. Since there are
 # lots of spots where we define the DTYPE in a numpy array,
@@ -28,10 +34,12 @@ __all__ = [
 VALID_CRITERIA = {'aic', 'bic'}
 
 
-def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2, max_q=5, max_order=None,
-               stationary=False, information_criterion='aic', alpha=0.05, test='kpss', n_jobs=1,
-               start_params=None, trend='c', method="css-mle", transparams=True, solver='lbfgs',
-               maxiter=50, disp=0, callback=None, offset_test_args=None, suppress_warnings=False, **fit_args):
+def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2, max_q=5,
+               start_P=1, D=None, start_Q=1, max_P=2, max_D=1, max_Q=2, max_order=None, m=1,
+               seasonal=True, stationary=False, information_criterion='aic', alpha=0.05, test='kpss',
+               seasonal_test='ch', n_jobs=1, start_params=None, trend='c', method="css-mle", transparams=True,
+               solver='lbfgs', maxiter=50, disp=0, callback=None, offset_test_args=None, seasonal_test_args=None,
+               suppress_warnings=False, error_action='warn', **fit_args):
     """The ``AutoARIMA`` function seeks to identify the most optimal parameters for an ``ARIMA`` model,
     and returns a fitted ARIMA model. This function is based on the commonly-used R function,
     `forecase::auto.arima``[3].
@@ -63,17 +71,48 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         than ``start_p``.
 
     max_d : int, optional (default=2)
-        The maximum value of ``d``, inclusive, or the maximum number of non-seasonal
+        The maximum value of ``d``, or the maximum number of non-seasonal
         differences. Must be a positive integer greater than ``d``.
 
     max_q : int, optional (default=5)
         The maximum value of ``q``, inclusive. Must be a positive integer greater than
         ``start_q``.
 
+    start_P : int, optional (default=1)
+        The starting value of ``P``, the order of the auto-regressive portion
+        of the seasonal model.
+
+    D : int, optional (default=None)
+        The order of the seasonal differencing. If None (by default_, the value
+        will automatically be selected based on the results of the ``seasonal_test``.
+        Must be a positive integer or None.
+
+    start_Q : int, optional (default=1)
+        The starting value of ``Q``, the order of the moving-average portion
+        of the seasonal model.
+
+    max_P : int, optional (default=2)
+        The maximum value of ``P``, inclusive. Must be a positive integer greater
+        than ``start_P``.
+
+    max_D : int, optional (default=1)
+        The maximum value of ``D``. Must be a positive integer greater than ``D``.
+
+    max_Q : int, optional (default=2)
+        The maximum value of ``Q``, inclusive. Must be a positive integer greater
+        than ``start_Q``.
+
     max_order : int, optional (default=None)
         If the sum of ``p`` and ``q`` is >= ``max_order``, a model will *not* be
         fit with those parameters, but will progress to the next combination.
         Default is None, which means there are no constraints on maximum order.
+
+    m : int, optional (default=1)
+        The period for seasonal differencing. Typically, it is 4 for quarterly
+        data, 12 for monthly data, or 1 for annual data. Default is 1.
+
+    seasonal : bool, optional (default=True)
+        Whether to fit a seasonal ARIMA.
 
     stationary : bool, optional (default=False)
         Whether the time-series is stationary and ``d`` should be set to zero.
@@ -90,6 +129,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         Type of unit root test to use in order to detect
         stationarity.
 
+    seasonal_test : str, optional (default='ch')
+        This determines which seasonal unit root test is used.
+
     n_jobs : int, optional (default=1)
         The number of jobs to run if running in parallel.
 
@@ -102,7 +144,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         Uses the transformation suggested in Jones (1980).  If False,
         no checking for stationarity or invertibility is done.
 
-    method : str, one of {'css-mle','mle','css'}, optional (default='css-mle')
+    method : str, one of {'css-mle','mle','css'}, optional (default=None)
         This is the loglikelihood to maximize.  If "css-mle", the
         conditional sum of squares likelihood is maximized and its values
         are used as starting values for the computation of the exact
@@ -110,11 +152,15 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         is maximized via the Kalman Filter.  If "css" the conditional sum
         of squares likelihood is maximized.  All three methods use
         `start_params` as starting parameters.  See above for more
-        information.
+        information. If fitting a seasonal ARIMA, the default is 'lbfgs'
 
-    trend : str {'c','nc'}, optional (default='c')
-        Whether to include a constant or not.  'c' includes constant,
-        'nc' no constant.
+    trend : str or iterable, optional (default='c')
+        Parameter controlling the deterministic trend polynomial :math:`A(t)`.
+        Can be specified as a string where 'c' indicates a constant (i.e. a
+        degree zero component of the trend polynomial), 't' indicates a
+        linear trend with time, and 'ct' is both. Can also be specified as an
+        iterable defining the polynomial as in ``numpy.poly1d``, where
+        ``[1,1,0,1]`` would denote :math:`a + bt + ct^3`.
 
     solver : str or None, optional (default='lbfgs')
         Solver to be used.  The default is 'lbfgs' (limited memory
@@ -135,14 +181,21 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 
     callback : callable, optional (default=None)
         Called after each iteration as callback(xk) where xk is the current
-        parameter vector.
+        parameter vector. This is only used in non-seasonal ARIMA models.
 
     offset_test_args : dict, optional (default=None)
         The args to pass to the constructor of the offset (``d``) test.
 
+    seasonal_test_args : dict, optional (default=None)
+        The args to pass to the constructor of the seasonal offset (``D``) test.
+
     suppress_warnings : bool, optional (default=False)
         Many warnings might be thrown inside of statsmodels. If ``suppress_warnings``
         is True, all of these warnings will be squelched.
+
+    error_action : str, optional (default='warn')
+        If unable to fit an ARIMA due to stationarity issues, whether to warn ('warn'),
+        raise the ``ValueError`` ('raise') or ignore ('ignore').
 
     **fit_args : dict, optional (default=None)
         A dictionary of keyword arguments to pass to the :func:`ARIMA.fit` method.
@@ -155,10 +208,10 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     [3] https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima
     """
     # validate start/max points
-    if any(_ < 0 for _ in (max_p, max_q, start_p, start_q)):
-        raise ValueError('starting and max p & q values must be positive integers (>= 0)')
-    if max_p <= start_p or max_q <= start_q:
-        raise ValueError('max p & q must be less than their starting values')
+    if any(_ < 0 for _ in (max_p, max_q, max_P, max_Q, start_p, start_q, start_P, start_Q)):
+        raise ValueError('starting and max p, q, P & Q values must be positive integers (>= 0)')
+    if max_p <= start_p or max_q <= start_q or max_P <= start_P or max_Q <= start_Q:
+        raise ValueError('max p, q, P & Q must be less than their starting values')
 
     # validate max_order
     if max_order is None:
@@ -166,14 +219,24 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     elif max_order < 0:
         raise ValueError('max_order must be None or a positive integer (>= 0)')
 
-    # validate d
-    if max_d < 0:
-        raise ValueError('max_d must be a positive integer (>= 0)')
-    if d is not None:
-        if d < 0:
-            raise ValueError('d must be None or a positive integer (>= 0)')
-        if d > max_d:
-            raise ValueError('if explicitly defined, d must be <= max_d')
+    # validate d & D
+    for _d, _max_d in ((d, max_d), (D, max_D)):
+        if _max_d < 0:
+            raise ValueError('max_d & max_D must be positive integers (>= 0)')
+        if _d is not None:
+            if _d < 0:
+                raise ValueError('d & D must be None or a positive integer (>= 0)')
+            if _d > _max_d:
+                raise ValueError('if explicitly defined, d & D must be <= max_d & <= max_D, respectively')
+
+    # check on m
+    if m < 1:
+        raise ValueError('m must be a positive integer (> 0)')
+
+    # validate error action
+    actions = {'warn', 'raise', 'ignore', None}
+    if error_action not in actions:
+        raise ValueError('error_action must be one of %r, but got %r' % (actions, error_action))
 
     # copy array
     y = check_array(y, ensure_2d=False, dtype=DTYPE, copy=True, force_all_finite=True)
@@ -182,10 +245,10 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     # check for constant data
     if is_constant(y):
         warnings.warn('Input time-series is completely constant; returning a (0, 0, 0) ARMA.')
-        return ARIMA(order=(0, 0, 0), start_params=start_params, trend=trend, method=method,
-                     transparams=transparams, solver=solver, maxiter=maxiter, disp=disp,
-                     callback=callback, suppress_warnings=suppress_warnings)\
-            .fit(y, exogenous, **fit_args)
+        return _fit_arima(y, xreg=exogenous, order=(0, d, 0), seasonal_order=None, start_params=start_params,
+                          trend=trend, method=method, transparams=transparams, solver=solver,
+                          maxiter=maxiter, disp=disp, callback=callback, fit_params=fit_args,
+                          suppress_warnings=suppress_warnings, error_action=error_action)
 
     # test ic, and use AIC if n <= 3
     if information_criterion not in VALID_CRITERIA:
@@ -204,6 +267,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     max_p = min(max_p, np.floor(n_samples / 3))
     max_q = min(max_q, np.floor(n_samples / 3))
 
+    # if it's not seasonal, we can avoid multiple 'if not is None' comparisons
+    # later by just using this shortcut (hack):
+    if not seasonal:
+        D = m = -1
+
     # choose the order of differencing
     xx = y.copy()
     if exogenous is not None:
@@ -212,32 +280,35 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 
     # is the TS stationary?
     if stationary:
-        # D = 0
-        d = 0
+        d = D = 0
 
-    # now for seasonality. Since we cannot use P, D, Q, m in the ARIMA (dernit statsmodels),
-    # we have to treat everything as non-seasonal. But we'll go thru the logical process
-    # as if seasonality were a factor, in case they ever build it in.
-    m = 1  # this will be removed if m is a parameter
+    # now for seasonality
     if m == 1:
-        # D = max_P = max_Q = 0
-        pass  # if seasonality ever works..
-    # elif D is None:  # we don't have a D yet
-    #     D = nsdiffs(xx, m=m, test=seasonal_test, max_D=max_D)
-    #     todo: check on exogenous not null after differencing
-    #     pass
+        D = max_P = max_Q = 0
 
-    # if D > 0:
-    #     dx = diff(xx, differences=D, lag=m)
-    # else:
-    dx = xx
+    # m must be > 1 for nsdiffs
+    elif D is None:  # we don't have a D yet and we need one (seasonal)
+        seasonal_test_args = seasonal_test_args if seasonal_test_args is not None else dict()
+        D = nsdiffs(xx, m=m, test=seasonal_test, max_D=max_D, **seasonal_test_args)
+        if D > 0 and exogenous is not None:
+            diffex = diff(exogenous, differences=D, lag=m)
+            # check for constance on any column
+            if np.apply_along_axis(is_constant, arr=diffex, axis=0).any():
+                D -= 1
+
+    # D might still be None if not seasonal. Py 3 will throw and error for that
+    # unless we explicitly check for ``seasonal``
+    if D > 0:
+        dx = diff(xx, differences=D, lag=m)
+    else:
+        dx = xx
 
     # difference the exogenous matrix
-    diffex = exogenous
     if exogenous is not None:
-        # if D > 0
-        #     diffex = diff(exogenous, differences=D, lag=m)
-        pass
+        if D > 0:
+            diffex = diff(exogenous, differences=D, lag=m)
+        else:
+            diffex = exogenous
 
     # determine/set the order of differencing by estimating the number of
     # orders it would take in order to make the TS stationary.
@@ -253,61 +324,68 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                 d -= 1
 
     # check differences (do we want to warn?...)
-    # if D >= 2:
-    #     warnings.warn("Having more than one seasonal differences is not recommended. "
-    #                   "Please consider using only one seasonal difference.")
-    # elif (D + d > 2):
-    #     warnings.warn("Having 3 or more differencing operations is not recommended. "
-    #                   "Please consider reducing the total number of differences.")
+    if error_action == 'warn' and not suppress_warnings:
+        if D >= 2:
+            warnings.warn("Having more than one seasonal differences is not recommended. "
+                          "Please consider using only one seasonal difference.")
+        elif (D + d > 2 or d > 2):  # if D is -1, this will be off, so we include the OR
+            warnings.warn("Having 3 or more differencing operations is not recommended. "
+                          "Please consider reducing the total number of differences.")
 
     if d > 0:
         dx = diff(dx, differences=d, lag=1)
 
     # check for constance
     if is_constant(dx):
-        if exogenous is None:
-            # if D > 0
-            #     fit = ARIMA(order=(0, d, 0), seasonal=(0, D, 0), ...)
-            # elif ...
-            if d < 2:
-                fit = ARIMA(order=(0, d, 0), start_params=start_params, trend=trend, method=method,
-                            transparams=transparams, solver=solver, maxiter=maxiter, disp=disp,
-                            callback=callback, suppress_warnings=suppress_warnings)\
-                    .fit(y, exogenous, **fit_args)
-            else:
-                raise ValueError('data follow a simple polynomial and are not suitable for ARIMA modeling')
-        else:  # perfect regression
-            # if D > 0
-            #     fit = ARIMA(order=(0, d, 0), seasonal=(0, D, 0), ...)
-            # else:
-            fit = ARIMA(order=(0, d, 0), start_params=start_params, trend=trend, method=method,
-                        transparams=transparams, solver=solver, maxiter=maxiter, disp=disp,
-                        callback=callback, suppress_warnings=suppress_warnings)\
-                .fit(y, exogenous, **fit_args)
+        if exogenous is None and not (D > 0 or d < 2):
+            raise ValueError('data follow a simple polynomial and are not suitable for ARIMA modeling')
 
-        return fit
+        # perfect regression
+        ssn = None if not seasonal else (0, D, 0, m)
+        return _fit_arima(y, xreg=exogenous, order=(0, d, 0), seasonal_order=ssn, start_params=start_params,
+                          trend=trend, method=method, transparams=transparams, solver=solver,
+                          maxiter=maxiter, disp=disp, callback=callback, fit_params=fit_args,
+                          suppress_warnings=suppress_warnings, error_action=error_action)
 
     # seasonality issues
-    if m > 1:  # won't be until seasonal ARIMA implemented
-        # if max_P > 0:
-        #     max_p = min(max_p, m - 1)
-        # if max_Q > 0:
-        #     max_q = min(max_q, m - 1)
+    if m > 1:
+        if max_P > 0:
+            max_p = min(max_p, m - 1)
+        if max_Q > 0:
+            max_q = min(max_q, m - 1)
         pass
+
+    # generate the set of (p, q, P, Q) FIRST, since it is contingent on whether or not
+    # the user is interested in a seasonal ARIMA result. This will reduce the search space
+    # for non-seasonal ARIMA models.
+    def generator():
+        # loop p, q. Make sure to loop at +1 interval,
+        # since max_{p|q} is inclusive.
+        if seasonal:
+            return (
+                ((p, d, q), (P, D, Q, m))
+                for p in xrange(start_p, max_p + 1)
+                for q in xrange(start_q, max_q + 1)
+                for P in xrange(start_P, max_P + 1)
+                for Q in xrange(start_Q, max_Q + 1)
+                if p + q + P + Q <= max_order
+            )
+
+        # otherwise it's not seasonal, and we don't need the seasonal pieces
+        return (
+            ((p, d, q), None)
+            for p in xrange(start_p, max_p + 1)
+            for q in xrange(start_q, max_q + 1)
+            if p + q <= max_order
+        )
 
     # get results in parallel
     all_res = Parallel(n_jobs=n_jobs)(
-        delayed(_fit_arima)(y, xreg=exogenous, order=(p, d, q), start_params=start_params,
-                            trend=trend, method=method, transparams=transparams,
+        delayed(_fit_arima)(y, xreg=exogenous, order=order, seasonal_order=seasonal_order,
+                            start_params=start_params, trend=trend, method=method, transparams=transparams,
                             solver=solver, maxiter=maxiter, disp=disp, callback=callback,
-                            fit_params=fit_args, suppress_warnings=suppress_warnings)
-
-        # loop p, q. Make sure to loop at +1 interval,
-        # since max_{p|q} is inclusive. Also, if we ever
-        # add seasonality here, this will grow a bit in the loop
-        for p in range(start_p, max_p + 1)
-        for q in range(start_q, max_q + 1)
-        if p + q <= max_order)
+                            fit_params=fit_args, suppress_warnings=suppress_warnings, error_action=error_action)
+        for order, seasonal_order in generator())
 
     # filter the non-successful ones
     filtered = [m for m in all_res if m is not None]
@@ -320,15 +398,23 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     return sorted_res[0]
 
 
-def _fit_arima(x, xreg, order, start_params, trend, method, transparams,
-               solver, maxiter, disp, callback, fit_params, suppress_warnings):
+def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, transparams,
+               solver, maxiter, disp, callback, fit_params, suppress_warnings,
+               error_action):
     try:
-        return ARIMA(order=order, start_params=start_params,
+        return ARIMA(order=order, seasonal_order=seasonal_order, start_params=start_params,
                      trend=trend, method=method, transparams=transparams,
                      solver=solver, maxiter=maxiter, disp=disp,
                      callback=callback, suppress_warnings=suppress_warnings)\
             .fit(x, exogenous=xreg, **fit_params)
 
     # for non-stationarity errors, return None
-    except ValueError:
+    except ValueError as v:
+        if error_action == 'warn':
+            warnings.warn('Unable to fit ARIMA for order=(%i, %i, %i); data is likely non-stationary. '
+                          '(if you do not want to see these warnings, run with error_action="ignore")'
+                          % (order[0], order[1], order[2]))
+        elif error_action == 'raise':
+            raise v
+        # otherwise it's 'ignore'
         return None
