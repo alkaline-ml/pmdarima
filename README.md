@@ -7,11 +7,13 @@
 Pyramid is a no-nonsense statistical Python library with a solitary objective: bring R's
 [`auto.arima`](https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima)
 functionality to Python. Pyramid operates by wrapping
-[`statsmodels.tsa.ARIMA`](https://github.com/statsmodels/statsmodels) and
+[`statsmodels.tsa.ARIMA`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/arima_model.py) and
 [`statsmodels.tsa.statespace.SARIMX`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/statespace/sarimax.py)
 into one estimator class and creating a more user-friendly estimator interface for programmers familiar with scikit-learn.
 
 ### Usage:
+
+For an easy, quick-start example, see [examples/](doc/examples/quick_start_example.ipynb). Alternatively, read on:
 
 ```python
 import numpy as np
@@ -103,5 +105,4 @@ Warnings:
 [1] Covariance matrix calculated using the outer product of gradients (complex-step).
 [2] Covariance matrix is singular or near-singular, with condition number 2.84e+24. Standard errors may be unstable.
 ```
-
 
