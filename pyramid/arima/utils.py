@@ -69,17 +69,12 @@ def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
     if max_D <= 0:
         raise ValueError('max_D must be a positive integer')
 
-    # get the test
+    # get the test - this validates m internally
     testfunc = get_callable(test, VALID_STESTS)(m, **kwargs).estimate_seasonal_differencing_term
     x = column_or_1d(check_array(x, ensure_2d=False, force_all_finite=True))
 
     if is_constant(x):
         return 0
-
-    if m == 1:
-        raise ValueError('non-seasonal data (m=1)')
-    elif m < 1:
-        raise ValueError('m must be a positive integer (> 0)')
 
     D = 0
     dodiff = testfunc(x)

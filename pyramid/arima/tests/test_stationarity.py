@@ -93,6 +93,7 @@ def test_ndiffs_corner_cases():
 
 
 def test_nsdiffs_corner_cases():
+    # max_D must be a positive int
     assert_raises(ValueError, nsdiffs, austres, m=2, max_D=0)
 
     # assert 0 for constant

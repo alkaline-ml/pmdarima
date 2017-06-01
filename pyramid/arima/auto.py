@@ -245,7 +245,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     # check for constant data
     if is_constant(y):
         warnings.warn('Input time-series is completely constant; returning a (0, 0, 0) ARMA.')
-        return _fit_arima(y, xreg=exogenous, order=(0, d, 0), seasonal_order=None, start_params=start_params,
+        return _fit_arima(y, xreg=exogenous, order=(0, 0, 0), seasonal_order=None, start_params=start_params,
                           trend=trend, method=method, transparams=transparams, solver=solver,
                           maxiter=maxiter, disp=disp, callback=callback, fit_params=fit_args,
                           suppress_warnings=suppress_warnings, error_action=error_action)
@@ -264,8 +264,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     # adjust max p, q -- R code:
     # max.p <- min(max.p, floor(serieslength/3))
     # max.q <- min(max.q, floor(serieslength/3))
-    max_p = min(max_p, np.floor(n_samples / 3))
-    max_q = min(max_q, np.floor(n_samples / 3))
+    max_p = int(min(max_p, np.floor(n_samples / 3)))
+    max_q = int(min(max_q, np.floor(n_samples / 3)))
 
     # if it's not seasonal, we can avoid multiple 'if not is None' comparisons
     # later by just using this shortcut (hack):

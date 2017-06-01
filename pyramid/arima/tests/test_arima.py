@@ -2,9 +2,11 @@
 from __future__ import absolute_import
 from pyramid.arima import ARIMA, auto_arima
 from pyramid.arima.auto import _fmt_warning_str
+from nose.tools import assert_raises
 import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
 from numpy.random import RandomState
+import warnings
 
 # initialize the random state
 rs = RandomState(42)
@@ -205,6 +207,28 @@ def test_with_seasonality():
 
     # ensure summary still works
     seasonal_fit.summary()
+
+    # show we can estimate D even when it's not there...
+    auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
+               start_P=0, seasonal=True, n_jobs=1, d=1, D=None,
+               error_action='ignore', suppress_warnings=True)
+
+
+def test_corner_cases():
+    assert_raises(ValueError, auto_arima, wineind, error_action='some-bad-string')
+
+    # things that produce warnings
+    with warnings.catch_warnings(record=False):
+        warnings.simplefilter('ignore')
+
+        # show a constant result will result in a quick fit
+        _ = auto_arima(np.ones(10), suppress_warnings=True)
+
+        # show that with <= 3 samples, using a non-aic metric reverts to AIC
+        try:
+            _ = auto_arima(np.arange(3), information_criterion='bic', seasonal=False, suppress_warnings=True)
+        except ValueError:  # this happens because it can't fit such small data...
+            pass
 
 
 def test_warning_str_fmt():
