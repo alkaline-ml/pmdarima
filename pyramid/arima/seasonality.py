@@ -23,6 +23,10 @@ from .stationarity import _BaseStationarityTest
 # make this an absolute import.
 from pyramid.arima._arima import C_pop_A
 
+__all__ = [
+    'CHTest'
+]
+
 
 class _SeasonalStationarityTest(six.with_metaclass(ABCMeta, _BaseStationarityTest)):
     """Provides the base class for seasonal differencing tests such as the
@@ -180,88 +184,3 @@ class CHTest(_SeasonalStationarityTest):
             return int(chstat > 65.44445)
 
         return int(chstat > 0.269 * (m ** 0.928))
-
-
-class OCSBTest(_SeasonalStationarityTest):
-    def __init__(self, m):
-        super(OCSBTest, self).__init__(m=m)
-
-    @staticmethod
-    def _calc_ocsb_crit_val(m):
-        log_m = np.log(m)
-        return -0.2937411 * np.exp(-0.2850853 * (log_m - 0.7656451) + (-0.05983644) *
-                                   ((log_m - 0.7656451) ** 2)) - 1.652202
-
-    def estimate_seasonal_differencing_term(self, x):
-        if not self._base_case(x):
-            return 0
-
-        # ensure vector
-        x = column_or_1d(check_array(x, ensure_2d=False, dtype=np.float64, force_all_finite=True))
-        n = x.shape[0]
-        m = int(self.m)
-
-        if n < 2 * m + 5:
-            return 0
-
-        # Compute (1-B)(1-B^m)y_t
-        seas_diff_series = diff(x, lag=m, differences=1)
-        diff_series = diff(seas_diff_series, lag=1, differences=1)
-
-        # Compute (1-B^m)y_{t-1} (we know it's > len 1)
-        y_one = diff(x[1:], lag=m, differences=1)
-
-        # Compute (1-B)y_{t-m}
-        y_two = diff(x[m:], lag=1, differences=1)
-
-        # make all series of the same length and matching time periods
-        y_one = y_one[m:-1]
-        y_two = y_two[1:-m]
-        diff_series = diff_series[m + 1:]
-        contingent_series = diff_series.copy()
-
-        # this is hideous, but it's seriously cleaner than the way the R code does it...
-        # https://github.com/robjhyndman/forecast/blob/30308a4e314ff29338291462e81bf68ff0c5f86d/R/newarima2.R#L839
-        xreg = np.vstack([y_one, y_two]).T  # now they're columns
-
-        orders = [
-            ((3, 0, 0), (1, 0, 0, m)),
-            ((3, 0, 0), (0, 0, 0, m)),
-            ((2, 0, 0), (0, 0, 0, m)),
-            ((1, 0, 0), (0, 0, 0, m))
-        ]
-
-        successful_arima = False
-        for order, seasonal_order in orders:
-            try:
-                regression = ARIMA(order=order, seasonal_order=seasonal_order).fit(y=diff_series, exogenous=xreg)
-                successful_arima = True
-                break
-            except ValueError:
-                pass
-
-        # if we were unable to fit a successful ARIMA, do this part:
-        if not successful_arima:
-            try:
-                regression = OLS(contingent_series, exog=xreg - 1).fit()
-            except:
-                raise ValueError('The OCSB regression model cannot be estimated')
-
-            residuals = contingent_series - regression.predict(xreg - 1)
-            meanratio = np.abs(residuals).mean() / np.abs(contingent_series).mean()
-
-            if np.isnan(meanratio) or meanratio < 1e-10:
-                return 0
-
-            # Proceed to do OCSB test on the linear model.
-            y_two_t = regression.tvalues[1]  # the t-value for the y_two feature
-            if not np.isfinite(y_two_t):
-                return 1
-            return int(y_two_t >= self._calc_ocsb_crit_val(m))
-
-        else:
-            # do the OCSB test on the ARIMA model
-            # todo - under construction...
-            # https://github.com/robjhyndman/forecast/blob/30308a4e314ff29338291462e81bf68ff0c5f86d/R/newarima2.R#L886
-
-            return 0
