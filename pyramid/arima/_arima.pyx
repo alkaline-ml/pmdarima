@@ -102,7 +102,6 @@ cdef DOUBLE approx1(DOUBLE v, np.ndarray[DOUBLE, ndim=1, mode='c'] x,
         return (y[i] * f1 if f1 != 0.0 else 0.0) + (y[j] * f2 if f2 != 0.0 else 0.0)
 
 
-
 def C_Approx(np.ndarray[DOUBLE, ndim=1, mode='c'] x,
              np.ndarray[DOUBLE, ndim=1, mode='c'] y,
              np.ndarray[DOUBLE, ndim=1, mode='c'] xout,
@@ -127,3 +126,15 @@ def C_Approx(np.ndarray[DOUBLE, ndim=1, mode='c'] x,
 
     # return
     return yout
+
+
+def C_pop_A(np.ndarray[INTP, ndim=2, mode='c'] A,
+            np.ndarray[INTP, ndim=1, mode='c'] frecob):
+
+    cdef i, j, n = frecob.shape[0]
+
+    j = 0
+    for i in range(n):
+        if frecob[i] == 1:
+            A[i, j] = 1
+            j += 1

@@ -3,8 +3,9 @@
 from __future__ import absolute_import
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
 from pyramid.arima.stationarity import ADFTest, PPTest, KPSSTest
-from pyramid.arima.utils import ndiffs
-from pyramid.utils.array import c
+from pyramid.arima.seasonality import CHTest
+from pyramid.arima.utils import ndiffs, nsdiffs
+from nose.tools import assert_raises
 import numpy as np
 
 austres = np.array([13067.3, 13130.5, 13198.4, 13254.2, 13303.7, 13353.9,
@@ -69,3 +70,35 @@ def test_adf():
     assert not is_sig
 
     # OLS in statsmodels seems unstable compared to the R code?...
+
+
+def test_sd_test():
+    val = CHTest._sd_test(austres, 3)
+
+    # R code produces 0.07956102
+    assert_almost_equal(val, 0.07956102, decimal=7)
+    assert CHTest(m=3).estimate_seasonal_differencing_term(austres) == 0
+
+    # what if freq > 12?
+    assert_almost_equal(CHTest._sd_test(austres, 24), 4.134289, decimal=5)
+    assert CHTest(m=24).estimate_seasonal_differencing_term(austres) == 0
+    assert CHTest(m=52).estimate_seasonal_differencing_term(austres) == 0
+
+    # this won't even go thru because n < 2 * m + 5:
+    assert CHTest(m=365).estimate_seasonal_differencing_term(austres) == 0
+
+
+def test_ndiffs_corner_cases():
+    assert_raises(ValueError, ndiffs, austres, max_d=0)
+
+
+def test_nsdiffs_corner_cases():
+    # max_D must be a positive int
+    assert_raises(ValueError, nsdiffs, austres, m=2, max_D=0)
+
+    # assert 0 for constant
+    assert nsdiffs([1, 1, 1, 1], m=2) == 0
+
+    # show fails for m <= 1
+    assert_raises(ValueError, nsdiffs, austres, m=1)
+    assert_raises(ValueError, nsdiffs, austres, m=0)
