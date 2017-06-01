@@ -11,7 +11,7 @@ import numpy as np
 from ..utils import get_callable
 from ..utils.array import diff
 from .stationarity import KPSSTest, ADFTest, PPTest
-from .seasonality import OCSBTest, CHTest
+from .seasonality import CHTest  #, OCSBTest
 
 __all__ = [
     'get_callable',
