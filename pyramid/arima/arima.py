@@ -11,8 +11,11 @@ from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_array, check_is_fitted
 from sklearn.utils.metaestimators import if_delegate_has_method
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
+from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 from statsmodels import api as sm
+import datetime
 import warnings
+import os
 
 # The DTYPE we'll use for everything here. Since there are
 # lots of spots where we define the DTYPE in a numpy array,
@@ -204,19 +207,17 @@ class ARIMA(BaseEstimator):
                                     disp=self.disp, callback=self.callback,
                                     **fit_args)
 
-
         # sometimes too many warnings...
         if self.suppress_warnings:
             with warnings.catch_warnings(record=False):
                 warnings.simplefilter('ignore')
-                self.arima_, self.arima_res_ = _fit_wrapper()
+                _, self.arima_res_ = _fit_wrapper()
         else:
-            self.arima_, self.arima_res_ = _fit_wrapper()
+            _, self.arima_res_ = _fit_wrapper()
 
         return self
 
-    def predict(self, n_periods=10, exogenous=None, alpha=0.05,
-                include_std_err=False, include_conf_int=False):
+    def predict(self, n_periods=10, exogenous=None):
         """Generate predictions (forecasts) ``n_periods`` in the future. Note that unless
         ``include_std_err`` or ``include_conf_int`` are True, only the forecast
         array will be returned (otherwise, a tuple with the corresponding elements
@@ -246,32 +247,21 @@ class ARIMA(BaseEstimator):
         -------
         forecasts : array-like, shape=(n_periods,)
             The array of fore-casted values.
-
-        stderr : array-like, shape=(n_periods,)
-            The array of standard errors (NOTE this is only returned
-            if ``include_std_err`` is True).
-
-        conf_int : array-like, shape=(n_periods, 2)
-            The array of confidence intervals (NOTE this is only returned
-            if ``include_conf_int`` is True).
         """
         check_is_fitted(self, 'arima_res_')
 
-        # use the results wrapper to predict so it injects its own params
-        # (also if I was 0, ARMA will not have a forecast method natively)
-        f, s, c = self.arima_res_.forecast(steps=n_periods, exog=exogenous, alpha=alpha)
+        # ARIMA predicts differently...
+        if self.seasonal_order is None:
+            # use the results wrapper to predict so it injects its own params
+            # (also if I was 0, ARMA will not have a forecast method natively)
+            f, _, _ = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
+        else:
+            f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
 
         # different variants of the stats someone might want returned...
-        if include_std_err and include_conf_int:
-            return f, s, c
-        elif include_conf_int:
-            return f, c
-        elif include_std_err:
-            return f, s
         return f
 
-    def fit_predict(self, y, exogenous=None, n_periods=10, alpha=0.05,
-                    include_std_err=False, include_conf_int=False, **fit_args):
+    def fit_predict(self, y, exogenous=None, n_periods=10, **fit_args):
         """Fit an ARIMA to a vector, ``y``, of observations, and then
         generate predictions.
 
@@ -300,8 +290,56 @@ class ARIMA(BaseEstimator):
             Any keyword args to pass to the fit method.
         """
         self.fit(y, exogenous, **fit_args)
-        return self.predict(n_periods=n_periods, exogenous=exogenous, alpha=alpha,
-                            include_std_err=include_std_err, include_conf_int=include_conf_int)
+        return self.predict(n_periods=n_periods, exogenous=exogenous)
+
+    def _get_pickle_hash_file(self):
+        # Mmmm, pickle hash...
+        return '.%s-%i.pmdpkl' % (str(datetime.datetime.now()).replace(' ', '_'), hash(self))
+
+    def __getstate__(self):
+        """I am being pickled..."""
+        loc = self.__dict__.get('tmp_pkl_', None)
+
+        # if this already contains a pointer to a "saved state" model,
+        # delete that model and replace it with a new one
+        if loc is not None:
+            os.unlink(loc)
+
+        # get the new location for where to save the results
+        new_loc = self._get_pickle_hash_file()
+        cwd = os.path.abspath(os.getcwd())
+        new_loc = os.path.join(cwd, new_loc)
+
+        # save the results - but only if it's fit...
+        if hasattr(self, 'arima_res_'):
+            # statsmodels result views work by caching metrics. If they
+            # are not cached prior to pickling, we might hit issues. This is
+            # a bug documented here: https://github.com/statsmodels/statsmodels/issues/3290
+            _ = self.arima_res_.summary()
+            self.arima_res_.save(fname=new_loc, remove_data=False)
+
+            # point to the location of the saved MLE model
+            self.tmp_pkl_ = new_loc
+
+        return self.__dict__
+
+    def __setstate__(self, state):
+        # I am being unpickled...
+        self.__dict__ = state
+
+        # re-set the results class
+        loc = state.get('tmp_pkl_', None)
+        if loc is not None:
+            self.arima_res_ = TimeSeriesModelResults.load(loc)
+
+        return self
+
+    def _clear_cached_state(self):
+        # when fit in an auto-arima, a lot of cached .pmdpkl files
+        # are generated if fit in parallel... this removes the tmp file
+        loc = self.__dict__.get('tmp_pkl_', None)
+        if loc is not None:
+            os.unlink(loc)
 
     @if_delegate_has_method('arima_res_')
     def aic(self):
@@ -377,19 +415,6 @@ class ARIMA(BaseEstimator):
         return self.arima_res_.bse
 
     @if_delegate_has_method('arima_res_')
-    def df_model(self):
-        """Get the model degrees of freedom:
-
-            k_exog + k_trend + k_ar + k_ma
-
-        Returns
-        -------
-        df_model : array-like
-            The degrees of freedom.
-        """
-        return self.arima_res_.df_model
-
-    @if_delegate_has_method('arima_res_')
     def df_resid(self):
         """Get the residual degrees of freedom:
 
@@ -417,40 +442,6 @@ class ARIMA(BaseEstimator):
             The HQIC
         """
         return self.arima_res_.hqic
-
-    @if_delegate_has_method('arima_res_')
-    def k_ar(self):
-        """Get the number of AR coefficients in the model.
-
-        Returns
-        -------
-        k_ar : int
-            The number of AR coefficients.
-        """
-        return self.arima_res_.k_ar
-
-    @if_delegate_has_method('arima_res_')
-    def k_exog(self):
-        """Get the number of exogenous variables included in the model. Does not
-        include the constant.
-
-        Returns
-        -------
-        k_exog : int
-            The number of features in the exogenous variables.
-        """
-        return self.arima_res_.k_exog
-
-    @if_delegate_has_method('arima_res_')
-    def k_ma(self):
-        """Get the number of MA coefficients in the model.
-
-        Returns
-        -------
-        k_ma : int
-            The number of MA coefficients.
-        """
-        return self.arima_res_.k_ma
 
     @if_delegate_has_method('arima_res_')
     def maparams(self):
@@ -518,18 +509,3 @@ class ARIMA(BaseEstimator):
             The model residuals.
         """
         return self.arima_res_.resid
-
-    @if_delegate_has_method('arima_res_')
-    def sigma2(self):
-        """Get the variance of the residuals. If the model is fit by 'css',
-        sigma2 = ssr/nobs, where ssr is the sum of squared residuals. If
-        the model is fit by 'mle', then sigma2 = 1/nobs * sum(v^2 / F)
-        where v is the one-step forecast error and F is the forecast error
-        variance.
-
-        Returns
-        -------
-        sigma2 : float
-            The variance of the residuals
-        """
-        return self.arima_res_.sigma2

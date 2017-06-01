@@ -4,7 +4,8 @@ from __future__ import absolute_import
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
 from pyramid.arima.stationarity import ADFTest, PPTest, KPSSTest
 from pyramid.arima.seasonality import CHTest
-from pyramid.arima.utils import ndiffs
+from pyramid.arima.utils import ndiffs, nsdiffs
+from nose.tools import assert_raises
 import numpy as np
 
 austres = np.array([13067.3, 13130.5, 13198.4, 13254.2, 13303.7, 13353.9,
@@ -85,3 +86,18 @@ def test_sd_test():
 
     # this won't even go thru because n < 2 * m + 5:
     assert CHTest(m=365).estimate_seasonal_differencing_term(austres) == 0
+
+
+def test_ndiffs_corner_cases():
+    assert_raises(ValueError, ndiffs, austres, max_d=0)
+
+
+def test_nsdiffs_corner_cases():
+    assert_raises(ValueError, nsdiffs, austres, m=2, max_D=0)
+
+    # assert 0 for constant
+    assert nsdiffs([1, 1, 1, 1], m=2) == 0
+
+    # show fails for m <= 1
+    assert_raises(ValueError, nsdiffs, austres, m=1)
+    assert_raises(ValueError, nsdiffs, austres, m=0)

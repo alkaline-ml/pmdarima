@@ -37,7 +37,7 @@ VALID_CRITERIA = {'aic', 'bic'}
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2, max_q=5,
                start_P=1, D=None, start_Q=1, max_P=2, max_D=1, max_Q=2, max_order=None, m=1,
                seasonal=True, stationary=False, information_criterion='aic', alpha=0.05, test='kpss',
-               seasonal_test='ch', n_jobs=1, start_params=None, trend='c', method="css-mle", transparams=True,
+               seasonal_test='ch', n_jobs=1, start_params=None, trend='c', method=None, transparams=True,
                solver='lbfgs', maxiter=50, disp=0, callback=None, offset_test_args=None, seasonal_test_args=None,
                suppress_warnings=False, error_action='warn', **fit_args):
     """The ``AutoARIMA`` function seeks to identify the most optimal parameters for an ``ARIMA`` model,
@@ -380,12 +380,13 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         )
 
     # get results in parallel
+    gen = generator()  # the combos we need to fit
     all_res = Parallel(n_jobs=n_jobs)(
         delayed(_fit_arima)(y, xreg=exogenous, order=order, seasonal_order=seasonal_order,
                             start_params=start_params, trend=trend, method=method, transparams=transparams,
                             solver=solver, maxiter=maxiter, disp=disp, callback=callback,
                             fit_params=fit_args, suppress_warnings=suppress_warnings, error_action=error_action)
-        for order, seasonal_order in generator())
+        for order, seasonal_order in gen)
 
     # filter the non-successful ones
     filtered = [m for m in all_res if m is not None]
@@ -395,7 +396,13 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 
     # sort by the criteria
     sorted_res = sorted(filtered, key=(lambda model: getattr(model, information_criterion)()), reverse=True)
-    return sorted_res[0]
+    best = sorted_res[0]
+
+    # remove all the cached .pmdpkl files...
+    for model in sorted_res:
+        model._clear_cached_state()
+
+    return best
 
 
 def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, transparams,
@@ -411,10 +418,16 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, tran
     # for non-stationarity errors, return None
     except ValueError as v:
         if error_action == 'warn':
-            warnings.warn('Unable to fit ARIMA for order=(%i, %i, %i); data is likely non-stationary. '
-                          '(if you do not want to see these warnings, run with error_action="ignore")'
-                          % (order[0], order[1], order[2]))
+            warnings.warn(_fmt_warning_str(order, seasonal_order))
         elif error_action == 'raise':
             raise v
         # otherwise it's 'ignore'
         return None
+
+
+def _fmt_warning_str(order, seasonal_order):
+    """This is just so we can test that the string will format even if we don't want the warnings in the tests"""
+    return ('Unable to fit ARIMA for order=(%i, %i, %i)%s; data is likely non-stationary. '
+            '(if you do not want to see these warnings, run with error_action="ignore")'
+            % (order[0], order[1], order[2], '' if seasonal_order is None else ' seasonal_order=(%i, %i, %i, %i)'
+               % (seasonal_order[0], seasonal_order[1], seasonal_order[2], seasonal_order[3])))

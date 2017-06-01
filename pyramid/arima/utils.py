@@ -41,10 +41,11 @@ def is_constant(x):
     x : array-like, shape=(n_samples,)
         The time series vector.
     """
+    x = column_or_1d(x)
     return (x == x[0]).all()
 
 
-def nsdiffs(x, m, max_D=2, test='ocsb', **kwargs):
+def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
     """Functions to estimate the number of seasonal differences
     required to make a given time series stationary.
 
@@ -61,7 +62,7 @@ def nsdiffs(x, m, max_D=2, test='ocsb', **kwargs):
         Maximum number of seasonal differences allowed. Must
         be a positive integer.
 
-    test : str, optional (default='ocsb')
+    test : str, optional (default='ch')
         Type of unit root test to use in order to detect
         seasonality.
     """
@@ -69,7 +70,7 @@ def nsdiffs(x, m, max_D=2, test='ocsb', **kwargs):
         raise ValueError('max_D must be a positive integer')
 
     # get the test
-    testfunc = get_callable(test, VALID_TESTS)(m, **kwargs).estimate_seasonal_differencing_term
+    testfunc = get_callable(test, VALID_STESTS)(m, **kwargs).estimate_seasonal_differencing_term
     x = column_or_1d(check_array(x, ensure_2d=False, force_all_finite=True))
 
     if is_constant(x):
