@@ -203,6 +203,9 @@ def test_with_seasonality():
     # show that we can forecast even after the pickling (this was fit in parallel)
     seasonal_fit.predict(n_periods=10)
 
+    # ensure summary still works
+    seasonal_fit.summary()
+
 
 def test_warning_str_fmt():
     order = (1, 1, 1)

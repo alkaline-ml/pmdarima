@@ -509,3 +509,8 @@ class ARIMA(BaseEstimator):
             The model residuals.
         """
         return self.arima_res_.resid
+
+    @if_delegate_has_method('arima_res_')
+    def summary(self):
+        """Get a summary of the ARIMA model"""
+        return self.arima_res_.summary()
