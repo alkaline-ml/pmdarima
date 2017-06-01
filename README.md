@@ -12,7 +12,7 @@ functionality to Python. Pyramid operates by wrapping
 into one estimator class and creating a more user-friendly estimator interface for programmers familiar with scikit-learn.
 
 <br/>
-![Example output](/doc/img/quick_start_output.png)
+![Example output](/doc/img/quick_start_output.png?raw=true)
 <br/>
 
 
