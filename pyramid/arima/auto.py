@@ -39,7 +39,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                seasonal=True, stationary=False, information_criterion='aic', alpha=0.05, test='kpss',
                seasonal_test='ch', n_jobs=1, start_params=None, trend='c', method=None, transparams=True,
                solver='lbfgs', maxiter=50, disp=0, callback=None, offset_test_args=None, seasonal_test_args=None,
-               suppress_warnings=False, error_action='warn', **fit_args):
+               suppress_warnings=False, error_action='warn', trace=False, **fit_args):
     """The ``AutoARIMA`` function seeks to identify the most optimal parameters for an ``ARIMA`` model,
     and returns a fitted ARIMA model. This function is based on the commonly-used R function,
     `forecase::auto.arima``[3].
@@ -197,6 +197,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         If unable to fit an ARIMA due to stationarity issues, whether to warn ('warn'),
         raise the ``ValueError`` ('raise') or ignore ('ignore').
 
+    trace : bool, optional (default=False)
+        Whether to print status on the fits.
+
     **fit_args : dict, optional (default=None)
         A dictionary of keyword arguments to pass to the :func:`ARIMA.fit` method.
 
@@ -248,7 +251,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         return _fit_arima(y, xreg=exogenous, order=(0, 0, 0), seasonal_order=None, start_params=start_params,
                           trend=trend, method=method, transparams=transparams, solver=solver,
                           maxiter=maxiter, disp=disp, callback=callback, fit_params=fit_args,
-                          suppress_warnings=suppress_warnings, error_action=error_action)
+                          suppress_warnings=suppress_warnings, trace=trace, error_action=error_action)
 
     # test ic, and use AIC if n <= 3
     if information_criterion not in VALID_CRITERIA:
@@ -345,7 +348,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         return _fit_arima(y, xreg=exogenous, order=(0, d, 0), seasonal_order=ssn, start_params=start_params,
                           trend=trend, method=method, transparams=transparams, solver=solver,
                           maxiter=maxiter, disp=disp, callback=callback, fit_params=fit_args,
-                          suppress_warnings=suppress_warnings, error_action=error_action)
+                          suppress_warnings=suppress_warnings, trace=trace, error_action=error_action)
 
     # seasonality issues
     if m > 1:
@@ -385,7 +388,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         delayed(_fit_arima)(y, xreg=exogenous, order=order, seasonal_order=seasonal_order,
                             start_params=start_params, trend=trend, method=method, transparams=transparams,
                             solver=solver, maxiter=maxiter, disp=disp, callback=callback,
-                            fit_params=fit_args, suppress_warnings=suppress_warnings, error_action=error_action)
+                            fit_params=fit_args, suppress_warnings=suppress_warnings,
+                            trace=trace, error_action=error_action)
         for order, seasonal_order in gen)
 
     # filter the non-successful ones
@@ -406,8 +410,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 
 
 def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, transparams,
-               solver, maxiter, disp, callback, fit_params, suppress_warnings,
+               solver, maxiter, disp, callback, fit_params, suppress_warnings, trace,
                error_action):
+    if trace:
+        print('Fitting ARIMA: %s' % _fmt_order_info(order, seasonal_order))
+
     try:
         return ARIMA(order=order, seasonal_order=seasonal_order, start_params=start_params,
                      trend=trend, method=method, transparams=transparams,
@@ -425,9 +432,14 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, tran
         return None
 
 
+def _fmt_order_info(order, seasonal_order):
+    return 'order=(%i, %i, %i)%s' \
+           % (order[0], order[1], order[2], '' if seasonal_order is None else ' seasonal_order=(%i, %i, %i, %i)'
+              % (seasonal_order[0], seasonal_order[1], seasonal_order[2], seasonal_order[3]))
+
+
 def _fmt_warning_str(order, seasonal_order):
     """This is just so we can test that the string will format even if we don't want the warnings in the tests"""
-    return ('Unable to fit ARIMA for order=(%i, %i, %i)%s; data is likely non-stationary. '
+    return ('Unable to fit ARIMA for %s; data is likely non-stationary. '
             '(if you do not want to see these warnings, run with error_action="ignore")'
-            % (order[0], order[1], order[2], '' if seasonal_order is None else ' seasonal_order=(%i, %i, %i, %i)'
-               % (seasonal_order[0], seasonal_order[1], seasonal_order[2], seasonal_order[3])))
+            % _fmt_order_info(order, seasonal_order))
