@@ -11,10 +11,6 @@ functionality to Python. Pyramid operates by wrapping
 [`statsmodels.tsa.statespace.SARIMX`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/statespace/sarimax.py)
 into one estimator class and creating a more user-friendly estimator interface for programmers familiar with scikit-learn.
 
-<br/>
-![Example output](https://raw.githubusercontent.com/tgsmith61591/pyramid/develop/doc/img/quick_start_output.png?raw=true)
-<br/>
-
 
 ### Usage:
 
