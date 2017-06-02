@@ -413,14 +413,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, transparams,
                solver, maxiter, disp, callback, fit_params, suppress_warnings, trace,
                error_action):
-    if trace:
-        print('Fitting ARIMA: %s' % _fmt_order_info(order, seasonal_order))
-
     try:
-        return ARIMA(order=order, seasonal_order=seasonal_order, start_params=start_params,
-                     trend=trend, method=method, transparams=transparams,
-                     solver=solver, maxiter=maxiter, disp=disp,
-                     callback=callback, suppress_warnings=suppress_warnings)\
+        fit = ARIMA(order=order, seasonal_order=seasonal_order, start_params=start_params,
+                    trend=trend, method=method, transparams=transparams,
+                    solver=solver, maxiter=maxiter, disp=disp,
+                    callback=callback, suppress_warnings=suppress_warnings)\
             .fit(x, exogenous=xreg, **fit_params)
 
     # for non-stationarity errors, return None
@@ -430,8 +427,16 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, tran
         elif error_action == 'raise':
             raise v
         # otherwise it's 'ignore'
-        return None
+        fit = None
 
+    # do trace
+    if trace:
+        print('Fit ARIMA: %s; AIC=%.3f, BIC=%.3f'
+              % (_fmt_order_info(order, seasonal_order),
+                 fit.aic() if fit is not None else np.nan,
+                 fit.bic() if fit is not None else np.nan))
+
+    return fit
 
 def _fmt_order_info(order, seasonal_order):
     return 'order=(%i, %i, %i)%s' \
