@@ -135,12 +135,12 @@ def test_the_r_src():
     params = fit.params()
     assert_almost_equal(params, np.array([5.0370, -0.6515, -0.2449, 0.8012]), decimal=2)
 
-    # > fit = forecast::auto.arima(abc, max.p=5, max.d=5, max.q=5, max.order=100)
+    # > fit = forecast::auto.arima(abc, max.p=5, max.d=5, max.q=5, max.order=100, stepwise=F)
     fit = auto_arima(abc, max_p=5, max_d=5, max_q=5, max_order=100, seasonal=False,
                      trend='c', suppress_warnings=True, error_action='ignore')
 
-    # this differs from the R fit, but has a higher AIC, so the objective was achieved...
-    assert abs(140 - fit.aic()) < 1.0
+    # this differs from the R fit with a slightly higher AIC...
+    assert abs(137 - fit.aic()) < 1.0  # R's is 135.28
 
 
 def test_errors():

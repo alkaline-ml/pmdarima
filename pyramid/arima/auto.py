@@ -398,8 +398,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         raise ValueError('No ARIMAs were successfully fit. It is likely your data is non-stationary. '
                          'Please induce stationarity or try a different range of model order params.')
 
-    # sort by the criteria
-    sorted_res = sorted(filtered, key=(lambda model: getattr(model, information_criterion)()), reverse=True)
+    # sort by the criteria - lower is better for both AIC and BIC
+    # (https://stats.stackexchange.com/questions/81427/aic-guidelines-in-model-selection)
+    sorted_res = sorted(filtered, key=(lambda model: getattr(model, information_criterion)()))
     best = sorted_res[0]
 
     # remove all the cached .pmdpkl files...
