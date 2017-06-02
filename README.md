@@ -12,6 +12,9 @@ functionality to Python. Pyramid operates by wrapping
 into one estimator class and creating a more user-friendly estimator interface for programmers familiar with scikit-learn.
 
 
+![Example image](doc/examples/quick_start_output.png)
+
+
 ### Usage:
 
 For an easy, quick-start example, see [examples/](doc/examples/quick_start_example.ipynb). Alternatively, read on:
