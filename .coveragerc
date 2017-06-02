@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = pyramid
+include = */pyramid/*
+omit =
+    */setup.py
+    */_build_utils/*

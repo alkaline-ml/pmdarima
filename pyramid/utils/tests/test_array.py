@@ -1,7 +1,9 @@
 
 from __future__ import absolute_import
 from pyramid.utils.array import diff, c
+from pyramid.utils import get_callable
 from numpy.testing import assert_array_equal
+from nose.tools import assert_raises
 import numpy as np
 
 x = np.arange(5)
@@ -28,3 +30,13 @@ def test_concatenate():
     assert_array_equal(c(1), np.ones(1))
     assert c() is None
     assert_array_equal(c([1]), np.ones(1))
+
+
+def test_corner_in_callable():
+    # test the ValueError in the get-callable method
+    assert_raises(ValueError, get_callable, 'fake-key', {'a': 1})
+
+
+def test_corner():
+    # fails because lag < 1
+    assert_raises(ValueError, diff, x=x, lag=0)
