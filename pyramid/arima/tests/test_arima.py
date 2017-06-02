@@ -255,11 +255,19 @@ def test_with_seasonality():
 
     # show we can run a random search much faster! and while we're at it,
     # make the function return all the values
+    auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
+               start_P=0, seasonal=True, n_jobs=1, d=1, D=None,
+               error_action='ignore', suppress_warnings=True,
+               random=True, random_state=42, return_valid_fits=True,
+               n_fits=5)  # only fit 5
+
+    # can we fit the same thing with an exogenous array of predictors?
+    # also make it stationary and make sure that works...
     all_res = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
                          start_P=0, seasonal=True, n_jobs=1, d=1, D=None,
-                         error_action='ignore', suppress_warnings=True,
+                         error_action='ignore', suppress_warnings=True, stationary=True,
                          random=True, random_state=42, return_valid_fits=True,
-                         n_fits=5)  # only fit 5
+                         n_fits=5, exogenous=rs.rand(wineind.shape[0], 4))  # only fit 2
 
     # show it is a list
     assert hasattr(all_res, '__iter__')
@@ -291,8 +299,11 @@ def test_corner_cases():
         # except ValueError:  # this happens because it can't fit such small data...
         #     pass
 
-        # show we fail for n_iter < 0
-        assert_raises(ValueError, auto_arima, np.ones(10), random=True, n_fits=-1)
+    # show we fail for n_iter < 0
+    assert_raises(ValueError, auto_arima, np.ones(10), random=True, n_fits=-1)
+
+    # show if max* < start* it breaks:
+    assert_raises(ValueError, auto_arima, np.ones(10), start_p=5, max_p=0)
 
 
 def test_warning_str_fmt():
