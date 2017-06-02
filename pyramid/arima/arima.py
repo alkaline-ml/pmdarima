@@ -17,11 +17,8 @@ import datetime
 import warnings
 import os
 
-# The DTYPE we'll use for everything here. Since there are
-# lots of spots where we define the DTYPE in a numpy array,
-# it's easier to define as a global for this module.
-import numpy as np
-DTYPE = np.float64
+# DTYPE for arrays
+from ..compat.numpy import DTYPE
 
 __all__ = [
     'ARIMA'
@@ -160,7 +157,9 @@ class ARIMA(BaseEstimator):
         self.suppress_warnings = suppress_warnings
 
     def fit(self, y, exogenous=None, **fit_args):
-        """Fit an ARIMA to a vector, ``y``, of observations.
+        """Fit an ARIMA to a vector, ``y``, of observations with an
+        optional matrix of ``exogenous`` variables.
+
 
         Parameters
         ----------
@@ -169,7 +168,8 @@ class ARIMA(BaseEstimator):
 
         exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
             An optional array of exogenous variables. This should not
-            include a constant or trend.
+            include a constant or trend. If provided, these variables are
+            used as additional features in the regression operation.
         """
         y = check_array(y, ensure_2d=False, force_all_finite=False, copy=True, dtype=DTYPE)
 
@@ -192,9 +192,9 @@ class ARIMA(BaseEstimator):
                                exog=exogenous, dates=None, freq=None)
 
                 # there's currently a bug in the ARIMA model where on pickling
-                # it tries to acquire an attribute called 'self.{dates|freq|missing}', but it
-                # does not exist! It's passed up to TimeSeriesModel in base, but
-                # is never set. So we inject one here so as not to get an AttributeError later.
+                # it tries to acquire an attribute called 'self.{dates|freq|missing}', but they
+                # do not exist as class attrs! They're passed up to TimeSeriesModel in base, but
+                # are never set. So we inject them here so as not to get an AttributeError later.
                 # https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/arima_model.py#L994
                 for attr, val in (('dates', None), ('freq', None), ('missing', 'none')):
                     if not hasattr(arima, attr):
@@ -243,16 +243,8 @@ class ARIMA(BaseEstimator):
 
         exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
             An optional array of exogenous variables. This should not
-            include a constant or trend.
-
-        alpha : float
-            The confidence intervals for the forecasts are (1 - alpha) %
-
-        include_std_err : bool, optional (default=False)
-            Whether to return the array of standard errors.
-
-        include_conf_int : bool, optional (default=False)
-            Whether to return the array of confidence intervals.
+            include a constant or trend. If provided, these variables are
+            used as additional features in the regression operation.
 
 
         Returns
@@ -268,7 +260,7 @@ class ARIMA(BaseEstimator):
                 raise ValueError('When an ARIMA is fit with an exogenous array, '
                                  'it must be provided one for predictions.')
             else:
-                exogenous = check_array(exogenous, ensure_2d=True, force_all_finite=True, dtype=np.float64)
+                exogenous = check_array(exogenous, ensure_2d=True, force_all_finite=True, dtype=DTYPE)
                 if exogenous.shape[0] != n_periods:
                     raise ValueError('Exogenous array dims (n_rows) != n_periods')
 
@@ -284,29 +276,23 @@ class ARIMA(BaseEstimator):
         return f
 
     def fit_predict(self, y, exogenous=None, n_periods=10, **fit_args):
-        """Fit an ARIMA to a vector, ``y``, of observations, and then
-        generate predictions.
+        """Fit an ARIMA to a vector, ``y``, of observations with an
+        optional matrix of ``exogenous`` variables, and then generate
+        predictions.
+
 
         Parameters
         ----------
         y : array-like, shape=(n_samples,)
             The time-series on which to fit the ARIMA.
 
-        exogenous : array-like, optional (default=None)
+        exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
             An optional array of exogenous variables. This should not
-            include a constant or trend.
+            include a constant or trend. If provided, these variables are
+            used as additional features in the regression operation.
 
         n_periods : int, optional (default=10)
             The number of periods in the future to forecast.
-
-        alpha : float
-            The confidence intervals for the forecasts are (1 - alpha) %
-
-        include_std_err : bool, optional (default=False)
-            Whether to return the array of standard errors.
-
-        include_conf_int : bool, optional (default=False)
-            Whether to return the array of confidence intervals.
 
         fit_args : dict, optional (default=None)
             Any keyword args to pass to the fit method.
@@ -314,7 +300,8 @@ class ARIMA(BaseEstimator):
         self.fit(y, exogenous, **fit_args)
         return self.predict(n_periods=n_periods, exogenous=exogenous)
 
-    def _get_cache_folder(self):
+    @staticmethod
+    def _get_cache_folder():
         return '.pyramid-cache'
 
     def _get_pickle_hash_file(self):

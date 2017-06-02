@@ -4,7 +4,7 @@
 #
 # The pyramid module
 
-__version__ = '0.1'
+__version__ = '0.2-dev'
 
 try:
     # this var is injected in the setup build to enable
@@ -21,6 +21,7 @@ if __PYRAMID_SETUP__:
 else:
     __all__ = [
         'arima',
+        'compat',
         'utils'
     ]
 

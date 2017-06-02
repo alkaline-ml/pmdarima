@@ -253,6 +253,22 @@ def test_with_seasonality():
                error_action='ignore', suppress_warnings=True,
                trace=True)  # get the coverage on trace
 
+    # show we can run a random search much faster! and while we're at it,
+    # make the function return all the values
+    all_res = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
+                         start_P=0, seasonal=True, n_jobs=1, d=1, D=None,
+                         error_action='ignore', suppress_warnings=True,
+                         random=True, random_state=42, return_valid_fits=True,
+                         n_fits=5)  # only fit 5
+
+    # show it is a list
+    assert hasattr(all_res, '__iter__')
+
+    # show that we can fit an ARIMA where the max_p|q == start_p|q
+    auto_arima(hr, start_p=0, max_p=0, d=0, start_q=0, max_q=0, seasonal=False, max_order=np.inf)
+
+    # FIXME: we get an IndexError from statsmodels summary if (0, 0, 0)
+
 
 def test_corner_cases():
     assert_raises(ValueError, auto_arima, wineind, error_action='some-bad-string')
@@ -264,11 +280,19 @@ def test_corner_cases():
         # show a constant result will result in a quick fit
         _ = auto_arima(np.ones(10), suppress_warnings=True)
 
+        # show the same thing with return_all results in the ARIMA in a list
+        _ = auto_arima(np.ones(10), suppress_warnings=True, return_valid_fits=True)
+        assert hasattr(_, '__iter__')
+
+        # we did this in 0.1-alpha:
         # show that with <= 3 samples, using a non-aic metric reverts to AIC
-        try:
-            _ = auto_arima(np.arange(3), information_criterion='bic', seasonal=False, suppress_warnings=True)
-        except ValueError:  # this happens because it can't fit such small data...
-            pass
+        # try:
+        #     _ = auto_arima(np.arange(3), information_criterion='bic', seasonal=False, suppress_warnings=True)
+        # except ValueError:  # this happens because it can't fit such small data...
+        #     pass
+
+        # show we fail for n_iter < 0
+        assert_raises(ValueError, auto_arima, np.ones(10), random=True, n_fits=-1)
 
 
 def test_warning_str_fmt():

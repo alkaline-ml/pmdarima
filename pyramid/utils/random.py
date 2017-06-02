@@ -6,14 +6,13 @@
 
 from __future__ import absolute_import, division, print_function
 from numpy.random import RandomState
-import sys
+
+# long is not defined in python 3
+from ..compat.python import long
 
 __all__ = [
     'get_random_state'
 ]
-
-if sys.version_info[0] >= 3:
-    long = int
 
 
 def get_random_state(random_state):

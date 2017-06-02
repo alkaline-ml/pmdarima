@@ -5,7 +5,6 @@
 # Tests for seasonal differencing terms
 
 from __future__ import absolute_import, division
-from statsmodels.regression.linear_model import OLS
 from sklearn.utils.validation import column_or_1d, check_array
 from sklearn.linear_model import LinearRegression
 from sklearn.externals import six
@@ -14,9 +13,9 @@ from abc import ABCMeta, abstractmethod
 from numpy.linalg import solve
 import numpy as np
 
-from ..utils.array import c, diff
-from .arima import ARIMA
+from ..utils.array import c
 from .stationarity import _BaseStationarityTest
+from ..compat.numpy import DTYPE
 
 # since the C import relies on the C code having been built with Cython,
 # and since pyramid never plans to use setuptools for the 'develop' option,
@@ -40,16 +39,35 @@ class _SeasonalStationarityTest(six.with_metaclass(ABCMeta, _BaseStationarityTes
 
     @abstractmethod
     def estimate_seasonal_differencing_term(self, x):
-        """Estimate the seasonal differencing term (duh)"""
+        """Estimate the seasonal differencing term (duh)
+
+        Parameters
+        ----------
+        x : array-like, shape=(n_samples,)
+            The time series vector.
+        """
 
 
 class CHTest(_SeasonalStationarityTest):
-    """The Canova-Hansen test for seasonal differences.
+    """The Canova-Hansen test for seasonal differences. Canova and Hansen (1995)
+    proposed a test statistic for the null hypothesis that the seasonal pattern is stable.
+    The test statistic can be formulated in terms of seasonal dummies or seasonal cycles.
+    The former allows us to identify seasons (e.g. months or quarters) that are not stable,
+    while the latter tests the stability of seasonal cycles (e.g. cycles of period 2 and 4
+    quarters in quarterly data). [1]
+
 
     Parameters
     ----------
     m : int
-        The seasonal differencing term.
+        The seasonal differencing term. For monthly data, e.g., this would be 12.
+        For quarterly, 4. For annual, 1, etc. For the Canova-Hansen test to work,
+        ``m`` must exceed 1.
+
+
+    References
+    ----------
+    [1] https://jalobe.com/blog/testing-for-seasonal-stability-canova-and-hansen-test-statistic/
     """
     def __init__(self, m):
         super(CHTest, self).__init__(m=m)
@@ -133,7 +151,6 @@ class CHTest(_SeasonalStationarityTest):
         solved = solve(tmp, np.identity(tmp.shape[0]))
         return (1.0 / n ** 2) * solved.dot(A.T).dot(Fhat.T).dot(Fhat).dot(A).diagonal().sum()
 
-
     @staticmethod
     def _seas_dummy(x, m):
         # set up seasonal dummies using fourier series
@@ -161,7 +178,7 @@ class CHTest(_SeasonalStationarityTest):
             return 0
 
         # ensure vector
-        x = column_or_1d(check_array(x, ensure_2d=False, dtype=np.float64, force_all_finite=True))
+        x = column_or_1d(check_array(x, ensure_2d=False, dtype=DTYPE, force_all_finite=True))
         n = x.shape[0]
         m = int(self.m)
 
