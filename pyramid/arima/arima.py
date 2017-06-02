@@ -190,6 +190,15 @@ class ARIMA(BaseEstimator):
                 # create the statsmodels ARIMA
                 arima = _ARIMA(endog=y, order=self.order, missing='none',
                                exog=exogenous, dates=None, freq=None)
+
+                # there's currently a bug in the ARIMA model where on pickling
+                # it tries to acquire an attribute called 'self.{dates|freq|missing}', but it
+                # does not exist! It's passed up to TimeSeriesModel in base, but
+                # is never set. So we inject one here so as not to get an AttributeError later.
+                # https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/arima_model.py#L994
+                for attr, val in (('dates', None), ('freq', None), ('missing', 'none')):
+                    if not hasattr(arima, attr):
+                        setattr(arima, attr, val)
             else:
                 if method is None:
                     method = 'lbfgs'
@@ -214,6 +223,9 @@ class ARIMA(BaseEstimator):
                 _, self.arima_res_ = _fit_wrapper()
         else:
             _, self.arima_res_ = _fit_wrapper()
+
+        # if the model is fit with an exogenous array, it must be predicted with one as well.
+        self.fit_with_exog_ = exogenous is not None
 
         return self
 
@@ -249,6 +261,16 @@ class ARIMA(BaseEstimator):
             The array of fore-casted values.
         """
         check_is_fitted(self, 'arima_res_')
+
+        # if we fit with exog, make sure one was passed:
+        if self.fit_with_exog_:
+            if exogenous is None:
+                raise ValueError('When an ARIMA is fit with an exogenous array, '
+                                 'it must be provided one for predictions.')
+            else:
+                exogenous = check_array(exogenous, ensure_2d=True, force_all_finite=True, dtype=np.float64)
+                if exogenous.shape[0] != n_periods:
+                    raise ValueError('Exogenous array dims (n_rows) != n_periods')
 
         # ARIMA predicts differently...
         if self.seasonal_order is None:
@@ -292,9 +314,15 @@ class ARIMA(BaseEstimator):
         self.fit(y, exogenous, **fit_args)
         return self.predict(n_periods=n_periods, exogenous=exogenous)
 
+    def _get_cache_folder(self):
+        return '.pyramid-cache'
+
     def _get_pickle_hash_file(self):
         # Mmmm, pickle hash...
-        return '.%s-%i.pmdpkl' % (str(datetime.datetime.now()).replace(' ', '_'), hash(self))
+        return '%s-%s-%i.pmdpkl' % (
+            str(datetime.datetime.now()).replace(' ', '_'),
+            ''.join([str(e) for e in self.order]),
+            hash(self))
 
     def __getstate__(self):
         """I am being pickled..."""
@@ -308,7 +336,18 @@ class ARIMA(BaseEstimator):
         # get the new location for where to save the results
         new_loc = self._get_pickle_hash_file()
         cwd = os.path.abspath(os.getcwd())
-        new_loc = os.path.join(cwd, new_loc)
+
+        # check that the cache folder exists, and if not, make it.
+        cache_loc = os.path.join(cwd, self._get_cache_folder())
+        try:
+            os.makedirs(cache_loc)
+        # since this is a race condition, just try to make it
+        except OSError as e:
+            if e.errno != 17:
+                raise
+
+        # now create the full path with the cache folder
+        new_loc = os.path.join(cache_loc, new_loc)
 
         # save the results - but only if it's fit...
         if hasattr(self, 'arima_res_'):
@@ -316,7 +355,7 @@ class ARIMA(BaseEstimator):
             # are not cached prior to pickling, we might hit issues. This is
             # a bug documented here: https://github.com/statsmodels/statsmodels/issues/3290
             _ = self.arima_res_.summary()
-            self.arima_res_.save(fname=new_loc, remove_data=False)
+            self.arima_res_.save(fname=new_loc)  # , remove_data=False)
 
             # point to the location of the saved MLE model
             self.tmp_pkl_ = new_loc
@@ -330,7 +369,11 @@ class ARIMA(BaseEstimator):
         # re-set the results class
         loc = state.get('tmp_pkl_', None)
         if loc is not None:
-            self.arima_res_ = TimeSeriesModelResults.load(loc)
+            try:
+                self.arima_res_ = TimeSeriesModelResults.load(loc)
+            except:
+                raise OSError('Could not read saved model state from %s. '
+                              'Does it still exist?' % loc)
 
         return self
 

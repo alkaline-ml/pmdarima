@@ -3,6 +3,7 @@
 .idea/
 
 # custom extension
+.pyramid-cache/
 *.pmdpkl
 
 # Byte-compiled / optimized / DLL files

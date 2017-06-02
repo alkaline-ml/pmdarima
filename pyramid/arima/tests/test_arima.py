@@ -2,11 +2,14 @@
 from __future__ import absolute_import
 from pyramid.arima import ARIMA, auto_arima
 from pyramid.arima.auto import _fmt_warning_str
+from pyramid.arima.utils import nsdiffs
 from nose.tools import assert_raises
 import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
 from numpy.random import RandomState
 import warnings
+import pickle
+import os
 
 # initialize the random state
 rs = RandomState(42)
@@ -81,7 +84,8 @@ lynx = np.array([269,  321,  585,  871,  1475, 2821, 3928, 5943, 4950, 2577, 523
 
 
 def test_basic_arima():
-    arima = ARIMA(order=(0, 0, 0), trend='c').fit(y)
+    arima = ARIMA(order=(0, 0, 0), trend='c')
+    preds = arima.fit_predict(y)  # fit/predict for coverage
 
     # test some of the attrs
     assert_almost_equal(arima.aic(), 11.201308403566909, decimal=5)
@@ -94,7 +98,6 @@ def test_basic_arima():
                                0.44079876])
 
     # generate predictions
-    preds = arima.predict(n_periods=10)
     assert_array_almost_equal(preds, expected_preds)
 
 
@@ -115,6 +118,42 @@ def test_more_elaborate():
     # show we can fit this with a non-zero order
     arima = ARIMA(order=(2, 1, 2)).fit(y=hr)
     _try_get_attrs(arima)
+
+    # can we fit this same arima with a made-up exogenous array?
+    xreg = rs.rand(hr.shape[0], 4)
+    arima = ARIMA(order=(2, 1, 2)).fit(y=hr, exogenous=xreg)
+    _try_get_attrs(arima)
+
+    # pickle this for the __get/setattr__ coverage.
+    # since the only time this is tested is in parallel in auto.py,
+    # this doesn't actually get any coverage proof...
+    fl = 'some_temp_file.pkl'
+    with open(fl, 'wb') as p:
+        pickle.dump(arima, p)
+
+    # show we can predict with this even though it's been pickled
+    new_xreg = rs.rand(5, 4)
+    _preds = arima.predict(n_periods=5, exogenous=new_xreg)
+
+    # now unpickle
+    with open(fl, 'rb') as p:
+        other = pickle.load(p)
+
+    # show we can still predict, compare
+    _other_preds = other.predict(n_periods=5, exogenous=new_xreg)
+    assert_array_almost_equal(_preds, _other_preds)
+
+    # now clear the cache and remove the pickle file
+    arima._clear_cached_state()
+    os.unlink(fl)
+
+    # now show that since we fit the ARIMA with an exogenous array,
+    # we need to provide one for predictions otherwise it breaks.
+    assert_raises(ValueError, arima.predict, n_periods=5, exogenous=None)
+
+    # show that if we DO provide an exogenous and it's the wrong dims, we
+    # also break things down.
+    assert_raises(ValueError, arima.predict, n_periods=5, exogenous=rs.rand(4, 4))
 
 
 def test_the_r_src():
@@ -237,3 +276,7 @@ def test_warning_str_fmt():
     seasonal = (1, 1, 1, 1)
     for ssnl in (seasonal, None):
         _ = _fmt_warning_str(order, ssnl)
+
+
+def test_nsdiffs_on_wine():
+    assert nsdiffs(wineind, m=52) == 2
