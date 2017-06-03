@@ -13,6 +13,7 @@ from statsmodels import api as sm
 from abc import ABCMeta, abstractmethod
 import numpy as np
 
+from ..compat.numpy import DTYPE
 from ..utils.array import c, diff
 from .approx import approx
 
@@ -29,13 +30,15 @@ __all__ = [
 
 
 class _BaseStationarityTest(six.with_metaclass(ABCMeta, BaseEstimator)):
-    def _base_case(self, x):
+    @staticmethod
+    def _base_case(x):
         # if x is empty, return false so the other methods return False
         if (x is None) or (x.shape[0] == 0):
             return False
         return True
 
-    def _embed(self, x, k):
+    @staticmethod
+    def _embed(x, k):
         # lag the vector and put the lags into columns
         n = x.shape[0]
         rows = [
@@ -57,7 +60,13 @@ class _DifferencingStationarityTest(six.with_metaclass(ABCMeta, _BaseStationarit
 
     @abstractmethod
     def is_stationary(self, x):
-        """Test whether the time series is stationary"""
+        """Test whether the time series is stationary.
+
+        Parameters
+        ----------
+        x : array-like, shape=(n_samples,)
+            The time series vector.
+        """
 
 
 class KPSSTest(_DifferencingStationarityTest):
@@ -98,7 +107,7 @@ class KPSSTest(_DifferencingStationarityTest):
             return np.nan, False
 
         # ensure vector
-        x = column_or_1d(check_array(x, ensure_2d=False, dtype=np.float64, force_all_finite=True))
+        x = column_or_1d(check_array(x, ensure_2d=False, dtype=DTYPE, force_all_finite=True))
         n = x.shape[0]
 
         # check on status of null
@@ -187,7 +196,7 @@ class ADFTest(_DifferencingStationarityTest):
             return np.nan, False
 
         # ensure vector
-        x = column_or_1d(check_array(x, ensure_2d=False, dtype=np.float64, force_all_finite=True))
+        x = column_or_1d(check_array(x, ensure_2d=False, dtype=DTYPE, force_all_finite=True))
 
         # if k is none...
         k = self.k
@@ -216,7 +225,7 @@ class ADFTest(_DifferencingStationarityTest):
         # OLS from statsmodels rather than LR from sklearn. This is because we need
         # the std errors, and sklearn does not have a way to store them.
         res = sm.OLS(yt, X).fit()
-        STAT = res.params[0] / res.HC0_se[0]  # todo: is the denominator correct?...
+        STAT = res.params[0] / res.HC0_se[0]  # FIXME: is the denominator correct?...
         table = -np.array([c(4.38, 4.15, 4.04, 3.99, 3.98, 3.96),
                            c(3.95, 3.80, 3.73, 3.69, 3.68, 3.66),
                            c(3.60, 3.50, 3.45, 3.43, 3.42, 3.41),
@@ -277,7 +286,7 @@ class PPTest(_DifferencingStationarityTest):
             return np.nan, False
 
         # ensure vector
-        x = column_or_1d(check_array(x, ensure_2d=False, dtype=np.float64, force_all_finite=True))
+        x = column_or_1d(check_array(x, ensure_2d=False, dtype=DTYPE, force_all_finite=True))
 
         # embed the vector. This is some funkiness that goes on in the R code...
         # basically, make a matrix where the column (rows if not T) are lagged windows of x
@@ -330,7 +339,7 @@ class PPTest(_DifferencingStationarityTest):
         ]).T
 
         tablen = table.shape[1]
-        tableT = c(25, 50, 100, 250, 500, 100000).astype(np.float64)
+        tableT = c(25, 50, 100, 250, 500, 100000).astype(DTYPE)
         tablep = c(0.01, 0.025, 0.05, 0.10, 0.90, 0.95, 0.975, 0.99)
         tableipl = np.zeros(tablen)
 

@@ -19,6 +19,8 @@ def configuration(parent_package='', top_path=None):
     config = Configuration('pyramid', parent_package, top_path)
 
     # modules
+    config.add_subpackage('compat')
+    config.add_subpackage('compat/tests')
     config.add_subpackage('utils')
     config.add_subpackage('utils/tests')
 
@@ -26,8 +28,6 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('arima')
     config.add_subpackage('arima/tests')
 
-    # misc repo tests
-    config.add_subpackage('tests')
     return config
 
 

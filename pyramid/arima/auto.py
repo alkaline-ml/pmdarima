@@ -5,33 +5,26 @@
 # Automatically find optimal parameters for an ARIMA
 
 from __future__ import absolute_import
-from sklearn.utils.validation import check_array
+from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.externals.joblib import Parallel, delayed
 from sklearn.linear_model import LinearRegression
 import numpy as np
 import warnings
 
 from .utils import ndiffs, is_constant, nsdiffs
-from ..utils.array import diff
+from ..utils import diff, get_random_state
 from .arima import ARIMA
 
-# for python 3
-try:
-    xrange
-except NameError:
-    xrange = range
-
-# The DTYPE we'll use for everything here. Since there are
-# lots of spots where we define the DTYPE in a numpy array,
-# it's easier to define as a global for this module.
-DTYPE = np.float64
+# for python 3 compat
+from ..compat.python import xrange
+from ..compat.numpy import DTYPE
 
 __all__ = [
     'auto_arima'
 ]
 
 # The valid information criteria
-VALID_CRITERIA = {'aic', 'bic'}
+VALID_CRITERIA = {'aic', 'bic', 'hqic'}
 
 
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2, max_q=5,
@@ -39,14 +32,29 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                seasonal=True, stationary=False, information_criterion='aic', alpha=0.05, test='kpss',
                seasonal_test='ch', n_jobs=1, start_params=None, trend='c', method=None, transparams=True,
                solver='lbfgs', maxiter=50, disp=0, callback=None, offset_test_args=None, seasonal_test_args=None,
-               suppress_warnings=False, error_action='warn', trace=False, **fit_args):
-    """The ``AutoARIMA`` function seeks to identify the most optimal parameters for an ``ARIMA`` model,
+               suppress_warnings=False, error_action='warn', trace=False, random=False, random_state=None,
+               n_fits=10, return_valid_fits=False, **fit_args):
+    """The ``auto_arima`` function seeks to identify the most optimal parameters for an ``ARIMA`` model,
     and returns a fitted ARIMA model. This function is based on the commonly-used R function,
     `forecase::auto.arima``[3].
 
+    The ``auro_arima`` function works by conducting differencing tests (i.e., Kwiatkowski–Phillips–Schmidt–Shin,
+    Augmented Dickey-Fuller or Phillips–Perron) to determine the order of differencing, ``d``, and then fitting
+    models within ranges of defined ``start_p``, ``max_p``, ``start_q``, ``max_q`` ranges. If the ``seasonal``
+    optional is enabled, ``auto_arima`` also seeks to identify the optimal ``P`` and ``Q`` hyper-parameters after
+    conducting the Canova-Hansen to determine the optimal order of seasonal differencing, ``D``.
+
+    In order to find the best model, ``auto_arima`` optimizes for a given ``information_criterion``, one of
+    {'aic', 'bic', 'hqic'} (Akaine Information Criterion, Bayesian Information Criterion or Hannan-Quinn
+    Information Criterion, respectively) and returns the ARIMA which minimizes the value.
+
+    Note that due to stationarity issues, ``auto_arima`` might not find a suitable model that will converge. If this
+    is the case, a ``ValueError`` will be thrown suggesting stationarity-inducing measures be taken prior
+    to re-fitting or that a new range of ``order`` values be selected.
+
     Parameters
     ----------
-    y : array-like, shape=(n_samples,)
+    y : array-like or iterable, shape=(n_samples,)
         The time-series to which to fit an ``ARIMA`` estimator.
 
     exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
@@ -200,6 +208,22 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     trace : bool, optional (default=False)
         Whether to print status on the fits.
 
+    random : bool, optional (default=False)
+        Similar to grid searches, ``auto_arima`` provides the capability to perform
+        a "random search" over a hyper-parameter space. If ``random`` is True, rather
+        than perform an exhaustive search, only ``n_fits`` ARIMA models will be fit.
+
+    random_state : int, long or numpy ``RandomState``, optional (default=None)
+        The PRNG for when ``random=True``
+
+    n_fits : int, optional (default=10)
+        If ``random`` is True and a "random search" is going to be performed, ``n_iter``
+        is the number of ARIMA models to be fit.
+
+    return_valid_fits : bool, optional (default=False)
+        If True, will return all valid ARIMA fits. If False (by default), will only
+        return the best fit.
+
     **fit_args : dict, optional (default=None)
         A dictionary of keyword arguments to pass to the :func:`ARIMA.fit` method.
 
@@ -213,8 +237,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     # validate start/max points
     if any(_ < 0 for _ in (max_p, max_q, max_P, max_Q, start_p, start_q, start_P, start_Q)):
         raise ValueError('starting and max p, q, P & Q values must be positive integers (>= 0)')
-    if max_p <= start_p or max_q <= start_q or max_P <= start_P or max_Q <= start_Q:
-        raise ValueError('max p, q, P & Q must be less than their starting values')
+    if max_p < start_p or max_q < start_q or max_P < start_P or max_Q < start_Q:
+        raise ValueError('max p, q, P & Q must be >= than their starting values')
 
     # validate max_order
     if max_order is None:
@@ -236,22 +260,30 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     if m < 1:
         raise ValueError('m must be a positive integer (> 0)')
 
+    # check on n_iter
+    if random and n_fits < 0:
+        raise ValueError('n_iter must be a positive integer for a random search')
+
     # validate error action
     actions = {'warn', 'raise', 'ignore', None}
     if error_action not in actions:
         raise ValueError('error_action must be one of %r, but got %r' % (actions, error_action))
 
     # copy array
-    y = check_array(y, ensure_2d=False, dtype=DTYPE, copy=True, force_all_finite=True)
+    y = column_or_1d(check_array(y, ensure_2d=False, dtype=DTYPE, copy=True, force_all_finite=True))
     n_samples = y.shape[0]
 
     # check for constant data
     if is_constant(y):
         warnings.warn('Input time-series is completely constant; returning a (0, 0, 0) ARMA.')
-        return _fit_arima(y, xreg=exogenous, order=(0, 0, 0), seasonal_order=None, start_params=start_params,
-                          trend=trend, method=method, transparams=transparams, solver=solver,
-                          maxiter=maxiter, disp=disp, callback=callback, fit_params=fit_args,
-                          suppress_warnings=suppress_warnings, trace=trace, error_action=error_action)
+        return _return_wrapper(_post_ppc_arima(
+            _fit_arima(y, xreg=exogenous, order=(0, 0, 0), seasonal_order=None,
+                       start_params=start_params, trend=trend, method=method,
+                       transparams=transparams, solver=solver, maxiter=maxiter,
+                       disp=disp, callback=callback, fit_params=fit_args,
+                       suppress_warnings=suppress_warnings, trace=trace,
+                       error_action=error_action)),
+            return_valid_fits)
 
     # test ic, and use AIC if n <= 3
     if information_criterion not in VALID_CRITERIA:
@@ -259,16 +291,22 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                          'Valid information criteria include: %r'
                          % (information_criterion, VALID_CRITERIA))
 
-    if n_samples <= 3:
-        if information_criterion != 'aic':
-            warnings.warn('n_samples (%i) <= 3 necessitates using AIC' % n_samples)
-        information_criterion = 'aic'
+    # the R code handles this, but I don't think statsmodels will even fit a model this small...
+    # if n_samples <= 3:
+    #     if information_criterion != 'aic':
+    #         warnings.warn('n_samples (%i) <= 3 necessitates using AIC' % n_samples)
+    #     information_criterion = 'aic'
 
     # adjust max p, q -- R code:
     # max.p <- min(max.p, floor(serieslength/3))
     # max.q <- min(max.q, floor(serieslength/3))
     max_p = int(min(max_p, np.floor(n_samples / 3)))
     max_q = int(min(max_q, np.floor(n_samples / 3)))
+
+    # this is not in the R code and poses a risk that R did not consider...
+    # if max_p|q has now dropped below start_p|q, correct it.
+    start_p = min(start_p, max_p)
+    start_q = min(start_q, max_q)
 
     # if it's not seasonal, we can avoid multiple 'if not is None' comparisons
     # later by just using this shortcut (hack):
@@ -293,6 +331,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     elif D is None:  # we don't have a D yet and we need one (seasonal)
         seasonal_test_args = seasonal_test_args if seasonal_test_args is not None else dict()
         D = nsdiffs(xx, m=m, test=seasonal_test, max_D=max_D, **seasonal_test_args)
+
         if D > 0 and exogenous is not None:
             diffex = diff(exogenous, differences=D, lag=m)
             # check for constance on any column
@@ -312,6 +351,12 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
             diffex = diff(exogenous, differences=D, lag=m)
         else:
             diffex = exogenous
+    else:
+        # here's the thing... we're only going to use diffex if exogenous
+        # was not None in the first place. However, PyCharm doesn't know that
+        # and it thinks we might use it before assigning it. Therefore, assign
+        # it to None as a default value and it won't raise the warning anymore.
+        diffex = None
 
     # determine/set the order of differencing by estimating the number of
     # orders it would take in order to make the TS stationary.
@@ -331,7 +376,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         if D >= 2:
             warnings.warn("Having more than one seasonal differences is not recommended. "
                           "Please consider using only one seasonal difference.")
-        elif (D + d > 2 or d > 2):  # if D is -1, this will be off, so we include the OR
+        elif D + d > 2 or d > 2:  # if D is -1, this will be off, so we include the OR
             warnings.warn("Having 3 or more differencing operations is not recommended. "
                           "Please consider reducing the total number of differences.")
 
@@ -345,10 +390,14 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 
         # perfect regression
         ssn = None if not seasonal else (0, D, 0, m)
-        return _fit_arima(y, xreg=exogenous, order=(0, d, 0), seasonal_order=ssn, start_params=start_params,
-                          trend=trend, method=method, transparams=transparams, solver=solver,
-                          maxiter=maxiter, disp=disp, callback=callback, fit_params=fit_args,
-                          suppress_warnings=suppress_warnings, trace=trace, error_action=error_action)
+        return _return_wrapper(
+            _post_ppc_arima(_fit_arima(y, xreg=exogenous, order=(0, d, 0), seasonal_order=ssn,
+                                       start_params=start_params, trend=trend, method=method,
+                                       transparams=transparams, solver=solver, maxiter=maxiter,
+                                       disp=disp, callback=callback, fit_params=fit_args,
+                                       suppress_warnings=suppress_warnings, trace=trace,
+                                       error_action=error_action)),
+            return_valid_fits)
 
     # seasonality issues
     if m > 1:
@@ -361,29 +410,33 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     # generate the set of (p, q, P, Q) FIRST, since it is contingent on whether or not
     # the user is interested in a seasonal ARIMA result. This will reduce the search space
     # for non-seasonal ARIMA models.
-    def generator():
-        # loop p, q. Make sure to loop at +1 interval,
-        # since max_{p|q} is inclusive.
-        if seasonal:
-            return (
-                ((p, d, q), (P, D, Q, m))
-                for p in xrange(start_p, max_p + 1)
-                for q in xrange(start_q, max_q + 1)
-                for P in xrange(start_P, max_P + 1)
-                for Q in xrange(start_Q, max_Q + 1)
-                if p + q + P + Q <= max_order
-            )
-
+    # loop p, q. Make sure to loop at +1 interval,
+    # since max_{p|q} is inclusive.
+    if seasonal:
+        gen = (
+            ((p, d, q), (P, D, Q, m))
+            for p in xrange(start_p, max_p + 1)
+            for q in xrange(start_q, max_q + 1)
+            for P in xrange(start_P, max_P + 1)
+            for Q in xrange(start_Q, max_Q + 1)
+            if p + q + P + Q <= max_order
+        )
+    else:
         # otherwise it's not seasonal, and we don't need the seasonal pieces
-        return (
+        gen = (
             ((p, d, q), None)
             for p in xrange(start_p, max_p + 1)
             for q in xrange(start_q, max_q + 1)
             if p + q <= max_order
         )
 
+    # if we are fitting a random search rather than an exhaustive one, we
+    # will scramble up the generator (as a list) and only fit n_iter ARIMAs
+    if random:
+        random_state = get_random_state(random_state)
+        gen = random_state.permutation(list(gen))[:n_fits]  # make a list to scramble...
+
     # get results in parallel
-    gen = generator()  # the combos we need to fit
     all_res = Parallel(n_jobs=n_jobs)(
         delayed(_fit_arima)(y, xreg=exogenous, order=order, seasonal_order=seasonal_order,
                             start_params=start_params, trend=trend, method=method, transparams=transparams,
@@ -393,21 +446,17 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         for order, seasonal_order in gen)
 
     # filter the non-successful ones
-    filtered = [m for m in all_res if m is not None]
-    if not filtered:
-        raise ValueError('No ARIMAs were successfully fit. It is likely your data is non-stationary. '
-                         'Please induce stationarity or try a different range of model order params.')
+    filtered = _post_ppc_arima(all_res)
 
     # sort by the criteria - lower is better for both AIC and BIC
     # (https://stats.stackexchange.com/questions/81427/aic-guidelines-in-model-selection)
-    sorted_res = sorted(filtered, key=(lambda model: getattr(model, information_criterion)()))
-    best = sorted_res[0]
+    sorted_res = sorted(filtered, key=(lambda mod: getattr(mod, information_criterion)()))
 
     # remove all the cached .pmdpkl files...
     for model in sorted_res:
         model._clear_cached_state()
 
-    return best
+    return _return_wrapper(sorted_res, return_valid_fits)
 
 
 def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, transparams,
@@ -438,6 +487,7 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, tran
 
     return fit
 
+
 def _fmt_order_info(order, seasonal_order):
     return 'order=(%i, %i, %i)%s' \
            % (order[0], order[1], order[2], '' if seasonal_order is None else ' seasonal_order=(%i, %i, %i, %i)'
@@ -449,3 +499,54 @@ def _fmt_warning_str(order, seasonal_order):
     return ('Unable to fit ARIMA for %s; data is likely non-stationary. '
             '(if you do not want to see these warnings, run with error_action="ignore")'
             % _fmt_order_info(order, seasonal_order))
+
+
+def _post_ppc_arima(a):
+    """If there are no suitable models, raise a ValueError.
+    Otherwise, return ``a``. In the case that ``a`` is an iterable
+    (i.e., it made it to the end of the function), this method will
+    filter out the None values and assess whether the list is empty.
+
+    Parameters
+    ----------
+    a : ARIMA or iterable
+        The list or ARIMAs, or an ARIMA
+    """
+    # if it's a result of making it to the end, it will be a list of ARIMA models.
+    if hasattr(a, '__iter__'):
+        a = [m for m in a if m is not None]
+
+    # if the list is empty, or if it was an ARIMA and it's None
+    if not a:  # check for truthiness rather than None explicitly
+        raise ValueError('Could not successfully fit ARIMA to input data. It is likely your '
+                         'data is non-stationary. Please induce stationarity or try a different '
+                         'range of model order params.')
+    # good to return
+    return a
+
+
+def _return_wrapper(fits, return_all):
+    """If the user wants to get all of the models back, this will
+    return a list of the ARIMA models, otherwise it will just return
+    the model. If this is called from the end of the function, ``fits``
+    will already be a list.
+
+    We *know* that if a function call makes it here, ``fits`` is NOT None
+    or it would have thrown an exception in :func:`_post_ppc_arima`.
+
+    Parameters
+    ----------
+    fits : iterable or ARIMA
+        The ARIMA(s)
+
+    return_all : bool
+        Whether to return all.
+    """
+    # make sure it's an iterable
+    if not hasattr(fits, '__iter__'):
+        fits = [fits]
+
+    # which to return? if not all, then first index (assume sorted)
+    if not return_all:
+        return fits[0]
+    return fits

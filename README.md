@@ -12,9 +12,8 @@ functionality to Python. Pyramid operates by wrapping
 into one estimator class and creating a more user-friendly estimator interface for programmers familiar with scikit-learn.
 
 
-### Usage:
+## Example Usage:
 
-For an easy, quick-start example, see [examples/](doc/examples/quick_start_example.ipynb). Alternatively, read on:
 
 ```python
 import numpy as np
@@ -45,14 +44,8 @@ fit = auto_arima(wineind, start_p=1, start_q=1, max_p=3, max_q=3, m=12,
                  start_P=0, seasonal=True, n_jobs=-1, d=1, D=1,
                  error_action='ignore',  # 'warn' if you want to see when a model cannot be fit
                  suppress_warnings=True)  # so convergence warnings don't fill your screen up
-```
 
-
-Pyramid wraps [statsmodels](http://www.statsmodels.org/stable/index.html), and the `pyramid.arima.ARIMA` can thus
-leverage statsmodels results views:
-
-
-```python
+# now you can look at your model summary:
 >>> fit.summary()
 <class 'statsmodels.iolib.summary.Summary'>
 """
@@ -87,3 +80,8 @@ Warnings:
 [2] Covariance matrix is singular or near-singular, with condition number 2.84e+24. Standard errors may be unstable.
 ```
 
+
+![Example image](doc/examples/quick_start_output.png?raw=true)
+
+
+__For an easy, reproducible quick-start example, see [examples/](doc/examples/quick_start_example.ipynb).__
