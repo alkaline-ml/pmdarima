@@ -241,10 +241,10 @@ def test_with_seasonality1():
 
 
 def test_with_seasonality2():
-    # can we auto-arima this?
     seasonal_fit = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-                              start_P=0, seasonal=True, n_jobs=-1, d=1, D=1,
-                              suppress_warnings=True, error_action='raise')  # do raise so it fails fast
+                              start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
+                              suppress_warnings=True, error_action='raise',  # do raise so it fails fast
+                              random=True, random_state=42, n_fits=3)
 
     # show that we can forecast even after the pickling (this was fit in parallel)
     seasonal_fit.predict(n_periods=10)
@@ -258,7 +258,8 @@ def test_with_seasonality3():
     auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
                start_P=0, seasonal=True, n_jobs=1, d=1, D=None,
                error_action='ignore', suppress_warnings=True,
-               trace=True)  # get the coverage on trace
+               trace=True,  # get the coverage on trace
+               random=True, random_state=42, n_fits=3)
 
 
 def test_with_seasonality4():
