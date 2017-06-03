@@ -84,7 +84,7 @@ lynx = np.array([269,  321,  585,  871,  1475, 2821, 3928, 5943, 4950, 2577, 523
 
 
 def test_basic_arima():
-    arima = ARIMA(order=(0, 0, 0), trend='c')
+    arima = ARIMA(order=(0, 0, 0), trend='c', suppress_warnings=True)
     preds = arima.fit_predict(y)  # fit/predict for coverage
 
     # test some of the attrs
@@ -116,12 +116,12 @@ def _try_get_attrs(arima):
 
 def test_more_elaborate():
     # show we can fit this with a non-zero order
-    arima = ARIMA(order=(2, 1, 2)).fit(y=hr)
+    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True).fit(y=hr)
     _try_get_attrs(arima)
 
     # can we fit this same arima with a made-up exogenous array?
     xreg = rs.rand(hr.shape[0], 4)
-    arima = ARIMA(order=(2, 1, 2)).fit(y=hr, exogenous=xreg)
+    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True).fit(y=hr, exogenous=xreg)
     _try_get_attrs(arima)
 
     # pickle this for the __get/setattr__ coverage.
@@ -158,7 +158,7 @@ def test_more_elaborate():
 
 def test_the_r_src():
     # this is the test the R code provides
-    fit = ARIMA(order=(2, 0, 1), trend='c').fit(abc)
+    fit = ARIMA(order=(2, 0, 1), trend='c', suppress_warnings=True).fit(abc)
 
     # the R code's AIC = ~135
     assert abs(135 - fit.aic()) < 1.0
@@ -220,14 +220,17 @@ def test_many_orders():
 
     failed = False
     try:
-        auto_arima(lynx_bc, start_p=1, start_q=1, d=0, max_p=5, max_q=5, n_jobs=-1)
+        auto_arima(lynx_bc, start_p=1, start_q=1, d=0, max_p=5, max_q=5,
+                   n_jobs=-1, suppress_warnings=True, maxiter=10)  # shorter max iter
     except ValueError:
         failed = True
     assert failed
 
 
-def test_with_seasonality():
-    fit = ARIMA(order=(1, 1, 1), seasonal_order=(0, 1, 1, 12)).fit(y=wineind)
+def test_with_seasonality1():
+    fit = ARIMA(order=(1, 1, 1),
+                seasonal_order=(0, 1, 1, 12),
+                suppress_warnings=True).fit(y=wineind)
     _try_get_attrs(fit)
 
     # R code AIC result is ~3004
@@ -236,10 +239,12 @@ def test_with_seasonality():
     # R code BIC result is ~3017
     assert abs(fit.bic() - 3017) < 100  # show equal within 100 or so
 
+
+def test_with_seasonality2():
     # can we auto-arima this?
     seasonal_fit = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
                               start_P=0, seasonal=True, n_jobs=-1, d=1, D=1,
-                              error_action='raise')  # do raise so it fails fast
+                              suppress_warnings=True, error_action='raise')  # do raise so it fails fast
 
     # show that we can forecast even after the pickling (this was fit in parallel)
     seasonal_fit.predict(n_periods=10)
@@ -247,12 +252,16 @@ def test_with_seasonality():
     # ensure summary still works
     seasonal_fit.summary()
 
+
+def test_with_seasonality3():
     # show we can estimate D even when it's not there...
     auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
                start_P=0, seasonal=True, n_jobs=1, d=1, D=None,
                error_action='ignore', suppress_warnings=True,
                trace=True)  # get the coverage on trace
 
+
+def test_with_seasonality4():
     # show we can run a random search much faster! and while we're at it,
     # make the function return all the values
     auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
@@ -261,6 +270,8 @@ def test_with_seasonality():
                random=True, random_state=42, return_valid_fits=True,
                n_fits=5)  # only fit 5
 
+
+def test_with_seasonality5():
     # can we fit the same thing with an exogenous array of predictors?
     # also make it stationary and make sure that works...
     all_res = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
@@ -272,8 +283,12 @@ def test_with_seasonality():
     # show it is a list
     assert hasattr(all_res, '__iter__')
 
+
+def test_with_seasonality6():
     # show that we can fit an ARIMA where the max_p|q == start_p|q
-    auto_arima(hr, start_p=0, max_p=0, d=0, start_q=0, max_q=0, seasonal=False, max_order=np.inf)
+    auto_arima(hr, start_p=0, max_p=0, d=0, start_q=0, max_q=0,
+               seasonal=False, max_order=np.inf,
+               suppress_warnings=True)
 
     # FIXME: we get an IndexError from statsmodels summary if (0, 0, 0)
 
