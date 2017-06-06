@@ -101,6 +101,21 @@ def test_basic_arima():
     assert_array_almost_equal(preds, expected_preds)
 
 
+def test_with_oob():
+    # show we can fit with CV (kinda)
+    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True, out_of_sample_size=10).fit(y=hr)
+    assert not np.isnan(arima.oob())  # show this works
+
+    # show we can fit if ooss < 0 and oob will be nan
+    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True, out_of_sample_size=-1).fit(y=hr)
+    assert np.isnan(arima.oob())
+
+    # can we do one with an exogenous array, too?
+    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True, out_of_sample_size=10).fit(
+        y=hr, exogenous=rs.rand(hr.shape[0], 4))
+    assert not np.isnan(arima.oob())
+
+
 def _try_get_attrs(arima):
     # show we can get all these attrs without getting an error
     attrs = {
@@ -292,6 +307,15 @@ def test_with_seasonality6():
                suppress_warnings=True)
 
     # FIXME: we get an IndexError from statsmodels summary if (0, 0, 0)
+
+
+def test_with_seasonality7():
+    # show we can fit one with OOB as the criterion
+    _ = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
+                   start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
+                   out_of_sample_size=10, information_criterion='oob',
+                   suppress_warnings=True, error_action='raise',  # do raise so it fails fast
+                   random=True, random_state=42, n_fits=3)
 
 
 def test_corner_cases():

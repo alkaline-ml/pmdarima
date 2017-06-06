@@ -24,7 +24,7 @@ __all__ = [
 ]
 
 # The valid information criteria
-VALID_CRITERIA = {'aic', 'bic', 'hqic'}
+VALID_CRITERIA = {'aic', 'bic', 'hqic', 'oob'}
 
 
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2, max_q=5,
@@ -33,7 +33,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                seasonal_test='ch', n_jobs=1, start_params=None, trend='c', method=None, transparams=True,
                solver='lbfgs', maxiter=50, disp=0, callback=None, offset_test_args=None, seasonal_test_args=None,
                suppress_warnings=False, error_action='warn', trace=False, random=False, random_state=None,
-               n_fits=10, return_valid_fits=False, **fit_args):
+               n_fits=10, return_valid_fits=False, out_of_sample_size=0, scoring='mse', scoring_args=None,
+               **fit_args):
     """The ``auto_arima`` function seeks to identify the most optimal parameters for an ``ARIMA`` model,
     and returns a fitted ARIMA model. This function is based on the commonly-used R function,
     `forecase::auto.arima``[3].
@@ -45,8 +46,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     conducting the Canova-Hansen to determine the optimal order of seasonal differencing, ``D``.
 
     In order to find the best model, ``auto_arima`` optimizes for a given ``information_criterion``, one of
-    {'aic', 'bic', 'hqic'} (Akaine Information Criterion, Bayesian Information Criterion or Hannan-Quinn
-    Information Criterion, respectively) and returns the ARIMA which minimizes the value.
+    {'aic', 'bic', 'hqic', 'oob'} (Akaine Information Criterion, Bayesian Information Criterion, Hannan-Quinn
+    Information Criterion, or "out of bag"--for validation scoring--respectively) and returns the ARIMA which
+    minimizes the value.
 
     Note that due to stationarity issues, ``auto_arima`` might not find a suitable model that will converge. If this
     is the case, a ``ValueError`` will be thrown suggesting stationarity-inducing measures be taken prior
@@ -127,8 +129,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 
     information_criterion : str, optional (default='aic')
         The information criterion used to select the best ARIMA model. One of
-        ``pyramid.arima.auto_arima.VALID_CRITERIA``, ('aic', 'bic'). Note that if
-        n_samples <= 3, AIC will be used.
+        ``pyramid.arima.auto_arima.VALID_CRITERIA``, ('aic', 'bic', 'hqic', 'oob').
 
     alpha : float, optional (default=0.05)
         Level of the test for testing significance.
@@ -224,6 +225,17 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         If True, will return all valid ARIMA fits. If False (by default), will only
         return the best fit.
 
+    out_of_sample_size : int, optional (default=0)
+        The number of examples from the tail of the time series to use as validation
+        examples.
+
+    scoring : str, optional (default='mse')
+        If performing validation (i.e., if ``out_of_sample_size`` > 0), the metric
+        to use for scoring the out-of-sample data. One of {'mse', 'mae'}
+
+    scoring_args : dict, optional (default=None)
+        A dictionary of key-word arguments to be passed to the ``scoring`` metric.
+
     **fit_args : dict, optional (default=None)
         A dictionary of keyword arguments to pass to the :func:`ARIMA.fit` method.
 
@@ -282,7 +294,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                        transparams=transparams, solver=solver, maxiter=maxiter,
                        disp=disp, callback=callback, fit_params=fit_args,
                        suppress_warnings=suppress_warnings, trace=trace,
-                       error_action=error_action)),
+                       error_action=error_action, scoring=scoring,
+                       out_of_sample_size=out_of_sample_size,
+                       scoring_args=scoring_args)),
             return_valid_fits)
 
     # test ic, and use AIC if n <= 3
@@ -396,7 +410,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                                        transparams=transparams, solver=solver, maxiter=maxiter,
                                        disp=disp, callback=callback, fit_params=fit_args,
                                        suppress_warnings=suppress_warnings, trace=trace,
-                                       error_action=error_action)),
+                                       error_action=error_action, scoring=scoring,
+                                       out_of_sample_size=out_of_sample_size,
+                                       scoring_args=scoring_args)),
             return_valid_fits)
 
     # seasonality issues
@@ -442,7 +458,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                             start_params=start_params, trend=trend, method=method, transparams=transparams,
                             solver=solver, maxiter=maxiter, disp=disp, callback=callback,
                             fit_params=fit_args, suppress_warnings=suppress_warnings,
-                            trace=trace, error_action=error_action)
+                            trace=trace, error_action=error_action, out_of_sample_size=out_of_sample_size,
+                            scoring=scoring, scoring_args=scoring_args)
         for order, seasonal_order in gen)
 
     # filter the non-successful ones
@@ -461,12 +478,14 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 
 def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, transparams,
                solver, maxiter, disp, callback, fit_params, suppress_warnings, trace,
-               error_action):
+               error_action, out_of_sample_size, scoring, scoring_args):
     try:
         fit = ARIMA(order=order, seasonal_order=seasonal_order, start_params=start_params,
                     trend=trend, method=method, transparams=transparams,
                     solver=solver, maxiter=maxiter, disp=disp,
-                    callback=callback, suppress_warnings=suppress_warnings)\
+                    callback=callback, suppress_warnings=suppress_warnings,
+                    out_of_sample_size=out_of_sample_size, scoring=scoring,
+                    scoring_args=scoring_args)\
             .fit(x, exogenous=xreg, **fit_params)
 
     # for non-stationarity errors, return None

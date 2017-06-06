@@ -8,21 +8,29 @@
 from __future__ import print_function, absolute_import, division
 
 from sklearn.base import BaseEstimator
-from sklearn.utils.validation import check_array, check_is_fitted
+from sklearn.utils.validation import check_array, check_is_fitted, column_or_1d
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 from statsmodels import api as sm
+import numpy as np
 import datetime
 import warnings
 import os
 
 # DTYPE for arrays
 from ..compat.numpy import DTYPE
+from ..utils import get_callable
 
 __all__ = [
     'ARIMA'
 ]
+
+VALID_SCORING = {
+    'mse': mean_squared_error,
+    'mae': mean_absolute_error
+}
 
 
 class ARIMA(BaseEstimator):
@@ -123,6 +131,17 @@ class ARIMA(BaseEstimator):
         Many warnings might be thrown inside of statsmodels. If ``suppress_warnings``
         is True, all of these warnings will be squelched.
 
+    out_of_sample_size : int, optional (default=0)
+        The number of examples from the tail of the time series to use as validation
+        examples.
+
+    scoring : str, optional (default='mse')
+        If performing validation (i.e., if ``out_of_sample_size`` > 0), the metric
+        to use for scoring the out-of-sample data. One of {'mse', 'mae'}
+
+    scoring_args : dict, optional (default=None)
+        A dictionary of key-word arguments to be passed to the ``scoring`` metric.
+
 
     Notes
     -----
@@ -141,7 +160,8 @@ class ARIMA(BaseEstimator):
     """
     def __init__(self, order, seasonal_order=None, start_params=None, trend='c',
                  method=None, transparams=True, solver='lbfgs', maxiter=50,
-                 disp=0, callback=None, suppress_warnings=False):
+                 disp=0, callback=None, suppress_warnings=False, out_of_sample_size=0,
+                 scoring='mse', scoring_args=None):
         super(ARIMA, self).__init__()
 
         self.order = order
@@ -155,6 +175,9 @@ class ARIMA(BaseEstimator):
         self.disp = disp
         self.callback = callback
         self.suppress_warnings = suppress_warnings
+        self.out_of_sample_size = out_of_sample_size
+        self.scoring = scoring
+        self.scoring_args = dict() if not scoring_args else scoring_args
 
     def fit(self, y, exogenous=None, **fit_args):
         """Fit an ARIMA to a vector, ``y``, of observations with an
@@ -171,12 +194,18 @@ class ARIMA(BaseEstimator):
             include a constant or trend. If provided, these variables are
             used as additional features in the regression operation.
         """
-        y = check_array(y, ensure_2d=False, force_all_finite=False, copy=True, dtype=DTYPE)
+        y = column_or_1d(check_array(y, ensure_2d=False, force_all_finite=False, copy=True, dtype=DTYPE))
+        n_samples = y.shape[0]
 
         # if exog was included, check the array...
         if exogenous is not None:
             exogenous = check_array(exogenous, ensure_2d=True, force_all_finite=False,
                                     copy=False, dtype=DTYPE)
+
+        # determine the CV args, if any
+        cv = self.out_of_sample_size
+        scoring = get_callable(self.scoring, VALID_SCORING)
+        cv = max(min(cv, n_samples), 0)  # don't allow negative, don't allow > n_samples
 
         def _fit_wrapper():
             # these might change depending on which one
@@ -226,6 +255,14 @@ class ARIMA(BaseEstimator):
 
         # if the model is fit with an exogenous array, it must be predicted with one as well.
         self.fit_with_exog_ = exogenous is not None
+
+        # now make a prediction if we're validating to save the out-of-sample value
+        if cv > 0:
+            # get the predictions
+            pred = self.arima_res_.predict(exog=exogenous, typ='linear')[-cv:]
+            self.oob_ = scoring(y[-cv:], pred, **self.scoring_args)
+        else:
+            self.oob_ = np.nan
 
         return self
 
@@ -499,6 +536,17 @@ class ARIMA(BaseEstimator):
             The MA roots.
         """
         return self.arima_res_.maroots
+
+    def oob(self):
+        """If the model was built with ``out_of_sample_size`` > 0, a validation
+        score will have been computed. Otherwise it will be np.nan.
+
+        Returns
+        -------
+        oob_ : float
+            The "out-of-bag" score.
+        """
+        return self.oob_
 
     @if_delegate_has_method('arima_res_')
     def params(self):
