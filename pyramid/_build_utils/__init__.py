@@ -64,7 +64,7 @@ def maybe_cythonize_extensions(top_path, config):
         build_from_c_and_cpp_files(config.ext_modules)
     else:
         message = ('Please install cython with a version >= {0} in order '
-                   'to build a scikit-learn development version.').format(
+                   'to build a pyramid development version.').format(
                        CYTHON_MIN_VERSION)
         try:
             import Cython
@@ -77,4 +77,4 @@ def maybe_cythonize_extensions(top_path, config):
             exc.args += (message,)
             raise
 
-    config.ext_modules = cythonize(config.ext_modules)
+        config.ext_modules = cythonize(config.ext_modules)

@@ -152,6 +152,8 @@ def do_setup():
         except ImportError:
             from distutils.core import setup
 
+        metadata['version'] = VERSION
+
     else:  # we DO need numpy
         try:
             from numpy.distutils.core import setup
