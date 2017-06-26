@@ -69,9 +69,6 @@ class CleanCommand(clean):
         cwd = os.path.abspath(os.path.dirname(__file__))
         remove_c_files = not os.path.exists(os.path.join(cwd, 'PKG-INFO'))
         if remove_c_files:
-            cython_hash_file = os.path.join(cwd, 'cythonize.dat')
-            if os.path.exists(cython_hash_file):
-                os.unlink(cython_hash_file)
             print('Will remove generated .c & .so files')
         if os.path.exists('build'):
             shutil.rmtree('build')
@@ -111,15 +108,6 @@ def configuration(parent_package='', top_path=None):
 
     config.add_subpackage(DISTNAME)
     return config
-
-
-def generate_cython():
-    cwd = os.path.abspath(os.path.dirname(__file__))
-    print("Generating Cython modules")
-    p = subprocess.call([sys.executable, os.path.join(cwd, 'build_tools', 'cythonize.py'), DISTNAME], cwd=cwd)
-
-    if p != 0:
-        raise RuntimeError("Running cythonize failed!")
 
 
 def do_setup():
@@ -172,14 +160,6 @@ def do_setup():
 
         # add the config to the metadata
         metadata['configuration'] = configuration
-
-        # build cython modules
-        print('Generating cython files')
-
-        cwd = os.path.abspath(os.path.dirname(__file__))
-        if not os.path.exists(os.path.join(cwd, 'PKG-INFO')):
-            # Generate Cython sources, unless building from source release
-            generate_cython()
 
     # call setup on the dict
     setup(**metadata)
