@@ -7,6 +7,8 @@
 from __future__ import absolute_import
 import os
 
+from pyramid._build_utils import maybe_cythonize_extensions
+
 
 # DEFINE CONFIG
 def configuration(parent_package='', top_path=None):
@@ -18,6 +20,10 @@ def configuration(parent_package='', top_path=None):
 
     config = Configuration('pyramid', parent_package, top_path)
 
+    # build utilities
+    config.add_subpackage('__check_build')
+    config.add_subpackage('_build_utils')
+
     # modules
     config.add_subpackage('compat')
     config.add_subpackage('compat/tests')
@@ -27,6 +33,9 @@ def configuration(parent_package='', top_path=None):
     # modules with cython
     config.add_subpackage('arima')
     config.add_subpackage('arima/tests')
+
+    # do cythonization
+    maybe_cythonize_extensions(top_path, config)
 
     return config
 
