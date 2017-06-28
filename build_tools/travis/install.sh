@@ -31,7 +31,12 @@ if [[ "$DISTRIB" == "conda" ]]; then
 
     # Configure the conda environment and put it in the path using the
     # provided versions
-    if [[ "$INSTALL_MKL" == "true" ]]; then
+    if [[ "$PYTHON_VERSION" == "2.7" ]]; then
+        conda create -n testenv --yes python=$PYTHON_VERSION
+            numpy scipy cython=$CYTHON_VERSION statsmodels \
+            scikit-learn=$SCIKIT_LEARN_VERSION
+
+    elif [[ "$INSTALL_MKL" == "true" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
             numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
             mkl cython=$CYTHON_VERSION \

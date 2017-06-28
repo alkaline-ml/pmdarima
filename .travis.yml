@@ -22,9 +22,8 @@ matrix:
   include:
     # This environment tests the oldest supported anaconda env. Except some of these (i.e., statsmodels
     # and sklearn) require higher versions of numpy, so cannot really test *actual* oldest...
-    - env: DISTRIB="conda" PYTHON_VERSION="2.7" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" STATSMODELS_VERSION="0.8"
+    - env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1"
     # This environment tests the newest supported Anaconda release (4.4.0)
     - env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
