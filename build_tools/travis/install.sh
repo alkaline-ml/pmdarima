@@ -32,7 +32,7 @@ if [[ "$DISTRIB" == "conda" ]]; then
     # Configure the conda environment and put it in the path using the
     # provided versions
     if [[ "$PYTHON_VERSION" == "2.7" ]]; then
-        conda create -n testenv --yes python=$PYTHON_VERSION
+        conda create -n testenv --yes python=$PYTHON_VERSION \
             numpy scipy cython=$CYTHON_VERSION statsmodels \
             scikit-learn=$SCIKIT_LEARN_VERSION
 
