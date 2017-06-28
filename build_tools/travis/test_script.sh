@@ -18,6 +18,7 @@ run_tests() {
         TEST_CMD="pytest --showlocals --durations=1 --pyargs"
     else
         TEST_CMD="nosetests --with-timer --timer-top-n 20"
+    fi
 
     # Get into a temp directory to run test from the installed scikit learn and
     # check if we do not leave artifacts
