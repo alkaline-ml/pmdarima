@@ -81,7 +81,7 @@ Warnings:
 ```
 
 
-![Example image](doc/examples/quick_start_output.png?raw=true)
+![Example image](examples/quick_start_output.png?raw=true)
 
 
-__For an easy, reproducible quick-start example, see [examples/](doc/examples/quick_start_example.ipynb).__
+__For an easy, reproducible quick-start example, see [examples/](examples/quick_start_example.ipynb).__
