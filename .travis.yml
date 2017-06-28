@@ -22,17 +22,17 @@ matrix:
   include:
     # This environment tests the oldest supported anaconda env
     - env: DISTRIB="conda" PYTHON_VERSION="2.7" INSTALL_MKL="false"
-           NUMPY_VERSION="1.8.2" SCIPY_VERSION="0.13.3" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1"
+           NUMPY_VERSION="1.10" SCIPY_VERSION="0.13.3" CYTHON_VERSION="0.23.5"
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" STATSMODELS_VERSION="0.8"
     # This environment tests the newest supported Anaconda release (4.4.0)
     - env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.18"
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
     # This environment use pytest to run the tests. It uses the newest
     # supported Anaconda release (4.4.0).
     - env: USE_PYTEST="true" DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.18"
+           COVERAGE=false SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
   allow_failures:
     # allow_failures seems to be keyed on the python version
     # We are using this to allow failures for DISTRIB=scipy-dev-wheels

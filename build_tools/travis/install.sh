@@ -35,13 +35,15 @@ if [[ "$DISTRIB" == "conda" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
             numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
             mkl cython=$CYTHON_VERSION \
-            scikit-learn=$SCIKIT_LEARN_VERSION
+            scikit-learn=$SCIKIT_LEARN_VERSION \
+            statsmodels=$STATSMODELS_VERSION
 
     else
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
             numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
             nomkl cython=$CYTHON_VERSION \
-            scikit-learn=$SCIKIT_LEARN_VERSION
+            scikit-learn=$SCIKIT_LEARN_VERSION \
+            statsmodels=$STATSMODELS_VERSION
     fi
     source activate testenv
 
