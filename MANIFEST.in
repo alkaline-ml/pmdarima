@@ -1,0 +1,3 @@
+recursive-include doc *
+recursive-include pyramid *.c *.h *.pyx
+include README.md
