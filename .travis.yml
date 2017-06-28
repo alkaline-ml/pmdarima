@@ -22,7 +22,7 @@ matrix:
   include:
     # This environment tests the oldest supported anaconda env
     - env: DISTRIB="conda" PYTHON_VERSION="2.7" INSTALL_MKL="false"
-           NUMPY_VERSION="1.10" SCIPY_VERSION="0.13.3" CYTHON_VERSION="0.23.5"
+           NUMPY_VERSION="1.11" SCIPY_VERSION="0.13.3" CYTHON_VERSION="0.23.5"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" STATSMODELS_VERSION="0.8"
     # This environment tests the newest supported Anaconda release (4.4.0)
     - env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"

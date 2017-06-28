@@ -37,7 +37,7 @@ run_tests() {
     if [[ "$USE_PYTEST" != "true" ]]; then
         # Going back to git checkout folder needed for make test-doc
         cd $OLDPWD
-        make test-doc
+        # make test-doc
     fi
 }
 
