@@ -14,6 +14,12 @@ python -c "import scipy; print('scipy %s' % scipy.__version__)"
 python -c "import multiprocessing as mp; print('%d CPUs' % mp.cpu_count())"
 
 run_tests() {
+    if [[ "$USE_PYTEST" == "true" ]]; then
+        TEST_CMD="pytest --showlocals --durations=1 --pyargs"
+    else
+        TEST_CMD="nosetests --with-timer --timer-top-n 20"
+    fi
+
     # Get into a temp directory to run test from the installed scikit learn and
     # check if we do not leave artifacts
     mkdir -p $TEST_DIR
@@ -23,11 +29,16 @@ run_tests() {
     cd $TEST_DIR
 
     if [[ "$COVERAGE" == "true" ]]; then
-        nosetests -s --with-coverage --with-timer --timer-top-n 20 pyramid
-    else
-        nosetests -s --with-timer --timer-top-n 20 pyramid
+        TEST_CMD="$TEST_CMD --with-coverage"
     fi
+    $TEST_CMD pyramid
 
+    # Test doc (only with nose until we switch completely to pytest)
+    if [[ "$USE_PYTEST" != "true" ]]; then
+        # Going back to git checkout folder needed for make test-doc
+        cd $OLDPWD
+        # make test-doc
+    fi
 }
 
 if [[ "$SKIP_TESTS" != "true" ]]; then
