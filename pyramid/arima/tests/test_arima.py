@@ -89,6 +89,7 @@ def test_basic_arima():
 
     # test some of the attrs
     assert_almost_equal(arima.aic(), 11.201308403566909, decimal=5)
+    assert_almost_equal(arima.aicc(), 11.74676, decimal=5)
     assert_almost_equal(arima.bic(), 13.639060053303311, decimal=5)
 
     # get predictions
@@ -119,7 +120,7 @@ def test_with_oob():
 def _try_get_attrs(arima):
     # show we can get all these attrs without getting an error
     attrs = {
-        'aic', 'arparams', 'arroots', 'bic', 'bse',
+        'aic', 'aicc', 'arparams', 'arroots', 'bic', 'bse',
         'df_resid', 'hqic', 'maparams', 'maroots',
         'params', 'pvalues', 'resid',
     }
@@ -177,6 +178,9 @@ def test_the_r_src():
 
     # the R code's AIC = ~135
     assert abs(135 - fit.aic()) < 1.0
+
+    # the R code's AICc = ~ 137
+    assert abs(137 - fit.aicc()) < 1.0
 
     # the R code's BIC = ~145
     assert abs(145 - fit.bic()) < 1.0
@@ -250,6 +254,9 @@ def test_with_seasonality1():
 
     # R code AIC result is ~3004
     assert abs(fit.aic() - 3004) < 100  # show equal within 100 or so
+
+    # R code AICc result is ~3005
+    assert abs(fit.aicc() - 3005) < 100 # show equal within 100 or so
 
     # R code BIC result is ~3017
     assert abs(fit.bic() - 3017) < 100  # show equal within 100 or so
