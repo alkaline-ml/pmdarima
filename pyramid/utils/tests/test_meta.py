@@ -1,7 +1,6 @@
 
 from __future__ import absolute_import, print_function
 from pyramid.utils.metaestimators import if_has_delegate
-from nose.tools import assert_raises
 
 
 class _IfHasDelegateTester(object):
@@ -16,7 +15,7 @@ class _IfHasDelegateTester(object):
     def predict(self):
         return True
 
-    @if_has_delegate(('b_', 'a_'))
+    @if_has_delegate(['b_', 'a_'])
     def predict2(self):
         return True
 

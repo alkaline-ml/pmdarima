@@ -276,7 +276,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     # is stepwise AND parallel enabled?
     if stepwise and n_jobs != 1:
         n_jobs = 1
-        warnings.warn('stepwise model cannot be fit in parallel (n_jobs = %i). '
+        warnings.warn('stepwise model cannot be fit in parallel (n_jobs=%i). '
                       'Falling back to stepwise parameter search.' % n_jobs)
 
     # check on m

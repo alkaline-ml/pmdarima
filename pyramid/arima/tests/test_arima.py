@@ -249,12 +249,23 @@ def test_with_seasonality1():
 
 
 def test_with_seasonality2():
-    seasonal_fit = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-                              start_P=0, seasonal=True, n_jobs=1, d=1, D=1, stepwise=True,
-                              suppress_warnings=True, error_action='ignore',
-                              random_state=42)
+    # also test the warning, while we're at it...
+    def suppress_warnings(func):
+        def suppressor(*args, **kwargs):
+            with warnings.catch_warnings(record=True):
+                warnings.simplefilter("ignore")
+                return func(*args, **kwargs)
+        return suppressor
+
+    @suppress_warnings
+    def do_fit():
+        return auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
+                          start_P=0, seasonal=True, n_jobs=-1, d=1, D=1, stepwise=True,
+                          suppress_warnings=True, error_action='ignore',
+                          random_state=42)
 
     # show that we can forecast even after the pickling (this was fit in parallel)
+    seasonal_fit = do_fit()
     seasonal_fit.predict(n_periods=10)
 
     # ensure summary still works
