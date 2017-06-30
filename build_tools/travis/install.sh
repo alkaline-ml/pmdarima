@@ -57,7 +57,7 @@ if [[ "$DISTRIB" == "conda" ]]; then
 fi
 
 if [[ "$COVERAGE" == "true" ]]; then
-    pip install coverage codecov
+    pip install coverage codecov coveralls
 fi
 
 if [[ "$SKIP_TESTS" == "true" ]]; then
