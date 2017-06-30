@@ -5,8 +5,12 @@ from numpy.testing import assert_array_almost_equal, assert_almost_equal
 from pyramid.arima.stationarity import ADFTest, PPTest, KPSSTest
 from pyramid.arima.seasonality import CHTest
 from pyramid.arima.utils import ndiffs, nsdiffs
+from pyramid.utils import get_random_state
 from nose.tools import assert_raises
 import numpy as np
+
+# for testing rand of len 400 for m==365
+random_state = get_random_state(42)
 
 austres = np.array([13067.3, 13130.5, 13198.4, 13254.2, 13303.7, 13353.9,
                     13409.3, 13459.2, 13504.5, 13552.6, 13614.3, 13669.5,
@@ -53,6 +57,21 @@ def test_kpss():
     assert ndiffs(austres, test='kpss', max_d=2) == 2
 
 
+def test_non_default_kpss():
+    test = KPSSTest(alpha=0.05, null='trend', lshort=False)
+    pval, is_sig = test.is_stationary(austres)
+    assert is_sig  # show it is significant
+    assert_almost_equal(pval, 0.01)
+
+    # test the ndiffs with the KPSS test
+    assert ndiffs(austres, test='kpss', max_d=2) == 2
+
+
+def test_kpss_corner():
+    test = KPSSTest(alpha=0.05, null='something-else', lshort=True)
+    assert_raises(ValueError, test.is_stationary, austres)
+
+
 def test_pp():
     test = PPTest(alpha=0.05, lshort=True)
     pval, is_sig = test.is_stationary(austres)
@@ -72,7 +91,15 @@ def test_adf():
     # OLS in statsmodels seems unstable compared to the R code?...
 
 
-def test_sd_test():
+def test_adf_corner():
+    assert_raises(ValueError, ADFTest, alpha=0.05, k=-1)
+
+    # show we can fit with k is None
+    test = ADFTest(alpha=0.05, k=None)
+    _ = test.is_stationary(austres)
+
+
+def test_ch_test():
     val = CHTest._sd_test(austres, 3)
 
     # R code produces 0.07956102
@@ -86,6 +113,14 @@ def test_sd_test():
 
     # this won't even go thru because n < 2 * m + 5:
     assert CHTest(m=365).estimate_seasonal_differencing_term(austres) == 0
+
+
+def test_ch_base():
+    test = CHTest(m=2)
+    assert test.estimate_seasonal_differencing_term(None) == 0
+
+    # test really long m for random array
+    CHTest(m=365).estimate_seasonal_differencing_term(random_state.rand(400))
 
 
 def test_ndiffs_corner_cases():
@@ -102,3 +137,14 @@ def test_nsdiffs_corner_cases():
     # show fails for m <= 1
     assert_raises(ValueError, nsdiffs, austres, m=1)
     assert_raises(ValueError, nsdiffs, austres, m=0)
+
+
+def test_base_cases():
+    classes = (ADFTest, KPSSTest, PPTest)
+    for cls in classes:
+        instance = cls()
+        p_val, is_stationary = instance.is_stationary(None)
+
+        # results of base-case
+        assert np.isnan(p_val)
+        assert not is_stationary
