@@ -23,9 +23,10 @@ builtins.__PYRAMID_SETUP__ = True
 
 # metadata
 DISTNAME = 'pyramid'
-DESCRIPTION = "Python's auto.arima equivalent"
+DESCRIPTION = "Python's forecast::auto.arima equivalent"
 
 MAINTAINER = 'Taylor G. Smith'
+MAINTAINER_GIT = 'tgsmith61591'
 MAINTAINER_EMAIL = 'taylor.smith@alkaline-ml.com'
 LICENSE = 'MIT'
 
@@ -113,6 +114,8 @@ def configuration(parent_package='', top_path=None):
 def do_setup():
     # setup the config
     metadata = dict(name=DISTNAME,
+                    packages=[DISTNAME],
+                    url="https://github.com/%s/%s" % (MAINTAINER_GIT, DISTNAME),
                     maintainer=MAINTAINER,
                     maintainer_email=MAINTAINER_EMAIL,
                     description=DESCRIPTION,
@@ -133,7 +136,8 @@ def do_setup():
                                  'Programming Language :: Python :: 2.7'
                                  ],
                     keywords='sklearn scikit-learn arima timeseries',
-                    # packages=[DISTNAME],
+                    # this will only work for releases that have the appropriate tag...
+                    download_url='https://github.com/%s/%s/archive/v%s.tar.gz' % (MAINTAINER_GIT, DISTNAME, VERSION),
                     # install_requires=REQUIREMENTS,
                     cmdclass=cmdclass)
 

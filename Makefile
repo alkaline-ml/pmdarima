@@ -16,7 +16,7 @@ ifeq ($(BITS),32)
 endif
 
 
-all: clean inplace test
+all: clean inplace #test
 
 clean-ctags:
 	rm -f tags
@@ -31,6 +31,7 @@ inplace:
 
 test-code: in
 	$(NOSETESTS) -s -v pyramid
+
 # test-sphinxext:
 #	$(NOSETESTS) -s -v doc/sphinxext/
 #test-doc:
