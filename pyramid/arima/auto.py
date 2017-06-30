@@ -10,6 +10,7 @@ from sklearn.externals.joblib import Parallel, delayed
 from sklearn.linear_model import LinearRegression
 import numpy as np
 import warnings
+import time
 
 from .utils import ndiffs, is_constant, nsdiffs
 from ..utils import diff, get_random_state
@@ -251,6 +252,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     [2] https://github.com/robjhyndman/forecast/blob/19b0711e554524bf6435b7524517715658c07699/R/arima.R
     [3] https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima
     """
+    start = time.time()
+
     # validate start/max points
     if any(_ < 0 for _ in (max_p, max_q, max_P, max_Q, start_p, start_q, start_P, start_Q)):
         raise ValueError('starting and max p, q, P & Q values must be positive integers (>= 0)')
@@ -308,7 +311,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                        error_action=error_action, scoring=scoring,
                        out_of_sample_size=out_of_sample_size,
                        scoring_args=scoring_args)),
-            return_valid_fits)
+            return_valid_fits, start, trace)
 
     # test ic, and use AIC if n <= 3
     if information_criterion not in VALID_CRITERIA:
@@ -424,7 +427,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                                        error_action=error_action, scoring=scoring,
                                        out_of_sample_size=out_of_sample_size,
                                        scoring_args=scoring_args)),
-            return_valid_fits)
+            return_valid_fits, start, trace)
 
     # seasonality issues
     if m > 1:
@@ -528,7 +531,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     for model in sorted_res:
         model._clear_cached_state()
 
-    return _return_wrapper(sorted_res, return_valid_fits)
+    return _return_wrapper(sorted_res, return_valid_fits, start, trace)
 
 
 class _StepwiseFitWrapper(object):
@@ -674,6 +677,7 @@ class _StepwiseFitWrapper(object):
 def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, transparams,
                solver, maxiter, disp, callback, fit_params, suppress_warnings, trace,
                error_action, out_of_sample_size, scoring, scoring_args):
+    start = time.time()
     try:
         fit = ARIMA(order=order, seasonal_order=seasonal_order, start_params=start_params,
                     trend=trend, method=method, transparams=transparams,
@@ -694,10 +698,11 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, tran
 
     # do trace
     if trace:
-        print('Fit ARIMA: %s; AIC=%.3f, BIC=%.3f'
+        print('Fit ARIMA: %s; AIC=%.3f, BIC=%.3f, Fit time=%.3f seconds'
               % (_fmt_order_info(order, seasonal_order),
                  fit.aic() if fit is not None else np.nan,
-                 fit.bic() if fit is not None else np.nan))
+                 fit.bic() if fit is not None else np.nan,
+                 time.time() - start if fit is not None else np.nan))
 
     return fit
 
@@ -739,7 +744,7 @@ def _post_ppc_arima(a):
     return a
 
 
-def _return_wrapper(fits, return_all):
+def _return_wrapper(fits, return_all, start, trace):
     """If the user wants to get all of the models back, this will
     return a list of the ARIMA models, otherwise it will just return
     the model. If this is called from the end of the function, ``fits``
@@ -759,6 +764,10 @@ def _return_wrapper(fits, return_all):
     # make sure it's an iterable
     if not hasattr(fits, '__iter__'):
         fits = [fits]
+
+    # whether to print the final runtime
+    if trace:
+        print('Total fit time: %.3f seconds' % (time.time() - start))
 
     # which to return? if not all, then first index (assume sorted)
     if not return_all:
