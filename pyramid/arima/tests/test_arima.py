@@ -89,6 +89,7 @@ def test_basic_arima():
 
     # test some of the attrs
     assert_almost_equal(arima.aic(), 11.201308403566909, decimal=5)
+    assert_almost_equal(arima.aicc(), 11.74676, decimal=5)
     assert_almost_equal(arima.bic(), 13.639060053303311, decimal=5)
 
     # get predictions
@@ -119,8 +120,8 @@ def test_with_oob():
 def _try_get_attrs(arima):
     # show we can get all these attrs without getting an error
     attrs = {
-        'aic', 'arparams', 'arroots', 'bic', 'bse',
-        'df_resid', 'hqic', 'maparams', 'maroots',
+        'aic', 'aicc', 'arparams', 'arroots', 'bic', 'bse',
+        'df_model', 'df_resid', 'hqic', 'maparams', 'maroots',
         'params', 'pvalues', 'resid',
     }
 
@@ -178,6 +179,9 @@ def test_the_r_src():
     # the R code's AIC = ~135
     assert abs(135 - fit.aic()) < 1.0
 
+    # the R code's AICc = ~ 137
+    assert abs(137 - fit.aicc()) < 1.0
+
     # the R code's BIC = ~145
     assert abs(145 - fit.bic()) < 1.0
 
@@ -229,17 +233,10 @@ def test_errors():
 
 
 def test_many_orders():
-    # show that auto-arima can't fit this data for some reason...
     lam = 0.5
     lynx_bc = ((lynx ** lam) - 1) / lam
-
-    failed = False
-    try:
-        auto_arima(lynx_bc, start_p=1, start_q=1, d=0, max_p=5, max_q=5,
-                   n_jobs=-1, suppress_warnings=True, maxiter=10)  # shorter max iter
-    except ValueError:
-        failed = True
-    assert failed
+    auto_arima(lynx_bc, start_p=1, start_q=1, d=0, max_p=5, max_q=5,
+               suppress_warnings=True, stepwise=True)
 
 
 def test_with_seasonality1():
@@ -251,17 +248,31 @@ def test_with_seasonality1():
     # R code AIC result is ~3004
     assert abs(fit.aic() - 3004) < 100  # show equal within 100 or so
 
+    # R code AICc result is ~3005
+    assert abs(fit.aicc() - 3005) < 100 # show equal within 100 or so
+
     # R code BIC result is ~3017
     assert abs(fit.bic() - 3017) < 100  # show equal within 100 or so
 
 
 def test_with_seasonality2():
-    seasonal_fit = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-                              start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
-                              suppress_warnings=True, error_action='raise',  # do raise so it fails fast
-                              random=True, random_state=42, n_fits=3)
+    # also test the warning, while we're at it...
+    def suppress_warnings(func):
+        def suppressor(*args, **kwargs):
+            with warnings.catch_warnings(record=True):
+                warnings.simplefilter("ignore")
+                return func(*args, **kwargs)
+        return suppressor
+
+    @suppress_warnings
+    def do_fit():
+        return auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
+                          start_P=0, seasonal=True, n_jobs=-1, d=1, D=1, stepwise=True,
+                          suppress_warnings=True, error_action='ignore',
+                          random_state=42)
 
     # show that we can forecast even after the pickling (this was fit in parallel)
+    seasonal_fit = do_fit()
     seasonal_fit.predict(n_periods=10)
 
     # ensure summary still works
@@ -271,17 +282,17 @@ def test_with_seasonality2():
 def test_with_seasonality3():
     # show we can estimate D even when it's not there...
     auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-               start_P=0, seasonal=True, n_jobs=1, d=1, D=None,
+               start_P=0, seasonal=True, d=1, D=None,
                error_action='ignore', suppress_warnings=True,
                trace=True,  # get the coverage on trace
-               random=True, random_state=42, n_fits=3)
+               random_state=42, stepwise=True)
 
 
 def test_with_seasonality4():
     # show we can run a random search much faster! and while we're at it,
-    # make the function return all the values
+    # make the function return all the values.
     auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-               start_P=0, seasonal=True, n_jobs=1, d=1, D=None,
+               start_P=0, seasonal=True, n_jobs=1, d=1, D=None, stepwise=False,
                error_action='ignore', suppress_warnings=True,
                random=True, random_state=42, return_valid_fits=True,
                n_fits=5)  # only fit 5
@@ -294,7 +305,7 @@ def test_with_seasonality5():
                          start_P=0, seasonal=True, n_jobs=1, d=1, D=None,
                          error_action='ignore', suppress_warnings=True, stationary=True,
                          random=True, random_state=42, return_valid_fits=True,
-                         n_fits=5, exogenous=rs.rand(wineind.shape[0], 4))  # only fit 2
+                         stepwise=False, n_fits=5, exogenous=rs.rand(wineind.shape[0], 4))  # only fit 2
 
     # show it is a list
     assert hasattr(all_res, '__iter__')
@@ -315,7 +326,8 @@ def test_with_seasonality7():
                    start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
                    out_of_sample_size=10, information_criterion='oob',
                    suppress_warnings=True, error_action='raise',  # do raise so it fails fast
-                   random=True, random_state=42, n_fits=3)
+                   random=True, random_state=42, n_fits=3,
+                   stepwise=False)
 
 
 def test_corner_cases():

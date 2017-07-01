@@ -1,5 +1,6 @@
 
 from .array import *
+from .metaestimators import *
 from .random import *
 
 
