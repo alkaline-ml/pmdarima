@@ -249,9 +249,15 @@ class ARIMA(BaseEstimator):
         if self.suppress_warnings:
             with warnings.catch_warnings(record=False):
                 warnings.simplefilter('ignore')
-                _, self.arima_res_ = _fit_wrapper()
+                arima, self.arima_res_ = _fit_wrapper()
         else:
-            _, self.arima_res_ = _fit_wrapper()
+            arima, self.arima_res_ = _fit_wrapper()
+
+        # Set df_model attribute for SARIMAXResults object
+        if not hasattr(self.arima_res_, 'df_model'):
+            df_model = arima.k_exog + arima.k_trend + arima.k_ar + \
+                       arima.k_ma + arima.k_seasonal_ar + arima.k_seasonal_ma
+            setattr(self.arima_res_, 'df_model', df_model)
 
         # if the model is fit with an exogenous array, it must be predicted with one as well.
         self.fit_with_exog_ = exogenous is not None
