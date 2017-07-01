@@ -21,7 +21,7 @@ import os
 
 # DTYPE for arrays
 from ..compat.numpy import DTYPE
-from ..utils import get_callable
+from ..utils import get_callable, if_has_delegate
 
 __all__ = [
     'ARIMA'
@@ -431,6 +431,7 @@ class ARIMA(BaseEstimator):
         """
         return self.arima_res_.aic
 
+    @if_has_delegate('arima_res_')
     def aicc(self):
         """Get the AICc, the corrected Akaike Information Criterion:
 
@@ -508,6 +509,17 @@ class ARIMA(BaseEstimator):
             The BSE
         """
         return self.arima_res_.bse
+
+    @if_delegate_has_method('arima_res_')
+    def df_model(self):
+        """The model degrees of freedom: ``k_exog`` + ``k_trend`` +
+        ``k_ar`` + ``k_ma``.
+
+        Returns
+        -------
+        df_model : array-like
+            The degrees of freedom in the model.
+        """
 
     @if_delegate_has_method('arima_res_')
     def df_resid(self):

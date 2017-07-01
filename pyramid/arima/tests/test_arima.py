@@ -121,7 +121,7 @@ def _try_get_attrs(arima):
     # show we can get all these attrs without getting an error
     attrs = {
         'aic', 'aicc', 'arparams', 'arroots', 'bic', 'bse',
-        'df_resid', 'hqic', 'maparams', 'maroots',
+        'df_model', 'df_resid', 'hqic', 'maparams', 'maroots',
         'params', 'pvalues', 'resid',
     }
 
