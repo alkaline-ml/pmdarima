@@ -410,7 +410,7 @@ class ARIMA(BaseEstimator):
 
     @if_delegate_has_method('arima_res_')
     def aic(self):
-        """Get the AIC, the Akaine Information Criterion:
+        """Get the AIC, the Akaike Information Criterion:
 
             -2 * llf + 2 * df_model
 
@@ -424,6 +424,28 @@ class ARIMA(BaseEstimator):
             The AIC
         """
         return self.arima_res_.aic
+
+    def aicc(self):
+        """Get the AICc, the corrected Akaike Information Criterion:
+
+            AIC + 2 * df_model * (df_model + 1) / (nobs - df_model - 1)
+
+        Where ``df_model`` (the number of degrees of freedom in the model)
+        includes all AR parameters, MA parameters, constant terms parameters
+        on constant terms and the variance. And ``nobs`` is the sample size.
+
+        Returns
+        -------
+        aicc : float
+            The AICc
+        """
+        # TODO: this code should really be added to statsmodels. Rewrite
+        #       this function to reflect other metric implementations if/when
+        #       statsmodels incorporates AICc
+        aic = self.arima_res_.aic
+        nobs = self.arima_res_.nobs
+        df_model = self.arima_res_.df_model + 1  # add one for constant term
+        return aic + 2. * df_model * (nobs / (nobs - df_model - 1.) - 1.)
 
     @if_delegate_has_method('arima_res_')
     def arparams(self):

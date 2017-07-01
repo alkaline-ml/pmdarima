@@ -24,7 +24,7 @@ __all__ = [
 ]
 
 # The valid information criteria
-VALID_CRITERIA = {'aic', 'bic', 'hqic', 'oob'}
+VALID_CRITERIA = {'aic', 'aicc', 'bic', 'hqic', 'oob'}
 
 
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2, max_q=5,
@@ -46,9 +46,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     conducting the Canova-Hansen to determine the optimal order of seasonal differencing, ``D``.
 
     In order to find the best model, ``auto_arima`` optimizes for a given ``information_criterion``, one of
-    {'aic', 'bic', 'hqic', 'oob'} (Akaine Information Criterion, Bayesian Information Criterion, Hannan-Quinn
-    Information Criterion, or "out of bag"--for validation scoring--respectively) and returns the ARIMA which
-    minimizes the value.
+    {'aic', 'aicc', 'bic', 'hqic', 'oob'} (Akaike Information Criterion, Corrected Akaike Information Criterion,
+    Bayesian Information Criterion, Hannan-Quinn Information Criterion, or "out of bag"--for validation
+    scoring--respectively) and returns the ARIMA which minimizes the value.
 
     Note that due to stationarity issues, ``auto_arima`` might not find a suitable model that will converge. If this
     is the case, a ``ValueError`` will be thrown suggesting stationarity-inducing measures be taken prior
