@@ -44,5 +44,8 @@ def test_corners():
     # fails for bad length
     assert_raises(ValueError, approx, x=[], y=[], xout=[], ties='mean')
 
+    # fails for bad length
+    assert_raises(ValueError, approx, x=[], y=[], xout=[], method='constant')
+
     # fails for linear when < 2 samples
     assert_raises(ValueError, approx, x=[1], y=[1], xout=[], method='linear', ties='ordered')
