@@ -6,7 +6,6 @@
 
 from __future__ import print_function, absolute_import, division
 from distutils.command.clean import clean
-import subprocess
 import shutil
 import os
 import sys
@@ -23,6 +22,7 @@ builtins.__PYRAMID_SETUP__ = True
 
 # metadata
 DISTNAME = 'pyramid'
+PYPIDIST = '%s-arima' % DISTNAME
 DESCRIPTION = "Python's forecast::auto.arima equivalent"
 
 MAINTAINER = 'Taylor G. Smith'
@@ -111,7 +111,7 @@ def configuration(parent_package='', top_path=None):
 
 def do_setup():
     # setup the config
-    metadata = dict(name='py-arima',
+    metadata = dict(name=PYPIDIST,
                     packages=[DISTNAME],
                     url="https://github.com/%s/%s" % (MAINTAINER_GIT, DISTNAME),
                     maintainer=MAINTAINER,
