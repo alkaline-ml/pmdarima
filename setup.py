@@ -51,9 +51,7 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     extra_setuptools_args = dict(
         zip_safe=False,  # the package can run out of an .egg file
         include_package_data=True,
-        extras_require={
-            'alldeps': REQUIREMENTS,
-        },
+        install_requires=REQUIREMENTS,
     )
 else:
     extra_setuptools_args = dict()
@@ -140,7 +138,8 @@ def do_setup():
                     download_url='https://github.com/%s/%s/archive/v%s.tar.gz' % (MAINTAINER_GIT, DISTNAME, VERSION),
                     # install_requires=REQUIREMENTS,
                     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4',
-                    cmdclass=cmdclass)
+                    cmdclass=cmdclass,
+                    **extra_setuptools_args)
 
     if len(sys.argv) == 1 or (
             len(sys.argv) >= 2 and ('--help' in sys.argv[1:] or
