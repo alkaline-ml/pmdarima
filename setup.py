@@ -113,7 +113,7 @@ def configuration(parent_package='', top_path=None):
 
 def do_setup():
     # setup the config
-    metadata = dict(name=DISTNAME,
+    metadata = dict(name='py-arima',
                     packages=[DISTNAME],
                     url="https://github.com/%s/%s" % (MAINTAINER_GIT, DISTNAME),
                     maintainer=MAINTAINER,
@@ -123,22 +123,23 @@ def do_setup():
                     version=VERSION,
                     classifiers=['Intended Audience :: Science/Research',
                                  'Intended Audience :: Developers',
-                                 'Intended Audience :: Scikit-learn users',
-                                 'Intended Audience :: R users',
+                                 'Programming Language :: C',
                                  'Programming Language :: Python',
-                                 'Topic :: Machine Learning',
                                  'Topic :: Software Development',
                                  'Topic :: Scientific/Engineering',
                                  'Operating System :: Microsoft :: Windows',
                                  'Operating System :: POSIX',
                                  'Operating System :: Unix',
                                  'Operating System :: MacOS',
-                                 'Programming Language :: Python :: 2.7'
+                                 'Programming Language :: Python :: 2.7',
+                                 'Programming Language :: Python :: 3.5',
+                                 'Programming Language :: Python :: 3.6',
                                  ],
                     keywords='sklearn scikit-learn arima timeseries',
                     # this will only work for releases that have the appropriate tag...
                     download_url='https://github.com/%s/%s/archive/v%s.tar.gz' % (MAINTAINER_GIT, DISTNAME, VERSION),
                     # install_requires=REQUIREMENTS,
+                    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4',
                     cmdclass=cmdclass)
 
     if len(sys.argv) == 1 or (
