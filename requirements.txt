@@ -1,5 +1,5 @@
 Cython>=0.23
-numpy>=1.10
+numpy>=1.9
 scipy>=0.9
 scikit-learn>=0.17
 statsmodels>=0.8
