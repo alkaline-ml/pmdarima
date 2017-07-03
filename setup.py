@@ -48,6 +48,8 @@ SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
     '--single-version-externally-managed'
 }
 
+# are we building from install or develop?
+we_be_buildin = 'install' in sys.argv
 if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     # we don't use setuptools, but if we don't import it, the "develop"
     # option for setup.py is invalid.
@@ -56,6 +58,7 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     # only require cython if we're developing
     if 'develop' in sys.argv:
         REQUIREMENTS.append('Cython>=%s' % CYTHON_MIN_VERSION)
+        we_be_buildin = True
 
     print('Adding extra setuptools args')
     extra_setuptools_args = dict(
@@ -168,11 +171,20 @@ def do_setup():
 
         metadata['version'] = VERSION
 
-    else:  # we DO need numpy
-        try:
-            from numpy.distutils.core import setup
-        except ImportError:
-            raise RuntimeError('Need numpy to build %s' % DISTNAME)
+    else:
+        # if we are building from install or develop, we NEED numpy
+        if we_be_buildin:
+            try:
+                from numpy.distutils.core import setup
+            except ImportError:
+                raise RuntimeError('Need numpy to build %s' % DISTNAME)
+
+        # if we are building from a wheel, we do not need numpy, because it will be handled in the requirements.txt
+        else:
+            try:
+                from setuptools import setup
+            except ImportError:
+                from distutils.core import setup
 
         # add the config to the metadata
         metadata['configuration'] = configuration
