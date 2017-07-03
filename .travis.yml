@@ -26,7 +26,7 @@ matrix:
            COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" FROM_REQ=false
     # This tests that the package can be built even in the absence of required packages (which are then
     # installed via the requirements.txt)
-    - env: DISTRIB="conda" PYTHON_VERSION="3.5" COVERAGE=true FROM_REQ=true
+    # - env: DISTRIB="conda" PYTHON_VERSION="3.5" COVERAGE=true FROM_REQ=true
     # This environment tests Python 3.5 support
     - env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"

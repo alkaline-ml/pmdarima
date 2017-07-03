@@ -36,8 +36,9 @@ if [[ "$DISTRIB" == "conda" ]]; then
             numpy scipy cython=$CYTHON_VERSION statsmodels \
             scikit-learn=$SCIKIT_LEARN_VERSION
 
-    elif [[ "$FROM_REQ" == "true" ]]; then
-        conda create -n testenv --yes python=$PYTHON_VERSION numpy cython
+    # todo...
+    # elif [[ "$FROM_REQ" == "true" ]]; then
+    #      conda create -n testenv --yes python=$PYTHON_VERSION numpy cython
 
     elif [[ "$INSTALL_MKL" == "true" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \

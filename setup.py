@@ -178,10 +178,7 @@ def do_setup():
 
         # if we are building from a wheel, we do not need numpy, because it will be handled in the requirements.txt
         else:
-            try:
-                from setuptools import setup
-            except ImportError:
-                from distutils.core import setup
+            from setuptools import setup
 
         # add the config to the metadata
         metadata['configuration'] = configuration
