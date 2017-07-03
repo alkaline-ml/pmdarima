@@ -46,7 +46,7 @@ SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
 }
 
 if SETUPTOOLS_COMMANDS.intersection(sys.argv):
-    import setuptools
+    # import setuptools
 
     extra_setuptools_args = dict(
         zip_safe=False,  # the package can run out of an .egg file
