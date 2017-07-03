@@ -36,7 +36,8 @@ VERSION = pyramid.__version__
 
 # get the installation requirements:
 with open('requirements.txt') as req:
-    REQUIREMENTS = req.read().split(os.linesep)
+    REQUIREMENTS = [l for l in req.read().split(os.linesep) if l][::-1]
+    print("Requirements: %r" % REQUIREMENTS)
 
 SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
     'develop', 'release', 'bdist_egg', 'bdist_rpm',
