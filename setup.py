@@ -25,9 +25,6 @@ DISTNAME = 'pyramid'
 PYPIDIST = '%s-arima' % DISTNAME
 DESCRIPTION = "Python's forecast::auto.arima equivalent"
 
-# todo: can we put this somewhere that _build_utils can access it, too?
-CYTHON_MIN_VERSION = '0.23'
-
 MAINTAINER = 'Taylor G. Smith'
 MAINTAINER_GIT = 'tgsmith61591'
 MAINTAINER_EMAIL = 'taylor.smith@alkaline-ml.com'
@@ -57,7 +54,6 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
 
     # only require cython if we're developing
     if 'develop' in sys.argv:
-        REQUIREMENTS.append('Cython>=%s' % CYTHON_MIN_VERSION)
         we_be_buildin = True
 
     print('Adding extra setuptools args')
