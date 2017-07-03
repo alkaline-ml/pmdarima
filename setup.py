@@ -25,6 +25,9 @@ DISTNAME = 'pyramid'
 PYPIDIST = '%s-arima' % DISTNAME
 DESCRIPTION = "Python's forecast::auto.arima equivalent"
 
+# todo: can we put this somewhere that _build_utils can access it, too?
+CYTHON_MIN_VERSION = '0.23'
+
 MAINTAINER = 'Taylor G. Smith'
 MAINTAINER_GIT = 'tgsmith61591'
 MAINTAINER_EMAIL = 'taylor.smith@alkaline-ml.com'
@@ -46,7 +49,13 @@ SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
 }
 
 if SETUPTOOLS_COMMANDS.intersection(sys.argv):
-    # import setuptools
+    # we don't use setuptools, but if we don't import it, the "develop"
+    # option for setup.py is invalid.
+    import setuptools
+
+    # only require cython if we're developing
+    if 'develop' in sys.argv:
+        REQUIREMENTS.append('Cython>=%s' % CYTHON_MIN_VERSION)
 
     extra_setuptools_args = dict(
         zip_safe=False,  # the package can run out of an .egg file
