@@ -49,3 +49,11 @@ before_script:
   - sleep 5 # give xvfb some time to start by sleeping for 5 seconds
 script: bash build_tools/travis/test_script.sh
 after_success: source build_tools/travis/after_success.sh
+
+notifications:
+    slack:
+      rooms:
+        - tgsmith61591-gh:mWyfLXzxRAHCKD2QRHWvHZaX#pyramid-cicd
+      on_success: always
+      on_failure: always
+      on_pull_requests: true
