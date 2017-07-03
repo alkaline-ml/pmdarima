@@ -57,6 +57,7 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     if 'develop' in sys.argv:
         REQUIREMENTS.append('Cython>=%s' % CYTHON_MIN_VERSION)
 
+    print('Adding extra setuptools args')
     extra_setuptools_args = dict(
         zip_safe=False,  # the package can run out of an .egg file
         include_package_data=True,
@@ -130,6 +131,7 @@ def do_setup():
                     version=VERSION,
                     classifiers=['Intended Audience :: Science/Research',
                                  'Intended Audience :: Developers',
+                                 'Intended Audience :: Financial and Insurance Industry',  # for all you quants
                                  'Programming Language :: C',
                                  'Programming Language :: Python',
                                  'Topic :: Software Development',
@@ -145,7 +147,6 @@ def do_setup():
                     keywords='sklearn scikit-learn arima timeseries',
                     # this will only work for releases that have the appropriate tag...
                     download_url='https://github.com/%s/%s/archive/v%s.tar.gz' % (MAINTAINER_GIT, DISTNAME, VERSION),
-                    # install_requires=REQUIREMENTS,
                     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4',
                     cmdclass=cmdclass,
                     **extra_setuptools_args)

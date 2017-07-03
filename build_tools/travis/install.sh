@@ -66,6 +66,8 @@ fi
 if [[ "$SKIP_TESTS" == "true" ]]; then
     echo "No need to build pyramid when not running the tests"
 else
+    python setup.py develop
+
     # Build pyramid in the install.sh script to collapse the verbose
     # build output in the travis output when it succeeds.
     python --version
@@ -78,6 +80,6 @@ try:
 except ImportError:
     pass
 "
-    python setup.py develop
+
     ccache --show-stats
 fi
