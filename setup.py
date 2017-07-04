@@ -55,8 +55,13 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     # we don't use setuptools, but if we don't import it, the "develop"
     # option for setup.py is invalid.
     import setuptools
+    from setuptools.dist import Distribution
 
-    # only require cython if we're developing
+    class BinaryDistribution(Distribution):
+        def has_ext_modules(self):
+            return True
+
+    # only import numpy (later) if we're developing
     if 'develop' in sys.argv:
         we_be_buildin = True
 
@@ -65,6 +70,7 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
         zip_safe=False,  # the package can run out of an .egg file
         include_package_data=False,
         package_data={'pyramid': ['*']},
+        distclass=BinaryDistribution,
         install_requires=REQUIREMENTS,
     )
 else:
