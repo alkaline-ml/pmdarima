@@ -15,15 +15,18 @@ if sys.version_info[0] < 3:
 else:
     import builtins
 
-# Hacky, adopted from sklearn. This sets a global variable
+# Hacky (!!), adopted from sklearn. This sets a global variable
 # so pyramid __init__ can detect if it's being loaded in the setup
 # routine, so it won't load submodules that haven't yet been built.
+# This is because of the numpy distutils extensions that are used by pyramid
+# to build the compiled extensions in sub-packages
 builtins.__PYRAMID_SETUP__ = True
 
 # metadata
 DISTNAME = 'pyramid'
 PYPIDIST = '%s-arima' % DISTNAME
 DESCRIPTION = "Python's forecast::auto.arima equivalent"
+# todo: long description from README rst
 
 MAINTAINER = 'Taylor G. Smith'
 MAINTAINER_GIT = 'tgsmith61591'
@@ -36,7 +39,7 @@ VERSION = pyramid.__version__
 
 # get the installation requirements:
 with open('requirements.txt') as req:
-    REQUIREMENTS = [l for l in req.read().split(os.linesep) if l][::-1]
+    REQUIREMENTS = [l for l in req.read().split(os.linesep) if l]
     print("Requirements: %r" % REQUIREMENTS)
 
 SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
@@ -170,14 +173,16 @@ def do_setup():
         metadata['version'] = VERSION
 
     else:
-        # if we are building from install or develop, we NEED numpy
+        # if we are building from install or develop, we NEED numpy and cython,
+        # since they are both used in building the .pyx files into C modules.
         if we_be_buildin:
             try:
                 from numpy.distutils.core import setup
             except ImportError:
                 raise RuntimeError('Need numpy to build %s' % DISTNAME)
 
-        # if we are building from a wheel, we do not need numpy, because it will be handled in the requirements.txt
+        # if we are building to or from a wheel, we do not need numpy,
+        # because it will be handled in the requirements.txt
         else:
             from setuptools import setup
 

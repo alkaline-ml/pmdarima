@@ -205,6 +205,10 @@ def test_errors():
     # show bad m value
     _assert_val_error(auto_arima, abc, m=0)
 
+    # show that for starting values > max_order, we'll get an error
+    _assert_val_error(auto_arima, abc, start_p=5, start_q=5, seasonal=False, max_order=3)
+    _assert_val_error(auto_arima, abc, start_p=5, start_q=5, start_P=4, start_Q=3, seasonal=True, max_order=3)
+
 
 def test_many_orders():
     lam = 0.5
