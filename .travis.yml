@@ -36,7 +36,7 @@ script: bash build_tools/travis/test_script.sh
 after_success: source build_tools/travis/after_success.sh
 
 deploy:
-  server: https://test.pypi.org/legacy # Include to override production pypi
+  server: https://testpypi.python.org/pypi # Include to override production pypi
   skip_cleanup: true
   on:
     branch: travis_ci_continuous_deployment
