@@ -186,13 +186,17 @@ class ARIMA(BaseEstimator):
 
         Parameters
         ----------
-        y : array-like, shape=(n_samples,)
-            The time-series on which to fit the ARIMA.
+        y : array-like or iterable, shape=(n_samples,)
+            The time-series to which to fit the ``ARIMA`` estimator. This may either be a Pandas
+            ``Series`` object (statsmodels can internally use the dates in the index), or a numpy
+            array. This should be a one-dimensional array of floats, and should not contain any
+            ``np.nan`` or ``np.inf`` values.
 
         exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
-            An optional array of exogenous variables. This should not
-            include a constant or trend. If provided, these variables are
-            used as additional features in the regression operation.
+            An optional 2-d array of exogenous variables. If provided, these variables are
+            used as additional features in the regression operation. This should not
+            include a constant or trend. Note that if an ``ARIMA`` is fit on exogenous
+            features, it must be provided exogenous features for making predictions.
         """
         y = column_or_1d(check_array(y, ensure_2d=False, force_all_finite=False, copy=True, dtype=DTYPE))
         n_samples = y.shape[0]
@@ -285,9 +289,10 @@ class ARIMA(BaseEstimator):
             The number of periods in the future to forecast.
 
         exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
-            An optional array of exogenous variables. This should not
-            include a constant or trend. If provided, these variables are
-            used as additional features in the regression operation.
+            An optional 2-d array of exogenous variables. If provided, these variables are
+            used as additional features in the regression operation. This should not
+            include a constant or trend. Note that if an ``ARIMA`` is fit on exogenous
+            features, it must be provided exogenous features for making predictions.
 
 
         Returns
@@ -326,13 +331,17 @@ class ARIMA(BaseEstimator):
 
         Parameters
         ----------
-        y : array-like, shape=(n_samples,)
-            The time-series on which to fit the ARIMA.
+        y : array-like or iterable, shape=(n_samples,)
+            The time-series to which to fit the ``ARIMA`` estimator. This may either be a Pandas
+            ``Series`` object (statsmodels can internally use the dates in the index), or a numpy
+            array. This should be a one-dimensional array of floats, and should not contain any
+            ``np.nan`` or ``np.inf`` values.
 
         exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
-            An optional array of exogenous variables. This should not
-            include a constant or trend. If provided, these variables are
-            used as additional features in the regression operation.
+            An optional 2-d array of exogenous variables. If provided, these variables are
+            used as additional features in the regression operation. This should not
+            include a constant or trend. Note that if an ``ARIMA`` is fit on exogenous
+            features, it must be provided exogenous features for making predictions.
 
         n_periods : int, optional (default=10)
             The number of periods in the future to forecast.
