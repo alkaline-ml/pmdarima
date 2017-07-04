@@ -36,10 +36,11 @@ script: bash build_tools/travis/test_script.sh
 after_success: source build_tools/travis/after_success.sh
 
 deploy:
+  server: https://test.pypi.org/legacy # Include to override production pypi
+  skip_cleanup: true
   on:
     branch: travis_ci_continuous_deployment
   provider: pypi
-  server: https://test.pypi.org/legacy # Include to override production pypi
   user: tgsmith61591.gh
   password:
     secure: Z6Dhyub8hfejq6HNdUwi0SYxcZCj1mPsYmcJt2YaukmIBb00s1Njgq148VNR2zLH1w2tbHL11b/P5JA6f8oCjXapIXP6H+cVmZW+iKCDoE9zik17i5yWqKZekLyVhhu54qDRi1Sf2Ipw0Ix3AZafuMCfp9mcW4jKBdhY4CPEXauW+oo3EMK62Z7a7R0CD/r4izHl2onRsQCmnmctrMmiCSpvJZkKvjLOsfP3/Afg4DmwwV85rryp8fpPpwN2hzyghM71wjwR/4zN8LIkpcQJwIzNJUHCunXCVsZ6yIchK1kXPFL+jlr1nHqR+8c0BB82J9essF4PA+URjKX2rC157ytO9YowBHseCB+Z7UXt9Cr7pEY60WnTbSn/qPHXUL0r577u/Mb7hvWoWKOTh5LVQjI4Ar0RPLLBF/dDIZkctUaWDBRbgxyk9/oQ2/L8M721iTppl7Z0k1U2IzHv0I0mT03Twu5h994UJ0Tqd1oPyGsdcJ7XIPXTKvy61rE8erQx6xt/EyWLNh8eKu6ntYgxG++OMpapWmE3sfLsfzE8FDU5E9gwqBiCkGM5yzLAPEHRW/4Nhx9Qe4PD0qEa/ZDZeEtzJ9K3mLU7Vn+8Y0CQCp91+AgpxF+6g6fVHEcMDwCS+XzTL2s9PeDTsDBXib+OsaQFMia1sKzoADCiEQGcs64=
