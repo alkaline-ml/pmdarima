@@ -37,6 +37,7 @@ after_success: source build_tools/travis/after_success.sh
 
 deploy:
   server: https://testpypi.python.org/pypi # Include to override production pypi
+  upload_docs: no
   skip_cleanup: true
   on:
     branch: travis_ci_continuous_deployment
