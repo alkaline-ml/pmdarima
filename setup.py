@@ -60,7 +60,8 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     print('Adding extra setuptools args')
     extra_setuptools_args = dict(
         zip_safe=False,  # the package can run out of an .egg file
-        include_package_data=True,
+        include_package_data=False,
+        package_data={'pyramid': ['*']},
         install_requires=REQUIREMENTS,
     )
 else:
