@@ -6,6 +6,9 @@
 .pyramid-cache/
 *.pmdpkl
 
+# OAuth access for automating releases
+ACCESS_TOKEN
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
