@@ -1,51 +1,47 @@
 sudo: required
 language: python
-
 cache:
   apt: true
   directories:
   - $HOME/.cache/pip
   - $HOME/.ccache
-
 dist: trusty
-
 before_install: source build_tools/travis/before_install.sh
-
 env:
   global:
-    # Directory where tests are run from
-    - TEST_DIR=/tmp/pyramid
-    - OMP_NUM_THREADS=4
-    - OPENBLAS_NUM_THREADS=4
-
+  - TEST_DIR=/tmp/pyramid
+  - OMP_NUM_THREADS=4
+  - OPENBLAS_NUM_THREADS=4
 matrix:
   include:
-    # This environment tests the oldest supported anaconda env. Except some of these (i.e., statsmodels
-    # and sklearn) require higher versions of numpy, so cannot really test *actual* oldest...
-    - env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1"
-    # This environment tests Python 3.5 support
-    - env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-    # This environment tests the newest supported Anaconda release (4.4.0)
-    - env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-    # This environment use pytest to run the tests. It uses the newest
-    # supported Anaconda release (4.4.0).
-    - env: USE_PYTEST="true" DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=false SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
+  - env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5" COVERAGE=true
+      SCIKIT_LEARN_VERSION="0.17.1" FROM_REQ=false
+  - env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true" NUMPY_VERSION="1.12.1"
+      SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2" COVERAGE=true SCIKIT_LEARN_VERSION="0.18"
+      STATSMODELS_VERSION="0.8" FROM_REQ=false
+  - env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true" NUMPY_VERSION="1.12.1"
+      SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2" COVERAGE=true SCIKIT_LEARN_VERSION="0.18"
+      STATSMODELS_VERSION="0.8" FROM_REQ=false
+  - env: USE_PYTEST="true" DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
+      NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2" COVERAGE=false
+      SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8" FROM_REQ=false
   allow_failures:
-    # allow_failures seems to be keyed on the python version
-    # We are using this to allow failures for DISTRIB=scipy-dev-wheels
-    - python: 3.5
-
+  - python: 3.5
 install: source build_tools/travis/install.sh
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 5 # give xvfb some time to start by sleeping for 5 seconds
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- sleep 5
 script: bash build_tools/travis/test_script.sh
 after_success: source build_tools/travis/after_success.sh
+deploy:
+  server: https://test.pypi.org/legacy/ # Upload to pypi test server
+  distributions: "bdist_wheel" # Upload tar.gz and .whl files.
+  skip_upload_docs: true
+  skip_cleanup: true
+  on:
+    tags: true # Upload on tagged releases
+  provider: pypi
+  user: tgsmith61591.gh
+  password:
+    secure: TnuFYjjfLIZFMvIpt+KXhG7eeMf+KahTFKz3TE5o6obQXI9uxhN+2m4DX48QCJf2bAGxEKkLe9frXVM+Y/NUBm80sBIv4KvbmZkayMT4TZiJRzntIrsJCzem3jgExP1YUsSqrrmED7tvWpIZEqSJe+eUwHbsTAGhVBIz9mk7/CAP5UR8+0Oe+QKgjkX2VN/psoHOfFFQYTtE3L4pO05UlvyNIzNkrZ8WQ0PZ6wLHSIUCTC8ACFSzH9qWshYZ3+NVEX89l32V8A83nwV7k11yRonpXsSsrmsFYEDFf2h5b1it3VrOatwoNSMfUT+yvzhwuG2ibQv9dr/9mjlZl35VW1lE4qe2512FlVkTojATSVcMEz7cf1ZQdHtVYryqTOcyW9IgvZUJQoggMRSJLR9nLwxeSG1tfbN8NE3SQxnzeGxD+wz/XL26Tk5s9klQe7nI+rEXIR8lrN7zlOR7y9DQI7PiDHkbiIsy60p5Bi+0/pIrYaogCm7FuA4+23Y5m8Iv0/whWB3UIw5o6pVEzRnjdldeD37cLHfLLgwAU0fLnsT7Zdhc4chQhzfeTAy0o3LjdF0f8/vGnngqyxIvk+i/SrNibfB8fMWeduKse8z5mOU+eeLxqorbvyqPTHv0KG/6cBacOOHoSuwspxW1XQnBJp1R2GLSUOuHM9y3ScNrnpU=

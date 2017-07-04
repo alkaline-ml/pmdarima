@@ -6,7 +6,6 @@
 
 from __future__ import print_function, absolute_import, division
 from distutils.command.clean import clean
-import subprocess
 import shutil
 import os
 import sys
@@ -23,6 +22,7 @@ builtins.__PYRAMID_SETUP__ = True
 
 # metadata
 DISTNAME = 'pyramid'
+PYPIDIST = '%s-arima' % DISTNAME
 DESCRIPTION = "Python's forecast::auto.arima equivalent"
 
 MAINTAINER = 'Taylor G. Smith'
@@ -36,7 +36,8 @@ VERSION = pyramid.__version__
 
 # get the installation requirements:
 with open('requirements.txt') as req:
-    REQUIREMENTS = req.read().split(os.linesep)
+    REQUIREMENTS = [l for l in req.read().split(os.linesep) if l][::-1]
+    print("Requirements: %r" % REQUIREMENTS)
 
 SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
     'develop', 'release', 'bdist_egg', 'bdist_rpm',
@@ -45,15 +46,23 @@ SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
     '--single-version-externally-managed'
 }
 
+# are we building from install or develop?
+we_be_buildin = 'install' in sys.argv
 if SETUPTOOLS_COMMANDS.intersection(sys.argv):
+    # we don't use setuptools, but if we don't import it, the "develop"
+    # option for setup.py is invalid.
     import setuptools
 
+    # only require cython if we're developing
+    if 'develop' in sys.argv:
+        we_be_buildin = True
+
+    print('Adding extra setuptools args')
     extra_setuptools_args = dict(
         zip_safe=False,  # the package can run out of an .egg file
-        include_package_data=True,
-        extras_require={
-            'alldeps': REQUIREMENTS,
-        },
+        include_package_data=False,
+        package_data={'pyramid': ['*']},
+        install_requires=REQUIREMENTS,
     )
 else:
     extra_setuptools_args = dict()
@@ -113,7 +122,7 @@ def configuration(parent_package='', top_path=None):
 
 def do_setup():
     # setup the config
-    metadata = dict(name=DISTNAME,
+    metadata = dict(name=PYPIDIST,
                     packages=[DISTNAME],
                     url="https://github.com/%s/%s" % (MAINTAINER_GIT, DISTNAME),
                     maintainer=MAINTAINER,
@@ -123,23 +132,25 @@ def do_setup():
                     version=VERSION,
                     classifiers=['Intended Audience :: Science/Research',
                                  'Intended Audience :: Developers',
-                                 'Intended Audience :: Scikit-learn users',
-                                 'Intended Audience :: R users',
+                                 'Intended Audience :: Financial and Insurance Industry',  # for all you quants
+                                 'Programming Language :: C',
                                  'Programming Language :: Python',
-                                 'Topic :: Machine Learning',
                                  'Topic :: Software Development',
                                  'Topic :: Scientific/Engineering',
                                  'Operating System :: Microsoft :: Windows',
                                  'Operating System :: POSIX',
                                  'Operating System :: Unix',
                                  'Operating System :: MacOS',
-                                 'Programming Language :: Python :: 2.7'
+                                 'Programming Language :: Python :: 2.7',
+                                 'Programming Language :: Python :: 3.5',
+                                 'Programming Language :: Python :: 3.6',
                                  ],
                     keywords='sklearn scikit-learn arima timeseries',
                     # this will only work for releases that have the appropriate tag...
                     download_url='https://github.com/%s/%s/archive/v%s.tar.gz' % (MAINTAINER_GIT, DISTNAME, VERSION),
-                    # install_requires=REQUIREMENTS,
-                    cmdclass=cmdclass)
+                    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4',
+                    cmdclass=cmdclass,
+                    **extra_setuptools_args)
 
     if len(sys.argv) == 1 or (
             len(sys.argv) >= 2 and ('--help' in sys.argv[1:] or
@@ -158,11 +169,17 @@ def do_setup():
 
         metadata['version'] = VERSION
 
-    else:  # we DO need numpy
-        try:
-            from numpy.distutils.core import setup
-        except ImportError:
-            raise RuntimeError('Need numpy to build %s' % DISTNAME)
+    else:
+        # if we are building from install or develop, we NEED numpy
+        if we_be_buildin:
+            try:
+                from numpy.distutils.core import setup
+            except ImportError:
+                raise RuntimeError('Need numpy to build %s' % DISTNAME)
+
+        # if we are building from a wheel, we do not need numpy, because it will be handled in the requirements.txt
+        else:
+            from setuptools import setup
 
         # add the config to the metadata
         metadata['configuration'] = configuration
