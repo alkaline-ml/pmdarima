@@ -40,7 +40,7 @@ deploy:
   skip_upload_docs: true
   skip_cleanup: true
   on:
-    branch: travis_ci_continuous_deployment
+    tags: true # Upload on tagged releases
   provider: pypi
   user: tgsmith61591.gh
   password:
