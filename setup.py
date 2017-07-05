@@ -58,6 +58,9 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     from setuptools.dist import Distribution
 
     class BinaryDistribution(Distribution):
+        def is_pure(self):
+            return False
+
         def has_ext_modules(self):
             return True
 

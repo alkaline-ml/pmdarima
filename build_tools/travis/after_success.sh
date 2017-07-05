@@ -6,6 +6,11 @@
 
 set -e
 
+# after the success of the build, build the ext again to ensure the .so
+# files are present in case we are deploying. Otherwise the .whl files will
+# be built without the compiled .so Cython files
+python setup.py build_ext
+
 if [[ "$COVERAGE" == "true" ]]; then
     # Need to run coveralls from a git checkout, so we copy .coverage
     # from TEST_DIR where nosetests has been run
