@@ -10,20 +10,29 @@ echo 'List files from cached directories'
 echo 'pip:'
 ls $HOME/.cache/pip
 
-export CC=/usr/lib/ccache/gcc
-export CXX=/usr/lib/ccache/g++
-# Useful for debugging how ccache is used
-# export CCACHE_LOGFILE=/tmp/ccache.log
-# ~60M is used by .ccache when compiling from scratch at the time of writing
-ccache --max-size 100M --show-stats
+# the ccache is not part of OS X
+if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    export CC=/usr/lib/ccache/gcc
+    export CXX=/usr/lib/ccache/g++
+    # Useful for debugging how ccache is used
+    # export CCACHE_LOGFILE=/tmp/ccache.log
+    # ~60M is used by .ccache when compiling from scratch at the time of writing
+    ccache --max-size 100M --show-stats
+fi
 
 if [[ "$DISTRIB" == "conda" ]]; then
     # Deactivate the travis-provided virtual environment and setup a
     # conda-based environment instead
     deactivate
 
-    # Install miniconda
-    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+    # Install miniconda. If linux, use wget; if OS X, use curl
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+    else
+        curl -O https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    fi
+
+    # install miniconda using the script
     MINICONDA_PATH=/home/travis/miniconda
     chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH
     export PATH=$MINICONDA_PATH/bin:$PATH
@@ -82,5 +91,8 @@ except ImportError:
     pass
 "
 
-    ccache --show-stats
+    # Only show the CCACHE stats if linux
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        ccache --show-stats
+    fi
 fi
