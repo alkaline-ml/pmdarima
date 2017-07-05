@@ -62,7 +62,7 @@ notifications:
 
 deploy:
   #server: https://test.pypi.org/legacy/ # Upload to pypi test server
-  distributions: "bdist_wheel" # Upload tar.gz and .whl files.
+  distributions: "sdist bdist_wheel" # Upload tar.gz and .whl files.
   skip_upload_docs: true
   skip_cleanup: true # release artifacts as well
   on:

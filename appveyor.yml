@@ -53,7 +53,7 @@ test_script:
 
 after_test:
   # After the test, build the wheels.
-  - python setup.py bdist_wheel
+  - python setup.py sdist bdist_wheel
 
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.
