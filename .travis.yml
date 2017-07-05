@@ -1,14 +1,13 @@
 sudo: required
 language: python
-os:
-  - linux
-  - osx
+dist: trusty
+
 cache:
   apt: true
   directories:
   - $HOME/.cache/pip
   - $HOME/.ccache
-dist: trusty
+
 before_install: source build_tools/travis/before_install.sh
 env:
   global:
@@ -19,6 +18,10 @@ env:
 
 matrix:
   include:
+    os:
+      # - osx - this is EXTREMELY slow to build on travis... see https://github.com/travis-ci/travis-ci/issues/7304
+      - linux
+
     # This environment tests the oldest supported anaconda env. Except some of these (i.e., statsmodels
     # and sklearn) require higher versions of numpy, so cannot really test *actual* oldest...
     - env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
