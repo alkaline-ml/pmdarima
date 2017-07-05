@@ -6,6 +6,7 @@
 #   * Make sure there is no 'dev' in the version number
 #   * Ensure the master branch has been pushed already
 #   * Create and push the tag to git.
+# This script was adapted from: https://gist.github.com/bclinkinbeard/1331790
 REPO=pyramid
 OWNER=tgsmith61591
 
