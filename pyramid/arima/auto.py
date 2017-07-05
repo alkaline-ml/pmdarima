@@ -8,6 +8,7 @@ from __future__ import absolute_import
 from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.externals.joblib import Parallel, delayed
 from sklearn.linear_model import LinearRegression
+from numpy.linalg import LinAlgError
 import numpy as np
 import warnings
 import time
@@ -725,8 +726,8 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, tran
                     scoring_args=scoring_args)\
             .fit(x, exogenous=xreg, **fit_params)
 
-    # for non-stationarity errors, return None
-    except ValueError as v:
+    # for non-stationarity errors or singular matrices, return None
+    except (LinAlgError, ValueError) as v:
         if error_action == 'warn':
             warnings.warn(_fmt_warning_str(order, seasonal_order))
         elif error_action == 'raise':
