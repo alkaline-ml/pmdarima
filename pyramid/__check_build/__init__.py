@@ -24,7 +24,7 @@ def raise_build_error(e):
         msg = INPLACE_MSG
     dir_content = list()
     for i, filename in enumerate(os.listdir(local_dir)):
-        if ((i + 1) % 3):
+        if (i + 1) % 3:
             dir_content.append(filename.ljust(26))
         else:
             dir_content.append(filename + '\n')
@@ -41,5 +41,5 @@ to build the package before using it: run `python setup.py install` or
 
 try:
     from ._check_build import check_build
-except ImportError as e:
-    raise_build_error(e)
+except ImportError as ie:
+    raise_build_error(ie)

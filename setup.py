@@ -56,11 +56,9 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     # option for setup.py is invalid.
     import setuptools
     from setuptools.dist import Distribution
+    from setuptools import find_packages
 
     class BinaryDistribution(Distribution):
-        def is_pure(self):
-            return False
-
         def has_ext_modules(self):
             return True
 
