@@ -1,6 +1,6 @@
 # AppVeyor.com is a Continuous Integration service to build and run tests under Windows
-# This .yml file is based on scikit-learn's Appveyor CI setup, adapted for use with Pyramid
-# https://ci.appveyor.com/project/tgsmith61591/pyramid
+# This .yml file is based on scikit-learn and statsmodels' Appveyor CI setups, adapted for
+# use with Pyramid https://ci.appveyor.com/project/tgsmith61591/pyramid
 
 environment:
   global:
@@ -31,7 +31,7 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda --quiet
-  - ps: conda install numpy scipy cython scikit-learn statsmodels pip nose patsy --quiet
+  - ps: conda install numpy scipy cython scikit-learn statsmodels pip nose patsy wheel twine --quiet
   - python setup.py develop
 
 test_script:
@@ -56,15 +56,8 @@ deploy_script:
   - echo "Starting Artifact Deployment"
   # upload to pypi for windows
   - set PATH=%BK_PATH%
-  # - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -And $env:APPVEYOR_REPO_BRANCH -eq "master") { Invoke-Expression "twine upload -u $env:PYPI_USERNAME -p $env:PYPI_PASSWORD --repository-url https://testpypi.python.org/pypi/ --skip-existing dist/*" } Else { write-output "Not on a tag on master, won't deploy to pypi"}
-  - echo "twine upload -u $env:PYPI_USERNAME -p $env:PYPI_PASSWORD --repository-url https://testpypi.python.org/pypi/ --skip-existing dist/*"
-
-
-cache:
-  # Use the appveyor cache to avoid re-downloading large archives such
-  # the MKL numpy and scipy wheels, speed up the appveyor jobs and reduce bandwidth
-  # usage on our rackspace account.
-  - '%APPDATA%\pip\Cache'
+  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -And $env:APPVEYOR_REPO_BRANCH -eq "master") { Invoke-Expression "twine upload -u $env:PYPI_USERNAME -p $env:PYPI_PASSWORD --repository-url https://testpypi.python.org/pypi/ --skip-existing dist/*" } Else {
+        write-output "Not on a tag on master, won't deploy to pypi"}
 
 notifications:
   - provider: Slack
