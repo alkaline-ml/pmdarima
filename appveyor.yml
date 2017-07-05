@@ -13,54 +13,26 @@ environment:
     #  secure: BQm8KfEj6v2Y+dQxb2syQvTFxDnHXvaNktkLcYSq7jfbTOO6eH9n09tfQzFUVcWZ
 
   matrix:
-    - PYTHON: "C:\\Python27"
-      PYTHON_VERSION: "2.7.8"
-      PYTHON_ARCH: "32"
+    - PY_MAJOR_VER: 2
+      PYTHON_ARCH: "x86_32"
 
-    - PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7.8"
-      PYTHON_ARCH: "64"
+    - PY_MAJOR_VER: 2
+      PYTHON_ARCH: "x86_64"
 
-    - PYTHON: "C:\\Python35"
-      PYTHON_VERSION: "3.5.0"
-      PYTHON_ARCH: "32"
+    - PY_MAJOR_VER: 3
+      PYTHON_ARCH: "x86_32"
 
-    - PYTHON: "C:\\Python35-x64"
-      PYTHON_VERSION: "3.5.0"
-      PYTHON_ARCH: "64"
+    - PY_MAJOR_VER: 3
+      PYTHON_ARCH: "x86_64"
 
-install:
-  # If there is a newer build queued for the same PR, cancel this one.
-  # The AppVeyor 'rollout builds' option is supposed to serve the same
-  # purpose but is problematic because it tends to cancel builds pushed
-  # directly to master instead of just PR builds.
-  # credits: JuliaLang developers.
-  - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
-        https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
-        Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
-        throw "There are newer queued builds for this pull request, failing early." }
-
-  # Install Python (from the official .msi of http://python.org) and pip when
-  # not already installed.
-  - "powershell ./build_tools/appveyor/install.ps1"
-  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  - "python -m pip install -U pip"
-
-  # Check that we have the expected version and architecture for Python
-  - "python --version"
-  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
-  - "pip --version"
-
-  # Install the build and runtime dependencies of the project.
-  - "%CMD_IN_ENV% pip install --timeout=60 --trusted-host www.lfd.uci.edu -r build_tools/appveyor/requirements.txt"
-  - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
-  - ps: "ls dist"
-
-  # Install the generated wheel package to test it
-  - "pip install --pre --no-index --find-links dist/ pyramid_arima"
-
-# Not a .NET project, we build pyramid in the install step instead
-build: false
+build_script:
+  - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-latest-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
+  - cmd: C:\Miniconda.exe /S /D=C:\Py
+  - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
+  - conda config --set always_yes yes
+  - conda update conda --quiet
+  - ps: conda install numpy scipy cython scikit-learn statsmodels pip nose patsy --quiet
+  - python setup.py develop
 
 test_script:
   # Change to a non-source folder to make sure we run the tests on the
