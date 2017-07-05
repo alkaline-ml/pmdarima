@@ -4,7 +4,7 @@
 ![Supported versions](https://img.shields.io/badge/python-2.7-blue.svg)
 ![Supported versions](https://img.shields.io/badge/python-3.5-blue.svg)
 
-# pyramid :chart_with_upwards_trend:
+# pyramid
 Pyramid is a no-nonsense statistical Python library with a solitary objective: bring R's
 [`auto.arima`](https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima)
 functionality to Python. Pyramid operates by wrapping
@@ -13,18 +13,16 @@ functionality to Python. Pyramid operates by wrapping
 into one estimator class and creating a more user-friendly estimator interface for programmers familiar with scikit-learn.
 
 
-## Dependencies
+## Installation
 
-Pyramid depends on:
-  - numpy >= 1.10
+Pyramid is not currently on pypi or conda, and thus depends on a current distribution of the following packages:
+
+  - numpy >= 1.9
   - scipy >= 0.9
   - scikit-learn >= 0.17
   - statsmodels >= 0.8
 
-
-## Installation
-
-Pyramid is not currently on pypi or conda. The best way to install, then, is by cloning from git:
+The best way to install, until the wheels make it onto PyPi, is by cloning from git:
 
 ```bash
 $ git clone https://github.com/tgsmith61591/pyramid.git
