@@ -359,7 +359,8 @@ class ARIMA(BaseEstimator):
     def _get_pickle_hash_file(self):
         # Mmmm, pickle hash...
         return '%s-%s-%i.pmdpkl' % (
-            str(datetime.datetime.now()).replace(' ', '_'),
+            # cannot use ':' in Windows file names. Whoops!
+            str(datetime.datetime.now()).replace(' ', '_').replace(':', '-'),
             ''.join([str(e) for e in self.order]),
             hash(self))
 
