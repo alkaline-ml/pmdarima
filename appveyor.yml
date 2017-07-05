@@ -39,7 +39,7 @@ test_script:
   # installed library.
   - "mkdir empty_folder"
   - "cd empty_folder"
-  - "python -c \"import nose; nose.main()\" --with-timer --timer-top-n 20 -s pyramid"
+  - nosetests --exe -v -A "not slow" pyramid
 
   # Move back to the project folder
   - "cd .."
@@ -47,12 +47,6 @@ test_script:
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.
   - path: dist\*
-
-# on_success:
-  # Upload the generated wheel package to Rackspace
-  # On Windows, Apache Libcloud cannot find a standard CA cert bundle so we
-  # disable the ssl checks. TODO: find way to upload this to pypi from appveyor
-  # - "python -m wheelhouse_uploader upload --no-ssl-check --local-folder=dist sklearn-windows-wheels"
 
 # cache:
   # Use the appveyor cache to avoid re-downloading large archives such
