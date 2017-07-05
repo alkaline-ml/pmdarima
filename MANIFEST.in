@@ -1,4 +1,8 @@
-recursive-include doc *
+# recursive-include doc *
 recursive-include examples *
-recursive-include pyramid *.c *.pyx
+recursive-include pyramid/__check_build *.c *.py* *.so
+recursive-include pyramid/arima *.c *.py* *.so
+recursive-include pyramid/compat *.py*
+recursive-include pyramid/datasets *.py*
+recursive-include pyramid/utils *.py*
 include README.md
