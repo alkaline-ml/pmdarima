@@ -31,7 +31,14 @@ build_script:
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
   - conda update conda --quiet
-  - ps: conda install numpy scipy cython scikit-learn statsmodels pip nose patsy wheel twine --quiet
+
+  # Things we'll need for build/test
+  - ps: conda install numpy scipy cython scikit-learn statsmodels pip nose patsy --quiet
+
+  # Things we'll need for deployment
+  - pip install wheel twine
+
+  # Build the package
   - python setup.py develop
 
 test_script:
