@@ -1,5 +1,8 @@
 sudo: required
 language: python
+os:
+  - linux
+  - osx
 cache:
   apt: true
   directories:
@@ -62,7 +65,7 @@ notifications:
 
 deploy:
   #server: https://test.pypi.org/legacy/ # Upload to pypi test server
-  distributions: "sdist bdist_wheel" # Upload tar.gz and .whl files.
+  distributions: "bdist_wheel" # Upload .whl files only.
   skip_upload_docs: true
   skip_cleanup: true # release artifacts as well
   on:

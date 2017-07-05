@@ -2,4 +2,7 @@
 
 set -e
 
-sudo apt-get -qq update
+if [[ ""$TRAVIS_OS_NAME" == "linux" ]]; then
+  echo "Updating apt-get for Linux build"
+  sudo apt-get -qq update
+fi
