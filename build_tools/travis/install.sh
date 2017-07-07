@@ -27,18 +27,22 @@ if [[ "$DISTRIB" == "conda" ]]; then
     # running, so deactivate would fail.
     deactivate || echo "No virtualenv to deactivate"
 
-    # Install miniconda. If linux, use wget; if OS X, use curl
+    # Install miniconda (if linux, use wget; if OS X, use curl)
+    # using the script we download
+    MINICONDA_PATH=/home/travis/miniconda
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+        chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH
     else
         curl https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh > miniconda.sh
+        # give it all permissions required
+        chmod 777 miniconda.sh
+        # run it with super user permissions so it can create the miniconda path.
+        # use sh or bash, since miniconda can complain about that, otherwise...
+        sudo sh miniconda.sh -b -p $MINICONDA_PATH
     fi
 
-    # install miniconda using the script - mac osx needs sudo or we get permission denied
-    MINICONDA_PATH=/home/travis/miniconda
-    # mac osx has hard time with permissions here...
-    sudo mkdir $MINICONDA_PATH
-    chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH
+    # append the path, update conda
     export PATH=$MINICONDA_PATH/bin:$PATH
     conda update --yes conda
 
