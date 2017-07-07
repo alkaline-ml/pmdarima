@@ -56,9 +56,26 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     # option for setup.py is invalid.
     import setuptools
     from setuptools.dist import Distribution
-    from setuptools import find_packages
 
     class BinaryDistribution(Distribution):
+        """The goal is to avoid having to later build the C code on the platform:
+
+        References
+        ----------
+          [1] https://stackoverflow.com/questions/31380578/how-to-avoid-building-c-library-with-my-python-package
+          [2] https://github.com/spotify/dh-virtualenv/issues/113
+        """
+        def is_pure(self):
+            """See 'Building Wheels': http://lucumr.pocoo.org/2014/1/27/python-on-wheels/
+            Since we are distributing binary (.so, .dll, .dylib) files for different platforms
+            we need to make sure the wheel does not build without them!
+
+            Returns
+            -------
+            False
+            """
+            return False
+
         def has_ext_modules(self):
             return True
 

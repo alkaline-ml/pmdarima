@@ -65,9 +65,3 @@ deploy_script:
   - set PATH=%BK_PATH%
   - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -And $env:APPVEYOR_REPO_BRANCH -eq "master") { Invoke-Expression "twine upload -u $env:PYPI_USERNAME -p $env:PYPI_PASSWORD --repository-url https://testpypi.python.org/pypi/ --skip-existing dist/*.whl" } Else {
         write-output "Not on a tag on master, won't deploy to pypi"}
-
-notifications:
-  - provider: Slack
-    auth_token:
-      secure: mWyfLXzxRAHCKD2QRHWvHZaX
-    channel: 'tgsmith61591-gh#pyramid-cicd'
