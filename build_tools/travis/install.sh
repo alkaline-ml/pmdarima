@@ -21,16 +21,11 @@ if [[ "$CACHEC" == true ]]; then
     ccache --max-size 100M --show-stats
 fi
 
-# if it's mac osx, there might not be a virtualenv running, so deactivate would fail.
-# this function is provided as an || alternative
-no_deactivate() {
-  echo "No virtualenv to deactivate"
-}
-
 if [[ "$DISTRIB" == "conda" ]]; then
     # Deactivate the travis-provided virtual environment and setup a
-    # conda-based environment instead
-    deactivate || no_deactivate
+    # conda-based environment instead. if it's mac osx, there might not be a virtualenv
+    # running, so deactivate would fail.
+    deactivate || echo "No virtualenv to deactivate"
 
     # Install miniconda. If linux, use wget; if OS X, use curl
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then

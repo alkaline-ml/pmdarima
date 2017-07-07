@@ -11,16 +11,16 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 # install python (it is not always native on older mac platforms)
 else
   # homebrew should come with the xcode image
+  echo "Updating HomeBrew"
   brew update
 
   # install some form of python and let miniconda take care of the rest...
-  if [[ "$PYTHON_VERSION" == "2.7" ]]; then
-    brew install python
-  else
-    brew install python3
-  fi
+  echo "Installing Python via HomeBrew"
+  # python 2.7 should already be there by default, but check...
+  python --version || brew install python
 
   # get pip via curl
+  echo "Getting 'distribute' python package (pip dependency)"
   curl -O http://python-distribute.org/distribute_setup.py
   python distribute_setup.py
   curl -O http://raw.github.com/pypa/pip/master/contrib/get-pip.py
@@ -29,6 +29,7 @@ else
   # install virtualenv (don't activate) in case we ever use more than just conda testing
   pip install virtualenv
 
-  # we SHOULD have git... but make sure brew has it installed so we can clone the branch
-  brew install git
+  # we SHOULD have git (I think the branch is cloned prior to before_install?)...
+  # but make sure brew has it installed so we can clone the branch otherwise
+  git --version || brew install git
 fi
