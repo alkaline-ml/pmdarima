@@ -73,11 +73,7 @@ matrix:
            DEPLOY=false CACHEC=true
 
 install: source build_tools/travis/install.sh
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 5 # give xvfb some time to start by sleeping for 5 seconds
-
+before_script: bash build_tools/travis/before_script.sh
 script: bash build_tools/travis/test_script.sh
 after_success: source build_tools/travis/after_success.sh
 
