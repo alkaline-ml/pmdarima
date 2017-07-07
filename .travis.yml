@@ -1,11 +1,16 @@
-sudo: required
+# The Travis build will test both Linux AND OSX distributions, but language needs to be
+# overridden to "generic" for Mac, otherwise the build will fail until Python is downloaded
+# via Homebrew (which is handled in the before_install.sh). Note that none of the test envs
+# or wheels test/create artifacts on <64 bit Linux or Mac. All artifacts are 64-bit ONLY.
 language: python
+sudo: required
+
 cache:
   apt: true
   directories:
   - $HOME/.cache/pip
   - $HOME/.ccache
-dist: trusty
+
 before_install: source build_tools/travis/before_install.sh
 env:
   global:
@@ -17,39 +22,58 @@ env:
 matrix:
   include:
     # This environment tests the oldest supported anaconda env. Except some of these (i.e., statsmodels
-    # and sklearn) require higher versions of numpy, so cannot really test *actual* oldest...
-    - env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" FROM_REQ=false
-           DEPLOY=true
-    # This tests that the package can be built even in the absence of required packages (which are then
-    # installed via the requirements.txt)
-    # - env: DISTRIB="conda" PYTHON_VERSION="3.5" COVERAGE=true FROM_REQ=true DEPLOY=true
-    # This environment tests Python 3.5 support
-    - env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
+    # and sklearn) require higher versions of numpy, so cannot really test *actual* oldest... this also
+    # tests against linux.
+    - os: linux
+      dist: trusty
+      env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true
+           CACHEC=true
+
+    # This environment tests the same conditions as above, but tests against MAC OS X
+    - os: osx
+      language: generic
+      env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true
+           CACHEC=false
+
+    # This environment tests Python 3.5 support on linux
+    - os: linux
+      dist: trusty
+      env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-           FROM_REQ=false DEPLOY=true
-    # This environment tests the newest supported Anaconda release (4.4.0)
-    - env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
+           DEPLOY=true CACHEC=true
+
+    # This environment tests Python 3.5 support on MAC OS X
+    - os: osx
+      language: generic
+      env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-           FROM_REQ=false DEPLOY=false
+           DEPLOY=true CACHEC=false
+
+    # This environment tests the newest supported Anaconda release (4.4.0) and
+    # runs on linux
+    - os: linux
+      dist: trusty
+      env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
+           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
+           DEPLOY=false CACHEC=true
+
     # This environment use pytest to run the tests. It uses the newest
-    # supported Anaconda release (4.4.0).
-    - env: USE_PYTEST="true" DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
+    # supported Anaconda release (4.4.0) and tests with pytests instead of nosetests.
+    # This test runs on linux.
+    - os: linux
+      dist: trusty
+      env: USE_PYTEST="true" DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=false SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-           FROM_REQ=false DEPLOY=false
-  allow_failures:
-    # allow_failures seems to be keyed on the python version
-    # We are using this to allow failures for DISTRIB=scipy-dev-wheels
-    - python: 3.5
+           DEPLOY=false CACHEC=true
 
 install: source build_tools/travis/install.sh
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 5 # give xvfb some time to start by sleeping for 5 seconds
+before_script: bash build_tools/travis/before_script.sh
 script: bash build_tools/travis/test_script.sh
 after_success: source build_tools/travis/after_success.sh
 
@@ -63,7 +87,7 @@ notifications:
 
 deploy:
   #server: https://test.pypi.org/legacy/ # Upload to pypi test server
-  distributions: "sdist bdist_wheel" # Upload tar.gz and .whl files.
+  distributions: "bdist_wheel" # Upload .whl files only.
   skip_upload_docs: true
   skip_cleanup: true # release artifacts as well
   on:

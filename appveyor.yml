@@ -53,7 +53,7 @@ test_script:
 
 after_test:
   # After the test, build the wheels.
-  - python setup.py sdist bdist_wheel
+  - python setup.py bdist_wheel
 
 artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.
@@ -63,5 +63,5 @@ deploy_script:
   - echo "Starting Artifact Deployment"
   # upload to pypi for windows
   - set PATH=%BK_PATH%
-  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -And $env:APPVEYOR_REPO_BRANCH -eq "master") { Invoke-Expression "twine upload -u $env:PYPI_USERNAME -p $env:PYPI_PASSWORD --repository-url https://testpypi.python.org/pypi/ --skip-existing dist/*" } Else {
+  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true" -And $env:APPVEYOR_REPO_BRANCH -eq "master") { Invoke-Expression "twine upload -u $env:PYPI_USERNAME -p $env:PYPI_PASSWORD --repository-url https://testpypi.python.org/pypi/ --skip-existing dist/*.whl" } Else {
         write-output "Not on a tag on master, won't deploy to pypi"}
