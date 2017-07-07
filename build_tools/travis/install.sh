@@ -31,7 +31,7 @@ if [[ "$DISTRIB" == "conda" ]]; then
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
     else
-        curl -O https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+        curl -O https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh > miniconda.sh
     fi
 
     # install miniconda using the script

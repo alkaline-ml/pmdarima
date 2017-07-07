@@ -30,6 +30,8 @@ else
   pip install virtualenv
 
   # we SHOULD have git (I think the branch is cloned prior to before_install?)...
-  # but make sure brew has it installed so we can clone the branch otherwise
+  # but make sure brew has it installed so we can clone the branch otherwise.
+  # Again, this will fail if git already exists (why does homebrew not just warn for
+  # these types of things?) so provide alternative
   git --version || brew install git
 fi

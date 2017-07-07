@@ -1,6 +1,7 @@
 # The Travis build will test both Linux AND OSX distributions, but language needs to be
 # overridden to "generic" for Mac, otherwise the build will fail until Python is downloaded
-# via Homebrew (which is handled in the before_install.sh).
+# via Homebrew (which is handled in the before_install.sh). Note that none of the test envs
+# or wheels test/create artifacts on <64 bit Linux or Mac. All artifacts are 64-bit ONLY.
 language: python
 sudo: required
 
