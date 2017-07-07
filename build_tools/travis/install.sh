@@ -10,8 +10,9 @@ echo 'List files from cached directories'
 echo 'pip:'
 ls $HOME/.cache/pip
 
-# the ccache is not part of OS X
-if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+# only do ccache if CACHEC is true. For now, this is FALSE on osx testing,
+# but might become true later (which is why we don't test for OS name instead)
+if [[ "$CACHEC" == true ]]; then
     export CC=/usr/lib/ccache/gcc
     export CXX=/usr/lib/ccache/g++
     # Useful for debugging how ccache is used
@@ -20,16 +21,22 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     ccache --max-size 100M --show-stats
 fi
 
+# if it's mac osx, there might not be a virtualenv running, so deactivate would fail.
+# this function is provided as an || alternative
+no_deactivate() {
+  echo "No virtualenv to deactivate"
+}
+
 if [[ "$DISTRIB" == "conda" ]]; then
     # Deactivate the travis-provided virtual environment and setup a
     # conda-based environment instead
-    deactivate
+    deactivate || no_deactivate
 
     # Install miniconda. If linux, use wget; if OS X, use curl
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
     else
-        curl -O https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        curl -O https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
     fi
 
     # install miniconda using the script
@@ -44,10 +51,6 @@ if [[ "$DISTRIB" == "conda" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION \
             numpy scipy cython=$CYTHON_VERSION statsmodels \
             scikit-learn=$SCIKIT_LEARN_VERSION
-
-    # todo...
-    # elif [[ "$FROM_REQ" == "true" ]]; then
-    #      conda create -n testenv --yes python=$PYTHON_VERSION numpy cython
 
     elif [[ "$INSTALL_MKL" == "true" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
@@ -67,23 +70,26 @@ if [[ "$DISTRIB" == "conda" ]]; then
 
     # Install nose-timer via pip
     pip install nose-timer
+
+# if we ever set up a virtualenv test... for now we plan to use conda
+else
+    echo "TODO: setup virtualenv code block"
 fi
 
+# use PIP for installing coverage tools since we might not be using a conda dist
 if [[ "$COVERAGE" == "true" ]]; then
     pip install coverage codecov coveralls
 fi
 
-if [[ "$SKIP_TESTS" == "true" ]]; then
-    echo "No need to build pyramid when not running the tests"
-else
-    python setup.py develop
+# now run the python setup. This implicitly builds all the C code with build_ext
+python setup.py develop
 
-    # Build pyramid in the install.sh script to collapse the verbose
-    # build output in the travis output when it succeeds.
-    python --version
-    python -c "import numpy; print('numpy %s' % numpy.__version__)"
-    python -c "import scipy; print('scipy %s' % scipy.__version__)"
-    python -c "\
+# Build pyramid in the install.sh script to collapse the verbose
+# build output in the travis output when it succeeds.
+python --version
+python -c "import numpy; print('numpy %s' % numpy.__version__)"
+python -c "import scipy; print('scipy %s' % scipy.__version__)"
+python -c "\
 try:
     import pandas
     print('pandas %s' % pandas.__version__)
@@ -91,8 +97,7 @@ except ImportError:
     pass
 "
 
-    # Only show the CCACHE stats if linux
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        ccache --show-stats
-    fi
+# Only show the CCACHE stats if linux
+if [[ "$CACHEC" == true ]]; then
+    ccache --show-stats
 fi
