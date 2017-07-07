@@ -11,13 +11,13 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 # install python (it is not always native on older mac platforms)
 else
   # homebrew should come with the xcode image
-  sudo brew update
+  brew update
 
   # install some form of python and let miniconda take care of the rest...
   if [[ "$PYTHON_VERSION" == "2.7" ]]; then
-    sudo brew install python
+    brew install python
   else
-    sudo brew install python3
+    brew install python3
   fi
 
   # get pip via curl
