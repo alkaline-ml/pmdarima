@@ -34,9 +34,9 @@ if [[ "$DISTRIB" == "conda" ]]; then
         curl https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh > miniconda.sh
     fi
 
-    # install miniconda using the script
+    # install miniconda using the script - mac osx needs sudo or we get permission denied
     MINICONDA_PATH=/home/travis/miniconda
-    chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH
+    chmod +x miniconda.sh && sudo ./miniconda.sh -b -p $MINICONDA_PATH
     export PATH=$MINICONDA_PATH/bin:$PATH
     conda update --yes conda
 
