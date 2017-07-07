@@ -36,7 +36,9 @@ if [[ "$DISTRIB" == "conda" ]]; then
 
     # install miniconda using the script - mac osx needs sudo or we get permission denied
     MINICONDA_PATH=/home/travis/miniconda
-    chmod 777 miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH
+    # mac osx has hard time with permissions here...
+    sudo mkdir $MINICONDA_PATH
+    chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH
     export PATH=$MINICONDA_PATH/bin:$PATH
     conda update --yes conda
 
