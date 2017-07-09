@@ -77,10 +77,17 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
             return False
 
         def has_ext_modules(self):
+            """Pyramid has external modules. Therefore, unsurprisingly, this returns
+            True to indicate that there are, in fact, external modules.
+
+            Returns
+            -------
+            True
+            """
             return True
 
     # only import numpy (later) if we're developing
-    if 'develop' in sys.argv:
+    if any(cmd in sys.argv for cmd in {'develop', 'bdist_wheel'}):
         we_be_buildin = True
 
     print('Adding extra setuptools args')
@@ -197,7 +204,7 @@ def do_setup():
         metadata['version'] = VERSION
 
     else:
-        # if we are building from install or develop, we NEED numpy and cython,
+        # if we are building for install, develop or bdist_wheel, we NEED numpy and cython,
         # since they are both used in building the .pyx files into C modules.
         if we_be_buildin:
             try:

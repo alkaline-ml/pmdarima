@@ -86,14 +86,15 @@ notifications:
     on_pull_requests: true
 
 deploy:
+  provider: pypi
+  user: tgsmith61591.gh
+  password:
+    secure: qRlN//K2Oa3m0xu0C4T9hJB/G/kwvYn5hwzH6dy72tz4ERLjjCf8MrAawRzpsDkF1MG4k8f8m7IFlbo3F7f7exDI7r2gPlKe6bD0dm0NtLvkuzpcFFJEYk8JqUa/Ft5XKLUxrKh0YlLf83V5SGo/8jwF25joaPMutEym/T1CfZdsDkx6SKvqy9OUfr65G41IvhlYLzX8ShkSRnWCNO3XzAScwutEuESvOd9BkGga9sGtf7zpWX0k1AAr4ePIvpwGtpgrAZ0uAID9fHtpEq7F9fEq7i0gjdPUz77TSSnGH6wUZkQ0jSjW1igiI9ADAAKBdl4ynPellJlujEV671MaTExFx3D2hawUtNnhISYi+rXycxI0Q4T1VkIs4nMaJrfnquaFVJCw9qyMm5vbw+YSlBHjwSOCB05dBLcRfuOlFY4ZpDSt3MYTdD9jolRlDIpy2WIZO1E0YaYcaIp22aLNc93njdCAnjUDaFQBK6QQO/WI+OIM7ZJIHbiCbUHug2pDVND5LpFKc4V/gFD50x/iZYmFF+TheTuDzfGoixD3krwSk5fKyTuXnnj9T3FpT4KaPnoRLbnTK0KQJsvyoY1YxExGc8KemdNjWlxho1E+Zxy2RFih6I2xptwoFoKWj1b+5IraKqPc2IVBBDDCBKtWvwMf3tqwMtHQmQcMU6Z0JsU=
   #server: https://test.pypi.org/legacy/ # Upload to pypi test server
   distributions: "bdist_wheel" # Upload .whl files only.
   skip_upload_docs: true
   skip_cleanup: true # release artifacts as well
   on:
+    #branch: release-0.5
     tags: true # Upload on tagged releases
     condition: "$DEPLOY = true"
-  provider: pypi
-  user: tgsmith61591.gh
-  password:
-    secure: TnuFYjjfLIZFMvIpt+KXhG7eeMf+KahTFKz3TE5o6obQXI9uxhN+2m4DX48QCJf2bAGxEKkLe9frXVM+Y/NUBm80sBIv4KvbmZkayMT4TZiJRzntIrsJCzem3jgExP1YUsSqrrmED7tvWpIZEqSJe+eUwHbsTAGhVBIz9mk7/CAP5UR8+0Oe+QKgjkX2VN/psoHOfFFQYTtE3L4pO05UlvyNIzNkrZ8WQ0PZ6wLHSIUCTC8ACFSzH9qWshYZ3+NVEX89l32V8A83nwV7k11yRonpXsSsrmsFYEDFf2h5b1it3VrOatwoNSMfUT+yvzhwuG2ibQv9dr/9mjlZl35VW1lE4qe2512FlVkTojATSVcMEz7cf1ZQdHtVYryqTOcyW9IgvZUJQoggMRSJLR9nLwxeSG1tfbN8NE3SQxnzeGxD+wz/XL26Tk5s9klQe7nI+rEXIR8lrN7zlOR7y9DQI7PiDHkbiIsy60p5Bi+0/pIrYaogCm7FuA4+23Y5m8Iv0/whWB3UIw5o6pVEzRnjdldeD37cLHfLLgwAU0fLnsT7Zdhc4chQhzfeTAy0o3LjdF0f8/vGnngqyxIvk+i/SrNibfB8fMWeduKse8z5mOU+eeLxqorbvyqPTHv0KG/6cBacOOHoSuwspxW1XQnBJp1R2GLSUOuHM9y3ScNrnpU=
