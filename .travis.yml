@@ -18,12 +18,10 @@ env:
     - TEST_DIR=/tmp/pyramid
     - OMP_NUM_THREADS=4
     - OPENBLAS_NUM_THREADS=4
-  matrix:
-    # Build 32- & 64-bit machines
-    - MACHINE_BITS="x86_64"
-    - MACHINE_BITS="x86"
 
 matrix:
+  - MACHINE_BITS="x86_64"
+  - MACHINE_BITS="x86"
   include:
     # This environment tests the oldest supported anaconda env. Except some of these (i.e., statsmodels
     # and sklearn) require higher versions of numpy, so cannot really test *actual* oldest... this also
