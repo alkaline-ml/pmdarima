@@ -23,65 +23,35 @@ matrix:
   include:
     # This environment tests the oldest supported anaconda env. Except some of these (i.e., statsmodels
     # and sklearn) require higher versions of numpy, so cannot really test *actual* oldest... this also
-    # tests against 32-bit linux.
+    # tests against linux.
     - os: linux
       dist: trusty
       env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true
-           CACHEC=true MACHINE_BITS="x86"
+           CACHEC=true
 
-    # This is the same test env as above, but tests against 64-bit linux.
-    - os: linux
-      dist: trusty
-      env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true
-           CACHEC=true MACHINE_BITS="x86_64"
-
-    # This environment tests the same conditions as above, but tests against 32-bit MAC OS X
+    # This environment tests the same conditions as above, but tests against MAC OS X
     - os: osx
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true
-           CACHEC=false MACHINE_BITS="x86"
+           CACHEC=false
 
-    # This environment tests the same conditions as above, but tests against 64-bit MAC OS X
-    - os: osx
-      language: generic
-      env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true
-           CACHEC=false MACHINE_BITS="x86_64"
-
-    # This environment tests Python 3.5 support on 32-bit linux
+    # This environment tests Python 3.5 support on linux
     - os: linux
       dist: trusty
       env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-           DEPLOY=true CACHEC=true MACHINE_BITS="x86"
+           DEPLOY=true CACHEC=true
 
-    # This environment tests Python 3.5 support on 64-bit linux
-    - os: linux
-      dist: trusty
-      env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-           DEPLOY=true CACHEC=true MACHINE_BITS="x86_64"
-
-    # This environment tests Python 3.5 support on 32-bit MAC OS X
+    # This environment tests Python 3.5 support on MAC OS X
     - os: osx
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-           DEPLOY=true CACHEC=false MACHINE_BITS="x86"
-
-    # This environment tests Python 3.5 support on 64-bit MAC OS X
-    - os: osx
-      language: generic
-      env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-           DEPLOY=true CACHEC=false MACHINE_BITS="x86_64"
+           DEPLOY=true CACHEC=false
 
     # This environment tests the newest supported Anaconda release (4.4.0) and
     # runs on linux
@@ -90,7 +60,7 @@ matrix:
       env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-           DEPLOY=false CACHEC=true MACHINE_BITS="x86_64"
+           DEPLOY=false CACHEC=true
 
     # This environment use pytest to run the tests. It uses the newest
     # supported Anaconda release (4.4.0) and tests with pytests instead of nosetests.
@@ -100,7 +70,7 @@ matrix:
       env: USE_PYTEST="true" DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=false SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-           DEPLOY=false CACHEC=true MACHINE_BITS="x86_64"
+           DEPLOY=false CACHEC=true
 
 install: source build_tools/travis/install.sh
 before_script: bash build_tools/travis/before_script.sh
@@ -125,6 +95,6 @@ deploy:
   skip_upload_docs: true
   skip_cleanup: true # release artifacts as well
   on:
-    #branch: release-0.5
-    tags: true # Upload on tagged releases
-    condition: "$DEPLOY = true"
+    branch: release-0.5
+    #tags: true # Upload on tagged releases
+    #condition: "$DEPLOY = true"
