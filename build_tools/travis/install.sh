@@ -30,10 +30,10 @@ if [[ "$DISTRIB" == "conda" ]]; then
     # Install miniconda (if linux, use wget; if OS X, use curl)
     # using the script we download
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-${MACHINE_BITS}.sh -O miniconda.sh
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
         MINICONDA_PATH=/home/travis/miniconda
     else
-        curl https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-${MACHINE_BITS}.sh > miniconda.sh
+        curl https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh > miniconda.sh
         MINICONDA_PATH=/Users/travis/miniconda
     fi
 
