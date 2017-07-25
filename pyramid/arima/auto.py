@@ -390,9 +390,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         D = nsdiffs(xx, m=m, test=seasonal_test, max_D=max_D, **seasonal_test_args)
 
         if D > 0 and exogenous is not None:
-            diffex = diff(exogenous, differences=D, lag=m)
+            diffxreg = diff(exogenous, differences=D, lag=m)
             # check for constance on any column
-            if np.apply_along_axis(is_constant, arr=diffex, axis=0).any():
+            if np.apply_along_axis(is_constant, arr=diffxreg, axis=0).any():
                 D -= 1
 
     # D might still be None if not seasonal. Py 3 will throw and error for that
@@ -405,15 +405,15 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     # difference the exogenous matrix
     if exogenous is not None:
         if D > 0:
-            diffex = diff(exogenous, differences=D, lag=m)
+            diffxreg = diff(exogenous, differences=D, lag=m)
         else:
-            diffex = exogenous
+            diffxreg = exogenous
     else:
-        # here's the thing... we're only going to use diffex if exogenous
+        # here's the thing... we're only going to use diffxreg if exogenous
         # was not None in the first place. However, PyCharm doesn't know that
         # and it thinks we might use it before assigning it. Therefore, assign
         # it to None as a default value and it won't raise the warning anymore.
-        diffex = None
+        diffxreg = None
 
     # determine/set the order of differencing by estimating the number of
     # orders it would take in order to make the TS stationary.
@@ -422,10 +422,10 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         d = ndiffs(dx, test=test, alpha=alpha, max_d=max_d, **offset_test_args)
 
         if d > 0 and exogenous is not None:
-            diffex = diff(diffex, differences=d, lag=1)
+            diffxreg = diff(diffxreg, differences=d, lag=1)
 
             # if any columns are constant, subtract one order of differencing
-            if np.apply_along_axis(is_constant, arr=diffex, axis=0).any():
+            if np.apply_along_axis(is_constant, arr=diffxreg, axis=0).any():
                 d -= 1
 
     # check differences (do we want to warn?...)
@@ -464,7 +464,6 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
             max_p = min(max_p, m - 1)
         if max_Q > 0:
             max_q = min(max_q, m - 1)
-        pass
 
     # generate the set of (p, q, P, Q) FIRST, since it is contingent on whether or not
     # the user is interested in a seasonal ARIMA result. This will reduce the search space
