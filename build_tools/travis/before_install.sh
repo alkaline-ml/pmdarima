@@ -15,20 +15,17 @@ else
   # depending on the python version, get a different one
   if [[ "$PYTHON_VERSION" == "2.7" ]]; then
     PYTHON_VERSION="2.7.13"
-    PYTHON_NAME="Python-${PYTHON_VERSION}"
   else
     PYTHON_VERSION="3.5.4"
-    PYTHON_NAME="Python-${PYTHON_VERSION}rc1"
   fi
 
   # curl the URL
-  curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.tgz > ${PYTHON_NAME}.tgz
+  PYTHON_NAME="Python-${PYTHON_VERSION}rc1-macosx10.6"
+  curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.pkg > ${PYTHON_NAME}.pkg
 
   # unpack
-  tar -zxvf ${PYTHON_NAME}.tgz
-  cd ${PYTHON_NAME}
-  ./configure --prefix=${HOME} --enable-optimizations
-  make && make install
+  echo "Installing from pkg"
+  sudo installer -pkg ${PYTHON_NAME}.pkg -target ${HOME}
   cd ${HOME}
 
   # add python to the path

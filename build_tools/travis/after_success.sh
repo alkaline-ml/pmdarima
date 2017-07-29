@@ -22,3 +22,6 @@ fi
 
 # remove the .egg-info dir so Mac won't bomb on bdist_wheel cmd (absolute path in SOURCES.txt)
 rm -r pyramid_arima.egg-info/ || echo "No local .egg cache to remove"
+
+# make sure we have twine in case we deploy
+pip install twine || "pip installing twine failed"
