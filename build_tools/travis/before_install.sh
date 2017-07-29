@@ -65,6 +65,9 @@ else
   # install virtualenv (don't activate) in case we ever use more than just conda testing
   pip install virtualenv
 
+  # see what platform python we're running (should be 10.6)
+  python -c 'from distutils.util import get_platform; print(get_platform())'
+
   # go back into the pyramid directory
   cd pyramid
 fi
