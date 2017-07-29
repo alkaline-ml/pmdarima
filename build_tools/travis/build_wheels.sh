@@ -39,3 +39,8 @@ elif [ "${TRAVIS_OS_NAME}" == "osx" ]; then
 else
     echo "Cannot build on ${TRAVIS_OS_NAME}."
 fi
+
+# only one env will have us build the tar file for src dist
+if [[ "$BUILD_TAR" ]]; then
+    python setup.py sdist
+fi

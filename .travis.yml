@@ -35,10 +35,10 @@ matrix:
 
     # This environment tests the same conditions as above, but tests against MAC OS X,
     # using virtualenv instead of the conda python distribution
-    #- os: osx
-    #  language: generic
-    #  env: DISTRIB="virtualenv" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-    #       COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=false
+    - os: osx
+      language: generic
+      env: DISTRIB="virtualenv" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=false
 
     # This environment tests Python 3.5 support on linux
     - os: linux
@@ -49,16 +49,16 @@ matrix:
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
            DEPLOY=true CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
-           DOCKER_CONTAINER_NAME="pyramidcontainer"
+           DOCKER_CONTAINER_NAME="pyramidcontainer" BUILD_TAR=true
 
     # This environment tests Python 3.5 support on MAC OS X, using virtualenv
     # instead of the conda python distribution
-    #- os: osx
-    #  language: generic
-    #  env: DISTRIB="virtualenv" PYTHON_VERSION="3.5"
-    #       NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-    #       COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-    #       DEPLOY=true CACHEC=false
+    - os: osx
+      language: generic
+      env: DISTRIB="virtualenv" PYTHON_VERSION="3.5"
+           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
+           DEPLOY=true CACHEC=false
 
     # This environment tests the newest supported Anaconda release (4.4.0) and
     # runs on linux
@@ -98,7 +98,10 @@ notifications:
 
 deploy:
   #server: https://test.pypi.org/legacy/ # Upload to pypi test server
-  distributions: "bdist_wheel" # Upload .whl files only.
+  # script:
+  #   - bash build_tools/travis/build_wheels.sh
+  #   - ls dist/
+  #   - python -m twine upload --skip-existing dist/*
   skip_upload_docs: true
   skip_cleanup: true # release artifacts as well
   on:
