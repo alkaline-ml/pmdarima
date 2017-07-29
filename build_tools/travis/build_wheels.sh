@@ -35,12 +35,15 @@ if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
         done
     done
 elif [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-    echo "todo: build OS X python wheels"
+    # this should be all that's required, right? We already removed the .egg-info
+    # directory so no locally cached SOURCES.txt with absolute paths will blow things up
+    python setup.py bdist_wheel
 else
     echo "Cannot build on ${TRAVIS_OS_NAME}."
 fi
 
 # only one env will have us build the tar file for src dist
 if [[ "$BUILD_TAR" ]]; then
+    echo "Building .tar for source release to pypi"
     python setup.py sdist
 fi
