@@ -15,13 +15,14 @@ else
   # depending on the python version, get a different one
   if [[ "$PYTHON_VERSION" == "2.7" ]]; then
     PYTHON_VERSION="2.7.13"
+    PYTHON_NAME="Python-${PYTHON_VERSION}-macosx10.6"
   else
     PYTHON_VERSION="3.5.4"
+    PYTHON_NAME="Python-${PYTHON_VERSION}rc1-macosx10.6"
   fi
 
   # curl the URL
   cd ${HOME}
-  PYTHON_NAME="Python-${PYTHON_VERSION}rc1-macosx10.6"
   curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.pkg > ${PYTHON_NAME}.pkg
 
   # unpack

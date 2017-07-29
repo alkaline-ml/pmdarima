@@ -84,7 +84,7 @@ script: bash build_tools/travis/test_script.sh
 after_success:
   - source build_tools/travis/after_success.sh
   # This is just for testing - later, put in the deploy section
-  - bash build_tools/travis/deploy/build_wheels.sh
+  - bash build_tools/travis/build_wheels.sh
   - ls dist/
 
 notifications:

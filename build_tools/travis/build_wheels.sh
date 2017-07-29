@@ -29,7 +29,7 @@ if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
                 -v "${_root}":/io \
                 -e "PYMODULE=${PYMODULE}" \
                 -e "PYTHON_VERSION=${ML_PYTHON_VERSION}" \
-                "${ML_IMAGE}" "/io/build_tools/travis/deploy/build_manywheels_linux.sh"
+                "${ML_IMAGE}" "/io/build_tools/travis/build_manywheels_linux.sh"
             sudo docker cp "${DOCKER_CONTAINER_NAME}:/io/dist/" "${_root}/dist/"
             docker rm $(docker ps -a -f status=exited -q)
         done
