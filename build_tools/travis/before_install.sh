@@ -23,7 +23,7 @@ else
   fi
 
   # curl the pkg from python.org
-  cd ${HOME}
+  cd ..  # go outside of the pyramid directory
   curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.pkg > ${PYTHON_NAME}.pkg
 
   # for some reason the installer complains about the package path being off?
@@ -59,6 +59,12 @@ else
   curl -O http://raw.github.com/pypa/pip/master/contrib/get-pip.py
   python get-pip.py
 
+  # upgrade pip
+  pip install --upgrade pip || "pip is already current"
+
   # install virtualenv (don't activate) in case we ever use more than just conda testing
   pip install virtualenv
+
+  # go back into the pyramid directory
+  cd pyramid
 fi
