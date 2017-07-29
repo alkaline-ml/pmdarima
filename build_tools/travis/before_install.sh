@@ -48,6 +48,8 @@ else
   # discussion under the -store option).
   sudo installer -package ${PYTHON_NAME}.pkg -target /
 
+  ls -la /
+
   # add python to the path
   export PATH=/usr/bin/python:${PATH}
   python --version || echo "Python not setup properly!"
