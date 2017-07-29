@@ -21,11 +21,14 @@ else
 
   # curl the URL
   PYTHON_NAME="Python-${PYTHON_VERSION}rc1-macosx10.6"
-  curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.pkg > ${PYTHON_NAME}.pkg
+  PACKAGE_PATH="${HOME}/${PYTHON_NAME}.pkg"
+  curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.pkg > ${PACKAGE_PATH}
 
   # unpack
+  echo "Home contents:"
+  ls ${HOME}
   echo "Installing from pkg"
-  sudo installer -pkg ${PYTHON_NAME}.pkg -target ${HOME}
+  sudo installer -pkg ${PACKAGE_PATH} -target ${HOME}
   cd ${HOME}
 
   # add python to the path
