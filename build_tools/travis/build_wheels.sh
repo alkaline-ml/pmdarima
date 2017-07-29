@@ -45,5 +45,5 @@ fi
 # only one env will have us build the tar file for src dist
 if [[ "$BUILD_TAR" ]]; then
     echo "Building .tar for source release to pypi"
-    python setup.py sdist
+    sudo python setup.py sdist
 fi
