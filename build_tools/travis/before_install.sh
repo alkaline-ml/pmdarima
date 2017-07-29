@@ -29,7 +29,7 @@ else
   echo "Changing permissions to 777"
   sudo chmod 777 ${PYTHON_NAME}.pkg
   echo "Installing from pkg"
-  sudo installer -pkg ${PYTHON_NAME}.pkg
+  sudo installer -pkg ${PYTHON_NAME}.pkg -target /
 
   # add python to the path
   export PATH=/usr/bin/python:${PATH}
