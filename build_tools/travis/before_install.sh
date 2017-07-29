@@ -7,17 +7,33 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
   echo "Updating apt-get for Linux build"
   sudo apt-get -qq update
 
-# if it's a mac build, we need to brew update, and then we need to
-# install python (it is not always native on older mac platforms)
+# if it's a mac build, we need to install python from python.org
+# (it is not always native on older mac platforms). We want to avoid
+# homebrew, since it's ONLY for 64-bit distros and will not build a wheel
+# with the 10_6 platform.
 else
-  # homebrew should come with the xcode image
-  echo "Updating HomeBrew"
-  brew update
+  # depending on the python version, get a different one
+  if [[ "$PYTHON_VERSION" == "2.7" ]]; then
+    PYTHON_VERSION="2.7.13"
+    PYTHON_NAME="Python-${PYTHON_VERSION}"
+  else
+    PYTHON_VERSION="3.5.4"
+    PYTHON_NAME="Python-${PYTHON_VERSION}rc1"
+  fi
 
-  # install some form of python and let miniconda take care of the rest...
-  echo "Installing Python via HomeBrew"
-  # python 2.7 should already be there by default, but check...
-  python --version || brew install python
+  # curl the URL
+  curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.tgz > ${PYTHON_NAME}.tgz
+
+  # unpack
+  tar -zxvf ${PYTHON_NAME}.tgz
+  cd ${PYTHON_NAME}
+  ./configure --prefix=${HOME} --enable-optimizations
+  make && make install
+  cd ${HOME}
+
+  # add python to the path
+  export PATH=${HOME}/bin/python:${PATH}
+  python --version || echo "Python not setup properly!"
 
   # get pip via curl
   echo "Getting 'distribute' python package (pip dependency)"
@@ -28,10 +44,4 @@ else
 
   # install virtualenv (don't activate) in case we ever use more than just conda testing
   pip install virtualenv
-
-  # we SHOULD have git (I think the branch is cloned prior to before_install?)...
-  # but make sure brew has it installed so we can clone the branch otherwise.
-  # Again, this will fail if git already exists (why does homebrew not just warn for
-  # these types of things?) so provide alternative
-  git --version || brew install git
 fi

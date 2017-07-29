@@ -21,12 +21,12 @@ if [[ "$CACHEC" == true ]]; then
     ccache --max-size 100M --show-stats
 fi
 
-if [[ "$DISTRIB" == "conda" ]]; then
-    # Deactivate the travis-provided virtual environment and setup a
-    # conda-based environment instead. if it's mac osx, there might not be a virtualenv
-    # running, so deactivate would fail.
-    deactivate || echo "No virtualenv to deactivate"
+# Deactivate the travis-provided virtual environment and setup a
+# conda-based environment instead. if it's mac osx, there might not be a virtualenv
+# running, so deactivate would fail.
+deactivate || echo "No virtualenv or condaenv to deactivate"
 
+if [[ "$DISTRIB" == "conda" ]]; then
     # Install miniconda (if linux, use wget; if OS X, use curl)
     # using the script we download
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -69,8 +69,43 @@ if [[ "$DISTRIB" == "conda" ]]; then
     pip install nose-timer
 
 # if we ever set up a virtualenv test... for now we plan to use conda
+elif [[ "$DISTRIB" == "virtualenv" ]]; then
+    # set up our virtual env for the python version we want
+    virtualenv testenv
+    source testenv/bin/activate
+
+    # pip install the requirements
+    pip install cython==${CYTHON_VERSION}
+
+    # if numpy version IS SET (see else block), use it, else use default
+    if [[ -z "$NUMPY_VERSION" ]]; then
+        pip install numpy
+    else
+        pip install numpy==${NUMPY_VERSION}
+    fi
+
+    # next, if scipy version IS SET (see else block), use it, else use default
+    if [[ -z "$SCIPY_VERSION" ]]; then
+        pip install scipy
+    else
+        pip install scipy==${SCIPY_VERSION}
+    fi
+
+    # scikit always has a version tied to it (at least for now)
+    pip install scikit-learn==${SCIKIT_LEARN_VERSION}
+
+    # statsmodels does not always have a version tied to it
+    if [[ -z "$STATSMODELS_VERSION" ]]; then
+        pip install statsmodels
+    else
+        pip install statsmodels==${STATSMODELS_VERSION}
+    fi
+
+    # Install nose-timer via pip
+    pip install nose-timer
 else
-    echo "TODO: setup virtualenv code block"
+    echo "You done screwed up your .travis.yml"
+    exit -10
 fi
 
 # use PIP for installing coverage tools since we might not be using a conda dist
