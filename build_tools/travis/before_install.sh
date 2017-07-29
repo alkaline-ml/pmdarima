@@ -24,11 +24,11 @@ else
   curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.pkg > ${PYTHON_NAME}.pkg
 
   # unpack
+  ls -la ${HOME}
   echo "Changing permissions to 777"
-  sudo chmod 777 ${PYTHON_NAME}.pkg
+  sudo chmod 777 ${HOME}/${PYTHON_NAME}.pkg
   echo "Installing from pkg"
-  sudo installer -pkg ${PACKAGE_PATH} -target ${HOME}
-  cd ${HOME}
+  sudo installer -pkg ${HOME}/${PYTHON_NAME}.pkg
 
   # add python to the path
   export PATH=${HOME}/bin/python:${PATH}
