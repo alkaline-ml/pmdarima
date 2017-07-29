@@ -21,11 +21,11 @@ else
 
   # curl the URL
   PYTHON_NAME="Python-${PYTHON_VERSION}rc1-macosx10.6"
-  PACKAGE_PATH="${HOME}/${PYTHON_NAME}.pkg"
-  curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.pkg > ${PACKAGE_PATH}
+  curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.pkg > ${PYTHON_NAME}.pkg
 
   # unpack
-  sudo chmod 777 ${PACKAGE_PATH}
+  echo "Changing permissions to 777"
+  sudo chmod 777 ${PYTHON_NAME}.pkg
   echo "Installing from pkg"
   sudo installer -pkg ${PACKAGE_PATH} -target ${HOME}
   cd ${HOME}
