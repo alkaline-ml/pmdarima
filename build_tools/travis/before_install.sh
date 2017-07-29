@@ -25,8 +25,11 @@ else
   curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.pkg > ${PACKAGE_PATH}
 
   # unpack
-  echo "Home contents:"
-  ls ${HOME}
+  echo "Current package permissions:"
+  ls -la ${HOME} | grep ${PACKAGE_PATH}
+  sudo chmod 777 ${PACKAGE_PATH}
+  echo "New package permissions:"
+  ls -la ${HOME} | grep ${PACKAGE_PATH}
   echo "Installing from pkg"
   sudo installer -pkg ${PACKAGE_PATH} -target ${HOME}
   cd ${HOME}
