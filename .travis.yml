@@ -15,6 +15,7 @@ before_install: source build_tools/travis/before_install.sh
 env:
   global:
     # Directory where tests are run from
+    - PYMODULE=pyramid
     - TEST_DIR=/tmp/pyramid
     - OMP_NUM_THREADS=4
     - OPENBLAS_NUM_THREADS=4
