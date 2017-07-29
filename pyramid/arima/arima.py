@@ -277,17 +277,21 @@ class ARIMA(BaseEstimator):
         return self
 
     def _check_exog(self, exogenous):
-        # if we fit with exog, make sure one was passed:
+        # if we fit with exog, make sure one was passed, or else fail out:
         if self.fit_with_exog_:
             if exogenous is None:
                 raise ValueError('When an ARIMA is fit with an exogenous array, '
-                                 'it must be provided one for predictions.')
+                                 'it must be provided one for predicting (either '
+                                 'in- OR out-of-sample).')
             else:
                 return check_array(exogenous, ensure_2d=True, force_all_finite=True, dtype=DTYPE)
         return None
 
     def predict_in_sample(self, exogenous=None, start=None, end=None, dynamic=False):
-        """Generate in-sample predictions from the fit ARIMA model.
+        """Generate in-sample predictions from the fit ARIMA model. This can be useful when
+        wanting to visualize the fit, and qualitatively inspect the efficacy of the model, or
+        when wanting to compute the residuals of the model.
+
 
         Parameters
         ----------
