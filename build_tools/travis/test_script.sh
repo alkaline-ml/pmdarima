@@ -20,7 +20,7 @@ run_tests() {
         TEST_CMD="nosetests --with-timer --timer-top-n 20"
     fi
 
-    # Get into a temp directory to run test from the installed scikit learn and
+    # Get into a temp directory to run test from the installed pyramid and
     # check if we do not leave artifacts
     mkdir -p $TEST_DIR
 
