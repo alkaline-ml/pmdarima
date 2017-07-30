@@ -24,6 +24,7 @@ else
 
   # curl the pkg from python.org
   cd ..  # go outside of the pyramid directory
+  echo "Downloading python ${PYTHON_VERSION}"
   curl https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_NAME}.pkg > ${PYTHON_NAME}.pkg
 
   # for some reason the installer complains about the package path being off?
@@ -46,9 +47,10 @@ else
   # The installer command requires root privileges to run.  If a package requires authentication (set in a
   # package's .info file) the installer must be either run as root or with the sudo(8) command (but see further
   # discussion under the -store option).
-  sudo installer -verbose -package ${PYTHON_NAME}.pkg -target /
+  sudo installer -package ${PYTHON_NAME}.pkg -target /
 
   # add python to the path
+  echo "${PATH}"
   export PATH=/usr/bin/python:${PATH}
   python --version || echo "Python not setup properly!"
 
