@@ -46,9 +46,7 @@ else
   # The installer command requires root privileges to run.  If a package requires authentication (set in a
   # package's .info file) the installer must be either run as root or with the sudo(8) command (but see further
   # discussion under the -store option).
-  sudo installer -package ${PYTHON_NAME}.pkg -target /
-
-  ls -la /
+  sudo installer -verbose -package ${PYTHON_NAME}.pkg -target /
 
   # add python to the path
   export PATH=/usr/bin/python:${PATH}
