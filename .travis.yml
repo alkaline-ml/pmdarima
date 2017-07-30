@@ -101,7 +101,7 @@ deploy:
     tags: true # Upload on tagged releases
     condition: "$DEPLOY = true"
   server: https://test.pypi.org/legacy/ # Upload to pypi test server
-  provider: pypi
+  provider: script
   script:
     - python -m twine upload --skip-existing dist/*
   skip_upload_docs: true
