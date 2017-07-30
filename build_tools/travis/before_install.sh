@@ -12,6 +12,9 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 # homebrew, since it's ONLY for 64-bit distros and will not build a wheel
 # with the 10_6 platform.
 else
+  # for debugging. newer versions of travis might come with python installed...
+  which python || "Python is not yet installed"
+
   # depending on the python version, get a different version pkg
   if [[ "$PYTHON_VERSION" == "2.7" ]]; then
     PYTHON_VERSION="2.7.13"
@@ -48,11 +51,12 @@ else
   # package's .info file) the installer must be either run as root or with the sudo(8) command (but see further
   # discussion under the -store option).
   sudo installer -package ${PYTHON_NAME}.pkg -target /
+  which python || "Package is installed, but python is still not on the PATH"
 
   # add python to the path
-  echo "${PATH}"
   export PATH=/usr/bin/python:${PATH}
   python --version || echo "Python not setup properly!"
+  which python
 
   # get pip via curl
   echo "Getting 'distribute' python package (pip dependency)"
