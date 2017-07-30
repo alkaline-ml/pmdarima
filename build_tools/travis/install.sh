@@ -65,41 +65,8 @@ if [[ "$DISTRIB" == "conda" ]]; then
     fi
     source activate testenv
 
-    # Install nose-timer via pip
-    pip install nose-timer
-
-# if we ever set up a virtualenv test... for now we plan to use conda
-elif [[ "$DISTRIB" == "virtualenv" ]]; then
-    # set up our virtual env for the python version we want
-    virtualenv testenv
-    source testenv/bin/activate
-
-    # pip install the requirements
-    pip install cython==${CYTHON_VERSION}
-
-    # if numpy version IS SET (see else block), use it, else use default
-    if [[ -z "$NUMPY_VERSION" ]]; then
-        pip install numpy
-    else
-        pip install numpy==${NUMPY_VERSION}
-    fi
-
-    # next, if scipy version IS SET (see else block), use it, else use default
-    if [[ -z "$SCIPY_VERSION" ]]; then
-        pip install scipy
-    else
-        pip install scipy==${SCIPY_VERSION}
-    fi
-
-    # scikit always has a version tied to it (at least for now)
-    pip install scikit-learn==${SCIKIT_LEARN_VERSION}
-
-    # statsmodels does not always have a version tied to it
-    if [[ -z "$STATSMODELS_VERSION" ]]; then
-        pip install statsmodels
-    else
-        pip install statsmodels==${STATSMODELS_VERSION}
-    fi
+    # determine what platform is running
+    python -c 'from distutils.util import get_platform; print(get_platform())'
 
     # Install nose-timer via pip
     pip install nose-timer
