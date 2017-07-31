@@ -100,10 +100,9 @@ notifications:
     on_pull_requests: true
 
 deploy:
+  provider: script
+  skip_cleanup: true
   on:
     tags: true # Upload on tagged releases
     condition: "$DEPLOY = true"
-  provider: script
-  script:
-    - python -m twine upload --skip-existing dist/*
-  skip_cleanup: true # release artifacts as well
+  script: python -m twine upload --skip-existing dist/*

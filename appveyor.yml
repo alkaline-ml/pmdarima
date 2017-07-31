@@ -61,6 +61,10 @@ artifacts:
 
 deploy_script:
   - echo "Starting Artifact Deployment"
-  # upload to pypi for windows
   - set PATH=%BK_PATH%
-  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --repository-url https://testpypi.python.org/legacy/ --skip-existing dist/*.whl" } Else { write-output "Not on a tag on master, won't deploy to pypi" }
+  # upload to pypi for windows, but we kind of hack here... we're generating a .pypirc on the fly
+  - cmd: "echo [pypitest] > %USERPROFILE%\\.pypirc"
+  - cmd: "echo repository: https://test.pypi.org/legacy/ >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo username: %PYPI_USERNAME% >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo password: %PYPI_PASSWORD% >> %USERPROFILE%\\.pypirc"
+  - cmd: "if [%APPVEYOR_REPO_TAG%]==[true] python -m twine upload -r pypitest --skip-existing dist\\*.whl"
