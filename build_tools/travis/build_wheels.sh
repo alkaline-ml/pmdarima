@@ -42,8 +42,5 @@ else
     echo "Cannot build on ${TRAVIS_OS_NAME}."
 fi
 
-# only one env will have us build the tar file for src dist
-if [[ "$BUILD_TAR" ]]; then
-    echo "Building .tar for source release to pypi"
-    sudo python setup.py sdist
-fi
+# build the tar for all dists, but it will only be uploaded on one because of --skip-existing
+sudo python setup.py sdist

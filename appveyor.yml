@@ -52,19 +52,14 @@ test_script:
   - "cd .."
 
 after_test:
-  # After the test, build the wheels.
+  # After the test, build the wheels (let travis handle the source build).
   - python setup.py bdist_wheel
-
-artifacts:
-  # Archive the generated wheel package in the ci.appveyor.com build report.
-  - path: dist\*
-
-deploy_script:
-  - echo "Starting Artifact Deployment"
-  - set PATH=%BK_PATH%
+  #- set PATH=%BK_PATH%
   # upload to pypi for windows, but we kind of hack here... we're generating a .pypirc on the fly
-  - cmd: "echo [pypitest] > %USERPROFILE%\\.pypirc"
-  - cmd: "echo repository: https://test.pypi.org/legacy/ >> %USERPROFILE%\\.pypirc"
-  - cmd: "echo username: %PYPI_USERNAME% >> %USERPROFILE%\\.pypirc"
-  - cmd: "echo password: %PYPI_PASSWORD% >> %USERPROFILE%\\.pypirc"
-  - cmd: "if [%APPVEYOR_REPO_TAG%]==[true] python -m twine upload -r pypitest --skip-existing dist\\*.whl"
+  # see: https://wiki.python.org/moin/TestPyPI for example layout
+  - cmd: "echo [testpypi] >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo repository = https://test.pypi.org/legacy/ >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo username = %PYPI_USERNAME% >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo password = %PYPI_PASSWORD% >> %USERPROFILE%\\.pypirc"
+  #- cmd: "if [%APPVEYOR_REPO_TAG%]==[true] python -m twine upload -r testpypi --skip-existing dist\\*.whl"
+  - cmd: "python -m twine upload -r testpypi --skip-existing dist\\*.whl"

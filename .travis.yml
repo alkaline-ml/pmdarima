@@ -14,14 +14,14 @@ cache:
 before_install: source build_tools/travis/before_install.sh
 env:
   global:
-    # Directory where tests are run from
     - PYMODULE=pyramid
     - TEST_DIR=/tmp/pyramid
     - OMP_NUM_THREADS=4
     - OPENBLAS_NUM_THREADS=4
-    - TWINE_USERNAME="tgsmith61591.gh"
     - TWINE_REPOSITORY_URL="https://test.pypi.org/legacy/"
-    - secure: "zkaE+qqr0oghwNqsz5g99kVr3nVYCSxlzyWlpWudJfuiCFm3RRdh+Gc89V2ZiXNqsMKtDxpELPbY3R0gjj4m/N963m/XAtIQmm+ivWayL577+AaScFSnGXu9IJdRvIo27D/F5FEqzPHGFtQRv5AJYNjNPQoBPuVNwer4N89s6WjZ5yrDhBip13umLDEJvY6TSUaKY2fZFogmkMGZBjQd87dCQ7mf3Y77NJ8grLvZwbpUWQJLIFcGQqlQCSCBBYM4tPebpA2j9uDOvZdJ4aBqs/qkGazjLco3yy6kbFV/21V0TxUzHx7DvmD4VdKR/eCCMOfxWAuXoDNRYmgsubb9EcanY4HTYUz/NOvDTEte6UEta8UN92glGrDYf2f+Cf0YKKVQlL+kGQdDAXRamqGVrmJTWbR3CYAb9bYcN/86INSwqto65aQKlslV5Skd8v4UqD2ZRZCz5shVbkpKMXNFG/mEnTf/EJ60OlnRiIDiwfKPMlFEfQSpoJZEf4b1gk79VtMV2shM8IMM67bbJ1lxV/eqzHCJaWU6waoAkYSrI7aGPF3BReCUOzoeuqHF6ZhjuSQqdgUywVxYNPwbSFxX8x8D9evKc3GI2eUDM6+3ZkdLlOLY2V/RrocpPDTx9Bn/u50OW4pr0FfCGLWU7F1xnCiZrUw8K5ddywzhUx3xCPo="
+    - TWINE_USERNAME="tgsmith61591.gh"
+    - TWINE_PASSWORD:
+      - secure: "zkaE+qqr0oghwNqsz5g99kVr3nVYCSxlzyWlpWudJfuiCFm3RRdh+Gc89V2ZiXNqsMKtDxpELPbY3R0gjj4m/N963m/XAtIQmm+ivWayL577+AaScFSnGXu9IJdRvIo27D/F5FEqzPHGFtQRv5AJYNjNPQoBPuVNwer4N89s6WjZ5yrDhBip13umLDEJvY6TSUaKY2fZFogmkMGZBjQd87dCQ7mf3Y77NJ8grLvZwbpUWQJLIFcGQqlQCSCBBYM4tPebpA2j9uDOvZdJ4aBqs/qkGazjLco3yy6kbFV/21V0TxUzHx7DvmD4VdKR/eCCMOfxWAuXoDNRYmgsubb9EcanY4HTYUz/NOvDTEte6UEta8UN92glGrDYf2f+Cf0YKKVQlL+kGQdDAXRamqGVrmJTWbR3CYAb9bYcN/86INSwqto65aQKlslV5Skd8v4UqD2ZRZCz5shVbkpKMXNFG/mEnTf/EJ60OlnRiIDiwfKPMlFEfQSpoJZEf4b1gk79VtMV2shM8IMM67bbJ1lxV/eqzHCJaWU6waoAkYSrI7aGPF3BReCUOzoeuqHF6ZhjuSQqdgUywVxYNPwbSFxX8x8D9evKc3GI2eUDM6+3ZkdLlOLY2V/RrocpPDTx9Bn/u50OW4pr0FfCGLWU7F1xnCiZrUw8K5ddywzhUx3xCPo="
 
 matrix:
   include:
@@ -52,7 +52,7 @@ matrix:
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
            DEPLOY=true CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
-           DOCKER_CONTAINER_NAME="pyramidcontainer" BUILD_TAR=true
+           DOCKER_CONTAINER_NAME="pyramidcontainer"
 
     # This environment tests Python 3.5 support on MAC OS X, using virtualenv
     # instead of the conda python distribution
@@ -89,7 +89,7 @@ after_success:
   - source build_tools/travis/after_success.sh
   # Build the wheels every time so we can debug
   - bash build_tools/travis/build_wheels.sh
-  - ls dist/
+  - ls -la dist/
 
 notifications:
   slack:
@@ -102,7 +102,10 @@ notifications:
 deploy:
   provider: script
   skip_cleanup: true
+  #on:
+  #  tags: true # Upload on tagged releases
+  #  condition: "$DEPLOY = true"
   on:
-    tags: true # Upload on tagged releases
-    condition: "$DEPLOY = true"
-  script: python -m twine upload --skip-existing dist/*
+    branch: develop
+  script:
+    - python -m twine upload --skip-existing dist/*
