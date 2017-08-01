@@ -8,9 +8,9 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script interpreter
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\build_tools\\appveyor\\run_with_env.cmd"
-  PYPI_PASSWORD:
-    secure: TnuFYjjfLIZFMvIpt+KXhG7eeMf+KahTFKz3TE5o6obQXI9uxhN+2m4DX48QCJf2bAGxEKkLe9frXVM+Y/NUBm80sBIv4KvbmZkayMT4TZiJRzntIrsJCzem3jgExP1YUsSqrrmED7tvWpIZEqSJe+eUwHbsTAGhVBIz9mk7/CAP5UR8+0Oe+QKgjkX2VN/psoHOfFFQYTtE3L4pO05UlvyNIzNkrZ8WQ0PZ6wLHSIUCTC8ACFSzH9qWshYZ3+NVEX89l32V8A83nwV7k11yRonpXsSsrmsFYEDFf2h5b1it3VrOatwoNSMfUT+yvzhwuG2ibQv9dr/9mjlZl35VW1lE4qe2512FlVkTojATSVcMEz7cf1ZQdHtVYryqTOcyW9IgvZUJQoggMRSJLR9nLwxeSG1tfbN8NE3SQxnzeGxD+wz/XL26Tk5s9klQe7nI+rEXIR8lrN7zlOR7y9DQI7PiDHkbiIsy60p5Bi+0/pIrYaogCm7FuA4+23Y5m8Iv0/whWB3UIw5o6pVEzRnjdldeD37cLHfLLgwAU0fLnsT7Zdhc4chQhzfeTAy0o3LjdF0f8/vGnngqyxIvk+i/SrNibfB8fMWeduKse8z5mOU+eeLxqorbvyqPTHv0KG/6cBacOOHoSuwspxW1XQnBJp1R2GLSUOuHM9y3ScNrnpU=
   PYPI_USERNAME: tgsmith61591.gh
+  password:
+    secure: TnuFYjjfLIZFMvIpt+KXhG7eeMf+KahTFKz3TE5o6obQXI9uxhN+2m4DX48QCJf2bAGxEKkLe9frXVM+Y/NUBm80sBIv4KvbmZkayMT4TZiJRzntIrsJCzem3jgExP1YUsSqrrmED7tvWpIZEqSJe+eUwHbsTAGhVBIz9mk7/CAP5UR8+0Oe+QKgjkX2VN/psoHOfFFQYTtE3L4pO05UlvyNIzNkrZ8WQ0PZ6wLHSIUCTC8ACFSzH9qWshYZ3+NVEX89l32V8A83nwV7k11yRonpXsSsrmsFYEDFf2h5b1it3VrOatwoNSMfUT+yvzhwuG2ibQv9dr/9mjlZl35VW1lE4qe2512FlVkTojATSVcMEz7cf1ZQdHtVYryqTOcyW9IgvZUJQoggMRSJLR9nLwxeSG1tfbN8NE3SQxnzeGxD+wz/XL26Tk5s9klQe7nI+rEXIR8lrN7zlOR7y9DQI7PiDHkbiIsy60p5Bi+0/pIrYaogCm7FuA4+23Y5m8Iv0/whWB3UIw5o6pVEzRnjdldeD37cLHfLLgwAU0fLnsT7Zdhc4chQhzfeTAy0o3LjdF0f8/vGnngqyxIvk+i/SrNibfB8fMWeduKse8z5mOU+eeLxqorbvyqPTHv0KG/6cBacOOHoSuwspxW1XQnBJp1R2GLSUOuHM9y3ScNrnpU=
 
   matrix:
     - PY_MAJOR_VER: 2
@@ -57,9 +57,19 @@ after_test:
   #- set PATH=%BK_PATH%
   # upload to pypi for windows, but we kind of hack here... we're generating a .pypirc on the fly
   # see: https://wiki.python.org/moin/TestPyPI for example layout
-  - cmd: "echo [testpypi] >> %USERPROFILE%\\.pypirc"
-  - cmd: "echo repository = https://test.pypi.org/legacy/ >> %USERPROFILE%\\.pypirc"
-  - cmd: "echo username = %PYPI_USERNAME% >> %USERPROFILE%\\.pypirc"
-  - cmd: "echo password = %PYPI_PASSWORD% >> %USERPROFILE%\\.pypirc"
-  #- cmd: "if [%APPVEYOR_REPO_TAG%]==[true] python -m twine upload -r testpypi --skip-existing dist\\*.whl"
+  - cmd: "echo '[distutils]' > %USERPROFILE%\\.pypirc"
+  - cmd: "echo 'index-servers =' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo '    pypi' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo '    testpypi' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo ' ' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo '[pypi]' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo 'repository = https://upload.pypi.org/legacy/' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo 'username = %PYPI_USERNAME%' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo 'password = %password%' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo ' ' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo '[testpypi]' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo 'repository = https://test.pypi.org/legacy/' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo 'username = %PYPI_USERNAME%' >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo 'password = %password%' >> %USERPROFILE%\\.pypirc"
+  #- cmd: "if [%APPVEYOR_REPO_TAG%]==[true] python -m twine upload --skip-existing dist\\*.whl"
   - cmd: "python -m twine upload -r testpypi --skip-existing dist\\*.whl"

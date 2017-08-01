@@ -106,6 +106,6 @@ deploy:
   #  tags: true # Upload on tagged releases
   #  condition: "$DEPLOY = true"
   on:
-    branch: develop
+    condition: test -d dist
   script:
     - python -m twine upload --skip-existing dist/*
