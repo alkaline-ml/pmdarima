@@ -106,5 +106,4 @@ deploy:
   #  condition: "$DEPLOY = true"
   on:
     condition: test -d dist
-  script:
-    - python -m twine upload --skip-existing dist/*
+  script: python -m twine upload --skip-existing dist/*

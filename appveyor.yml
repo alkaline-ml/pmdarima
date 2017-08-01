@@ -15,15 +15,19 @@ environment:
   matrix:
     - PY_MAJOR_VER: 2
       PYTHON_ARCH: "x86"
+      PYTHON_VERSION: "2.7"
 
     - PY_MAJOR_VER: 2
       PYTHON_ARCH: "x86_64"
+      PYTHON_VERSION: "2.7"
 
     - PY_MAJOR_VER: 3
       PYTHON_ARCH: "x86"
+      PYTHON_VERSION: "3.5"
 
     - PY_MAJOR_VER: 3
       PYTHON_ARCH: "x86_64"
+      PYTHON_VERSION: "3.5"
 
 build_script:
   - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-latest-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
@@ -33,7 +37,8 @@ build_script:
   - conda update conda --quiet
 
   # Things we'll need for build/test
-  - ps: conda install numpy scipy cython scikit-learn statsmodels pip nose patsy --quiet
+  - ps: conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy
+  - source activate testenv
 
   # Things we'll need for deployment
   - pip install wheel twine
