@@ -38,7 +38,7 @@ build_script:
 
   # Things we'll need for build/test
   - ps: conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy
-  - source activate testenv
+  - activate testenv
 
   # Things we'll need for deployment
   - pip install wheel twine
