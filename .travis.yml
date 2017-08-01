@@ -88,7 +88,7 @@ after_success:
   - source build_tools/travis/after_success.sh
   # Build the wheels every time so we can debug
   - bash build_tools/travis/build_wheels.sh
-  - ls -la dist/
+  - ls dist/
 
 notifications:
   slack:
@@ -101,9 +101,10 @@ notifications:
 deploy:
   provider: script
   skip_cleanup: true
+  script: python -m twine upload --skip-existing dist/*
   #on:
   #  tags: true # Upload on tagged releases
   #  condition: "$DEPLOY = true"
   on:
-    condition: test -d dist
-  script: python -m twine upload --skip-existing dist/*
+    branch: develop
+    condition: "$DEPLOY = true"
