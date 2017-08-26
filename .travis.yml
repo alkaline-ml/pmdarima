@@ -101,7 +101,7 @@ notifications:
 deploy:
   provider: script
   skip_cleanup: true
-  script: python -m twine upload --skip-existing dist/*
+  script: python -m twine upload --skip-existing dist/*.whl
   #on:
   #  tags: true # Upload on tagged releases
   #  condition: "$DEPLOY = true"

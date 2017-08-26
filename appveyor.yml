@@ -59,7 +59,7 @@ test_script:
 after_test:
   # After the test, build the wheels (let travis handle the source build).
   - ECHO "Test complete, building wheels"
-  - python setup.py bdist_wheel
+  - python setup.py sdist bdist_wheel
   - set PATH=%BK_PATH%
 
 artifacts:
