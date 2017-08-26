@@ -68,5 +68,5 @@ artifacts:
 deploy_script:
   - echo "Starting artifact deployment"
   - set PATH=%BK_PATH%
-  #- ps: If ($env:APPVEYOR_REPO_TAG -eq "true") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --skip-existing dist/*" } Else { write-output "Not on a tagged commit, won't deploy to pypi"}
-  - ps: If ($env:APPVEYOR_REPO_BRANCH -eq "develop") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*" } Else { write-output "Not on a development commit, won't deploy to pypitest"}
+  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --skip-existing dist/*" } Else { write-output "Not on a tagged commit, won't deploy to pypi"}
+  #- ps: If ($env:APPVEYOR_REPO_BRANCH -eq "develop") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*" } Else { write-output "Not on a development commit, won't deploy to pypitest"}

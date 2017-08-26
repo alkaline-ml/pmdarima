@@ -18,7 +18,7 @@ env:
     - TEST_DIR=/tmp/pyramid
     - OMP_NUM_THREADS=4
     - OPENBLAS_NUM_THREADS=4
-    - TWINE_REPOSITORY_URL="https://test.pypi.org/legacy/"
+    # - TWINE_REPOSITORY_URL="https://test.pypi.org/legacy/"  # only for test
     - TWINE_USERNAME="tgsmith61591.gh"
     - secure: CBeKNP+qy0Jtg8SqM6FDT4Qfn8RVO25sYEcg518wRczQcSpIO0E5bTjBoDGZdl6WguG8QCYLNTt3ll3NY1AntVSVG5m0X6dyHRN+hTOJw59KmQcE7UXvhvwpA98DEnXRPf2CCBXZnDDyYmhHH6c0VlCHhurvMfs6f9JhUOR7yJvz5pMg42uP0at2odkNa/G086+6+yVnkt/rfYYXLgxAOVOfbt7GyLiPp7CX3WenCCroH9gw6FQVsOw+swEZ7xYep4VgaO029b+nExFNjlA9MXB1i3oVVkRBTk8UfsOg82kjfi4SYSfI/qVVY7ivcxbjR/K7HkMi34Mcq/0KTtmRFaO3++hcvPEHuk0CmtN9zprDO/Muan2HBytG/p6ZbK9lEA1coOcREl/4wK5xAmGadZI5WHPK+HF3sTjni4dgDb10AbyctV1B/3I+yoxdY5Jt7eHD1Qu3zu6UnxsW+oLSlyQH3YgbBWGcwAa401bvvE92d4oRvYq0maV5oLk+QwPk8JyAX2ejrslx1o83Xs38qt4wPXTm+Ky4peHV3HbbFYQa1+lrVBHAew8ahUF+1P7oSudoZZkFuks3kouFUp/ENguFLTQNT/sq1SEhMmv5AZ4rcUatY0FiBL1Q3a9DMdqh2T/r2vow1UDPKcUWE8pqtHltMuzaJ82LaZhIdCsD7Ik=
 
@@ -102,9 +102,6 @@ deploy:
   provider: script
   skip_cleanup: true
   script: python -m twine upload --skip-existing dist/*.whl
-  #on:
-  #  tags: true # Upload on tagged releases
-  #  condition: "$DEPLOY = true"
   on:
-    branch: develop
+    tags: true # Upload on tagged releases
     condition: "$DEPLOY = true"

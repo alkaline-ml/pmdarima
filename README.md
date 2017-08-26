@@ -1,3 +1,4 @@
+[![PyPI version](https://badge.fury.io/py/pyramid-arima.svg)](https://badge.fury.io/py/pyramid-arima)
 [![Linux build status](https://travis-ci.org/tgsmith61591/pyramid.svg?branch=master)](https://travis-ci.org/tgsmith61591/pyramid)
 [![Windows build status](https://ci.appveyor.com/api/projects/status/592vawuu69kd6d21?svg=true)](https://ci.appveyor.com/project/tgsmith61591/pyramid)
 [![Coverage Status](https://coveralls.io/repos/github/tgsmith61591/pyramid/badge.svg?branch=master)](https://coveralls.io/github/tgsmith61591/pyramid?branch=master)
@@ -15,19 +16,10 @@ into one estimator class and creating a more user-friendly estimator interface f
 
 ## Installation
 
-Pyramid is not currently on pypi or conda, and thus depends on a current distribution of the following packages:
-
-  - numpy >= 1.9
-  - scipy >= 0.9
-  - scikit-learn >= 0.17
-  - statsmodels >= 0.8
-
-The best way to install, until the wheels make it onto PyPi, is by cloning from git:
+Pyramid is on pypi under the package name `pyramid-arima` and can be downloaded via `pip`:
 
 ```bash
-$ git clone https://github.com/tgsmith61591/pyramid.git
-$ cd pyramid
-$ python setup.py install
+$ pip install pyramid-arima
 ```
 
 
