@@ -6,6 +6,9 @@
 .pyramid-cache/
 *.pmdpkl
 
+# Pypi pws
+.pypipws
+
 # OAuth access for automating releases
 ACCESS_TOKEN
 

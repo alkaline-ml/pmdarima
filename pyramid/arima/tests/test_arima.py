@@ -232,6 +232,9 @@ def test_with_seasonality1():
     # R code BIC result is ~3017
     assert abs(fit.bic() - 3017) < 100  # show equal within 100 or so
 
+    # show we can predict in-sample
+    fit.predict_in_sample()
+
 
 def test_with_seasonality2():
     # also test the warning, while we're at it...

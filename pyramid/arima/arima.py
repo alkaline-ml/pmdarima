@@ -8,7 +8,7 @@
 from __future__ import print_function, absolute_import, division
 
 from sklearn.base import BaseEstimator
-from sklearn.utils.validation import check_array, check_is_fitted, column_or_1d
+from sklearn.utils.validation import check_array, check_is_fitted, column_or_1d as c1d
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
@@ -198,7 +198,7 @@ class ARIMA(BaseEstimator):
             include a constant or trend. Note that if an ``ARIMA`` is fit on exogenous
             features, it must be provided exogenous features for making predictions.
         """
-        y = column_or_1d(check_array(y, ensure_2d=False, force_all_finite=False, copy=True, dtype=DTYPE))
+        y = c1d(check_array(y, ensure_2d=False, force_all_finite=False, copy=True, dtype=DTYPE))  # type: np.ndarray
         n_samples = y.shape[0]
 
         # if exog was included, check the array...
@@ -253,14 +253,14 @@ class ARIMA(BaseEstimator):
         if self.suppress_warnings:
             with warnings.catch_warnings(record=False):
                 warnings.simplefilter('ignore')
-                arima, self.arima_res_ = _fit_wrapper()
+                fit, self.arima_res_ = _fit_wrapper()
         else:
-            arima, self.arima_res_ = _fit_wrapper()
+            fit, self.arima_res_ = _fit_wrapper()
 
         # Set df_model attribute for SARIMAXResults object
         if not hasattr(self.arima_res_, 'df_model'):
-            df_model = arima.k_exog + arima.k_trend + arima.k_ar + \
-                       arima.k_ma + arima.k_seasonal_ar + arima.k_seasonal_ma
+            df_model = fit.k_exog + fit.k_trend + fit.k_ar + \
+                       fit.k_ma + fit.k_seasonal_ar + fit.k_seasonal_ma
             setattr(self.arima_res_, 'df_model', df_model)
 
         # if the model is fit with an exogenous array, it must be predicted with one as well.
@@ -275,6 +275,58 @@ class ARIMA(BaseEstimator):
             self.oob_ = np.nan
 
         return self
+
+    def _check_exog(self, exogenous):
+        # if we fit with exog, make sure one was passed, or else fail out:
+        if self.fit_with_exog_:
+            if exogenous is None:
+                raise ValueError('When an ARIMA is fit with an exogenous array, '
+                                 'it must be provided one for predicting (either '
+                                 'in- OR out-of-sample).')
+            else:
+                return check_array(exogenous, ensure_2d=True, force_all_finite=True, dtype=DTYPE)
+        return None
+
+    def predict_in_sample(self, exogenous=None, start=None, end=None, dynamic=False):
+        """Generate in-sample predictions from the fit ARIMA model. This can be useful when
+        wanting to visualize the fit, and qualitatively inspect the efficacy of the model, or
+        when wanting to compute the residuals of the model.
+
+
+        Parameters
+        ----------
+        exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
+            An optional 2-d array of exogenous variables. If provided, these variables are
+            used as additional features in the regression operation. This should not
+            include a constant or trend. Note that if an ``ARIMA`` is fit on exogenous
+            features, it must be provided exogenous features for making predictions.
+
+        start : int, optional (default=None)
+            Zero-indexed observation number at which to start forecasting, ie.,
+            the first forecast is start.
+
+        end : int, optional (default=None)
+            Zero-indexed observation number at which to end forecasting, ie.,
+            the first forecast is start.
+
+        dynamic : bool, optional
+            The `dynamic` keyword affects in-sample prediction. If dynamic
+            is False, then the in-sample lagged values are used for
+            prediction. If `dynamic` is True, then in-sample forecasts are
+            used in place of lagged dependent variables. The first forecasted
+            value is `start`.
+
+
+        Returns
+        -------
+        predict : array
+            The predicted values.
+        """
+        check_is_fitted(self, 'arima_res_')
+
+        # if we fit with exog, make sure one was passed:
+        exogenous = self._check_exog(exogenous)  # type: np.ndarray
+        return self.arima_res_.predict(exog=exogenous, start=start, end=end, dynamic=dynamic)
 
     def predict(self, n_periods=10, exogenous=None):
         """Generate predictions (forecasts) ``n_periods`` in the future. Note that unless
@@ -303,14 +355,9 @@ class ARIMA(BaseEstimator):
         check_is_fitted(self, 'arima_res_')
 
         # if we fit with exog, make sure one was passed:
-        if self.fit_with_exog_:
-            if exogenous is None:
-                raise ValueError('When an ARIMA is fit with an exogenous array, '
-                                 'it must be provided one for predictions.')
-            else:
-                exogenous = check_array(exogenous, ensure_2d=True, force_all_finite=True, dtype=DTYPE)
-                if exogenous.shape[0] != n_periods:
-                    raise ValueError('Exogenous array dims (n_rows) != n_periods')
+        exogenous = self._check_exog(exogenous)  # type: np.ndarray
+        if exogenous is not None and exogenous.shape[0] != n_periods:
+            raise ValueError('Exogenous array dims (n_rows) != n_periods')
 
         # ARIMA predicts differently...
         if self.seasonal_order is None:

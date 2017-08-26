@@ -14,10 +14,13 @@ cache:
 before_install: source build_tools/travis/before_install.sh
 env:
   global:
-    # Directory where tests are run from
+    - PYMODULE=pyramid
     - TEST_DIR=/tmp/pyramid
     - OMP_NUM_THREADS=4
     - OPENBLAS_NUM_THREADS=4
+    # - TWINE_REPOSITORY_URL="https://test.pypi.org/legacy/"  # only for test
+    - TWINE_USERNAME="tgsmith61591.gh"
+    - secure: CBeKNP+qy0Jtg8SqM6FDT4Qfn8RVO25sYEcg518wRczQcSpIO0E5bTjBoDGZdl6WguG8QCYLNTt3ll3NY1AntVSVG5m0X6dyHRN+hTOJw59KmQcE7UXvhvwpA98DEnXRPf2CCBXZnDDyYmhHH6c0VlCHhurvMfs6f9JhUOR7yJvz5pMg42uP0at2odkNa/G086+6+yVnkt/rfYYXLgxAOVOfbt7GyLiPp7CX3WenCCroH9gw6FQVsOw+swEZ7xYep4VgaO029b+nExFNjlA9MXB1i3oVVkRBTk8UfsOg82kjfi4SYSfI/qVVY7ivcxbjR/K7HkMi34Mcq/0KTtmRFaO3++hcvPEHuk0CmtN9zprDO/Muan2HBytG/p6ZbK9lEA1coOcREl/4wK5xAmGadZI5WHPK+HF3sTjni4dgDb10AbyctV1B/3I+yoxdY5Jt7eHD1Qu3zu6UnxsW+oLSlyQH3YgbBWGcwAa401bvvE92d4oRvYq0maV5oLk+QwPk8JyAX2ejrslx1o83Xs38qt4wPXTm+Ky4peHV3HbbFYQa1+lrVBHAew8ahUF+1P7oSudoZZkFuks3kouFUp/ENguFLTQNT/sq1SEhMmv5AZ4rcUatY0FiBL1Q3a9DMdqh2T/r2vow1UDPKcUWE8pqtHltMuzaJ82LaZhIdCsD7Ik=
 
 matrix:
   include:
@@ -26,29 +29,35 @@ matrix:
     # tests against linux.
     - os: linux
       dist: trusty
+      services:
+        - docker
       env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true
-           CACHEC=true
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=true
+           DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64" DOCKER_CONTAINER_NAME="pyramidcontainer"
 
-    # This environment tests the same conditions as above, but tests against MAC OS X
+    # This environment tests the same conditions as above, but tests against MAC OS X,
+    # using virtualenv instead of the conda python distribution
     - os: osx
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true
-           CACHEC=false
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=false
 
     # This environment tests Python 3.5 support on linux
     - os: linux
       dist: trusty
+      services:
+        - docker
       env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
-           DEPLOY=true CACHEC=true
+           DEPLOY=true CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+           DOCKER_CONTAINER_NAME="pyramidcontainer"
 
-    # This environment tests Python 3.5 support on MAC OS X
+    # This environment tests Python 3.5 support on MAC OS X, using virtualenv
+    # instead of the conda python distribution
     - os: osx
       language: generic
-      env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
+      env: DISTRIB="conda" PYTHON_VERSION="3.5"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.8"
            DEPLOY=true CACHEC=false
@@ -75,7 +84,11 @@ matrix:
 install: source build_tools/travis/install.sh
 before_script: bash build_tools/travis/before_script.sh
 script: bash build_tools/travis/test_script.sh
-after_success: source build_tools/travis/after_success.sh
+after_success:
+  - source build_tools/travis/after_success.sh
+  # Build the wheels every time so we can debug
+  - bash build_tools/travis/build_wheels.sh
+  - ls dist/
 
 notifications:
   slack:
@@ -86,15 +99,9 @@ notifications:
     on_pull_requests: true
 
 deploy:
-  provider: pypi
-  user: tgsmith61591.gh
-  password:
-    secure: qRlN//K2Oa3m0xu0C4T9hJB/G/kwvYn5hwzH6dy72tz4ERLjjCf8MrAawRzpsDkF1MG4k8f8m7IFlbo3F7f7exDI7r2gPlKe6bD0dm0NtLvkuzpcFFJEYk8JqUa/Ft5XKLUxrKh0YlLf83V5SGo/8jwF25joaPMutEym/T1CfZdsDkx6SKvqy9OUfr65G41IvhlYLzX8ShkSRnWCNO3XzAScwutEuESvOd9BkGga9sGtf7zpWX0k1AAr4ePIvpwGtpgrAZ0uAID9fHtpEq7F9fEq7i0gjdPUz77TSSnGH6wUZkQ0jSjW1igiI9ADAAKBdl4ynPellJlujEV671MaTExFx3D2hawUtNnhISYi+rXycxI0Q4T1VkIs4nMaJrfnquaFVJCw9qyMm5vbw+YSlBHjwSOCB05dBLcRfuOlFY4ZpDSt3MYTdD9jolRlDIpy2WIZO1E0YaYcaIp22aLNc93njdCAnjUDaFQBK6QQO/WI+OIM7ZJIHbiCbUHug2pDVND5LpFKc4V/gFD50x/iZYmFF+TheTuDzfGoixD3krwSk5fKyTuXnnj9T3FpT4KaPnoRLbnTK0KQJsvyoY1YxExGc8KemdNjWlxho1E+Zxy2RFih6I2xptwoFoKWj1b+5IraKqPc2IVBBDDCBKtWvwMf3tqwMtHQmQcMU6Z0JsU=
-  server: https://test.pypi.org/legacy/ # Upload to pypi test server
-  distributions: "bdist_wheel" # Upload .whl files only.
-  skip_upload_docs: true
-  skip_cleanup: true # release artifacts as well
+  provider: script
+  skip_cleanup: true
+  script: python -m twine upload --skip-existing dist/*.whl
   on:
-    branch: release-0.5
-    #tags: true # Upload on tagged releases
-    #condition: "$DEPLOY = true"
+    tags: true # Upload on tagged releases
+    condition: "$DEPLOY = true"

@@ -21,12 +21,12 @@ if [[ "$CACHEC" == true ]]; then
     ccache --max-size 100M --show-stats
 fi
 
-if [[ "$DISTRIB" == "conda" ]]; then
-    # Deactivate the travis-provided virtual environment and setup a
-    # conda-based environment instead. if it's mac osx, there might not be a virtualenv
-    # running, so deactivate would fail.
-    deactivate || echo "No virtualenv to deactivate"
+# Deactivate the travis-provided virtual environment and setup a
+# conda-based environment instead. if it's mac osx, there might not be a virtualenv
+# running, so deactivate would fail.
+deactivate || echo "No virtualenv or condaenv to deactivate"
 
+if [[ "$DISTRIB" == "conda" ]]; then
     # Install miniconda (if linux, use wget; if OS X, use curl)
     # using the script we download
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -65,12 +65,14 @@ if [[ "$DISTRIB" == "conda" ]]; then
     fi
     source activate testenv
 
+    # determine what platform is running
+    python -c 'from distutils.util import get_platform; print(get_platform())'
+
     # Install nose-timer via pip
     pip install nose-timer
-
-# if we ever set up a virtualenv test... for now we plan to use conda
 else
-    echo "TODO: setup virtualenv code block"
+    echo "You done screwed up your .travis.yml"
+    exit -10
 fi
 
 # use PIP for installing coverage tools since we might not be using a conda dist
