@@ -128,8 +128,8 @@ def C_Approx(np.ndarray[DOUBLE, ndim=1, mode='c'] x,
     return yout
 
 
-def C_pop_A(np.ndarray[INTP, ndim=2, mode='c'] A,
-            np.ndarray[INTP, ndim=1, mode='c'] frecob):
+def C_pop_A(np.ndarray[np.int64_t, ndim=2, mode='c'] A,
+            np.ndarray[np.int64_t, ndim=1, mode='c'] frecob):
 
     cdef i, j, n = frecob.shape[0]
 

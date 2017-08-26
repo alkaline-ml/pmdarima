@@ -8,6 +8,7 @@ from __future__ import absolute_import
 from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.externals.joblib import Parallel, delayed
 from sklearn.linear_model import LinearRegression
+from numpy.linalg import LinAlgError
 import numpy as np
 import warnings
 import time
@@ -29,7 +30,7 @@ VALID_CRITERIA = {'aic', 'aicc', 'bic', 'hqic', 'oob'}
 
 
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2, max_q=5,
-               start_P=1, D=None, start_Q=1, max_P=2, max_D=1, max_Q=2, max_order=None, m=1,
+               start_P=1, D=None, start_Q=1, max_P=2, max_D=1, max_Q=2, max_order=10, m=1,
                seasonal=True, stationary=False, information_criterion='aic', alpha=0.05, test='kpss',
                seasonal_test='ch', stepwise=True, n_jobs=1, start_params=None, trend='c', method=None,
                transparams=True, solver='lbfgs', maxiter=50, disp=0, callback=None, offset_test_args=None,
@@ -59,11 +60,16 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     Parameters
     ----------
     y : array-like or iterable, shape=(n_samples,)
-        The time-series to which to fit an ``ARIMA`` estimator.
+        The time-series to which to fit an ``ARIMA`` estimator. This may either be a Pandas
+        ``Series`` object (statsmodels can internally use the dates in the index), or a numpy
+        array. This should be a one-dimensional array of floats, and should not contain any
+        ``np.nan`` or ``np.inf`` values.
 
     exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
-        An optional array of exogenous variables. This should not
-        include a constant or trend.
+        An optional 2-d array of exogenous variables. If provided, these variables are
+        used as additional features in the regression operation. This should not
+        include a constant or trend. Note that if an ``ARIMA`` is fit on exogenous
+        features, it must be provided exogenous features for making predictions.
 
     start_p : int, optional (default=2)
         The starting value of ``p``, the order (or number of time lags)
@@ -71,8 +77,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 
     d : int, optional (default=None)
         The order of first-differencing. If None (by default), the value
-        will automatically be selected based on the results of the ``test``.
-        Must be a positive integer or None.
+        will automatically be selected based on the results of the ``test`` (i.e.,
+        either the Kwiatkowski–Phillips–Schmidt–Shin, Augmented Dickey-Fuller or the
+        Phillips–Perron test will be conducted to find the most probable value).
+        Must be a positive integer or None. Note that if ``d`` is None, the runtime
+        could be significantly longer.
 
     start_q : int, optional (default=2)
         The starting value of ``q``, the order of the moving-average
@@ -80,11 +89,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 
     max_p : int, optional (default=5)
         The maximum value of ``p``, inclusive. Must be a positive integer greater
-        than ``start_p``.
+        than or equal to ``start_p``.
 
     max_d : int, optional (default=2)
         The maximum value of ``d``, or the maximum number of non-seasonal
-        differences. Must be a positive integer greater than ``d``.
+        differences. Must be a positive integer greater than or equal to ``d``.
 
     max_q : int, optional (default=5)
         The maximum value of ``q``, inclusive. Must be a positive integer greater than
@@ -114,17 +123,21 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         The maximum value of ``Q``, inclusive. Must be a positive integer greater
         than ``start_Q``.
 
-    max_order : int, optional (default=None)
+    max_order : int, optional (default=10)
         If the sum of ``p`` and ``q`` is >= ``max_order``, a model will *not* be
         fit with those parameters, but will progress to the next combination.
-        Default is None, which means there are no constraints on maximum order.
+        Default is 5. If ``max_order`` is None, it means there are no constraints on
+        maximum order.
 
     m : int, optional (default=1)
-        The period for seasonal differencing. Typically, it is 4 for quarterly
-        data, 12 for monthly data, or 1 for annual data. Default is 1.
+        The period for seasonal differencing, ``m`` refers to the number of of periods
+        in each season. For example, ``m`` is 4 for quarterly data, 12 for monthly data,
+        or 1 for annual (non-seasonal) data. Default is 1. Note that if ``m`` == 1 (i.e.,
+        is non-seasonal), ``seasonal`` will be set to False.
 
     seasonal : bool, optional (default=True)
-        Whether to fit a seasonal ARIMA.
+        Whether to fit a seasonal ARIMA. Default is True. Note that if ``seasonal`` is True
+        and ``m`` == 1, ``seasonal`` will be set to False.
 
     stationary : bool, optional (default=False)
         Whether the time-series is stationary and ``d`` should be set to zero.
@@ -137,25 +150,29 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         Level of the test for testing significance.
 
     test : str, optional (default='kpss')
-        Type of unit root test to use in order to detect
-        stationarity.
+        Type of unit root test to use in order to detect stationarity if ``stationary``
+        is False and ``d`` is None. Default is 'kpss' (Kwiatkowski–Phillips–Schmidt–Shin).
 
     seasonal_test : str, optional (default='ch')
-        This determines which seasonal unit root test is used.
+        This determines which seasonal unit root test is used if ``seasonal`` is True
+        and ``D`` is None. Default is 'ch' (Canova-Hansen).
 
     stepwise : bool, optional (default=True)
         Whether to use the stepwise algorithm outlined in Hyndman and Khandakar (2008) to
-        identify the optimal model parameters.
+        identify the optimal model parameters. The stepwise algorithm can be significantly
+        faster than fitting all (or a ``random`` subset of) hyper-parameter combinations
+        and is less likely to over-fit the model.
 
     n_jobs : int, optional (default=1)
-        The number of jobs to run if running in parallel.
+        The number of models to fit in parallel in the case of a grid search (``stepwise=False``).
+        Default is 1, but -1 can be used to designate "as many as possible".
 
     start_params : array-like, optional (default=None)
         Starting parameters for ``ARMA(p,q)``.  If None, the default is given
         by ``ARMA._fit_start_params``.
 
     transparams : bool, optional (default=True)
-        Whehter or not to transform the parameters to ensure stationarity.
+        Whether or not to transform the parameters to ensure stationarity.
         Uses the transformation suggested in Jones (1980).  If False,
         no checking for stationarity or invertibility is done.
 
@@ -199,41 +216,48 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         parameter vector. This is only used in non-seasonal ARIMA models.
 
     offset_test_args : dict, optional (default=None)
-        The args to pass to the constructor of the offset (``d``) test.
+        The args to pass to the constructor of the offset (``d``) test. See
+        ``pyramid.arima.stationarity`` for more details.
 
     seasonal_test_args : dict, optional (default=None)
         The args to pass to the constructor of the seasonal offset (``D``) test.
+        See ``pyramid.arima.seasonality`` for more details.
 
     suppress_warnings : bool, optional (default=False)
         Many warnings might be thrown inside of statsmodels. If ``suppress_warnings``
-        is True, all of these warnings will be squelched.
+        is True, all of the warnings coming from ``ARIMA`` will be squelched.
 
     error_action : str, optional (default='warn')
-        If unable to fit an ARIMA due to stationarity issues, whether to warn ('warn'),
-        raise the ``ValueError`` ('raise') or ignore ('ignore').
+        If unable to fit an ``ARIMA`` due to stationarity issues, whether to warn ('warn'),
+        raise the ``ValueError`` ('raise') or ignore ('ignore'). Note that the default
+        behavior is to warn, and fits that fail will be returned as None. This is the recommended
+        behavior, as statsmodels ARIMA and SARIMAX models hit bugs periodically that can cause
+        an otherwise healthy parameter combination to fail for reasons not related to pyramid.
 
     trace : bool, optional (default=False)
-        Whether to print status on the fits.
+        Whether to print status on the fits. Note that this can be very verbose...
 
     random : bool, optional (default=False)
         Similar to grid searches, ``auto_arima`` provides the capability to perform
         a "random search" over a hyper-parameter space. If ``random`` is True, rather
-        than perform an exhaustive search, only ``n_fits`` ARIMA models will be fit.
+        than perform an exhaustive search or ``stepwise`` search, only ``n_fits``
+        ARIMA models will be fit (``stepwise`` must be False for this option to do anything).
 
     random_state : int, long or numpy ``RandomState``, optional (default=None)
-        The PRNG for when ``random=True``
+        The PRNG for when ``random=True``. Ensures replicable testing and results.
 
     n_fits : int, optional (default=10)
         If ``random`` is True and a "random search" is going to be performed, ``n_iter``
         is the number of ARIMA models to be fit.
 
     return_valid_fits : bool, optional (default=False)
-        If True, will return all valid ARIMA fits. If False (by default), will only
+        If True, will return all valid ARIMA fits in a list. If False (by default), will only
         return the best fit.
 
     out_of_sample_size : int, optional (default=0)
         The number of examples from the tail of the time series to use as validation
-        examples.
+        examples. The ``ARIMA`` class can fit only a portion of the data if specified,
+        in order to retain an "out of bag" sample score.
 
     scoring : str, optional (default='mse')
         If performing validation (i.e., if ``out_of_sample_size`` > 0), the metric
@@ -265,6 +289,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         max_order = np.inf
     elif max_order < 0:
         raise ValueError('max_order must be None or a positive integer (>= 0)')
+
+    # alternatively, if the start_p and start_q supercede the max order, that's a failable offense...
+    if (not seasonal and start_p + start_q > max_order) or \
+            (seasonal and start_P + start_p + start_Q + start_q > max_order):
+        raise ValueError('If max_order is prescribed, it must exceed sum of starting orders')
 
     # validate d & D
     for _d, _max_d in ((d, max_d), (D, max_D)):
@@ -361,9 +390,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         D = nsdiffs(xx, m=m, test=seasonal_test, max_D=max_D, **seasonal_test_args)
 
         if D > 0 and exogenous is not None:
-            diffex = diff(exogenous, differences=D, lag=m)
+            diffxreg = diff(exogenous, differences=D, lag=m)
             # check for constance on any column
-            if np.apply_along_axis(is_constant, arr=diffex, axis=0).any():
+            if np.apply_along_axis(is_constant, arr=diffxreg, axis=0).any():
                 D -= 1
 
     # D might still be None if not seasonal. Py 3 will throw and error for that
@@ -376,15 +405,15 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
     # difference the exogenous matrix
     if exogenous is not None:
         if D > 0:
-            diffex = diff(exogenous, differences=D, lag=m)
+            diffxreg = diff(exogenous, differences=D, lag=m)
         else:
-            diffex = exogenous
+            diffxreg = exogenous
     else:
-        # here's the thing... we're only going to use diffex if exogenous
+        # here's the thing... we're only going to use diffxreg if exogenous
         # was not None in the first place. However, PyCharm doesn't know that
         # and it thinks we might use it before assigning it. Therefore, assign
         # it to None as a default value and it won't raise the warning anymore.
-        diffex = None
+        diffxreg = None
 
     # determine/set the order of differencing by estimating the number of
     # orders it would take in order to make the TS stationary.
@@ -393,10 +422,10 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
         d = ndiffs(dx, test=test, alpha=alpha, max_d=max_d, **offset_test_args)
 
         if d > 0 and exogenous is not None:
-            diffex = diff(diffex, differences=d, lag=1)
+            diffxreg = diff(diffxreg, differences=d, lag=1)
 
             # if any columns are constant, subtract one order of differencing
-            if np.apply_along_axis(is_constant, arr=diffex, axis=0).any():
+            if np.apply_along_axis(is_constant, arr=diffxreg, axis=0).any():
                 d -= 1
 
     # check differences (do we want to warn?...)
@@ -435,7 +464,6 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
             max_p = min(max_p, m - 1)
         if max_Q > 0:
             max_q = min(max_q, m - 1)
-        pass
 
     # generate the set of (p, q, P, Q) FIRST, since it is contingent on whether or not
     # the user is interested in a seasonal ARIMA result. This will reduce the search space
@@ -500,7 +528,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
                                                P=P, D=D, Q=Q, m=m, start_p=start_p, start_q=start_q,
                                                start_P=start_P, start_Q=start_Q, max_p=max_p, max_q=max_q,
                                                max_P=max_P, max_Q=max_Q, seasonal=seasonal,
-                                               information_criterion=information_criterion)
+                                               information_criterion=information_criterion,
+                                               max_order=max_order)
 
         # fit a baseline p, d, q model and then a null model
         stepwise_wrapper.fit_increment_k_cache_set(True)  # p, d, q, P, D, Q
@@ -537,7 +566,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5, max_d=2
 class _StepwiseFitWrapper(object):
     """The stepwise algorithm fluctuates the more sensitive pieces of the ARIMA
     (the seasonal components) first, adjusting towards the direction of the smaller
-    {A|B|HQ}IC, and continues to step down as long as the error shrinks. As long as the
+    {A|B|HQ}IC(c), and continues to step down as long as the error shrinks. As long as the
     error term decreases and the best parameters have not shifted to a point where they
     can no longer change, ``k`` will increase, and the models will continue to be fit
     until the ``max_k`` is reached.
@@ -549,7 +578,10 @@ class _StepwiseFitWrapper(object):
                  maxiter, disp, callback, fit_params, suppress_warnings, trace,
                  error_action, out_of_sample_size, scoring, scoring_args, p, d, q,
                  P, D, Q, m, start_p, start_q, start_P, start_Q, max_p, max_q,
-                 max_P, max_Q, seasonal, information_criterion):
+                 max_P, max_Q, seasonal, information_criterion, max_order):
+        # todo: I really hate how congested this block is, and just for the sake of a stateful __init__...
+        #       Could we just pass **kwargs (MUCH less expressive...) in here? It would be much more
+        #       difficult to debug later...
 
         # stuff for the fit call
         self.y = y
@@ -588,6 +620,7 @@ class _StepwiseFitWrapper(object):
         self.max_P = max_P
         self.max_Q = max_Q
         self.seasonal = seasonal
+        self.max_order = max_order
 
         # other internal start vars
         self.bestfit = None
@@ -620,7 +653,11 @@ class _StepwiseFitWrapper(object):
         order = (p, self.d, q)
         ssnl = (P, self.D, Q, self.m) if self.seasonal else None
 
-        if expr and (order, ssnl) not in self.results_dict:
+        # if the sum of the orders > max_order we do not build this model...
+        order_sum = p + q + (P + Q if self.seasonal else 0)
+
+        # if all conditions hold true, good to build this model.
+        if expr and order_sum <= self.max_order and (order, ssnl) not in self.results_dict:
             self.k += 1
             # cache the fit
             fit = _fit_arima(self.y, xreg=self.xreg, order=order, seasonal_order=ssnl,
@@ -631,6 +668,7 @@ class _StepwiseFitWrapper(object):
                              error_action=self.error_action, out_of_sample_size=self.out_of_sample_size,
                              scoring=self.scoring, scoring_args=self.scoring_args)
 
+            # use the orders as a key to be hashed for the dictionary (pointing to fit)
             self.results_dict[(order, ssnl)] = fit
 
             if self.is_new_better(fit):
@@ -687,13 +725,14 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend, method, tran
                     scoring_args=scoring_args)\
             .fit(x, exogenous=xreg, **fit_params)
 
-    # for non-stationarity errors, return None
-    except ValueError as v:
+    # for non-stationarity errors or singular matrices, return None
+    except (LinAlgError, ValueError) as v:
         if error_action == 'warn':
             warnings.warn(_fmt_warning_str(order, seasonal_order))
         elif error_action == 'raise':
+            # todo: can we do something more informative in case the error is not on the pyramid side?
             raise v
-        # otherwise it's 'ignore'
+        # if it's 'ignore' or 'warn', we just return None
         fit = None
 
     # do trace

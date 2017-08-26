@@ -4,7 +4,7 @@
 #
 # The pyramid module
 
-__version__ = '0.4'
+__version__ = "0.5-dev8"
 
 try:
     # this var is injected in the setup build to enable
@@ -19,14 +19,16 @@ if __PYRAMID_SETUP__:
     import os
     sys.stderr.write('Partial import of pyramid during the build process.' + os.linesep)
 else:
+    # check that the build completed properly. This prints an informative
+    # message in the case that any of the C code was not properly compiled.
+    from . import __check_build
+
     __all__ = [
         'arima',
         'compat',
+        'datasets',
         'utils'
     ]
-
-    # top-level imports - if any
-    # todo
 
 
 def setup_module(module):

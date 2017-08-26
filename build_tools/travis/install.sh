@@ -10,21 +10,34 @@ echo 'List files from cached directories'
 echo 'pip:'
 ls $HOME/.cache/pip
 
-export CC=/usr/lib/ccache/gcc
-export CXX=/usr/lib/ccache/g++
-# Useful for debugging how ccache is used
-# export CCACHE_LOGFILE=/tmp/ccache.log
-# ~60M is used by .ccache when compiling from scratch at the time of writing
-ccache --max-size 100M --show-stats
+# only do ccache if CACHEC is true. For now, this is FALSE on osx testing,
+# but might become true later (which is why we don't test for OS name instead)
+if [[ "$CACHEC" == true ]]; then
+    export CC=/usr/lib/ccache/gcc
+    export CXX=/usr/lib/ccache/g++
+    # Useful for debugging how ccache is used
+    # export CCACHE_LOGFILE=/tmp/ccache.log
+    # ~60M is used by .ccache when compiling from scratch at the time of writing
+    ccache --max-size 100M --show-stats
+fi
+
+# Deactivate the travis-provided virtual environment and setup a
+# conda-based environment instead. if it's mac osx, there might not be a virtualenv
+# running, so deactivate would fail.
+deactivate || echo "No virtualenv or condaenv to deactivate"
 
 if [[ "$DISTRIB" == "conda" ]]; then
-    # Deactivate the travis-provided virtual environment and setup a
-    # conda-based environment instead
-    deactivate
+    # Install miniconda (if linux, use wget; if OS X, use curl)
+    # using the script we download
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+        MINICONDA_PATH=/home/travis/miniconda
+    else
+        curl https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh > miniconda.sh
+        MINICONDA_PATH=/Users/travis/miniconda
+    fi
 
-    # Install miniconda
-    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-    MINICONDA_PATH=/home/travis/miniconda
+    # append the path, update conda
     chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH
     export PATH=$MINICONDA_PATH/bin:$PATH
     conda update --yes conda
@@ -52,29 +65,38 @@ if [[ "$DISTRIB" == "conda" ]]; then
     fi
     source activate testenv
 
+    # determine what platform is running
+    python -c 'from distutils.util import get_platform; print(get_platform())'
+
     # Install nose-timer via pip
     pip install nose-timer
+else
+    echo "You done screwed up your .travis.yml"
+    exit -10
 fi
 
+# use PIP for installing coverage tools since we might not be using a conda dist
 if [[ "$COVERAGE" == "true" ]]; then
     pip install coverage codecov coveralls
 fi
 
-if [[ "$SKIP_TESTS" == "true" ]]; then
-    echo "No need to build pyramid when not running the tests"
-else
-    # Build pyramid in the install.sh script to collapse the verbose
-    # build output in the travis output when it succeeds.
-    python --version
-    python -c "import numpy; print('numpy %s' % numpy.__version__)"
-    python -c "import scipy; print('scipy %s' % scipy.__version__)"
-    python -c "\
+# now run the python setup. This implicitly builds all the C code with build_ext
+python setup.py develop
+
+# Build pyramid in the install.sh script to collapse the verbose
+# build output in the travis output when it succeeds.
+python --version
+python -c "import numpy; print('numpy %s' % numpy.__version__)"
+python -c "import scipy; print('scipy %s' % scipy.__version__)"
+python -c "\
 try:
     import pandas
     print('pandas %s' % pandas.__version__)
 except ImportError:
     pass
 "
-    python setup.py develop
+
+# Only show the CCACHE stats if linux
+if [[ "$CACHEC" == true ]]; then
     ccache --show-stats
 fi

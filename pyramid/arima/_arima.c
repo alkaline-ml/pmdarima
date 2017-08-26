@@ -1755,7 +1755,7 @@ static void __pyx_memoryview_slice_assign_scalar(__Pyx_memviewslice *, int, size
 static void __pyx_memoryview__slice_assign_scalar(char *, Py_ssize_t *, Py_ssize_t *, int, size_t, void *); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_7pyramid_5arima_6_arima_DOUBLE = { "DOUBLE", NULL, sizeof(__pyx_t_7pyramid_5arima_6_arima_DOUBLE), { 0 }, 0, 'R', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_float64_t = { "float64_t", NULL, sizeof(__pyx_t_5numpy_float64_t), { 0 }, 0, 'R', 0, 0 };
-static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_7pyramid_5arima_6_arima_INTP = { "INTP", NULL, sizeof(__pyx_t_7pyramid_5arima_6_arima_INTP), { 0 }, 0, IS_UNSIGNED(__pyx_t_7pyramid_5arima_6_arima_INTP) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_7pyramid_5arima_6_arima_INTP), 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_int64_t = { "int64_t", NULL, sizeof(__pyx_t_5numpy_int64_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_5numpy_int64_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_5numpy_int64_t), 0 };
 #define __Pyx_MODULE_NAME "pyramid.arima._arima"
 int __pyx_module_is_main_pyramid__arima___arima = 0;
 
@@ -3083,8 +3083,8 @@ static PyObject *__pyx_pf_7pyramid_5arima_6_arima_2C_Approx(CYTHON_UNUSED PyObje
 /* "pyramid/arima/_arima.pyx":131
  * 
  * 
- * def C_pop_A(np.ndarray[INTP, ndim=2, mode='c'] A,             # <<<<<<<<<<<<<<
- *             np.ndarray[INTP, ndim=1, mode='c'] frecob):
+ * def C_pop_A(np.ndarray[np.int64_t, ndim=2, mode='c'] A,             # <<<<<<<<<<<<<<
+ *             np.ndarray[np.int64_t, ndim=1, mode='c'] frecob):
  * 
  */
 
@@ -3180,17 +3180,17 @@ static PyObject *__pyx_pf_7pyramid_5arima_6_arima_4C_pop_A(CYTHON_UNUSED PyObjec
   __pyx_pybuffernd_frecob.rcbuffer = &__pyx_pybuffer_frecob;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_A.rcbuffer->pybuffer, (PyObject*)__pyx_v_A, &__Pyx_TypeInfo_nn___pyx_t_7pyramid_5arima_6_arima_INTP, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 131, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_A.rcbuffer->pybuffer, (PyObject*)__pyx_v_A, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int64_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 131, __pyx_L1_error)
   }
   __pyx_pybuffernd_A.diminfo[0].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_A.diminfo[0].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_A.diminfo[1].strides = __pyx_pybuffernd_A.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_A.diminfo[1].shape = __pyx_pybuffernd_A.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_frecob.rcbuffer->pybuffer, (PyObject*)__pyx_v_frecob, &__Pyx_TypeInfo_nn___pyx_t_7pyramid_5arima_6_arima_INTP, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 131, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_frecob.rcbuffer->pybuffer, (PyObject*)__pyx_v_frecob, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int64_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 131, __pyx_L1_error)
   }
   __pyx_pybuffernd_frecob.diminfo[0].strides = __pyx_pybuffernd_frecob.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_frecob.diminfo[0].shape = __pyx_pybuffernd_frecob.rcbuffer->pybuffer.shape[0];
 
   /* "pyramid/arima/_arima.pyx":134
- *             np.ndarray[INTP, ndim=1, mode='c'] frecob):
+ *             np.ndarray[np.int64_t, ndim=1, mode='c'] frecob):
  * 
  *     cdef i, j, n = frecob.shape[0]             # <<<<<<<<<<<<<<
  * 
@@ -3334,8 +3334,8 @@ static PyObject *__pyx_pf_7pyramid_5arima_6_arima_4C_pop_A(CYTHON_UNUSED PyObjec
   /* "pyramid/arima/_arima.pyx":131
  * 
  * 
- * def C_pop_A(np.ndarray[INTP, ndim=2, mode='c'] A,             # <<<<<<<<<<<<<<
- *             np.ndarray[INTP, ndim=1, mode='c'] frecob):
+ * def C_pop_A(np.ndarray[np.int64_t, ndim=2, mode='c'] A,             # <<<<<<<<<<<<<<
+ *             np.ndarray[np.int64_t, ndim=1, mode='c'] frecob):
  * 
  */
 
@@ -18114,8 +18114,8 @@ static int __Pyx_InitCachedConstants(void) {
   /* "pyramid/arima/_arima.pyx":131
  * 
  * 
- * def C_pop_A(np.ndarray[INTP, ndim=2, mode='c'] A,             # <<<<<<<<<<<<<<
- *             np.ndarray[INTP, ndim=1, mode='c'] frecob):
+ * def C_pop_A(np.ndarray[np.int64_t, ndim=2, mode='c'] A,             # <<<<<<<<<<<<<<
+ *             np.ndarray[np.int64_t, ndim=1, mode='c'] frecob):
  * 
  */
   __pyx_tuple__24 = PyTuple_Pack(5, __pyx_n_s_A, __pyx_n_s_frecob, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_n); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 131, __pyx_L1_error)
@@ -18382,8 +18382,8 @@ PyMODINIT_FUNC PyInit__arima(void)
   /* "pyramid/arima/_arima.pyx":131
  * 
  * 
- * def C_pop_A(np.ndarray[INTP, ndim=2, mode='c'] A,             # <<<<<<<<<<<<<<
- *             np.ndarray[INTP, ndim=1, mode='c'] frecob):
+ * def C_pop_A(np.ndarray[np.int64_t, ndim=2, mode='c'] A,             # <<<<<<<<<<<<<<
+ *             np.ndarray[np.int64_t, ndim=1, mode='c'] frecob):
  * 
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7pyramid_5arima_6_arima_5C_pop_A, NULL, __pyx_n_s_pyramid_arima__arima); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)

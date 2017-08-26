@@ -124,7 +124,7 @@ class CHTest(_SeasonalStationarityTest):
         # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
         Omfhat = (Fhataux.T.dot(Fhataux) + Omnw + Omnw.T) / Ne
         sq = np.arange(0, s - 1, 2)
-        frecob = np.zeros(s - 1, dtype=np.int)
+        frecob = np.zeros(s - 1).astype('int64')
 
         # I hate looping like this, but it seems like overkill to write a C function
         # for something that's otherwise so trivial...
@@ -139,7 +139,7 @@ class CHTest(_SeasonalStationarityTest):
         a = (frecob == 1).sum()
 
         # populate the A matrix
-        A = np.zeros((s - 1, a), dtype=np.int)
+        A = np.zeros((s - 1, a)).astype('int64')
         C_pop_A(A, frecob)
 
         tmp = A.T.dot(Omfhat).dot(A)
