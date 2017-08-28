@@ -6,3 +6,4 @@ recursive-include pyramid/compat *.pyx *.pyd
 recursive-include pyramid/datasets *.pyx *.pyd
 recursive-include pyramid/utils *.pyx *.pyd
 include README.md
+include requirements.txt
