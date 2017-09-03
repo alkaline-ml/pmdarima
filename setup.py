@@ -58,7 +58,8 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     from setuptools.dist import Distribution
 
     class BinaryDistribution(Distribution):
-        """The goal is to avoid having to later build the C code on the platform:
+        """The goal is to avoid having to later build the C code
+        on the system itself.
 
         References
         ----------
@@ -66,9 +67,10 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
           [2] https://github.com/spotify/dh-virtualenv/issues/113
         """
         def is_pure(self):
-            """See 'Building Wheels': http://lucumr.pocoo.org/2014/1/27/python-on-wheels/
-            Since we are distributing binary (.so, .dll, .dylib) files for different platforms
-            we need to make sure the wheel does not build without them!
+            """Since we are distributing binary (.so, .dll, .dylib) files for
+            different platforms we need to make sure the wheel does not build
+            without them! See 'Building Wheels':
+            http://lucumr.pocoo.org/2014/1/27/python-on-wheels/
 
             Returns
             -------
@@ -77,8 +79,8 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
             return False
 
         def has_ext_modules(self):
-            """Pyramid has external modules. Therefore, unsurprisingly, this returns
-            True to indicate that there are, in fact, external modules.
+            """Pyramid has external modules. Therefore, unsurprisingly, this
+            returns True to indicate that there are, in fact, external modules.
 
             Returns
             -------
@@ -128,7 +130,8 @@ class CleanCommand(clean):
                     pyx_file = str.replace(filename, extension, '.pyx')
                     if os.path.exists(os.path.join(dirpath, pyx_file)):
                         os.unlink(os.path.join(dirpath, filename))
-            # this is for FORTRAN modules, which some of my other packages have used in the past...
+            # this is for FORTRAN modules, which some of my other packages
+            # have used in the past...
             for dirname in dirnames:
                 if dirname == '__pycache__' or dirname.endswith('.so.dSYM'):
                     print('Removing directory: %s' % dirname)
@@ -164,25 +167,29 @@ def do_setup():
                     description=DESCRIPTION,
                     license=LICENSE,
                     version=VERSION,
-                    classifiers=['Intended Audience :: Science/Research',
-                                 'Intended Audience :: Developers',
-                                 'Intended Audience :: Financial and Insurance Industry',  # for all you quants
-                                 'Programming Language :: C',
-                                 'Programming Language :: Python',
-                                 'Topic :: Software Development',
-                                 'Topic :: Scientific/Engineering',
-                                 'Operating System :: Microsoft :: Windows',
-                                 'Operating System :: POSIX',
-                                 'Operating System :: Unix',
-                                 'Operating System :: MacOS',
-                                 'Programming Language :: Python :: 2.7',
-                                 'Programming Language :: Python :: 3.5',
-                                 'Programming Language :: Python :: 3.6',
-                                 ],
-                    keywords='arima timeseries forecasting pyramid pyramid-arima scikit-learn statsmodels',
-                    # this will only work for releases that have the appropriate tag...
-                    download_url='https://github.com/%s/%s/archive/v%s.tar.gz' % (MAINTAINER_GIT, DISTNAME, VERSION),
-                    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4',
+                    classifiers=[
+                        'Intended Audience :: Science/Research',
+                        'Intended Audience :: Developers',
+                        'Intended Audience :: Financial and Insurance Industry',
+                        'Programming Language :: C',
+                        'Programming Language :: Python',
+                        'Topic :: Software Development',
+                        'Topic :: Scientific/Engineering',
+                        'Operating System :: Microsoft :: Windows',
+                        'Operating System :: POSIX',
+                        'Operating System :: Unix',
+                        'Operating System :: MacOS',
+                        'Programming Language :: Python :: 2.7',
+                        'Programming Language :: Python :: 3.5',
+                        'Programming Language :: Python :: 3.6',
+                    ],
+                    keywords='arima timeseries forecasting pyramid '
+                             'pyramid-arima scikit-learn statsmodels',
+                    # this will only work for releases that have the right tag
+                    download_url='https://github.com/%s/%s/archive/v%s.tar.gz'
+                                 % (MAINTAINER_GIT, DISTNAME, VERSION),
+                    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, '
+                                    '!=3.3.*, !=3.4.*, <4',
                     cmdclass=cmdclass,
                     **extra_setuptools_args)
 
@@ -195,7 +202,11 @@ def do_setup():
         # For these actions, NumPy is not required, so we can import the
         # setuptools module. However this is not preferable... the moment
         # setuptools is imported, it monkey-patches distutils' setup and
-        # changes its behavior... (https://github.com/scikit-learn/scikit-learn/issues/1016)
+        # changes its behavior...
+        # (https://github.com/scikit-learn/scikit-learn/issues/1016)
+        #
+        # This is called when installing from pip and numpy might not
+        # be on the system yet
         try:
             from setuptools import setup
         except ImportError:
@@ -204,8 +215,9 @@ def do_setup():
         metadata['version'] = VERSION
 
     else:
-        # if we are building for install, develop or bdist_wheel, we NEED numpy and cython,
-        # since they are both used in building the .pyx files into C modules.
+        # if we are building for install, develop or bdist_wheel, we NEED
+        # numpy and cython, since they are both used in building the .pyx
+        # files into C modules.
         if we_be_buildin:
             try:
                 from numpy.distutils.core import setup
