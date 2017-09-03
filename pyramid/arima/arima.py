@@ -34,45 +34,54 @@ VALID_SCORING = {
 
 
 class ARIMA(BaseEstimator):
-    """An ARIMA, or autoregressive integrated moving average, is a generalization of an autoregressive
-    moving average (ARMA) and is fitted to time-series data in an effort to forecast future points.
-    ARIMA models can be especially efficacious in cases where data shows evidence of non-stationarity.
+    """An ARIMA, or autoregressive integrated moving average, is a
+    generalization of an autoregressive moving average (ARMA) and is fitted to
+    time-series data in an effort to forecast future points. ARIMA models can
+    be especially efficacious in cases where data shows evidence of
+    non-stationarity.
 
-    The "AR" part of ARIMA indicates that the evolving variable of interest is regressed on its own
-    lagged (i.e., prior observed) values. The "MA" part indicates that the regression error is actually a linear
-    combination of error terms whose values occurred contemporaneously and at various times in the past.
-    The "I" (for "integrated") indicates that the data values have been replaced with the difference
-    between their values and the previous values (and this differencing process may have been performed
-    more than once). The purpose of each of these features is to make the model fit the data as well as possible.
+    The "AR" part of ARIMA indicates that the evolving variable of interest is
+    regressed on its own lagged (i.e., prior observed) values. The "MA" part
+    indicates that the regression error is actually a linear combination of
+    error terms whose values occurred contemporaneously and at various times
+    in the past. The "I" (for "integrated") indicates that the data values
+    have been replaced with the difference between their values and the
+    previous values (and this differencing process may have been performed
+    more than once). The purpose of each of these features is to make the model
+    fit the data as well as possible.
 
-    Non-seasonal ARIMA models are generally denoted ``ARIMA(p,d,q)`` where parameters ``p``, ``d``, and ``q`` are
-    non-negative integers, ``p`` is the order (number of time lags) of the autoregressive model, ``d`` is the degree
-    of differencing (the number of times the data have had past values subtracted), and ``q`` is the order of the
-    moving-average model. Seasonal ARIMA models are usually denoted ``ARIMA(p,d,q)(P,D,Q)m``, where ``m`` refers
-    to the number of periods in each season, and the uppercase ``P``, ``D``, ``Q`` refer to the autoregressive,
-    differencing, and moving average terms for the seasonal part of the ARIMA model.
+    Non-seasonal ARIMA models are generally denoted ``ARIMA(p,d,q)`` where
+    parameters ``p``, ``d``, and ``q`` are non-negative integers, ``p`` is the
+    order (number of time lags) of the autoregressive model, ``d`` is the
+    degree of differencing (the number of times the data have had past values
+    subtracted), and ``q`` is the order of the moving-average model. Seasonal
+    ARIMA models are usually denoted ``ARIMA(p,d,q)(P,D,Q)m``, where ``m``
+    refers to the number of periods in each season, and the uppercase ``P``,
+    ``D``, ``Q`` refer to the autoregressive, differencing, and moving average
+    terms for the seasonal part of the ARIMA model.
 
-    When two out of the three terms are zeros, the model may be referred to based on the non-zero parameter,
-    dropping "AR", "I" or "MA" from the acronym describing the model. For example, ``ARIMA(1,0,0)`` is ``AR(1)``,
+    When two out of the three terms are zeros, the model may be referred to
+    based on the non-zero parameter, dropping "AR", "I" or "MA" from the
+    acronym describing the model. For example, ``ARIMA(1,0,0)`` is ``AR(1)``,
     ``ARIMA(0,1,0)`` is ``I(1)``, and ``ARIMA(0,0,1)`` is ``MA(1)``. [1]
 
     See notes for more practical information on the ``ARIMA`` class.
 
-
     Parameters
     ----------
     order : iterable or array-like, shape=(3,)
-        The (p,d,q) order of the model for the number of AR parameters, differences, and MA parameters
-        to use. ``p`` is the order (number of time lags) of the auto-regressive model, and is a non-
-        negative integer. ``d`` is the degree of differencing (the number of times the data have
-        had past values subtracted), and is a non-negative integer. ``q`` is the order of the moving-
-        average model, and is a non-negative integer.
+        The (p,d,q) order of the model for the number of AR parameters,
+        differences, and MA parameters to use. ``p`` is the order (number of
+        time lags) of the auto-regressive model, and is a non-negative integer.
+        ``d`` is the degree of differencing (the number of times the data have
+        had past values subtracted), and is a non-negative integer. ``q`` is
+        the order of the moving-average model, and is a non-negative integer.
 
-    seasonal_order : iterable or array-like, shape=(4,), optional (default=None)
+    seasonal_order : array-like, shape=(4,), optional (default=None)
         The (P,D,Q,s) order of the seasonal component of the model for the
-        AR parameters, differences, MA parameters, and periodicity.
-        ``D`` must be an integer indicating the integration order of the process,
-        while ``P`` and ``Q`` may either be an integers indicating the AR and MA
+        AR parameters, differences, MA parameters, and periodicity. ``D`` must
+        be an integer indicating the integration order of the process, while
+        ``P`` and ``Q`` may either be an integers indicating the AR and MA
         orders (so that all lags up to those orders are included) or else
         iterables giving specific AR and / or MA lags to include. ``S`` is an
         integer giving the periodicity (number of periods in season), often it
@@ -128,40 +137,46 @@ class ARIMA(BaseEstimator):
         parameter vector. This is only used in non-seasonal ARIMA models.
 
     suppress_warnings : bool, optional (default=False)
-        Many warnings might be thrown inside of statsmodels. If ``suppress_warnings``
-        is True, all of these warnings will be squelched.
+        Many warnings might be thrown inside of statsmodels. If
+        ``suppress_warnings`` is True, all of these warnings will be squelched.
 
     out_of_sample_size : int, optional (default=0)
-        The number of examples from the tail of the time series to use as validation
-        examples.
+        The number of examples from the tail of the time series to use as
+        validation examples.
 
     scoring : str, optional (default='mse')
-        If performing validation (i.e., if ``out_of_sample_size`` > 0), the metric
-        to use for scoring the out-of-sample data. One of {'mse', 'mae'}
+        If performing validation (i.e., if ``out_of_sample_size`` > 0), the
+        metric to use for scoring the out-of-sample data. One of {'mse', 'mae'}
 
     scoring_args : dict, optional (default=None)
-        A dictionary of key-word arguments to be passed to the ``scoring`` metric.
-
+        A dictionary of key-word arguments to be passed to the
+        ``scoring`` metric.
 
     Notes
     -----
-    * Since the ``ARIMA`` class currently wraps ``statsmodels.tsa.arima_model.ARIMA``, which does not
-      provide support for seasonality, the only way to fit seasonal ARIMAs is to manually lag/pre-process
-      your data appropriately. This might change in the future. [2]
+    * Since the ``ARIMA`` class currently wraps
+      ``statsmodels.tsa.arima_model.ARIMA``, which does not provide support
+      for seasonality, the only way to fit seasonal ARIMAs is to manually
+      lag/pre-process your data appropriately. This might change in
+      the future. [2]
 
-    * After the model fit, many more methods will become available to the fitted model (i.e., :func:`pvalues`,
-      :func:`params`, etc.). These are delegate methods which wrap the internal ARIMA results instance.
+    * After the model fit, many more methods will become available to the
+      fitted model (i.e., :func:`pvalues`, :func:`params`, etc.). These are
+      delegate methods which wrap the internal ARIMA results instance.
 
+    See Also
+    --------
+    :func:`pyramid.arima.auto_arima`
 
     References
     ----------
-    [1] https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average
-    [2] http://www.statsmodels.org/0.6.1/generated/statsmodels.tsa.arima_model.ARIMA.html
+    .. [1] https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average
+    .. [2] http://www.statsmodels.org/0.6.1/generated/statsmodels.tsa.arima_model.ARIMA.html
     """
     def __init__(self, order, seasonal_order=None, start_params=None, trend='c',
                  method=None, transparams=True, solver='lbfgs', maxiter=50,
-                 disp=0, callback=None, suppress_warnings=False, out_of_sample_size=0,
-                 scoring='mse', scoring_args=None):
+                 disp=0, callback=None, suppress_warnings=False,
+                 out_of_sample_size=0, scoring='mse', scoring_args=None):
         super(ARIMA, self).__init__()
 
         self.order = order
@@ -183,33 +198,38 @@ class ARIMA(BaseEstimator):
         """Fit an ARIMA to a vector, ``y``, of observations with an
         optional matrix of ``exogenous`` variables.
 
-
         Parameters
         ----------
         y : array-like or iterable, shape=(n_samples,)
-            The time-series to which to fit the ``ARIMA`` estimator. This may either be a Pandas
-            ``Series`` object (statsmodels can internally use the dates in the index), or a numpy
-            array. This should be a one-dimensional array of floats, and should not contain any
+            The time-series to which to fit the ``ARIMA`` estimator. This may
+            either be a Pandas ``Series`` object (statsmodels can internally
+            use the dates in the index), or a numpy array. This should be a
+            one-dimensional array of floats, and should not contain any
             ``np.nan`` or ``np.inf`` values.
 
         exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
-            An optional 2-d array of exogenous variables. If provided, these variables are
-            used as additional features in the regression operation. This should not
-            include a constant or trend. Note that if an ``ARIMA`` is fit on exogenous
-            features, it must be provided exogenous features for making predictions.
+            An optional 2-d array of exogenous variables. If provided, these
+            variables are used as additional features in the regression
+            operation. This should not include a constant or trend. Note that
+            if an ``ARIMA`` is fit on exogenous features, it must be provided
+            exogenous features for making predictions.
         """
-        y = c1d(check_array(y, ensure_2d=False, force_all_finite=False, copy=True, dtype=DTYPE))  # type: np.ndarray
+        y = c1d(check_array(y, ensure_2d=False, force_all_finite=False,
+                            copy=True, dtype=DTYPE))  # type: np.ndarray
         n_samples = y.shape[0]
 
         # if exog was included, check the array...
         if exogenous is not None:
-            exogenous = check_array(exogenous, ensure_2d=True, force_all_finite=False,
+            exogenous = check_array(exogenous, ensure_2d=True,
+                                    force_all_finite=False,
                                     copy=False, dtype=DTYPE)
 
         # determine the CV args, if any
         cv = self.out_of_sample_size
         scoring = get_callable(self.scoring, VALID_SCORING)
-        cv = max(min(cv, n_samples), 0)  # don't allow negative, don't allow > n_samples
+
+        # don't allow negative, don't allow > n_samples
+        cv = max(min(cv, n_samples), 0)
 
         def _fit_wrapper():
             # these might change depending on which one
@@ -225,11 +245,14 @@ class ARIMA(BaseEstimator):
                                exog=exogenous, dates=None, freq=None)
 
                 # there's currently a bug in the ARIMA model where on pickling
-                # it tries to acquire an attribute called 'self.{dates|freq|missing}', but they
-                # do not exist as class attrs! They're passed up to TimeSeriesModel in base, but
-                # are never set. So we inject them here so as not to get an AttributeError later.
+                # it tries to acquire an attribute called
+                # 'self.{dates|freq|missing}', but they do not exist as class
+                # attrs! They're passed up to TimeSeriesModel in base, but
+                # are never set. So we inject them here so as not to get an
+                # AttributeError later.
                 # https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/arima_model.py#L994
-                for attr, val in (('dates', None), ('freq', None), ('missing', 'none')):
+                for attr, val in (('dates', None), ('freq', None),
+                                  ('missing', 'none')):
                     if not hasattr(arima, attr):
                         setattr(arima, attr, val)
             else:
@@ -237,9 +260,10 @@ class ARIMA(BaseEstimator):
                     method = 'lbfgs'
 
                 # create the SARIMAX
-                arima = sm.tsa.statespace.SARIMAX(endog=y, exog=exogenous, order=self.order,
-                                                  seasonal_order=self.seasonal_order, trend=self.trend,
-                                                  enforce_stationarity=self.transparams)
+                arima = sm.tsa.statespace.SARIMAX(
+                    endog=y, exog=exogenous, order=self.order,
+                    seasonal_order=self.seasonal_order, trend=self.trend,
+                    enforce_stationarity=self.transparams)
 
             # actually fit the model, now...
             return arima, arima.fit(start_params=self.start_params,
@@ -263,10 +287,12 @@ class ARIMA(BaseEstimator):
                        fit.k_ma + fit.k_seasonal_ar + fit.k_seasonal_ma
             setattr(self.arima_res_, 'df_model', df_model)
 
-        # if the model is fit with an exogenous array, it must be predicted with one as well.
+        # if the model is fit with an exogenous array, it must
+        # be predicted with one as well.
         self.fit_with_exog_ = exogenous is not None
 
-        # now make a prediction if we're validating to save the out-of-sample value
+        # now make a prediction if we're validating
+        # to save the out-of-sample value
         if cv > 0:
             # get the predictions
             pred = self.arima_res_.predict(exog=exogenous, typ='linear')[-cv:]
@@ -280,26 +306,29 @@ class ARIMA(BaseEstimator):
         # if we fit with exog, make sure one was passed, or else fail out:
         if self.fit_with_exog_:
             if exogenous is None:
-                raise ValueError('When an ARIMA is fit with an exogenous array, '
-                                 'it must be provided one for predicting (either '
-                                 'in- OR out-of-sample).')
+                raise ValueError('When an ARIMA is fit with an exogenous '
+                                 'array, it must be provided one for '
+                                 'predicting (either in- OR out-of-sample).')
             else:
-                return check_array(exogenous, ensure_2d=True, force_all_finite=True, dtype=DTYPE)
+                return check_array(exogenous, ensure_2d=True,
+                                   force_all_finite=True, dtype=DTYPE)
         return None
 
-    def predict_in_sample(self, exogenous=None, start=None, end=None, dynamic=False):
-        """Generate in-sample predictions from the fit ARIMA model. This can be useful when
-        wanting to visualize the fit, and qualitatively inspect the efficacy of the model, or
-        when wanting to compute the residuals of the model.
-
+    def predict_in_sample(self, exogenous=None, start=None,
+                          end=None, dynamic=False):
+        """Generate in-sample predictions from the fit ARIMA model. This can
+        be useful when wanting to visualize the fit, and qualitatively inspect
+        the efficacy of the model, or when wanting to compute the residuals
+        of the model.
 
         Parameters
         ----------
         exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
-            An optional 2-d array of exogenous variables. If provided, these variables are
-            used as additional features in the regression operation. This should not
-            include a constant or trend. Note that if an ``ARIMA`` is fit on exogenous
-            features, it must be provided exogenous features for making predictions.
+            An optional 2-d array of exogenous variables. If provided, these
+            variables are used as additional features in the regression
+            operation. This should not include a constant or trend. Note that
+            if an ``ARIMA`` is fit on exogenous features, it must be provided
+            exogenous features for making predictions.
 
         start : int, optional (default=None)
             Zero-indexed observation number at which to start forecasting, ie.,
@@ -316,7 +345,6 @@ class ARIMA(BaseEstimator):
             used in place of lagged dependent variables. The first forecasted
             value is `start`.
 
-
         Returns
         -------
         predict : array
@@ -326,14 +354,14 @@ class ARIMA(BaseEstimator):
 
         # if we fit with exog, make sure one was passed:
         exogenous = self._check_exog(exogenous)  # type: np.ndarray
-        return self.arima_res_.predict(exog=exogenous, start=start, end=end, dynamic=dynamic)
+        return self.arima_res_.predict(exog=exogenous, start=start,
+                                       end=end, dynamic=dynamic)
 
     def predict(self, n_periods=10, exogenous=None):
-        """Generate predictions (forecasts) ``n_periods`` in the future. Note that unless
-        ``include_std_err`` or ``include_conf_int`` are True, only the forecast
-        array will be returned (otherwise, a tuple with the corresponding elements
-        will be returned).
-
+        """Generate predictions (forecasts) ``n_periods`` in the future.
+        Note that unless ``include_std_err`` or ``include_conf_int`` are True,
+        only the forecast array will be returned (otherwise, a tuple with the
+        corresponding elements will be returned).
 
         Parameters
         ----------
@@ -341,11 +369,11 @@ class ARIMA(BaseEstimator):
             The number of periods in the future to forecast.
 
         exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
-            An optional 2-d array of exogenous variables. If provided, these variables are
-            used as additional features in the regression operation. This should not
-            include a constant or trend. Note that if an ``ARIMA`` is fit on exogenous
-            features, it must be provided exogenous features for making predictions.
-
+            An optional 2-d array of exogenous variables. If provided, these
+            variables are used as additional features in the regression
+            operation. This should not include a constant or trend. Note that
+            if an ``ARIMA`` is fit on exogenous features, it must be provided
+            exogenous features for making predictions.
 
         Returns
         -------
@@ -375,20 +403,21 @@ class ARIMA(BaseEstimator):
         optional matrix of ``exogenous`` variables, and then generate
         predictions.
 
-
         Parameters
         ----------
         y : array-like or iterable, shape=(n_samples,)
-            The time-series to which to fit the ``ARIMA`` estimator. This may either be a Pandas
-            ``Series`` object (statsmodels can internally use the dates in the index), or a numpy
-            array. This should be a one-dimensional array of floats, and should not contain any
+            The time-series to which to fit the ``ARIMA`` estimator. This may
+            either be a Pandas ``Series`` object (statsmodels can internally
+            use the dates in the index), or a numpy array. This should be a
+            one-dimensional array of floats, and should not contain any
             ``np.nan`` or ``np.inf`` values.
 
         exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
-            An optional 2-d array of exogenous variables. If provided, these variables are
-            used as additional features in the regression operation. This should not
-            include a constant or trend. Note that if an ``ARIMA`` is fit on exogenous
-            features, it must be provided exogenous features for making predictions.
+            An optional 2-d array of exogenous variables. If provided, these
+            variables are used as additional features in the regression
+            operation. This should not include a constant or trend. Note that
+            if an ``ARIMA`` is fit on exogenous features, it must be provided
+            exogenous features for making predictions.
 
         n_periods : int, optional (default=10)
             The number of periods in the future to forecast.
@@ -440,7 +469,8 @@ class ARIMA(BaseEstimator):
         if hasattr(self, 'arima_res_'):
             # statsmodels result views work by caching metrics. If they
             # are not cached prior to pickling, we might hit issues. This is
-            # a bug documented here: https://github.com/statsmodels/statsmodels/issues/3290
+            # a bug documented here:
+            # https://github.com/statsmodels/statsmodels/issues/3290
             _ = self.arima_res_.summary()
             self.arima_res_.save(fname=new_loc)  # , remove_data=False)
 
@@ -597,8 +627,8 @@ class ARIMA(BaseEstimator):
 
             -2 * llf + 2 * (`df_model`) * log(log(nobs))
 
-        Like :func:`bic` if the model is fit using conditional sum of squares then
-        the ``k_ar`` pre-sample observations are not counted in ``nobs``.
+        Like :func:`bic` if the model is fit using conditional sum of squares
+        then the ``k_ar`` pre-sample observations are not counted in ``nobs``.
 
         Returns
         -------
@@ -649,7 +679,8 @@ class ARIMA(BaseEstimator):
     def params(self):
         """Get the parameters of the model. The order of variables is the trend
         coefficients and the :func:`k_exog` exogenous coefficients, then the
-        :func:`k_ar` AR coefficients, and finally the :func:`k_ma` MA coefficients.
+        :func:`k_ar` AR coefficients, and finally the :func:`k_ma` MA
+        coefficients.
 
         Returns
         -------
@@ -660,8 +691,9 @@ class ARIMA(BaseEstimator):
 
     @if_delegate_has_method('arima_res_')
     def pvalues(self):
-        """Get the p-values associated with the t-values of the coefficients. Note
-        that the coefficients are assumed to have a Student's T distribution.
+        """Get the p-values associated with the t-values of the coefficients.
+        Note that the coefficients are assumed to have a Student's T
+        distribution.
 
         Returns
         -------
@@ -674,9 +706,9 @@ class ARIMA(BaseEstimator):
     def resid(self):
         """Get the model residuals. If the model is fit using 'mle', then the
         residuals are created via the Kalman Filter. If the model is fit
-        using 'css' then the residuals are obtained via ``scipy.signal.lfilter``
-        adjusted such that the first :func:`k_ma` residuals are zero. These zero
-        residuals are not returned.
+        using 'css' then the residuals are obtained via
+        ``scipy.signal.lfilter`` adjusted such that the first :func:`k_ma`
+        residuals are zero. These zero residuals are not returned.
 
         Returns
         -------
