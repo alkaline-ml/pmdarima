@@ -6,9 +6,8 @@ The ``pyramid.arima`` sub-module defines the ``ARIMA`` estimator and the
 ``auto_arima`` function, as well as a set of tests of seasonality and
 stationarity.
 
-Differencing Tests
-------------------
 .. toctree::
+    :caption: Tests of seasonality and stationarity
     :maxdepth: 2
 
     arima.seasonality <./arima.seasonality.rst>

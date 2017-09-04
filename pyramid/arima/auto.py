@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import
 from sklearn.utils.validation import check_array, column_or_1d
+from sklearn.utils import check_random_state
 from sklearn.externals.joblib import Parallel, delayed
 from sklearn.linear_model import LinearRegression
 from numpy.linalg import LinAlgError
@@ -14,7 +15,7 @@ import warnings
 import time
 
 from .utils import ndiffs, is_constant, nsdiffs
-from ..utils import diff, get_random_state
+from ..utils import diff
 from .arima import ARIMA
 
 # for python 3 compat
@@ -550,7 +551,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         # if we are fitting a random search rather than an exhaustive one, we
         # will scramble up the generator (as a list) and only fit n_iter ARIMAs
         if random:
-            random_state = get_random_state(random_state)
+            random_state = check_random_state(random_state)
 
             # make a list to scramble...
             gen = random_state.permutation(list(gen))[:n_fits]

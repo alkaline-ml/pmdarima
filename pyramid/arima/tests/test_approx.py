@@ -39,7 +39,8 @@ def test_corners():
     assert_raises(ValueError, approx, x=[1, 2, 3], y=[1, 2], xout=1.0)
 
     # fails for bad string
-    assert_raises(ValueError, approx, x=table, y=table, xout=1.0, method='bad-string')
+    assert_raises(ValueError, approx, x=table, y=table,
+                  xout=1.0, method='bad-string')
 
     # fails for bad length
     assert_raises(ValueError, approx, x=[], y=[], xout=[], ties='mean')
@@ -48,4 +49,5 @@ def test_corners():
     assert_raises(ValueError, approx, x=[], y=[], xout=[], method='constant')
 
     # fails for linear when < 2 samples
-    assert_raises(ValueError, approx, x=[1], y=[1], xout=[], method='linear', ties='ordered')
+    assert_raises(ValueError, approx, x=[1], y=[1], xout=[],
+                  method='linear', ties='ordered')

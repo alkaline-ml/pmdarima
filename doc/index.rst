@@ -8,10 +8,13 @@ Pyramid: ARIMA estimators for Python
 ====================================
 Pyramid brings R's beloved ``auto.arima`` to Python, making an even stronger
 case for why you don't need R for data science. It does so not by calling R
-under the hood, but by wrapping statsmodels' well-tested ARIMA and SARIMAX
+under the hood, but by wrapping statsmodels' well-tested
+`ARIMA <http://www.statsmodels.org/dev/generated/statsmodels.tsa.arima_model.ARIMA.html>`_ and
+`SARIMAX <http://www.statsmodels.org/dev/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html>`_
 estimators in a single, easy-to-use scikit-learn-esque estimator.
 
 .. toctree::
+   :caption: Table of Contents
    :maxdepth: 2
 
    Setup <./setup.rst>
