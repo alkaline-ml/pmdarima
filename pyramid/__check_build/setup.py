@@ -1,4 +1,5 @@
-# Author: Virgile Fritsch <virgile.fritsch@inria.fr> (originally written for sklearn, adapted for pyramid)
+# Author: Virgile Fritsch <virgile.fritsch@inria.fr> (originally written
+# for sklearn, adapted for pyramid)
 # License: BSD 3 clause
 
 import numpy as np
@@ -12,6 +13,7 @@ def configuration(parent_package='', top_path=None):
                          include_dirs=[np.get_include()])
 
     return config
+
 
 if __name__ == '__main__':
     from numpy.distutils.core import setup

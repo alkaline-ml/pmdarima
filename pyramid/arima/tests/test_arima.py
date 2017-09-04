@@ -110,7 +110,7 @@ def _try_get_attrs(arima):
 
     # this just shows all of these attrs work.
     for attr in attrs:
-        _ = getattr(arima, attr)()
+        getattr(arima, attr)()
 
 
 def test_more_elaborate():
@@ -324,13 +324,13 @@ def test_with_seasonality6():
 
 def test_with_seasonality7():
     # show we can fit one with OOB as the criterion
-    _ = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-                   start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
-                   out_of_sample_size=10, information_criterion='oob',
-                   suppress_warnings=True,
-                   error_action='raise',  # do raise so it fails fast
-                   random=True, random_state=42, n_fits=3,
-                   stepwise=False)
+    auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
+               start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
+               out_of_sample_size=10, information_criterion='oob',
+               suppress_warnings=True,
+               error_action='raise',  # do raise so it fails fast
+               random=True, random_state=42, n_fits=3,
+               stepwise=False)
 
 
 def test_corner_cases():
@@ -342,11 +342,11 @@ def test_corner_cases():
         warnings.simplefilter('ignore')
 
         # show a constant result will result in a quick fit
-        _ = auto_arima(np.ones(10), suppress_warnings=True)
+        auto_arima(np.ones(10), suppress_warnings=True)
 
         # show the same thing with return_all results in the ARIMA in a list
-        _ = auto_arima(np.ones(10), suppress_warnings=True,
-                       return_valid_fits=True)
+        auto_arima(np.ones(10), suppress_warnings=True,
+                   return_valid_fits=True)
         assert hasattr(_, '__iter__')
 
     # show we fail for n_iter < 0
@@ -360,7 +360,7 @@ def test_warning_str_fmt():
     order = (1, 1, 1)
     seasonal = (1, 1, 1, 1)
     for ssnl in (seasonal, None):
-        _ = _fmt_warning_str(order, ssnl)
+        _fmt_warning_str(order, ssnl)
 
 
 def test_nsdiffs_on_wine():

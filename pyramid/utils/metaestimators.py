@@ -5,7 +5,6 @@
 # Metaestimators for the ARIMA class
 
 from __future__ import absolute_import
-from abc import ABCMeta, abstractmethod
 from operator import attrgetter
 from functools import update_wrapper
 
@@ -51,7 +50,7 @@ class _IffHasDelegate(object):
                 attrgetter(self.delegate_names[-1])(obj)
 
         # lambda, but not partial, allows help() to work with update_wrapper
-        out = lambda *args, **kwargs: self.fn(obj, *args, **kwargs)
+        out = (lambda *args, **kwargs: self.fn(obj, *args, **kwargs))
         # update the docstring of the returned function
         update_wrapper(out, self.fn)
         return out

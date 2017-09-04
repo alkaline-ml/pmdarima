@@ -96,7 +96,7 @@ def test_adf_corner():
 
     # show we can fit with k is None
     test = ADFTest(alpha=0.05, k=None)
-    _ = test.is_stationary(austres)
+    test.is_stationary(austres)
 
 
 def test_ch_test():

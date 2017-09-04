@@ -7,7 +7,7 @@ from nose.tools import assert_raises
 import numpy as np
 
 x = np.arange(5)
-m = np.array([10, 5, 12, 23, 18, 3, 2, 0, 12]).reshape(3,3).T
+m = np.array([10, 5, 12, 23, 18, 3, 2, 0, 12]).reshape(3, 3).T
 
 
 def test_diff():

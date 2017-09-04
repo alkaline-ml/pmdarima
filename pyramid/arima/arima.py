@@ -472,7 +472,7 @@ class ARIMA(BaseEstimator):
             # are not cached prior to pickling, we might hit issues. This is
             # a bug documented here:
             # https://github.com/statsmodels/statsmodels/issues/3290
-            _ = self.arima_res_.summary()
+            self.arima_res_.summary()
             self.arima_res_.save(fname=new_loc)  # , remove_data=False)
 
             # point to the location of the saved MLE model
