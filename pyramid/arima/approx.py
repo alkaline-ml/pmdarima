@@ -13,8 +13,8 @@ from ..utils import get_callable
 from ..compat.numpy import DTYPE
 
 # since the C import relies on the C code having been built with Cython,
-# and since pyramid never plans to use setuptools for the 'develop' option,
-# make this an absolute import.
+# and since the platform might name the .so file something funky (like
+# _arima.cpython-35m-darwin.so), import this absolutely and not relatively.
 from pyramid.arima._arima import C_Approx
 
 __all__ = [
@@ -89,7 +89,8 @@ def _regularize(x, y, ties):
     return x, y
 
 
-def approx(x, y, xout, method='linear', rule=1, f=0, yleft=None, yright=None, ties='mean'):
+def approx(x, y, xout, method='linear', rule=1, f=0, yleft=None,
+           yright=None, ties='mean'):
     """Return a list of points which (linearly) interpolate given data points,
     or a function performing the linear (or constant) interpolation.
 
@@ -113,8 +114,8 @@ def approx(x, y, xout, method='linear', rule=1, f=0, yleft=None, yright=None, ti
 
     rule : int, optional (default=1)
         An integer describing how interpolation is to take place
-        outside the interval ``[min(x), max(x)]``. If ``rule`` is 1 then np.nans
-        are returned for such points and if it is 2, the value at the
+        outside the interval ``[min(x), max(x)]``. If ``rule`` is 1 then
+        np.nans are returned for such points and if it is 2, the value at the
         closest data extreme is used.
 
     f : int, optional (default=0)
@@ -123,15 +124,16 @@ def approx(x, y, xout, method='linear', rule=1, f=0, yleft=None, yright=None, ti
         functions. If y0 and y1 are the values to the left and right of the
         point then the value is y0 if f == 0, y1 if f == 1, and y0*(1-f)+y1*f
         for intermediate values. In this way the result is right-continuous
-        for f == 0 and left-continuous for f == 1, even for non-finite y values.
+        for f == 0 and left-continuous for f == 1, even for non-finite
+        ``y`` values.
 
     yleft : float, optional (default=None)
-        The value to be returned when input ``x`` values are less than ``min(x)``.
-        The default is defined by the value of rule given below.
+        The value to be returned when input ``x`` values are less than
+        ``min(x)``. The default is defined by the value of rule given below.
 
     yright : float, optional (default=None)
-        The value to be returned when input ``x`` values are greater than ``max(x)``.
-        The default is defined by the value of rule given below.
+        The value to be returned when input ``x`` values are greater than
+        ``max(x)``. The default is defined by the value of rule given below.
 
     ties : str, optional (default='mean')
         Handling of tied ``x`` values. Choices are "mean" or "ordered".
@@ -144,7 +146,9 @@ def approx(x, y, xout, method='linear', rule=1, f=0, yleft=None, yright=None, ti
 
     # check method
     method_key = method
-    method = get_callable(method_key, VALID_APPROX)  # not a callable, actually...
+
+    # not a callable, actually, but serves the purpose..
+    method = get_callable(method_key, VALID_APPROX)
 
     # copy/regularize vectors
     x, y = _regularize(x, y, ties)
@@ -153,7 +157,8 @@ def approx(x, y, xout, method='linear', rule=1, f=0, yleft=None, yright=None, ti
     # if len 1?
     if nx <= 1:
         if method_key == 'linear':
-            raise ValueError('need at least two points to linearly interpolate')
+            raise ValueError('need at least two points to '
+                             'linearly interpolate')
         if nx == 0:
             raise ValueError('empty array')
 

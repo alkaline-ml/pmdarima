@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+#
+# Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
 from .approx import *
 from .arima import *

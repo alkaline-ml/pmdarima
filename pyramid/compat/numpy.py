@@ -8,7 +8,8 @@
 # designed not to make calls out to other portions of Pyramid and to
 # remove circular dependencies."
 #
-# Since DTYPE is used commonly, this removes circular dependencies or hard-coding.
+# Since DTYPE is used commonly, this removes circular dependencies or
+# hard-coding.
 
 from __future__ import absolute_import
 import numpy as np

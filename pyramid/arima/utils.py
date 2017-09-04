@@ -42,12 +42,12 @@ def is_constant(x):
     x : array-like, shape=(n_samples,)
         The time series vector.
     """
-    x = column_or_1d(x)
+    x = column_or_1d(x)  # type: np.ndarray
     return (x == x[0]).all()
 
 
 def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
-    """Functions to estimate the number of seasonal differences
+    """Function to estimate the number of seasonal differences
     required to make a given time series stationary.
 
     Parameters
@@ -64,15 +64,17 @@ def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
         be a positive integer.
 
     test : str, optional (default='ch')
-        Type of unit root test to use in order to detect
-        seasonality.
+        Type of unit root test of seasonality to use in order
+        to detect seasonal periodicity.
     """
     if max_D <= 0:
         raise ValueError('max_D must be a positive integer')
 
     # get the test - this validates m internally
-    testfunc = get_callable(test, VALID_STESTS)(m, **kwargs).estimate_seasonal_differencing_term
-    x = column_or_1d(check_array(x, ensure_2d=False, force_all_finite=True, dtype=DTYPE))
+    testfunc = get_callable(test, VALID_STESTS)(m, **kwargs)\
+        .estimate_seasonal_differencing_term
+    x = column_or_1d(check_array(x, ensure_2d=False,
+                                 force_all_finite=True, dtype=DTYPE))
 
     if is_constant(x):
         return 0
@@ -91,7 +93,7 @@ def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
 
 
 def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
-    """Functions to estimate the number of differences required to
+    """Function to estimate the number of differences required to
     make a given time series stationary.
 
     Parameters
@@ -103,8 +105,8 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
         Level of the test
 
     test : str, optional (default='kpss')
-        Type of unit root test to use in order to detect
-        stationarity.
+        Type of unit root test of stationarity to use in order to
+        test the stationarity of the time-series.
 
     max_d : int, optional (default=2)
         Maximum number of non-seasonal differences allowed. Must
@@ -115,7 +117,8 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
 
     # get the test
     testfunc = get_callable(test, VALID_TESTS)(alpha, **kwargs).is_stationary
-    x = column_or_1d(check_array(x, ensure_2d=False, force_all_finite=True, dtype=DTYPE))
+    x = column_or_1d(check_array(x, ensure_2d=False,
+                                 force_all_finite=True, dtype=DTYPE))
     d = 0
 
     # base case

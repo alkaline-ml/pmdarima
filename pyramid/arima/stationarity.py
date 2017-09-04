@@ -18,8 +18,8 @@ from ..utils.array import c, diff
 from .approx import approx
 
 # since the C import relies on the C code having been built with Cython,
-# and since pyramid never plans to use setuptools for the 'develop' option,
-# make this an absolute import.
+# and since the platform might name the .so file something funky (like
+# _arima.cpython-35m-darwin.so), import this absolutely and not relatively.
 from pyramid.arima._arima import C_tseries_pp_sum
 
 __all__ = [
@@ -49,7 +49,8 @@ class _BaseStationarityTest(six.with_metaclass(ABCMeta, BaseEstimator)):
         # return np.array([x[1:], x[:m]])
 
 
-class _DifferencingStationarityTest(six.with_metaclass(ABCMeta, _BaseStationarityTest)):
+class _DifferencingStationarityTest(six.with_metaclass(ABCMeta,
+                                                       _BaseStationarityTest)):
     """Provides the base class for stationarity tests such as the
     Kwiatkowski–Phillips–Schmidt–Shin, Augmented Dickey-Fuller and the
     Phillips–Perron tests. These tests are used to determine whether a time
@@ -72,9 +73,8 @@ class _DifferencingStationarityTest(six.with_metaclass(ABCMeta, _BaseStationarit
 class KPSSTest(_DifferencingStationarityTest):
     """In econometrics, Kwiatkowski–Phillips–Schmidt–Shin (KPSS) tests are used
     for testing a null hypothesis that an observable time series is stationary
-    around a deterministic trend (i.e. trend-stationary) against the alternative
-    of a unit root.
-
+    around a deterministic trend (i.e. trend-stationary) against the
+    alternative of a unit root.
 
     Parameters
     ----------
@@ -89,10 +89,9 @@ class KPSSTest(_DifferencingStationarityTest):
     lshort : bool, optional (default=True)
         Whether or not to truncate the ``l`` value in the C code.
 
-
     References
     ----------
-    [1] https://github.com/cran/tseries/blob/8ceb31fa77d0b632dd511fc70ae2096fa4af3537/R/test.R#L719
+    .. [1] https://github.com/cran/tseries/blob/8ceb31fa77d0b632dd511fc70ae2096fa4af3537/R/test.R#L719
     """
     _valid = {'trend', 'null'}
 
@@ -103,11 +102,20 @@ class KPSSTest(_DifferencingStationarityTest):
         self.lshort = lshort
 
     def is_stationary(self, x):
+        """Test whether the time series is stationary.
+
+        Parameters
+        ----------
+        x : array-like, shape=(n_samples,)
+            The time series vector.
+        """
         if not self._base_case(x):
             return np.nan, False
 
         # ensure vector
-        x = column_or_1d(check_array(x, ensure_2d=False, dtype=DTYPE, force_all_finite=True))
+        x = column_or_1d(check_array(
+            x, ensure_2d=False, dtype=DTYPE,
+            force_all_finite=True))  # type: np.ndarray
         n = x.shape[0]
 
         # check on status of null
@@ -117,12 +125,12 @@ class KPSSTest(_DifferencingStationarityTest):
         if null == 'trend':
             t = np.arange(n).reshape(n, 1)
 
-            # these numbers came out of the R code.. I've found NO doc for these...
+            # these numbers came out of the R code.. I've found 0 doc for these
             table = c(0.216, 0.176, 0.146, 0.119)
         elif null == 'level':
             t = np.ones(n).reshape(n, 1)
 
-            # these numbers came out of the R code.. I've found NO doc for these...
+            # these numbers came out of the R code.. I've found 0 doc for these
             table = c(0.739, 0.574, 0.463, 0.347)
         else:
             raise ValueError("null must be one of %r" % self._valid)
@@ -149,18 +157,18 @@ class KPSSTest(_DifferencingStationarityTest):
         _, pval = approx(table, tablep, xout=stat, rule=2)
 
         # R does a test for rule=1, but we don't want to do that, because they
-        # just do it to issue a warning in case the P-value is smaller/greater than
-        # the printed value is.
+        # just do it to issue a warning in case the P-value is smaller/greater
+        # than the printed value is.
         return pval[0], pval[0] < self.alpha
 
 
 class ADFTest(_DifferencingStationarityTest):
-    """In statistics and econometrics, an augmented Dickey–Fuller test (ADF) tests
-    the null hypothesis of a unit root is present in a time series sample. The alternative
-    hypothesis is different depending on which version of the test is used, but is usually
-    stationarity or trend-stationarity. It is an augmented version of the Dickey–Fuller test
-    for a larger and more complicated set of time series models.
-
+    """In statistics and econometrics, an augmented Dickey–Fuller test (ADF)
+    tests the null hypothesis of a unit root is present in a time series
+    sample. The alternative hypothesis is different depending on which version
+    of the test is used, but is usually stationarity or trend-stationarity. It
+    is an augmented version of the Dickey–Fuller test for a larger and more
+    complicated set of time series models.
 
     Parameters
     ----------
@@ -171,17 +179,16 @@ class ADFTest(_DifferencingStationarityTest):
         The drift parameter. If ``k`` is None, it will be set to:
         ``np.trunc(np.power(x.shape[0] - 1, 1 / 3.0))``
 
-
     Notes
     -----
-    * ADF test does not perform as reliably to the R code as do the KPSS and PP tests.
-      This is due to the fact that is has to use statsmodels OLS regression for std err
-      estimates rather than the more robust sklearn LinearRegression.
-
+    * ADF test does not perform as reliably to the R code as do the KPSS and PP
+      tests. This is due to the fact that is has to use statsmodels OLS
+      regression for std err estimates rather than the more robust sklearn
+      LinearRegression.
 
     References
     ----------
-    [1] https://en.wikipedia.org/wiki/Augmented_Dickey–Fuller_test
+    .. [1] https://en.wikipedia.org/wiki/Augmented_Dickey–Fuller_test
     """
 
     def __init__(self, alpha=0.05, k=None):
@@ -192,11 +199,20 @@ class ADFTest(_DifferencingStationarityTest):
             raise ValueError('k must be a positive integer (>= 0)')
 
     def is_stationary(self, x):
+        """Test whether the time series is stationary.
+
+        Parameters
+        ----------
+        x : array-like, shape=(n_samples,)
+            The time series vector.
+        """
         if not self._base_case(x):
             return np.nan, False
 
         # ensure vector
-        x = column_or_1d(check_array(x, ensure_2d=False, dtype=DTYPE, force_all_finite=True))
+        x = column_or_1d(check_array(
+            x, ensure_2d=False, dtype=DTYPE,
+            force_all_finite=True))  # type: np.ndarray
 
         # if k is none...
         k = self.k
@@ -209,23 +225,29 @@ class ADFTest(_DifferencingStationarityTest):
         z = self._embed(y, k)
         yt = z[0, :]
         tt = np.arange(k - 1, n)
-        xt1 = x[tt]  # R does [k:n]... but that's 1-based indexing and inclusive on the tail...
+
+        # R does [k:n].. but that's 1-based indexing and inclusive on the tail
+        xt1 = x[tt]
 
         # make tt inclusive again (it was used as a mask before)
         tt += 1
 
         # the array that will create the LM:
         _n = xt1.shape[0]
-        X = np.hstack([xt1.reshape((_n, 1)), np.ones(_n).reshape((_n, 1)), tt.reshape((_n, 1))])
+        X = np.hstack([xt1.reshape((_n, 1)),
+                       np.ones(_n).reshape((_n, 1)),
+                       tt.reshape((_n, 1))])
+
         if k > 1:
             yt1 = z[1:k, :]  # R had 2:k
             X = np.hstack([X, yt1.T])
 
-        # fit the linear regression - this one is a bit strange in that we are using
-        # OLS from statsmodels rather than LR from sklearn. This is because we need
-        # the std errors, and sklearn does not have a way to store them.
+        # fit the linear regression - this one is a bit strange in that we
+        # are using OLS from statsmodels rather than LR from sklearn. This is
+        # because we need the std errors, and sklearn does not have a way to
+        # store them.
         res = sm.OLS(yt, X).fit()
-        STAT = res.params[0] / res.HC0_se[0]  # FIXME: is the denominator correct?...
+        STAT = res.params[0] / res.HC0_se[0]  # FIXME: is the denom correct?...
         table = -np.array([c(4.38, 4.15, 4.04, 3.99, 3.98, 3.96),
                            c(3.95, 3.80, 3.73, 3.69, 3.68, 3.66),
                            c(3.60, 3.50, 3.45, 3.43, 3.42, 3.41),
@@ -253,15 +275,11 @@ class ADFTest(_DifferencingStationarityTest):
 
 
 class PPTest(_DifferencingStationarityTest):
-    """In statistics, the Phillips–Perron test (named after Peter C. B. Phillips
-    and Pierre Perron) is a unit root test. It is used in time series analysis to test the null
-    hypothesis that a time series is integrated of order 1. It builds on the Dickey–Fuller test
-    of the null hypothesis ``p = 0``.
-
-    The R code allows for two types of test: 'Z(alpha)' and 'Z(t_alpha)'. Since sklearn
-    does not allow extraction of std errors from the lm fit, t_alpha is much more difficult
-    to achieve... so don't allow that variant.
-
+    """In statistics, the Phillips–Perron test (named after Peter C. B.
+    Phillips and Pierre Perron) is a unit root test. It is used in time series
+    analysis to test the null hypothesis that a time series is integrated of
+    order 1. It builds on the Dickey–Fuller test of the null hypothesis
+    ``p = 0``.
 
     Parameters
     ----------
@@ -271,10 +289,16 @@ class PPTest(_DifferencingStationarityTest):
     lshort : bool, optional (default=True)
         Whether or not to truncate the ``l`` value in the C code.
 
+    Notes
+    -----
+    * The R code allows for two types of tests: 'Z(alpha)' and 'Z(t_alpha)'.
+      Since sklearn does not allow extraction of std errors from the linear
+      model fit, ``t_alpha`` is much more difficult to achieve... so do not
+      allow that variant.
 
     References
     ----------
-    [1] https://github.com/cran/tseries/blob/8ceb31fa77d0b632dd511fc70ae2096fa4af3537/R/test.R#L549
+    .. [1] https://github.com/cran/tseries/blob/8ceb31fa77d0b632dd511fc70ae2096fa4af3537/R/test.R#L549
     """
     def __init__(self, alpha=0.05, lshort=True):
         super(PPTest, self).__init__(alpha=alpha)
@@ -282,17 +306,27 @@ class PPTest(_DifferencingStationarityTest):
         self.lshort = lshort
 
     def is_stationary(self, x):
+        """Test whether the time series is stationary.
+
+        Parameters
+        ----------
+        x : array-like, shape=(n_samples,)
+            The time series vector.
+        """
         if not self._base_case(x):
             return np.nan, False
 
         # ensure vector
-        x = column_or_1d(check_array(x, ensure_2d=False, dtype=DTYPE, force_all_finite=True))
+        x = column_or_1d(check_array(
+            x, ensure_2d=False, dtype=DTYPE,
+            force_all_finite=True))  # type: np.ndarray
 
-        # embed the vector. This is some funkiness that goes on in the R code...
-        # basically, make a matrix where the column (rows if not T) are lagged windows of x
+        # embed the vector. This is some funkiness that goes on in the R
+        # code... basically, make a matrix where the column (rows if not T)
+        # are lagged windows of x
         z = self._embed(x, 2)
         yt = z[0, :]
-        yt1 = z[1, :]
+        yt1 = z[1, :]  # type: np.ndarray
 
         # fit a linear model to a predictor matrix
         n = yt.shape[0]
@@ -301,9 +335,9 @@ class PPTest(_DifferencingStationarityTest):
         res = LinearRegression().fit(X, yt)  # lm(yt ~ 1 + tt + yt1)
         coef = res.coef_
 
-        # check for singularities - do we want to do this??? in the R code, it happens.
-        # but the very same lm in the R code is rank 3, and here it is rank 2. Should
-        # we just ignore?...
+        # check for singularities - do we want to do this??? in the R code,
+        # it happens. but the very same lm in the R code is rank 3, and here
+        # it is rank 2. Should we just ignore?...
         # if res.rank_ < 3:
         #     raise ValueError('singularities in regression')
 
@@ -318,8 +352,12 @@ class PPTest(_DifferencingStationarityTest):
         n2 = n * n
         syt11n = (yt1 * (np.arange(n) + 1)).sum()  # sum(yt1*(1:n))
         trm1 = n2 * (n2 - 1) * (yt1 ** 2).sum() / 12.0
-        trm2 = n * (syt11n ** 2)  # n*sum(yt1*(1:n))^2
-        trm3 = n * (n + 1) * syt11n * yt1.sum()  # n*(n+1)*sum(yt1*(1:n))*sum(yt1)
+
+        # R code: # n*sum(yt1*(1:n))^2
+        trm2 = n * (syt11n ** 2)
+
+        # R code: n*(n+1)*sum(yt1*(1:n))*sum(yt1)
+        trm3 = n * (n + 1) * syt11n * yt1.sum()
         trm4 = (n * (n + 1) * (2 * n + 1) * (yt1.sum() ** 2)) / 6.0
         dx = trm1 - trm2 + trm3 - trm4
 
