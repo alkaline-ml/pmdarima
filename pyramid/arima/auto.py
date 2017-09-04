@@ -315,8 +315,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                            start_q, start_P, start_Q)):
         raise ValueError('starting and max p, q, P & Q values must '
                          'be positive integers (>= 0)')
-    if max_p < start_p or max_q < start_q or max_P < start_P or \
-                    max_Q < start_Q:
+    if max_p < start_p or max_q < start_q \
+            or max_P < start_P or max_Q < start_Q:
         raise ValueError('max p, q, P & Q must be >= than '
                          'their starting values')
 
@@ -551,7 +551,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         # will scramble up the generator (as a list) and only fit n_iter ARIMAs
         if random:
             random_state = get_random_state(random_state)
-            gen = random_state.permutation(list(gen))[:n_fits]  # make a list to scramble...
+
+            # make a list to scramble...
+            gen = random_state.permutation(list(gen))[:n_fits]
 
         # get results in parallel
         all_res = Parallel(n_jobs=n_jobs)(
@@ -638,7 +640,8 @@ class _StepwiseFitWrapper(object):
     smaller {A|B|HQ}IC(c), and continues to step down as long as the error
     shrinks. As long as the error term decreases and the best parameters have
     not shifted to a point where they can no longer change, ``k`` will
-    increase, and the models will continue to be fit until the ``max_k`` is reached.
+    increase, and the models will continue to be fit until the ``max_k`` is
+    reached.
 
     See the R code:
     https://github.com/robjhyndman/forecast/blob/30308a4e314ff29338291462e81bf68ff0c5f86d/R/newarima2.R#L366
@@ -708,7 +711,7 @@ class _StepwiseFitWrapper(object):
         elif new_model is None:
             return False
 
-        get_ic = lambda m: getattr(m, self.information_criterion)()
+        get_ic = (lambda m: getattr(m, self.information_criterion)())
         current_ic, new_ic = get_ic(self.bestfit), get_ic(new_model)
         return new_ic < current_ic
 

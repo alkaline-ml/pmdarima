@@ -8,7 +8,8 @@
 from __future__ import print_function, absolute_import, division
 
 from sklearn.base import BaseEstimator
-from sklearn.utils.validation import check_array, check_is_fitted, column_or_1d as c1d
+from sklearn.utils.validation import (check_array, check_is_fitted,
+                                      column_or_1d as c1d)
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
@@ -505,7 +506,7 @@ class ARIMA(BaseEstimator):
     def aic(self):
         """Get the AIC, the Akaike Information Criterion:
 
-            -2 * llf + 2 * df_model
+            :code:`-2 * llf + 2 * df_model`
 
         Where ``df_model`` (the number of degrees of freedom in the model)
         includes all AR parameters, MA parameters, constant terms parameters
@@ -515,6 +516,10 @@ class ARIMA(BaseEstimator):
         -------
         aic : float
             The AIC
+
+        References
+        ----------
+        .. [1] https://en.wikipedia.org/wiki/Akaike_information_criterion
         """
         return self.arima_res_.aic
 
@@ -522,7 +527,7 @@ class ARIMA(BaseEstimator):
     def aicc(self):
         """Get the AICc, the corrected Akaike Information Criterion:
 
-            AIC + 2 * df_model * (df_model + 1) / (nobs - df_model - 1)
+            :code:`AIC + 2 * df_model * (df_model + 1) / (nobs - df_model - 1)`
 
         Where ``df_model`` (the number of degrees of freedom in the model)
         includes all AR parameters, MA parameters, constant terms parameters
@@ -532,6 +537,10 @@ class ARIMA(BaseEstimator):
         -------
         aicc : float
             The AICc
+
+        References
+        ----------
+        .. [1] https://en.wikipedia.org/wiki/Akaike_information_criterion#AICc
         """
         # TODO: this code should really be added to statsmodels. Rewrite
         #       this function to reflect other metric implementations if/when
@@ -556,7 +565,8 @@ class ARIMA(BaseEstimator):
     def arroots(self):
         """The roots of the AR coefficients are the solution to:
 
-            (1 - arparams[0] * z - arparams[1] * z^2 - ... - arparams[p-1] * z^k_ar) = 0
+            :code:`(1 - arparams[0] * z - arparams[1] * z^2 - ... - arparams[
+            p-1] * z^k_ar) = 0`
 
         Stability requires that the roots in modulus lie outside the unit
         circle.
@@ -572,7 +582,7 @@ class ARIMA(BaseEstimator):
     def bic(self):
         """Get the BIC, the Bayes Information Criterion:
 
-            -2 * llf + log(nobs) * df_model
+            :code:`-2 * llf + log(nobs) * df_model`
 
         Where if the model is fit using conditional sum of squares, the
         number of observations ``nobs`` does not include the ``p`` pre-sample
@@ -582,6 +592,10 @@ class ARIMA(BaseEstimator):
         -------
         bse : float
             The BIC
+
+        References
+        ----------
+        .. [1] https://en.wikipedia.org/wiki/Bayesian_information_criterion
         """
         return self.arima_res_.bic
 
@@ -612,7 +626,7 @@ class ARIMA(BaseEstimator):
     def df_resid(self):
         """Get the residual degrees of freedom:
 
-            nobs - df_model
+            :code:`nobs - df_model`
 
         Returns
         -------
@@ -625,7 +639,7 @@ class ARIMA(BaseEstimator):
     def hqic(self):
         """Get the Hannan-Quinn Information Criterion:
 
-            -2 * llf + 2 * (`df_model`) * log(log(nobs))
+            :code:`-2 * llf + 2 * (`df_model`) * log(log(nobs))`
 
         Like :func:`bic` if the model is fit using conditional sum of squares
         then the ``k_ar`` pre-sample observations are not counted in ``nobs``.
@@ -634,6 +648,10 @@ class ARIMA(BaseEstimator):
         -------
         hqic : float
             The HQIC
+
+        References
+        ----------
+        .. [1] https://en.wikipedia.org/wiki/Hannan-Quinn_information_criterion
         """
         return self.arima_res_.hqic
 
@@ -652,7 +670,8 @@ class ARIMA(BaseEstimator):
     def maroots(self):
         """The roots of the MA coefficients are the solution to:
 
-            (1 + maparams[0] * z + maparams[1] * z^2 + ... + maparams[q-1] * z^q) = 0
+            :code:`(1 + maparams[0] * z + maparams[1] * z^2 + ... + maparams[
+            q-1] * z^q) = 0`
 
         Stability requires that the roots in modules lie outside the unit
         circle.

@@ -5,6 +5,7 @@
 Submodules
 ----------
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
        pyramid.arima <./_submodules/arima.rst>
+       pyramid.datasets <./_submodules/datasets.rst>

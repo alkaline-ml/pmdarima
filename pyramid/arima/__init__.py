@@ -2,12 +2,6 @@
 #
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
-"""
-The ``pyramid.arima`` defines the ``ARIMA`` estimator and the
-``auto_arima`` function.
-"""
-
-
 from .approx import *
 from .arima import *
 from .auto import *
