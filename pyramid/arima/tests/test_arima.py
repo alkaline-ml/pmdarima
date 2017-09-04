@@ -345,9 +345,9 @@ def test_corner_cases():
         auto_arima(np.ones(10), suppress_warnings=True)
 
         # show the same thing with return_all results in the ARIMA in a list
-        auto_arima(np.ones(10), suppress_warnings=True,
-                   return_valid_fits=True)
-        assert hasattr(_, '__iter__')
+        fits = auto_arima(np.ones(10), suppress_warnings=True,
+                          return_valid_fits=True)
+        assert hasattr(fits, '__iter__')
 
     # show we fail for n_iter < 0
     assert_raises(ValueError, auto_arima, np.ones(10), random=True, n_fits=-1)
