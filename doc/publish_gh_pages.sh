@@ -21,6 +21,9 @@ if test $# -eq 0; then
     VERSION_NUMBER=`python -c 'import pyramid as p; '\
                    'from pkg_resources import parse_version as pv; '\
                    'print(str(pv(p.__version__)))'`
+
+    exit 0
+
     COMMIT_MESSAGE="Update for version - $VERSION_NUMBER"
     COMMIT_TIME=`date "+%m/%d/%Y %H:%M"`
     CURRENT_BRANCH=`git rev-parse --abbrev-ref HEAD`
@@ -46,13 +49,15 @@ if test $# -eq 0; then
 
     echo "\n\nSee note A.6) on removing everything"
     # delete everything pretty much
-    rm -rf ../.gitignore ../*.yml
+    rm -rf ../*.yml
 
     echo "\n\nSee note A.7) cp _build/html/* ../\n\n"
-    cp -R _build/html/* ../
+    cp -R _build/html ../
+    cd .. && cp -R html/* .
 
     echo "\n\nSee note A.8) git add -A\n\n"
-    cd .. && git add -A
+    touch .nojekyll
+    git add -A
 
     echo "\n\nSee note A.9) git commit -m '$COMMIT_MESSAGE'\n\n"
     git commit -m "[ci skip] $COMMIT_MESSAGE"
