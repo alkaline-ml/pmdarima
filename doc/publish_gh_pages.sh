@@ -39,7 +39,7 @@ if test $# -eq 0; then
     git pull origin gh-pages
 
     echo "\n\nSee note A.4) git merge --no-ff ${CURRENT_BRANCH}\n\n"
-    git merge --no-ff ${CURRENT_BRANCH}
+    git merge --no-ff --allow-unrelated-histories ${CURRENT_BRANCH}
 
     echo "\n\nSee note A.5) make clean html\n\n"
     cd doc && make clean html
