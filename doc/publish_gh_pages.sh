@@ -18,11 +18,8 @@ set -e
 
 if test $# -eq 0; then
 
-    VERSION_NUMBER=`python -c 'import pyramid as p; '\
-                   'from pkg_resources import parse_version as pv; '\
-                   'print(str(pv(p.__version__)))'`
-
-    exit 0
+    VERSION_NUMBER=`python -c 'import pyramid as p; from pkg_resources import parse_version as pv; print(str(pv(p.__version__)))'`
+    echo "$VERSION_NUMBER"
 
     COMMIT_MESSAGE="Update for version - $VERSION_NUMBER"
     COMMIT_TIME=`date "+%m/%d/%Y %H:%M"`
