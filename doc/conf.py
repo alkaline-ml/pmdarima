@@ -189,3 +189,4 @@ def setup(app):
         app.add_stylesheet(pth)
 
     add(os.path.abspath('_static/css/fields.css'))  # for parameters, etc.
+    add(os.path.abspath('_static/css/gitcontrib.css'))  # for git contributors

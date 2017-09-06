@@ -20,6 +20,7 @@ estimators in a single, easy-to-use scikit-learn-esque estimator.
    Setup <./setup.rst>
    Quickstart <./quickstart.rst>
    Codebase <./codebase.rst>
+   Contributors <./contributors.rst>
 
 
 Indices and tables
