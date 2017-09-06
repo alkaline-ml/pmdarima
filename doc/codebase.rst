@@ -1,9 +1,10 @@
-===================
-``pyramid`` Package
-===================
+===============
+Pyramid Package
+===============
+
+This section outlines various submodules in Pyramid.
 
 .. toctree::
-   :caption: Pyramid submodules
    :maxdepth: 2
 
        pyramid.arima <./_submodules/arima.rst>

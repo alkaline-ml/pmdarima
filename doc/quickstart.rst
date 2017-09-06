@@ -1,12 +1,6 @@
-.. Example ARIMA fit
-
-.. title:: Pyramid Quickstart
-
 ==================
 Pyramid Quickstart
 ==================
-
-.. include:: _includes/big_toc_css.rst
 
 Here is a simple example of Pyramid use:
 

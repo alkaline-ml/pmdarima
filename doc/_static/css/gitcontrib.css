@@ -1,151 +1,93 @@
-/*
-    Taken from GitHub's styling of contributions in the graph area
-*/
-
-.clearfix::before {
-    display: table;
-    content: "";
-}
-
 .capped-card {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size: 14px;
-    line-height: 1.5;
-    color: #24292e;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 14px;
+  line-height: 1.5;
+  color: #24292e;
+  list-style: none !important;
 }
 
-.capped-card::before {
-    display: table;
-    content: "";
+.contrib-wrapper {
+  position absolute;
+  display: block;
+  height: 80px;
+  width: 450px;
 }
 
-.clearfix::after {
-    display: table;
-    clear: both;
-    content: "";
+.committer {
+  text-decoration: none;
+  color: #0366d6;
 }
 
-.capped-card::after {
-    display: table;
-    clear: both;
-    content: "";
-}
-
-.contrib-data {
-    padding: 0;
-    margin: 0 0 10px;
-    list-style: none;
-}
-
-.capped-cards {
-    list-style: none;
-}
-
-ol {
-    padding-left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-body {
-    word-wrap: break-word;
-}
-
-.capped-card:nth-child(2n+1) {
-    margin-left: 0;
-}
-
-.capped-cards .capped-card {
-    float: left;
-    width: 450px;
-}
-
-.capped-card {
-    margin: 10px;
-    margin-left: 10px;
-    list-style: none;
-    border: 1px solid #dfe2e5;
-    border-radius: 2px;
-}
-
-.contributors-graph .capped-card .avatar {
-    float: left;
-    width: 32px;
-    height: 32px;
-    margin-right: 5px;
+.contrib-avatar-wrapper {
+  position: absolute;
+  display: block;
+  margin-left: 0px;
+  margin-top: 0px;
+  height: 80px;
+  width: 80px;
 }
 
 .avatar {
-    display: inline-block;
-    overflow: hidden;
-    line-height: 1;
-    vertical-align: middle;
-    border-radius: 3px;
+  margin-left: 10px;
+  margin-top: 10px;
 }
 
-img.avatar {
-    border-style: none;
+.contrib-author-wrapper {
+  position: absolute;
+  display: block;
+  margin-left: 80px;
+  margin-top: 0px;
+  width: 310px;
+  height: 50px;
 }
 
-.contributors-graph .capped-card h3 {
-    font-weight: normal;
+.contrib-author-wrapper h3 {
+  margin-left: 5px;
+  margin-top: 5px;
+  font-weight: normal;
+  font-size: 24px;
 }
 
-.capped-card h3 {
-    font-size: 20px;
-    line-height: 100%;
-}
-
-.contributors-graph .capped-card .rank {
+.rank {
     float: right;
     font-size: 13px;
     color: #586069;
+    margin-right: 10px;
+    margin-top: 10px;
 }
 
-.contributors-graph .capped-card h3 {
-    font-weight: normal;
+.contrib-stats-wrapper {
+  position: absolute;
+  display: block;
+  margin-left: 80px;
+  margin-top: 50px;
+  width: 370px;
+  height: 30px;
 }
 
-.contributors-graph .capped-card .ameta {
-    display: block;
-    font-size: 12px;
-    color: #c6cbd1;
-    box-sizing: border-box;
+.contrib-stats {
+  position: absolute;
+  display: block;
+  margin-left: 80px;
+  margin-right: 20px;
+  margin-top: 10px;
+  width: 350px;
+  height: 25px;
 }
 
-.capped-card {
-    list-style: none;
+.ameta {
+  margin-left: 5px;
 }
 
-.capped-card h3 {
-    padding: 10px;
-    margin: 0;
-    line-height: 100%;
-    border-bottom: 1px solid #eaecef;
-    font-size: 20px;
-}
-
-.contributors-graph .capped-card .rank {
-    float: right;
-    font-size: 13px;
-    color: #586069;
-    box-sizing: border-box;
-}
-
-a.aname {
-    color: #0366d6;
-    text-decoration: none;
-    background-color: transparent;
-}
-
-.contributors-graph .capped-card .cmt {
-    color: #586069;
+.cmt {
+  color: #586069;
+  text-decoration: none;
 }
 
 .a {
-    color: #28a745;
+  color: #28a745;
 }
 
 .d {
-    color: #cb2431;
+  color: #cb2431;
 }
