@@ -80,7 +80,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         one-dimensional array of floats, and should not contain any
         ``np.nan`` or ``np.inf`` values.
 
-    exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
+    exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
         An optional 2-d array of exogenous variables. If provided, these
         variables are used as additional features in the regression
         operation. This should not include a constant or trend. Note that
@@ -305,9 +305,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
 
     References
     ----------
-    .. [1] https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average
-    .. [2] https://github.com/robjhyndman/forecast/blob/19b0711e554524bf6435b7524517715658c07699/R/arima.R
-    .. [3] https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima
+    .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average
+    .. [2] R's auto-arima source code: http://bit.ly/2gOh5z2
+    .. [3] R's auto-arima documentation: http://bit.ly/2wbBvUN
     """
     start = time.time()
 
@@ -644,8 +644,9 @@ class _StepwiseFitWrapper(object):
     increase, and the models will continue to be fit until the ``max_k`` is
     reached.
 
-    See the R code:
-    https://github.com/robjhyndman/forecast/blob/30308a4e314ff29338291462e81bf68ff0c5f86d/R/newarima2.R#L366
+    References
+    ----------
+    .. [1] R's auto-arima stepwise source code: http://bit.ly/2vOma0W
     """
     def __init__(self, y, xreg, start_params, trend, method, transparams,
                  solver, maxiter, disp, callback, fit_params,

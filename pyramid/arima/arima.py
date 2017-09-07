@@ -171,8 +171,9 @@ class ARIMA(BaseEstimator):
 
     References
     ----------
-    .. [1] https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average
-    .. [2] http://www.statsmodels.org/0.6.1/generated/statsmodels.tsa.arima_model.ARIMA.html
+    .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average
+
+    .. [2] Statsmodels ARIMA documentation: http://bit.ly/2wc9Ra8
     """
     def __init__(self, order, seasonal_order=None, start_params=None, trend='c',
                  method=None, transparams=True, solver='lbfgs', maxiter=50,
@@ -208,7 +209,7 @@ class ARIMA(BaseEstimator):
             one-dimensional array of floats, and should not contain any
             ``np.nan`` or ``np.inf`` values.
 
-        exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
+        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -250,8 +251,7 @@ class ARIMA(BaseEstimator):
                 # 'self.{dates|freq|missing}', but they do not exist as class
                 # attrs! They're passed up to TimeSeriesModel in base, but
                 # are never set. So we inject them here so as not to get an
-                # AttributeError later.
-                # https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/arima_model.py#L994
+                # AttributeError later. (see http://bit.ly/2f7SkKH)
                 for attr, val in (('dates', None), ('freq', None),
                                   ('missing', 'none')):
                     if not hasattr(arima, attr):
@@ -324,7 +324,7 @@ class ARIMA(BaseEstimator):
 
         Parameters
         ----------
-        exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
+        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -369,7 +369,7 @@ class ARIMA(BaseEstimator):
         n_periods : int, optional (default=10)
             The number of periods in the future to forecast.
 
-        exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
+        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -413,7 +413,7 @@ class ARIMA(BaseEstimator):
             one-dimensional array of floats, and should not contain any
             ``np.nan`` or ``np.inf`` values.
 
-        exogenous : array-like, shape=[n_samples, n_features], optional (default=None)
+        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that

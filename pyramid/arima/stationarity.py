@@ -91,7 +91,7 @@ class KPSSTest(_DifferencingStationarityTest):
 
     References
     ----------
-    .. [1] https://github.com/cran/tseries/blob/8ceb31fa77d0b632dd511fc70ae2096fa4af3537/R/test.R#L719
+    .. [1] R's tseries KPSS test source code: http://bit.ly/2eJP1IU
     """
     _valid = {'trend', 'null'}
 
@@ -188,7 +188,7 @@ class ADFTest(_DifferencingStationarityTest):
 
     References
     ----------
-    .. [1] https://en.wikipedia.org/wiki/Augmented_Dickey–Fuller_test
+    .. [1] https://wikipedia.org/wiki/Augmented_Dickey–Fuller_test
     """
 
     def __init__(self, alpha=0.05, k=None):
@@ -298,7 +298,7 @@ class PPTest(_DifferencingStationarityTest):
 
     References
     ----------
-    .. [1] https://github.com/cran/tseries/blob/8ceb31fa77d0b632dd511fc70ae2096fa4af3537/R/test.R#L549
+    .. [1] R's tseries PP test source code: http://bit.ly/2wbzx6V
     """
     def __init__(self, alpha=0.05, lshort=True):
         super(PPTest, self).__init__(alpha=alpha)

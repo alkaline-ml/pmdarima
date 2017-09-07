@@ -67,7 +67,8 @@ class CHTest(_SeasonalStationarityTest):
 
     References
     ----------
-    .. [1] https://jalobe.com/blog/testing-for-seasonal-stability-canova-and-hansen-test-statistic/
+    .. [1] Testing for seasonal stability using the Canova
+           and Hansen test statisic: http://bit.ly/2wKkrZo
     """
     def __init__(self, m):
         super(CHTest, self).__init__(m=m)

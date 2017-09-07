@@ -63,8 +63,10 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
 
         References
         ----------
-          [1] https://stackoverflow.com/questions/31380578/how-to-avoid-building-c-library-with-my-python-package
-          [2] https://github.com/spotify/dh-virtualenv/issues/113
+        .. [1] How to avoid building a C library with my Python package:
+               http://bit.ly/2vQkW47
+
+        .. [2] https://github.com/spotify/dh-virtualenv/issues/113
         """
         def is_pure(self):
             """Since we are distributing binary (.so, .dll, .dylib) files for
