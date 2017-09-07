@@ -184,9 +184,9 @@ texinfo_documents = [
 ]
 
 def setup(app):
-    def add(pth):
+    def adds(pth):
         print("Adding stylesheet: %s" % pth)
         app.add_stylesheet(pth)
 
-    add(os.path.abspath('_static/css/fields.css'))  # for parameters, etc.
-    add(os.path.abspath('_static/css/gitcontrib.css'))  # for git contributors
+    adds('css/fields.css')  # for parameters, etc.
+    adds('css/gitcontrib.css')  # for git contributors
