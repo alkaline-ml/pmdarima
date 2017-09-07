@@ -7,7 +7,7 @@ Thanks to the following users for their contributions to Pyramid!
 .. raw:: html
 
     <!-- Block section -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="_static/js/jquery.min.js"></script>
 
     <!-- This does all the heavy lifting -->
     <script src="_static/js/contrib.js"></script>
