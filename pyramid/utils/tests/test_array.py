@@ -7,7 +7,7 @@ from nose.tools import assert_raises
 import numpy as np
 
 x = np.arange(5)
-m = np.array([10, 5, 12, 23, 18, 3, 2, 0, 12]).reshape(3,3).T
+m = np.array([10, 5, 12, 23, 18, 3, 2, 0, 12]).reshape(3, 3).T
 
 
 def test_diff():
@@ -18,8 +18,10 @@ def test_diff():
     assert_array_equal(diff(x, lag=2, differences=2), np.zeros(1))
 
     # test matrix for lag = (1, 2), diff = (1, 2)
-    assert_array_equal(diff(m, lag=1, differences=1), np.array([[-5, -5, -2], [7, -15, 12]]))
-    assert_array_equal(diff(m, lag=1, differences=2), np.array([[12, -10, 14]]))
+    assert_array_equal(diff(m, lag=1, differences=1),
+                       np.array([[-5, -5, -2], [7, -15, 12]]))
+    assert_array_equal(diff(m, lag=1, differences=2),
+                       np.array([[12, -10, 14]]))
     assert_array_equal(diff(m, lag=2, differences=1), np.array([[2, -20, 10]]))
     assert diff(m, lag=2, differences=2).shape[0] == 0
 

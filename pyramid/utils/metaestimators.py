@@ -5,7 +5,6 @@
 # Metaestimators for the ARIMA class
 
 from __future__ import absolute_import
-from abc import ABCMeta, abstractmethod
 from operator import attrgetter
 from functools import update_wrapper
 
@@ -51,7 +50,7 @@ class _IffHasDelegate(object):
                 attrgetter(self.delegate_names[-1])(obj)
 
         # lambda, but not partial, allows help() to work with update_wrapper
-        out = lambda *args, **kwargs: self.fn(obj, *args, **kwargs)
+        out = (lambda *args, **kwargs: self.fn(obj, *args, **kwargs))
         # update the docstring of the returned function
         update_wrapper(out, self.fn)
         return out
@@ -59,8 +58,32 @@ class _IffHasDelegate(object):
 
 def if_has_delegate(delegate):
     """Create a decorator for methods that are delegated in the presence of a
-    results wrapper. This enables ducktyping by hasattr returning True according to the
-    sub-estimator.
+    results wrapper. This enables duck-typing by ``hasattr`` returning True
+    according to the sub-estimator.
+
+    This function was adapted from scikit-learn, which defines
+    ``if_delegate_has_method``, but operates differently by injecting methods
+    not based on method presence, but by delegate presence.
+
+    Examples
+    --------
+    >>> from pyramid.utils.metaestimators import if_has_delegate
+    >>>
+    >>> class A(object):
+    ...     @if_has_delegate('d')
+    ...     def func(self):
+    ...         return True
+    >>>
+    >>> a = A()
+    >>> # the delegate does not exist yet
+    >>> assert not hasattr(a, 'func')
+    >>> # inject the attribute
+    >>> a.d = None
+    >>> assert hasattr(a, 'func') and a.func()
+
+    See Also
+    --------
+    :func:`pyramid.arima.ARIMA`
 
     Parameters
     ----------

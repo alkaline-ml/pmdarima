@@ -5,12 +5,12 @@ from numpy.testing import assert_array_almost_equal, assert_almost_equal
 from pyramid.arima.stationarity import ADFTest, PPTest, KPSSTest
 from pyramid.arima.seasonality import CHTest
 from pyramid.arima.utils import ndiffs, nsdiffs
-from pyramid.utils import get_random_state
+from sklearn.utils import check_random_state
 from nose.tools import assert_raises
 import numpy as np
 
 # for testing rand of len 400 for m==365
-random_state = get_random_state(42)
+random_state = check_random_state(42)
 
 austres = np.array([13067.3, 13130.5, 13198.4, 13254.2, 13303.7, 13353.9,
                     13409.3, 13459.2, 13504.5, 13552.6, 13614.3, 13669.5,
@@ -96,7 +96,7 @@ def test_adf_corner():
 
     # show we can fit with k is None
     test = ADFTest(alpha=0.05, k=None)
-    _ = test.is_stationary(austres)
+    test.is_stationary(austres)
 
 
 def test_ch_test():

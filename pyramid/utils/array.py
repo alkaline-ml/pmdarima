@@ -17,7 +17,22 @@ __all__ = [
 def c(*args):
     """Since this whole library is aimed at re-creating in
     Python what R has already done so well, why not add a ``c`` function
-    that wraps ``numpy.concatenate``?
+    that wraps ``numpy.concatenate``? Similar to R, this works with scalars,
+    iterables, and any mix therein.
+
+    Examples
+    --------
+    >>> from pyramid.utils import c
+    >>> c(1, 2, 3, 4)
+    array([1, 2, 3, 4])
+
+    >>> from pyramid.utils import c
+    >>> c([1, 2], 4, c(5, 4))
+    array([1, 2, 4, 5, 4])
+
+    References
+    ----------
+    .. [1] https://stat.ethz.ch/R-manual/R-devel/library/base/html/c.html
     """
     # R returns NULL for this
     if not args:
@@ -53,47 +68,52 @@ def _diff_matrix(x, lag):
 
 
 def diff(x, lag=1, differences=1):
-    """A python implementation of the R ``diff`` function (documentation found at
-    https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html). This computes
-    lag differences from an array given a ``lag`` and ``differencing`` term.
+    """A python implementation of the R ``diff`` function (documentation found
+    at https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html). This
+    computes lag differences from an array given a ``lag`` and ``differencing``
+    term.
 
-    If ``x`` is a vector of length n, ``lag`` = 1 and ``differences`` = 1, then the computed
-    result is equal to the successive differences ``x[lag:n] - x[:n-lag]``.
+    If ``x`` is a vector of length n, ``lag`` = 1 and ``differences`` = 1, then
+    the computed result is equal to the successive differences
+    ``x[lag:n] - x[:n-lag]``.
 
-    Consider the following examples in R:
+    Examples
+    --------
+    >>> from pyramid.utils import c, diff
+    >>>
+    >>> # lag 1, diff 1
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff(x, 1, 1)
+    array([ -6.,  -2.,   7.,  25.], dtype=float32)
 
-        # Examples with 1d vector
-        > x = c(10, 4, 2, 9, 34)
+    >>> from pyramid.utils import c, diff
+    >>>
+    >>> # lag 1, diff 2
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff(x, 1, 2)
+    array([  4.,   9.,  18.], dtype=float32)
 
-        # lag=1 and differences=1
-        > diff(x, 1L, 1L)
-        [1] -6 -2  7 25
+    >>> from pyramid.utils import c, diff
+    >>>
+    >>> # lag 3, diff 1
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff(x, 3, 1)
+    array([ -1.,  30.], dtype=float32)
 
-        # lag=1 and differences=2
-        > diff(x, 1, 2)
-        [1]  4  9 18
+    >>> from pyramid.utils import c, diff
+    >>>
+    >>> # lag 6 (larger than the vec), diff 1
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff(x, 6, 1)
+    array([], dtype=float32)
 
-        # lag=3 and differences=1
-        > diff(x, 3L, 1L)
-        [1] -1 30
-
-        # lag=6 (larger than original vector) and differences=1
-        > diff(x, 6L, 1L)
-        numeric(0)
-
-        # Examples with a matrix:
-        > m = matrix(data=1:9, nrow=3)
-        > m
-             [,1] [,2] [,3]
-        [1,]    1    4    7
-        [2,]    2    5    8
-        [3,]    3    6    9
-
-        # lag=1 and differences=1
-        > diff(m, 1L, 1L)
-             [,1] [,2] [,3]
-        [1,]    1    1    1
-        [2,]    1    1    1
+    >>> from pyramid.utils import c, diff
+    >>> import numpy as np
+    >>>
+    >>> x = np.arange(1, 10).reshape((3, 3)).T
+    >>> diff(x, 1, 1)
+    array([[ 1.,  1.,  1.],
+           [ 1.,  1.,  1.]], dtype=float32)
 
     Parameters
     ----------
@@ -110,6 +130,10 @@ def diff(x, lag=1, differences=1):
     -------
     res : np.ndarray, shape=(n_samples, [n_features])
         The result of the differenced arrays.
+
+    References
+    ----------
+    .. [1] https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html
     """
     if any(v < 1 for v in (lag, differences)):
         raise ValueError('lag and differences must be positive (> 0) integers')

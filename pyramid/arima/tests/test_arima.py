@@ -45,12 +45,18 @@ hr = np.array([84.2697, 84.2697, 84.0619, 85.6542, 87.2093, 87.1246,
 
 # > set.seed(123)
 # > abc <- rnorm(50, 5, 1)
-abc = np.array([4.439524, 4.769823, 6.558708, 5.070508, 5.129288, 6.715065, 5.460916, 3.734939,
-                4.313147, 4.554338, 6.224082, 5.359814, 5.400771, 5.110683, 4.444159, 6.786913,
-                5.497850, 3.033383, 5.701356, 4.527209, 3.932176, 4.782025, 3.973996, 4.271109,
-                4.374961, 3.313307, 5.837787, 5.153373, 3.861863, 6.253815, 5.426464, 4.704929,
-                5.895126, 5.878133, 5.821581, 5.688640, 5.553918, 4.938088, 4.694037, 4.619529,
-                4.305293, 4.792083, 3.734604, 7.168956, 6.207962, 3.876891, 4.597115, 4.533345,
+abc = np.array([4.439524, 4.769823, 6.558708, 5.070508,
+                5.129288, 6.715065, 5.460916, 3.734939,
+                4.313147, 4.554338, 6.224082, 5.359814,
+                5.400771, 5.110683, 4.444159, 6.786913,
+                5.497850, 3.033383, 5.701356, 4.527209,
+                3.932176, 4.782025, 3.973996, 4.271109,
+                4.374961, 3.313307, 5.837787, 5.153373,
+                3.861863, 6.253815, 5.426464, 4.704929,
+                5.895126, 5.878133, 5.821581, 5.688640,
+                5.553918, 4.938088, 4.694037, 4.619529,
+                4.305293, 4.792083, 3.734604, 7.168956,
+                6.207962, 3.876891, 4.597115, 4.533345,
                 5.779965, 4.916631])
 
 wineind = load_wineind()
@@ -78,15 +84,18 @@ def test_basic_arima():
 
 def test_with_oob():
     # show we can fit with CV (kinda)
-    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True, out_of_sample_size=10).fit(y=hr)
+    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True,
+                  out_of_sample_size=10).fit(y=hr)
     assert not np.isnan(arima.oob())  # show this works
 
     # show we can fit if ooss < 0 and oob will be nan
-    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True, out_of_sample_size=-1).fit(y=hr)
+    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True,
+                  out_of_sample_size=-1).fit(y=hr)
     assert np.isnan(arima.oob())
 
     # can we do one with an exogenous array, too?
-    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True, out_of_sample_size=10).fit(
+    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True,
+                  out_of_sample_size=10).fit(
         y=hr, exogenous=rs.rand(hr.shape[0], 4))
     assert not np.isnan(arima.oob())
 
@@ -101,7 +110,7 @@ def _try_get_attrs(arima):
 
     # this just shows all of these attrs work.
     for attr in attrs:
-        _ = getattr(arima, attr)()
+        getattr(arima, attr)()
 
 
 def test_more_elaborate():
@@ -111,7 +120,8 @@ def test_more_elaborate():
 
     # can we fit this same arima with a made-up exogenous array?
     xreg = rs.rand(hr.shape[0], 4)
-    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True).fit(y=hr, exogenous=xreg)
+    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True).fit(
+        y=hr, exogenous=xreg)
     _try_get_attrs(arima)
 
     # pickle this for the __get/setattr__ coverage.
@@ -143,7 +153,8 @@ def test_more_elaborate():
 
     # show that if we DO provide an exogenous and it's the wrong dims, we
     # also break things down.
-    assert_raises(ValueError, arima.predict, n_periods=5, exogenous=rs.rand(4, 4))
+    assert_raises(ValueError, arima.predict, n_periods=5,
+                  exogenous=rs.rand(4, 4))
 
 
 def test_the_r_src():
@@ -165,11 +176,14 @@ def test_the_r_src():
 
     # note that statsmodels' mean is on the front, not the end.
     params = fit.params()
-    assert_almost_equal(params, np.array([5.0370, -0.6515, -0.2449, 0.8012]), decimal=2)
+    assert_almost_equal(params, np.array([5.0370, -0.6515, -0.2449, 0.8012]),
+                        decimal=2)
 
-    # > fit = forecast::auto.arima(abc, max.p=5, max.d=5, max.q=5, max.order=100, stepwise=F)
-    fit = auto_arima(abc, max_p=5, max_d=5, max_q=5, max_order=100, seasonal=False,
-                     trend='c', suppress_warnings=True, error_action='ignore')
+    # > fit = forecast::auto.arima(abc, max.p=5, max.d=5,
+    #             max.q=5, max.order=100, stepwise=F)
+    fit = auto_arima(abc, max_p=5, max_d=5, max_q=5, max_order=100,
+                     seasonal=False, trend='c', suppress_warnings=True,
+                     error_action='ignore')
 
     # this differs from the R fit with a slightly higher AIC...
     assert abs(137 - fit.aic()) < 1.0  # R's is 135.28
@@ -206,8 +220,10 @@ def test_errors():
     _assert_val_error(auto_arima, abc, m=0)
 
     # show that for starting values > max_order, we'll get an error
-    _assert_val_error(auto_arima, abc, start_p=5, start_q=5, seasonal=False, max_order=3)
-    _assert_val_error(auto_arima, abc, start_p=5, start_q=5, start_P=4, start_Q=3, seasonal=True, max_order=3)
+    _assert_val_error(auto_arima, abc, start_p=5, start_q=5,
+                      seasonal=False, max_order=3)
+    _assert_val_error(auto_arima, abc, start_p=5, start_q=5, start_P=4,
+                      start_Q=3, seasonal=True, max_order=3)
 
 
 def test_many_orders():
@@ -247,12 +263,15 @@ def test_with_seasonality2():
 
     @suppress_warnings
     def do_fit():
-        return auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-                          start_P=0, seasonal=True, n_jobs=-1, d=1, D=1, stepwise=True,
-                          suppress_warnings=True, error_action='ignore',
+        return auto_arima(wineind, start_p=1, start_q=1, max_p=2,
+                          max_q=2, m=12, start_P=0, seasonal=True, n_jobs=-1,
+                          d=1, D=1, stepwise=True,
+                          suppress_warnings=True,
+                          error_action='ignore',
                           random_state=42)
 
-    # show that we can forecast even after the pickling (this was fit in parallel)
+    # show that we can forecast even after the
+    # pickling (this was fit in parallel)
     seasonal_fit = do_fit()
     seasonal_fit.predict(n_periods=10)
 
@@ -282,11 +301,13 @@ def test_with_seasonality4():
 def test_with_seasonality5():
     # can we fit the same thing with an exogenous array of predictors?
     # also make it stationary and make sure that works...
-    all_res = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-                         start_P=0, seasonal=True, n_jobs=1, d=1, D=None,
-                         error_action='ignore', suppress_warnings=True, stationary=True,
+    all_res = auto_arima(wineind, start_p=1, start_q=1, max_p=2,
+                         max_q=2, m=12, start_P=0, seasonal=True, n_jobs=1,
+                         d=1, D=None, error_action='ignore',
+                         suppress_warnings=True, stationary=True,
                          random=True, random_state=42, return_valid_fits=True,
-                         stepwise=False, n_fits=5, exogenous=rs.rand(wineind.shape[0], 4))  # only fit 2
+                         stepwise=False, n_fits=5,
+                         exogenous=rs.rand(wineind.shape[0], 4))  # only fit 2
 
     # show it is a list
     assert hasattr(all_res, '__iter__')
@@ -303,34 +324,30 @@ def test_with_seasonality6():
 
 def test_with_seasonality7():
     # show we can fit one with OOB as the criterion
-    _ = auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-                   start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
-                   out_of_sample_size=10, information_criterion='oob',
-                   suppress_warnings=True, error_action='raise',  # do raise so it fails fast
-                   random=True, random_state=42, n_fits=3,
-                   stepwise=False)
+    auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
+               start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
+               out_of_sample_size=10, information_criterion='oob',
+               suppress_warnings=True,
+               error_action='raise',  # do raise so it fails fast
+               random=True, random_state=42, n_fits=3,
+               stepwise=False)
 
 
 def test_corner_cases():
-    assert_raises(ValueError, auto_arima, wineind, error_action='some-bad-string')
+    assert_raises(ValueError, auto_arima, wineind,
+                  error_action='some-bad-string')
 
     # things that produce warnings
     with warnings.catch_warnings(record=False):
         warnings.simplefilter('ignore')
 
         # show a constant result will result in a quick fit
-        _ = auto_arima(np.ones(10), suppress_warnings=True)
+        auto_arima(np.ones(10), suppress_warnings=True)
 
         # show the same thing with return_all results in the ARIMA in a list
-        _ = auto_arima(np.ones(10), suppress_warnings=True, return_valid_fits=True)
-        assert hasattr(_, '__iter__')
-
-        # we did this in 0.1-alpha:
-        # show that with <= 3 samples, using a non-aic metric reverts to AIC
-        # try:
-        #     _ = auto_arima(np.arange(3), information_criterion='bic', seasonal=False, suppress_warnings=True)
-        # except ValueError:  # this happens because it can't fit such small data...
-        #     pass
+        fits = auto_arima(np.ones(10), suppress_warnings=True,
+                          return_valid_fits=True)
+        assert hasattr(fits, '__iter__')
 
     # show we fail for n_iter < 0
     assert_raises(ValueError, auto_arima, np.ones(10), random=True, n_fits=-1)
@@ -343,7 +360,7 @@ def test_warning_str_fmt():
     order = (1, 1, 1)
     seasonal = (1, 1, 1, 1)
     for ssnl in (seasonal, None):
-        _ = _fmt_warning_str(order, ssnl)
+        _fmt_warning_str(order, ssnl)
 
 
 def test_nsdiffs_on_wine():

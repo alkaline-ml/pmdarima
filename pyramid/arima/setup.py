@@ -20,7 +20,8 @@ def configuration(parent_package="", top_path=None):
                          include_dirs=[numpy.get_include(),
                                        blas_info.pop('include_dirs', [])],
                          libraries=libraries,
-                         extra_compile_args=blas_info.pop('extra_compile_args', []),
+                         extra_compile_args=blas_info.pop(
+                             'extra_compile_args', []),
                          **blas_info)
 
     config.add_subpackage('tests')

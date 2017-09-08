@@ -1,0 +1,66 @@
+
+/*
+body {
+    font-family: Helvetica, Arial, sans-serif !important;
+    font-style: 100%;
+}
+*/
+
+table.docutils tr {
+    border-style: solid none solid none;
+    border-width: 1px 0 1px 0;
+    border-color: #ddd;
+}
+
+div.body p, div.body dd, div.body li {
+    line-height: 1.5em;
+}
+
+div.body {
+    font-size: 0.9em;
+}
+
+div.body p {
+    margin-top: 1.2em;
+    margin-bottom: .1em;
+}
+
+div.body p, div.body dd, div.body li {
+    line-height: 1.5em;
+}
+
+table.docutils td, table.docutils th {
+    padding: 1px 8px 1px 5px !important;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1px solid #aaa;
+}
+
+.field-odd, .field-even {
+    background-color: #fff;
+}
+
+.field-name {
+    background-color: #F0F7FA;
+}
+
+.field-body {
+    background-color: #fff;
+}
+
+th.field-name {
+    white-space: nowrap;
+}
+
+.field-odd, .field-even {
+    background-color: #fff;
+}
+
+.field-name {
+    background-color: #F0F7FA;
+}
+
+.field-body {
+    background-color: #fff;
+}
