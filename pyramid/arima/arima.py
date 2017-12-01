@@ -360,9 +360,6 @@ class ARIMA(BaseEstimator):
 
     def predict(self, n_periods=10, exogenous=None):
         """Generate predictions (forecasts) ``n_periods`` in the future.
-        Note that unless ``include_std_err`` or ``include_conf_int`` are True,
-        only the forecast array will be returned (otherwise, a tuple with the
-        corresponding elements will be returned).
 
         Parameters
         ----------
