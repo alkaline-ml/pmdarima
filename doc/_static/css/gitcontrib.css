@@ -32,6 +32,11 @@
   margin-top: 10px;
 }
 
+img.avatar {
+  width: 60px;
+  height: 60px;
+}
+
 .contrib-author-wrapper {
   position: absolute;
   display: block;
