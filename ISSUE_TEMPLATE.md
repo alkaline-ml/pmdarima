@@ -1,7 +1,7 @@
 <!-- Instructions For Filing a Bug: https://github.com/scikit-learn/scikit-learn/blob/master/CONTRIBUTING.md#filing-bugs -->
 
 #### Description
-<!-- Example: Joblib Error thrown when calling fit on LatentDirichletAllocation with evaluate_every > 0-->
+<!-- Example: ValueError raised when fitting very high-frequency data -->
 
 #### Steps/Code to Reproduce
 <!--

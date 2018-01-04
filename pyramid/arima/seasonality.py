@@ -130,7 +130,8 @@ class CHTest(_SeasonalStationarityTest):
         frecob = np.zeros(s - 1).astype('int64')
 
         # I hate looping like this, but it seems like overkill to
-        # write a C function for something that's otherwise so trivial...
+        # write a C function for something that's otherwise so trivial
+        # (especially due to the overhead of calling a C func from python)
         for i, v in enumerate(frec):
             if v == 1 and i == int(s / 2) - 1:
                 frecob[sq[i]] = 1
@@ -146,7 +147,10 @@ class CHTest(_SeasonalStationarityTest):
         C_pop_A(A, frecob)
 
         tmp = A.T.dot(Omfhat).dot(A)
-        _, sv, _ = svd(tmp)
+
+        # UPDATE 01/04/2018 - we can get away without computing u, v
+        # (this is also MUCH MUCH faster!!!)
+        sv = svd(tmp, compute_uv=False)
         if sv.min() < 2.220446e-16:  # machine min eps
             return 0
 

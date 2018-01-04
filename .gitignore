@@ -9,6 +9,9 @@
 # Pypi pws
 .pypipws
 
+# Coverage
+coverage
+
 # OAuth access for automating releases
 ACCESS_TOKEN
 

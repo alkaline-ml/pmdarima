@@ -147,10 +147,10 @@ class KPSSTest(_DifferencingStationarityTest):
         scalar, denom = 10, 14
         if self.lshort:
             scalar, denom = 3, 13
-        l = int(np.trunc(scalar * np.sqrt(n) / denom))
+        l_ = int(np.trunc(scalar * np.sqrt(n) / denom))
 
         # compute the C subroutine
-        s2 = C_tseries_pp_sum(e, n, l, s2)
+        s2 = C_tseries_pp_sum(e, n, l_, s2)
         stat = eta / s2
 
         # do approximation
@@ -345,8 +345,8 @@ class PPTest(_DifferencingStationarityTest):
         ssqru = (u * u).sum() / float(n)
 
         scalar = 12 if not self.lshort else 4
-        l = int(np.trunc(scalar * np.power(n / 100.0, 0.25)))
-        ssqrtl = C_tseries_pp_sum(u, n, l, ssqru)
+        l_ = int(np.trunc(scalar * np.power(n / 100.0, 0.25)))
+        ssqrtl = C_tseries_pp_sum(u, n, l_, ssqru)
 
         # define trm vals
         n2 = n * n
