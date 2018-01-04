@@ -17,3 +17,6 @@ python:
 .. code-block:: python
 
     from pyramid.arima import auto_arima
+
+If you encounter an ``ImportError``, try updating numpy and re-installing. Outdated
+numpy versions have been observed to break the Pyramid build.
