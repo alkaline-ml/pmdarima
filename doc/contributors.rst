@@ -13,7 +13,9 @@ Thanks to the following users for their contributions to Pyramid!
     <script src="_static/js/contrib.js"></script>
     <script type="text/javascript">
         // actually call the contrib code
-
+        $(document).ready(function() {
+            fetchContributors();
+        });
     </script>
 
     <!-- This is taken from the Github contrib page -->

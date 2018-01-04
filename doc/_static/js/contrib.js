@@ -55,9 +55,7 @@ function fetchContributors() {
                         '</li>')
 
             // can only do this once the doc is ready
-            $(document).ready(function() {
-                $('#contrib').append(li);
-            });
+            $('#contrib').append(li);
         });
     });
 }
