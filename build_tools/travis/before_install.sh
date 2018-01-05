@@ -7,6 +7,6 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
   echo "Updating apt-get for Linux build"
   sudo apt-get -qq update
 # Because screw you, Travis:
-elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-  rvm get stable
+# elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+#   rvm get stable
 fi

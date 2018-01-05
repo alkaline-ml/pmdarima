@@ -37,7 +37,7 @@ build_script:
   - conda update conda --quiet
 
   # Things we'll need for build/test
-  - conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy
+  - ps: conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy
   - activate testenv
 
   # Things we'll need for deployment

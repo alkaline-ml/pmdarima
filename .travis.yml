@@ -85,7 +85,7 @@ install: source build_tools/travis/install.sh
 before_script: bash build_tools/travis/before_script.sh
 script: bash build_tools/travis/test_script.sh
 after_success:
-  - source build_tools/travis/after_success.sh
+  - source build_tools/travis/after_success.sh # || "shell_session_update failed"
   # Build the wheels every time so we can debug
   - bash build_tools/travis/build_wheels.sh
   - ls dist/

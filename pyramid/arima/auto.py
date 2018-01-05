@@ -369,7 +369,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
 
     # copy array
     y = column_or_1d(check_array(y, ensure_2d=False, dtype=DTYPE, copy=True,
-                                 force_all_finite=True))
+                                 force_all_finite=True))  # type: np.ndarray
     n_samples = y.shape[0]
 
     # check for constant data
@@ -628,7 +628,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                         key=(lambda mod:
                              getattr(mod, information_criterion)()))
 
-    # remove all the cached .pmdpkl files...
+    # remove all the cached .pmdpkl files... someday write this as an exit hook
+    # in case of a KeyboardInterrupt or anything
     for model in sorted_res:
         model._clear_cached_state()
 
@@ -705,7 +706,11 @@ class _StepwiseFitWrapper(object):
 
         # results list to store intermittent hashes of orders to determine if
         # we've seen this order before...
-        self.results_dict = dict()
+        self.results_dict = dict()  # type: dict[tuple, ARIMA]
+
+        # define the info criterion getter ONCE to avoid multiple lambda
+        # creation calls
+        self.get_ic = (lambda mod: getattr(mod, self.information_criterion)())
 
     def is_new_better(self, new_model):
         if self.bestfit is None:
@@ -713,8 +718,7 @@ class _StepwiseFitWrapper(object):
         elif new_model is None:
             return False
 
-        get_ic = (lambda m: getattr(m, self.information_criterion)())
-        current_ic, new_ic = get_ic(self.bestfit), get_ic(new_model)
+        current_ic, new_ic = self.get_ic(self.bestfit), self.get_ic(new_model)
         return new_ic < current_ic
 
     # this function takes a boolean expression, fits & caches a model,

@@ -33,6 +33,10 @@ VALID_TIES = {
     'mean': np.average
 }
 
+# identity function defined once to avoid multiple lambda calls
+# littered throughout
+_identity = (lambda t: t)
+
 
 def _regularize(x, y, ties):
     """Regularize the values, make them ordered and remove duplicates.
@@ -82,8 +86,14 @@ def _regularize(x, y, ties):
                 return f(vals)
 
             # replace the duplicates in the y array with the "tie" func
-            func = VALID_TIES.get(ties, lambda t: t)
+            func = VALID_TIES.get(ties, _identity)
+
+            # maybe expensive to vectorize on the fly? Not sure; would need
+            # to do some benchmarking. However, we need to in order to keep y
+            # and x in scope...
             y = np.vectorize(tie_apply)(func, ux)
+
+            # does ux need ordering? hmm..
             x = ux
 
     return x, y
