@@ -34,7 +34,9 @@ build_script:
   - cmd: C:\Miniconda.exe /S /D=C:\Py
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
-  - conda update conda
+  # - conda update conda
+
+  # Debugging because Appveyor gives us no stack traces when this stuff breaks.
   - ps: echo "Conda version:"
   - conda --version
   - ps: echo "Python version=$env:PYTHON_VERSION"
