@@ -5,17 +5,20 @@
 # Automatically find optimal parameters for an ARIMA
 
 from __future__ import absolute_import
+
 from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.utils import check_random_state
 from sklearn.externals.joblib import Parallel, delayed
 from sklearn.linear_model import LinearRegression
+
 from numpy.linalg import LinAlgError
 import numpy as np
+
 import warnings
 import time
 
 from .utils import ndiffs, is_constant, nsdiffs
-from ..utils import diff
+from ..utils import diff, is_iterable
 from .arima import ARIMA
 
 # for python 3 compat
@@ -874,8 +877,9 @@ def _post_ppc_arima(a):
         The list or ARIMAs, or an ARIMA
     """
     # if it's a result of making it to the end, it will
-    # be a list of ARIMA models.
-    if hasattr(a, '__iter__'):
+    # be a list of ARIMA models. Filter out the Nones
+    # (the failed models)...
+    if is_iterable(a):
         a = [m for m in a if m is not None]
 
     # if the list is empty, or if it was an ARIMA and it's None
@@ -906,7 +910,7 @@ def _return_wrapper(fits, return_all, start, trace):
         Whether to return all.
     """
     # make sure it's an iterable
-    if not hasattr(fits, '__iter__'):
+    if not is_iterable(fits):
         fits = [fits]
 
     # whether to print the final runtime

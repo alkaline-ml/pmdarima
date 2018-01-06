@@ -5,12 +5,16 @@
 # Array utilities
 
 from __future__ import absolute_import, division
+
 from sklearn.utils.validation import check_array
+from sklearn.externals import six
+
 import numpy as np
 
 __all__ = [
     'c',
-    'diff'
+    'diff',
+    'is_iterable'
 ]
 
 
@@ -20,15 +24,26 @@ def c(*args):
     that wraps ``numpy.concatenate``? Similar to R, this works with scalars,
     iterables, and any mix therein.
 
+    Note that using the ``c`` function on multi-nested lists or iterables
+    will fail!
+
     Examples
     --------
-    >>> from pyramid.utils import c
+    Using ``c`` with *args will yield a single array:
     >>> c(1, 2, 3, 4)
     array([1, 2, 3, 4])
 
-    >>> from pyramid.utils import c
+    Using ``c`` with nested lists and scalars will also yield a single array:
     >>> c([1, 2], 4, c(5, 4))
     array([1, 2, 4, 5, 4])
+
+    However, using ``c`` with multi-level lists will fail!
+    >>> c([1, 2, 3], [[1, 2]])
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "pyramid/utils/array.py", line 64, in c
+        return np.concatenate([a if is_iterable(a) else [a] for a in args])
+    ValueError: all the input arrays must have same number of dimensions
 
     References
     ----------
@@ -43,14 +58,14 @@ def c(*args):
         element = args[0]
 
         # if it's iterable, make it an array
-        if hasattr(element, '__iter__'):
+        if is_iterable(element):
             return np.asarray(element)
 
         # otherwise it's not iterable, put it in an array
         return np.asarray([element])
 
     # concat all
-    return np.concatenate([a if hasattr(a, '__iter__') else [a] for a in args])
+    return np.concatenate([a if is_iterable(a) else [a] for a in args])
 
 
 def _diff_vector(x, lag):
@@ -107,7 +122,7 @@ def diff(x, lag=1, differences=1):
     >>> diff(x, 6, 1)
     array([], dtype=float32)
 
-    >>> from pyramid.utils import c, diff
+    >>> from pyramid.utils import diff
     >>> import numpy as np
     >>>
     >>> x = np.arange(1, 10).reshape((3, 3)).T
@@ -138,7 +153,7 @@ def diff(x, lag=1, differences=1):
     if any(v < 1 for v in (lag, differences)):
         raise ValueError('lag and differences must be positive (> 0) integers')
 
-    x = check_array(x, ensure_2d=False, dtype=np.float32)
+    x = check_array(x, ensure_2d=False, dtype=np.float32)  # type: np.ndarray
     fun = _diff_vector if len(x.shape) == 1 else _diff_matrix
     res = x
 
@@ -150,3 +165,25 @@ def diff(x, lag=1, differences=1):
             return res
 
     return res
+
+
+def is_iterable(x):
+    """Determine whether an object ``x`` is iterable. In Python 2, this
+    was as simple as checking for the ``__iter__`` attribute. However, in
+    Python 3, strings became iterable. Therefore, this function checks for the
+    ``__iter__`` attribute, returning True if present (except for strings,
+    for which it will return False).
+
+    Parameters
+    ----------
+    x : str, iterable or object
+        The object in question.
+
+    Returns
+    -------
+    isiter : bool
+        True if iterable, else False.
+    """
+    if isinstance(x, six.string_types):
+        return False
+    return hasattr(x, '__iter__')

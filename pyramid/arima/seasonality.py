@@ -150,12 +150,22 @@ class CHTest(_SeasonalStationarityTest):
 
         # UPDATE 01/04/2018 - we can get away without computing u, v
         # (this is also MUCH MUCH faster!!!)
-        sv = svd(tmp, compute_uv=False)
-        if sv.min() < 2.220446e-16:  # machine min eps
+        sv = svd(tmp, compute_uv=False)  # type: np.ndarray
+
+        # From R:
+        # double.eps: the smallest positive floating-point number ‘x’ such that
+        # ‘1 + x != 1’.  It equals ‘double.base ^ ulp.digits’ if either
+        # ‘double.base’ is 2 or ‘double.rounding’ is 0; otherwise, it
+        # is ‘(double.base ^ double.ulp.digits) / 2’.  Normally
+        # ‘2.220446e-16’.
+        # Numpy's float64 has an eps of 2.2204460492503131e-16
+        if sv.min() < np.finfo(sv.dtype).eps:  # machine min eps
             return 0
 
         # solve against the identity matrix, then produce
-        # a nasty mess of dot products...
+        # a nasty mess of dot products... this is the (horrendous) R code:
+        # (1/N^2) * sum(diag(solve(tmp) %*% t(A) %*% t(Fhat) %*% Fhat %*% A))
+        # https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L321
         solved = solve(tmp, np.identity(tmp.shape[0]))
         return (1.0 / n ** 2) * solved.dot(A.T).dot(
             Fhat.T).dot(Fhat).dot(A).diagonal().sum()
