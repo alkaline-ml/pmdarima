@@ -11,7 +11,12 @@ cache:
   - $HOME/.cache/pip
   - $HOME/.ccache
 
+# we set +e to re-instate the error-tolerant state. The problem is Travis is broken on Mac OS
+# builds right now due to Issue 6307 (https://github.com/travis-ci/travis-ci/issues/6307)
+# and fails at the end of a successful build. This will allow the build to recover even if
+# a non-zero status code is encountered.
 before_install:
+  - set +e
   - source build_tools/travis/before_install.sh
 env:
   global:

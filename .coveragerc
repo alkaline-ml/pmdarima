@@ -1,3 +1,6 @@
+[report]
+show_missing = True
+
 [run]
 branch = True
 source = pyramid
