@@ -12,7 +12,6 @@ cache:
   - $HOME/.ccache
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rvm get stable; fi
   - source build_tools/travis/before_install.sh
 env:
   global:
