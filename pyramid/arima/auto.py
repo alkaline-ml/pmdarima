@@ -20,6 +20,7 @@ import time
 from .utils import ndiffs, is_constant, nsdiffs
 from ..utils import diff, is_iterable
 from .arima import ARIMA
+from .warnings import ModelFitWarning
 
 # for python 3 compat
 from ..compat.python import xrange
@@ -827,7 +828,8 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
     # for non-stationarity errors or singular matrices, return None
     except (LinAlgError, ValueError) as v:
         if error_action == 'warn':
-            warnings.warn(_fmt_warning_str(order, seasonal_order))
+            warnings.warn(_fmt_warning_str(order, seasonal_order),
+                          ModelFitWarning)
         elif error_action == 'raise':
             # todo: can we do something more informative in case
             # the error is not on the pyramid side?
