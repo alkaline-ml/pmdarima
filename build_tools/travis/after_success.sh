@@ -4,7 +4,8 @@
 
 # License: 3-clause BSD
 
-set -e
+# 02/10/2018 remove due to Travis build issue 6307
+# set -e
 
 # push coverage if necessary
 if [[ "$COVERAGE" == "true" ]]; then
