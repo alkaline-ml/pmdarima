@@ -4,7 +4,7 @@
 #
 # The pyramid module
 
-__version__ = "0.6.5-dev"
+__version__ = "0.6.5"
 
 try:
     # this var is injected in the setup build to enable
