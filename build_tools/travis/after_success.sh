@@ -12,7 +12,7 @@ if [[ "$COVERAGE" == "true" ]]; then
 
     # Need to run coveralls from a git checkout, so we copy .coverage
     # from TEST_DIR where nosetests has been run
-    cp $TEST_DIR/.coverage $TRAVIS_BUILD_DIR
+    rsync $TEST_DIR/.coverage $TRAVIS_BUILD_DIR --ignore-existing
     cd $TRAVIS_BUILD_DIR
 
     # Ignore coveralls failures as the coveralls server is not
