@@ -6,6 +6,7 @@
 
 # 02/10/2018 remove due to Travis build issue 6307
 # set -e
+set +e  # because TRAVIS SUCKS
 
 # push coverage if necessary
 if [[ "$COVERAGE" == "true" ]]; then
