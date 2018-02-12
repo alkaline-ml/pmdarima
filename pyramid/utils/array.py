@@ -64,7 +64,28 @@ def c(*args):
         # otherwise it's not iterable, put it in an array
         return np.asarray([element])
 
-    # concat all
+    # np.concat all. This can be slow, as noted by numerous threads on
+    # numpy concat efficiency, however an alternative using recursive
+    # yields was tested and performed far worse:
+    #
+    # >>> def timeit(func, ntimes, *args):
+    # ...     times = []
+    # ...     for i in range(ntimes):
+    # ...         start = time.time()
+    # ...         func(*args)
+    # ...         times.append(time.time() - start)
+    # ...     arr = np.asarray(times)
+    # ...     print("%s (%i times) - Mean: %.5f sec, "
+    # ...           "Min: %.5f sec, Max: %.5f" % (func.__name__, ntimes,
+    # ...                                         arr.mean(), arr.min(),
+    # ...                                         arr.max()))
+    # >>> y = [np.arange(10000), range(500), (1000,), 100, np.arange(50000)]
+    # >>> timeit(c1, 100, *y)
+    # c1 (100 times) - Mean: 0.00009 sec, Min: 0.00006 sec, Max: 0.00065
+    # >>> timeit(c2, 100, *y)
+    # c2 (100 times) - Mean: 0.08708 sec, Min: 0.08273 sec, Max: 0.10115
+    #
+    # So we stick with c1, which is this variant.
     return np.concatenate([a if is_iterable(a) else [a] for a in args])
 
 
