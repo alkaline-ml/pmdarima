@@ -233,6 +233,13 @@ def test_many_orders():
                suppress_warnings=True, stepwise=True)
 
 
+def test_small_samples():
+    # if n_samples < 10, test the new starting p, d, Q
+    samp = lynx[:8]
+    auto_arima(samp, suppress_warnings=True, stepwise=True,
+               error_action='ignore')
+
+
 def test_with_seasonality1():
     fit = ARIMA(order=(1, 1, 1),
                 seasonal_order=(0, 1, 1, 12),
