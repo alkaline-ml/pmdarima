@@ -36,6 +36,15 @@ matrix:
            COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=true
            DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64" DOCKER_CONTAINER_NAME="pyramidcontainer"
 
+    # This environment tests against Linux with CPython 2.7.x built with UCS-4 encoding
+    - os: linux
+      dist: trusty
+      services:
+        - docker
+      env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=true
+           DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64" DOCKER_CONTAINER_NAME="pyramidcontainer" UCS_SETTING="ucs4"
+
     # This environment tests the same conditions as above, but tests against MAC OS X,
     # using virtualenv instead of the conda python distribution
     - os: osx
