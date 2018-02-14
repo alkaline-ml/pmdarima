@@ -3,6 +3,7 @@ branch = True
 source = pyramid
 include = */pyramid/*
 omit =
-    */setup.py
-    */__check_build/*
-    */_build_utils/*
+    pyramid/arima/setup.py
+    pyramid/_build_utils/*
+    pyramid/__check_build/*
+    pyramid/setup.py
