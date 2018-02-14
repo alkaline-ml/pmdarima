@@ -42,6 +42,14 @@ def is_constant(x):
     ----------
     x : array-like, shape=(n_samples,)
         The time series vector.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> x = np.array([1, 2, 3])
+    >>> y = np.ones(3)
+    >>> [is_constant(x), is_constant(y)]
+    [False, True]
     """
     x = column_or_1d(x)  # type: np.ndarray
     return (x == x[0]).all()
@@ -120,9 +128,9 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
     testfunc = get_callable(test, VALID_TESTS)(alpha, **kwargs).is_stationary
     x = column_or_1d(check_array(x, ensure_2d=False,
                                  force_all_finite=True, dtype=DTYPE))
-    d = 0
 
-    # base case
+    # base case, if constant return 0
+    d = 0
     if is_constant(x):
         return d
 
