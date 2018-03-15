@@ -42,7 +42,7 @@ build_script:
   - ps: echo "Python version=$env:PYTHON_VERSION"
 
   # Things we'll need for build/test
-  - ps: conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy
+  - ps: conda.exe create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy
   - activate testenv
 
   # Things we'll need for deployment
