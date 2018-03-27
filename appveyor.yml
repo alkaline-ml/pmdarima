@@ -36,7 +36,7 @@ environment:
 # 3/27/18 - Conda is not working well on Windows because they haven't gotten
 # their act together RE: powershell...
 build_script:
-  - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-4.3.$env:MINICONDA_MICRO_VERSION-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
+  - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-4.3.$env:MINICONDA_MICRO_VERSION-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
   # - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-latest-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
   - cmd: C:\Miniconda.exe /S /D=C:\Py
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
