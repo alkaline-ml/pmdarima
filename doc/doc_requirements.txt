@@ -1,0 +1,12 @@
+Cython>=0.23
+numpy>=1.9
+scipy>=0.9
+scikit-learn>=0.17
+statsmodels>=0.8
+sphinx
+sphinx_rtd_theme
+matplotlib==2.2.0rc1
+sphinx_gallery==0.1.13
+numpydoc==0.7.0
+Django==1.11
+image==1.5.19

@@ -20,7 +20,9 @@ if [[ "$COVERAGE" == "true" ]]; then
     # very reliable but we don't want travis to report a failure
     # in the github UI just because the coverage report failed to
     # be published.
-    coveralls || echo "Coveralls upload failed"
+    coveralls --rcfile .coveragerc || echo "Coveralls upload failed"
+else
+    echo "Skipping coverage upload since COVERAGE=false"
 fi
 
 # make sure we have twine in case we deploy
