@@ -215,6 +215,9 @@ class ARIMA(BaseEstimator):
             operation. This should not include a constant or trend. Note that
             if an ``ARIMA`` is fit on exogenous features, it must be provided
             exogenous features for making predictions.
+
+        **fit_args : dict or kwargs
+            Any keyword arguments to pass to the statsmodels ARIMA fit.
         """
         y = c1d(check_array(y, ensure_2d=False, force_all_finite=False,
                             copy=True, dtype=DTYPE))  # type: np.ndarray
@@ -360,9 +363,8 @@ class ARIMA(BaseEstimator):
 
     def predict(self, n_periods=10, exogenous=None):
         """Generate predictions (forecasts) ``n_periods`` in the future.
-        Note that unless ``include_std_err`` or ``include_conf_int`` are True,
-        only the forecast array will be returned (otherwise, a tuple with the
-        corresponding elements will be returned).
+        Note that if ``exogenous`` variables were used in the model fit, they
+        will be expected for the predict procedure and will fail otherwise.
 
         Parameters
         ----------
@@ -423,7 +425,7 @@ class ARIMA(BaseEstimator):
         n_periods : int, optional (default=10)
             The number of periods in the future to forecast.
 
-        fit_args : dict, optional (default=None)
+        fit_args : dict or kwargs, optional (default=None)
             Any keyword args to pass to the fit method.
         """
         self.fit(y, exogenous, **fit_args)

@@ -147,10 +147,10 @@ class KPSSTest(_DifferencingStationarityTest):
         scalar, denom = 10, 14
         if self.lshort:
             scalar, denom = 3, 13
-        l = int(np.trunc(scalar * np.sqrt(n) / denom))
+        l_ = int(np.trunc(scalar * np.sqrt(n) / denom))
 
         # compute the C subroutine
-        s2 = C_tseries_pp_sum(e, n, l, s2)
+        s2 = C_tseries_pp_sum(e, n, l_, s2)
         stat = eta / s2
 
         # do approximation
@@ -190,6 +190,18 @@ class ADFTest(_DifferencingStationarityTest):
     ----------
     .. [1] https://wikipedia.org/wiki/Augmented_Dickey–Fuller_test
     """
+    table = -np.array([c(4.38, 4.15, 4.04, 3.99, 3.98, 3.96),
+                       c(3.95, 3.80, 3.73, 3.69, 3.68, 3.66),
+                       c(3.60, 3.50, 3.45, 3.43, 3.42, 3.41),
+                       c(3.24, 3.18, 3.15, 3.13, 3.13, 3.12),
+                       c(1.14, 1.19, 1.22, 1.23, 1.24, 1.25),
+                       c(0.80, 0.87, 0.90, 0.92, 0.93, 0.94),
+                       c(0.50, 0.58, 0.62, 0.64, 0.65, 0.66),
+                       c(0.15, 0.24, 0.28, 0.31, 0.32, 0.33)]).T
+
+    tablen = table.shape[1]
+    tableT = c(25, 50, 100, 250, 500, 100000)
+    tablep = c(0.01, 0.025, 0.05, 0.10, 0.90, 0.95, 0.975, 0.99)
 
     def __init__(self, alpha=0.05, k=None):
         super(ADFTest, self).__init__(alpha=alpha)
@@ -248,26 +260,14 @@ class ADFTest(_DifferencingStationarityTest):
         # store them.
         res = sm.OLS(yt, X).fit()
         STAT = res.params[0] / res.HC0_se[0]  # FIXME: is the denom correct?...
-        table = -np.array([c(4.38, 4.15, 4.04, 3.99, 3.98, 3.96),
-                           c(3.95, 3.80, 3.73, 3.69, 3.68, 3.66),
-                           c(3.60, 3.50, 3.45, 3.43, 3.42, 3.41),
-                           c(3.24, 3.18, 3.15, 3.13, 3.13, 3.12),
-                           c(1.14, 1.19, 1.22, 1.23, 1.24, 1.25),
-                           c(0.80, 0.87, 0.90, 0.92, 0.93, 0.94),
-                           c(0.50, 0.58, 0.62, 0.64, 0.65, 0.66),
-                           c(0.15, 0.24, 0.28, 0.31, 0.32, 0.33)]).T
 
-        tablen = table.shape[1]
-        tableT = c(25, 50, 100, 250, 500, 100000)
-        tablep = c(0.01, 0.025, 0.05, 0.10, 0.90, 0.95, 0.975, 0.99)
-
-        tableipl = np.zeros(tablen)
-        for i in range(tablen):
-            _, pval = approx(tableT, table[:, i], xout=n, rule=2)
+        tableipl = np.zeros(self.tablen)
+        for i in range(self.tablen):
+            _, pval = approx(self.tableT, self.table[:, i], xout=n, rule=2)
             tableipl[i] = pval
 
         # make sure to do 1 - x...
-        _, interpol = approx(tableipl, tablep, xout=STAT, rule=2)
+        _, interpol = approx(tableipl, self.tablep, xout=STAT, rule=2)
         pval = 1 - interpol[0]
 
         # in the R code, here is where the P value warning is tested again...
@@ -300,6 +300,21 @@ class PPTest(_DifferencingStationarityTest):
     ----------
     .. [1] R's tseries PP test source code: http://bit.ly/2wbzx6V
     """
+    table = -np.array([
+        c(22.5, 25.7, 27.4, 28.4, 28.9, 29.5),
+        c(19.9, 22.4, 23.6, 24.4, 24.8, 25.1),
+        c(17.9, 19.8, 20.7, 21.3, 21.5, 21.8),
+        c(15.6, 16.8, 17.5, 18.0, 18.1, 18.3),
+        c(3.66, 3.71, 3.74, 3.75, 3.76, 3.77),
+        c(2.51, 2.60, 2.62, 2.64, 2.65, 2.66),
+        c(1.53, 1.66, 1.73, 1.78, 1.78, 1.79),
+        c(0.43, 0.65, 0.75, 0.82, 0.84, 0.87)
+    ]).T
+
+    tablen = table.shape[1]
+    tableT = c(25, 50, 100, 250, 500, 100000).astype(DTYPE)
+    tablep = c(0.01, 0.025, 0.05, 0.10, 0.90, 0.95, 0.975, 0.99)
+
     def __init__(self, alpha=0.05, lshort=True):
         super(PPTest, self).__init__(alpha=alpha)
 
@@ -345,8 +360,8 @@ class PPTest(_DifferencingStationarityTest):
         ssqru = (u * u).sum() / float(n)
 
         scalar = 12 if not self.lshort else 4
-        l = int(np.trunc(scalar * np.power(n / 100.0, 0.25)))
-        ssqrtl = C_tseries_pp_sum(u, n, l, ssqru)
+        l_ = int(np.trunc(scalar * np.power(n / 100.0, 0.25)))
+        ssqrtl = C_tseries_pp_sum(u, n, l_, ssqru)
 
         # define trm vals
         n2 = n * n
@@ -365,28 +380,13 @@ class PPTest(_DifferencingStationarityTest):
         alpha = coef[2]  # it's the last col...
         STAT = n * (alpha - 1) - (n ** 6) / (24.0 * dx) * (ssqrtl - ssqru)
 
-        table = -np.array([
-            c(22.5, 25.7, 27.4, 28.4, 28.9, 29.5),
-            c(19.9, 22.4, 23.6, 24.4, 24.8, 25.1),
-            c(17.9, 19.8, 20.7, 21.3, 21.5, 21.8),
-            c(15.6, 16.8, 17.5, 18.0, 18.1, 18.3),
-            c(3.66, 3.71, 3.74, 3.75, 3.76, 3.77),
-            c(2.51, 2.60, 2.62, 2.64, 2.65, 2.66),
-            c(1.53, 1.66, 1.73, 1.78, 1.78, 1.79),
-            c(0.43, 0.65, 0.75, 0.82, 0.84, 0.87)
-        ]).T
-
-        tablen = table.shape[1]
-        tableT = c(25, 50, 100, 250, 500, 100000).astype(DTYPE)
-        tablep = c(0.01, 0.025, 0.05, 0.10, 0.90, 0.95, 0.975, 0.99)
-        tableipl = np.zeros(tablen)
-
-        for i in range(tablen):
-            _, pval = approx(tableT, table[:, i], xout=n, rule=2)
+        tableipl = np.zeros(self.tablen)
+        for i in range(self.tablen):
+            _, pval = approx(self.tableT, self.table[:, i], xout=n, rule=2)
             tableipl[i] = pval
 
         # make sure to do 1 - x...
-        _, interpol = approx(tableipl, tablep, xout=STAT, rule=2)
+        _, interpol = approx(tableipl, self.tablep, xout=STAT, rule=2)
         pval = 1 - interpol[0]
 
         # in the R code, here is where the P value warning is tested again...

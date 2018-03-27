@@ -1,7 +1,9 @@
 
 from __future__ import absolute_import
-from pyramid.utils.array import diff, c
+
+from pyramid.utils.array import diff, c, is_iterable
 from pyramid.utils import get_callable
+
 from numpy.testing import assert_array_equal
 from nose.tools import assert_raises
 import numpy as np
@@ -42,3 +44,10 @@ def test_corner_in_callable():
 def test_corner():
     # fails because lag < 1
     assert_raises(ValueError, diff, x=x, lag=0)
+
+
+def test_is_iterable():
+    assert not is_iterable("this string")
+    assert is_iterable(["this", "list"])
+    assert not is_iterable(None)
+    assert is_iterable(np.array([1, 2]))

@@ -5,8 +5,10 @@ Utilities useful during the build -- adapted from sklearn.
 # license: BSD
 
 from __future__ import division, print_function, absolute_import
+
 from numpy.distutils.system_info import get_info
 from distutils.version import LooseVersion
+
 import os
 
 DEFAULT_ROOT = 'pyramid'

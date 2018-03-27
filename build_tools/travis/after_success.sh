@@ -4,10 +4,13 @@
 
 # License: 3-clause BSD
 
-set -e
+# 02/10/2018 remove due to Travis build issue 6307
+# set -e
+set +e  # because TRAVIS SUCKS
 
 # push coverage if necessary
 if [[ "$COVERAGE" == "true" ]]; then
+
     # Need to run coveralls from a git checkout, so we copy .coverage
     # from TEST_DIR where nosetests has been run
     cp $TEST_DIR/.coverage $TRAVIS_BUILD_DIR
@@ -17,7 +20,9 @@ if [[ "$COVERAGE" == "true" ]]; then
     # very reliable but we don't want travis to report a failure
     # in the github UI just because the coverage report failed to
     # be published.
-    coveralls || echo "Coveralls upload failed"
+    coveralls --rcfile .coveragerc || echo "Coveralls upload failed"
+else
+    echo "Skipping coverage upload since COVERAGE=false"
 fi
 
 # make sure we have twine in case we deploy

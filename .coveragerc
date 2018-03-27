@@ -1,7 +1,5 @@
 [run]
-branch = True
 source = pyramid
-include = */pyramid/*
 omit =
     */setup.py
     */__check_build/*

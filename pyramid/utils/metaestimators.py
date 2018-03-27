@@ -2,7 +2,8 @@
 #
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 #
-# Metaestimators for the ARIMA class
+# Metaestimators for the ARIMA class. These classes are derived from the
+# sklearn metaestimators, but adapted for more specific use with pyramid.
 
 from __future__ import absolute_import
 from operator import attrgetter
