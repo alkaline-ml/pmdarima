@@ -1,6 +1,6 @@
 [run]
-source = pyramid
+include = */pyramid/*
 omit =
     */setup.py
-    */__check_build/*
-    */_build_utils/*
+    */pyramid/__check_build/*
+    */pyramid/_build_utils/*

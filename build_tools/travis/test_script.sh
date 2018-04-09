@@ -17,7 +17,8 @@ run_tests() {
     if [[ "$USE_PYTEST" == "true" ]]; then
         TEST_CMD="pytest --showlocals --durations=1 --pyargs"
     else
-        TEST_CMD="nosetests --with-timer --timer-top-n 20"
+        # TEST_CMD="nosetests --with-timer --timer-top-n 20"
+        TEST_CMD="nosetests"
     fi
 
     # Get into a temp directory to run test from the installed pyramid and
