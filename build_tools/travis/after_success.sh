@@ -16,11 +16,11 @@ if [[ "$COVERAGE" == "true" ]]; then
     cp $TEST_DIR/.coverage $TRAVIS_BUILD_DIR
     cd $TRAVIS_BUILD_DIR
 
-    # Ignore coveralls failures as the coveralls server is not
+    # Ignore codecov failures as the codecov server is not
     # very reliable but we don't want travis to report a failure
     # in the github UI just because the coverage report failed to
     # be published.
-    coveralls --rcfile .coveragerc || echo "Coveralls upload failed"
+    codecov || echo "codecov upload failed"
 else
     echo "Skipping coverage upload since COVERAGE=false"
 fi

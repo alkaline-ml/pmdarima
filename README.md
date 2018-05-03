@@ -1,7 +1,7 @@
 [![PyPI version](https://badge.fury.io/py/pyramid-arima.svg)](https://badge.fury.io/py/pyramid-arima)
 [![Linux build status](https://travis-ci.org/tgsmith61591/pyramid.svg?branch=master)](https://travis-ci.org/tgsmith61591/pyramid)
 [![Windows build status](https://ci.appveyor.com/api/projects/status/592vawuu69kd6d21?svg=true)](https://ci.appveyor.com/project/tgsmith61591/pyramid)
-[![Coverage Status](https://coveralls.io/repos/github/tgsmith61591/pyramid/badge.svg?branch=master)](https://coveralls.io/github/tgsmith61591/pyramid?branch=master)
+[![codecov](https://codecov.io/gh/tgsmith61591/pyramid/branch/master/graph/badge.svg)](https://codecov.io/gh/tgsmith61591/pyramid)
 ![Supported versions](https://img.shields.io/badge/python-2.7-blue.svg)
 ![Supported versions](https://img.shields.io/badge/python-3.5-blue.svg)
 

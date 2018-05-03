@@ -47,21 +47,21 @@ if [[ "$DISTRIB" == "conda" ]]; then
     if [[ "$PYTHON_VERSION" == "2.7" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION \
             numpy scipy cython=$CYTHON_VERSION statsmodels \
-            scikit-learn=$SCIKIT_LEARN_VERSION
+            scikit-learn=$SCIKIT_LEARN_VERSION pytest pytest-cov
 
     elif [[ "$INSTALL_MKL" == "true" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
             numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
             mkl cython=$CYTHON_VERSION \
             scikit-learn=$SCIKIT_LEARN_VERSION \
-            statsmodels=$STATSMODELS_VERSION
+            statsmodels=$STATSMODELS_VERSION pytest pytest-cov
 
     else
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
             numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
             nomkl cython=$CYTHON_VERSION \
             scikit-learn=$SCIKIT_LEARN_VERSION \
-            statsmodels=$STATSMODELS_VERSION
+            statsmodels=$STATSMODELS_VERSION pytest pytest-cov
     fi
     source activate testenv
 
@@ -77,7 +77,7 @@ fi
 
 # use PIP for installing coverage tools since we might not be using a conda dist
 if [[ "$COVERAGE" == "true" ]]; then
-    pip install coverage codecov coveralls
+    pip install coverage codecov
 fi
 
 # now run the python setup. This implicitly builds all the C code with build_ext

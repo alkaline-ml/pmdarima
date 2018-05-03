@@ -1,6 +1,9 @@
 [run]
+source = pyramid
 include = */pyramid/*
 omit =
     */setup.py
     */pyramid/__check_build/*
     */pyramid/_build_utils/*
+    */pyramid/setup.py
+    */pyramid/__init__.py
