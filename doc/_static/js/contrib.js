@@ -2,7 +2,7 @@ function commaFmt(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-$(document).ready(function() {
+function fetchContributors() {
     $.getJSON("https://api.github.com/repos/tgsmith61591/pyramid/stats/contributors", function(arr) {
         // sort the array based on total count
         arr.sort(function(a, b) {
@@ -54,7 +54,8 @@ $(document).ready(function() {
                          '</div>' +
                         '</li>')
 
+            // can only do this once the doc is ready
             $('#contrib').append(li);
         });
     });
-});
+}

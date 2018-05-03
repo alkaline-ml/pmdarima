@@ -20,26 +20,26 @@ Here is a simple example of Pyramid use:
     ...                           error_action='ignore',  # don't want to know if an order does not work
     ...                           suppress_warnings=True,  # don't want convergence warnings
     ...                           stepwise=True)  # set to stepwise
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 1, 1, 12); AIC=3066.811, BIC=3082.663, Fit time=1.731 seconds
+    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 1, 1, 12); AIC=3066.811, BIC=3082.663, Fit time=0.517 seconds
     Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 1, 0, 12); AIC=nan, BIC=nan, Fit time=nan seconds
-    Fit ARIMA: order=(1, 1, 0) seasonal_order=(1, 1, 0, 12); AIC=3099.735, BIC=3112.417, Fit time=0.434 seconds
-    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 1, 1, 12); AIC=3066.983, BIC=3079.665, Fit time=0.473 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(1, 1, 1, 12); AIC=3067.666, BIC=3086.688, Fit time=2.184 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 1, 0, 12); AIC=3088.109, BIC=3100.791, Fit time=0.344 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 1, 2, 12); AIC=3067.669, BIC=3086.692, Fit time=4.371 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(1, 1, 2, 12); AIC=3068.757, BIC=3090.951, Fit time=4.160 seconds
-    Fit ARIMA: order=(2, 1, 1) seasonal_order=(0, 1, 1, 12); AIC=3067.485, BIC=3086.508, Fit time=1.204 seconds
-    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 1, 1, 12); AIC=3094.578, BIC=3107.260, Fit time=0.468 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 1, 1, 12); AIC=3066.771, BIC=3085.794, Fit time=1.222 seconds
-    Fit ARIMA: order=(2, 1, 3) seasonal_order=(0, 1, 1, 12); AIC=3070.642, BIC=3096.006, Fit time=3.495 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(1, 1, 1, 12); AIC=3068.086, BIC=3090.280, Fit time=1.180 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 1, 0, 12); AIC=3090.977, BIC=3106.830, Fit time=0.544 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 1, 2, 12); AIC=3067.766, BIC=3089.959, Fit time=3.303 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(1, 1, 2, 12); AIC=3069.717, BIC=3095.081, Fit time=5.675 seconds
+    Fit ARIMA: order=(1, 1, 0) seasonal_order=(1, 1, 0, 12); AIC=3099.735, BIC=3112.417, Fit time=0.162 seconds
+    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 1, 1, 12); AIC=3066.983, BIC=3079.665, Fit time=0.164 seconds
+    Fit ARIMA: order=(1, 1, 1) seasonal_order=(1, 1, 1, 12); AIC=3067.666, BIC=3086.688, Fit time=0.645 seconds
+    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 1, 0, 12); AIC=3088.109, BIC=3100.791, Fit time=0.136 seconds
+    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 1, 2, 12); AIC=3067.669, BIC=3086.692, Fit time=1.512 seconds
+    Fit ARIMA: order=(1, 1, 1) seasonal_order=(1, 1, 2, 12); AIC=3068.757, BIC=3090.951, Fit time=1.651 seconds
+    Fit ARIMA: order=(2, 1, 1) seasonal_order=(0, 1, 1, 12); AIC=3067.485, BIC=3086.508, Fit time=0.445 seconds
+    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 1, 1, 12); AIC=3094.578, BIC=3107.260, Fit time=0.174 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 1, 1, 12); AIC=3066.771, BIC=3085.794, Fit time=0.425 seconds
+    Fit ARIMA: order=(2, 1, 3) seasonal_order=(0, 1, 1, 12); AIC=3070.642, BIC=3096.006, Fit time=0.966 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(1, 1, 1, 12); AIC=3068.086, BIC=3090.280, Fit time=0.411 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 1, 0, 12); AIC=3090.977, BIC=3106.830, Fit time=0.249 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 1, 2, 12); AIC=3067.766, BIC=3089.959, Fit time=1.170 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(1, 1, 2, 12); AIC=3069.717, BIC=3095.081, Fit time=2.000 seconds
     Fit ARIMA: order=(0, 1, 2) seasonal_order=(0, 1, 1, 12); AIC=nan, BIC=nan, Fit time=nan seconds
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 1, 1, 12); AIC=3068.701, BIC=3090.895, Fit time=1.509 seconds
-    Fit ARIMA: order=(1, 1, 3) seasonal_order=(0, 1, 1, 12); AIC=3068.842, BIC=3091.036, Fit time=2.329 seconds
-    Total fit time: 34.636 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 1, 1, 12); AIC=3068.701, BIC=3090.895, Fit time=0.523 seconds
+    Fit ARIMA: order=(1, 1, 3) seasonal_order=(0, 1, 1, 12); AIC=3068.842, BIC=3091.036, Fit time=0.590 seconds
+    Total fit time: 11.745 seconds
 
 It's easy to examine your model fit results. Simply use the ``summary`` method:
 

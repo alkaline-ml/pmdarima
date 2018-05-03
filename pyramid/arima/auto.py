@@ -5,18 +5,22 @@
 # Automatically find optimal parameters for an ARIMA
 
 from __future__ import absolute_import
+
 from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.utils import check_random_state
 from sklearn.externals.joblib import Parallel, delayed
 from sklearn.linear_model import LinearRegression
+
 from numpy.linalg import LinAlgError
 import numpy as np
+
 import warnings
 import time
 
 from .utils import ndiffs, is_constant, nsdiffs
-from ..utils import diff
+from ..utils import diff, is_iterable
 from .arima import ARIMA
+from .warnings import ModelFitWarning
 
 # for python 3 compat
 from ..compat.python import xrange
@@ -369,7 +373,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
 
     # copy array
     y = column_or_1d(check_array(y, ensure_2d=False, dtype=DTYPE, copy=True,
-                                 force_all_finite=True))
+                                 force_all_finite=True))  # type: np.ndarray
     n_samples = y.shape[0]
 
     # check for constant data
@@ -628,7 +632,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                         key=(lambda mod:
                              getattr(mod, information_criterion)()))
 
-    # remove all the cached .pmdpkl files...
+    # remove all the cached .pmdpkl files... someday write this as an exit hook
+    # in case of a KeyboardInterrupt or anything
     for model in sorted_res:
         model._clear_cached_state()
 
@@ -705,7 +710,11 @@ class _StepwiseFitWrapper(object):
 
         # results list to store intermittent hashes of orders to determine if
         # we've seen this order before...
-        self.results_dict = dict()
+        self.results_dict = dict()  # type: dict[tuple, ARIMA]
+
+        # define the info criterion getter ONCE to avoid multiple lambda
+        # creation calls
+        self.get_ic = (lambda mod: getattr(mod, self.information_criterion)())
 
     def is_new_better(self, new_model):
         if self.bestfit is None:
@@ -713,8 +722,7 @@ class _StepwiseFitWrapper(object):
         elif new_model is None:
             return False
 
-        get_ic = (lambda m: getattr(m, self.information_criterion)())
-        current_ic, new_ic = get_ic(self.bestfit), get_ic(new_model)
+        current_ic, new_ic = self.get_ic(self.bestfit), self.get_ic(new_model)
         return new_ic < current_ic
 
     # this function takes a boolean expression, fits & caches a model,
@@ -820,7 +828,8 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
     # for non-stationarity errors or singular matrices, return None
     except (LinAlgError, ValueError) as v:
         if error_action == 'warn':
-            warnings.warn(_fmt_warning_str(order, seasonal_order))
+            warnings.warn(_fmt_warning_str(order, seasonal_order),
+                          ModelFitWarning)
         elif error_action == 'raise':
             # todo: can we do something more informative in case
             # the error is not on the pyramid side?
@@ -870,8 +879,9 @@ def _post_ppc_arima(a):
         The list or ARIMAs, or an ARIMA
     """
     # if it's a result of making it to the end, it will
-    # be a list of ARIMA models.
-    if hasattr(a, '__iter__'):
+    # be a list of ARIMA models. Filter out the Nones
+    # (the failed models)...
+    if is_iterable(a):
         a = [m for m in a if m is not None]
 
     # if the list is empty, or if it was an ARIMA and it's None
@@ -902,7 +912,7 @@ def _return_wrapper(fits, return_all, start, trace):
         Whether to return all.
     """
     # make sure it's an iterable
-    if not hasattr(fits, '__iter__'):
+    if not is_iterable(fits):
         fits = [fits]
 
     # whether to print the final runtime

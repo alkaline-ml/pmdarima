@@ -1,4 +1,4 @@
-# stationarity tests
+# stationarity/seasonality tests
 
 from __future__ import absolute_import
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
@@ -113,6 +113,16 @@ def test_ch_test():
 
     # this won't even go thru because n < 2 * m + 5:
     assert CHTest(m=365).estimate_seasonal_differencing_term(austres) == 0
+
+    # change the length to be longer so we can actually test the end case
+    aus_list = austres.tolist()  # type: list
+    y = np.asarray(aus_list * 10)  # type: np.ndarray
+
+    # y len is now 1760, which is > 2 * m + 5, but idk what to assert
+    CHTest(m=365).estimate_seasonal_differencing_term(y)
+
+    # what if m > 365???
+    CHTest(m=366).estimate_seasonal_differencing_term(y)
 
 
 def test_ch_base():

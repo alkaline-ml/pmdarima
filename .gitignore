@@ -9,6 +9,12 @@
 # Pypi pws
 .pypipws
 
+# Coverage
+coverage
+
+# Pytest
+.pytest_cache
+
 # OAuth access for automating releases
 ACCESS_TOKEN
 
