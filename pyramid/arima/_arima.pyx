@@ -9,13 +9,19 @@
 #
 # Author: Taylor G Smith <taylor.smith@alkaline-ml.com>
 
-from libc.string cimport memset
-from libc.math cimport pow
 import numpy as np
 cimport numpy as np
+from libc.math cimport isnan
+from libc.math cimport NAN
+
+cdef extern from "numpy/npy_math.h":
+    bint npy_isnan(double x)
 
 ctypedef float [:, :] float_array_2d_t
 ctypedef double [:, :] double_array_2d_t
+ctypedef int [:, :] int_array_2d_t
+ctypedef long [:, :] long_array_2d_t
+
 ctypedef np.npy_intp INTP
 ctypedef np.npy_float FLOAT
 ctypedef np.float64_t DOUBLE
@@ -28,11 +34,19 @@ cdef fused floating_array_2d_t:
     float_array_2d_t
     double_array_2d_t
 
+cdef fused intp1d:
+    int[::1]
+    long[::1]
+
+cdef fused intp_array_2d_t:
+    int_array_2d_t
+    long_array_2d_t
+
 
 np.import_array()
 
 
-def C_tseries_pp_sum(np.ndarray[DOUBLE, ndim=1, mode='c'] u, INTP n, INTP L, DOUBLE s):
+def C_tseries_pp_sum(floating1d u, INTP n, INTP L, DOUBLE s):
     """Translation of the ``tseries_pp_sum`` C source code located at:
     https://github.com/cran/tseries/blob/8ceb31fa77d0b632dd511fc70ae2096fa4af3537/src/ppsum.c
 
@@ -58,15 +72,13 @@ def C_tseries_pp_sum(np.ndarray[DOUBLE, ndim=1, mode='c'] u, INTP n, INTP L, DOU
     return s + tmp1
 
 
-cdef DOUBLE approx1(DOUBLE v, np.ndarray[DOUBLE, ndim=1, mode='c'] x,
-            np.ndarray[DOUBLE, ndim=1, mode='c'] y,
-            INTP n, DOUBLE ylow, DOUBLE yhigh, INTP kind,
-            DOUBLE f1, DOUBLE f2):
+cdef DOUBLE approx1(DOUBLE v, floating1d x, floating1d y, INTP n, DOUBLE ylow,
+                    DOUBLE yhigh, INTP kind, DOUBLE f1, DOUBLE f2):
 
     # Approximate  y(v),  given (x,y)[i], i = 0,..,n-1
     cdef INTP i, j, ij
     if n == 0:
-        return np.nan
+        return NAN
 
     i = 0
     j = n - 1
@@ -78,13 +90,14 @@ cdef DOUBLE approx1(DOUBLE v, np.ndarray[DOUBLE, ndim=1, mode='c'] x,
         return yhigh
 
     # find the correct interval by bisection
-    while i < j - 1:  # x[i] <= v <= x[j]
-        ij = (i + j) / 2  # i+1 <= ij <= j-1
-        if v < x[ij]:
-            j = ij
-        else:
-            i = ij
-        # still i < j
+    with nogil:
+        while i < j - 1:  # x[i] <= v <= x[j]
+            ij = (i + j) / 2  # i+1 <= ij <= j-1
+            if v < x[ij]:
+                j = ij
+            else:
+                i = ij
+            # still i < j
 
     # probably i == j-1
 
@@ -102,9 +115,7 @@ cdef DOUBLE approx1(DOUBLE v, np.ndarray[DOUBLE, ndim=1, mode='c'] x,
         return (y[i] * f1 if f1 != 0.0 else 0.0) + (y[j] * f2 if f2 != 0.0 else 0.0)
 
 
-def C_Approx(np.ndarray[DOUBLE, ndim=1, mode='c'] x,
-             np.ndarray[DOUBLE, ndim=1, mode='c'] y,
-             np.ndarray[DOUBLE, ndim=1, mode='c'] xout,
+def C_Approx(floating1d x, floating1d y, floating1d xout,
              INTP method, INTP f, DOUBLE yleft, DOUBLE yright):
 
     cdef INTP i, nxy = x.shape[0], nout = xout.shape[0]
@@ -112,13 +123,15 @@ def C_Approx(np.ndarray[DOUBLE, ndim=1, mode='c'] x,
     cdef DOUBLE v
 
     # make yout
+    # cdef double[::1] yout = np.zeros(nout)
     cdef np.ndarray[np.float64_t, ndim=1, mode='c'] yout = np.zeros(nout, dtype=np.float64)
 
     for i in range(nout):
         v = xout[i]
 
         # yout[i] = ISNAN(xout[i]) ? xout[i] : approx1(xout[i], x, y, nxy, &M);
-        if not np.isnan(v):
+        # XXX: Does this work?
+        if not isnan(v):
             v = approx1(v, x, y, nxy, yleft, yright, method, f1, f2)
 
         # assign to the interpolation vector
@@ -128,8 +141,7 @@ def C_Approx(np.ndarray[DOUBLE, ndim=1, mode='c'] x,
     return yout
 
 
-def C_pop_A(np.ndarray[np.int64_t, ndim=2, mode='c'] A,
-            np.ndarray[np.int64_t, ndim=1, mode='c'] frecob):
+def C_pop_A(intp_array_2d_t A, intp1d frecob):
 
     cdef i, j, n = frecob.shape[0]
 
