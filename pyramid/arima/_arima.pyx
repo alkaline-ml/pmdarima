@@ -143,9 +143,10 @@ def C_Approx(floating1d x, floating1d y, floating1d xout,
 
 def C_pop_A(intp_array_2d_t A, intp1d frecob):
 
-    cdef i, j, n = frecob.shape[0]
-
+    cdef int i, j, n
+    n = frecob.shape[0]
     j = 0
+
     for i in range(n):
         if frecob[i] == 1:
             A[i, j] = 1
