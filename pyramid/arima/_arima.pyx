@@ -53,7 +53,7 @@ def C_tseries_pp_sum(floating1d u, INTP n, INTP L, DOUBLE s):
     This code provides efficient computation of the sums involved in the Phillips-Perron tests.
     """
     cdef INTP i, j
-    cdef DOUBLE tmp1, tmp2
+    cdef DOUBLE tmp1, tmp2, result
 
     tmp1 = 0.0
     for i in range(1, L + 1):  # for (i=1; i<=(*l); i++)
@@ -68,8 +68,9 @@ def C_tseries_pp_sum(floating1d u, INTP n, INTP L, DOUBLE s):
 
     tmp1 /= float(n)
     tmp1 *= 2.0
+    result = s + tmp1
 
-    return s + tmp1
+    return result
 
 
 cdef DOUBLE approx1(DOUBLE v, floating1d x, floating1d y, INTP n, DOUBLE ylow,
@@ -77,20 +78,20 @@ cdef DOUBLE approx1(DOUBLE v, floating1d x, floating1d y, INTP n, DOUBLE ylow,
 
     # Approximate  y(v),  given (x,y)[i], i = 0,..,n-1
     cdef INTP i, j, ij
-    if n == 0:
-        return NAN
-
-    i = 0
-    j = n - 1
-
-    # out-of-domain points
-    if v < x[i]:
-        return ylow
-    if v > x[j]:
-        return yhigh
-
-    # find the correct interval by bisection
     with nogil:
+        if n == 0:
+            return NAN
+
+        i = 0
+        j = n - 1
+
+        # out-of-domain points
+        if v < x[i]:
+            return ylow
+        if v > x[j]:
+            return yhigh
+
+        # find the correct interval by bisection
         while i < j - 1:  # x[i] <= v <= x[j]
             ij = (i + j) / 2  # i+1 <= ij <= j-1
             if v < x[ij]:
@@ -99,32 +100,38 @@ cdef DOUBLE approx1(DOUBLE v, floating1d x, floating1d y, INTP n, DOUBLE ylow,
                 i = ij
             # still i < j
 
-    # probably i == j-1
+        # probably i == j-1
 
-    # interpolate
-    if v == x[j]:
-        return y[j]
-    if v == x[i]:
-        return y[i]
+        # interpolate
+        if v == x[j]:
+            return y[j]
+        if v == x[i]:
+            return y[i]
 
-    # impossible: if x[j] == x[i] return y[i]
-    if kind == 1:  # linear
-        return y[i] + (y[j] - y[i]) * ((v - x[i]) / (x[j] - x[i]))
-    else:  # 2 == constant
-        # is this necessary? if f1 or f2 is zero, won't the multiplication cause 0.0 anyways?
-        return (y[i] * f1 if f1 != 0.0 else 0.0) + (y[j] * f2 if f2 != 0.0 else 0.0)
+        # impossible: if x[j] == x[i] return y[i]
+        if kind == 1:  # linear
+            return y[i] + (y[j] - y[i]) * ((v - x[i]) / (x[j] - x[i]))
+        else:  # 2 == constant
+            # is this necessary? if f1 or f2 is zero, won't the multiplication cause 0.0 anyways?
+            return (y[i] * f1 if f1 != 0.0 else 0.0) + (y[j] * f2 if f2 != 0.0 else 0.0)
 
 
 def C_Approx(floating1d x, floating1d y, floating1d xout,
              INTP method, INTP f, DOUBLE yleft, DOUBLE yright):
 
-    cdef INTP i, nxy = x.shape[0], nout = xout.shape[0]
-    cdef INTP f2 = f, f1 = 1 - f
+    cdef INTP i, nxy, nout, f1, f2
     cdef DOUBLE v
+
+    nxy = x.shape[0]
+    nout = xout.shape[0]
+    f1 = 1 - f
+    f2 = f
 
     # make yout
     # cdef double[::1] yout = np.zeros(nout)
-    cdef np.ndarray[np.float64_t, ndim=1, mode='c'] yout = np.zeros(nout, dtype=np.float64)
+    cdef np.ndarray[double, ndim=1, mode='c'] yout = np.zeros(nout,
+                                                              dtype=np.float64,
+                                                              order='c')
 
     for i in range(nout):
         v = xout[i]
@@ -147,7 +154,37 @@ def C_pop_A(intp_array_2d_t A, intp1d frecob):
     n = frecob.shape[0]
     j = 0
 
-    for i in range(n):
-        if frecob[i] == 1:
-            A[i, j] = 1
-            j += 1
+    with nogil:
+        for i in range(n):
+            if frecob[i] == 1:
+                A[i, j] = 1
+                j += 1
+
+
+def C_compute_frecob_fast(intp1d frec, INTP s, floating_array_2d_t Omfhat):
+    cdef int i = 0
+    cdef int j = 0
+    cdef INTP n = frec.shape[0]
+    cdef INTP v
+    cdef int a = 0
+    cdef int half_s = <int>(s / 2) - 1
+
+    cdef np.ndarray[INTP, ndim=1, mode='c'] sq = np.arange(0, s - 1, 2)
+    cdef np.ndarray[INTP, ndim=1, mode='c'] frecob = np.zeros(s - 1, dtype=np.int64)
+
+    with nogil:
+        for i in range(n):
+            v = frec[i]
+
+            if v == 1 and i == half_s:
+                frecob[sq[i]] = 1
+            if v == 1 and i < half_s:
+                frecob[sq[i]] = frecob[sq[i] + 1] = 1
+
+        # sum of == 1
+        for i in range(s - 1):
+            if frecob[i] == 1:
+                a += 1
+
+    A = np.zeros((s - 1, a), dtype=np.int64, order='c')
+    return A, frecob

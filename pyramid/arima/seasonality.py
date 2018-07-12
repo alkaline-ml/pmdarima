@@ -20,7 +20,7 @@ from ..compat.numpy import DTYPE
 # since the C import relies on the C code having been built with Cython,
 # and since the platform might name the .so file something funky (like
 # _arima.cpython-35m-darwin.so), import this absolutely and not relatively.
-from pyramid.arima._arima import C_pop_A
+from pyramid.arima._arima import C_compute_frecob_fast, C_pop_A
 
 __all__ = [
     'CHTest'
@@ -126,26 +126,10 @@ class CHTest(_SeasonalStationarityTest):
 
         # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
         Omfhat = (Fhataux.T.dot(Fhataux) + Omnw + Omnw.T) / Ne
-        sq = np.arange(0, s - 1, 2)
-        frecob = np.zeros(s - 1).astype('int64')
-
-        # I hate looping like this, but it seems like overkill to
-        # write a C function for something that's otherwise so trivial
-        # (especially due to the overhead of calling a C func from python)
-        for i, v in enumerate(frec):
-            if v == 1 and i == int(s / 2) - 1:
-                frecob[sq[i]] = 1
-            if v == 1 and i < int(s / 2) - 1:
-                frecob[sq[i]] = frecob[sq[i] + 1] = 1
-
-        # call the C sequence in place
-        # C_frec(frec, frecob, sq, s)
-        a = (frecob == 1).sum()
 
         # populate the A matrix
-        A = np.zeros((s - 1, a)).astype('int64')
+        A, frecob = C_compute_frecob_fast(frec, s, Omfhat)
         C_pop_A(A, frecob)
-
         tmp = A.T.dot(Omfhat).dot(A)
 
         # UPDATE 01/04/2018 - we can get away without computing u, v
