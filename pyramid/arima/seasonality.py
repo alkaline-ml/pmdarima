@@ -5,18 +5,21 @@
 # Tests for seasonal differencing terms
 
 from __future__ import absolute_import, division
+
 from sklearn.utils.validation import column_or_1d, check_array
 from sklearn.linear_model import LinearRegression
 from sklearn.externals import six
+
 from scipy.linalg import svd
 from abc import ABCMeta, abstractmethod
+
 from numpy.linalg import solve
 import numpy as np
 
 from ..utils.array import c
 from .stationarity import _BaseStationarityTest
 from ..compat.numpy import DTYPE
-from ._arima import C_compute_frecob_fast, C_pop_A, C_compute_omfhat_fast
+from ._arima import C_compute_frecob_fast, C_pop_A
 
 __all__ = [
     'CHTest'
@@ -107,7 +110,21 @@ class CHTest(_SeasonalStationarityTest):
 
         # wnw <- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)
         wnw = 1. - (np.arange(ltrunc) + 1.) / (ltrunc + 1.)
-        Omfhat = C_compute_omfhat_fast(ltrunc, wnw, Fhataux)
+        Ne = Fhataux.shape[0]
+        Omnw = 0
+
+        # original R code:
+        # for (k in 1:ltrunc)
+        #     Omnw <- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%
+        #         Fhataux[1:(Ne - k), ]) * wnw[k]
+
+        # translated R code:
+        for k in range(ltrunc):
+            Omnw = Omnw + (Fhataux.T[:, k + 1:Ne].dot(
+                Fhataux[:(Ne - (k + 1)), :])) * wnw[k]
+
+        # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
+        Omfhat = (Fhataux.T.dot(Fhataux) + Omnw + Omnw.T) / Ne
 
         # populate the A matrix
         A, frecob = C_compute_frecob_fast(frec, s, Omfhat)

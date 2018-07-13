@@ -194,24 +194,3 @@ def C_compute_frecob_fast(intp1d frec, INTP s, floating_array_2d_t Omfhat):
 
     A = np.zeros((s - 1, a), dtype=np.int64, order='c')
     return A, frecob
-
-
-def C_compute_omfhat_fast(INTP ltrunc, floating1d wnw,
-                        floating_array_2d_t Fhataux):
-    cdef double Omnw = 0.
-    cdef double product
-    cdef INTP Ne = Fhataux.shape[0]
-    cdef int k
-
-    # original R code:
-    # for (k in 1:ltrunc)
-    #     Omnw <- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%
-    #         Fhataux[1:(Ne - k), ]) * wnw[k]
-
-    # translated R code:
-    for k in range(ltrunc):
-        product = Fhataux.T[:, k + 1:Ne].dot(Fhataux[:(Ne - (k + 1)), :])
-        Omnw += product * wnw[k]
-
-    # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
-    Omfhat = (Fhataux.T.dot(Fhataux) + Omnw + Omnw.T) / Ne

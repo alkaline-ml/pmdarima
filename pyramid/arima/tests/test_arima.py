@@ -1,13 +1,19 @@
+# -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
+
 from pyramid.arima import ARIMA, auto_arima
 from pyramid.arima.auto import _fmt_warning_str
 from pyramid.arima.utils import nsdiffs
 from pyramid.datasets import load_lynx, load_wineind
+
+# TODO: replace with pytest or internal module
 from nose.tools import assert_raises
+
 import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
 from numpy.random import RandomState
+
 import warnings
 import pickle
 import os
