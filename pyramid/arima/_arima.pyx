@@ -11,11 +11,9 @@
 
 import numpy as np
 cimport numpy as np
-from libc.math cimport isnan
-from libc.math cimport NAN
 
-cdef extern from "numpy/npy_math.h":
-    bint npy_isnan(double x)
+cdef extern from "_arima_fast_helpers.h":
+    bint pyr_isfinite(double) nogil
 
 ctypedef float [:, :] float_array_2d_t
 ctypedef double [:, :] double_array_2d_t
@@ -44,6 +42,13 @@ cdef fused intp_array_2d_t:
 
 
 np.import_array()
+
+
+# This is simply here to test the pyr_finite function against nan values.
+# This shouldn't be used internally, since it has the overhead of being
+# exposed as a Python object.
+def C_is_not_finite(v):
+    return not pyr_isfinite(v)
 
 
 def C_tseries_pp_sum(floating1d u, INTP n, INTP L, DOUBLE s):
@@ -78,10 +83,10 @@ cdef DOUBLE approx1(DOUBLE v, floating1d x, floating1d y, INTP n, DOUBLE ylow,
 
     # Approximate  y(v),  given (x,y)[i], i = 0,..,n-1
     cdef INTP i, j, ij
-    with nogil:
-        if n == 0:
-            return NAN
+    if n == 0:
+        return np.nan
 
+    with nogil:
         i = 0
         j = n - 1
 
@@ -138,7 +143,7 @@ def C_Approx(floating1d x, floating1d y, floating1d xout,
 
         # yout[i] = ISNAN(xout[i]) ? xout[i] : approx1(xout[i], x, y, nxy, &M);
         # XXX: Does this work?
-        if not isnan(v):
+        if pyr_isfinite(v):
             v = approx1(v, x, y, nxy, yleft, yright, method, f1, f2)
 
         # assign to the interpolation vector
@@ -171,6 +176,7 @@ def C_compute_frecob_fast(intp1d frec, INTP s, floating_array_2d_t Omfhat):
 
     cdef np.ndarray[INTP, ndim=1, mode='c'] sq = np.arange(0, s - 1, 2)
     cdef np.ndarray[INTP, ndim=1, mode='c'] frecob = np.zeros(s - 1, dtype=np.int64)
+    cdef np.ndarray[INTP, ndim=2, mode='c'] A = None
 
     with nogil:
         for i in range(n):

@@ -18,6 +18,8 @@ def configuration(parent_package="", top_path=None):
     config.add_extension("_arima",
                          sources=["_arima.pyx"],
                          include_dirs=[numpy.get_include(),
+                                       # Should this be explicitly included?:
+                                       '_arima_fast_helpers.h',
                                        blas_info.pop('include_dirs', [])],
                          libraries=libraries,
                          extra_compile_args=blas_info.pop(
