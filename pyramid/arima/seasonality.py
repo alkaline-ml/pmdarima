@@ -16,11 +16,7 @@ import numpy as np
 from ..utils.array import c
 from .stationarity import _BaseStationarityTest
 from ..compat.numpy import DTYPE
-
-# since the C import relies on the C code having been built with Cython,
-# and since the platform might name the .so file something funky (like
-# _arima.cpython-35m-darwin.so), import this absolutely and not relatively.
-from pyramid.arima._arima import C_compute_frecob_fast, C_pop_A
+from ._arima import C_compute_frecob_fast, C_pop_A, C_compute_omfhat_fast
 
 __all__ = [
     'CHTest'
@@ -111,21 +107,7 @@ class CHTest(_SeasonalStationarityTest):
 
         # wnw <- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)
         wnw = 1. - (np.arange(ltrunc) + 1.) / (ltrunc + 1.)
-        Ne = Fhataux.shape[0]
-        Omnw = 0
-
-        # original R code:
-        # for (k in 1:ltrunc)
-        #     Omnw <- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%
-        #         Fhataux[1:(Ne - k), ]) * wnw[k]
-
-        # translated R code:
-        for k in range(ltrunc):
-            Omnw = Omnw + (Fhataux.T[:, k + 1:Ne].dot(
-                Fhataux[:(Ne - (k + 1)), :])) * wnw[k]
-
-        # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
-        Omfhat = (Fhataux.T.dot(Fhataux) + Omnw + Omnw.T) / Ne
+        Omfhat = C_compute_omfhat_fast(ltrunc, wnw, Fhataux)
 
         # populate the A matrix
         A, frecob = C_compute_frecob_fast(frec, s, Omfhat)
