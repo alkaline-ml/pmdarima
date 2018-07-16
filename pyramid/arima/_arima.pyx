@@ -175,8 +175,8 @@ def C_compute_frecob_fast(intp1d frec, INTP s, floating_array_2d_t Omfhat):
     cdef int half_s = <int>(s / 2) - 1
 
     cdef np.ndarray[INTP, ndim=1, mode='c'] sq = np.arange(0, s - 1, 2)
-    cdef np.ndarray[INTP, ndim=1, mode='c'] frecob = np.zeros(s - 1, dtype=np.int64)
-    cdef np.ndarray[INTP, ndim=2, mode='c'] A = None
+    cdef np.ndarray[long, ndim=1, mode='c'] frecob = np.zeros(s - 1, dtype=np.int64)
+    cdef np.ndarray[long, ndim=2, mode='c'] A = None
 
     with nogil:
         for i in range(n):
