@@ -167,12 +167,14 @@ def C_pop_A(intp_array_2d_t A, intp1d frecob):
 
 
 def C_compute_frecob_fast(intp1d frec, INTP s, floating_array_2d_t Omfhat):
-    cdef int i = 0
-    cdef int j = 0
-    cdef INTP n = frec.shape[0]
-    cdef INTP v
-    cdef int a = 0
-    cdef int half_s = <int>(s / 2) - 1
+    cdef int i, j, a, half_s
+    cdef INTP n, v
+
+    i = 0
+    j = 0
+    a = 0
+    half_s = <int>(s / 2) - 1
+    n = frec.shape[0]
 
     cdef np.ndarray[int, ndim=1, mode='c'] sq = np.arange(0, s - 1, 2, dtype=np.int32)
     cdef np.ndarray[int, ndim=1, mode='c'] frecob = np.zeros(s - 1, dtype=np.int32)
