@@ -8,13 +8,15 @@
 from __future__ import print_function, absolute_import, division
 
 from sklearn.base import BaseEstimator
-from sklearn.utils.validation import (check_array, check_is_fitted,
-                                      column_or_1d as c1d)
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
+from sklearn.utils.validation import check_array, check_is_fitted, \
+    column_or_1d as c1d
+
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 from statsmodels import api as sm
+
 import numpy as np
 import datetime
 import warnings
@@ -22,6 +24,7 @@ import os
 
 # DTYPE for arrays
 from ..compat.numpy import DTYPE
+from ..compat.python import long
 from ..utils import get_callable, if_has_delegate
 
 __all__ = [
@@ -361,7 +364,8 @@ class ARIMA(BaseEstimator):
         return self.arima_res_.predict(exog=exogenous, start=start,
                                        end=end, dynamic=dynamic)
 
-    def predict(self, n_periods=10, exogenous=None):
+    def predict(self, n_periods=10, exogenous=None,
+                return_conf_int=False, alpha=0.05):
         """Generate predictions (forecasts) ``n_periods`` in the future.
         Note that if ``exogenous`` variables were used in the model fit, they
         will be expected for the predict procedure and will fail otherwise.
@@ -378,12 +382,24 @@ class ARIMA(BaseEstimator):
             if an ``ARIMA`` is fit on exogenous features, it must be provided
             exogenous features for making predictions.
 
+        return_conf_int : bool, optional (default=False)
+            Whether to get the confidence intervals of the forecasts.
+
+        alpha : float, optional (default=0.05)
+            The confidence intervals for the forecasts are (1 - alpha) %
+
         Returns
         -------
         forecasts : array-like, shape=(n_periods,)
             The array of fore-casted values.
+
+        conf_int : array-like, shape=(n_periods, 2), optional
+            The confidence intervals for the forecasts. Only returned if
+            ``return_conf_int`` is True.
         """
         check_is_fitted(self, 'arima_res_')
+        if not isinstance(n_periods, (int, long)):
+            raise TypeError("n_periods must be an int or a long")
 
         # if we fit with exog, make sure one was passed:
         exogenous = self._check_exog(exogenous)  # type: np.ndarray
@@ -394,11 +410,28 @@ class ARIMA(BaseEstimator):
         if self.seasonal_order is None:
             # use the results wrapper to predict so it injects its own params
             # (also if I was 0, ARMA will not have a forecast method natively)
-            f, _, _ = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
+            f, _, conf_int = self.arima_res_.forecast(
+                steps=n_periods, exog=exogenous, alpha=alpha)
         else:
-            f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
+            # Unfortunately, SARIMAX does not really provide a nice way to get
+            # the confidence intervals out of the box, so we have to perform
+            # the get_prediction code here and unpack the confidence intervals
+            # manually.
+            # f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
+            arima = self.arima_res_
+            end = arima.nobs + n_periods - 1
+            results = arima.get_prediction(start=arima.nobs, end=end,
+                                           exog=exogenous)
+            f = results.predicted_mean
+            conf_int = results.conf_int(alpha=alpha)
 
-        # different variants of the stats someone might want returned...
+        if return_conf_int:
+            # The confidence intervals may be a Pandas frame if it comes from
+            # SARIMAX & we want Numpy. We will to duck type it so we don't add
+            # new explicit requirements for the package
+            if hasattr(conf_int, "iloc"):  # duck type for pd.DataFrame
+                conf_int = conf_int.values
+            return f, conf_int
         return f
 
     def fit_predict(self, y, exogenous=None, n_periods=10, **fit_args):
@@ -612,6 +645,22 @@ class ARIMA(BaseEstimator):
             The BSE
         """
         return self.arima_res_.bse
+
+    @if_delegate_has_method('arima_res_')
+    def conf_int(self, alpha=0.05, **kwargs):
+        r"""Returns the confidence interval of the fitted parameters.
+
+        Returns
+        -------
+        alpha : float, optional (default=0.05)
+            The significance level for the confidence interval. ie.,
+            the default alpha = .05 returns a 95% confidence interval.
+
+        **kwargs : keyword args or dict
+            Keyword arguments to pass to the confidence interval function.
+            Could include 'cols' or 'method'
+        """
+        return self.arima_res_.conf_int(alpha=alpha, **kwargs)
 
     @if_delegate_has_method('arima_res_')
     def df_model(self):

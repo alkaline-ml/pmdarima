@@ -87,6 +87,24 @@ def test_basic_arima():
     # generate predictions
     assert_array_almost_equal(preds, expected_preds)
 
+    # Make sure we can get confidence intervals
+    expected_intervals = np.array([
+        [-0.10692387,  0.98852139],
+        [-0.10692387,  0.98852139],
+        [-0.10692387,  0.98852139],
+        [-0.10692387,  0.98852139],
+        [-0.10692387,  0.98852139],
+        [-0.10692387,  0.98852139],
+        [-0.10692387,  0.98852139],
+        [-0.10692387,  0.98852139],
+        [-0.10692387,  0.98852139],
+        [-0.10692387,  0.98852139]
+    ])
+
+    _, intervals = arima.predict(n_periods=10, return_conf_int=True,
+                                 alpha=0.05)
+    assert_array_almost_equal(intervals, expected_intervals)
+
 
 def test_with_oob():
     # show we can fit with CV (kinda)
@@ -263,6 +281,9 @@ def test_with_seasonality1():
 
     # show we can predict in-sample
     fit.predict_in_sample()
+
+    # test with SARIMAX confidence intervals
+    fit.predict(n_periods=10, return_conf_int=True, alpha=0.05)
 
 
 def test_with_seasonality2():
