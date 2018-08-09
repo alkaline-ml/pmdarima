@@ -116,7 +116,10 @@ def test_with_oob():
                   out_of_sample_size=-1).fit(y=hr)
     assert np.isnan(arima.oob())
 
-    # can we do one with an exogenous array, too?
+
+# Test Issue #28 ----------------------------------------------------------
+def test_oob_for_issue_28():
+    # Continuation of above: can we do one with an exogenous array, too?
     xreg = rs.rand(hr.shape[0], 4)
     arima = ARIMA(order=(2, 1, 2), suppress_warnings=True,
                   out_of_sample_size=10).fit(
@@ -125,7 +128,6 @@ def test_with_oob():
     oob = arima.oob()
     assert not np.isnan(oob)
 
-    # Test Issue #28 -----------------------------------------------------
     # Assert that the endog shapes match. First is equal to the original,
     # and the second is the differenced array, with original shape - d.
     assert_array_almost_equal(arima.arima_res_.data.endog, hr)
@@ -137,7 +139,8 @@ def test_with_oob():
 
     # Compare the OOB score to an equivalent fit on data - 10 obs, but
     # without any OOB scoring, and we'll show that the OOB scoring in the
-    # first IS in fact only applied to the first (train - n_out_of_bag) samples
+    # first IS in fact only applied to the first (train - n_out_of_bag)
+    # samples
     arima_no_oob = ARIMA(
             order=(2, 1, 2), suppress_warnings=True,
             out_of_sample_size=0)\
@@ -153,7 +156,8 @@ def test_with_oob():
 
     # Now assert on the forecast differences.
     with_oob_forecasts = arima.predict(n_periods=5, exogenous=xreg_test)
-    no_oob_forecasts = arima_no_oob.predict(n_periods=5, exogenous=xreg_test)
+    no_oob_forecasts = arima_no_oob.predict(n_periods=5,
+                                            exogenous=xreg_test)
 
     assert_raises(AssertionError, assert_array_almost_equal,
                   with_oob_forecasts, no_oob_forecasts)
@@ -174,6 +178,37 @@ def test_with_oob():
     assert_array_almost_equal(with_oob_forecasts,
                               arima_no_oob.predict(n_periods=5,
                                                    exogenous=xreg_test))
+
+
+# Test the OOB functionality for SARIMAX (Issue #28) --------------------------
+def test_oob_sarimax():
+    xreg = rs.rand(wineind.shape[0], 2)
+    fit = ARIMA(order=(1, 1, 1),
+                seasonal_order=(0, 1, 1, 12),
+                out_of_sample_size=15,
+                suppress_warnings=True).fit(y=wineind, exogenous=xreg)
+
+    fit_no_oob = ARIMA(
+            order=(1, 1, 1), seasonal_order=(0, 1, 1, 12),
+            out_of_sample_size=0, suppress_warnings=True)\
+        .fit(y=wineind[:-15], exogenous=xreg[:-15, :])
+
+    # now assert some of the same things here that we did in the former test
+    oob = fit.oob()
+
+    # compare scores:
+    scoring = get_callable(fit_no_oob.scoring, VALID_SCORING)
+    no_oob_preds = fit_no_oob.predict(n_periods=15, exogenous=xreg[-15:, :])
+    assert_almost_equal(oob, scoring(wineind[-15:], no_oob_preds))
+
+    # show params are still the same
+    assert_array_almost_equal(fit.params(), fit_no_oob.params())
+
+    # show we can add the new samples and get the exact same forecasts
+    fit_no_oob.add_new_observations(wineind[-15:], xreg[-15:, :])
+    xreg_test = rs.rand(5, 2)
+    assert_array_almost_equal(fit.predict(5, xreg_test),
+                              fit_no_oob.predict(5, xreg_test))
 
 
 def _try_get_attrs(arima):

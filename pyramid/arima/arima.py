@@ -38,6 +38,24 @@ VALID_SCORING = {
 }
 
 
+def _append_to_endog(endog, new_y):
+    """Append to the endogenous array
+
+    Parameters
+    ----------
+    endog : np.ndarray, shape=(n_samples, [1])
+        The existing endogenous array
+
+    new_y : np.ndarray, shape=(n_samples)
+        The new endogenous array to append
+    """
+    if endog.ndim == 1:
+        return np.concatenate((endog, new_y))
+
+    # otherwise it's a 2d array maybe from sarimax
+    return np.concatenate((endog.ravel(), new_y))[:, np.newaxis]
+
+
 class ARIMA(BaseEstimator):
     """An ARIMA, or autoregressive integrated moving average, is a
     generalization of an autoregressive moving average (ARMA) and is fitted to
@@ -450,7 +468,7 @@ class ARIMA(BaseEstimator):
             # (also if I was 0, ARMA will not have a forecast method natively)
             f, _, conf_int = self.arima_res_.forecast(
                 steps=n_periods, exog=exogenous, alpha=alpha)
-        else:
+        else:  # SARIMAX
             # Unfortunately, SARIMAX does not really provide a nice way to get
             # the confidence intervals out of the box, so we have to perform
             # the get_prediction code here and unpack the confidence intervals
@@ -630,41 +648,51 @@ class ARIMA(BaseEstimator):
                                  "(endog=%i, exog=%i)"
                                  % (n_samples, n_exog))
 
+        # difference the y array to concatenate (now n_samples - d)
+        d = self.order[1]
+
+        # first concatenate the original data, then do the differencing
+        y = _append_to_endog(model_res.data.endog, y)
+
+        # Set the endog in two places. The undifferenced array in the
+        # model_res.data, and the differenced array in the model_res.model
+        model_res.data.endog = c1d(y)  # type: np.ndarray
+
         # Update the arrays in the data class. The statsmodels ARIMA class
         # stores the values a bit differently than it does in the SARIMAX
         # class...
-        if self.seasonal_order is None:  # ARIMA
+        sarimax = self.seasonal_order is not None
+        if not sarimax:  # ARIMA
 
-            # difference the y array to concatenate (now n_samples - d)
-            d = self.order[1]
-
-            # first concatenate the original data, then do the differencing
-            y = np.concatenate((model_res.data.endog, y))
+            # The model endog is stored differently in the ARIMA class than
+            # in the SARIMAX class, where the ARIMA actually stores the diffed
+            # array.
             y_diffed = diff(y, d)
-
-            # Set the endog in two places. The undifferenced array in the
-            # model_res.data, and the differenced array in the model_res.model
-            model_res.data.endog = y
             model_res.model.endog = y_diffed
 
-            # Now set the exogenous. First, concat with model_res.data.exog,
-            # then difference and add the intercept
-            if exogenous is not None:
-                exog = np.concatenate((model_res.data.exog, exogenous))
+        else:  # SARIMAX
+            # The model endog is stored differently in the ARIMA class than
+            # in the SARIMAX class, where the SARIMAX is a 2d (n x 1) array
+            # that is NOT diffed
+            model_res.model.endog = y
 
-                # and do the differencing
+        # Now set the exogenous. First, concat with model_res.data.exog,
+        # then difference and add the intercept
+        if exogenous is not None:
+            # set in the model results wrapper
+            exog = np.concatenate((model_res.data.exog, exogenous))
+            model_res.data.exog = exog
+
+            # and do the differencing (but only for ARIMA, and not SARIMAX)
+            if not sarimax:
                 exog_diff = exog[d:, :]
                 intercept = np.ones(exog_diff.shape[0])[:, np.newaxis]
                 exog_diff = np.hstack((intercept, exog_diff))
 
-                # set both
-                model_res.data.exog = exog
+                # set in the model itself
                 model_res.model.exog = exog_diff
-
-        else:  # SARIMAX
-            # TODO:
-            pass
-
+            else:
+                model_res.model.exog = exog
 
     @if_delegate_has_method('arima_res_')
     def aic(self):
