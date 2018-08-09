@@ -237,8 +237,27 @@ class ARIMA(BaseEstimator):
         scoring = get_callable(self.scoring, VALID_SCORING)
 
         # don't allow negative, don't allow > n_samples
-        cv = max(min(cv, n_samples), 0)
+        cv = max(cv, 0)
 
+        # if cv is too big, raise
+        if cv >= n_samples:
+            raise ValueError("out-of-sample size must be less than number "
+                             "of samples!")
+
+        # If we want to get a score on the out-of-sample, we need to trim
+        # down the size of our y vec for fitting. Addressed due to Issue #28
+        cv_samples = None
+        cv_exog = None
+        if cv:
+            cv_samples = y[-cv:]
+            y = y[:-cv]
+
+            # This also means we have to address the exogenous matrix
+            if exogenous is not None:
+                cv_exog = exogenous[-cv:, :]
+                exogenous = exogenous[:-cv, :]
+
+        # This wrapper is used for fitting either an ARIMA or a SARIMAX
         def _fit_wrapper():
             # these might change depending on which one
             method = self.method
@@ -298,12 +317,13 @@ class ARIMA(BaseEstimator):
         # be predicted with one as well.
         self.fit_with_exog_ = exogenous is not None
 
-        # now make a prediction if we're validating
-        # to save the out-of-sample value
-        if cv > 0:
-            # get the predictions
-            pred = self.arima_res_.predict(exog=exogenous, typ='linear')[-cv:]
-            self.oob_ = scoring(y[-cv:], pred, **self.scoring_args)
+        # now make a forecast if we're validating to compute the
+        # out-of-sample score
+        if cv_samples is not None:
+            # get the predictions (use self.predict, which calls forecast
+            # from statsmodels internally)
+            pred = self.predict(n_periods=cv, exogenous=cv_exog)
+            self.oob_ = scoring(cv_samples, pred, **self.scoring_args)
         else:
             self.oob_ = np.nan
 
