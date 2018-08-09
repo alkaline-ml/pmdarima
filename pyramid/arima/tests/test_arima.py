@@ -3,12 +3,11 @@
 from __future__ import absolute_import
 
 from pyramid.arima import ARIMA, auto_arima
+from pyramid.arima.arima import VALID_SCORING
 from pyramid.arima.auto import _fmt_warning_str
 from pyramid.arima.utils import nsdiffs
 from pyramid.datasets import load_lynx, load_wineind
-
-# TODO: replace with pytest or internal module
-from nose.tools import assert_raises
+from pyramid.utils import get_callable, assert_raises
 
 import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
@@ -118,10 +117,63 @@ def test_with_oob():
     assert np.isnan(arima.oob())
 
     # can we do one with an exogenous array, too?
+    xreg = rs.rand(hr.shape[0], 4)
     arima = ARIMA(order=(2, 1, 2), suppress_warnings=True,
                   out_of_sample_size=10).fit(
-        y=hr, exogenous=rs.rand(hr.shape[0], 4))
-    assert not np.isnan(arima.oob())
+        y=hr, exogenous=xreg)
+
+    oob = arima.oob()
+    assert not np.isnan(oob)
+
+    # Test Issue #28 -----------------------------------------------------
+    # Assert that the endog shapes match. First is equal to the original,
+    # and the second is the differenced array, with original shape - d.
+    assert_array_almost_equal(arima.arima_res_.data.endog, hr)
+    assert arima.arima_res_.model.endog.shape[0] == hr.shape[0] - 1
+
+    # Now assert the same for exog
+    assert_array_almost_equal(arima.arima_res_.data.exog, xreg)
+    assert arima.arima_res_.model.exog.shape[0] == xreg.shape[0] - 1
+
+    # Compare the OOB score to an equivalent fit on data - 10 obs, but
+    # without any OOB scoring, and we'll show that the OOB scoring in the
+    # first IS in fact only applied to the first (train - n_out_of_bag) samples
+    arima_no_oob = ARIMA(
+            order=(2, 1, 2), suppress_warnings=True,
+            out_of_sample_size=0)\
+        .fit(y=hr[:-10], exogenous=xreg[:-10, :])
+
+    scoring = get_callable(arima_no_oob.scoring, VALID_SCORING)
+    preds = arima_no_oob.predict(n_periods=10, exogenous=xreg[-10:, :])
+    assert_almost_equal(oob, scoring(hr[-10:], preds))
+
+    # Show that the model parameters are exactly the same
+    xreg_test = rs.rand(5, 4)
+    assert_array_almost_equal(arima.params(), arima_no_oob.params())
+
+    # Now assert on the forecast differences.
+    with_oob_forecasts = arima.predict(n_periods=5, exogenous=xreg_test)
+    no_oob_forecasts = arima_no_oob.predict(n_periods=5, exogenous=xreg_test)
+
+    assert_raises(AssertionError, assert_array_almost_equal,
+                  with_oob_forecasts, no_oob_forecasts)
+
+    # But after we update the no_oob model with the latest data, we should
+    # be producing the same exact forecasts
+
+    # First, show we'll fail if we try to add observations with no exogenous
+    assert_raises(ValueError, arima_no_oob.add_new_observations,
+                  hr[-10:], None)
+
+    # Also show we'll fail if we try to add mis-matched shapes of data
+    assert_raises(ValueError, arima_no_oob.add_new_observations,
+                  hr[-10:], xreg_test)
+
+    # Actually add them now, and compare the forecasts (should be the same)
+    arima_no_oob.add_new_observations(hr[-10:], xreg[-10:, :])
+    assert_array_almost_equal(with_oob_forecasts,
+                              arima_no_oob.predict(n_periods=5,
+                                                   exogenous=xreg_test))
 
 
 def _try_get_attrs(arima):
@@ -274,7 +326,7 @@ def test_with_seasonality1():
     assert abs(fit.aic() - 3004) < 100  # show equal within 100 or so
 
     # R code AICc result is ~3005
-    assert abs(fit.aicc() - 3005) < 100 # show equal within 100 or so
+    assert abs(fit.aicc() - 3005) < 100  # show equal within 100 or so
 
     # R code BIC result is ~3017
     assert abs(fit.bic() - 3017) < 100  # show equal within 100 or so
