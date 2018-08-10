@@ -2,4 +2,5 @@ Cython>=0.23
 numpy>=1.9
 scipy>=0.9
 scikit-learn>=0.17
-statsmodels>=0.8
+pandas>=0.22
+statsmodels>=0.9.0
