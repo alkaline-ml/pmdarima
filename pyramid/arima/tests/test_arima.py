@@ -6,7 +6,7 @@ from pyramid.arima import ARIMA, auto_arima
 from pyramid.arima.arima import VALID_SCORING
 from pyramid.arima.auto import _fmt_warning_str
 from pyramid.arima.utils import nsdiffs
-from pyramid.datasets import load_lynx, load_wineind
+from pyramid.datasets import load_lynx, load_wineind, load_heartrate
 from pyramid.utils import get_callable, assert_raises
 
 import numpy as np
@@ -22,31 +22,7 @@ rs = RandomState(42)
 y = rs.rand(25)
 
 # more interesting, heart rate data:
-hr = np.array([84.2697, 84.2697, 84.0619, 85.6542, 87.2093, 87.1246,
-               86.8726, 86.7052, 87.5899, 89.1475, 89.8204, 89.8204,
-               90.4375, 91.7605, 93.1081, 94.3291, 95.8003, 97.5119,
-               98.7457, 98.904, 98.3437, 98.3075, 98.8313, 99.0789,
-               98.8157, 98.2998, 97.7311, 97.6471, 97.7922, 97.2974,
-               96.2042, 95.2318, 94.9367, 95.0867, 95.389, 95.5414,
-               95.2439, 94.9415, 95.3557, 96.3423, 97.1563, 97.4026,
-               96.7028, 96.5516, 97.9837, 98.9879, 97.6312, 95.4064,
-               93.8603, 93.0552, 94.6012, 95.8476, 95.7692, 95.9236,
-               95.7692, 95.9211, 95.8501, 94.6703, 93.0993, 91.972,
-               91.7821, 91.7911, 90.807, 89.3196, 88.1511, 88.7762,
-               90.2265, 90.8066, 91.2284, 92.4238, 93.243, 92.8472,
-               92.5926, 91.7778, 91.2974, 91.6364, 91.2952, 91.771,
-               93.2285, 93.3199, 91.8799, 91.2239, 92.4055, 93.8716,
-               94.5825, 94.5594, 94.9453, 96.2412, 96.6879, 95.8295,
-               94.7819, 93.4731, 92.7997, 92.963, 92.6996, 91.9648,
-               91.2417, 91.9312, 93.9548, 95.3044, 95.2511, 94.5358,
-               93.8093, 93.2287, 92.2065, 92.1588, 93.6376, 94.899,
-               95.1592, 95.2415, 95.5414, 95.0971, 94.528, 95.5887,
-               96.4715, 96.6158, 97.0769, 96.8531, 96.3947, 97.4291,
-               98.1767, 97.0148, 96.044, 95.9581, 96.4814, 96.5211,
-               95.3629, 93.5741, 92.077, 90.4094, 90.1751, 91.3312,
-               91.2883, 89.0592, 87.052, 86.6226, 85.7889, 85.6348,
-               85.3911, 83.8064, 82.8729, 82.6266, 82.645, 82.645,
-               82.645, 82.645, 82.645, 82.645, 82.645, 82.645])
+hr = load_heartrate()
 
 # > set.seed(123)
 # > abc <- rnorm(50, 5, 1)
@@ -116,6 +92,16 @@ def test_with_oob():
                   out_of_sample_size=-1).fit(y=hr)
     assert np.isnan(arima.oob())
 
+    # This will raise since n_steps is not an int
+    assert_raises(TypeError, arima.predict, n_periods="5")
+
+    # But that we CAN forecast with an int...
+    _ = arima.predict(n_periods=5)
+
+    # Show we fail if cv > n_samples
+    assert_raises(ValueError,
+                  ARIMA(order=(2, 1, 2), out_of_sample_size=1000).fit, hr)
+
 
 # Test Issue #28 ----------------------------------------------------------
 def test_oob_for_issue_28():
@@ -173,6 +159,10 @@ def test_oob_for_issue_28():
     assert_raises(ValueError, arima_no_oob.add_new_observations,
                   hr[-10:], xreg_test)
 
+    # Show we fail if we try to add observations with a different dim exog
+    assert_raises(ValueError, arima_no_oob.add_new_observations,
+                  hr[-10:], xreg_test[:, 2])
+
     # Actually add them now, and compare the forecasts (should be the same)
     arima_no_oob.add_new_observations(hr[-10:], xreg[-10:, :])
     assert_array_almost_equal(with_oob_forecasts,
@@ -185,8 +175,7 @@ def test_oob_sarimax():
     xreg = rs.rand(wineind.shape[0], 2)
     fit = ARIMA(order=(1, 1, 1),
                 seasonal_order=(0, 1, 1, 12),
-                out_of_sample_size=15,
-                suppress_warnings=True).fit(y=wineind, exogenous=xreg)
+                out_of_sample_size=15).fit(y=wineind, exogenous=xreg)
 
     fit_no_oob = ARIMA(
             order=(1, 1, 1), seasonal_order=(0, 1, 1, 12),
@@ -205,16 +194,20 @@ def test_oob_sarimax():
     assert_array_almost_equal(fit.params(), fit_no_oob.params())
 
     # show we can add the new samples and get the exact same forecasts
-    fit_no_oob.add_new_observations(wineind[-15:], xreg[-15:, :])
     xreg_test = rs.rand(5, 2)
+    fit_no_oob.add_new_observations(wineind[-15:], xreg[-15:, :])
     assert_array_almost_equal(fit.predict(5, xreg_test),
                               fit_no_oob.predict(5, xreg_test))
+
+    # Show we can get a confidence interval out here
+    preds, conf = fit.predict(5, xreg_test, return_conf_int=True)
+    assert all(isinstance(a, np.ndarray) for a in (preds, conf))
 
 
 def _try_get_attrs(arima):
     # show we can get all these attrs without getting an error
     attrs = {
-        'aic', 'aicc', 'arparams', 'arroots', 'bic', 'bse',
+        'aic', 'aicc', 'arparams', 'arroots', 'bic', 'bse', 'conf_int',
         'df_model', 'df_resid', 'hqic', 'maparams', 'maroots',
         'params', 'pvalues', 'resid',
     }
@@ -302,19 +295,22 @@ def test_the_r_src():
 
 def test_errors():
     def _assert_val_error(f, *args, **kwargs):
-        try:
-            f(*args, **kwargs)
-            return False
-        except ValueError:
-            return True
+        # Legacy, didn't really assert anything. Bad news!
+        # try:
+        #     f(*args, **kwargs)
+        #     return False
+        # except ValueError:
+        #     return True
+        assert_raises(ValueError, f, *args, **kwargs)
 
     # show we fail for bad start/max p, q values:
     _assert_val_error(auto_arima, abc, start_p=-1)
     _assert_val_error(auto_arima, abc, start_q=-1)
     _assert_val_error(auto_arima, abc, max_p=-1)
     _assert_val_error(auto_arima, abc, max_q=-1)
-    _assert_val_error(auto_arima, abc, start_p=0, max_p=0)
-    _assert_val_error(auto_arima, abc, start_q=0, max_q=0)
+    # (where start < max)
+    _assert_val_error(auto_arima, abc, start_p=1, max_p=0)
+    _assert_val_error(auto_arima, abc, start_q=1, max_q=0)
 
     # show max order error
     _assert_val_error(auto_arima, abc, max_order=-1)

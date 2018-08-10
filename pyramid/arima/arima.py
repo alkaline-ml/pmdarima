@@ -49,11 +49,9 @@ def _append_to_endog(endog, new_y):
     new_y : np.ndarray, shape=(n_samples)
         The new endogenous array to append
     """
-    if endog.ndim == 1:
-        return np.concatenate((endog, new_y))
-
-    # otherwise it's a 2d array maybe from sarimax
-    return np.concatenate((endog.ravel(), new_y))[:, np.newaxis]
+    return np.concatenate((endog, new_y)) if \
+        endog.ndim == 1 else \
+        np.concatenate((endog.ravel(), new_y))[:, np.newaxis]
 
 
 class ARIMA(BaseEstimator):
@@ -363,6 +361,8 @@ class ARIMA(BaseEstimator):
         else:
             self.oob_ = np.nan
 
+        # Save nobs since we might change it later if using OOB
+        self.nobs_ = y.shape[0]
         return self
 
     def _check_exog(self, exogenous):
@@ -651,12 +651,16 @@ class ARIMA(BaseEstimator):
         # difference the y array to concatenate (now n_samples - d)
         d = self.order[1]
 
-        # first concatenate the original data, then do the differencing
+        # first concatenate the original data (might be 2d or 1d)
         y = _append_to_endog(model_res.data.endog, y)
 
-        # Set the endog in two places. The undifferenced array in the
-        # model_res.data, and the differenced array in the model_res.model
-        model_res.data.endog = c1d(y)  # type: np.ndarray
+        # Now create the new exogenous.
+        if exogenous is not None:
+            # Concatenate
+            exog = np.concatenate((model_res.data.exog, exogenous))
+        else:
+            # Just so it's in the namespace
+            exog = None
 
         # Update the arrays in the data class. The statsmodels ARIMA class
         # stores the values a bit differently than it does in the SARIMAX
@@ -664,35 +668,52 @@ class ARIMA(BaseEstimator):
         sarimax = self.seasonal_order is not None
         if not sarimax:  # ARIMA
 
+            # Set the endog in two places. The undifferenced array in the
+            # model_res.data, and the differenced array in the model_res.model
+            model_res.data.endog = c1d(y)  # type: np.ndarray
+
             # The model endog is stored differently in the ARIMA class than
             # in the SARIMAX class, where the ARIMA actually stores the diffed
             # array.
             y_diffed = diff(y, d)
             model_res.model.endog = y_diffed
 
-        else:  # SARIMAX
-            # The model endog is stored differently in the ARIMA class than
-            # in the SARIMAX class, where the SARIMAX is a 2d (n x 1) array
-            # that is NOT diffed
-            model_res.model.endog = y
+            # Set the model result nobs
+            model_res.nobs = y.shape[0]
 
-        # Now set the exogenous. First, concat with model_res.data.exog,
-        # then difference and add the intercept
-        if exogenous is not None:
-            # set in the model results wrapper
-            exog = np.concatenate((model_res.data.exog, exogenous))
-            model_res.data.exog = exog
+            # Set the exogenous
+            if exog is not None:
+                # Set in data class
+                model_res.data.exog = exog
 
-            # and do the differencing (but only for ARIMA, and not SARIMAX)
-            if not sarimax:
+                # Difference and add intercept, then add to model class
+                k_intercept = (model_res.model.exog.shape[1] -
+                               exogenous.shape[1])
                 exog_diff = exog[d:, :]
-                intercept = np.ones(exog_diff.shape[0])[:, np.newaxis]
+                intercept = np.ones((exog_diff.shape[0], k_intercept))
                 exog_diff = np.hstack((intercept, exog_diff))
 
                 # set in the model itself
                 model_res.model.exog = exog_diff
-            else:
-                model_res.model.exog = exog
+
+        else:  # SARIMAX
+            # The model endog is stored differently in the ARIMA class than
+            # in the SARIMAX class, where the SARIMAX is a 2d (n x 1) array
+            # that is NOT diffed. We also handle this piece a bit differently..
+            # In the SARIMAX class, statsmodels creates a "pseudo new" model
+            # with the same parameters for forecasting, and we'll do the same.
+            model_kwargs = model_res._init_kwds.copy()
+
+            if exog is not None:
+                model_kwargs['exog'] = exog
+
+            # Create the pseudo "new" model and set its parameters with the
+            # existing model fit parameters
+            new_model = sm.tsa.statespace.SARIMAX(endog=y, **model_kwargs)
+            new_model.update(model_res.params)
+
+            # Point the arima result to the new model
+            self.arima_res_.model = new_model
 
     @if_delegate_has_method('arima_res_')
     def aic(self):
@@ -734,11 +755,13 @@ class ARIMA(BaseEstimator):
         ----------
         .. [1] https://en.wikipedia.org/wiki/Akaike_information_criterion#AICc
         """
-        # TODO: this code should really be added to statsmodels. Rewrite
-        #       this function to reflect other metric implementations if/when
-        #       statsmodels incorporates AICc
+        # FIXME:
+        # this code should really be added to statsmodels. Rewrite
+        # this function to reflect other metric implementations if/when
+        # statsmodels incorporates AICc
+
         aic = self.arima_res_.aic
-        nobs = self.arima_res_.nobs
+        nobs = self.nobs_
         df_model = self.arima_res_.df_model + 1  # add one for constant term
         return aic + 2. * df_model * (nobs / (nobs - df_model - 1.) - 1.)
 
