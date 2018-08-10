@@ -134,11 +134,12 @@ def test_oob_for_issue_28():
 
     scoring = get_callable(arima_no_oob.scoring, VALID_SCORING)
     preds = arima_no_oob.predict(n_periods=10, exogenous=xreg[-10:, :])
-    assert_almost_equal(oob, scoring(hr[-10:], preds))
+    assert_almost_equal(oob, scoring(hr[-10:], preds), decimal=3)
 
     # Show that the model parameters are exactly the same
     xreg_test = rs.rand(5, 4)
-    assert_array_almost_equal(arima.params(), arima_no_oob.params())
+    assert_array_almost_equal(arima.params(), arima_no_oob.params(),
+                              decimal=3)
 
     # Now assert on the forecast differences.
     with_oob_forecasts = arima.predict(n_periods=5, exogenous=xreg_test)
@@ -167,7 +168,8 @@ def test_oob_for_issue_28():
     arima_no_oob.add_new_observations(hr[-10:], xreg[-10:, :])
     assert_array_almost_equal(with_oob_forecasts,
                               arima_no_oob.predict(n_periods=5,
-                                                   exogenous=xreg_test))
+                                                   exogenous=xreg_test),
+                              decimal=3)
 
 
 # Test the OOB functionality for SARIMAX (Issue #28) --------------------------
@@ -188,16 +190,19 @@ def test_oob_sarimax():
     # compare scores:
     scoring = get_callable(fit_no_oob.scoring, VALID_SCORING)
     no_oob_preds = fit_no_oob.predict(n_periods=15, exogenous=xreg[-15:, :])
-    assert_almost_equal(oob, scoring(wineind[-15:], no_oob_preds))
+    assert_almost_equal(oob, scoring(wineind[-15:], no_oob_preds),
+                        decimal=3)
 
     # show params are still the same
-    assert_array_almost_equal(fit.params(), fit_no_oob.params())
+    assert_array_almost_equal(fit.params(), fit_no_oob.params(),
+                              decimal=3)
 
     # show we can add the new samples and get the exact same forecasts
     xreg_test = rs.rand(5, 2)
     fit_no_oob.add_new_observations(wineind[-15:], xreg[-15:, :])
     assert_array_almost_equal(fit.predict(5, xreg_test),
-                              fit_no_oob.predict(5, xreg_test))
+                              fit_no_oob.predict(5, xreg_test),
+                              decimal=3)
 
     # Show we can get a confidence interval out here
     preds, conf = fit.predict(5, xreg_test, return_conf_int=True)
