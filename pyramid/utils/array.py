@@ -19,7 +19,9 @@ __all__ = [
 
 
 def c(*args):
-    """Since this whole library is aimed at re-creating in
+    r"""Imitates the ``c`` function from R.
+
+    Since this whole library is aimed at re-creating in
     Python what R has already done so well, why not add a ``c`` function
     that wraps ``numpy.concatenate``? Similar to R, this works with scalars,
     iterables, and any mix therein.
@@ -29,7 +31,7 @@ def c(*args):
 
     Examples
     --------
-    Using ``c`` with *args will yield a single array:
+    Using ``c`` with varargs will yield a single array:
     >>> c(1, 2, 3, 4)
     array([1, 2, 3, 4])
 
@@ -38,11 +40,7 @@ def c(*args):
     array([1, 2, 4, 5, 4])
 
     However, using ``c`` with multi-level lists will fail!
-    >>> c([1, 2, 3], [[1, 2]])
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-      File "pyramid/utils/array.py", line 64, in c
-        return np.concatenate([a if is_iterable(a) else [a] for a in args])
+    >>> c([1, 2, 3], [[1, 2]])  # doctest: +SKIP
     ValueError: all the input arrays must have same number of dimensions
 
     References
@@ -104,7 +102,9 @@ def _diff_matrix(x, lag):
 
 
 def diff(x, lag=1, differences=1):
-    """A python implementation of the R ``diff`` function (documentation found
+    """Difference an array.
+
+    A python implementation of the R ``diff`` function (documentation found
     at https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html). This
     computes lag differences from an array given a ``lag`` and ``differencing``
     term.
@@ -189,7 +189,9 @@ def diff(x, lag=1, differences=1):
 
 
 def is_iterable(x):
-    """Determine whether an object ``x`` is iterable. In Python 2, this
+    """Test a variable for iterability.
+
+    Determine whether an object ``x`` is iterable. In Python 2, this
     was as simple as checking for the ``__iter__`` attribute. However, in
     Python 3, strings became iterable. Therefore, this function checks for the
     ``__iter__`` attribute, returning True if present (except for strings,

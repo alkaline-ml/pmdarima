@@ -49,7 +49,9 @@ class _SeasonalStationarityTest(six.with_metaclass(ABCMeta,
 
 
 class CHTest(_SeasonalStationarityTest):
-    """The Canova-Hansen test for seasonal differences. Canova and Hansen
+    """Conduct a CH test for seasonality.
+
+    The Canova-Hansen test for seasonal differences. Canova and Hansen
     (1995) proposed a test statistic for the null hypothesis that the seasonal
     pattern is stable. The test statistic can be formulated in terms of
     seasonal dummies or seasonal cycles. The former allows us to identify

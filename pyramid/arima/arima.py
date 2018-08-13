@@ -55,7 +55,9 @@ def _append_to_endog(endog, new_y):
 
 
 class ARIMA(BaseEstimator):
-    """An ARIMA, or autoregressive integrated moving average, is a
+    """An ARIMA estimator.
+
+    An ARIMA, or autoregressive integrated moving average, is a
     generalization of an autoregressive moving average (ARMA) and is fitted to
     time-series data in an effort to forecast future points. ARIMA models can
     be especially efficacious in cases where data shows evidence of

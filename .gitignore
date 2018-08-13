@@ -32,6 +32,8 @@ pyramid/arima/_arima.html
 env/
 build/
 doc/_build
+doc/auto_examples
+doc/modules/generated
 develop-eggs/
 dist/
 downloads/

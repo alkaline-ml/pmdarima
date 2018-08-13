@@ -10,7 +10,7 @@ __all__ = [
 
 
 def load_heartrate():
-    """Heartrate data.
+    """Uniform heart-rate data.
 
     A sample of heartrate data borrowed from an
     `MIT database <http://ecg.mit.edu/time-series/>`_. The sample consists
