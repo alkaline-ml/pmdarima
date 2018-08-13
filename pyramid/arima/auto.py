@@ -322,6 +322,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
     --------
     :func:`pyramid.arima.ARIMA`
 
+    Notes
+    -----
+    Fitting with `stepwise=False` can prove slower, especially when
+    `seasonal=True`.
+
     References
     ----------
     .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average

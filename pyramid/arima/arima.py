@@ -213,6 +213,8 @@ class ARIMA(BaseEstimator):
                  method=None, transparams=True, solver='lbfgs', maxiter=50,
                  disp=0, callback=None, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None):
+
+        # XXX: This isn't actually required--sklearn doesn't need a super call
         super(ARIMA, self).__init__()
 
         self.order = order
