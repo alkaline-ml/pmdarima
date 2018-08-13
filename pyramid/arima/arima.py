@@ -666,7 +666,7 @@ class ARIMA(BaseEstimator):
         # stores the values a bit differently than it does in the SARIMAX
         # class...
         sarimax = self.seasonal_order is not None
-        if not sarimax:  # ARIMA
+        if not sarimax:  # ARIMA or ARMA
 
             # Set the endog in two places. The undifferenced array in the
             # model_res.data, and the differenced array in the model_res.model
@@ -674,8 +674,12 @@ class ARIMA(BaseEstimator):
 
             # The model endog is stored differently in the ARIMA class than
             # in the SARIMAX class, where the ARIMA actually stores the diffed
-            # array.
-            y_diffed = diff(y, d)
+            # array. However, ARMA does not (and we cannot diff for d < 1).
+            if d > 0:  # ARIMA
+                y_diffed = diff(y, d)
+            else:  # ARMA
+                y_diffed = y
+
             model_res.model.endog = y_diffed
 
             # Set the model result nobs
@@ -695,6 +699,11 @@ class ARIMA(BaseEstimator):
 
                 # set in the model itself
                 model_res.model.exog = exog_diff
+
+            else:
+                # Otherwise we STILL have to set the exogenous array as an
+                # intercept in the model class for both ARMA and ARIMA.
+                model_res.model.exog = np.ones((y.shape[0], 1))
 
         else:  # SARIMAX
             # The model endog is stored differently in the ARIMA class than
