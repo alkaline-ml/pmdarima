@@ -208,6 +208,40 @@ def test_oob_sarimax():
     assert all(isinstance(a, np.ndarray) for a in (preds, conf))
 
 
+# Test Issue #29 (d=0, cv=True) -----------------------------------------------
+def test_oob_for_issue_29():
+    y = np.array([3.0, 4.0, 1.0, 2.0, 1.0, 2.0, 0.0, 1.0,
+                  0.0, 0.0, 2.0, 0.0, 1.0, 1.0, 2.0, 2.0])
+
+    xreg = np.random.RandomState(1).rand(y.shape[0], 3)
+
+    # Try for cv on/off, various D levels, and various Xregs
+    for d in (0, 1):
+        for cv in (0, 3):
+            for exog in (xreg, None):
+
+                # surround with try/except so we can log the failing combo
+                try:
+                    model = ARIMA(order=(1, d, 1),
+                                  out_of_sample_size=cv).fit(y, exogenous=exog)
+
+                    # If exogenous is defined, we need to pass n_periods of
+                    # exogenous rows to the predict function. Otherwise we'll
+                    # just leave it at None
+                    if exog is not None:
+                        xr = exog[:3, :]
+                    else:
+                        xr = None
+
+                    _, _ = model.predict(n_periods=3, return_conf_int=True,
+                                         exogenous=xr)
+
+                except Exception:
+                    print("Failing combo: d=%i, cv=%i, exog=%r"
+                          % (d, cv, exog))
+                    raise
+
+
 def _try_get_attrs(arima):
     # show we can get all these attrs without getting an error
     attrs = {
