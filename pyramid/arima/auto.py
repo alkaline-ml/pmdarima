@@ -46,7 +46,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                random=False, random_state=None, n_fits=10,
                return_valid_fits=False, out_of_sample_size=0, scoring='mse',
                scoring_args=None, **fit_args):
-    """The ``auto_arima`` function seeks to identify the most optimal
+    """Automatically discover the optimal order for an ARIMA model.
+
+    The ``auto_arima`` function seeks to identify the most optimal
     parameters for an ``ARIMA`` model, and returns a fitted ARIMA model. This
     function is based on the commonly-used R function,
     ``forecast::auto.arima`` [3].

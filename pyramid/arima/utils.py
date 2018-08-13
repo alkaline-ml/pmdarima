@@ -35,8 +35,10 @@ VALID_STESTS = {
 
 
 def is_constant(x):
-    """Determine whether a vector is composed of all of the
-    same elements and nothing else.
+    """Test ``x`` for constancy.
+
+    Determine whether a vector is composed of all of the same elements
+    and nothing else.
 
     Parameters
     ----------
@@ -56,7 +58,9 @@ def is_constant(x):
 
 
 def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
-    """Function to estimate the number of seasonal differences
+    """Estimate seasonal differences.
+
+    Function to estimate the number of seasonal differences
     required to make a given time series stationary.
 
     Parameters
@@ -102,7 +106,9 @@ def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
 
 
 def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
-    """Function to estimate the number of differences required to
+    """Estimate differencing term.
+
+    Function to estimate the number of differences required to
     make a given time series stationary.
 
     Parameters

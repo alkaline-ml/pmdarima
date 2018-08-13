@@ -6,26 +6,38 @@
 ====================================
 Pyramid: ARIMA estimators for Python
 ====================================
+
 Pyramid brings R's beloved ``auto.arima`` to Python, making an even stronger
-case for why you don't need R for data science. It does so not by calling R
-under the hood, but by wrapping statsmodels' well-tested
-`ARIMA <http://www.statsmodels.org/dev/generated/statsmodels.tsa.arima_model.ARIMA.html>`_ and
-`SARIMAX <http://www.statsmodels.org/dev/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html>`_
-estimators in a single, easy-to-use scikit-learn-esque estimator.
+case for why you don't need R for data science. Pyramid is 100% Python + Cython
+and does not leverage any R code, and implements a single, easy-to-use scikit-learn-esque estimator.
 
 .. toctree::
-   :caption: Table of Contents
    :maxdepth: 2
+   :hidden:
 
-   Setup <./setup.rst>
+   API Reference <./modules/classes.rst>
+   Examples <./auto_examples/index.rst>
    Quickstart <./quickstart.rst>
-   Codebase <./codebase.rst>
-   Contributors <./contributors.rst>
+   User Guide <./user_guide.rst>
 
 
-Indices and tables
-==================
+.. raw:: html
 
-* :ref:`genindex`
-* :ref:`modindex`
+   <br/>
+
+Quick refs, indices and tables
+==============================
+
+Helpful quickstart sections:
+
+* :ref:`about`
+* :ref:`setup`
+* :ref:`api_ref`
+* :ref:`contrib`
+* :ref:`contributors`
+* :ref:`quickstart`
+* :ref:`user_guide`
+
+To search for a specific section or class documentation, visit the index:
+
 * :ref:`search`

@@ -73,7 +73,9 @@ class _DifferencingStationarityTest(six.with_metaclass(ABCMeta,
 
 
 class KPSSTest(_DifferencingStationarityTest):
-    """In econometrics, Kwiatkowski–Phillips–Schmidt–Shin (KPSS) tests are used
+    """Conduct a KPSS test for stationarity.
+
+    In econometrics, Kwiatkowski–Phillips–Schmidt–Shin (KPSS) tests are used
     for testing a null hypothesis that an observable time series is stationary
     around a deterministic trend (i.e. trend-stationary) against the
     alternative of a unit root.
@@ -165,7 +167,9 @@ class KPSSTest(_DifferencingStationarityTest):
 
 
 class ADFTest(_DifferencingStationarityTest):
-    """In statistics and econometrics, an augmented Dickey–Fuller test (ADF)
+    """Conduct an ADF test for stationarity.
+
+    In statistics and econometrics, an augmented Dickey–Fuller test (ADF)
     tests the null hypothesis of a unit root is present in a time series
     sample. The alternative hypothesis is different depending on which version
     of the test is used, but is usually stationarity or trend-stationarity. It
@@ -277,7 +281,9 @@ class ADFTest(_DifferencingStationarityTest):
 
 
 class PPTest(_DifferencingStationarityTest):
-    """In statistics, the Phillips–Perron test (named after Peter C. B.
+    """Conduct a PP test for stationarity.
+
+    In statistics, the Phillips–Perron test (named after Peter C. B.
     Phillips and Pierre Perron) is a unit root test. It is used in time series
     analysis to test the null hypothesis that a time series is integrated of
     order 1. It builds on the Dickey–Fuller test of the null hypothesis

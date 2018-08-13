@@ -21,9 +21,13 @@ import os
 import sys
 import pyramid
 from pkg_resources import parse_version
+from sklearn.externals.six import u
 
 sys.path.insert(0, os.path.abspath('..' + os.path.sep))
 sys.path.insert(0, os.path.abspath('sphinxext'))
+
+from github_link import make_linkcode_resolve
+import sphinx_gallery
 
 
 # -- General configuration ------------------------------------------------
@@ -40,11 +44,21 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.coverage',
     'sphinx.ext.doctest',
+    'sphinx.ext.linkcode',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'numpy_ext.numpydoc'
+    'numpydoc',
+    'sphinx_gallery.gen_gallery'
 ]
+
+# this is needed for some reason...
+# see https://github.com/numpy/numpydoc/issues/69
+numpydoc_class_members_toctree = False
+autodoc_default_flags = ['members', 'inherited-members']
+
+# generate autosummary even if no references
+autosummary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -60,7 +74,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pyramid'
-copyright = '2017, Taylor G Smith'
+copyright = '2017-2018, Taylor G Smith'
 author = 'Taylor G Smith'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -167,7 +181,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pyramid', 'pyramid Documentation',
+    (master_doc, 'pyramid', u('pyramid Documentation'),
      [author], 1)
 ]
 
@@ -183,6 +197,13 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+sphinx_gallery_conf = {
+    'doc_module': 'pyramid',
+    'backreferences_dir': os.path.join('modules', 'generated'),
+    'reference_url': {'pyramid': None}
+}
+
+
 def setup(app):
     def adds(pth):
         print("Adding stylesheet: %s" % pth)
@@ -190,3 +211,10 @@ def setup(app):
 
     adds('css/fields.css')  # for parameters, etc.
     adds('css/gitcontrib.css')  # for git contributors
+
+
+# -- Extension configuration -------------------------------------------------
+
+# The following is used by sphinx.ext.linkcode to provide links to github
+linkcode_resolve = make_linkcode_resolve(
+    'pyramid', u('https://github.com/tgsmith61591/pyramid'))

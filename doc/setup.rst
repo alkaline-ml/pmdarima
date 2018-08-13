@@ -1,5 +1,16 @@
+.. _setup:
+
+=====
 Setup
 =====
+
+Pyramid depends on several prominent python packages:
+
+* `Numpy <https://github.com/numpy/numpy>`_
+* `SciPy <https://github.com/scipy/scipy>`_
+* `Scikit-learn <https://github.com/scikit-learn/scikit-learn>`_ (>= 0.17)
+* `Pandas <https://github.com/pandas-dev/pandas>`_
+* `Statsmodels <https://github.com/statsmodels/statsmodels>`_ (>=0.9.0)
 
 Installation
 ------------
