@@ -105,6 +105,7 @@ after_success:
   - bash build_tools/travis/build_wheels.sh
   - ls dist/
 
+# TODO: do we want "always?"
 notifications:
   slack:
     rooms:
