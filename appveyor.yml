@@ -10,7 +10,7 @@ environment:
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\build_tools\\appveyor\\run_with_env.cmd"
   PYPI_USERNAME: tgsmith61591.gh
   PYPI_PASSWORD:
-    secure: gbT4E95dOsFHbxOmXk4C3gkIiaqeg0MGgvlE4rmxD4U=
+    secure: okvMa3VgIXdlnMC48iMefQ==
 
   matrix:
     - PY_MAJOR_VER: 2
