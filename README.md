@@ -40,8 +40,3 @@ __For an easy, reproducible quick-start example, see [examples/](examples/quick_
   - R's code is heavily C-based. Pyramid runs on statsmodels, which is Python based. There will be some differences in performance
     speed-wise, but much of it can be eliminated by using `stepwise=True`. See [this discussion](https://stackoverflow.com/questions/40871602/sarimax-model-fitting-too-slow-in-statsmodels)
     for more thoughts...
-
-- Refreshing ARIMA models
-  - Periodically, your ARIMA will need to be refreshed given new observations. See [this discussion](https://stats.stackexchange.com/questions/34139/updating-arima-models-at-frequent-intervals)
-    and [this discussion](https://stats.stackexchange.com/questions/57745/what-do-you-consider-a-new-model-versus-an-updated-model-time-series)
-    on either re-using `auto_arima`-estimated order terms or re-fitting altogether.
