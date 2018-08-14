@@ -8,13 +8,15 @@
 from __future__ import print_function, absolute_import, division
 
 from sklearn.base import BaseEstimator
-from sklearn.utils.validation import (check_array, check_is_fitted,
-                                      column_or_1d as c1d)
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
+from sklearn.utils.validation import check_array, check_is_fitted, \
+    column_or_1d as c1d
+
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 from statsmodels import api as sm
+
 import numpy as np
 import datetime
 import warnings
@@ -22,7 +24,9 @@ import os
 
 # DTYPE for arrays
 from ..compat.numpy import DTYPE
+from ..compat.python import long
 from ..utils import get_callable, if_has_delegate
+from ..utils.array import diff
 
 __all__ = [
     'ARIMA'
@@ -34,8 +38,26 @@ VALID_SCORING = {
 }
 
 
+def _append_to_endog(endog, new_y):
+    """Append to the endogenous array
+
+    Parameters
+    ----------
+    endog : np.ndarray, shape=(n_samples, [1])
+        The existing endogenous array
+
+    new_y : np.ndarray, shape=(n_samples)
+        The new endogenous array to append
+    """
+    return np.concatenate((endog, new_y)) if \
+        endog.ndim == 1 else \
+        np.concatenate((endog.ravel(), new_y))[:, np.newaxis]
+
+
 class ARIMA(BaseEstimator):
-    """An ARIMA, or autoregressive integrated moving average, is a
+    """An ARIMA estimator.
+
+    An ARIMA, or autoregressive integrated moving average, is a
     generalization of an autoregressive moving average (ARMA) and is fitted to
     time-series data in an effort to forecast future points. ARIMA models can
     be especially efficacious in cases where data shows evidence of
@@ -142,8 +164,20 @@ class ARIMA(BaseEstimator):
         ``suppress_warnings`` is True, all of these warnings will be squelched.
 
     out_of_sample_size : int, optional (default=0)
-        The number of examples from the tail of the time series to use as
-        validation examples.
+        The number of examples from the tail of the time series to hold out
+        and use as validation examples. The model will not be fit on these
+        samples, but the observations will be added into the model's ``endog``
+        and ``exog`` arrays so that future forecast values originate from the
+        end of the endogenous vector. See :func:`add_new_observations`.
+
+        For instance::
+
+            y = [0, 1, 2, 3, 4, 5, 6]
+            out_of_sample_size = 2
+
+            > Fit on: [0, 1, 2, 3, 4]
+            > Score on: [5, 6]
+            > Append [5, 6] to end of self.arima_res_.data.endog values
 
     scoring : str, optional (default='mse')
         If performing validation (i.e., if ``out_of_sample_size`` > 0), the
@@ -179,6 +213,8 @@ class ARIMA(BaseEstimator):
                  method=None, transparams=True, solver='lbfgs', maxiter=50,
                  disp=0, callback=None, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None):
+
+        # XXX: This isn't actually required--sklearn doesn't need a super call
         super(ARIMA, self).__init__()
 
         self.order = order
@@ -234,8 +270,27 @@ class ARIMA(BaseEstimator):
         scoring = get_callable(self.scoring, VALID_SCORING)
 
         # don't allow negative, don't allow > n_samples
-        cv = max(min(cv, n_samples), 0)
+        cv = max(cv, 0)
 
+        # if cv is too big, raise
+        if cv >= n_samples:
+            raise ValueError("out-of-sample size must be less than number "
+                             "of samples!")
+
+        # If we want to get a score on the out-of-sample, we need to trim
+        # down the size of our y vec for fitting. Addressed due to Issue #28
+        cv_samples = None
+        cv_exog = None
+        if cv:
+            cv_samples = y[-cv:]
+            y = y[:-cv]
+
+            # This also means we have to address the exogenous matrix
+            if exogenous is not None:
+                cv_exog = exogenous[-cv:, :]
+                exogenous = exogenous[:-cv, :]
+
+        # This wrapper is used for fitting either an ARIMA or a SARIMAX
         def _fit_wrapper():
             # these might change depending on which one
             method = self.method
@@ -295,15 +350,23 @@ class ARIMA(BaseEstimator):
         # be predicted with one as well.
         self.fit_with_exog_ = exogenous is not None
 
-        # now make a prediction if we're validating
-        # to save the out-of-sample value
-        if cv > 0:
-            # get the predictions
-            pred = self.arima_res_.predict(exog=exogenous, typ='linear')[-cv:]
-            self.oob_ = scoring(y[-cv:], pred, **self.scoring_args)
+        # now make a forecast if we're validating to compute the
+        # out-of-sample score
+        if cv_samples is not None:
+            # get the predictions (use self.predict, which calls forecast
+            # from statsmodels internally)
+            pred = self.predict(n_periods=cv, exogenous=cv_exog)
+            self.oob_ = scoring(cv_samples, pred, **self.scoring_args)
+
+            # If we compute out of sample scores, we have to now update the
+            # observed time points so future forecasts originate from the end
+            # of our y vec
+            self.add_new_observations(cv_samples, cv_exog)
         else:
             self.oob_ = np.nan
 
+        # Save nobs since we might change it later if using OOB
+        self.nobs_ = y.shape[0]
         return self
 
     def _check_exog(self, exogenous):
@@ -311,8 +374,8 @@ class ARIMA(BaseEstimator):
         if self.fit_with_exog_:
             if exogenous is None:
                 raise ValueError('When an ARIMA is fit with an exogenous '
-                                 'array, it must be provided one for '
-                                 'predicting (either in- OR out-of-sample).')
+                                 'array, it must also be provided one for '
+                                 'predicting or updating observations.')
             else:
                 return check_array(exogenous, ensure_2d=True,
                                    force_all_finite=True, dtype=DTYPE)
@@ -361,7 +424,8 @@ class ARIMA(BaseEstimator):
         return self.arima_res_.predict(exog=exogenous, start=start,
                                        end=end, dynamic=dynamic)
 
-    def predict(self, n_periods=10, exogenous=None):
+    def predict(self, n_periods=10, exogenous=None,
+                return_conf_int=False, alpha=0.05):
         """Generate predictions (forecasts) ``n_periods`` in the future.
         Note that if ``exogenous`` variables were used in the model fit, they
         will be expected for the predict procedure and will fail otherwise.
@@ -378,12 +442,24 @@ class ARIMA(BaseEstimator):
             if an ``ARIMA`` is fit on exogenous features, it must be provided
             exogenous features for making predictions.
 
+        return_conf_int : bool, optional (default=False)
+            Whether to get the confidence intervals of the forecasts.
+
+        alpha : float, optional (default=0.05)
+            The confidence intervals for the forecasts are (1 - alpha) %
+
         Returns
         -------
         forecasts : array-like, shape=(n_periods,)
             The array of fore-casted values.
+
+        conf_int : array-like, shape=(n_periods, 2), optional
+            The confidence intervals for the forecasts. Only returned if
+            ``return_conf_int`` is True.
         """
         check_is_fitted(self, 'arima_res_')
+        if not isinstance(n_periods, (int, long)):
+            raise TypeError("n_periods must be an int or a long")
 
         # if we fit with exog, make sure one was passed:
         exogenous = self._check_exog(exogenous)  # type: np.ndarray
@@ -394,11 +470,28 @@ class ARIMA(BaseEstimator):
         if self.seasonal_order is None:
             # use the results wrapper to predict so it injects its own params
             # (also if I was 0, ARMA will not have a forecast method natively)
-            f, _, _ = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
-        else:
-            f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
+            f, _, conf_int = self.arima_res_.forecast(
+                steps=n_periods, exog=exogenous, alpha=alpha)
+        else:  # SARIMAX
+            # Unfortunately, SARIMAX does not really provide a nice way to get
+            # the confidence intervals out of the box, so we have to perform
+            # the get_prediction code here and unpack the confidence intervals
+            # manually.
+            # f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
+            arima = self.arima_res_
+            end = arima.nobs + n_periods - 1
+            results = arima.get_prediction(start=arima.nobs, end=end,
+                                           exog=exogenous)
+            f = results.predicted_mean
+            conf_int = results.conf_int(alpha=alpha)
 
-        # different variants of the stats someone might want returned...
+        if return_conf_int:
+            # The confidence intervals may be a Pandas frame if it comes from
+            # SARIMAX & we want Numpy. We will to duck type it so we don't add
+            # new explicit requirements for the package
+            if hasattr(conf_int, "iloc"):  # duck type for pd.DataFrame
+                conf_int = conf_int.values
+            return f, conf_int
         return f
 
     def fit_predict(self, y, exogenous=None, n_periods=10, **fit_args):
@@ -504,6 +597,137 @@ class ARIMA(BaseEstimator):
         if loc is not None:
             os.unlink(loc)
 
+    def add_new_observations(self, y, exogenous=None):
+        """Update the endog/exog samples after a model fit.
+
+        After fitting your model and creating forecasts, you're going
+        to need to attach new samples to the data you fit on. These are
+        used to compute new forecasts (but using the same estimated
+        parameters).
+
+        Parameters
+        ----------
+        y : array-like or iterable, shape=(n_samples,)
+            The time-series data to add to the endogenous samples on which the
+            ``ARIMA`` estimator was previously fit. This may either be a Pandas
+            ``Series`` object or a numpy array. This should be a one-
+            dimensional array of finite floats.
+
+        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+            An optional 2-d array of exogenous variables. If the model was
+            fit with an exogenous array of covariates, it will be required for
+            updating the observed values.
+
+        Notes
+        -----
+        This does not constitute re-fitting, as the model params do not
+        change, so do not use this in place of periodically refreshing the
+        model. Use it only to add new observed values from which to forecast
+        new values.
+        """
+        check_is_fitted(self, 'arima_res_')
+        model_res = self.arima_res_
+
+        # validate the new samples to add
+        y = c1d(check_array(y, ensure_2d=False, force_all_finite=False,
+                            copy=True, dtype=DTYPE))  # type: np.ndarray
+        n_samples = y.shape[0]
+
+        # if exogenous is None and new exog provided, or vice versa, raise
+        self._check_exog(exogenous)
+
+        # ensure the k_exog matches
+        if exogenous is not None:
+            k_exog = model_res.model.k_exog
+            n_exog, exog_dim = exogenous.shape
+
+            if exogenous.shape[1] != k_exog:
+                raise ValueError("Dim mismatch in fit exogenous (%i) and new "
+                                 "exogenous (%i)" % (k_exog, exog_dim))
+
+            # make sure the number of samples in exogenous match the number
+            # of samples in the endog
+            if n_exog != n_samples:
+                raise ValueError("Dim mismatch in n_samples "
+                                 "(endog=%i, exog=%i)"
+                                 % (n_samples, n_exog))
+
+        # difference the y array to concatenate (now n_samples - d)
+        d = self.order[1]
+
+        # first concatenate the original data (might be 2d or 1d)
+        y = _append_to_endog(model_res.data.endog, y)
+
+        # Now create the new exogenous.
+        if exogenous is not None:
+            # Concatenate
+            exog = np.concatenate((model_res.data.exog, exogenous))
+        else:
+            # Just so it's in the namespace
+            exog = None
+
+        # Update the arrays in the data class. The statsmodels ARIMA class
+        # stores the values a bit differently than it does in the SARIMAX
+        # class...
+        sarimax = self.seasonal_order is not None
+        if not sarimax:  # ARIMA or ARMA
+
+            # Set the endog in two places. The undifferenced array in the
+            # model_res.data, and the differenced array in the model_res.model
+            model_res.data.endog = c1d(y)  # type: np.ndarray
+
+            # The model endog is stored differently in the ARIMA class than
+            # in the SARIMAX class, where the ARIMA actually stores the diffed
+            # array. However, ARMA does not (and we cannot diff for d < 1).
+            if d > 0:  # ARIMA
+                y_diffed = diff(y, d)
+            else:  # ARMA
+                y_diffed = y
+
+            model_res.model.endog = y_diffed
+
+            # Set the model result nobs
+            model_res.nobs = y.shape[0]
+
+            # Set the exogenous
+            if exog is not None:
+                # Set in data class
+                model_res.data.exog = exog
+
+                # Difference and add intercept, then add to model class
+                k_intercept = (model_res.model.exog.shape[1] -
+                               exogenous.shape[1])
+                exog_diff = exog[d:, :]
+                intercept = np.ones((exog_diff.shape[0], k_intercept))
+                exog_diff = np.hstack((intercept, exog_diff))
+
+                # set in the model itself
+                model_res.model.exog = exog_diff
+
+            else:
+                # Otherwise we STILL have to set the exogenous array as an
+                # intercept in the model class for both ARMA and ARIMA.
+                model_res.model.exog = np.ones((y.shape[0], 1))
+
+        else:  # SARIMAX
+            # The model endog is stored differently in the ARIMA class than
+            # in the SARIMAX class, where the SARIMAX is a 2d (n x 1) array
+            # that is NOT diffed. We also handle this piece a bit differently..
+            # In the SARIMAX class, statsmodels creates a "pseudo new" model
+            # with the same parameters for forecasting, and we'll do the same.
+            model_kwargs = model_res._init_kwds.copy()
+
+            if exog is not None:
+                model_kwargs['exog'] = exog
+
+            # Create the pseudo "new" model and set its parameters with the
+            # existing model fit parameters
+            new_model = sm.tsa.statespace.SARIMAX(endog=y, **model_kwargs)
+            new_model.update(model_res.params)
+
+            # Point the arima result to the new model
+            self.arima_res_.model = new_model
+
     @if_delegate_has_method('arima_res_')
     def aic(self):
         """Get the AIC, the Akaike Information Criterion:
@@ -544,11 +768,13 @@ class ARIMA(BaseEstimator):
         ----------
         .. [1] https://en.wikipedia.org/wiki/Akaike_information_criterion#AICc
         """
-        # TODO: this code should really be added to statsmodels. Rewrite
-        #       this function to reflect other metric implementations if/when
-        #       statsmodels incorporates AICc
+        # FIXME:
+        # this code should really be added to statsmodels. Rewrite
+        # this function to reflect other metric implementations if/when
+        # statsmodels incorporates AICc
+
         aic = self.arima_res_.aic
-        nobs = self.arima_res_.nobs
+        nobs = self.nobs_
         df_model = self.arima_res_.df_model + 1  # add one for constant term
         return aic + 2. * df_model * (nobs / (nobs - df_model - 1.) - 1.)
 
@@ -614,6 +840,22 @@ class ARIMA(BaseEstimator):
         return self.arima_res_.bse
 
     @if_delegate_has_method('arima_res_')
+    def conf_int(self, alpha=0.05, **kwargs):
+        r"""Returns the confidence interval of the fitted parameters.
+
+        Returns
+        -------
+        alpha : float, optional (default=0.05)
+            The significance level for the confidence interval. ie.,
+            the default alpha = .05 returns a 95% confidence interval.
+
+        **kwargs : keyword args or dict
+            Keyword arguments to pass to the confidence interval function.
+            Could include 'cols' or 'method'
+        """
+        return self.arima_res_.conf_int(alpha=alpha, **kwargs)
+
+    @if_delegate_has_method('arima_res_')
     def df_model(self):
         """The model degrees of freedom: ``k_exog`` + ``k_trend`` +
         ``k_ar`` + ``k_ma``.
@@ -623,6 +865,7 @@ class ARIMA(BaseEstimator):
         df_model : array-like
             The degrees of freedom in the model.
         """
+        return self.arima_res_.df_model
 
     @if_delegate_has_method('arima_res_')
     def df_resid(self):

@@ -5,10 +5,12 @@
 # Tests for stationarity
 
 from __future__ import absolute_import, division
+
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import column_or_1d, check_array
 from sklearn.linear_model import LinearRegression
 from sklearn.externals import six
+
 from statsmodels import api as sm
 from abc import ABCMeta, abstractmethod
 import numpy as np
@@ -20,7 +22,7 @@ from .approx import approx
 # since the C import relies on the C code having been built with Cython,
 # and since the platform might name the .so file something funky (like
 # _arima.cpython-35m-darwin.so), import this absolutely and not relatively.
-from pyramid.arima._arima import C_tseries_pp_sum
+from ._arima import C_tseries_pp_sum
 
 __all__ = [
     'ADFTest',
@@ -71,7 +73,9 @@ class _DifferencingStationarityTest(six.with_metaclass(ABCMeta,
 
 
 class KPSSTest(_DifferencingStationarityTest):
-    """In econometrics, Kwiatkowski–Phillips–Schmidt–Shin (KPSS) tests are used
+    """Conduct a KPSS test for stationarity.
+
+    In econometrics, Kwiatkowski–Phillips–Schmidt–Shin (KPSS) tests are used
     for testing a null hypothesis that an observable time series is stationary
     around a deterministic trend (i.e. trend-stationary) against the
     alternative of a unit root.
@@ -94,6 +98,7 @@ class KPSSTest(_DifferencingStationarityTest):
     .. [1] R's tseries KPSS test source code: http://bit.ly/2eJP1IU
     """
     _valid = {'trend', 'null'}
+    tablep = c(0.01, 0.025, 0.05, 0.10)
 
     def __init__(self, alpha=0.05, null='level', lshort=True):
         super(KPSSTest, self).__init__(alpha=alpha)
@@ -138,7 +143,6 @@ class KPSSTest(_DifferencingStationarityTest):
         # fit the model
         lm = LinearRegression().fit(t, x)
         e = x - lm.predict(t)  # residuals
-        tablep = c(0.01, 0.025, 0.05, 0.10)
 
         s = np.cumsum(e)
         eta = (s * s).sum() / (n**2)
@@ -154,7 +158,7 @@ class KPSSTest(_DifferencingStationarityTest):
         stat = eta / s2
 
         # do approximation
-        _, pval = approx(table, tablep, xout=stat, rule=2)
+        _, pval = approx(table, self.tablep, xout=stat, rule=2)
 
         # R does a test for rule=1, but we don't want to do that, because they
         # just do it to issue a warning in case the P-value is smaller/greater
@@ -163,7 +167,9 @@ class KPSSTest(_DifferencingStationarityTest):
 
 
 class ADFTest(_DifferencingStationarityTest):
-    """In statistics and econometrics, an augmented Dickey–Fuller test (ADF)
+    """Conduct an ADF test for stationarity.
+
+    In statistics and econometrics, an augmented Dickey–Fuller test (ADF)
     tests the null hypothesis of a unit root is present in a time series
     sample. The alternative hypothesis is different depending on which version
     of the test is used, but is usually stationarity or trend-stationarity. It
@@ -190,14 +196,14 @@ class ADFTest(_DifferencingStationarityTest):
     ----------
     .. [1] https://wikipedia.org/wiki/Augmented_Dickey–Fuller_test
     """
-    table = -np.array([c(4.38, 4.15, 4.04, 3.99, 3.98, 3.96),
-                       c(3.95, 3.80, 3.73, 3.69, 3.68, 3.66),
-                       c(3.60, 3.50, 3.45, 3.43, 3.42, 3.41),
-                       c(3.24, 3.18, 3.15, 3.13, 3.13, 3.12),
-                       c(1.14, 1.19, 1.22, 1.23, 1.24, 1.25),
-                       c(0.80, 0.87, 0.90, 0.92, 0.93, 0.94),
-                       c(0.50, 0.58, 0.62, 0.64, 0.65, 0.66),
-                       c(0.15, 0.24, 0.28, 0.31, 0.32, 0.33)]).T
+    table = -np.array([(4.38, 4.15, 4.04, 3.99, 3.98, 3.96),
+                       (3.95, 3.80, 3.73, 3.69, 3.68, 3.66),
+                       (3.60, 3.50, 3.45, 3.43, 3.42, 3.41),
+                       (3.24, 3.18, 3.15, 3.13, 3.13, 3.12),
+                       (1.14, 1.19, 1.22, 1.23, 1.24, 1.25),
+                       (0.80, 0.87, 0.90, 0.92, 0.93, 0.94),
+                       (0.50, 0.58, 0.62, 0.64, 0.65, 0.66),
+                       (0.15, 0.24, 0.28, 0.31, 0.32, 0.33)]).T
 
     tablen = table.shape[1]
     tableT = c(25, 50, 100, 250, 500, 100000)
@@ -259,7 +265,7 @@ class ADFTest(_DifferencingStationarityTest):
         # because we need the std errors, and sklearn does not have a way to
         # store them.
         res = sm.OLS(yt, X).fit()
-        STAT = res.params[0] / res.HC0_se[0]  # FIXME: is the denom correct?...
+        STAT = res.params[0] / res.HC0_se[0]  # XXX: is the denom correct?...
 
         tableipl = np.zeros(self.tablen)
         for i in range(self.tablen):
@@ -275,7 +281,9 @@ class ADFTest(_DifferencingStationarityTest):
 
 
 class PPTest(_DifferencingStationarityTest):
-    """In statistics, the Phillips–Perron test (named after Peter C. B.
+    """Conduct a PP test for stationarity.
+
+    In statistics, the Phillips–Perron test (named after Peter C. B.
     Phillips and Pierre Perron) is a unit root test. It is used in time series
     analysis to test the null hypothesis that a time series is integrated of
     order 1. It builds on the Dickey–Fuller test of the null hypothesis
@@ -301,14 +309,14 @@ class PPTest(_DifferencingStationarityTest):
     .. [1] R's tseries PP test source code: http://bit.ly/2wbzx6V
     """
     table = -np.array([
-        c(22.5, 25.7, 27.4, 28.4, 28.9, 29.5),
-        c(19.9, 22.4, 23.6, 24.4, 24.8, 25.1),
-        c(17.9, 19.8, 20.7, 21.3, 21.5, 21.8),
-        c(15.6, 16.8, 17.5, 18.0, 18.1, 18.3),
-        c(3.66, 3.71, 3.74, 3.75, 3.76, 3.77),
-        c(2.51, 2.60, 2.62, 2.64, 2.65, 2.66),
-        c(1.53, 1.66, 1.73, 1.78, 1.78, 1.79),
-        c(0.43, 0.65, 0.75, 0.82, 0.84, 0.87)
+        (22.5, 25.7, 27.4, 28.4, 28.9, 29.5),
+        (19.9, 22.4, 23.6, 24.4, 24.8, 25.1),
+        (17.9, 19.8, 20.7, 21.3, 21.5, 21.8),
+        (15.6, 16.8, 17.5, 18.0, 18.1, 18.3),
+        (3.66, 3.71, 3.74, 3.75, 3.76, 3.77),
+        (2.51, 2.60, 2.62, 2.64, 2.65, 2.66),
+        (1.53, 1.66, 1.73, 1.78, 1.78, 1.79),
+        (0.43, 0.65, 0.75, 0.82, 0.84, 0.87)
     ]).T
 
     tablen = table.shape[1]

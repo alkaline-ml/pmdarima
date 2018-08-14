@@ -101,7 +101,9 @@ def _regularize(x, y, ties):
 
 def approx(x, y, xout, method='linear', rule=1, f=0, yleft=None,
            yright=None, ties='mean'):
-    """Return a list of points which (linearly) interpolate given data points,
+    """Linearly interpolate points.
+
+    Return a list of points which (linearly) interpolate given data points,
     or a function performing the linear (or constant) interpolation.
 
     Parameters

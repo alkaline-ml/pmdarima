@@ -25,12 +25,15 @@ __pycache__/
 
 # C extensions
 *.so
+pyramid/arima/_arima.html
 
 # Distribution / packaging
 .Python
 env/
 build/
 doc/_build
+doc/auto_examples
+doc/modules/generated
 develop-eggs/
 dist/
 downloads/

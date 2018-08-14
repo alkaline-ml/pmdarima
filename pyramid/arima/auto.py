@@ -46,7 +46,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                random=False, random_state=None, n_fits=10,
                return_valid_fits=False, out_of_sample_size=0, scoring='mse',
                scoring_args=None, **fit_args):
-    """The ``auto_arima`` function seeks to identify the most optimal
+    """Automatically discover the optimal order for an ARIMA model.
+
+    The ``auto_arima`` function seeks to identify the most optimal
     parameters for an ``ARIMA`` model, and returns a fitted ARIMA model. This
     function is based on the commonly-used R function,
     ``forecast::auto.arima`` [3].
@@ -287,9 +289,22 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         default), will only return the best fit.
 
     out_of_sample_size : int, optional (default=0)
-        The number of examples from the tail of the time series to use as
-        validation examples. The ``ARIMA`` class can fit only a portion of the
-        data if specified, in order to retain an "out of bag" sample score.
+        The ``ARIMA`` class can fit only a portion of the data if specified,
+        in order to retain an "out of bag" sample score. This is the
+        number of examples from the tail of the time series to hold out
+        and use as validation examples. The model will not be fit on these
+        samples, but the observations will be added into the model's ``endog``
+        and ``exog`` arrays so that future forecast values originate from the
+        end of the endogenous vector.
+
+        For instance::
+
+            y = [0, 1, 2, 3, 4, 5, 6]
+            out_of_sample_size = 2
+
+            > Fit on: [0, 1, 2, 3, 4]
+            > Score on: [5, 6]
+            > Append [5, 6] to end of self.arima_res_.data.endog values
 
     scoring : str, optional (default='mse')
         If performing validation (i.e., if ``out_of_sample_size`` > 0), the
@@ -306,6 +321,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
     See Also
     --------
     :func:`pyramid.arima.ARIMA`
+
+    Notes
+    -----
+    Fitting with `stepwise=False` can prove slower, especially when
+    `seasonal=True`.
 
     References
     ----------
