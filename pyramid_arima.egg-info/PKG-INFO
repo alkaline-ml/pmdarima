@@ -1,0 +1,27 @@
+Metadata-Version: 1.2
+Name: pyramid-arima
+Version: 0.7.0.dev0
+Summary: Python's forecast::auto.arima equivalent
+Home-page: https://github.com/tgsmith61591/pyramid
+Author: Taylor G. Smith
+Author-email: taylor.smith@alkaline-ml.com
+License: MIT
+Download-URL: https://github.com/tgsmith61591/pyramid/archive/v0.7.0-dev.tar.gz
+Description: UNKNOWN
+Keywords: arima timeseries forecasting pyramid pyramid-arima scikit-learn statsmodels
+Platform: UNKNOWN
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: Programming Language :: C
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development
+Classifier: Topic :: Scientific/Engineering
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Operating System :: MacOS
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Python: >=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4

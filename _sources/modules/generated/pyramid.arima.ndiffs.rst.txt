@@ -1,0 +1,12 @@
+:mod:`pyramid.arima`.ndiffs
+========================================
+
+.. currentmodule:: pyramid.arima
+
+.. autofunction:: ndiffs
+
+.. include:: pyramid.arima.ndiffs.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

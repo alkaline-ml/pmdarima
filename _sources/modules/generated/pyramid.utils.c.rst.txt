@@ -1,0 +1,12 @@
+:mod:`pyramid.utils`.c
+===================================
+
+.. currentmodule:: pyramid.utils
+
+.. autofunction:: c
+
+.. include:: pyramid.utils.c.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
