@@ -22,6 +22,7 @@ contribute you'll need to be able to build from source.
    setup.rst
    contributing.rst
    contributors.rst
+   refreshing.rst
 
 API reference
 -------------
