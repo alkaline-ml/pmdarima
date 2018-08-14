@@ -13,6 +13,9 @@ import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
 from numpy.random import RandomState
 
+from statsmodels import api as sm
+import pandas as pd
+
 import warnings
 import pickle
 import os
@@ -208,10 +211,11 @@ def test_oob_sarimax():
 
 # Test Issue #29 (d=0, cv=True) -----------------------------------------------
 def test_oob_for_issue_29():
-    y = np.array([3.0, 4.0, 1.0, 2.0, 1.0, 2.0, 0.0, 1.0,
-                  0.0, 0.0, 2.0, 0.0, 1.0, 1.0, 2.0, 2.0])
+    dta = sm.datasets.sunspots.load_pandas().data
+    dta.index = pd.Index(sm.tsa.datetools.dates_from_range('1700', '2008'))
+    del dta["YEAR"]
 
-    xreg = np.random.RandomState(1).rand(y.shape[0], 3)
+    xreg = np.random.RandomState(1).rand(dta.shape[0], 3)
 
     # Try for cv on/off, various D levels, and various Xregs
     for d in (0, 1):
@@ -220,8 +224,8 @@ def test_oob_for_issue_29():
 
                 # surround with try/except so we can log the failing combo
                 try:
-                    model = ARIMA(order=(1, d, 1),
-                                  out_of_sample_size=cv).fit(y, exogenous=exog)
+                    model = ARIMA(order=(2, d, 0), out_of_sample_size=cv)\
+                            .fit(dta, exogenous=exog)
 
                     # If exogenous is defined, we need to pass n_periods of
                     # exogenous rows to the predict function. Otherwise we'll
