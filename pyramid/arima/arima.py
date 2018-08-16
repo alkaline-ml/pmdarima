@@ -27,6 +27,10 @@ from ..compat.numpy import DTYPE
 from ..compat.python import long
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
+from .._config import PYRAMID_ARIMA_CACHE
+
+# Get the version
+import pyramid
 
 __all__ = [
     'ARIMA'
@@ -367,6 +371,10 @@ class ARIMA(BaseEstimator):
 
         # Save nobs since we might change it later if using OOB
         self.nobs_ = y.shape[0]
+
+        # As of version 0.7.2, start saving the version with the model so
+        # we can track changes over time.
+        self.pkg_version_ = pyramid.__version__
         return self
 
     def _check_exog(self, exogenous):
@@ -524,10 +532,6 @@ class ARIMA(BaseEstimator):
         self.fit(y, exogenous, **fit_args)
         return self.predict(n_periods=n_periods, exogenous=exogenous)
 
-    @staticmethod
-    def _get_cache_folder():
-        return '.pyramid-cache'
-
     def _get_pickle_hash_file(self):
         # Mmmm, pickle hash...
         return '%s-%s-%i.pmdpkl' % (
@@ -542,6 +546,7 @@ class ARIMA(BaseEstimator):
 
         # if this already contains a pointer to a "saved state" model,
         # delete that model and replace it with a new one
+        # FIXME: v0.7.2+ - do we want to keep this around for later unpickling?
         if loc is not None:
             os.unlink(loc)
 
@@ -550,7 +555,7 @@ class ARIMA(BaseEstimator):
         cwd = os.path.abspath(os.getcwd())
 
         # check that the cache folder exists, and if not, make it.
-        cache_loc = os.path.join(cwd, self._get_cache_folder())
+        cache_loc = os.path.join(cwd, PYRAMID_ARIMA_CACHE)
         try:
             os.makedirs(cache_loc)
         # since this is a race condition, just try to make it

@@ -23,6 +23,7 @@ contribute you'll need to be able to build from source.
    contributing.rst
    contributors.rst
    refreshing.rst
+   serialization.rst
 
 API reference
 -------------
