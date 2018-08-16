@@ -21,7 +21,7 @@ env:
     - OPENBLAS_NUM_THREADS=4
     # - TWINE_REPOSITORY_URL="https://test.pypi.org/legacy/"  # only for test
     - TWINE_USERNAME="tgsmith61591.gh"
-    - secure: CBeKNP+qy0Jtg8SqM6FDT4Qfn8RVO25sYEcg518wRczQcSpIO0E5bTjBoDGZdl6WguG8QCYLNTt3ll3NY1AntVSVG5m0X6dyHRN+hTOJw59KmQcE7UXvhvwpA98DEnXRPf2CCBXZnDDyYmhHH6c0VlCHhurvMfs6f9JhUOR7yJvz5pMg42uP0at2odkNa/G086+6+yVnkt/rfYYXLgxAOVOfbt7GyLiPp7CX3WenCCroH9gw6FQVsOw+swEZ7xYep4VgaO029b+nExFNjlA9MXB1i3oVVkRBTk8UfsOg82kjfi4SYSfI/qVVY7ivcxbjR/K7HkMi34Mcq/0KTtmRFaO3++hcvPEHuk0CmtN9zprDO/Muan2HBytG/p6ZbK9lEA1coOcREl/4wK5xAmGadZI5WHPK+HF3sTjni4dgDb10AbyctV1B/3I+yoxdY5Jt7eHD1Qu3zu6UnxsW+oLSlyQH3YgbBWGcwAa401bvvE92d4oRvYq0maV5oLk+QwPk8JyAX2ejrslx1o83Xs38qt4wPXTm+Ky4peHV3HbbFYQa1+lrVBHAew8ahUF+1P7oSudoZZkFuks3kouFUp/ENguFLTQNT/sq1SEhMmv5AZ4rcUatY0FiBL1Q3a9DMdqh2T/r2vow1UDPKcUWE8pqtHltMuzaJ82LaZhIdCsD7Ik=
+    - secure: "nLu1oztl7hWoLZbUc3lWoTVC0x4feY7x3S0z2RzbbVg7EjoRUNS1do1bRxsNBvZt1ujQAmRN2hTA6gr66KtElHtKAMbbx7/MUdFvnWQdw6urVwapRxPyzHv5Yhg1+iBaKAeUWeSSX1QETsCbPgmu6vzxFfp1wlCg++kO9n0RsNSlc9TejgPyVRY+mMxFktbEydfXJCMVg6D0wHJ+No3l2Y0k2UNfzSwYy+a4JobX6uad+8z303mr9+1iQyfiQyTyiurAPw3nM/sSqizV0LBdjm4mCho1aopZwF7gfh4YwYLYuVz6btGIoR5fEoF2nCTOKFyehooPWyx0vllKoUZ5BJMsJEPYXQnDQulimAoBjaTt/2TFxjdyHEuK7gAMko19Vvb5209yVoi/+REfZ0qC3P1pvF5iHKTl9mEkuMwvr2UYaetH7IsZq610c7aZf0ygj/snx4SfkFLvl5LolSqqI3Mzb9vKsef1yrf/G5L4dARC8gALfz6DS0e2GhnJDJafDGXIlfnx+tG0bKs1+vTkI8R09P7BxgaCTEeAWUdycBE2wx4hD7a58rStvHNU8tunbtBhQgHkAx/k5Cwd32LCQazWJLSht0SCdkW8mnW+U5IkcHHh2/7kYQIw2gnEiwiNGiBuuZXPfeYJRd1AqsjkXk798jKV9Xg1GD14mHdL628="
 
 matrix:
   include:
@@ -105,6 +105,7 @@ after_success:
   - bash build_tools/travis/build_wheels.sh
   - ls dist/
 
+# TODO: do we want "always?"
 notifications:
   slack:
     rooms:
