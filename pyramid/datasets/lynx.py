@@ -9,7 +9,10 @@ import numpy as np
 
 def load_lynx():
     """Annual numbers of lynx trappings for 1821–1934 in Canada.
-    Taken from Brockwell & Davis (1991), this appears to be the series
+
+    This time-series records the number of skins of predators (lynx) that were
+    collected over several years by the Hudson's Bay Company. The dataset was
+    taken from Brockwell & Davis (1991) and appears to be the series
     considered by Campbell & Walker (1977).
 
     Examples

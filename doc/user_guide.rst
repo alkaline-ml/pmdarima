@@ -39,3 +39,4 @@ package's submodules. See also the :ref:`api_ref`
    modules/arima.auto.rst
    modules/arima.seasonality.rst
    modules/arima.stationarity.rst
+   modules/datasets.rst

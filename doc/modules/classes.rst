@@ -13,7 +13,7 @@ uses.
 .. _arima_ref:
 
 :mod:`pyramid.arima`: ARIMA estimator and associated tests
-============================================================
+==========================================================
 
 The ``pyramid.arima`` sub-module defines the ``ARIMA`` estimator and the
 ``auto_arima`` function, as well as a set of tests of seasonality and
@@ -112,6 +112,8 @@ Differencing helpers
 The ``pyramid.datasets`` submodule provides several different univariate time-
 series datasets used in various examples and tests across the package. If you
 would like to prototype a model, this is a good place to find easy-to-access data.
+
+**User guide:** See the :ref:`datasets` section for further details.
 
 .. automodule:: pyramid.datasets
     :no-members:

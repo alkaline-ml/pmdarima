@@ -11,3 +11,6 @@ from os.path import expanduser
 # during the internal ARIMA pickling operation.
 PYRAMID_ARIMA_CACHE = os.environ.get('PYRAMID_ARIMA_CACHE',
                                      expanduser('~/.pyramid-arima-cache'))
+
+# The pattern of the pickle file for a saved ARIMA
+PICKLE_HASH_PATTERN = '%s-%s-%i.pmdpkl'

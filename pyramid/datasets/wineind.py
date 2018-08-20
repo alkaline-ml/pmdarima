@@ -9,7 +9,9 @@ import numpy as np
 
 def load_wineind():
     """Australian total wine sales by wine makers in bottles <= 1 litre.
-    Jan 1980 -- Aug 1994. This dataset is found in the R ``forecasts`` package.
+
+    This time-series records wine sales by Australian wine makers between
+    Jan 1980 -- Aug 1994. This dataset is found in the R ``forecast`` package.
 
     Examples
     --------

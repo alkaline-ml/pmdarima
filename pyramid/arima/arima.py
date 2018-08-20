@@ -27,7 +27,7 @@ from ..compat.numpy import DTYPE
 from ..compat.python import long
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
-from .._config import PYRAMID_ARIMA_CACHE
+from .._config import PYRAMID_ARIMA_CACHE, PICKLE_HASH_PATTERN
 
 # Get the version
 import pyramid
@@ -534,7 +534,7 @@ class ARIMA(BaseEstimator):
 
     def _get_pickle_hash_file(self):
         # Mmmm, pickle hash...
-        return '%s-%s-%i.pmdpkl' % (
+        return PICKLE_HASH_PATTERN % (
             # cannot use ':' in Windows file names. Whoops!
             str(datetime.datetime.now()).replace(' ', '_').replace(':', '-'),
             ''.join([str(e) for e in self.order]),
@@ -593,7 +593,40 @@ class ARIMA(BaseEstimator):
                 raise OSError('Could not read saved model state from %s. '
                               'Does it still exist?' % loc)
 
+        # Warn for unpickling a different version's model
+        self._warn_for_older_version()
         return self
+
+    def _warn_for_older_version(self):
+        # Added in v0.7.2 - check for the version pickled under and warn
+        # if it's different from the current version
+        do_warn = False
+        modl_version = None
+        this_version = pyramid.__version__
+
+        try:
+            modl_version = getattr(self, 'pkg_version_')
+
+            # Either < or > or '-dev' vs. release version
+            if modl_version != this_version:
+                do_warn = True
+        except AttributeError:
+            # Either wasn't fit when pickled or didn't have the attr due to
+            # it being an older version. If it wasn't fit, it will be missing
+            # the arima_res_ attr.
+            if hasattr(self, 'arima_res_'):  # it was fit, but is older
+                do_warn = True
+                modl_version = '<0.7.2'
+
+            # else: it may not have the model (not fit) and still be older,
+            # but we can't detect that.
+
+        # Means it was older
+        if do_warn:
+            warnings.warn("You've deserialized an ARIMA from a version (%s) "
+                          "that differs from your installed version of "
+                          "Pyramid (%s). This could cause unforeseen behavior."
+                          % (modl_version, this_version), UserWarning)
 
     def _clear_cached_state(self):
         # when fit in an auto-arima, a lot of cached .pmdpkl files
