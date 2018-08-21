@@ -10,54 +10,34 @@ from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.externals import six
 
 import numpy as np
+import pandas as pd
 
 __all__ = [
-    'autocorr',
+    'as_series',
     'c',
     'diff',
     'is_iterable'
 ]
 
 
-def autocorr(x, lag=1, center=True):
-    """
+def as_series(x):
+    """Cast as pandas Series.
+
+    Cast a numpy array or list to Pandas series.
 
     Parameters
     ----------
     x : array-like, shape=(n_samples,)
         The 1d array on which to compute the auto correlation.
 
-    lag : int, optional (default=1)
-        The lag term for the computation of the auto-correlation.
-
-    center : bool, optional (default=True)
-        Whether to center the values in ``x``. If ``center``, will
-        subtract the mean from the input vector.
-
-    Examples
-    --------
-    >>> from pyramid.datasets import load_lynx
-    >>> x = load_lynx()
-    >>> ac = autocorr(x)
-
     Returns
     -------
-    ac : np.ndarray
-        The auto-correlation array
+    s : pd.Series
+        A pandas Series
     """
-    # Check we have 1d
-    x = column_or_1d(x)  # type: np.ndarray
-    n = x.shape[0]
-    if lag >= n:
-        raise ValueError("Cannot compute auto-correlation with lag >= "
-                         "length of series (lag=%i, series=%i)"
-                         % (lag, n))
-
-    # Subtract its mean
-    x_center = x - np.mean(x)
-    x_norm = np.sum(x_center ** 2)
-    ac = np.correlate(x, x, mode='same') / x_norm
-    return ac[ac.size // 2:]
+    if isinstance(x, pd.Series):
+        return x
+    return pd.Series(column_or_1d(x))
 
 
 def c(*args):

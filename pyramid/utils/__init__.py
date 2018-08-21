@@ -5,6 +5,8 @@
 from .array import *
 from .metaestimators import *
 from .testing import *
+from .visualization import *
+from .wrapped import *
 
 
 def get_callable(key, dct):

@@ -153,7 +153,23 @@ Array helper functions & metaestimators
     :toctree: generated/
     :template: function.rst
 
+    utils.acf
+    utils.as_series
     utils.c
     utils.diff
     utils.if_has_delegate
     utils.is_iterable
+    utils.pacf
+
+Plotting utilities & wrappers
+-----------------------------
+
+.. currentmodule:: pyramid
+
+.. autosummary::
+    :toctree: generated/
+    :template: function.rst
+
+    utils.autocorr_plot
+    utils.plot_acf
+    utils.plot_pacf
