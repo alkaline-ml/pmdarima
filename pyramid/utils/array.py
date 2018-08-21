@@ -6,16 +6,38 @@
 
 from __future__ import absolute_import, division
 
-from sklearn.utils.validation import check_array
+from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.externals import six
 
 import numpy as np
+import pandas as pd
 
 __all__ = [
+    'as_series',
     'c',
     'diff',
     'is_iterable'
 ]
+
+
+def as_series(x):
+    """Cast as pandas Series.
+
+    Cast a numpy array or list to Pandas series.
+
+    Parameters
+    ----------
+    x : array-like, shape=(n_samples,)
+        The 1d array on which to compute the auto correlation.
+
+    Returns
+    -------
+    s : pd.Series
+        A pandas Series
+    """
+    if isinstance(x, pd.Series):
+        return x
+    return pd.Series(column_or_1d(x))
 
 
 def c(*args):

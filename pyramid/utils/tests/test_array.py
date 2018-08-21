@@ -1,11 +1,13 @@
 
 from __future__ import absolute_import
 
-from pyramid.utils.array import diff, c, is_iterable
+from pyramid.utils.array import diff, c, is_iterable, as_series
 from pyramid.utils import get_callable
 
 from numpy.testing import assert_array_equal
 from nose.tools import assert_raises
+
+import pandas as pd
 import numpy as np
 
 x = np.arange(5)
@@ -51,3 +53,9 @@ def test_is_iterable():
     assert is_iterable(["this", "list"])
     assert not is_iterable(None)
     assert is_iterable(np.array([1, 2]))
+
+
+def test_as_series():
+    assert isinstance(as_series([1, 2, 3]), pd.Series)
+    assert isinstance(as_series(np.arange(5)), pd.Series)
+    assert isinstance(as_series(pd.Series([1, 2, 3])), pd.Series)

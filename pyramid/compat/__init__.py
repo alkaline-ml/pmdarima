@@ -5,6 +5,7 @@ designed not to make calls out to other portions of Pyramid and to
 remove circular dependencies.
 """
 
+from .pandas import *
 from .python import *
 from .numpy import *
 

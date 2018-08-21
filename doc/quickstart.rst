@@ -4,44 +4,46 @@
 Pyramid Quickstart
 ==================
 
-Here is a simple example of Pyramid use:
+Since pyramid is intended to replace R's ``auto.arima``, the interface is
+designed to be quick to learn and easy to use, even for R users making the switch.
+Common functions and tools are elevated to the top-level of the package:
 
 .. code-block:: python
 
-    >>> import numpy as np
-    >>> from pyramid.arima import auto_arima
-    >>> from pyramid.datasets import load_wineind
+    import pyramid as pm
+
+    # Create an array like you would in R
+    x = pm.c(1, 2, 3, 4, 5, 6, 7)
+
+    # Compute an auto-correlation like you would in R:
+    pm.acf(x)
+
+    # Plot an auto-correlation:
+    pm.plot_acf(x)
+
+
+Auto-ARIMA example
+------------------
+
+Here's a quick example of how we can fit an ``auto_arima`` with pyramid:
+
+.. code-block:: python
+
+    import numpy as np
+    import pyramid as pm
+    from pyramid.datasets import load_wineind
 
     # this is a dataset from R
-    >>> wineind = load_wineind().astype(np.float64)
+    wineind = load_wineind().astype(np.float64)
 
-    >>> stepwise_fit = auto_arima(wineind, start_p=1, start_q=1,
-    ...                           max_p=3, max_q=3, m=12,
-    ...                           start_P=0, seasonal=True,
-    ...                           d=1, D=1, trace=True,
-    ...                           error_action='ignore',  # don't want to know if an order does not work
-    ...                           suppress_warnings=True,  # don't want convergence warnings
-    ...                           stepwise=True)  # set to stepwise
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 1, 1, 12); AIC=3066.811, BIC=3082.663, Fit time=0.517 seconds
-    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 1, 0, 12); AIC=nan, BIC=nan, Fit time=nan seconds
-    Fit ARIMA: order=(1, 1, 0) seasonal_order=(1, 1, 0, 12); AIC=3099.735, BIC=3112.417, Fit time=0.162 seconds
-    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 1, 1, 12); AIC=3066.983, BIC=3079.665, Fit time=0.164 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(1, 1, 1, 12); AIC=3067.666, BIC=3086.688, Fit time=0.645 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 1, 0, 12); AIC=3088.109, BIC=3100.791, Fit time=0.136 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 1, 2, 12); AIC=3067.669, BIC=3086.692, Fit time=1.512 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(1, 1, 2, 12); AIC=3068.757, BIC=3090.951, Fit time=1.651 seconds
-    Fit ARIMA: order=(2, 1, 1) seasonal_order=(0, 1, 1, 12); AIC=3067.485, BIC=3086.508, Fit time=0.445 seconds
-    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 1, 1, 12); AIC=3094.578, BIC=3107.260, Fit time=0.174 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 1, 1, 12); AIC=3066.771, BIC=3085.794, Fit time=0.425 seconds
-    Fit ARIMA: order=(2, 1, 3) seasonal_order=(0, 1, 1, 12); AIC=3070.642, BIC=3096.006, Fit time=0.966 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(1, 1, 1, 12); AIC=3068.086, BIC=3090.280, Fit time=0.411 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 1, 0, 12); AIC=3090.977, BIC=3106.830, Fit time=0.249 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 1, 2, 12); AIC=3067.766, BIC=3089.959, Fit time=1.170 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(1, 1, 2, 12); AIC=3069.717, BIC=3095.081, Fit time=2.000 seconds
-    Fit ARIMA: order=(0, 1, 2) seasonal_order=(0, 1, 1, 12); AIC=nan, BIC=nan, Fit time=nan seconds
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 1, 1, 12); AIC=3068.701, BIC=3090.895, Fit time=0.523 seconds
-    Fit ARIMA: order=(1, 1, 3) seasonal_order=(0, 1, 1, 12); AIC=3068.842, BIC=3091.036, Fit time=0.590 seconds
-    Total fit time: 11.745 seconds
+    # fit stepwise auto-ARIMA
+    stepwise_fit = pm.auto_arima(wineind, start_p=1, start_q=1,
+                                 max_p=3, max_q=3, m=12,
+                                 start_P=0, seasonal=True,
+                                 d=1, D=1, trace=True,
+                                 error_action='ignore',  # don't want to know if an order does not work
+                                 suppress_warnings=True,  # don't want convergence warnings
+                                 stepwise=True)  # set to stepwise
 
 It's easy to examine your model fit results. Simply use the ``summary`` method:
 
