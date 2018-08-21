@@ -6,6 +6,9 @@
 .pyramid-cache/
 *.pmdpkl
 
+# Models
+*.pkl
+
 # Pypi pws
 .pypipws
 
