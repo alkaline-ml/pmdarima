@@ -10,3 +10,4 @@ omit =
     */pyramid/_build_utils/*
     */pyramid/setup.py
     */pyramid/__init__.py
+    */pyramid/compat/matplotlib.py

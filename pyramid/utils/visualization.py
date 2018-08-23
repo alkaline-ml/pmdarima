@@ -7,9 +7,12 @@
 from __future__ import absolute_import
 
 from ..compat.pandas import autocorrelation_plot as ap
+from ..compat.matplotlib import get_compatible_pyplot
 
 from statsmodels.graphics.tsaplots import plot_acf as pacf, plot_pacf as ppacf
-from matplotlib import pyplot as plt
+
+# Gets the MPL.pyplot import (combatibilitized)
+plt = get_compatible_pyplot(default_backend='TkAgg')
 
 __all__ = [
     'autocorr_plot',
