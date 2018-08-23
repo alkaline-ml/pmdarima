@@ -100,6 +100,8 @@ rules may hinder the speed with which your contribution is merged:
    to build the package. For instructions on how to test (using nose or pytest)
    see `Numpy's testing instructions <https://github.com/numpy/numpy/blob/master/doc/TESTS.rst.txt>`_.
 
+.. _filing_bugs:
+
 Filing bugs
 -----------
 We use Github issues to track all bugs and feature requests; feel free to

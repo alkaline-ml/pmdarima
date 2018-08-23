@@ -41,7 +41,7 @@ most other python objects:
     # show they're the same
     np.allclose(pickle_preds, joblib_preds)
 
-As far as a model-builder goes, that should be all you really care to know about
+If your job is to build models, that's probably all you really care to know about
 the serialization process. However, there are several intricacies of how Pyramid
 internally saves a model that you might care to know for development purposes.
 

@@ -22,8 +22,11 @@ contribute you'll need to be able to build from source.
    setup.rst
    contributing.rst
    contributors.rst
+   quickstart.rst
    refreshing.rst
    serialization.rst
+   tips_and_tricks.rst
+   whats_new.rst
 
 API reference
 -------------

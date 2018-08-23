@@ -91,8 +91,7 @@ def plot_acf(series, ax=None, lags=None, alpha=None, use_vlines=True,
 
 
 def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
-              use_vlines=True, unbiased=False, fft=True,
-              title='Partial Autocorrelation', zero=True,
+              use_vlines=True, title='Partial Autocorrelation', zero=True,
               vlines_kwargs=None, **kwargs):
     """Plot a series' partial auto-correlation as a line plot.
 
@@ -134,12 +133,6 @@ def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
         If False, only markers are plotted.  The default marker is 'o'; it can
         be overridden with a ``marker`` kwarg.
 
-    unbiased : bool, optional (default=False)
-        If True, then denominators for autocovariance are n-k, otherwise n
-
-    fft : bool, optional (default=True)
-        If True, computes the ACF via FFT.
-
     title : str, optional (default='Partial Autocorrelation')
         Title to place on plot. Default is 'Partial Autocorrelation'
 
@@ -155,6 +148,6 @@ def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
         Matplotlib ``plot`` and ``axhline`` functions.
     """
     ppacf(x=series, ax=ax, lags=lags, alpha=alpha, method=method,
-          use_vlines=use_vlines, unbiased=unbiased, fft=fft, title=title,
-          zero=zero, vlines_kwargs=vlines_kwargs, **kwargs)
+          use_vlines=use_vlines, title=title, zero=zero,
+          vlines_kwargs=vlines_kwargs, **kwargs)
     plt.show()
