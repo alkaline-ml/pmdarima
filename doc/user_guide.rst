@@ -26,20 +26,15 @@ contribute you'll need to be able to build from source.
    refreshing.rst
    serialization.rst
    tips_and_tricks.rst
+   modules/datasets.rst
    whats_new.rst
 
 API reference
 -------------
-This section covers documentation and examples of each of the python
-package's submodules. See also the :ref:`api_ref`
+
+The :ref:`api_ref` covers documentation and examples of each of the Pyramid
+package's submodules.
 
 .. raw:: html
 
    <br/>
-
-.. toctree::
-
-   modules/arima.auto.rst
-   modules/arima.seasonality.rst
-   modules/arima.stationarity.rst
-   modules/datasets.rst

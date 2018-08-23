@@ -28,10 +28,16 @@ else:
     from .arima import auto_arima, ARIMA
     from .utils import acf, autocorr_plot, c, pacf, plot_acf, plot_pacf
 
+    # Need these namespaces at the top so they can be used like:
+    # pm.datasets.load_wineind()
+    from . import arima
+    from . import datasets
+    from . import utils
+
     __all__ = [
         # Namespaces we want exposed at top:
         'arima',
-        # 'compat',
+        'compat',
         'datasets',
         'utils',
 

@@ -24,8 +24,8 @@ import os
 rs = RandomState(42)
 y = rs.rand(25)
 
-# more interesting, heart rate data:
-hr = load_heartrate()
+# more interesting heart rate data (asserts we can use a series)
+hr = load_heartrate(as_series=True)
 
 # > set.seed(123)
 # > abc <- rnorm(50, 5, 1)

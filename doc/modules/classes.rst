@@ -42,7 +42,7 @@ one of several scoring criteria. This is typically the most effective way to
 fit an ARIMA model unless you have apriori subject matter expertise regarding
 the trends within your data.
 
-**User guide:** See the :ref:`auto_arima` section for further details.
+**User guide:** See the :ref:`tips_and_tricks` section for further details.
 
 .. currentmodule:: pyramid
 
@@ -77,7 +77,7 @@ Tests of stationarity
 Timeseries data must be stationary in order to model it well. Pyramid implements
 several tests of stationarity.
 
-**User guide:** See the :ref:`stationarity` section for further details.
+**User guide:** See the :ref:`enforcing_stationarity` section for further details.
 
 .. currentmodule:: pyramid
 

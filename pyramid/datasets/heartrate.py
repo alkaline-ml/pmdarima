@@ -3,22 +3,29 @@
 from __future__ import absolute_import
 
 import numpy as np
+import pandas as pd
 
 __all__ = [
     'load_heartrate'
 ]
 
 
-def load_heartrate():
+def load_heartrate(as_series=False):
     """Uniform heart-rate data.
 
     A sample of heartrate data borrowed from an
     `MIT database <http://ecg.mit.edu/time-series/>`_. The sample consists
     of 150 evenly spaced (0.5 seconds) heartrate measurements.
 
+    Parameters
+    ----------
+    as_series : bool, optional (default=False)
+        Whether to return a Pandas series. If False, will return a 1d
+        numpy array.
+
     Returns
     -------
-    hr : np.ndarray
+    rslt : array-like, shape=(n_samples,)
         The heartrate vector.
 
     Examples
@@ -48,6 +55,14 @@ def load_heartrate():
            82.8729, 82.6266, 82.645 , 82.645 , 82.645 , 82.645 , 82.645 ,
            82.645 , 82.645 , 82.645 ])
 
+    >>> load_heartrate(True).head()
+    0    84.2697
+    1    84.2697
+    2    84.0619
+    3    85.6542
+    4    87.2093
+    dtype: float64
+
     References
     ----------
     .. [1] Goldberger AL, Rigney DR. Nonlinear dynamics at the bedside.
@@ -56,7 +71,7 @@ def load_heartrate():
            Dynamics of Cardiac Function. New York: Springer-Verlag, 1991,
            pp. 583-605.
     """
-    return np.array([84.2697, 84.2697, 84.0619, 85.6542, 87.2093, 87.1246,
+    rslt = np.array([84.2697, 84.2697, 84.0619, 85.6542, 87.2093, 87.1246,
                      86.8726, 86.7052, 87.5899, 89.1475, 89.8204, 89.8204,
                      90.4375, 91.7605, 93.1081, 94.3291, 95.8003, 97.5119,
                      98.7457, 98.904, 98.3437, 98.3075, 98.8313, 99.0789,
@@ -81,3 +96,7 @@ def load_heartrate():
                      91.2883, 89.0592, 87.052, 86.6226, 85.7889, 85.6348,
                      85.3911, 83.8064, 82.8729, 82.6266, 82.645, 82.645,
                      82.645, 82.645, 82.645, 82.645, 82.645, 82.645])
+
+    if as_series:
+        return pd.Series(rslt)
+    return rslt

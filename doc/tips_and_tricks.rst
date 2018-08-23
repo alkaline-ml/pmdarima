@@ -4,6 +4,15 @@
 Tips to using ``auto_arima``
 ============================
 
+The ``auto_arima`` function fits the best ``ARIMA`` model to a univariate time
+series according to either
+`AIC <https://en.wikipedia.org/wiki/Akaike_information_criterion>`_,
+`AICc <https://en.wikipedia.org/wiki/Akaike_information_criterion#AICc>`_,
+`BIC <https://en.wikipedia.org/wiki/Bayesian_information_criterion>`_ or
+`HQIC <https://en.wikipedia.org/wiki/Hannan–Quinn_information_criterion>`_.
+The function performs a search (either stepwise or parallelized)
+over possible model orders within the constraints provided.
+
 The ``auto_arima`` function can be daunting. There are a lot of parameters to
 tune, and the outcome is heavily dependent on a number of them. In this section,
 we lay out several considerations you'll want to make when you fit your ARIMA
@@ -68,9 +77,14 @@ the difference twice:
     x = x_lag - x[:-1]
     # x = [ 4.,  9., 18.]
 
+.. _enforcing_stationarity:
 
 Enforcing stationarity
 ----------------------
+
+The ``pyramid.arima.stationarity`` sub-module defines various tests of stationarity for
+testing a null hypothesis that an observable univariate time series is stationary around
+a deterministic trend (i.e. trend-stationary).
 
 A time series is stationary when its mean, variance and auto-correlation, etc.,
 are constant over time. Many time-series methods may perform better when a time-series
@@ -150,8 +164,16 @@ parameters:
 ``D`` can be estimated via a Canova-Hansen test, however ``m`` generally requires subject matter
 knowledge of the data.
 
+.. _seasonality:
+
 Estimating the seasonal differencing term
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Seasonality can manifest itself in timeseries data in unexpected ways. Sometimes
+trends are partially dependent on the time of year or month. Other times, they
+may be related to weather patterns. In either case, seasonality is a real consideration
+that must be made. The pyramid package provides a test of seasonality for including
+seasonal terms in your ARIMA models.
 
 We can use a Canova-Hansen test to estimate our seasonal differencing term:
 

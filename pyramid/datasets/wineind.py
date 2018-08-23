@@ -4,14 +4,29 @@
 #
 # This is the wineind dataset found in R.
 
+from __future__ import absolute_import
+
 import numpy as np
+import pandas as pd
+
+import calendar
+
+__all__ = [
+    'load_wineind'
+]
 
 
-def load_wineind():
+def load_wineind(as_series=False):
     """Australian total wine sales by wine makers in bottles <= 1 litre.
 
     This time-series records wine sales by Australian wine makers between
     Jan 1980 -- Aug 1994. This dataset is found in the R ``forecast`` package.
+
+    Parameters
+    ----------
+    as_series : bool, optional (default=False)
+        Whether to return a Pandas series. If True, the index will be set to
+        the observed years/months. If False, will return a 1d numpy array.
 
     Examples
     --------
@@ -38,16 +53,24 @@ def load_wineind():
            29356, 31234, 22724, 28496, 32857, 37198, 13652, 22784, 23565,
            26323, 23779, 27549, 29660, 23356])
 
+    >>> load_wineind(True).head()
+    Jan 1980    15136
+    Feb 1980    16733
+    Mar 1980    20016
+    Apr 1980    17708
+    May 1980    18019
+    dtype: int64
+
     References
     ----------
     .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/wineind
 
     Returns
     -------
-    wineind : np.ndarray, shape=(n_samples,)
+    rslt : array-like, shape=(n_samples,)
         The wineind dataset. There are 176 observations.
     """
-    return np.array([15136, 16733, 20016, 17708, 18019, 19227, 22893, 23739,
+    rslt = np.array([15136, 16733, 20016, 17708, 18019, 19227, 22893, 23739,
                      21133, 22591, 26786, 29740, 15028, 17977, 20008, 21354,
                      19498, 22125, 25817, 28779, 20960, 22254, 27392, 29945,
                      16933, 17892, 20533, 23569, 22417, 22084, 26580, 27454,
@@ -69,3 +92,16 @@ def load_wineind():
                      25156, 25650, 30923, 37240, 17466, 19463, 24352, 26805,
                      25236, 24735, 29356, 31234, 22724, 28496, 32857, 37198,
                      13652, 22784, 23565, 26323, 23779, 27549, 29660, 23356])
+
+    if not as_series:
+        return rslt
+
+    # Otherwise we want a series and have to cleverly create the index
+    # (we don't want after aug in 1994, so trip Sep, Oct, Nov and Dec)
+    index = [
+        "%s %i" % (calendar.month_abbr[i + 1], year)
+        for year in range(1980, 1995)
+        for i in range(12)
+    ][:-4]
+
+    return pd.Series(rslt, index=index)

@@ -21,7 +21,7 @@ __all__ = [
 ]
 
 
-def autocorr_plot(series):
+def autocorr_plot(series, block=True):
     """Plot a series' auto-correlation.
 
     A wrapper method for the Pandas ``autocorrelation_plot`` method.
@@ -30,14 +30,19 @@ def autocorr_plot(series):
     ----------
     series : array-like, shape=(n_samples,)
         The series or numpy array for which to plot an auto-correlation.
+
+    block : bool, optional (default=False)
+        Whether to block a script from continuing while the figure is open.
+        Default is True (matplotlib's default as well), but if False, will
+        continue after drawing.
     """
     ap(series)
-    plt.show()
+    plt.show(block=block)
 
 
 def plot_acf(series, ax=None, lags=None, alpha=None, use_vlines=True,
              unbiased=False, fft=True, title='Autocorrelation',
-             zero=True, vlines_kwargs=None, **kwargs):
+             zero=True, vlines_kwargs=None, block=True, **kwargs):
     """Plot a series' auto-correlation as a line plot.
 
     A wrapper method for the statsmodels ``plot_acf`` method.
@@ -83,6 +88,11 @@ def plot_acf(series, ax=None, lags=None, alpha=None, use_vlines=True,
     vlines_kwargs : dict, optional (default=None)
         Optional dictionary of keyword arguments that are passed to vlines.
 
+    block : bool, optional (default=False)
+        Whether to block a script from continuing while the figure is open.
+        Default is True (matplotlib's default as well), but if False, will
+        continue after drawing.
+
     **kwargs : kwargs, optional
         Optional keyword arguments that are directly passed on to the
         Matplotlib ``plot`` and ``axhline`` functions.
@@ -90,12 +100,12 @@ def plot_acf(series, ax=None, lags=None, alpha=None, use_vlines=True,
     pacf(x=series, ax=ax, lags=lags, alpha=alpha, use_vlines=use_vlines,
          unbiased=unbiased, fft=fft, title=title, zero=zero,
          vlines_kwargs=vlines_kwargs, **kwargs)
-    plt.show()
+    plt.show(block=block)
 
 
 def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
               use_vlines=True, title='Partial Autocorrelation', zero=True,
-              vlines_kwargs=None, **kwargs):
+              vlines_kwargs=None, block=True, **kwargs):
     """Plot a series' partial auto-correlation as a line plot.
 
     A wrapper method for the statsmodels ``plot_pacf`` method.
@@ -146,6 +156,11 @@ def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
     vlines_kwargs : dict, optional (default=None)
         Optional dictionary of keyword arguments that are passed to vlines.
 
+    block : bool, optional (default=False)
+        Whether to block a script from continuing while the figure is open.
+        Default is True (matplotlib's default as well), but if False, will
+        continue after drawing.
+
     **kwargs : kwargs, optional
         Optional keyword arguments that are directly passed on to the
         Matplotlib ``plot`` and ``axhline`` functions.
@@ -153,4 +168,4 @@ def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
     ppacf(x=series, ax=ax, lags=lags, alpha=alpha, method=method,
           use_vlines=use_vlines, title=title, zero=zero,
           vlines_kwargs=vlines_kwargs, **kwargs)
-    plt.show()
+    plt.show(block=block)
