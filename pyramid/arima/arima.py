@@ -717,19 +717,22 @@ class ARIMA(BaseEstimator):
             # The model endog is stored differently in the ARIMA class than
             # in the SARIMAX class, where the ARIMA actually stores the diffed
             # array. However, ARMA does not (and we cannot diff for d < 1).
-            if d > 0:  # ARIMA
+            do_diff = d > 0
+            if do_diff:  # ARIMA
                 y_diffed = diff(y, d)
             else:  # ARMA
                 y_diffed = y
 
+            # This changes the length of the array!
             model_res.model.endog = y_diffed
 
-            # Set the model result nobs
-            model_res.nobs = y.shape[0]
+            # Set the model result nobs (must be the differenced shape!)
+            model_res.nobs = y_diffed.shape[0]
 
             # Set the exogenous
             if exog is not None:
-                # Set in data class
+                # Set in data class (this is NOT differenced, unlike the
+                # model data)
                 model_res.data.exog = exog
 
                 # Difference and add intercept, then add to model class
@@ -745,7 +748,10 @@ class ARIMA(BaseEstimator):
             else:
                 # Otherwise we STILL have to set the exogenous array as an
                 # intercept in the model class for both ARMA and ARIMA.
-                model_res.model.exog = np.ones((y.shape[0], 1))
+                # Make sure to use y_diffed in case d > 0, since the exog
+                # array will be multiplied by the endog at some point and we
+                # need the dimensions to match (Issue #30)
+                model_res.model.exog = np.ones((y_diffed.shape[0], 1))
 
         else:  # SARIMAX
             # The model endog is stored differently in the ARIMA class than

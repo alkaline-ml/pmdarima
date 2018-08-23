@@ -21,6 +21,10 @@ v0.8.0
   - Specifies the location of the ARIMA result pickles (see :ref:`serializing`)
   - Specifies the ARIMA result pickle name pattern
 
+* Fix bug (`Issue #30 <https://github.com/tgsmith61591/pyramid/issues/30>`_) in ``ARIMA``
+  where using CV with differencing and no seasonality caused a dim mismatch in the model's
+  exog array and its endog array
+
 
 v0.7.0
 ------

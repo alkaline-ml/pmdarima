@@ -253,6 +253,25 @@ def test_oob_for_issue_29():
                         raise
 
 
+def test_issue_30():
+    # From the issue:
+    vec = np.array([33., 44., 58., 49., 46., 98., 97.])
+    auto_arima(vec, out_of_sample_size=1, seasonal=False,
+               suppress_warnings=True)
+
+    # This is a way to force it:
+    ARIMA(order=(0, 1, 0), out_of_sample_size=1).fit(vec)
+
+    # Want to make sure it works with exog arrays as well
+    exog = np.random.RandomState(1).rand(vec.shape[0], 2)
+    auto_arima(vec, exogenous=exog, out_of_sample_size=1,
+               seasonal=False,
+               suppress_warnings=True)
+
+    # This is a way to force it:
+    ARIMA(order=(0, 1, 0), out_of_sample_size=1).fit(vec, exogenous=exog)
+
+
 def _try_get_attrs(arima):
     # show we can get all these attrs without getting an error
     attrs = {
