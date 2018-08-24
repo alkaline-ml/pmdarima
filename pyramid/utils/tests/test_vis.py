@@ -3,7 +3,6 @@
 from __future__ import absolute_import
 
 import pyramid as pm
-from matplotlib.testing.decorators import cleanup
 
 # Some as numpy, some as series
 datasets = [
@@ -13,9 +12,8 @@ datasets = [
 ]
 
 
-@cleanup
 def do_plot(plotting_func, dataset):
-    plotting_func(dataset, block=False)
+    plotting_func(dataset, show=False)
 
 
 def test_plot_autocorrelations():

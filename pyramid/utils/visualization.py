@@ -21,7 +21,18 @@ __all__ = [
 ]
 
 
-def autocorr_plot(series, block=True):
+def _show_or_return(obj, show):
+    if show:
+        # We never cover this in tests, unfortunately. Even with the
+        # cleanup tag, Travis doesn't play super nice with showing and
+        # closing lots of plots over and over. But it's just one line...
+        plt.show()
+        # returns None implicitly
+    else:
+        return obj
+
+
+def autocorr_plot(series, show=True):
     """Plot a series' auto-correlation.
 
     A wrapper method for the Pandas ``autocorrelation_plot`` method.
@@ -31,18 +42,23 @@ def autocorr_plot(series, block=True):
     series : array-like, shape=(n_samples,)
         The series or numpy array for which to plot an auto-correlation.
 
-    block : bool, optional (default=False)
-        Whether to block a script from continuing while the figure is open.
-        Default is True (matplotlib's default as well), but if False, will
-        continue after drawing.
+    show : bool, optional (default=True)
+        Whether to show the plot after it's been created. If not, will return
+        the plot as an Axis object instead.
+
+    Returns
+    -------
+    res : Axis or None
+        If ``show`` is True, does not return anything. If False, returns
+        the Axis object.
     """
-    ap(series)
-    plt.show(block=block)
+    res = ap(series)
+    return _show_or_return(res, show)
 
 
 def plot_acf(series, ax=None, lags=None, alpha=None, use_vlines=True,
              unbiased=False, fft=True, title='Autocorrelation',
-             zero=True, vlines_kwargs=None, block=True, **kwargs):
+             zero=True, vlines_kwargs=None, show=True, **kwargs):
     """Plot a series' auto-correlation as a line plot.
 
     A wrapper method for the statsmodels ``plot_acf`` method.
@@ -88,24 +104,30 @@ def plot_acf(series, ax=None, lags=None, alpha=None, use_vlines=True,
     vlines_kwargs : dict, optional (default=None)
         Optional dictionary of keyword arguments that are passed to vlines.
 
-    block : bool, optional (default=False)
-        Whether to block a script from continuing while the figure is open.
-        Default is True (matplotlib's default as well), but if False, will
-        continue after drawing.
+    show : bool, optional (default=True)
+        Whether to show the plot after it's been created. If not, will return
+        the plot as an Axis object instead.
 
     **kwargs : kwargs, optional
         Optional keyword arguments that are directly passed on to the
         Matplotlib ``plot`` and ``axhline`` functions.
+
+    Returns
+    -------
+    plt : Axis or None
+        If ``show`` is True, does not return anything. If False, returns
+        the Axis object.
     """
-    pacf(x=series, ax=ax, lags=lags, alpha=alpha, use_vlines=use_vlines,
-         unbiased=unbiased, fft=fft, title=title, zero=zero,
-         vlines_kwargs=vlines_kwargs, **kwargs)
-    plt.show(block=block)
+    res = pacf(x=series, ax=ax, lags=lags, alpha=alpha, use_vlines=use_vlines,
+               unbiased=unbiased, fft=fft, title=title, zero=zero,
+               vlines_kwargs=vlines_kwargs, **kwargs)
+
+    return _show_or_return(res, show)
 
 
 def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
               use_vlines=True, title='Partial Autocorrelation', zero=True,
-              vlines_kwargs=None, block=True, **kwargs):
+              vlines_kwargs=None, show=True, **kwargs):
     """Plot a series' partial auto-correlation as a line plot.
 
     A wrapper method for the statsmodels ``plot_pacf`` method.
@@ -156,16 +178,22 @@ def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
     vlines_kwargs : dict, optional (default=None)
         Optional dictionary of keyword arguments that are passed to vlines.
 
-    block : bool, optional (default=False)
-        Whether to block a script from continuing while the figure is open.
-        Default is True (matplotlib's default as well), but if False, will
-        continue after drawing.
+    show : bool, optional (default=True)
+        Whether to show the plot after it's been created. If not, will return
+        the plot as an Axis object instead.
 
     **kwargs : kwargs, optional
         Optional keyword arguments that are directly passed on to the
         Matplotlib ``plot`` and ``axhline`` functions.
+
+    Returns
+    -------
+    plt : Axis or None
+        If ``show`` is True, does not return anything. If False, returns
+        the Axis object.
     """
-    ppacf(x=series, ax=ax, lags=lags, alpha=alpha, method=method,
-          use_vlines=use_vlines, title=title, zero=zero,
-          vlines_kwargs=vlines_kwargs, **kwargs)
-    plt.show(block=block)
+    res = ppacf(x=series, ax=ax, lags=lags, alpha=alpha, method=method,
+                use_vlines=use_vlines, title=title, zero=zero,
+                vlines_kwargs=vlines_kwargs, **kwargs)
+
+    return _show_or_return(res, show)
