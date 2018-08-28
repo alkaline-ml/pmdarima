@@ -151,6 +151,9 @@ html_sidebars = {
 # Name of the favicon image
 html_favicon = 'img/favicon.ico'
 
+# TODO: someday
+# html_logo = ?
+
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.

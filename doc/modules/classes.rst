@@ -4,6 +4,8 @@
 API Reference
 =============
 
+.. include:: ../includes/api_css.rst
+
 This is the class and function reference for pyramid. Please refer to
 the :ref:`full user guide <user_guide>` for further details, as the class and
 function raw specifications may not be enough to give full guidelines on their
@@ -26,6 +28,10 @@ stationarity.
 ARIMA estimator
 ---------------
 
+The ``ARIMA`` class is a wrapper of the statsmodels ``ARMA``, ``ARIMA`` and
+``SARIMAX`` classes all in one. It accepts seasonal parameters optionally, and
+is the backing class to the ``auto_arima`` function.
+
 .. currentmodule:: pyramid
 
 .. autosummary::
@@ -37,7 +43,7 @@ ARIMA estimator
 ARIMA auto-parameter selection
 ------------------------------
 
-`auto_arima` selects the best model order for an ARIMA estimator by minimizing
+``auto_arima`` selects the best model order for an ARIMA estimator by minimizing
 one of several scoring criteria. This is typically the most effective way to
 fit an ARIMA model unless you have apriori subject matter expertise regarding
 the trends within your data.

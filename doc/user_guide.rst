@@ -17,17 +17,17 @@ contribute you'll need to be able to build from source.
    <br/>
 
 .. toctree::
+   :numbered:
 
    about.rst
    setup.rst
-   contributing.rst
-   contributors.rst
    quickstart.rst
-   refreshing.rst
    serialization.rst
+   refreshing.rst
    tips_and_tricks.rst
    modules/datasets.rst
-   whats_new.rst
+   contributing.rst
+   contributors.rst
 
 API reference
 -------------

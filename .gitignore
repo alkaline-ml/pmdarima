@@ -6,6 +6,9 @@
 .pyramid-cache/
 *.pmdpkl
 
+# Don't want to include scratch stuff
+scratch/
+
 # Models
 *.pkl
 
