@@ -64,3 +64,20 @@ th.field-name {
 .field-body {
     background-color: #fff;
 }
+
+h2 > a.reference {
+    font-weight: bold;
+    color: #2878A2;
+    text-decoration: none;
+    word-wrap: break-word;
+    font-family: Arial, sans-serif;
+}
+
+a.reference > code.xref {
+    background: transparent;
+    border: none;
+    font-size: 1.1em;
+    font-family: monospace;
+    padding: 2px 4px;
+    color: #2980B9 !important;
+}

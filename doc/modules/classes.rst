@@ -4,6 +4,8 @@
 API Reference
 =============
 
+.. include:: ../includes/api_css.rst
+
 This is the class and function reference for pyramid. Please refer to
 the :ref:`full user guide <user_guide>` for further details, as the class and
 function raw specifications may not be enough to give full guidelines on their
@@ -12,8 +14,8 @@ uses.
 
 .. _arima_ref:
 
-:mod:`pyramid.arima`: ARIMA estimator and associated tests
-==========================================================
+:mod:`pyramid.arima`: ARIMA estimator
+=====================================
 
 The ``pyramid.arima`` sub-module defines the ``ARIMA`` estimator and the
 ``auto_arima`` function, as well as a set of tests of seasonality and
@@ -23,8 +25,11 @@ stationarity.
     :no-members:
     :no-inherited-members:
 
-ARIMA estimator
----------------
+ARIMA estimator & statistical tests
+-----------------------------------
+
+**User guide:** See the :ref:`seasonality` and :ref:`enforcing_stationarity`
+sections for further details.
 
 .. currentmodule:: pyramid
 
@@ -32,15 +37,14 @@ ARIMA estimator
     :toctree: generated/
     :template: class.rst
 
+    arima.ADFTest
     arima.ARIMA
+    arima.CHTest
+    arima.KPSSTest
+    arima.PPTest
 
 ARIMA auto-parameter selection
 ------------------------------
-
-`auto_arima` selects the best model order for an ARIMA estimator by minimizing
-one of several scoring criteria. This is typically the most effective way to
-fit an ARIMA model unless you have apriori subject matter expertise regarding
-the trends within your data.
 
 **User guide:** See the :ref:`tips_and_tricks` section for further details.
 
@@ -51,43 +55,6 @@ the trends within your data.
     :template: function.rst
 
     arima.auto_arima
-
-Tests of seasonality
---------------------
-
-Tests of seasonality are important if your timeseries data exhibits seasonal
-trends (i.e., Black Friday trends in retail, dependencies on weather patterns,
-etc.). Pyramid currently implements only one test of seasonality, but more will
-be added in future versions.
-
-**User guide:** See the :ref:`seasonality` section for further details.
-
-.. currentmodule:: pyramid
-
-.. autosummary::
-    :toctree: generated/
-    :template: class.rst
-
-    arima.CHTest
-
-
-Tests of stationarity
----------------------
-
-Timeseries data must be stationary in order to model it well. Pyramid implements
-several tests of stationarity.
-
-**User guide:** See the :ref:`enforcing_stationarity` section for further details.
-
-.. currentmodule:: pyramid
-
-.. autosummary::
-    :toctree: generated/
-    :template: class.rst
-
-    arima.ADFTest
-    arima.KPSSTest
-    arima.PPTest
 
 
 Differencing helpers
