@@ -6,6 +6,7 @@
 # sklearn metaestimators, but adapted for more specific use with pyramid.
 
 from __future__ import absolute_import
+
 from operator import attrgetter
 from functools import update_wrapper
 
@@ -58,7 +59,9 @@ class _IffHasDelegate(object):
 
 
 def if_has_delegate(delegate):
-    """Create a decorator for methods that are delegated in the presence of a
+    """Wrap a delegated instance attribute function.
+
+    Creates a decorator for methods that are delegated in the presence of a
     results wrapper. This enables duck-typing by ``hasattr`` returning True
     according to the sub-estimator.
 

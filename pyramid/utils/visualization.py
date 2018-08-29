@@ -46,6 +46,17 @@ def autocorr_plot(series, show=True):
         Whether to show the plot after it's been created. If not, will return
         the plot as an Axis object instead.
 
+    Notes
+    -----
+    This method will only show the plot if ``show=True`` (which is the default
+    behavior). To simply get the axis back (say, to add to another canvas),
+    use ``show=False``.
+
+    Examples
+    --------
+    >>> autocorr_plot([1, 2, 3], False)  # doctest: +SKIP
+    <matplotlib.axes._subplots.AxesSubplot object at 0x127f41dd8>
+
     Returns
     -------
     res : Axis or None
@@ -111,6 +122,17 @@ def plot_acf(series, ax=None, lags=None, alpha=None, use_vlines=True,
     **kwargs : kwargs, optional
         Optional keyword arguments that are directly passed on to the
         Matplotlib ``plot`` and ``axhline`` functions.
+
+    Notes
+    -----
+    This method will only show the plot if ``show=True`` (which is the default
+    behavior). To simply get the axis back (say, to add to another canvas),
+    use ``show=False``.
+
+    Examples
+    --------
+    >>> plot_acf([1, 2, 3], show=False)  # doctest: +SKIP
+    <matplotlib.figure.Figure object at 0x122fab4e0>
 
     Returns
     -------
@@ -185,6 +207,17 @@ def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
     **kwargs : kwargs, optional
         Optional keyword arguments that are directly passed on to the
         Matplotlib ``plot`` and ``axhline`` functions.
+
+    Notes
+    -----
+    This method will only show the plot if ``show=True`` (which is the default
+    behavior). To simply get the axis back (say, to add to another canvas),
+    use ``show=False``.
+
+    Examples
+    --------
+    >>> plot_pacf([1, 2, 3, 4], show=False)  # doctest: +SKIP
+    <matplotlib.figure.Figure object at 0x129df1630>
 
     Returns
     -------
