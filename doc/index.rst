@@ -37,7 +37,3 @@ Helpful sections to get started:
 * :ref:`contributors`
 * :ref:`quickstart`
 * :ref:`user_guide`
-
-To search for a specific section or class documentation, visit the index:
-
-* :ref:`search`
