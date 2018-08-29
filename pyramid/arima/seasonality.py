@@ -63,8 +63,14 @@ class CHTest(_SeasonalStationarityTest):
     ----------
     m : int
         The seasonal differencing term. For monthly data, e.g., this would be
-        12. For quarterly, 4. For annual, 1, etc. For the Canova-Hansen test
-        to work, ``m`` must exceed 1.
+        12. For quarterly, 4, etc. For the Canova-Hansen test to work,
+        ``m`` must exceed 1.
+
+    Notes
+    -----
+    This test is generally not used directly, but in conjunction with
+    :func:`pyramid.arima.nsdiffs`, which directly estimates the number
+    of seasonal differences.
 
     References
     ----------
@@ -187,6 +193,21 @@ class CHTest(_SeasonalStationarityTest):
         ----------
         x : array-like, shape=(n_samples,)
             The time series vector.
+
+        Returns
+        -------
+        D : int
+            The seasonal differencing term. The CH test defines a set of
+            critical values::
+
+                (0.4617146, 0.7479655, 1.0007818,
+                 1.2375350, 1.4625240, 1.6920200,
+                 1.9043096, 2.1169602, 2.3268562,
+                 2.5406922, 2.7391007)
+
+            For different values of ``m``, the CH statistic is compared
+            to a different critical value, and returns 1 if the computed
+            statistic is greater than the critical value, or 0 if not.
         """
         if not self._base_case(x):
             return 0

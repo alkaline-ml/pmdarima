@@ -58,10 +58,12 @@ def is_constant(x):
 
 
 def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
-    """Estimate seasonal differences.
+    """Estimate the seasonal differencing term, ``D``.
 
-    Function to estimate the number of seasonal differences
-    required to make a given time series stationary.
+    Perform a test of seasonality for different levels of ``D`` to
+    estimate the number of seasonal differences required to make a given time
+    series stationary. Will select the maximum value of ``D`` for which
+    the time series is judged seasonally stationary by the statistical test.
 
     Parameters
     ----------
@@ -74,11 +76,20 @@ def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
 
     max_D : int, optional (default=2)
         Maximum number of seasonal differences allowed. Must
-        be a positive integer.
+        be a positive integer. The estimated value of ``D`` will not
+        exceed ``max_D``.
 
     test : str, optional (default='ch')
         Type of unit root test of seasonality to use in order
-        to detect seasonal periodicity.
+        to detect seasonal periodicity. Currently, the only allowed value
+        is 'ch'.
+
+    Returns
+    -------
+    D : int
+        The estimated seasonal differencing term. This is the maximum value
+        of ``D`` such that ``D <= max_D`` and the time series is judged
+        seasonally stationary. If the time series is constant, will return 0.
     """
     if max_D <= 0:
         raise ValueError('max_D must be a positive integer')
@@ -106,26 +117,37 @@ def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
 
 
 def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
-    """Estimate differencing term.
+    """Estimate ARIMA differencing term, ``d``.
 
-    Function to estimate the number of differences required to
-    make a given time series stationary.
+    Perform a test of stationarity for different levels of ``d`` to
+    estimate the number of differences required to make a given time
+    series stationary. Will select the maximum value of ``d`` for which
+    the time series is judged stationary by the statistical test.
 
     Parameters
     ----------
     x : array-like, shape=(n_samples, [n_features])
-        The array to difference.
+        The array (time series) to difference.
 
     alpha : float, optional (default=0.05)
-        Level of the test
+        Level of the test. This is the value above below which the P-value
+        will be deemed significant.
 
     test : str, optional (default='kpss')
         Type of unit root test of stationarity to use in order to
-        test the stationarity of the time-series.
+        test the stationarity of the time-series. One of ('kpss', 'adf', 'pp')
 
     max_d : int, optional (default=2)
         Maximum number of non-seasonal differences allowed. Must
-        be a positive integer.
+        be a positive integer. The estimated value of ``d`` will not
+        exceed ``max_d``.
+
+    Returns
+    -------
+    d : int
+        The estimated differencing term. This is the maximum value of ``d``
+        such that ``d <= max_d`` and the time series is judged stationary.
+        If the time series is constant, will return 0.
     """
     if max_d <= 0:
         raise ValueError('max_d must be a positive integer')

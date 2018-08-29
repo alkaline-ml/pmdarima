@@ -14,8 +14,8 @@ uses.
 
 .. _arima_ref:
 
-:mod:`pyramid.arima`: ARIMA estimator
-=====================================
+:mod:`pyramid.arima`: ARIMA estimator & differencing tests
+==========================================================
 
 The ``pyramid.arima`` sub-module defines the ``ARIMA`` estimator and the
 ``auto_arima`` function, as well as a set of tests of seasonality and
