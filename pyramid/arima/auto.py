@@ -157,7 +157,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         periods in each season. For example, ``m`` is 4 for quarterly data, 12
         for monthly data, or 1 for annual (non-seasonal) data. Default is 1.
         Note that if ``m`` == 1 (i.e., is non-seasonal), ``seasonal`` will be
-        set to False.
+        set to False. For more information on setting this parameter, see
+        :ref:`period`.
 
     seasonal : bool, optional (default=True)
         Whether to fit a seasonal ARIMA. Default is True. Note that if

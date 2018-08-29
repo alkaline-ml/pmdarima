@@ -112,9 +112,9 @@ will automatically determine the appropriate differencing term for you by defaul
     :scale: 50%
     :alt: Auto-correlation
 
-It would appear from the auto-correlation plot that the Lynx dataset may not be
-stationary and may need differencing to become so. We can determine whether we
-need to difference our data by conducting an ADF test:
+We can examine a time-series' auto-correlation plot given the code above.
+However, to more quantitatively determine whether we need to difference our
+data in order to make it stationary, we can conduct an ADF test:
 
 .. code-block:: python
 
@@ -134,6 +134,13 @@ provides a more handy interface for estimating your ``d`` parameter more directl
 
     # Estimate the number of differences using an ADF test:
     n_adf = ndiffs(y, test='adf')  # -> 0
+
+    # Or a KPSS test (auto_arima default):
+    n_kpss = ndiffs(y, test='kpss')  # -> 0
+
+    # Or a PP test:
+    n_pp = ndiffs(y, test='pp')  # -> 0
+    assert n_adf == n_kpss == n_pp == 0
 
 
 The easiest way to make your data stationary in the case of ARIMA models is
@@ -166,8 +173,8 @@ knowledge of the data.
 
 .. _seasonality:
 
-Estimating the seasonal differencing term
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Estimating the seasonal differencing term, ``D``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Seasonality can manifest itself in timeseries data in unexpected ways. Sometimes
 trends are partially dependent on the time of year or month. Other times, they
@@ -194,11 +201,64 @@ We can use a Canova-Hansen test to estimate our seasonal differencing term:
 By default, this will be estimated in ``auto_arima`` if ``seasonal=True``. Make
 sure to pay attention to the ``m`` and the ``max_D`` parameters.
 
-Typically, ``m`` will correspond to some recurrent periodicity such as:
+.. _period:
+
+Setting ``m``
+~~~~~~~~~~~~~
+
+The ``m`` parameter is the number of observations per seasonal cycle, and is
+one that must be known apriori. Typically, ``m`` will correspond to some
+recurrent periodicity such as:
 
 * 7 - daily
 * 12 - monthly
 * 52 - weekly
+
+Depending on how it's set, it can dramatically impact the outcome of an
+ARIMA model. For instance, consider the wineind dataset when fit with
+``m=1`` vs. ``m=12``:
+
+.. code-block:: python
+
+    import pyramid as pm
+
+    data = pm.datasets.load_wineind()
+    train, test = data[:150], data[150:]
+
+    # Fit two different ARIMAs
+    m1 = pm.auto_arima(train, error_action='ignore', seasonal=True, m=1)
+    m12 = pm.auto_arima(train, error_action='ignore', seasonal=True, m=12)
+
+The forecasts these two models will produce are wildly different (code to reproduce):
+
+.. code-block:: python
+
+    import matplotlib.pyplot as plt
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 8))
+    x = np.arange(test.shape[0])
+
+    # Plot m=1
+    axes[0].scatter(x, test, marker='x')
+    axes[0].plot(x, m1.predict(n_periods=test.shape[0]))
+    axes[0].set_title('Test samples vs. forecasts (m=1)')
+
+    # Plot m=12
+    axes[1].scatter(x, test, marker='x')
+    axes[1].plot(x, m12.predict(n_periods=test.shape[0]))
+    axes[1].set_title('Test samples vs. forecasts (m=12)')
+
+    plt.show()
+
+.. image:: img/m_matters.png
+    :align: center
+    :scale: 50%
+    :alt: The 'm' parameter
+
+As you can see, depending on the value of ``m``, you may either get a very good model
+or a very bad one!!! The author of R's ``auto.arima``, Rob Hyndman, wrote a very good
+`blog post <https://robjhyndman.com/hyndsight/seasonal-periods/>`_ on the period
+of a seasonal time series.
 
 
 Parallel vs. stepwise
