@@ -911,7 +911,8 @@ def _post_ppc_arima(a):
         raise ValueError('Could not successfully fit ARIMA to input data. '
                          'It is likely your data is non-stationary. Please '
                          'induce stationarity or try a different '
-                         'range of model order params.')
+                         'range of model order params. If your data is '
+                         'seasonal, check the period (m) of the data.')
     # good to return
     return a
 
