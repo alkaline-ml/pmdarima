@@ -47,21 +47,24 @@ if [[ "$DISTRIB" == "conda" ]]; then
     if [[ "$PYTHON_VERSION" == "2.7" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION \
             numpy scipy cython=$CYTHON_VERSION statsmodels \
-            scikit-learn=$SCIKIT_LEARN_VERSION pytest pytest-cov
+            scikit-learn=$SCIKIT_LEARN_VERSION pytest pytest-cov \
+            matplotlib=$MPL_VERSION
 
     elif [[ "$INSTALL_MKL" == "true" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
             numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
             mkl cython=$CYTHON_VERSION \
             scikit-learn=$SCIKIT_LEARN_VERSION \
-            statsmodels=$STATSMODELS_VERSION pytest pytest-cov
+            statsmodels=$STATSMODELS_VERSION pytest pytest-cov \
+            matplotlib=$MPL_VERSION
 
     else
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
             numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
             nomkl cython=$CYTHON_VERSION \
             scikit-learn=$SCIKIT_LEARN_VERSION \
-            statsmodels=$STATSMODELS_VERSION pytest pytest-cov
+            statsmodels=$STATSMODELS_VERSION pytest pytest-cov \
+            matplotlib=$MPL_VERSION
     fi
     source activate testenv
 
@@ -70,7 +73,6 @@ if [[ "$DISTRIB" == "conda" ]]; then
 
     # Install nose-timer via pip
     pip install nose-timer
-    pip install matplotlib==$MPL_VERSION
 else
     echo "We are only building with DISTRIB=conda currently"
     exit 10

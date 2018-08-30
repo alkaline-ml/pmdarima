@@ -36,7 +36,7 @@ def get_compatible_pyplot(default_backend="TkAgg", debug=True,
     import matplotlib
 
     # Can this raise?...
-    backend = matplotlib.get_backend().lower()
+    backend = matplotlib.get_backend()
     if backend in replace:
         matplotlib.use(default_backend)
 
