@@ -55,6 +55,15 @@ build_script:
   # Things we'll need for deployment
   - pip install wheel twine
 
+  # Matplotlib needs a different version depending on the python version
+  - ps: |
+      $PYTHON_MAJ = $env:PY_MAJOR_VER
+      If ($PYTHON_MAJ -eq 2) {
+          pip install matplotlib==2.1.0
+      } Else {
+          pip install matplotlib
+      }
+
   # Build the package
   - python setup.py develop
 

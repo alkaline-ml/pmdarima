@@ -28,6 +28,7 @@ print(lynx)
 print("\nLynx series head:")
 print(pm.datasets.load_lynx(as_series=True).head())
 
-# Two other datasets:
+# Several other datasets:
 heart_rate = pm.datasets.load_heartrate()
 wineind = pm.datasets.load_wineind()
+woolyrnq = pm.datasets.load_woolyrnq()

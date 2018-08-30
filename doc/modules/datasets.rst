@@ -14,6 +14,27 @@ All datasets share a common interface::
 
 Where ``as_series=True`` will return a Pandas Series object with the appropriate index.
 
+.. _heartrate:
+
+Heartrate
+---------
+
+The heart rate data records sample of heartrate data borrowed from an
+`MIT database <http://ecg.mit.edu/time-series/>`_. The sample consists
+of 150 evenly spaced (0.5 seconds) heartrate measurements.
+
+.. code-block:: python
+
+    >>> load_heartrate(True).head()
+    0    84.2697
+    1    84.2697
+    2    84.0619
+    3    85.6542
+    4    87.2093
+    dtype: float64
+
+.. _lynx:
+
 Lynx
 ----
 
@@ -32,6 +53,8 @@ built into R. The dataset exhibits a clear 10-year cycle.
     1825    1475
     dtype: int64
 
+.. _wineind:
+
 Wineind
 -------
 
@@ -49,19 +72,21 @@ R ``forecast`` package.
     May 1980    18019
     dtype: int64
 
-Heartrate
----------
+.. _woolyrnq:
 
-The heart rate data records sample of heartrate data borrowed from an
-`MIT database <http://ecg.mit.edu/time-series/>`_. The sample consists
-of 150 evenly spaced (0.5 seconds) heartrate measurements.
+Woolyrnq
+--------
+
+A time-series that records the quarterly production (in tonnes) of woollen
+yarn in Australia between Mar 1965 and Sep 1994. This dataset is found in the
+R ``forecast`` package.
 
 .. code-block:: python
 
-    >>> load_heartrate(True).head()
-    0    84.2697
-    1    84.2697
-    2    84.0619
-    3    85.6542
-    4    87.2093
-    dtype: float64
+    >>> load_woolyrnq(True).head()
+    Q1 1965    6172
+    Q2 1965    6709
+    Q3 1965    6633
+    Q4 1965    6660
+    Q1 1966    6786
+    dtype: int64
