@@ -27,6 +27,10 @@ from ..compat.numpy import DTYPE
 from ..compat.python import long
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
+from .._config import PYRAMID_ARIMA_CACHE, PICKLE_HASH_PATTERN
+
+# Get the version
+import pyramid
 
 __all__ = [
     'ARIMA'
@@ -367,6 +371,10 @@ class ARIMA(BaseEstimator):
 
         # Save nobs since we might change it later if using OOB
         self.nobs_ = y.shape[0]
+
+        # As of version 0.7.2, start saving the version with the model so
+        # we can track changes over time.
+        self.pkg_version_ = pyramid.__version__
         return self
 
     def _check_exog(self, exogenous):
@@ -524,13 +532,9 @@ class ARIMA(BaseEstimator):
         self.fit(y, exogenous, **fit_args)
         return self.predict(n_periods=n_periods, exogenous=exogenous)
 
-    @staticmethod
-    def _get_cache_folder():
-        return '.pyramid-cache'
-
     def _get_pickle_hash_file(self):
         # Mmmm, pickle hash...
-        return '%s-%s-%i.pmdpkl' % (
+        return PICKLE_HASH_PATTERN % (
             # cannot use ':' in Windows file names. Whoops!
             str(datetime.datetime.now()).replace(' ', '_').replace(':', '-'),
             ''.join([str(e) for e in self.order]),
@@ -542,6 +546,7 @@ class ARIMA(BaseEstimator):
 
         # if this already contains a pointer to a "saved state" model,
         # delete that model and replace it with a new one
+        # FIXME: v0.7.2+ - do we want to keep this around for later unpickling?
         if loc is not None:
             os.unlink(loc)
 
@@ -550,7 +555,7 @@ class ARIMA(BaseEstimator):
         cwd = os.path.abspath(os.getcwd())
 
         # check that the cache folder exists, and if not, make it.
-        cache_loc = os.path.join(cwd, self._get_cache_folder())
+        cache_loc = os.path.join(cwd, PYRAMID_ARIMA_CACHE)
         try:
             os.makedirs(cache_loc)
         # since this is a race condition, just try to make it
@@ -588,7 +593,40 @@ class ARIMA(BaseEstimator):
                 raise OSError('Could not read saved model state from %s. '
                               'Does it still exist?' % loc)
 
+        # Warn for unpickling a different version's model
+        self._warn_for_older_version()
         return self
+
+    def _warn_for_older_version(self):
+        # Added in v0.7.2 - check for the version pickled under and warn
+        # if it's different from the current version
+        do_warn = False
+        modl_version = None
+        this_version = pyramid.__version__
+
+        try:
+            modl_version = getattr(self, 'pkg_version_')
+
+            # Either < or > or '-dev' vs. release version
+            if modl_version != this_version:
+                do_warn = True
+        except AttributeError:
+            # Either wasn't fit when pickled or didn't have the attr due to
+            # it being an older version. If it wasn't fit, it will be missing
+            # the arima_res_ attr.
+            if hasattr(self, 'arima_res_'):  # it was fit, but is older
+                do_warn = True
+                modl_version = '<0.7.2'
+
+            # else: it may not have the model (not fit) and still be older,
+            # but we can't detect that.
+
+        # Means it was older
+        if do_warn:
+            warnings.warn("You've deserialized an ARIMA from a version (%s) "
+                          "that differs from your installed version of "
+                          "Pyramid (%s). This could cause unforeseen behavior."
+                          % (modl_version, this_version), UserWarning)
 
     def _clear_cached_state(self):
         # when fit in an auto-arima, a lot of cached .pmdpkl files
@@ -679,19 +717,22 @@ class ARIMA(BaseEstimator):
             # The model endog is stored differently in the ARIMA class than
             # in the SARIMAX class, where the ARIMA actually stores the diffed
             # array. However, ARMA does not (and we cannot diff for d < 1).
-            if d > 0:  # ARIMA
+            do_diff = d > 0
+            if do_diff:  # ARIMA
                 y_diffed = diff(y, d)
             else:  # ARMA
                 y_diffed = y
 
+            # This changes the length of the array!
             model_res.model.endog = y_diffed
 
-            # Set the model result nobs
-            model_res.nobs = y.shape[0]
+            # Set the model result nobs (must be the differenced shape!)
+            model_res.nobs = y_diffed.shape[0]
 
             # Set the exogenous
             if exog is not None:
-                # Set in data class
+                # Set in data class (this is NOT differenced, unlike the
+                # model data)
                 model_res.data.exog = exog
 
                 # Difference and add intercept, then add to model class
@@ -707,7 +748,10 @@ class ARIMA(BaseEstimator):
             else:
                 # Otherwise we STILL have to set the exogenous array as an
                 # intercept in the model class for both ARMA and ARIMA.
-                model_res.model.exog = np.ones((y.shape[0], 1))
+                # Make sure to use y_diffed in case d > 0, since the exog
+                # array will be multiplied by the endog at some point and we
+                # need the dimensions to match (Issue #30)
+                model_res.model.exog = np.ones((y_diffed.shape[0], 1))
 
         else:  # SARIMAX
             # The model endog is stored differently in the ARIMA class than

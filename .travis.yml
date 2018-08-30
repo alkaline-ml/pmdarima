@@ -19,6 +19,13 @@ env:
     - TEST_DIR=/tmp/pyramid
     - OMP_NUM_THREADS=4
     - OPENBLAS_NUM_THREADS=4
+    # Matplotlib variables:
+    - PYRAMID_MPL_DEBUG="true"
+    - PYRAMID_MPL_BACKEND="TkAgg"
+    - MPL_VERSION="2.2.3"
+    # So we don't test MPL
+    - TESTING_ON_TRAVIS="true"
+    # Deployment variables:
     # - TWINE_REPOSITORY_URL="https://test.pypi.org/legacy/"  # only for test
     - TWINE_USERNAME="tgsmith61591.gh"
     - secure: "nLu1oztl7hWoLZbUc3lWoTVC0x4feY7x3S0z2RzbbVg7EjoRUNS1do1bRxsNBvZt1ujQAmRN2hTA6gr66KtElHtKAMbbx7/MUdFvnWQdw6urVwapRxPyzHv5Yhg1+iBaKAeUWeSSX1QETsCbPgmu6vzxFfp1wlCg++kO9n0RsNSlc9TejgPyVRY+mMxFktbEydfXJCMVg6D0wHJ+No3l2Y0k2UNfzSwYy+a4JobX6uad+8z303mr9+1iQyfiQyTyiurAPw3nM/sSqizV0LBdjm4mCho1aopZwF7gfh4YwYLYuVz6btGIoR5fEoF2nCTOKFyehooPWyx0vllKoUZ5BJMsJEPYXQnDQulimAoBjaTt/2TFxjdyHEuK7gAMko19Vvb5209yVoi/+REfZ0qC3P1pvF5iHKTl9mEkuMwvr2UYaetH7IsZq610c7aZf0ygj/snx4SfkFLvl5LolSqqI3Mzb9vKsef1yrf/G5L4dARC8gALfz6DS0e2GhnJDJafDGXIlfnx+tG0bKs1+vTkI8R09P7BxgaCTEeAWUdycBE2wx4hD7a58rStvHNU8tunbtBhQgHkAx/k5Cwd32LCQazWJLSht0SCdkW8mnW+U5IkcHHh2/7kYQIw2gnEiwiNGiBuuZXPfeYJRd1AqsjkXk798jKV9Xg1GD14mHdL628="
@@ -43,7 +50,8 @@ matrix:
         - docker
       env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=true
-           DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64" DOCKER_CONTAINER_NAME="pyramidcontainer" UCS_SETTING="ucs4"
+           DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64" DOCKER_CONTAINER_NAME="pyramidcontainer"
+           UCS_SETTING="ucs4"
 
     # This environment tests the same conditions as above, but tests against MAC OS X,
     # using virtualenv instead of the conda python distribution

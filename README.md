@@ -29,14 +29,8 @@ from pyramid.arima import auto_arima
 ```
 
 
-### Quickstart
+### Documentation
 
-__For an easy, reproducible quick-start example, see [examples/](examples/quick_start_example.ipynb).__
-
-
-### Other considerations
-
-- How do I make pyramid run as quickly as R?
-  - R's code is heavily C-based. Pyramid runs on statsmodels, which is Python based. There will be some differences in performance
-    speed-wise, but much of it can be eliminated by using `stepwise=True`. See [this discussion](https://stackoverflow.com/questions/40871602/sarimax-model-fitting-too-slow-in-statsmodels)
-    for more thoughts...
+All of your questions and more (including examples and guides) can be answered
+by the [Pyramid documentation](https://www.alkaline-ml.com/pyramid). If not,
+always feel free to file an issue.

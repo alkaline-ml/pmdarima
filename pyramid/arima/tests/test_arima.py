@@ -24,8 +24,13 @@ import os
 rs = RandomState(42)
 y = rs.rand(25)
 
-# more interesting, heart rate data:
-hr = load_heartrate()
+# more interesting heart rate data (asserts we can use a series)
+hr = load_heartrate(as_series=True)
+
+# Yes, m is ACTUALLY 12... but that takes a LONG time. If we set it to
+# 1, we actually get a much, much faster model fit. We can only use this
+# if we're NOT testing the output of the model, but just the functionality!
+wineind_m = 1
 
 # > set.seed(123)
 # > abc <- rnorm(50, 5, 1)
@@ -253,6 +258,25 @@ def test_oob_for_issue_29():
                         raise
 
 
+def test_issue_30():
+    # From the issue:
+    vec = np.array([33., 44., 58., 49., 46., 98., 97.])
+    auto_arima(vec, out_of_sample_size=1, seasonal=False,
+               suppress_warnings=True)
+
+    # This is a way to force it:
+    ARIMA(order=(0, 1, 0), out_of_sample_size=1).fit(vec)
+
+    # Want to make sure it works with exog arrays as well
+    exog = np.random.RandomState(1).rand(vec.shape[0], 2)
+    auto_arima(vec, exogenous=exog, out_of_sample_size=1,
+               seasonal=False,
+               suppress_warnings=True)
+
+    # This is a way to force it:
+    ARIMA(order=(0, 1, 0), out_of_sample_size=1).fit(vec, exogenous=exog)
+
+
 def _try_get_attrs(arima):
     # show we can get all these attrs without getting an error
     attrs = {
@@ -427,14 +451,16 @@ def test_with_seasonality2():
                 return func(*args, **kwargs)
         return suppressor
 
+    # Use smaller M to make this move faster.
     @suppress_warnings
     def do_fit():
         return auto_arima(wineind, start_p=1, start_q=1, max_p=2,
-                          max_q=2, m=12, start_P=0, seasonal=True, n_jobs=-1,
-                          d=1, D=1, stepwise=True,
+                          max_q=2, m=2, start_P=0,
+                          seasonal=True, n_jobs=-1,
+                          d=1, D=1, stepwise=False,
                           suppress_warnings=True,
                           error_action='ignore',
-                          random_state=42)
+                          n_fits=20, random_state=42)
 
     # show that we can forecast even after the
     # pickling (this was fit in parallel)
@@ -447,7 +473,7 @@ def test_with_seasonality2():
 
 def test_with_seasonality3():
     # show we can estimate D even when it's not there...
-    auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
+    auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=wineind_m,
                start_P=0, seasonal=True, d=1, D=None,
                error_action='ignore', suppress_warnings=True,
                trace=True,  # get the coverage on trace
@@ -456,23 +482,24 @@ def test_with_seasonality3():
 
 def test_with_seasonality4():
     # show we can run a random search much faster! and while we're at it,
-    # make the function return all the values.
+    # make the function return all the values. Also, use small M to make our
+    # lives easier.
     auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-               start_P=0, seasonal=True, n_jobs=1, d=1, D=None, stepwise=False,
+               start_P=0, seasonal=True, n_jobs=2, d=1, D=None, stepwise=False,
                error_action='ignore', suppress_warnings=True,
                random=True, random_state=42, return_valid_fits=True,
-               n_fits=5)  # only fit 5
+               n_fits=3)  # only a few
 
 
 def test_with_seasonality5():
     # can we fit the same thing with an exogenous array of predictors?
     # also make it stationary and make sure that works...
     all_res = auto_arima(wineind, start_p=1, start_q=1, max_p=2,
-                         max_q=2, m=12, start_P=0, seasonal=True, n_jobs=1,
+                         max_q=2, m=12, start_P=0, seasonal=True, n_jobs=2,
                          d=1, D=None, error_action='ignore',
                          suppress_warnings=True, stationary=True,
                          random=True, random_state=42, return_valid_fits=True,
-                         stepwise=False, n_fits=5,
+                         stepwise=False, n_fits=3,  # only a few
                          exogenous=rs.rand(wineind.shape[0], 4))  # only fit 2
 
     # show it is a list

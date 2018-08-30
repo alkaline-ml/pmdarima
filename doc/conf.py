@@ -17,6 +17,17 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+# Import first to avoid backend ValueError:
+# ValueError: Sphinx-Gallery relies on the matplotlib 'agg' backend to
+# render figures and write them to files. You are currently using the MacOSX
+# backend. Sphinx-Gallery will terminate the build now, because changing
+# backends is not well supported by matplotlib. We advise you to move
+# sphinx_gallery imports before any matplotlib-dependent import. Moving
+# sphinx_gallery imports at the top of your conf.py file should fix this issue
+import sphinx_gallery
+import matplotlib
+matplotlib.use('agg')  # RISK: could be overridden via environment variables...
+
 import os
 import sys
 import pyramid
@@ -27,7 +38,6 @@ sys.path.insert(0, os.path.abspath('..' + os.path.sep))
 sys.path.insert(0, os.path.abspath('sphinxext'))
 
 from github_link import make_linkcode_resolve
-import sphinx_gallery
 
 
 # -- General configuration ------------------------------------------------
@@ -141,6 +151,9 @@ html_sidebars = {
 # Name of the favicon image
 html_favicon = 'img/favicon.ico'
 
+# TODO: someday
+# html_logo = ?
+
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
@@ -217,4 +230,6 @@ def setup(app):
 
 # The following is used by sphinx.ext.linkcode to provide links to github
 linkcode_resolve = make_linkcode_resolve(
-    'pyramid', u('https://github.com/tgsmith61591/pyramid'))
+    'pyramid', u('https://github.com/tgsmith61591/'
+                 'pyramid/blob/{revision}/'
+                 '{package}/{path}#L{lineno}'))

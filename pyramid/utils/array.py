@@ -6,25 +6,70 @@
 
 from __future__ import absolute_import, division
 
-from sklearn.utils.validation import check_array
+from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.externals import six
 
 import numpy as np
+import pandas as pd
 
 __all__ = [
+    'as_series',
     'c',
     'diff',
     'is_iterable'
 ]
 
 
+def as_series(x):
+    """Cast as pandas Series.
+
+    Cast an iterable to a Pandas Series object. Note that the index
+    will simply be a positional ``arange`` and cannot be set in this
+    function.
+
+    Parameters
+    ----------
+    x : array-like, shape=(n_samples,)
+        The 1d array on which to compute the auto correlation.
+
+    Examples
+    --------
+    >>> as_series([1, 2, 3])
+    0    1
+    1    2
+    2    3
+    dtype: int64
+
+    >>> as_series(as_series((1, 2, 3)))
+    0    1
+    1    2
+    2    3
+    dtype: int64
+
+    >>> import pandas as pd
+    >>> as_series(pd.Series([4, 5, 6], index=['a', 'b', 'c']))
+    a    4
+    b    5
+    c    6
+    dtype: int64
+
+    Returns
+    -------
+    s : pd.Series
+        A pandas Series object.
+    """
+    if isinstance(x, pd.Series):
+        return x
+    return pd.Series(column_or_1d(x))
+
+
 def c(*args):
     r"""Imitates the ``c`` function from R.
 
     Since this whole library is aimed at re-creating in
-    Python what R has already done so well, why not add a ``c`` function
-    that wraps ``numpy.concatenate``? Similar to R, this works with scalars,
-    iterables, and any mix therein.
+    Python what R has already done so well, the ``c`` function was created to
+    wrap ``numpy.concatenate`` and mimic the R functionality. Similar to R,
+    this works with scalars, iterables, and any mix therein.
 
     Note that using the ``c`` function on multi-nested lists or iterables
     will fail!
@@ -32,14 +77,17 @@ def c(*args):
     Examples
     --------
     Using ``c`` with varargs will yield a single array:
+
     >>> c(1, 2, 3, 4)
     array([1, 2, 3, 4])
 
     Using ``c`` with nested lists and scalars will also yield a single array:
+
     >>> c([1, 2], 4, c(5, 4))
     array([1, 2, 4, 5, 4])
 
     However, using ``c`` with multi-level lists will fail!
+
     >>> c([1, 2, 3], [[1, 2]])  # doctest: +SKIP
     ValueError: all the input arrays must have same number of dimensions
 
@@ -104,46 +152,41 @@ def _diff_matrix(x, lag):
 def diff(x, lag=1, differences=1):
     """Difference an array.
 
-    A python implementation of the R ``diff`` function (documentation found
-    at https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html). This
-    computes lag differences from an array given a ``lag`` and ``differencing``
-    term.
+    A python implementation of the R ``diff`` function [1]. This computes lag
+    differences from an array given a ``lag`` and ``differencing`` term.
 
-    If ``x`` is a vector of length n, ``lag`` = 1 and ``differences`` = 1, then
-    the computed result is equal to the successive differences
+    If ``x`` is a vector of length :math:`n`, ``lag=1`` and ``differences=1``,
+    then the computed result is equal to the successive differences
     ``x[lag:n] - x[:n-lag]``.
 
     Examples
     --------
-    >>> from pyramid.utils import c, diff
-    >>>
-    >>> # lag 1, diff 1
+    Where ``lag=1`` and ``differences=1``:
+
     >>> x = c(10, 4, 2, 9, 34)
     >>> diff(x, 1, 1)
     array([ -6.,  -2.,   7.,  25.], dtype=float32)
 
-    >>> from pyramid.utils import c, diff
-    >>>
-    >>> # lag 1, diff 2
+    Where ``lag=1`` and ``differences=2``:
+
     >>> x = c(10, 4, 2, 9, 34)
     >>> diff(x, 1, 2)
     array([  4.,   9.,  18.], dtype=float32)
 
-    >>> from pyramid.utils import c, diff
-    >>>
-    >>> # lag 3, diff 1
+    Where ``lag=3`` and ``differences=1``:
+
     >>> x = c(10, 4, 2, 9, 34)
     >>> diff(x, 3, 1)
     array([ -1.,  30.], dtype=float32)
 
-    >>> from pyramid.utils import c, diff
-    >>>
-    >>> # lag 6 (larger than the vec), diff 1
+    Where ``lag=6`` (larger than the array is) and ``differences=1``:
+
     >>> x = c(10, 4, 2, 9, 34)
     >>> diff(x, 6, 1)
     array([], dtype=float32)
 
-    >>> from pyramid.utils import diff
+    For a 2d array with ``lag=1`` and ``differences=1``:
+
     >>> import numpy as np
     >>>
     >>> x = np.arange(1, 10).reshape((3, 3)).T

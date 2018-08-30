@@ -69,6 +69,15 @@ class _DifferencingStationarityTest(six.with_metaclass(ABCMeta,
         ----------
         x : array-like, shape=(n_samples,)
             The time series vector.
+
+        Returns
+        -------
+        pval : float
+            The computed P-value of the test.
+
+        sig : bool
+            Whether the P-value is significant at the ``alpha`` level.
+            More directly, whether to difference the time series.
         """
 
 
@@ -93,6 +102,12 @@ class KPSSTest(_DifferencingStationarityTest):
     lshort : bool, optional (default=True)
         Whether or not to truncate the ``l`` value in the C code.
 
+    Notes
+    -----
+    This test is generally used indirectly via the
+    :func:`pyramid.arima.ndiffs` function, which computes the
+    differencing term, ``d``.
+
     References
     ----------
     .. [1] R's tseries KPSS test source code: http://bit.ly/2eJP1IU
@@ -113,6 +128,15 @@ class KPSSTest(_DifferencingStationarityTest):
         ----------
         x : array-like, shape=(n_samples,)
             The time series vector.
+
+        Returns
+        -------
+        pval : float
+            The computed P-value of the test.
+
+        sig : bool
+            Whether the P-value is significant at the ``alpha`` level.
+            More directly, whether to difference the time series.
         """
         if not self._base_case(x):
             return np.nan, False
@@ -187,10 +211,14 @@ class ADFTest(_DifferencingStationarityTest):
 
     Notes
     -----
-    * ADF test does not perform as reliably to the R code as do the KPSS and PP
-      tests. This is due to the fact that is has to use statsmodels OLS
-      regression for std err estimates rather than the more robust sklearn
-      LinearRegression.
+    This test is generally used indirectly via the
+    :func:`pyramid.arima.ndiffs` function, which computes the
+    differencing term, ``d``.
+
+    ADF test does not perform as close to the R code as do the KPSS and PP
+    tests. This is due to the fact that is has to use statsmodels OLS
+    regression for std err estimates rather than the more robust sklearn
+    LinearRegression.
 
     References
     ----------
@@ -223,6 +251,15 @@ class ADFTest(_DifferencingStationarityTest):
         ----------
         x : array-like, shape=(n_samples,)
             The time series vector.
+
+        Returns
+        -------
+        pval : float
+            The computed P-value of the test.
+
+        sig : bool
+            Whether the P-value is significant at the ``alpha`` level.
+            More directly, whether to difference the time series.
         """
         if not self._base_case(x):
             return np.nan, False
@@ -299,10 +336,14 @@ class PPTest(_DifferencingStationarityTest):
 
     Notes
     -----
-    * The R code allows for two types of tests: 'Z(alpha)' and 'Z(t_alpha)'.
-      Since sklearn does not allow extraction of std errors from the linear
-      model fit, ``t_alpha`` is much more difficult to achieve... so do not
-      allow that variant.
+    This test is generally used indirectly via the
+    :func:`pyramid.arima.ndiffs` function, which computes the
+    differencing term, ``d``.
+
+    The R code allows for two types of tests: 'Z(alpha)' and 'Z(t_alpha)'.
+    Since sklearn does not allow extraction of std errors from the linear
+    model fit, ``t_alpha`` is much more difficult to achieve, so we do not
+    allow that variant.
 
     References
     ----------
@@ -335,6 +376,15 @@ class PPTest(_DifferencingStationarityTest):
         ----------
         x : array-like, shape=(n_samples,)
             The time series vector.
+
+        Returns
+        -------
+        pval : float
+            The computed P-value of the test.
+
+        sig : bool
+            Whether the P-value is significant at the ``alpha`` level.
+            More directly, whether to difference the time series.
         """
         if not self._base_case(x):
             return np.nan, False

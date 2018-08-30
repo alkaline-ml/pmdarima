@@ -157,7 +157,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         periods in each season. For example, ``m`` is 4 for quarterly data, 12
         for monthly data, or 1 for annual (non-seasonal) data. Default is 1.
         Note that if ``m`` == 1 (i.e., is non-seasonal), ``seasonal`` will be
-        set to False.
+        set to False. For more information on setting this parameter, see
+        :ref:`period`.
 
     seasonal : bool, optional (default=True)
         Whether to fit a seasonal ARIMA. Default is True. Note that if
@@ -367,6 +368,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                 raise ValueError('d & D must be None or a positive '
                                  'integer (>= 0)')
             if _d > _max_d:
+                # TODO: should ignore if explicitly defined?...
                 raise ValueError('if explicitly defined, d & D must be <= '
                                  'max_d & <= max_D, respectively')
 
@@ -909,7 +911,8 @@ def _post_ppc_arima(a):
         raise ValueError('Could not successfully fit ARIMA to input data. '
                          'It is likely your data is non-stationary. Please '
                          'induce stationarity or try a different '
-                         'range of model order params.')
+                         'range of model order params. If your data is '
+                         'seasonal, check the period (m) of the data.')
     # good to return
     return a
 
