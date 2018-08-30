@@ -73,6 +73,11 @@ if [[ "$DISTRIB" == "conda" ]]; then
 
     # Install the mpl version
     # pip install matplotlib==$MPL_VERSION
+
+    # This kind of defeats the purpose of multiple numpys, but we're running
+    # into a situation on Travis with multiple numpys in the environment...
+    pip uninstall --yes numpy
+    conda install --yes numpy
 else
     echo "We are only building with DISTRIB=conda currently"
     exit 10
