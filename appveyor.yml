@@ -17,21 +17,29 @@ environment:
       PYTHON_ARCH: "x86"
       PYTHON_VERSION: "2.7"
       MINICONDA_MICRO_VERSION: "30"
+      MPL_VERSION: "2.1.0"
+      PYRAMID_MPL_DEBUG: "true"
 
     - PY_MAJOR_VER: 2
       PYTHON_ARCH: "x86_64"
       PYTHON_VERSION: "2.7"
       MINICONDA_MICRO_VERSION: "30"
+      MPL_VERSION: "2.1.0"
+      PYRAMID_MPL_DEBUG: "true"
 
     - PY_MAJOR_VER: 3
       PYTHON_ARCH: "x86"
       PYTHON_VERSION: "3.5"
       MINICONDA_MICRO_VERSION: "31"
+      MPL_VERSION: "3.0.0"
+      PYRAMID_MPL_DEBUG: "true"
 
     - PY_MAJOR_VER: 3
       PYTHON_ARCH: "x86_64"
       PYTHON_VERSION: "3.5"
       MINICONDA_MICRO_VERSION: "31"
+      MPL_VERSION: "3.0.0"
+      PYRAMID_MPL_DEBUG: "true"
 
 # 3/27/18 - Conda is not working well on Windows because they haven't gotten
 # their act together RE: powershell...
@@ -48,21 +56,12 @@ build_script:
   - conda --version
   - ps: echo "Python version=$env:PYTHON_VERSION"
 
-  # Things we'll need for build/test
-  - ps: conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy
+  # Install conda env
+  - ps: conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy matplotlib=$env:MPL_VERSION
   - activate testenv
 
   # Things we'll need for deployment
   - pip install wheel twine
-
-  # Matplotlib needs a different version depending on the python version
-  - ps: |
-      $PYTHON_MAJ = $env:PY_MAJOR_VER
-      If ($PYTHON_MAJ -eq 2) {
-          pip install matplotlib==2.1.0
-      } Else {
-          pip install matplotlib
-      }
 
   # Build the package
   - python setup.py develop

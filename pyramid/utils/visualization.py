@@ -11,8 +11,14 @@ from ..compat.matplotlib import get_compatible_pyplot
 
 from statsmodels.graphics.tsaplots import plot_acf as pacf, plot_pacf as ppacf
 
-# Gets the MPL.pyplot import (combatibilitized)
-plt = get_compatible_pyplot(default_backend='TkAgg')
+import os
+
+# Gets the MPL.pyplot import (combatibilitized). Only use debug mode if set
+# on the machine in an environment variable
+debug = os.environ.get("PYRAMID_MPL_DEBUG", "false").lower() == "true"
+plt = get_compatible_pyplot(default_backend='TkAgg', debug=debug,
+                            # These don't seem to play very nice with CI?
+                            replace=('MacOSX', 'Qt5Agg', 'Qt5Cairo'))
 
 __all__ = [
     'autocorr_plot',
