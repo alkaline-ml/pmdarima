@@ -16,9 +16,10 @@ import os
 # Gets the MPL.pyplot import (combatibilitized). Only use debug mode if set
 # on the machine in an environment variable
 debug = os.environ.get("PYRAMID_MPL_DEBUG", "false").lower() == "true"
-plt = get_compatible_pyplot(default_backend='TkAgg', debug=debug,
-                            # These don't seem to play very nice with CI?
-                            replace=('MacOSX', 'PyQt5','Qt5Agg', 'Qt5Cairo'))
+
+# If it's a Travis CI machine, we want to set the backend via env variable
+backend = os.environ.get("PYRAMID_MPL_BACKEND", None)
+plt = get_compatible_pyplot(backend=backend, debug=debug)
 
 __all__ = [
     'autocorr_plot',
