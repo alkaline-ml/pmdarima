@@ -70,9 +70,17 @@ if [[ "$DISTRIB" == "conda" ]]; then
 
     # Install nose-timer via pip
     pip install nose-timer
+
+    # Install the mpl version
+    # pip install matplotlib==$MPL_VERSION
+
+    # This kind of defeats the purpose of multiple numpys, but we're running
+    # into a situation on Travis with multiple numpys in the environment...
+    pip uninstall --yes numpy
+    pip install numpy
 else
-    echo "You done screwed up your .travis.yml"
-    exit -10
+    echo "We are only building with DISTRIB=conda currently"
+    exit 10
 fi
 
 # use PIP for installing coverage tools since we might not be using a conda dist

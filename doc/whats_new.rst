@@ -5,9 +5,9 @@ What's new in Pyramid
 =====================
 
 As new releases of Pyramid are pushed out, the following list (introduced in
-v0.8.0) will document the latest features.
+v0.8.1) will document the latest features.
 
-v0.8.0
+v0.8.1
 ------
 
 * ``ARIMA`` instance attributes
@@ -24,6 +24,16 @@ v0.8.0
 * Fix bug (`Issue #30 <https://github.com/tgsmith61591/pyramid/issues/30>`_) in ``ARIMA``
   where using CV with differencing and no seasonality caused a dim mismatch in the model's
   exog array and its endog array
+
+* New dataset: :ref:`woolyrnq` (from R's ``forecast`` package).
+
+* Visualization utilities available at the top level of the package:
+
+    - ``plot_acf``
+    - ``plot_pacf``
+    - ``autocorr_plot``
+
+* Updated documentation with significantly more examples and API references.
 
 
 v0.7.0
