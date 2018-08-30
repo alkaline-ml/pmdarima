@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.arima.auto_arima &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.arima.auto_arima &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -34,8 +34,8 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pyramid.arima.CHTest" href="pyramid.arima.CHTest.html" />
-    <link rel="prev" title="pyramid.arima.ARIMA" href="pyramid.arima.ARIMA.html" /> 
+    <link rel="next" title="pyramid.arima.is_constant" href="pyramid.arima.is_constant.html" />
+    <link rel="prev" title="pyramid.arima.PPTest" href="pyramid.arima.PPTest.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -90,14 +90,12 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-and-associated-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator and associated tests</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-estimator">ARIMA estimator</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-estimator-statistical-tests">ARIMA estimator &amp; statistical tests</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#arima-auto-parameter-selection">ARIMA auto-parameter selection</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.auto_arima</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#tests-of-seasonality">Tests of seasonality</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#tests-of-stationarity">Tests of stationarity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../classes.html#differencing-helpers">Differencing helpers</a></li>
 </ul>
 </li>
@@ -106,8 +104,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -178,7 +176,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pyramid.arima" title="pyramid.arima"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.arima</span></code></a>.auto_arima<a class="headerlink" href="#pyramid-arima-auto-arima" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyramid.arima.auto_arima">
-<code class="descclassname">pyramid.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ch'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend='c'</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=50</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyramid.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ch'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend='c'</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=50</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/arima/auto.py#L37"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically discover the optimal order for an ARIMA model.</p>
 <p>The <code class="docutils literal"><span class="pre">auto_arima</span></code> function seeks to identify the most optimal
 parameters for an <code class="docutils literal"><span class="pre">ARIMA</span></code> model, and returns a fitted ARIMA model. This
@@ -303,7 +301,8 @@ are no constraints on maximum order.</p>
 periods in each season. For example, <code class="docutils literal"><span class="pre">m</span></code> is 4 for quarterly data, 12
 for monthly data, or 1 for annual (non-seasonal) data. Default is 1.
 Note that if <code class="docutils literal"><span class="pre">m</span></code> == 1 (i.e., is non-seasonal), <code class="docutils literal"><span class="pre">seasonal</span></code> will be
-set to False.</p>
+set to False. For more information on setting this parameter, see
+<a class="reference internal" href="../../tips_and_tricks.html#period"><span class="std std-ref">Setting m</span></a>.</p>
 </div></blockquote>
 <p><strong>seasonal</strong> : bool, optional (default=True)</p>
 <blockquote>
@@ -525,14 +524,7 @@ method.</p>
 </table>
 </dd></dl>
 
-<div class="section" id="examples-using-pyramid-arima-auto-arima">
-<h2>Examples using <code class="docutils literal"><span class="pre">pyramid.arima.auto_arima</span></code><a class="headerlink" href="#examples-using-pyramid-arima-auto-arima" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forec..."><div class="figure" id="id4">
-<img alt="../../_images/sphx_glr_example_add_new_samples_thumb.png" src="../../_images/sphx_glr_example_add_new_samples_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/arima/example_add_new_samples.html#sphx-glr-auto-examples-arima-example-add-new-samples-py"><span class="std std-ref">Adding new observations to your model</span></a></span></p>
-</div>
-</div><div class="clearer"></div></div>
-</div>
+<div class="clearer"></div></div>
 
 
            </div>
@@ -542,10 +534,10 @@ method.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pyramid.arima.CHTest.html" class="btn btn-neutral float-right" title="pyramid.arima.CHTest" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pyramid.arima.is_constant.html" class="btn btn-neutral float-right" title="pyramid.arima.is_constant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pyramid.arima.ARIMA.html" class="btn btn-neutral" title="pyramid.arima.ARIMA" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pyramid.arima.PPTest.html" class="btn btn-neutral" title="pyramid.arima.PPTest" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -576,7 +568,7 @@ method.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

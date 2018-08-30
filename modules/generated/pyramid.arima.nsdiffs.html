@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.arima.nsdiffs &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.arima.nsdiffs &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -90,11 +90,9 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-and-associated-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator and associated tests</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-estimator">ARIMA estimator</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-estimator-statistical-tests">ARIMA estimator &amp; statistical tests</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-auto-parameter-selection">ARIMA auto-parameter selection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#tests-of-seasonality">Tests of seasonality</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#tests-of-stationarity">Tests of stationarity</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#differencing-helpers">Differencing helpers</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="pyramid.arima.is_constant.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.is_constant</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyramid.arima.ndiffs.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.ndiffs</a></li>
@@ -108,8 +106,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -180,10 +178,12 @@
 <h1><a class="reference internal" href="../classes.html#module-pyramid.arima" title="pyramid.arima"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.arima</span></code></a>.nsdiffs<a class="headerlink" href="#pyramid-arima-nsdiffs" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyramid.arima.nsdiffs">
-<code class="descclassname">pyramid.arima.</code><code class="descname">nsdiffs</code><span class="sig-paren">(</span><em>x</em>, <em>m</em>, <em>max_D=2</em>, <em>test='ch'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/arima/utils.html#nsdiffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.nsdiffs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimate seasonal differences.</p>
-<p>Function to estimate the number of seasonal differences
-required to make a given time series stationary.</p>
+<code class="descclassname">pyramid.arima.</code><code class="descname">nsdiffs</code><span class="sig-paren">(</span><em>x</em>, <em>m</em>, <em>max_D=2</em>, <em>test='ch'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/arima/utils.py#L60"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/arima/utils.html#nsdiffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.nsdiffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the seasonal differencing term, <code class="docutils literal"><span class="pre">D</span></code>.</p>
+<p>Perform a test of seasonality for different levels of <code class="docutils literal"><span class="pre">D</span></code> to
+estimate the number of seasonal differences required to make a given time
+series stationary. Will select the maximum value of <code class="docutils literal"><span class="pre">D</span></code> for which
+the time series is judged seasonally stationary by the statistical test.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -200,12 +200,22 @@ time series)</p>
 <p><strong>max_D</strong> : int, optional (default=2)</p>
 <blockquote>
 <div><p>Maximum number of seasonal differences allowed. Must
-be a positive integer.</p>
+be a positive integer. The estimated value of <code class="docutils literal"><span class="pre">D</span></code> will not
+exceed <code class="docutils literal"><span class="pre">max_D</span></code>.</p>
 </div></blockquote>
 <p><strong>test</strong> : str, optional (default=&#8217;ch&#8217;)</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Type of unit root test of seasonality to use in order
-to detect seasonal periodicity.</p>
+to detect seasonal periodicity. Currently, the only allowed value
+is &#8216;ch&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>D</strong> : int</p>
+<blockquote class="last">
+<div><p>The estimated seasonal differencing term. This is the maximum value
+of <code class="docutils literal"><span class="pre">D</span></code> such that <code class="docutils literal"><span class="pre">D</span> <span class="pre">&lt;=</span> <span class="pre">max_D</span></code> and the time series is judged
+seasonally stationary. If the time series is constant, will return 0.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -257,7 +267,7 @@ to detect seasonal periodicity.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

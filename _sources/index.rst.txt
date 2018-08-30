@@ -17,8 +17,8 @@ and does not leverage any R code, and implements a single, easy-to-use scikit-le
 
    API Reference <./modules/classes.rst>
    Examples <./auto_examples/index.rst>
-   Quickstart <./quickstart.rst>
    User Guide <./user_guide.rst>
+   What's New? <./whats_new.rst>
 
 
 .. raw:: html
@@ -28,7 +28,7 @@ and does not leverage any R code, and implements a single, easy-to-use scikit-le
 Quick refs, indices and tables
 ==============================
 
-Helpful quickstart sections:
+Helpful sections to get started:
 
 * :ref:`about`
 * :ref:`setup`
@@ -37,7 +37,3 @@ Helpful quickstart sections:
 * :ref:`contributors`
 * :ref:`quickstart`
 * :ref:`user_guide`
-
-To search for a specific section or class documentation, visit the index:
-
-* :ref:`search`

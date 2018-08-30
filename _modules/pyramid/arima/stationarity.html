@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.arima.stationarity &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.arima.stationarity &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -89,8 +89,8 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -225,6 +225,15 @@
 <span class="sd">        ----------</span>
 <span class="sd">        x : array-like, shape=(n_samples,)</span>
 <span class="sd">            The time series vector.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pval : float</span>
+<span class="sd">            The computed P-value of the test.</span>
+
+<span class="sd">        sig : bool</span>
+<span class="sd">            Whether the P-value is significant at the ``alpha`` level.</span>
+<span class="sd">            More directly, whether to difference the time series.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
 
@@ -249,6 +258,12 @@
 <span class="sd">    lshort : bool, optional (default=True)</span>
 <span class="sd">        Whether or not to truncate the ``l`` value in the C code.</span>
 
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This test is generally used indirectly via the</span>
+<span class="sd">    :func:`pyramid.arima.ndiffs` function, which computes the</span>
+<span class="sd">    differencing term, ``d``.</span>
+
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] R&#39;s tseries KPSS test source code: http://bit.ly/2eJP1IU</span>
@@ -269,6 +284,15 @@
 <span class="sd">        ----------</span>
 <span class="sd">        x : array-like, shape=(n_samples,)</span>
 <span class="sd">            The time series vector.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pval : float</span>
+<span class="sd">            The computed P-value of the test.</span>
+
+<span class="sd">        sig : bool</span>
+<span class="sd">            Whether the P-value is significant at the ``alpha`` level.</span>
+<span class="sd">            More directly, whether to difference the time series.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_case</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">False</span>
@@ -343,10 +367,14 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    * ADF test does not perform as reliably to the R code as do the KPSS and PP</span>
-<span class="sd">      tests. This is due to the fact that is has to use statsmodels OLS</span>
-<span class="sd">      regression for std err estimates rather than the more robust sklearn</span>
-<span class="sd">      LinearRegression.</span>
+<span class="sd">    This test is generally used indirectly via the</span>
+<span class="sd">    :func:`pyramid.arima.ndiffs` function, which computes the</span>
+<span class="sd">    differencing term, ``d``.</span>
+
+<span class="sd">    ADF test does not perform as close to the R code as do the KPSS and PP</span>
+<span class="sd">    tests. This is due to the fact that is has to use statsmodels OLS</span>
+<span class="sd">    regression for std err estimates rather than the more robust sklearn</span>
+<span class="sd">    LinearRegression.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -379,6 +407,15 @@
 <span class="sd">        ----------</span>
 <span class="sd">        x : array-like, shape=(n_samples,)</span>
 <span class="sd">            The time series vector.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pval : float</span>
+<span class="sd">            The computed P-value of the test.</span>
+
+<span class="sd">        sig : bool</span>
+<span class="sd">            Whether the P-value is significant at the ``alpha`` level.</span>
+<span class="sd">            More directly, whether to difference the time series.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_case</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">False</span>
@@ -455,10 +492,14 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    * The R code allows for two types of tests: &#39;Z(alpha)&#39; and &#39;Z(t_alpha)&#39;.</span>
-<span class="sd">      Since sklearn does not allow extraction of std errors from the linear</span>
-<span class="sd">      model fit, ``t_alpha`` is much more difficult to achieve... so do not</span>
-<span class="sd">      allow that variant.</span>
+<span class="sd">    This test is generally used indirectly via the</span>
+<span class="sd">    :func:`pyramid.arima.ndiffs` function, which computes the</span>
+<span class="sd">    differencing term, ``d``.</span>
+
+<span class="sd">    The R code allows for two types of tests: &#39;Z(alpha)&#39; and &#39;Z(t_alpha)&#39;.</span>
+<span class="sd">    Since sklearn does not allow extraction of std errors from the linear</span>
+<span class="sd">    model fit, ``t_alpha`` is much more difficult to achieve, so we do not</span>
+<span class="sd">    allow that variant.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -491,6 +532,15 @@
 <span class="sd">        ----------</span>
 <span class="sd">        x : array-like, shape=(n_samples,)</span>
 <span class="sd">            The time series vector.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pval : float</span>
+<span class="sd">            The computed P-value of the test.</span>
+
+<span class="sd">        sig : bool</span>
+<span class="sd">            Whether the P-value is significant at the ``alpha`` level.</span>
+<span class="sd">            More directly, whether to difference the time series.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_case</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">False</span>
@@ -589,7 +639,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

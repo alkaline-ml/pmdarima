@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Refreshing your ARIMA models &mdash; pyramid 0.7.0 documentation</title>
+  <title>5. Refreshing your ARIMA models &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -34,8 +34,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="The auto_arima process" href="modules/arima.auto.html" />
-    <link rel="prev" title="Contributors" href="contributors.html" /> 
+    <link rel="next" title="6. Tips to using auto_arima" href="tips_and_tricks.html" />
+    <link rel="prev" title="4. Serializing your ARIMA models" href="serialization.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -91,19 +91,26 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="user_guide.html">User Guide</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="user_guide.html#getting-started">Getting started</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="about.html">About the project</a></li>
-<li class="toctree-l3"><a class="reference internal" href="setup.html">Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="contributing.html">Contributing to Pyramid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="contributors.html">Contributors</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Refreshing your ARIMA models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html">1. About the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html">2. Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html">3. Pyramid Quickstart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">5. Refreshing your ARIMA models</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#adding-observations-to-your-model">5.1. Adding observations to your model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal"><span class="pre">auto_arima</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/datasets.html">7. Toy time-series datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html">8. Contributing to Pyramid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributors.html">9. Contributors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#api-reference">API reference</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -151,7 +158,7 @@
         
           <li><a href="user_guide.html">User Guide</a> &raquo;</li>
         
-      <li>Refreshing your ARIMA models</li>
+      <li>5. Refreshing your ARIMA models</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,7 +178,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="refreshing-your-arima-models">
-<span id="refreshing"></span><h1>Refreshing your ARIMA models<a class="headerlink" href="#refreshing-your-arima-models" title="Permalink to this headline">¶</a></h1>
+<span id="refreshing"></span><h1>5. Refreshing your ARIMA models<a class="headerlink" href="#refreshing-your-arima-models" title="Permalink to this headline">¶</a></h1>
 <p>There are two ways to keep your models up-to-date with Pyramid:</p>
 <ol class="arabic simple">
 <li>Periodically, your ARIMA will need to be refreshed given new observations. See
@@ -184,6 +191,31 @@ possible to <a class="reference external" href="./modules/generated/pyramid.arim
 See <a class="reference external" href="auto_examples/arima/example_add_new_samples.html#adding-new-observations-to-your-model">this example</a>
 for more info.</li>
 </ol>
+<div class="section" id="adding-observations-to-your-model">
+<h2>5.1. Adding observations to your model<a class="headerlink" href="#adding-observations-to-your-model" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to keep your model up-to-date without refreshing it is simply to
+add observations to your model so that future forecasts take the newest observations
+into consideration. Assume that you fit the following model:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
+<span class="kn">from</span> <span class="nn">pyramid.datasets</span> <span class="kn">import</span> <span class="n">load_wineind</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">load_wineind</span><span class="p">()</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">125</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">125</span><span class="p">:]</span>
+
+<span class="c1"># Fit an ARIMA</span>
+<span class="n">arima</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">ARIMA</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="n">arima</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After fitting and persisting your model (see <a class="reference internal" href="serialization.html#serializing"><span class="std std-ref">Serializing your ARIMA models</span></a>), you use your model
+to produce forecasts. After a few forecasts, you want to record the <em>actual</em> observed
+values so your model considers them when making newer forecasts:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">arima</span><span class="o">.</span><span class="n">add_new_observations</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>  <span class="c1"># pretend these are the new ones</span>
+</pre></div>
+</div>
+<p>Your model will now produce forecasts from the <em>new</em> latest observations. Of course,
+you&#8217;ll have to re-persist your ARIMA model after updating it!</p>
+</div>
 </div>
 
 
@@ -194,10 +226,10 @@ for more info.</li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="modules/arima.auto.html" class="btn btn-neutral float-right" title="The auto_arima process" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="tips_and_tricks.html" class="btn btn-neutral float-right" title="6. Tips to using auto_arima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="contributors.html" class="btn btn-neutral" title="Contributors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="serialization.html" class="btn btn-neutral" title="4. Serializing your ARIMA models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -228,7 +260,7 @@ for more info.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

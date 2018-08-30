@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.datasets.load_wineind &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.datasets.load_wineind &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -34,7 +34,7 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pyramid.utils.c" href="pyramid.utils.c.html" />
+    <link rel="next" title="pyramid.utils.acf" href="pyramid.utils.acf.html" />
     <link rel="prev" title="pyramid.datasets.load_lynx" href="pyramid.datasets.load_lynx.html" /> 
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -90,7 +90,7 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-and-associated-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator and associated tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal"><span class="pre">pyramid.datasets</span></code>: Toy univariate timeseries datasets</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#dataset-loading-functions">Dataset loading functions</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="pyramid.datasets.load_heartrate.html"><code class="docutils literal"><span class="pre">pyramid.datasets</span></code>.load_heartrate</a></li>
@@ -104,8 +104,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -176,14 +176,22 @@
 <h1><a class="reference internal" href="../classes.html#module-pyramid.datasets" title="pyramid.datasets"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.datasets</span></code></a>.load_wineind<a class="headerlink" href="#pyramid-datasets-load-wineind" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyramid.datasets.load_wineind">
-<code class="descclassname">pyramid.datasets.</code><code class="descname">load_wineind</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/datasets/wineind.html#load_wineind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.datasets.load_wineind" title="Permalink to this definition">¶</a></dt>
-<dd><p>Australian total wine sales by wine makers in bottles &lt;= 1 litre.
-Jan 1980 &#8211; Aug 1994. This dataset is found in the R <code class="docutils literal"><span class="pre">forecasts</span></code> package.</p>
+<code class="descclassname">pyramid.datasets.</code><code class="descname">load_wineind</code><span class="sig-paren">(</span><em>as_series=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/datasets/wineind.py#L19"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/datasets/wineind.html#load_wineind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.datasets.load_wineind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Australian total wine sales by wine makers in bottles &lt;= 1 litre.</p>
+<p>This time-series records wine sales by Australian wine makers between
+Jan 1980 &#8211; Aug 1994. This dataset is found in the R <code class="docutils literal"><span class="pre">forecast</span></code> package.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>wineind</strong> : np.ndarray, shape=(n_samples,)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>as_series</strong> : bool, optional (default=False)</p>
+<blockquote>
+<div><p>Whether to return a Pandas series. If True, the index will be set to
+the observed years/months. If False, will return a 1d numpy array.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rslt</strong> : array-like, shape=(n_samples,)</p>
 <blockquote class="last">
 <div><p>The wineind dataset. There are 176 observations.</p>
 </div></blockquote>
@@ -223,9 +231,33 @@ Jan 1980 &#8211; Aug 1994. This dataset is found in the R <code class="docutils 
 <span class="go">       26323, 23779, 27549, 29660, 23356])</span>
 </pre></div>
 </div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_wineind</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">Jan 1980    15136</span>
+<span class="go">Feb 1980    16733</span>
+<span class="go">Mar 1980    20016</span>
+<span class="go">Apr 1980    17708</span>
+<span class="go">May 1980    18019</span>
+<span class="go">dtype: int64</span>
+</pre></div>
+</div>
 </dd></dl>
 
-<div class="clearer"></div></div>
+<div class="section" id="examples-using-pyramid-datasets-load-wineind">
+<h2>Examples using <code class="docutils literal"><span class="pre">pyramid.datasets.load_wineind</span></code><a class="headerlink" href="#examples-using-pyramid-datasets-load-wineind" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip=" This is a simple example of how we can fit an ARIMA model in several lines without knowing any..."><div class="figure" id="id2">
+<img alt="../../_images/sphx_glr_example_simple_fit_thumb.png" src="../../_images/sphx_glr_example_simple_fit_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/example_simple_fit.html#sphx-glr-auto-examples-example-simple-fit-py"><span class="std std-ref">Simple auto_arima model</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can persist an ARIMA model to disk after fitting it. It can t..."><div class="figure" id="id3">
+<img alt="../../_images/sphx_glr_example_persisting_a_model_thumb.png" src="../../_images/sphx_glr_example_persisting_a_model_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/arima/example_persisting_a_model.html#sphx-glr-auto-examples-arima-example-persisting-a-model-py"><span class="std std-ref">Persisting an ARIMA model</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s built-in toy datasets that can be used for benchmark..."><div class="figure" id="id4">
+<img alt="../../_images/sphx_glr_example_load_data_thumb.png" src="../../_images/sphx_glr_example_load_data_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/datasets/example_load_data.html#sphx-glr-auto-examples-datasets-example-load-data-py"><span class="std std-ref">Dataset loading</span></a></span></p>
+</div>
+</div><div class="clearer"></div></div>
+</div>
 
 
            </div>
@@ -235,7 +267,7 @@ Jan 1980 &#8211; Aug 1994. This dataset is found in the R <code class="docutils 
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pyramid.utils.c.html" class="btn btn-neutral float-right" title="pyramid.utils.c" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pyramid.utils.acf.html" class="btn btn-neutral float-right" title="pyramid.utils.acf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="pyramid.datasets.load_lynx.html" class="btn btn-neutral" title="pyramid.datasets.load_lynx" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -269,7 +301,7 @@ Jan 1980 &#8211; Aug 1994. This dataset is found in the R <code class="docutils 
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

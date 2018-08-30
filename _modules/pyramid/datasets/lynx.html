@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.datasets.lynx &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.datasets.lynx &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -89,8 +89,8 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -160,13 +160,29 @@
 <span class="c1">#</span>
 <span class="c1"># This is the lynx dataset found in R.</span>
 
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;load_lynx&#39;</span>
+<span class="p">]</span>
 
 
-<div class="viewcode-block" id="load_lynx"><a class="viewcode-back" href="../../../modules/generated/pyramid.datasets.load_lynx.html#pyramid.datasets.load_lynx">[docs]</a><span class="k">def</span> <span class="nf">load_lynx</span><span class="p">():</span>
+<div class="viewcode-block" id="load_lynx"><a class="viewcode-back" href="../../../modules/generated/pyramid.datasets.load_lynx.html#pyramid.datasets.load_lynx">[docs]</a><span class="k">def</span> <span class="nf">load_lynx</span><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Annual numbers of lynx trappings for 1821–1934 in Canada.</span>
-<span class="sd">    Taken from Brockwell &amp; Davis (1991), this appears to be the series</span>
+
+<span class="sd">    This time-series records the number of skins of predators (lynx) that were</span>
+<span class="sd">    collected over several years by the Hudson&#39;s Bay Company. The dataset was</span>
+<span class="sd">    taken from Brockwell &amp; Davis (1991) and appears to be the series</span>
 <span class="sd">    considered by Campbell &amp; Walker (1977).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    as_series : bool, optional (default=False)</span>
+<span class="sd">        Whether to return a Pandas series. If True, the index will be set to</span>
+<span class="sd">        the observed years. If False, will return a 1d numpy array.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -184,6 +200,14 @@
 <span class="sd">            108,  229,  399, 1132, 2432, 3574, 2935, 1537,  529,  485,  662,</span>
 <span class="sd">           1000, 1590, 2657, 3396])</span>
 
+<span class="sd">    &gt;&gt;&gt; load_lynx(True).head()</span>
+<span class="sd">    1821     269</span>
+<span class="sd">    1822     321</span>
+<span class="sd">    1823     585</span>
+<span class="sd">    1824     871</span>
+<span class="sd">    1825    1475</span>
+<span class="sd">    dtype: int64</span>
+
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] Brockwell, P. J. and Davis, R. A. (1991)</span>
@@ -194,10 +218,10 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    lynx : np.ndarray, shape=(n_samples,)</span>
+<span class="sd">    lynx : array-like, shape=(n_samples,)</span>
 <span class="sd">        The lynx dataset. There are 114 observations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">269</span><span class="p">,</span>  <span class="mi">321</span><span class="p">,</span>  <span class="mi">585</span><span class="p">,</span>  <span class="mi">871</span><span class="p">,</span>  <span class="mi">1475</span><span class="p">,</span> <span class="mi">2821</span><span class="p">,</span> <span class="mi">3928</span><span class="p">,</span> <span class="mi">5943</span><span class="p">,</span> <span class="mi">4950</span><span class="p">,</span>
+    <span class="n">rslt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">269</span><span class="p">,</span>  <span class="mi">321</span><span class="p">,</span>  <span class="mi">585</span><span class="p">,</span>  <span class="mi">871</span><span class="p">,</span>  <span class="mi">1475</span><span class="p">,</span> <span class="mi">2821</span><span class="p">,</span> <span class="mi">3928</span><span class="p">,</span> <span class="mi">5943</span><span class="p">,</span> <span class="mi">4950</span><span class="p">,</span>
                      <span class="mi">2577</span><span class="p">,</span> <span class="mi">523</span><span class="p">,</span>  <span class="mi">98</span><span class="p">,</span>   <span class="mi">184</span><span class="p">,</span>  <span class="mi">279</span><span class="p">,</span>  <span class="mi">409</span><span class="p">,</span>  <span class="mi">2285</span><span class="p">,</span> <span class="mi">2685</span><span class="p">,</span> <span class="mi">3409</span><span class="p">,</span>
                      <span class="mi">1824</span><span class="p">,</span> <span class="mi">409</span><span class="p">,</span>  <span class="mi">151</span><span class="p">,</span>  <span class="mi">45</span><span class="p">,</span>   <span class="mi">68</span><span class="p">,</span>   <span class="mi">213</span><span class="p">,</span>  <span class="mi">546</span><span class="p">,</span>  <span class="mi">1033</span><span class="p">,</span> <span class="mi">2129</span><span class="p">,</span>
                      <span class="mi">2536</span><span class="p">,</span> <span class="mi">957</span><span class="p">,</span>  <span class="mi">361</span><span class="p">,</span>  <span class="mi">377</span><span class="p">,</span>  <span class="mi">225</span><span class="p">,</span>  <span class="mi">360</span><span class="p">,</span>  <span class="mi">731</span><span class="p">,</span>  <span class="mi">1638</span><span class="p">,</span> <span class="mi">2725</span><span class="p">,</span>
@@ -209,7 +233,12 @@
                      <span class="mi">1307</span><span class="p">,</span> <span class="mi">3465</span><span class="p">,</span> <span class="mi">6991</span><span class="p">,</span> <span class="mi">6313</span><span class="p">,</span> <span class="mi">3794</span><span class="p">,</span> <span class="mi">1836</span><span class="p">,</span> <span class="mi">345</span><span class="p">,</span>  <span class="mi">382</span><span class="p">,</span>  <span class="mi">808</span><span class="p">,</span>
                      <span class="mi">1388</span><span class="p">,</span> <span class="mi">2713</span><span class="p">,</span> <span class="mi">3800</span><span class="p">,</span> <span class="mi">3091</span><span class="p">,</span> <span class="mi">2985</span><span class="p">,</span> <span class="mi">3790</span><span class="p">,</span> <span class="mi">674</span><span class="p">,</span>  <span class="mi">81</span><span class="p">,</span>   <span class="mi">80</span><span class="p">,</span>
                      <span class="mi">108</span><span class="p">,</span>  <span class="mi">229</span><span class="p">,</span>  <span class="mi">399</span><span class="p">,</span>  <span class="mi">1132</span><span class="p">,</span> <span class="mi">2432</span><span class="p">,</span> <span class="mi">3574</span><span class="p">,</span> <span class="mi">2935</span><span class="p">,</span> <span class="mi">1537</span><span class="p">,</span> <span class="mi">529</span><span class="p">,</span>
-                     <span class="mi">485</span><span class="p">,</span>  <span class="mi">662</span><span class="p">,</span>  <span class="mi">1000</span><span class="p">,</span> <span class="mi">1590</span><span class="p">,</span> <span class="mi">2657</span><span class="p">,</span> <span class="mi">3396</span><span class="p">])</span></div>
+                     <span class="mi">485</span><span class="p">,</span>  <span class="mi">662</span><span class="p">,</span>  <span class="mi">1000</span><span class="p">,</span> <span class="mi">1590</span><span class="p">,</span> <span class="mi">2657</span><span class="p">,</span> <span class="mi">3396</span><span class="p">])</span>
+
+    <span class="c1"># Set the index if necessary</span>
+    <span class="k">if</span> <span class="n">as_series</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rslt</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1821</span><span class="p">,</span> <span class="mi">1935</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">rslt</span></div>
 </pre></div>
 
            </div>
@@ -244,7 +273,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

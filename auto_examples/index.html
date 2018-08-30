@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; pyramid 0.7.0 documentation</title>
+  <title>Examples &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -34,8 +34,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Adding new observations to your model" href="arima/example_add_new_samples.html" />
-    <link rel="prev" title="pyramid.utils.is_iterable" href="../modules/generated/pyramid.utils.is_iterable.html" /> 
+    <link rel="next" title="Simple auto_arima model" href="example_simple_fit.html" />
+    <link rel="prev" title="pyramid.utils.plot_pacf" href="../modules/generated/pyramid.utils.plot_pacf.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -91,15 +91,28 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">General examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">General examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example_simple_fit.html">Simple auto_arima model</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#arima-examples">ARIMA examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="arima/example_persisting_a_model.html">Persisting an ARIMA model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arima/example_auto_arima.html">Fitting an auto_arima model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="arima/example_add_new_samples.html">Adding new observations to your model</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#datasets-examples">Datasets examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datasets/example_load_data.html">Dataset loading</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils-examples">Utils examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils/example_array_concatenation.html">Array concatenation</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -170,14 +183,54 @@
 <h2>General examples<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>General-purpose and introductory examples for pyramid. These examples are
 designed to introduce you to the package style and layout.</p>
-<br/><div style='clear:both'></div></div>
+<br/><div class="sphx-glr-thumbcontainer" tooltip=" This is a simple example of how we can fit an ARIMA model in several lines without knowing any..."><div class="figure" id="id5">
+<img alt="../_images/sphx_glr_example_simple_fit_thumb.png" src="../_images/sphx_glr_example_simple_fit_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="example_simple_fit.html#sphx-glr-auto-examples-example-simple-fit-py"><span class="std std-ref">Simple auto_arima model</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div></div>
 <div class="section" id="arima-examples">
 <span id="id2"></span><h2>ARIMA examples<a class="headerlink" href="#arima-examples" title="Permalink to this headline">¶</a></h2>
-<p>Examples for how to use the <a class="reference internal" href="../modules/classes.html#module-pyramid.arima" title="pyramid.arima"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.arima</span></code></a> module to fit timeseries
+<p>Examples of how to use the <a class="reference internal" href="../modules/classes.html#module-pyramid.arima" title="pyramid.arima"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.arima</span></code></a> module to fit timeseries
 models.</p>
-<br/><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forec..."><div class="figure" id="id3">
+<br/><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can persist an ARIMA model to disk after fitting it. It can t..."><div class="figure" id="id6">
+<img alt="../_images/sphx_glr_example_persisting_a_model_thumb.png" src="../_images/sphx_glr_example_persisting_a_model_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="arima/example_persisting_a_model.html#sphx-glr-auto-examples-arima-example-persisting-a-model-py"><span class="std std-ref">Persisting an ARIMA model</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the ``auto_arima`` function to select an optimal time..."><div class="figure" id="id7">
+<img alt="../_images/sphx_glr_example_auto_arima_thumb.png" src="../_images/sphx_glr_example_auto_arima_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="arima/example_auto_arima.html#sphx-glr-auto-examples-arima-example-auto-arima-py"><span class="std std-ref">Fitting an auto_arima model</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forec..."><div class="figure" id="id8">
 <img alt="../_images/sphx_glr_example_add_new_samples_thumb.png" src="../_images/sphx_glr_example_add_new_samples_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="arima/example_add_new_samples.html#sphx-glr-auto-examples-arima-example-add-new-samples-py"><span class="std std-ref">Adding new observations to your model</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div></div>
+<div class="section" id="datasets-examples">
+<span id="id3"></span><h2>Datasets examples<a class="headerlink" href="#datasets-examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples of how to use the <a class="reference internal" href="../modules/classes.html#module-pyramid.datasets" title="pyramid.datasets"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.datasets</span></code></a> module to conveniently load
+toy time series data for model benchmarking and experimentation.</p>
+<br/><div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s built-in toy datasets that can be used for benchmark..."><div class="figure" id="id9">
+<img alt="../_images/sphx_glr_example_load_data_thumb.png" src="../_images/sphx_glr_example_load_data_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="datasets/example_load_data.html#sphx-glr-auto-examples-datasets-example-load-data-py"><span class="std std-ref">Dataset loading</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div></div>
+<div class="section" id="utils-examples">
+<span id="id4"></span><h2>Utils examples<a class="headerlink" href="#utils-examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples of how to use the <a class="reference internal" href="../modules/classes.html#module-pyramid.utils" title="pyramid.utils"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.utils</span></code></a> module to plot timeseries
+data, difference arrays, and more.</p>
+<br/><div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s convenient ``c`` function, which is, in essence, the..."><div class="figure" id="id10">
+<img alt="../_images/sphx_glr_example_array_concatenation_thumb.png" src="../_images/sphx_glr_example_array_concatenation_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="utils/example_array_concatenation.html#sphx-glr-auto-examples-utils-example-array-concatenation-py"><span class="std std-ref">Array concatenation</span></a></span></p>
 </div>
 </div><div class="toctree-wrapper compound">
 </div>
@@ -199,10 +252,10 @@ models.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="arima/example_add_new_samples.html" class="btn btn-neutral float-right" title="Adding new observations to your model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="example_simple_fit.html" class="btn btn-neutral float-right" title="Simple auto_arima model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../modules/generated/pyramid.utils.is_iterable.html" class="btn btn-neutral" title="pyramid.utils.is_iterable" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../modules/generated/pyramid.utils.plot_pacf.html" class="btn btn-neutral" title="pyramid.utils.plot_pacf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -233,7 +286,7 @@ models.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

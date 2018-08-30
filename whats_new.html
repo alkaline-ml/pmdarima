@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>What’s new in Pyramid &mdash; pyramid 0.8.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="9. Contributors" href="contributors.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyramid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What&#8217;s New?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v0-8-1">v0.8.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-7-0">v0.7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-6-5">v0.6.5</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyramid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>What&#8217;s new in Pyramid</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/whats_new.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="what-s-new-in-pyramid">
+<span id="whats-new"></span><h1>What&#8217;s new in Pyramid<a class="headerlink" href="#what-s-new-in-pyramid" title="Permalink to this headline">¶</a></h1>
+<p>As new releases of Pyramid are pushed out, the following list (introduced in
+v0.8.1) will document the latest features.</p>
+<div class="section" id="v0-8-1">
+<h2>v0.8.1<a class="headerlink" href="#v0-8-1" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">ARIMA</span></code> instance attributes</p>
+<ul class="simple">
+<li>The <code class="docutils literal"><span class="pre">pkg_version_</span></code> attribute (assigned on model <code class="docutils literal"><span class="pre">fit</span></code>) is new as of version 0.8.0.
+On unpickling, if the current Pyramid version does not match the version under which it
+was serialized, a <code class="docutils literal"><span class="pre">UserWarning</span></code> will be raised.</li>
+</ul>
+</li>
+<li><p class="first">Addition of the <code class="docutils literal"><span class="pre">_config.py</span></code> file at the top-level of the package</p>
+<ul class="simple">
+<li>Specifies the location of the ARIMA result pickles (see <a class="reference internal" href="serialization.html#serializing"><span class="std std-ref">Serializing your ARIMA models</span></a>)</li>
+<li>Specifies the ARIMA result pickle name pattern</li>
+</ul>
+</li>
+<li><p class="first">Fix bug (<a class="reference external" href="https://github.com/tgsmith61591/pyramid/issues/30">Issue #30</a>) in <code class="docutils literal"><span class="pre">ARIMA</span></code>
+where using CV with differencing and no seasonality caused a dim mismatch in the model&#8217;s
+exog array and its endog array</p>
+</li>
+<li><p class="first">New dataset: <a class="reference internal" href="modules/datasets.html#woolyrnq"><span class="std std-ref">Woolyrnq</span></a> (from R&#8217;s <code class="docutils literal"><span class="pre">forecast</span></code> package).</p>
+</li>
+<li><p class="first">Visualization utilities available at the top level of the package:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">plot_acf</span></code></li>
+<li><code class="docutils literal"><span class="pre">plot_pacf</span></code></li>
+<li><code class="docutils literal"><span class="pre">autocorr_plot</span></code></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Updated documentation with significantly more examples and API references.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="v0-7-0">
+<h2>v0.7.0<a class="headerlink" href="#v0-7-0" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">ARIMA</span></code> <code class="docutils literal"><span class="pre">out_of_sample_size</span></code> behavior<ul>
+<li>In prior versions, the <code class="docutils literal"><span class="pre">out_of_sample_size</span></code> (OOSS) parameter misbehaved in the sense that it
+ended up fitting the model on the entire sample, and scoring the number specified. This
+behavior changed in v0.7.0. Going forward, when OOSS is not None,
+ARIMA models will be fit on <span class="math">\(n - OOSS\)</span> samples, scored on the last OOSS samples,
+and the held-out samples are then added to the model.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">ARIMA</span></code> <code class="docutils literal"><span class="pre">add_new_samples</span></code> method<ul>
+<li>This method adds new samples to the model, effectively refreshing the point from
+which it creates new forecasts without impacting the model parameters.</li>
+</ul>
+</li>
+<li><code class="docutils literal"><span class="pre">ARIMA</span></code> confidence intervals on <code class="docutils literal"><span class="pre">predict</span></code><ul>
+<li>When <code class="docutils literal"><span class="pre">return_conf_int</span></code> is true, the confidence intervals will now be returned
+with the forecasts.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="v0-6-5">
+<h2>v0.6.5<a class="headerlink" href="#v0-6-5" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">CHTest</span></code> of seasonality<ul>
+<li>No longer compute the <span class="math">\(U\)</span> or <span class="math">\(V\)</span> matrix in the SVD computation in the
+Canova-Hansen test. This makes the test <em>much</em> faster.</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="contributors.html" class="btn btn-neutral" title="9. Contributors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2018, Taylor G Smith.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.8.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

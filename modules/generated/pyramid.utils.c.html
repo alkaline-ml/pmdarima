@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.utils.c &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.utils.c &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyramid.utils.diff" href="pyramid.utils.diff.html" />
-    <link rel="prev" title="pyramid.datasets.load_wineind" href="pyramid.datasets.load_wineind.html" /> 
+    <link rel="prev" title="pyramid.utils.as_series" href="pyramid.utils.as_series.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -90,23 +90,27 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-and-associated-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator and associated tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal"><span class="pre">pyramid.datasets</span></code>: Toy univariate timeseries datasets</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-utils-utilities"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>: Utilities</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#array-helper-functions-metaestimators">Array helper functions &amp; metaestimators</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.acf.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.acf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.as_series.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.as_series</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.c</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyramid.utils.diff.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.diff</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyramid.utils.if_has_delegate.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.if_has_delegate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyramid.utils.is_iterable.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.is_iterable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.pacf.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.pacf</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../classes.html#plotting-utilities-wrappers">Plotting utilities &amp; wrappers</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -177,12 +181,12 @@
 <h1><a class="reference internal" href="../classes.html#module-pyramid.utils" title="pyramid.utils"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.utils</span></code></a>.c<a class="headerlink" href="#pyramid-utils-c" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyramid.utils.c">
-<code class="descclassname">pyramid.utils.</code><code class="descname">c</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/utils/array.html#c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.utils.c" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyramid.utils.</code><code class="descname">c</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/utils/array.py#L66"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/utils/array.html#c"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.utils.c" title="Permalink to this definition">¶</a></dt>
 <dd><p>Imitates the <code class="docutils literal"><span class="pre">c</span></code> function from R.</p>
 <p>Since this whole library is aimed at re-creating in
-Python what R has already done so well, why not add a <code class="docutils literal"><span class="pre">c</span></code> function
-that wraps <code class="docutils literal"><span class="pre">numpy.concatenate</span></code>? Similar to R, this works with scalars,
-iterables, and any mix therein.</p>
+Python what R has already done so well, the <code class="docutils literal"><span class="pre">c</span></code> function was created to
+wrap <code class="docutils literal"><span class="pre">numpy.concatenate</span></code> and mimic the R functionality. Similar to R,
+this works with scalars, iterables, and any mix therein.</p>
 <p>Note that using the <code class="docutils literal"><span class="pre">c</span></code> function on multi-nested lists or iterables
 will fail!</p>
 <p class="rubric">References</p>
@@ -193,15 +197,21 @@ will fail!</p>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>Using <code class="docutils literal"><span class="pre">c</span></code> with varargs will yield a single array:
-&gt;&gt;&gt; c(1, 2, 3, 4)
-array([1, 2, 3, 4])</p>
-<p>Using <code class="docutils literal"><span class="pre">c</span></code> with nested lists and scalars will also yield a single array:
-&gt;&gt;&gt; c([1, 2], 4, c(5, 4))
-array([1, 2, 4, 5, 4])</p>
-<p>However, using <code class="docutils literal"><span class="pre">c</span></code> with multi-level lists will fail!
-&gt;&gt;&gt; c([1, 2, 3], [[1, 2]])  # doctest: +SKIP
-ValueError: all the input arrays must have same number of dimensions</p>
+<p>Using <code class="docutils literal"><span class="pre">c</span></code> with varargs will yield a single array:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">array([1, 2, 3, 4])</span>
+</pre></div>
+</div>
+<p>Using <code class="docutils literal"><span class="pre">c</span></code> with nested lists and scalars will also yield a single array:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">4</span><span class="p">,</span> <span class="n">c</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">array([1, 2, 4, 5, 4])</span>
+</pre></div>
+</div>
+<p>However, using <code class="docutils literal"><span class="pre">c</span></code> with multi-level lists will fail!</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>  
+<span class="go">ValueError: all the input arrays must have same number of dimensions</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <div class="clearer"></div></div>
@@ -217,7 +227,7 @@ ValueError: all the input arrays must have same number of dimensions</p>
         <a href="pyramid.utils.diff.html" class="btn btn-neutral float-right" title="pyramid.utils.diff" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pyramid.datasets.load_wineind.html" class="btn btn-neutral" title="pyramid.datasets.load_wineind" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pyramid.utils.as_series.html" class="btn btn-neutral" title="pyramid.utils.as_series" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -248,7 +258,7 @@ ValueError: all the input arrays must have same number of dimensions</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

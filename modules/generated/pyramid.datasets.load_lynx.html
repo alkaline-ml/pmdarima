@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.datasets.load_lynx &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.datasets.load_lynx &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -90,7 +90,7 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-and-associated-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator and associated tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal"><span class="pre">pyramid.datasets</span></code>: Toy univariate timeseries datasets</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#dataset-loading-functions">Dataset loading functions</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="pyramid.datasets.load_heartrate.html"><code class="docutils literal"><span class="pre">pyramid.datasets</span></code>.load_heartrate</a></li>
@@ -104,8 +104,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -176,15 +176,24 @@
 <h1><a class="reference internal" href="../classes.html#module-pyramid.datasets" title="pyramid.datasets"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.datasets</span></code></a>.load_lynx<a class="headerlink" href="#pyramid-datasets-load-lynx" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyramid.datasets.load_lynx">
-<code class="descclassname">pyramid.datasets.</code><code class="descname">load_lynx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/datasets/lynx.html#load_lynx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.datasets.load_lynx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Annual numbers of lynx trappings for 1821–1934 in Canada.
-Taken from Brockwell &amp; Davis (1991), this appears to be the series
+<code class="descclassname">pyramid.datasets.</code><code class="descname">load_lynx</code><span class="sig-paren">(</span><em>as_series=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/datasets/lynx.py#L17"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/datasets/lynx.html#load_lynx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.datasets.load_lynx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Annual numbers of lynx trappings for 1821–1934 in Canada.</p>
+<p>This time-series records the number of skins of predators (lynx) that were
+collected over several years by the Hudson&#8217;s Bay Company. The dataset was
+taken from Brockwell &amp; Davis (1991) and appears to be the series
 considered by Campbell &amp; Walker (1977).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lynx</strong> : np.ndarray, shape=(n_samples,)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>as_series</strong> : bool, optional (default=False)</p>
+<blockquote>
+<div><p>Whether to return a Pandas series. If True, the index will be set to
+the observed years. If False, will return a 1d numpy array.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lynx</strong> : array-like, shape=(n_samples,)</p>
 <blockquote class="last">
 <div><p>The lynx dataset. There are 114 observations.</p>
 </div></blockquote>
@@ -223,13 +232,30 @@ Springer. Series G (page 557).</td></tr>
 <span class="go">       1000, 1590, 2657, 3396])</span>
 </pre></div>
 </div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_lynx</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">1821     269</span>
+<span class="go">1822     321</span>
+<span class="go">1823     585</span>
+<span class="go">1824     871</span>
+<span class="go">1825    1475</span>
+<span class="go">dtype: int64</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <div class="section" id="examples-using-pyramid-datasets-load-lynx">
 <h2>Examples using <code class="docutils literal"><span class="pre">pyramid.datasets.load_lynx</span></code><a class="headerlink" href="#examples-using-pyramid-datasets-load-lynx" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forec..."><div class="figure" id="id3">
+<div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the ``auto_arima`` function to select an optimal time..."><div class="figure" id="id3">
+<img alt="../../_images/sphx_glr_example_auto_arima_thumb.png" src="../../_images/sphx_glr_example_auto_arima_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/arima/example_auto_arima.html#sphx-glr-auto-examples-arima-example-auto-arima-py"><span class="std std-ref">Fitting an auto_arima model</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forec..."><div class="figure" id="id4">
 <img alt="../../_images/sphx_glr_example_add_new_samples_thumb.png" src="../../_images/sphx_glr_example_add_new_samples_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/arima/example_add_new_samples.html#sphx-glr-auto-examples-arima-example-add-new-samples-py"><span class="std std-ref">Adding new observations to your model</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s built-in toy datasets that can be used for benchmark..."><div class="figure" id="id5">
+<img alt="../../_images/sphx_glr_example_load_data_thumb.png" src="../../_images/sphx_glr_example_load_data_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/datasets/example_load_data.html#sphx-glr-auto-examples-datasets-example-load-data-py"><span class="std std-ref">Dataset loading</span></a></span></p>
 </div>
 </div><div class="clearer"></div></div>
 </div>
@@ -276,7 +302,7 @@ Springer. Series G (page 557).</td></tr>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

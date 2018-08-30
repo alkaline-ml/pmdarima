@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.arima.seasonality &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.arima.seasonality &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -89,8 +89,8 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -219,8 +219,14 @@
 <span class="sd">    ----------</span>
 <span class="sd">    m : int</span>
 <span class="sd">        The seasonal differencing term. For monthly data, e.g., this would be</span>
-<span class="sd">        12. For quarterly, 4. For annual, 1, etc. For the Canova-Hansen test</span>
-<span class="sd">        to work, ``m`` must exceed 1.</span>
+<span class="sd">        12. For quarterly, 4, etc. For the Canova-Hansen test to work,</span>
+<span class="sd">        ``m`` must exceed 1.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This test is generally not used directly, but in conjunction with</span>
+<span class="sd">    :func:`pyramid.arima.nsdiffs`, which directly estimates the number</span>
+<span class="sd">    of seasonal differences.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -343,6 +349,21 @@
 <span class="sd">        ----------</span>
 <span class="sd">        x : array-like, shape=(n_samples,)</span>
 <span class="sd">            The time series vector.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        D : int</span>
+<span class="sd">            The seasonal differencing term. The CH test defines a set of</span>
+<span class="sd">            critical values::</span>
+
+<span class="sd">                (0.4617146, 0.7479655, 1.0007818,</span>
+<span class="sd">                 1.2375350, 1.4625240, 1.6920200,</span>
+<span class="sd">                 1.9043096, 2.1169602, 2.3268562,</span>
+<span class="sd">                 2.5406922, 2.7391007)</span>
+
+<span class="sd">            For different values of ``m``, the CH statistic is compared</span>
+<span class="sd">            to a different critical value, and returns 1 if the computed</span>
+<span class="sd">            statistic is greater than the critical value, or 0 if not.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_case</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
             <span class="k">return</span> <span class="mi">0</span>
@@ -408,7 +429,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -1,0 +1,12 @@
+:mod:`pyramid.utils`.as_series
+===========================================
+
+.. currentmodule:: pyramid.utils
+
+.. autofunction:: as_series
+
+.. include:: pyramid.utils.as_series.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

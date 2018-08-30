@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.utils.array &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.utils.array &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -89,8 +89,8 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -162,25 +162,70 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">column_or_1d</span>
 <span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="k">import</span> <span class="n">six</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;as_series&#39;</span><span class="p">,</span>
     <span class="s1">&#39;c&#39;</span><span class="p">,</span>
     <span class="s1">&#39;diff&#39;</span><span class="p">,</span>
     <span class="s1">&#39;is_iterable&#39;</span>
 <span class="p">]</span>
 
 
+<div class="viewcode-block" id="as_series"><a class="viewcode-back" href="../../../modules/generated/pyramid.utils.as_series.html#pyramid.utils.as_series">[docs]</a><span class="k">def</span> <span class="nf">as_series</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Cast as pandas Series.</span>
+
+<span class="sd">    Cast an iterable to a Pandas Series object. Note that the index</span>
+<span class="sd">    will simply be a positional ``arange`` and cannot be set in this</span>
+<span class="sd">    function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like, shape=(n_samples,)</span>
+<span class="sd">        The 1d array on which to compute the auto correlation.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; as_series([1, 2, 3])</span>
+<span class="sd">    0    1</span>
+<span class="sd">    1    2</span>
+<span class="sd">    2    3</span>
+<span class="sd">    dtype: int64</span>
+
+<span class="sd">    &gt;&gt;&gt; as_series(as_series((1, 2, 3)))</span>
+<span class="sd">    0    1</span>
+<span class="sd">    1    2</span>
+<span class="sd">    2    3</span>
+<span class="sd">    dtype: int64</span>
+
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt; as_series(pd.Series([4, 5, 6], index=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]))</span>
+<span class="sd">    a    4</span>
+<span class="sd">    b    5</span>
+<span class="sd">    c    6</span>
+<span class="sd">    dtype: int64</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    s : pd.Series</span>
+<span class="sd">        A pandas Series object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">column_or_1d</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
+
+
 <div class="viewcode-block" id="c"><a class="viewcode-back" href="../../../modules/generated/pyramid.utils.c.html#pyramid.utils.c">[docs]</a><span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Imitates the ``c`` function from R.</span>
 
 <span class="sd">    Since this whole library is aimed at re-creating in</span>
-<span class="sd">    Python what R has already done so well, why not add a ``c`` function</span>
-<span class="sd">    that wraps ``numpy.concatenate``? Similar to R, this works with scalars,</span>
-<span class="sd">    iterables, and any mix therein.</span>
+<span class="sd">    Python what R has already done so well, the ``c`` function was created to</span>
+<span class="sd">    wrap ``numpy.concatenate`` and mimic the R functionality. Similar to R,</span>
+<span class="sd">    this works with scalars, iterables, and any mix therein.</span>
 
 <span class="sd">    Note that using the ``c`` function on multi-nested lists or iterables</span>
 <span class="sd">    will fail!</span>
@@ -188,14 +233,17 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    Using ``c`` with varargs will yield a single array:</span>
+
 <span class="sd">    &gt;&gt;&gt; c(1, 2, 3, 4)</span>
 <span class="sd">    array([1, 2, 3, 4])</span>
 
 <span class="sd">    Using ``c`` with nested lists and scalars will also yield a single array:</span>
+
 <span class="sd">    &gt;&gt;&gt; c([1, 2], 4, c(5, 4))</span>
 <span class="sd">    array([1, 2, 4, 5, 4])</span>
 
 <span class="sd">    However, using ``c`` with multi-level lists will fail!</span>
+
 <span class="sd">    &gt;&gt;&gt; c([1, 2, 3], [[1, 2]])  # doctest: +SKIP</span>
 <span class="sd">    ValueError: all the input arrays must have same number of dimensions</span>
 
@@ -260,46 +308,41 @@
 <div class="viewcode-block" id="diff"><a class="viewcode-back" href="../../../modules/generated/pyramid.utils.diff.html#pyramid.utils.diff">[docs]</a><span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Difference an array.</span>
 
-<span class="sd">    A python implementation of the R ``diff`` function (documentation found</span>
-<span class="sd">    at https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html). This</span>
-<span class="sd">    computes lag differences from an array given a ``lag`` and ``differencing``</span>
-<span class="sd">    term.</span>
+<span class="sd">    A python implementation of the R ``diff`` function [1]. This computes lag</span>
+<span class="sd">    differences from an array given a ``lag`` and ``differencing`` term.</span>
 
-<span class="sd">    If ``x`` is a vector of length n, ``lag`` = 1 and ``differences`` = 1, then</span>
-<span class="sd">    the computed result is equal to the successive differences</span>
+<span class="sd">    If ``x`` is a vector of length :math:`n`, ``lag=1`` and ``differences=1``,</span>
+<span class="sd">    then the computed result is equal to the successive differences</span>
 <span class="sd">    ``x[lag:n] - x[:n-lag]``.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; from pyramid.utils import c, diff</span>
-<span class="sd">    &gt;&gt;&gt;</span>
-<span class="sd">    &gt;&gt;&gt; # lag 1, diff 1</span>
+<span class="sd">    Where ``lag=1`` and ``differences=1``:</span>
+
 <span class="sd">    &gt;&gt;&gt; x = c(10, 4, 2, 9, 34)</span>
 <span class="sd">    &gt;&gt;&gt; diff(x, 1, 1)</span>
 <span class="sd">    array([ -6.,  -2.,   7.,  25.], dtype=float32)</span>
 
-<span class="sd">    &gt;&gt;&gt; from pyramid.utils import c, diff</span>
-<span class="sd">    &gt;&gt;&gt;</span>
-<span class="sd">    &gt;&gt;&gt; # lag 1, diff 2</span>
+<span class="sd">    Where ``lag=1`` and ``differences=2``:</span>
+
 <span class="sd">    &gt;&gt;&gt; x = c(10, 4, 2, 9, 34)</span>
 <span class="sd">    &gt;&gt;&gt; diff(x, 1, 2)</span>
 <span class="sd">    array([  4.,   9.,  18.], dtype=float32)</span>
 
-<span class="sd">    &gt;&gt;&gt; from pyramid.utils import c, diff</span>
-<span class="sd">    &gt;&gt;&gt;</span>
-<span class="sd">    &gt;&gt;&gt; # lag 3, diff 1</span>
+<span class="sd">    Where ``lag=3`` and ``differences=1``:</span>
+
 <span class="sd">    &gt;&gt;&gt; x = c(10, 4, 2, 9, 34)</span>
 <span class="sd">    &gt;&gt;&gt; diff(x, 3, 1)</span>
 <span class="sd">    array([ -1.,  30.], dtype=float32)</span>
 
-<span class="sd">    &gt;&gt;&gt; from pyramid.utils import c, diff</span>
-<span class="sd">    &gt;&gt;&gt;</span>
-<span class="sd">    &gt;&gt;&gt; # lag 6 (larger than the vec), diff 1</span>
+<span class="sd">    Where ``lag=6`` (larger than the array is) and ``differences=1``:</span>
+
 <span class="sd">    &gt;&gt;&gt; x = c(10, 4, 2, 9, 34)</span>
 <span class="sd">    &gt;&gt;&gt; diff(x, 6, 1)</span>
 <span class="sd">    array([], dtype=float32)</span>
 
-<span class="sd">    &gt;&gt;&gt; from pyramid.utils import diff</span>
+<span class="sd">    For a 2d array with ``lag=1`` and ``differences=1``:</span>
+
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; x = np.arange(1, 10).reshape((3, 3)).T</span>
@@ -422,7 +465,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

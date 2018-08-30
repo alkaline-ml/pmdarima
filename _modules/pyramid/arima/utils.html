@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.arima.utils &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.arima.utils &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -89,8 +89,8 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -214,10 +214,12 @@
 
 
 <div class="viewcode-block" id="nsdiffs"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.nsdiffs.html#pyramid.arima.nsdiffs">[docs]</a><span class="k">def</span> <span class="nf">nsdiffs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">max_D</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;ch&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Estimate seasonal differences.</span>
+    <span class="sd">&quot;&quot;&quot;Estimate the seasonal differencing term, ``D``.</span>
 
-<span class="sd">    Function to estimate the number of seasonal differences</span>
-<span class="sd">    required to make a given time series stationary.</span>
+<span class="sd">    Perform a test of seasonality for different levels of ``D`` to</span>
+<span class="sd">    estimate the number of seasonal differences required to make a given time</span>
+<span class="sd">    series stationary. Will select the maximum value of ``D`` for which</span>
+<span class="sd">    the time series is judged seasonally stationary by the statistical test.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -230,11 +232,20 @@
 
 <span class="sd">    max_D : int, optional (default=2)</span>
 <span class="sd">        Maximum number of seasonal differences allowed. Must</span>
-<span class="sd">        be a positive integer.</span>
+<span class="sd">        be a positive integer. The estimated value of ``D`` will not</span>
+<span class="sd">        exceed ``max_D``.</span>
 
 <span class="sd">    test : str, optional (default=&#39;ch&#39;)</span>
 <span class="sd">        Type of unit root test of seasonality to use in order</span>
-<span class="sd">        to detect seasonal periodicity.</span>
+<span class="sd">        to detect seasonal periodicity. Currently, the only allowed value</span>
+<span class="sd">        is &#39;ch&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    D : int</span>
+<span class="sd">        The estimated seasonal differencing term. This is the maximum value</span>
+<span class="sd">        of ``D`` such that ``D &lt;= max_D`` and the time series is judged</span>
+<span class="sd">        seasonally stationary. If the time series is constant, will return 0.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">max_D</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_D must be a positive integer&#39;</span><span class="p">)</span>
@@ -262,26 +273,37 @@
 
 
 <div class="viewcode-block" id="ndiffs"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ndiffs.html#pyramid.arima.ndiffs">[docs]</a><span class="k">def</span> <span class="nf">ndiffs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;kpss&#39;</span><span class="p">,</span> <span class="n">max_d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Estimate differencing term.</span>
+    <span class="sd">&quot;&quot;&quot;Estimate ARIMA differencing term, ``d``.</span>
 
-<span class="sd">    Function to estimate the number of differences required to</span>
-<span class="sd">    make a given time series stationary.</span>
+<span class="sd">    Perform a test of stationarity for different levels of ``d`` to</span>
+<span class="sd">    estimate the number of differences required to make a given time</span>
+<span class="sd">    series stationary. Will select the maximum value of ``d`` for which</span>
+<span class="sd">    the time series is judged stationary by the statistical test.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    x : array-like, shape=(n_samples, [n_features])</span>
-<span class="sd">        The array to difference.</span>
+<span class="sd">        The array (time series) to difference.</span>
 
 <span class="sd">    alpha : float, optional (default=0.05)</span>
-<span class="sd">        Level of the test</span>
+<span class="sd">        Level of the test. This is the value above below which the P-value</span>
+<span class="sd">        will be deemed significant.</span>
 
 <span class="sd">    test : str, optional (default=&#39;kpss&#39;)</span>
 <span class="sd">        Type of unit root test of stationarity to use in order to</span>
-<span class="sd">        test the stationarity of the time-series.</span>
+<span class="sd">        test the stationarity of the time-series. One of (&#39;kpss&#39;, &#39;adf&#39;, &#39;pp&#39;)</span>
 
 <span class="sd">    max_d : int, optional (default=2)</span>
 <span class="sd">        Maximum number of non-seasonal differences allowed. Must</span>
-<span class="sd">        be a positive integer.</span>
+<span class="sd">        be a positive integer. The estimated value of ``d`` will not</span>
+<span class="sd">        exceed ``max_d``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    d : int</span>
+<span class="sd">        The estimated differencing term. This is the maximum value of ``d``</span>
+<span class="sd">        such that ``d &lt;= max_d`` and the time series is judged stationary.</span>
+<span class="sd">        If the time series is constant, will return 0.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">max_d</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_d must be a positive integer&#39;</span><span class="p">)</span>
@@ -355,7 +377,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

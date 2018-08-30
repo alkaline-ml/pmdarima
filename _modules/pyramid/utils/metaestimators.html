@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.utils.metaestimators &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.utils.metaestimators &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -89,8 +89,8 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -162,6 +162,7 @@
 <span class="c1"># sklearn metaestimators, but adapted for more specific use with pyramid.</span>
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+
 <span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">attrgetter</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">update_wrapper</span>
 
@@ -214,7 +215,9 @@
 
 
 <div class="viewcode-block" id="if_has_delegate"><a class="viewcode-back" href="../../../modules/generated/pyramid.utils.if_has_delegate.html#pyramid.utils.if_has_delegate">[docs]</a><span class="k">def</span> <span class="nf">if_has_delegate</span><span class="p">(</span><span class="n">delegate</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create a decorator for methods that are delegated in the presence of a</span>
+    <span class="sd">&quot;&quot;&quot;Wrap a delegated instance attribute function.</span>
+
+<span class="sd">    Creates a decorator for methods that are delegated in the presence of a</span>
 <span class="sd">    results wrapper. This enables duck-typing by ``hasattr`` returning True</span>
 <span class="sd">    according to the sub-estimator.</span>
 
@@ -289,7 +292,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

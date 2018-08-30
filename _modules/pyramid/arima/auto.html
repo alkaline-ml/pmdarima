@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.arima.auto &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.arima.auto &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -89,8 +89,8 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -313,7 +313,8 @@
 <span class="sd">        periods in each season. For example, ``m`` is 4 for quarterly data, 12</span>
 <span class="sd">        for monthly data, or 1 for annual (non-seasonal) data. Default is 1.</span>
 <span class="sd">        Note that if ``m`` == 1 (i.e., is non-seasonal), ``seasonal`` will be</span>
-<span class="sd">        set to False.</span>
+<span class="sd">        set to False. For more information on setting this parameter, see</span>
+<span class="sd">        :ref:`period`.</span>
 
 <span class="sd">    seasonal : bool, optional (default=True)</span>
 <span class="sd">        Whether to fit a seasonal ARIMA. Default is True. Note that if</span>
@@ -523,6 +524,7 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;d &amp; D must be None or a positive &#39;</span>
                                  <span class="s1">&#39;integer (&gt;= 0)&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">_d</span> <span class="o">&gt;</span> <span class="n">_max_d</span><span class="p">:</span>
+                <span class="c1"># TODO: should ignore if explicitly defined?...</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;if explicitly defined, d &amp; D must be &lt;= &#39;</span>
                                  <span class="s1">&#39;max_d &amp; &lt;= max_D, respectively&#39;</span><span class="p">)</span>
 
@@ -1065,7 +1067,8 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not successfully fit ARIMA to input data. &#39;</span>
                          <span class="s1">&#39;It is likely your data is non-stationary. Please &#39;</span>
                          <span class="s1">&#39;induce stationarity or try a different &#39;</span>
-                         <span class="s1">&#39;range of model order params.&#39;</span><span class="p">)</span>
+                         <span class="s1">&#39;range of model order params. If your data is &#39;</span>
+                         <span class="s1">&#39;seasonal, check the period (m) of the data.&#39;</span><span class="p">)</span>
     <span class="c1"># good to return</span>
     <span class="k">return</span> <span class="n">a</span>
 
@@ -1133,7 +1136,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

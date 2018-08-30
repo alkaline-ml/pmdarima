@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.arima.PPTest &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.arima.PPTest &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -34,7 +34,7 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pyramid.arima.is_constant" href="pyramid.arima.is_constant.html" />
+    <link rel="next" title="pyramid.arima.auto_arima" href="pyramid.arima.auto_arima.html" />
     <link rel="prev" title="pyramid.arima.KPSSTest" href="pyramid.arima.KPSSTest.html" /> 
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -90,16 +90,16 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-and-associated-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator and associated tests</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-estimator">ARIMA estimator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-auto-parameter-selection">ARIMA auto-parameter selection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#tests-of-seasonality">Tests of seasonality</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="../classes.html#tests-of-stationarity">Tests of stationarity</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../classes.html#arima-estimator-statistical-tests">ARIMA estimator &amp; statistical tests</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="pyramid.arima.ADFTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.ADFTest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.arima.ARIMA.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.ARIMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.arima.CHTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.CHTest</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyramid.arima.KPSSTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.KPSSTest</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.PPTest</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-auto-parameter-selection">ARIMA auto-parameter selection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../classes.html#differencing-helpers">Differencing helpers</a></li>
 </ul>
 </li>
@@ -108,8 +108,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -180,7 +180,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pyramid.arima" title="pyramid.arima"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.arima</span></code></a>.PPTest<a class="headerlink" href="#pyramid-arima-pptest" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyramid.arima.PPTest">
-<em class="property">class </em><code class="descclassname">pyramid.arima.</code><code class="descname">PPTest</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>lshort=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/arima/stationarity.html#PPTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.PPTest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pyramid.arima.</code><code class="descname">PPTest</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>lshort=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/arima/stationarity.py#L320"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/arima/stationarity.html#PPTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.PPTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conduct a PP test for stationarity.</p>
 <p>In statistics, the Phillips–Perron test (named after Peter C. B.
 Phillips and Pierre Perron) is a unit root test. It is used in time series
@@ -204,12 +204,13 @@ order 1. It builds on the Dickey–Fuller test of the null hypothesis
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<ul class="simple">
-<li>The R code allows for two types of tests: &#8216;Z(alpha)&#8217; and &#8216;Z(t_alpha)&#8217;.
+<p>This test is generally used indirectly via the
+<a class="reference internal" href="pyramid.arima.ndiffs.html#pyramid.arima.ndiffs" title="pyramid.arima.ndiffs"><code class="xref py py-func docutils literal"><span class="pre">pyramid.arima.ndiffs()</span></code></a> function, which computes the
+differencing term, <code class="docutils literal"><span class="pre">d</span></code>.</p>
+<p>The R code allows for two types of tests: &#8216;Z(alpha)&#8217; and &#8216;Z(t_alpha)&#8217;.
 Since sklearn does not allow extraction of std errors from the linear
-model fit, <code class="docutils literal"><span class="pre">t_alpha</span></code> is much more difficult to achieve... so do not
-allow that variant.</li>
-</ul>
+model fit, <code class="docutils literal"><span class="pre">t_alpha</span></code> is much more difficult to achieve, so we do not
+allow that variant.</p>
 <p class="rubric">References</p>
 <table class="docutils citation" frame="void" id="r29" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -237,12 +238,12 @@ allow that variant.</li>
 </table>
 <dl class="method">
 <dt id="pyramid.arima.PPTest.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>lshort=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/arima/stationarity.html#PPTest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.PPTest.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>lshort=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/arima/stationarity.py#L367"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/arima/stationarity.html#PPTest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.PPTest.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="pyramid.arima.PPTest.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.PPTest.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/../sklearn/base.py#L220"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.PPTest.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -267,15 +268,26 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pyramid.arima.PPTest.is_stationary">
-<code class="descname">is_stationary</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/arima/stationarity.html#PPTest.is_stationary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.PPTest.is_stationary" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_stationary</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/arima/stationarity.py#L372"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/arima/stationarity.html#PPTest.is_stationary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.PPTest.is_stationary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test whether the time series is stationary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array-like, shape=(n_samples,)</p>
-<blockquote class="last">
+<blockquote>
 <div><p>The time series vector.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>pval</strong> : float</p>
+<blockquote>
+<div><p>The computed P-value of the test.</p>
+</div></blockquote>
+<p><strong>sig</strong> : bool</p>
+<blockquote class="last">
+<div><p>Whether the P-value is significant at the <code class="docutils literal"><span class="pre">alpha</span></code> level.
+More directly, whether to difference the time series.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -285,7 +297,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pyramid.arima.PPTest.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.PPTest.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/../sklearn/base.py#L257"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.arima.PPTest.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -313,7 +325,7 @@ component of a nested object.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pyramid.arima.is_constant.html" class="btn btn-neutral float-right" title="pyramid.arima.is_constant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pyramid.arima.auto_arima.html" class="btn btn-neutral float-right" title="pyramid.arima.auto_arima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="pyramid.arima.KPSSTest.html" class="btn btn-neutral" title="pyramid.arima.KPSSTest" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -347,7 +359,7 @@ component of a nested object.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

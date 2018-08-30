@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; pyramid 0.7.0 documentation</title>
+  <title>API Reference &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -34,7 +34,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyramid.arima.ARIMA" href="generated/pyramid.arima.ARIMA.html" />
+    <link rel="next" title="pyramid.arima.ADFTest" href="generated/pyramid.arima.ADFTest.html" />
     <link rel="prev" title="Pyramid: ARIMA estimators for Python" href="../index.html" /> 
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -90,23 +90,17 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pyramid-arima-arima-estimator-and-associated-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator and associated tests</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#arima-estimator">ARIMA estimator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#arima-estimator-statistical-tests">ARIMA estimator &amp; statistical tests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.arima.ADFTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.ADFTest</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pyramid.arima.ARIMA.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.ARIMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.arima.CHTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.CHTest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.arima.KPSSTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.KPSSTest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.arima.PPTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.PPTest</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#arima-auto-parameter-selection">ARIMA auto-parameter selection</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="generated/pyramid.arima.auto_arima.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.auto_arima</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#tests-of-seasonality">Tests of seasonality</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.arima.CHTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.CHTest</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#tests-of-stationarity">Tests of stationarity</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.arima.ADFTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.ADFTest</a></li>
-<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.arima.KPSSTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.KPSSTest</a></li>
-<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.arima.PPTest.html"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>.PPTest</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#differencing-helpers">Differencing helpers</a><ul>
@@ -128,10 +122,19 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#pyramid-utils-utilities"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>: Utilities</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#array-helper-functions-metaestimators">Array helper functions &amp; metaestimators</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.utils.acf.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.acf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.utils.as_series.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.as_series</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pyramid.utils.c.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.c</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pyramid.utils.diff.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.diff</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pyramid.utils.if_has_delegate.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.if_has_delegate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pyramid.utils.is_iterable.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.is_iterable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.utils.pacf.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.pacf</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-utilities-wrappers">Plotting utilities &amp; wrappers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.utils.autocorr_plot.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.autocorr_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.utils.plot_acf.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.plot_acf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pyramid.utils.plot_pacf.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.plot_pacf</a></li>
 </ul>
 </li>
 </ul>
@@ -139,8 +142,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -207,72 +210,42 @@
             
   <div class="section" id="api-reference">
 <span id="api-ref"></span><h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
-<p>This is the class and function reference for pyramid. Please refer to
+<style type="text/css">
+    h1 {
+        /* margin: 0 -10px 0 -10px; */
+        text-align: center;
+        background-color: #cde8ef;
+        /* font-family: Helvetica, Arial, sans-serif; */
+        /* font-size: 190%; */
+        border-radius: 0 15px 0 15px;
+        -moz-border-radius: 0 15px 0 15px;
+        padding: 10px;
+    }
+
+    h2 {
+        background-color: #BED4EB;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    h3 {
+        padding: 5px;
+        border-radius: 10px;
+        background-color: #eee;
+    }
+</style><p>This is the class and function reference for pyramid. Please refer to
 the <a class="reference internal" href="../user_guide.html#user-guide"><span class="std std-ref">full user guide</span></a> for further details, as the class and
 function raw specifications may not be enough to give full guidelines on their
 uses.</p>
-<div class="section" id="pyramid-arima-arima-estimator-and-associated-tests">
-<span id="arima-ref"></span><h2><a class="reference internal" href="#module-pyramid.arima" title="pyramid.arima"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.arima</span></code></a>: ARIMA estimator and associated tests<a class="headerlink" href="#pyramid-arima-arima-estimator-and-associated-tests" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pyramid-arima-arima-estimator-differencing-tests">
+<span id="arima-ref"></span><h2><a class="reference internal" href="#module-pyramid.arima" title="pyramid.arima"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.arima</span></code></a>: ARIMA estimator &amp; differencing tests<a class="headerlink" href="#pyramid-arima-arima-estimator-differencing-tests" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal"><span class="pre">pyramid.arima</span></code> sub-module defines the <code class="docutils literal"><span class="pre">ARIMA</span></code> estimator and the
 <code class="docutils literal"><span class="pre">auto_arima</span></code> function, as well as a set of tests of seasonality and
 stationarity.</p>
-<span class="target" id="module-pyramid.arima"></span><div class="section" id="arima-estimator">
-<h3>ARIMA estimator<a class="headerlink" href="#arima-estimator" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA" title="pyramid.arima.ARIMA"><code class="xref py py-obj docutils literal"><span class="pre">arima.ARIMA</span></code></a>(order[,&nbsp;seasonal_order,&nbsp;...])</td>
-<td>An ARIMA estimator.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="arima-auto-parameter-selection">
-<h3>ARIMA auto-parameter selection<a class="headerlink" href="#arima-auto-parameter-selection" title="Permalink to this headline">¶</a></h3>
-<p><cite>auto_arima</cite> selects the best model order for an ARIMA estimator by minimizing
-one of several scoring criteria. This is typically the most effective way to
-fit an ARIMA model unless you have apriori subject matter expertise regarding
-the trends within your data.</p>
-<p><strong>User guide:</strong> See the <a class="reference internal" href="arima.auto.html#auto-arima"><span class="std std-ref">The auto_arima process</span></a> section for further details.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.arima.auto_arima.html#pyramid.arima.auto_arima" title="pyramid.arima.auto_arima"><code class="xref py py-obj docutils literal"><span class="pre">arima.auto_arima</span></code></a>(y[,&nbsp;exogenous,&nbsp;start_p,&nbsp;d,&nbsp;...])</td>
-<td>Automatically discover the optimal order for an ARIMA model.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="tests-of-seasonality">
-<h3>Tests of seasonality<a class="headerlink" href="#tests-of-seasonality" title="Permalink to this headline">¶</a></h3>
-<p>Tests of seasonality are important if your timeseries data exhibits seasonal
-trends (i.e., Black Friday trends in retail, dependencies on weather patterns,
-etc.). Pyramid currently implements only one test of seasonality, but more will
-be added in future versions.</p>
-<p><strong>User guide:</strong> See the <a class="reference internal" href="arima.seasonality.html#seasonality"><span class="std std-ref">Tests of seasonality</span></a> section for further details.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.arima.CHTest.html#pyramid.arima.CHTest" title="pyramid.arima.CHTest"><code class="xref py py-obj docutils literal"><span class="pre">arima.CHTest</span></code></a>(m)</td>
-<td>Conduct a CH test for seasonality.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="tests-of-stationarity">
-<h3>Tests of stationarity<a class="headerlink" href="#tests-of-stationarity" title="Permalink to this headline">¶</a></h3>
-<p>Timeseries data must be stationary in order to model it well. Pyramid implements
-several tests of stationarity.</p>
-<p><strong>User guide:</strong> See the <a class="reference internal" href="arima.stationarity.html#stationarity"><span class="std std-ref">Tests of stationarity</span></a> section for further details.</p>
+<span class="target" id="module-pyramid.arima"></span><div class="section" id="arima-estimator-statistical-tests">
+<h3>ARIMA estimator &amp; statistical tests<a class="headerlink" href="#arima-estimator-statistical-tests" title="Permalink to this headline">¶</a></h3>
+<p><strong>User guide:</strong> See the <a class="reference internal" href="../tips_and_tricks.html#seasonality"><span class="std std-ref">Estimating the seasonal differencing term, D</span></a> and <a class="reference internal" href="../tips_and_tricks.html#enforcing-stationarity"><span class="std std-ref">Enforcing stationarity</span></a>
+sections for further details.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -282,11 +255,32 @@ several tests of stationarity.</p>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.arima.ADFTest.html#pyramid.arima.ADFTest" title="pyramid.arima.ADFTest"><code class="xref py py-obj docutils literal"><span class="pre">arima.ADFTest</span></code></a>([alpha,&nbsp;k])</td>
 <td>Conduct an ADF test for stationarity.</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA" title="pyramid.arima.ARIMA"><code class="xref py py-obj docutils literal"><span class="pre">arima.ARIMA</span></code></a>(order[,&nbsp;seasonal_order,&nbsp;...])</td>
+<td>An ARIMA estimator.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.arima.CHTest.html#pyramid.arima.CHTest" title="pyramid.arima.CHTest"><code class="xref py py-obj docutils literal"><span class="pre">arima.CHTest</span></code></a>(m)</td>
+<td>Conduct a CH test for seasonality.</td>
+</tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyramid.arima.KPSSTest.html#pyramid.arima.KPSSTest" title="pyramid.arima.KPSSTest"><code class="xref py py-obj docutils literal"><span class="pre">arima.KPSSTest</span></code></a>([alpha,&nbsp;null,&nbsp;lshort])</td>
 <td>Conduct a KPSS test for stationarity.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.arima.PPTest.html#pyramid.arima.PPTest" title="pyramid.arima.PPTest"><code class="xref py py-obj docutils literal"><span class="pre">arima.PPTest</span></code></a>([alpha,&nbsp;lshort])</td>
 <td>Conduct a PP test for stationarity.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="arima-auto-parameter-selection">
+<h3>ARIMA auto-parameter selection<a class="headerlink" href="#arima-auto-parameter-selection" title="Permalink to this headline">¶</a></h3>
+<p><strong>User guide:</strong> See the <a class="reference internal" href="../tips_and_tricks.html#tips-and-tricks"><span class="std std-ref">Tips to using auto_arima</span></a> section for further details.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.arima.auto_arima.html#pyramid.arima.auto_arima" title="pyramid.arima.auto_arima"><code class="xref py py-obj docutils literal"><span class="pre">arima.auto_arima</span></code></a>(y[,&nbsp;exogenous,&nbsp;start_p,&nbsp;d,&nbsp;...])</td>
+<td>Automatically discover the optimal order for an ARIMA model.</td>
 </tr>
 </tbody>
 </table>
@@ -303,10 +297,10 @@ several tests of stationarity.</p>
 <td>Test <code class="docutils literal"><span class="pre">x</span></code> for constancy.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyramid.arima.ndiffs.html#pyramid.arima.ndiffs" title="pyramid.arima.ndiffs"><code class="xref py py-obj docutils literal"><span class="pre">arima.ndiffs</span></code></a>(x[,&nbsp;alpha,&nbsp;test,&nbsp;max_d])</td>
-<td>Estimate differencing term.</td>
+<td>Estimate ARIMA differencing term, <code class="docutils literal"><span class="pre">d</span></code>.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.arima.nsdiffs.html#pyramid.arima.nsdiffs" title="pyramid.arima.nsdiffs"><code class="xref py py-obj docutils literal"><span class="pre">arima.nsdiffs</span></code></a>(x,&nbsp;m[,&nbsp;max_D,&nbsp;test])</td>
-<td>Estimate seasonal differences.</td>
+<td>Estimate the seasonal differencing term, <code class="docutils literal"><span class="pre">D</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -317,6 +311,7 @@ several tests of stationarity.</p>
 <p>The <code class="docutils literal"><span class="pre">pyramid.datasets</span></code> submodule provides several different univariate time-
 series datasets used in various examples and tests across the package. If you
 would like to prototype a model, this is a good place to find easy-to-access data.</p>
+<p><strong>User guide:</strong> See the <a class="reference internal" href="datasets.html#datasets"><span class="std std-ref">Toy time-series datasets</span></a> section for further details.</p>
 <span class="target" id="module-pyramid.datasets"></span><div class="section" id="dataset-loading-functions">
 <h3>Dataset loading functions<a class="headerlink" href="#dataset-loading-functions" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">
@@ -325,13 +320,13 @@ would like to prototype a model, this is a good place to find easy-to-access dat
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.datasets.load_heartrate.html#pyramid.datasets.load_heartrate" title="pyramid.datasets.load_heartrate"><code class="xref py py-obj docutils literal"><span class="pre">datasets.load_heartrate</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.datasets.load_heartrate.html#pyramid.datasets.load_heartrate" title="pyramid.datasets.load_heartrate"><code class="xref py py-obj docutils literal"><span class="pre">datasets.load_heartrate</span></code></a>([as_series])</td>
 <td>Uniform heart-rate data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyramid.datasets.load_lynx.html#pyramid.datasets.load_lynx" title="pyramid.datasets.load_lynx"><code class="xref py py-obj docutils literal"><span class="pre">datasets.load_lynx</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyramid.datasets.load_lynx.html#pyramid.datasets.load_lynx" title="pyramid.datasets.load_lynx"><code class="xref py py-obj docutils literal"><span class="pre">datasets.load_lynx</span></code></a>([as_series])</td>
 <td>Annual numbers of lynx trappings for 1821–1934 in Canada.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.datasets.load_wineind.html#pyramid.datasets.load_wineind" title="pyramid.datasets.load_wineind"><code class="xref py py-obj docutils literal"><span class="pre">datasets.load_wineind</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.datasets.load_wineind.html#pyramid.datasets.load_wineind" title="pyramid.datasets.load_wineind"><code class="xref py py-obj docutils literal"><span class="pre">datasets.load_wineind</span></code></a>([as_series])</td>
 <td>Australian total wine sales by wine makers in bottles &lt;= 1 litre.</td>
 </tr>
 </tbody>
@@ -349,6 +344,12 @@ would like to prototype a model, this is a good place to find easy-to-access dat
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.utils.acf.html#pyramid.utils.acf" title="pyramid.utils.acf"><code class="xref py py-obj docutils literal"><span class="pre">utils.acf</span></code></a>(x[,&nbsp;unbiased,&nbsp;nlags,&nbsp;qstat,&nbsp;fft,&nbsp;...])</td>
+<td>Autocorrelation function for 1d arrays.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyramid.utils.as_series.html#pyramid.utils.as_series" title="pyramid.utils.as_series"><code class="xref py py-obj docutils literal"><span class="pre">utils.as_series</span></code></a>(x)</td>
+<td>Cast as pandas Series.</td>
+</tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.utils.c.html#pyramid.utils.c" title="pyramid.utils.c"><code class="xref py py-obj docutils literal"><span class="pre">utils.c</span></code></a>(*args)</td>
 <td>Imitates the <code class="docutils literal"><span class="pre">c</span></code> function from R.</td>
 </tr>
@@ -356,10 +357,33 @@ would like to prototype a model, this is a good place to find easy-to-access dat
 <td>Difference an array.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.utils.if_has_delegate.html#pyramid.utils.if_has_delegate" title="pyramid.utils.if_has_delegate"><code class="xref py py-obj docutils literal"><span class="pre">utils.if_has_delegate</span></code></a>(delegate)</td>
-<td>Create a decorator for methods that are delegated in the presence of a results wrapper.</td>
+<td>Wrap a delegated instance attribute function.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyramid.utils.is_iterable.html#pyramid.utils.is_iterable" title="pyramid.utils.is_iterable"><code class="xref py py-obj docutils literal"><span class="pre">utils.is_iterable</span></code></a>(x)</td>
 <td>Test a variable for iterability.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.utils.pacf.html#pyramid.utils.pacf" title="pyramid.utils.pacf"><code class="xref py py-obj docutils literal"><span class="pre">utils.pacf</span></code></a>(x[,&nbsp;nlags,&nbsp;method,&nbsp;alpha])</td>
+<td>Partial autocorrelation estimated</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="plotting-utilities-wrappers">
+<h3>Plotting utilities &amp; wrappers<a class="headerlink" href="#plotting-utilities-wrappers" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.utils.autocorr_plot.html#pyramid.utils.autocorr_plot" title="pyramid.utils.autocorr_plot"><code class="xref py py-obj docutils literal"><span class="pre">utils.autocorr_plot</span></code></a>(series[,&nbsp;show])</td>
+<td>Plot a series&#8217; auto-correlation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyramid.utils.plot_acf.html#pyramid.utils.plot_acf" title="pyramid.utils.plot_acf"><code class="xref py py-obj docutils literal"><span class="pre">utils.plot_acf</span></code></a>(series[,&nbsp;ax,&nbsp;lags,&nbsp;alpha,&nbsp;...])</td>
+<td>Plot a series&#8217; auto-correlation as a line plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyramid.utils.plot_pacf.html#pyramid.utils.plot_pacf" title="pyramid.utils.plot_pacf"><code class="xref py py-obj docutils literal"><span class="pre">utils.plot_pacf</span></code></a>(series[,&nbsp;ax,&nbsp;lags,&nbsp;alpha,&nbsp;...])</td>
+<td>Plot a series&#8217; partial auto-correlation as a line plot.</td>
 </tr>
 </tbody>
 </table>
@@ -375,7 +399,7 @@ would like to prototype a model, this is a good place to find easy-to-access dat
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="generated/pyramid.arima.ARIMA.html" class="btn btn-neutral float-right" title="pyramid.arima.ARIMA" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="generated/pyramid.arima.ADFTest.html" class="btn btn-neutral float-right" title="pyramid.arima.ADFTest" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../index.html" class="btn btn-neutral" title="Pyramid: ARIMA estimators for Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -409,7 +433,7 @@ would like to prototype a model, this is a good place to find easy-to-access dat
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

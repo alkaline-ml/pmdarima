@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.arima.arima &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.arima.arima &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -89,8 +89,8 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -183,6 +183,10 @@
 <span class="kn">from</span> <span class="nn">..compat.python</span> <span class="k">import</span> <span class="n">long</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">get_callable</span><span class="p">,</span> <span class="n">if_has_delegate</span>
 <span class="kn">from</span> <span class="nn">..utils.array</span> <span class="k">import</span> <span class="n">diff</span>
+<span class="kn">from</span> <span class="nn">.._config</span> <span class="k">import</span> <span class="n">PYRAMID_ARIMA_CACHE</span><span class="p">,</span> <span class="n">PICKLE_HASH_PATTERN</span>
+
+<span class="c1"># Get the version</span>
+<span class="kn">import</span> <span class="nn">pyramid</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;ARIMA&#39;</span>
@@ -523,6 +527,10 @@
 
         <span class="c1"># Save nobs since we might change it later if using OOB</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nobs_</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># As of version 0.7.2, start saving the version with the model so</span>
+        <span class="c1"># we can track changes over time.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pkg_version_</span> <span class="o">=</span> <span class="n">pyramid</span><span class="o">.</span><span class="n">__version__</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
     <span class="k">def</span> <span class="nf">_check_exog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">):</span>
@@ -680,13 +688,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exogenous</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_cache_folder</span><span class="p">():</span>
-        <span class="k">return</span> <span class="s1">&#39;.pyramid-cache&#39;</span>
-
     <span class="k">def</span> <span class="nf">_get_pickle_hash_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Mmmm, pickle hash...</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">-</span><span class="si">%s</span><span class="s1">-</span><span class="si">%i</span><span class="s1">.pmdpkl&#39;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="k">return</span> <span class="n">PICKLE_HASH_PATTERN</span> <span class="o">%</span> <span class="p">(</span>
             <span class="c1"># cannot use &#39;:&#39; in Windows file names. Whoops!</span>
             <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">),</span>
             <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">]),</span>
@@ -698,6 +702,7 @@
 
         <span class="c1"># if this already contains a pointer to a &quot;saved state&quot; model,</span>
         <span class="c1"># delete that model and replace it with a new one</span>
+        <span class="c1"># FIXME: v0.7.2+ - do we want to keep this around for later unpickling?</span>
         <span class="k">if</span> <span class="n">loc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
 
@@ -706,7 +711,7 @@
         <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
 
         <span class="c1"># check that the cache folder exists, and if not, make it.</span>
-        <span class="n">cache_loc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_cache_folder</span><span class="p">())</span>
+        <span class="n">cache_loc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="n">PYRAMID_ARIMA_CACHE</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">cache_loc</span><span class="p">)</span>
         <span class="c1"># since this is a race condition, just try to make it</span>
@@ -744,7 +749,40 @@
                 <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s1">&#39;Could not read saved model state from </span><span class="si">%s</span><span class="s1">. &#39;</span>
                               <span class="s1">&#39;Does it still exist?&#39;</span> <span class="o">%</span> <span class="n">loc</span><span class="p">)</span>
 
+        <span class="c1"># Warn for unpickling a different version&#39;s model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_warn_for_older_version</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">_warn_for_older_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Added in v0.7.2 - check for the version pickled under and warn</span>
+        <span class="c1"># if it&#39;s different from the current version</span>
+        <span class="n">do_warn</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">modl_version</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">this_version</span> <span class="o">=</span> <span class="n">pyramid</span><span class="o">.</span><span class="n">__version__</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">modl_version</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;pkg_version_&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Either &lt; or &gt; or &#39;-dev&#39; vs. release version</span>
+            <span class="k">if</span> <span class="n">modl_version</span> <span class="o">!=</span> <span class="n">this_version</span><span class="p">:</span>
+                <span class="n">do_warn</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># Either wasn&#39;t fit when pickled or didn&#39;t have the attr due to</span>
+            <span class="c1"># it being an older version. If it wasn&#39;t fit, it will be missing</span>
+            <span class="c1"># the arima_res_ attr.</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">):</span>  <span class="c1"># it was fit, but is older</span>
+                <span class="n">do_warn</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">modl_version</span> <span class="o">=</span> <span class="s1">&#39;&lt;0.7.2&#39;</span>
+
+            <span class="c1"># else: it may not have the model (not fit) and still be older,</span>
+            <span class="c1"># but we can&#39;t detect that.</span>
+
+        <span class="c1"># Means it was older</span>
+        <span class="k">if</span> <span class="n">do_warn</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;You&#39;ve deserialized an ARIMA from a version (</span><span class="si">%s</span><span class="s2">) &quot;</span>
+                          <span class="s2">&quot;that differs from your installed version of &quot;</span>
+                          <span class="s2">&quot;Pyramid (</span><span class="si">%s</span><span class="s2">). This could cause unforeseen behavior.&quot;</span>
+                          <span class="o">%</span> <span class="p">(</span><span class="n">modl_version</span><span class="p">,</span> <span class="n">this_version</span><span class="p">),</span> <span class="ne">UserWarning</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_clear_cached_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># when fit in an auto-arima, a lot of cached .pmdpkl files</span>
@@ -835,19 +873,22 @@
             <span class="c1"># The model endog is stored differently in the ARIMA class than</span>
             <span class="c1"># in the SARIMAX class, where the ARIMA actually stores the diffed</span>
             <span class="c1"># array. However, ARMA does not (and we cannot diff for d &lt; 1).</span>
-            <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># ARIMA</span>
+            <span class="n">do_diff</span> <span class="o">=</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">do_diff</span><span class="p">:</span>  <span class="c1"># ARIMA</span>
                 <span class="n">y_diffed</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>  <span class="c1"># ARMA</span>
                 <span class="n">y_diffed</span> <span class="o">=</span> <span class="n">y</span>
 
+            <span class="c1"># This changes the length of the array!</span>
             <span class="n">model_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">endog</span> <span class="o">=</span> <span class="n">y_diffed</span>
 
-            <span class="c1"># Set the model result nobs</span>
-            <span class="n">model_res</span><span class="o">.</span><span class="n">nobs</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># Set the model result nobs (must be the differenced shape!)</span>
+            <span class="n">model_res</span><span class="o">.</span><span class="n">nobs</span> <span class="o">=</span> <span class="n">y_diffed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="c1"># Set the exogenous</span>
             <span class="k">if</span> <span class="n">exog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="c1"># Set in data class</span>
+                <span class="c1"># Set in data class (this is NOT differenced, unlike the</span>
+                <span class="c1"># model data)</span>
                 <span class="n">model_res</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">exog</span> <span class="o">=</span> <span class="n">exog</span>
 
                 <span class="c1"># Difference and add intercept, then add to model class</span>
@@ -863,7 +904,10 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Otherwise we STILL have to set the exogenous array as an</span>
                 <span class="c1"># intercept in the model class for both ARMA and ARIMA.</span>
-                <span class="n">model_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="c1"># Make sure to use y_diffed in case d &gt; 0, since the exog</span>
+                <span class="c1"># array will be multiplied by the endog at some point and we</span>
+                <span class="c1"># need the dimensions to match (Issue #30)</span>
+                <span class="n">model_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">y_diffed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
 
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># SARIMAX</span>
             <span class="c1"># The model endog is stored differently in the ARIMA class than</span>
@@ -1175,7 +1219,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

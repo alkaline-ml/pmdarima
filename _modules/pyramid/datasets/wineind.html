@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.datasets.wineind &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.datasets.wineind &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -89,8 +89,8 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -160,12 +160,29 @@
 <span class="c1">#</span>
 <span class="c1"># This is the wineind dataset found in R.</span>
 
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">calendar</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;load_wineind&#39;</span>
+<span class="p">]</span>
 
 
-<div class="viewcode-block" id="load_wineind"><a class="viewcode-back" href="../../../modules/generated/pyramid.datasets.load_wineind.html#pyramid.datasets.load_wineind">[docs]</a><span class="k">def</span> <span class="nf">load_wineind</span><span class="p">():</span>
+<div class="viewcode-block" id="load_wineind"><a class="viewcode-back" href="../../../modules/generated/pyramid.datasets.load_wineind.html#pyramid.datasets.load_wineind">[docs]</a><span class="k">def</span> <span class="nf">load_wineind</span><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Australian total wine sales by wine makers in bottles &lt;= 1 litre.</span>
-<span class="sd">    Jan 1980 -- Aug 1994. This dataset is found in the R ``forecasts`` package.</span>
+
+<span class="sd">    This time-series records wine sales by Australian wine makers between</span>
+<span class="sd">    Jan 1980 -- Aug 1994. This dataset is found in the R ``forecast`` package.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    as_series : bool, optional (default=False)</span>
+<span class="sd">        Whether to return a Pandas series. If True, the index will be set to</span>
+<span class="sd">        the observed years/months. If False, will return a 1d numpy array.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -192,16 +209,24 @@
 <span class="sd">           29356, 31234, 22724, 28496, 32857, 37198, 13652, 22784, 23565,</span>
 <span class="sd">           26323, 23779, 27549, 29660, 23356])</span>
 
+<span class="sd">    &gt;&gt;&gt; load_wineind(True).head()</span>
+<span class="sd">    Jan 1980    15136</span>
+<span class="sd">    Feb 1980    16733</span>
+<span class="sd">    Mar 1980    20016</span>
+<span class="sd">    Apr 1980    17708</span>
+<span class="sd">    May 1980    18019</span>
+<span class="sd">    dtype: int64</span>
+
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/wineind</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    wineind : np.ndarray, shape=(n_samples,)</span>
+<span class="sd">    rslt : array-like, shape=(n_samples,)</span>
 <span class="sd">        The wineind dataset. There are 176 observations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">15136</span><span class="p">,</span> <span class="mi">16733</span><span class="p">,</span> <span class="mi">20016</span><span class="p">,</span> <span class="mi">17708</span><span class="p">,</span> <span class="mi">18019</span><span class="p">,</span> <span class="mi">19227</span><span class="p">,</span> <span class="mi">22893</span><span class="p">,</span> <span class="mi">23739</span><span class="p">,</span>
+    <span class="n">rslt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">15136</span><span class="p">,</span> <span class="mi">16733</span><span class="p">,</span> <span class="mi">20016</span><span class="p">,</span> <span class="mi">17708</span><span class="p">,</span> <span class="mi">18019</span><span class="p">,</span> <span class="mi">19227</span><span class="p">,</span> <span class="mi">22893</span><span class="p">,</span> <span class="mi">23739</span><span class="p">,</span>
                      <span class="mi">21133</span><span class="p">,</span> <span class="mi">22591</span><span class="p">,</span> <span class="mi">26786</span><span class="p">,</span> <span class="mi">29740</span><span class="p">,</span> <span class="mi">15028</span><span class="p">,</span> <span class="mi">17977</span><span class="p">,</span> <span class="mi">20008</span><span class="p">,</span> <span class="mi">21354</span><span class="p">,</span>
                      <span class="mi">19498</span><span class="p">,</span> <span class="mi">22125</span><span class="p">,</span> <span class="mi">25817</span><span class="p">,</span> <span class="mi">28779</span><span class="p">,</span> <span class="mi">20960</span><span class="p">,</span> <span class="mi">22254</span><span class="p">,</span> <span class="mi">27392</span><span class="p">,</span> <span class="mi">29945</span><span class="p">,</span>
                      <span class="mi">16933</span><span class="p">,</span> <span class="mi">17892</span><span class="p">,</span> <span class="mi">20533</span><span class="p">,</span> <span class="mi">23569</span><span class="p">,</span> <span class="mi">22417</span><span class="p">,</span> <span class="mi">22084</span><span class="p">,</span> <span class="mi">26580</span><span class="p">,</span> <span class="mi">27454</span><span class="p">,</span>
@@ -222,7 +247,20 @@
                      <span class="mi">16974</span><span class="p">,</span> <span class="mi">21697</span><span class="p">,</span> <span class="mi">24179</span><span class="p">,</span> <span class="mi">23757</span><span class="p">,</span> <span class="mi">25013</span><span class="p">,</span> <span class="mi">24019</span><span class="p">,</span> <span class="mi">30345</span><span class="p">,</span> <span class="mi">24488</span><span class="p">,</span>
                      <span class="mi">25156</span><span class="p">,</span> <span class="mi">25650</span><span class="p">,</span> <span class="mi">30923</span><span class="p">,</span> <span class="mi">37240</span><span class="p">,</span> <span class="mi">17466</span><span class="p">,</span> <span class="mi">19463</span><span class="p">,</span> <span class="mi">24352</span><span class="p">,</span> <span class="mi">26805</span><span class="p">,</span>
                      <span class="mi">25236</span><span class="p">,</span> <span class="mi">24735</span><span class="p">,</span> <span class="mi">29356</span><span class="p">,</span> <span class="mi">31234</span><span class="p">,</span> <span class="mi">22724</span><span class="p">,</span> <span class="mi">28496</span><span class="p">,</span> <span class="mi">32857</span><span class="p">,</span> <span class="mi">37198</span><span class="p">,</span>
-                     <span class="mi">13652</span><span class="p">,</span> <span class="mi">22784</span><span class="p">,</span> <span class="mi">23565</span><span class="p">,</span> <span class="mi">26323</span><span class="p">,</span> <span class="mi">23779</span><span class="p">,</span> <span class="mi">27549</span><span class="p">,</span> <span class="mi">29660</span><span class="p">,</span> <span class="mi">23356</span><span class="p">])</span></div>
+                     <span class="mi">13652</span><span class="p">,</span> <span class="mi">22784</span><span class="p">,</span> <span class="mi">23565</span><span class="p">,</span> <span class="mi">26323</span><span class="p">,</span> <span class="mi">23779</span><span class="p">,</span> <span class="mi">27549</span><span class="p">,</span> <span class="mi">29660</span><span class="p">,</span> <span class="mi">23356</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">as_series</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rslt</span>
+
+    <span class="c1"># Otherwise we want a series and have to cleverly create the index</span>
+    <span class="c1"># (we don&#39;t want after aug in 1994, so trip Sep, Oct, Nov and Dec)</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">calendar</span><span class="o">.</span><span class="n">month_abbr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">year</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1980</span><span class="p">,</span> <span class="mi">1995</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+    <span class="p">][:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rslt</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
@@ -257,7 +295,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

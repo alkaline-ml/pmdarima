@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.utils.diff &mdash; pyramid 0.7.0 documentation</title>
+  <title>pyramid.utils.diff &mdash; pyramid 0.8.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.1
               </div>
             
           
@@ -90,23 +90,27 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-and-associated-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator and associated tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal"><span class="pre">pyramid.datasets</span></code>: Toy univariate timeseries datasets</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-utils-utilities"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>: Utilities</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#array-helper-functions-metaestimators">Array helper functions &amp; metaestimators</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.acf.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.acf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.as_series.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.as_series</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyramid.utils.c.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.c</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.diff</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyramid.utils.if_has_delegate.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.if_has_delegate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyramid.utils.is_iterable.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.is_iterable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.pacf.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.pacf</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../classes.html#plotting-utilities-wrappers">Plotting utilities &amp; wrappers</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
 </ul>
 
             
@@ -177,14 +181,12 @@
 <h1><a class="reference internal" href="../classes.html#module-pyramid.utils" title="pyramid.utils"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.utils</span></code></a>.diff<a class="headerlink" href="#pyramid-utils-diff" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyramid.utils.diff">
-<code class="descclassname">pyramid.utils.</code><code class="descname">diff</code><span class="sig-paren">(</span><em>x</em>, <em>lag=1</em>, <em>differences=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/utils/array.html#diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.utils.diff" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyramid.utils.</code><code class="descname">diff</code><span class="sig-paren">(</span><em>x</em>, <em>lag=1</em>, <em>differences=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/utils/array.py#L152"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/utils/array.html#diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.utils.diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Difference an array.</p>
-<p>A python implementation of the R <code class="docutils literal"><span class="pre">diff</span></code> function (documentation found
-at <a class="reference external" href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html">https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html</a>). This
-computes lag differences from an array given a <code class="docutils literal"><span class="pre">lag</span></code> and <code class="docutils literal"><span class="pre">differencing</span></code>
-term.</p>
-<p>If <code class="docutils literal"><span class="pre">x</span></code> is a vector of length n, <code class="docutils literal"><span class="pre">lag</span></code> = 1 and <code class="docutils literal"><span class="pre">differences</span></code> = 1, then
-the computed result is equal to the successive differences
+<p>A python implementation of the R <code class="docutils literal"><span class="pre">diff</span></code> function [1]. This computes lag
+differences from an array given a <code class="docutils literal"><span class="pre">lag</span></code> and <code class="docutils literal"><span class="pre">differencing</span></code> term.</p>
+<p>If <code class="docutils literal"><span class="pre">x</span></code> is a vector of length <span class="math">\(n\)</span>, <code class="docutils literal"><span class="pre">lag=1</span></code> and <code class="docutils literal"><span class="pre">differences=1</span></code>,
+then the computed result is equal to the successive differences
 <code class="docutils literal"><span class="pre">x[lag:n]</span> <span class="pre">-</span> <span class="pre">x[:n-lag]</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -220,40 +222,32 @@ the computed result is equal to the successive differences
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyramid.utils</span> <span class="k">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># lag 1, diff 1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+<p>Where <code class="docutils literal"><span class="pre">lag=1</span></code> and <code class="docutils literal"><span class="pre">differences=1</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">array([ -6.,  -2.,   7.,  25.], dtype=float32)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyramid.utils</span> <span class="k">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># lag 1, diff 2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+<p>Where <code class="docutils literal"><span class="pre">lag=1</span></code> and <code class="docutils literal"><span class="pre">differences=2</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">array([  4.,   9.,  18.], dtype=float32)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyramid.utils</span> <span class="k">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># lag 3, diff 1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+<p>Where <code class="docutils literal"><span class="pre">lag=3</span></code> and <code class="docutils literal"><span class="pre">differences=1</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">array([ -1.,  30.], dtype=float32)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyramid.utils</span> <span class="k">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># lag 6 (larger than the vec), diff 1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+<p>Where <code class="docutils literal"><span class="pre">lag=6</span></code> (larger than the array is) and <code class="docutils literal"><span class="pre">differences=1</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">array([], dtype=float32)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyramid.utils</span> <span class="k">import</span> <span class="n">diff</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<p>For a 2d array with <code class="docutils literal"><span class="pre">lag=1</span></code> and <code class="docutils literal"><span class="pre">differences=1</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -307,7 +301,7 @@ the computed result is equal to the successive differences
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.7.0',
+            VERSION:'0.8.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
