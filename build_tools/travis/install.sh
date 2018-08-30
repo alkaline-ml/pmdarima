@@ -65,14 +65,14 @@ if [[ "$DISTRIB" == "conda" ]]; then
     fi
     source activate testenv
 
-    # Install the mpl version
-    conda install --yes matplotlib==$MPL_VERSION
-
     # determine what platform is running
     python -c 'from distutils.util import get_platform; print(get_platform())'
 
     # Install nose-timer via pip
     pip install nose-timer
+
+    # Install the mpl version
+    pip install matplotlib==$MPL_VERSION
 else
     echo "We are only building with DISTRIB=conda currently"
     exit 10

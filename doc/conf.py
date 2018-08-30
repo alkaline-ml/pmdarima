@@ -26,7 +26,7 @@
 # sphinx_gallery imports at the top of your conf.py file should fix this issue
 import sphinx_gallery
 import matplotlib
-matplotlib.use('agg')
+matplotlib.use('agg')  # RISK: could be overridden via environment variables...
 
 import os
 import sys

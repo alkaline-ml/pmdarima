@@ -23,6 +23,8 @@ env:
     - PYRAMID_MPL_DEBUG="true"
     - PYRAMID_MPL_BACKEND="TkAgg"
     - MPL_VERSION="2.2.3"
+    # So we don't test MPL
+    - TESTING_ON_TRAVIS="true"
     # Deployment variables:
     # - TWINE_REPOSITORY_URL="https://test.pypi.org/legacy/"  # only for test
     - TWINE_USERNAME="tgsmith61591.gh"

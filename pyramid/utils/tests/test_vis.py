@@ -3,17 +3,25 @@
 from __future__ import absolute_import
 
 import pyramid as pm
+import os
 
 # Some as numpy, some as series
 datasets = [
     pm.datasets.load_wineind(True),
     pm.datasets.load_lynx(False),
-    pm.datasets.load_heartrate(True)
+    pm.datasets.load_heartrate(True),
+    pm.datasets.load_woolyrnq(True)
 ]
+
+# We are ONLY going to run these tests if we are NOT on Travis,
+# since Travis really doesn't play too nice with the different
+# backends we have flying around out there.
+travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
 
 
 def do_plot(plotting_func, dataset):
-    plotting_func(dataset, show=False)
+    if not travis:
+        plotting_func(dataset, show=False)
 
 
 def test_plot_autocorrelations():
