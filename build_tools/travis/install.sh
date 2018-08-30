@@ -72,7 +72,7 @@ if [[ "$DISTRIB" == "conda" ]]; then
     pip install nose-timer
 
     # Install the mpl version
-    pip install matplotlib==$MPL_VERSION
+    # pip install matplotlib==$MPL_VERSION
 else
     echo "We are only building with DISTRIB=conda currently"
     exit 10

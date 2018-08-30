@@ -11,21 +11,32 @@ from ..compat.matplotlib import get_compatible_pyplot
 
 from statsmodels.graphics.tsaplots import plot_acf as pacf, plot_pacf as ppacf
 
+import warnings
 import os
 
-# Gets the MPL.pyplot import (combatibilitized). Only use debug mode if set
-# on the machine in an environment variable
-debug = os.environ.get("PYRAMID_MPL_DEBUG", "false").lower() == "true"
+# User may not have matplotlib
+try:
+    # Gets the MPL.pyplot import (combatibilitized). Only use debug mode if set
+    # on the machine in an environment variable
+    debug = os.environ.get("PYRAMID_MPL_DEBUG", "false").lower() == "true"
 
-# If it's a Travis CI machine, we want to set the backend via env variable
-backend = os.environ.get("PYRAMID_MPL_BACKEND", None)
-plt = get_compatible_pyplot(backend=backend, debug=debug)
+    # If it's a Travis CI machine, we want to set the backend via env variable
+    backend = os.environ.get("PYRAMID_MPL_BACKEND", None)
+    plt = get_compatible_pyplot(backend=backend, debug=debug)
+except ImportError:
+    plt = None
 
 __all__ = [
     'autocorr_plot',
     'plot_acf',
     'plot_pacf'
 ]
+
+
+def warn_for_no_mpl():
+    if plt is None:
+        warnings.warn("You do not have matplotlib installed. In order to "
+                      "create plots, you'll need to pip install matplotlib!")
 
 
 def _show_or_return(obj, show):
@@ -70,6 +81,10 @@ def autocorr_plot(series, show=True):
         If ``show`` is True, does not return anything. If False, returns
         the Axis object.
     """
+    if plt is None:
+        warn_for_no_mpl()
+        return None
+
     res = ap(series)
     return _show_or_return(res, show)
 
@@ -147,6 +162,10 @@ def plot_acf(series, ax=None, lags=None, alpha=None, use_vlines=True,
         If ``show`` is True, does not return anything. If False, returns
         the Axis object.
     """
+    if plt is None:
+        warn_for_no_mpl()
+        return None
+
     res = pacf(x=series, ax=ax, lags=lags, alpha=alpha, use_vlines=use_vlines,
                unbiased=unbiased, fft=fft, title=title, zero=zero,
                vlines_kwargs=vlines_kwargs, **kwargs)
@@ -232,6 +251,10 @@ def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
         If ``show`` is True, does not return anything. If False, returns
         the Axis object.
     """
+    if plt is None:
+        warn_for_no_mpl()
+        return None
+
     res = ppacf(x=series, ax=ax, lags=lags, alpha=alpha, method=method,
                 use_vlines=use_vlines, title=title, zero=zero,
                 vlines_kwargs=vlines_kwargs, **kwargs)
