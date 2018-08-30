@@ -47,24 +47,21 @@ if [[ "$DISTRIB" == "conda" ]]; then
     if [[ "$PYTHON_VERSION" == "2.7" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION \
             numpy scipy cython=$CYTHON_VERSION statsmodels \
-            scikit-learn=$SCIKIT_LEARN_VERSION pytest pytest-cov \
-            matplotlib=$MPL_VERSION
+            scikit-learn=$SCIKIT_LEARN_VERSION pytest pytest-cov
 
     elif [[ "$INSTALL_MKL" == "true" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
             numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
             mkl cython=$CYTHON_VERSION \
             scikit-learn=$SCIKIT_LEARN_VERSION \
-            statsmodels=$STATSMODELS_VERSION pytest pytest-cov \
-            matplotlib
+            statsmodels=$STATSMODELS_VERSION pytest pytest-cov
 
     else
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
             numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
             nomkl cython=$CYTHON_VERSION \
             scikit-learn=$SCIKIT_LEARN_VERSION \
-            statsmodels=$STATSMODELS_VERSION pytest pytest-cov \
-            matplotlib
+            statsmodels=$STATSMODELS_VERSION pytest pytest-cov
     fi
     source activate testenv
 
@@ -73,9 +70,10 @@ if [[ "$DISTRIB" == "conda" ]]; then
 
     # Install nose-timer via pip
     pip install nose-timer
+    pip install matplotlib==$MPL_VERSION
 else
-    echo "You done screwed up your .travis.yml"
-    exit -10
+    echo "We are only building with DISTRIB=conda currently"
+    exit 10
 fi
 
 # use PIP for installing coverage tools since we might not be using a conda dist

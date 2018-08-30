@@ -18,7 +18,7 @@ import os
 debug = os.environ.get("PYRAMID_MPL_DEBUG", "false").lower() == "true"
 plt = get_compatible_pyplot(default_backend='TkAgg', debug=debug,
                             # These don't seem to play very nice with CI?
-                            replace=('MacOSX', 'Qt5Agg', 'Qt5Cairo'))
+                            replace=('MacOSX', 'PyQt5','Qt5Agg', 'Qt5Cairo'))
 
 __all__ = [
     'autocorr_plot',
