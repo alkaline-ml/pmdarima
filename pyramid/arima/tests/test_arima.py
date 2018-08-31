@@ -18,6 +18,7 @@ import pandas as pd
 
 import warnings
 import pickle
+import pytest
 import os
 
 # initialize the random state
@@ -558,3 +559,17 @@ def test_warning_str_fmt():
 
 def test_nsdiffs_on_wine():
     assert nsdiffs(wineind, m=52) == 2
+
+
+# Asserting where D grows too large as a product of an M that's too big.
+def test_m_too_large():
+    train = lynx[:90]
+
+    with pytest.raises(ValueError) as v:
+        auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
+                   max_p=5, max_q=5, max_P=5, max_Q=5, seasonal=True,
+                   stepwise=True, suppress_warnings=True, D=10, max_D=10,
+                   error_action='ignore', m=20)
+
+        msg = str(v)
+        assert 'differenced the time series' in msg
