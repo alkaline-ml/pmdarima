@@ -477,6 +477,15 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
     else:
         dx = xx
 
+    # If D was too big, we might have gotten rid of x altogether!
+    if dx.shape[0] == 0:
+        raise ValueError("The seasonal differencing order, D=%i, was too "
+                         "large and differenced the time series into nothing! "
+                         "Try a smaller value for D, or if you didn't set D "
+                         "to begin with, try setting it explicitly. This can "
+                         "also occur in seasonal settings when m is too large."
+                         % D)
+
     # difference the exogenous matrix
     if exogenous is not None:
         if D > 0:
