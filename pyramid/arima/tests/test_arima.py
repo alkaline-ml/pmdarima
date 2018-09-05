@@ -395,7 +395,8 @@ def test_errors():
     # show errors for d
     _assert_val_error(auto_arima, abc, max_d=-1)
     _assert_val_error(auto_arima, abc, d=-1)
-    _assert_val_error(auto_arima, abc, d=5, max_d=4)
+    _assert_val_error(auto_arima, abc, max_D=-1)
+    _assert_val_error(auto_arima, abc, D=-1)
 
     # show error for bad IC
     _assert_val_error(auto_arima, abc, information_criterion='bad-value')
@@ -640,3 +641,19 @@ def test_failing_model_fit():
         auto_arima(wineind, seasonal=True, suppress_warnings=True,
                    error_action='raise', m=2, random=True, random_state=1,
                    n_fits=2)
+
+
+def test_warn_for_large_differences():
+    # First: d is too large
+    with warnings.catch_warnings(record=True) as w:
+        auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
+                   d=3, error_action='warn')
+
+        assert len(w) > 0
+
+    # Second: D is too large
+    with warnings.catch_warnings(record=True) as w:
+        auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
+                   D=3, error_action='warn')
+
+        assert len(w) > 0
