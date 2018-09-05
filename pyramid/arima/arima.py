@@ -24,7 +24,7 @@ import os
 
 # DTYPE for arrays
 from ..compat.numpy import DTYPE
-from ..compat.python import long
+from ..compat.python import long, safe_mkdirs
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
 from .._config import PYRAMID_ARIMA_CACHE, PICKLE_HASH_PATTERN
@@ -542,13 +542,16 @@ class ARIMA(BaseEstimator):
 
     def __getstate__(self):
         """I am being pickled..."""
-        loc = self.__dict__.get('tmp_pkl_', None)
 
-        # if this already contains a pointer to a "saved state" model,
-        # delete that model and replace it with a new one
-        # FIXME: v0.7.2+ - do we want to keep this around for later unpickling?
-        if loc is not None:
-            os.unlink(loc)
+        # In versions <0.9.0, if this already contains a pointer to a
+        # "saved state" model, we deleted that model and replaced it with the
+        # new one.
+        # In version >= v0.9.0, we keep the old model around, since that's how
+        # the user expects it should probably work (otherwise unpickling the
+        # previous state of the model would raise an OSError).
+        # loc = self.__dict__.get('tmp_pkl_', None)
+        # if loc is not None:
+        #     os.unlink(loc)
 
         # get the new location for where to save the results
         new_loc = self._get_pickle_hash_file()
@@ -556,12 +559,7 @@ class ARIMA(BaseEstimator):
 
         # check that the cache folder exists, and if not, make it.
         cache_loc = os.path.join(cwd, PYRAMID_ARIMA_CACHE)
-        try:
-            os.makedirs(cache_loc)
-        # since this is a race condition, just try to make it
-        except OSError as e:
-            if e.errno != 17:
-                raise
+        safe_mkdirs(cache_loc)
 
         # now create the full path with the cache folder
         new_loc = os.path.join(cache_loc, new_loc)
@@ -598,7 +596,7 @@ class ARIMA(BaseEstimator):
         return self
 
     def _warn_for_older_version(self):
-        # Added in v0.7.2 - check for the version pickled under and warn
+        # Added in v0.8.1 - check for the version pickled under and warn
         # if it's different from the current version
         do_warn = False
         modl_version = None
@@ -616,7 +614,7 @@ class ARIMA(BaseEstimator):
             # the arima_res_ attr.
             if hasattr(self, 'arima_res_'):  # it was fit, but is older
                 do_warn = True
-                modl_version = '<0.7.2'
+                modl_version = '<0.8.1'
 
             # else: it may not have the model (not fit) and still be older,
             # but we can't detect that.
@@ -624,7 +622,7 @@ class ARIMA(BaseEstimator):
         # Means it was older
         if do_warn:
             warnings.warn("You've deserialized an ARIMA from a version (%s) "
-                          "that differs from your installed version of "
+                          "that does not match your installed version of "
                           "Pyramid (%s). This could cause unforeseen behavior."
                           % (modl_version, this_version), UserWarning)
 

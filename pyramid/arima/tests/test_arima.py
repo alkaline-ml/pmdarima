@@ -13,12 +13,15 @@ import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
 from numpy.random import RandomState
 
+from sklearn.externals import joblib
+
 from statsmodels import api as sm
 import pandas as pd
 
 import warnings
 import pickle
 import pytest
+import time
 import os
 
 # initialize the random state
@@ -572,4 +575,37 @@ def test_m_too_large():
                    error_action='ignore', m=20)
 
         msg = str(v)
-        assert 'differenced the time series' in msg
+        assert 'The seasonal differencing order' in msg
+
+
+# Test that (as of v0.9.1) we can pickle a model, pickle it again, load both
+# and create predictions.
+def test_double_pickle():
+    arima = ARIMA(order=(0, 0, 0), trend='c', suppress_warnings=True)
+    arima.fit(y)
+
+    # Now save it twice
+    file_a = 'first.pkl'
+    file_b = 'second.pkl'
+
+    try:
+        # No compression
+        joblib.dump(arima, file_a)
+
+        # Sleep between pickling so that the "pickle hash" for the ARIMA is
+        # different by enough. We could theoretically also just use a UUID
+        # for part of the hash to make sure it's unique?
+        time.sleep(0.5)
+
+        # Some compression
+        joblib.dump(arima, file_b, compress=2)
+
+        # Load both and prove they can both predict
+        pred_a = joblib.load(file_a).predict(n_periods=5)
+        pred_b = joblib.load(file_b).predict(n_periods=5)
+        assert np.allclose(pred_a, pred_b)
+
+    # Always remove in case we fail in try, leaving residual files
+    finally:
+        os.unlink(file_a)
+        os.unlink(file_b)
