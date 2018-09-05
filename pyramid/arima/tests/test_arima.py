@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 from pyramid.arima import ARIMA, auto_arima
 from pyramid.arima.arima import VALID_SCORING
-from pyramid.arima.auto import _fmt_warning_str
+from pyramid.arima.auto import _fmt_warning_str, _post_ppc_arima
 from pyramid.arima.utils import nsdiffs
 from pyramid.datasets import load_lynx, load_wineind, load_heartrate
 from pyramid.utils import get_callable, assert_raises
@@ -173,7 +173,7 @@ def test_oob_for_issue_28():
 
     # Show we fail if we try to add observations with a different dim exog
     assert_raises(ValueError, arima_no_oob.add_new_observations,
-                  hr[-10:], xreg_test[:, 2])
+                  hr[-10:], xreg_test[:, :2])
 
     # Actually add them now, and compare the forecasts (should be the same)
     arima_no_oob.add_new_observations(hr[-10:], xreg[-10:, :])
@@ -474,6 +474,9 @@ def test_with_seasonality2():
     # ensure summary still works
     seasonal_fit.summary()
 
+    # Show we can predict on seasonal where conf_int is true
+    seasonal_fit.predict(n_periods=10, return_conf_int=True)
+
 
 def test_with_seasonality3():
     # show we can estimate D even when it's not there...
@@ -601,11 +604,39 @@ def test_double_pickle():
         joblib.dump(arima, file_b, compress=2)
 
         # Load both and prove they can both predict
-        pred_a = joblib.load(file_a).predict(n_periods=5)
-        pred_b = joblib.load(file_b).predict(n_periods=5)
+        loaded_a = joblib.load(file_a)  # type: ARIMA
+        loaded_b = joblib.load(file_b)  # type: ARIMA
+        pred_a = loaded_a.predict(n_periods=5)
+        pred_b = loaded_b.predict(n_periods=5)
         assert np.allclose(pred_a, pred_b)
+
+        # Remove the caches from each
+        loaded_a._clear_cached_state()
+        loaded_b._clear_cached_state()
+
+        # Test the previous condition where we removed the saved state of an
+        # ARIMA from statsmodels and caused an OSError and a corrupted pickle
+        with pytest.raises(OSError) as o:
+            joblib.load(file_a)  # fails since no cached state there!
+            msg = str(o)
+            assert 'Could not read saved model state' in msg, msg
 
     # Always remove in case we fail in try, leaving residual files
     finally:
         os.unlink(file_a)
         os.unlink(file_b)
+
+
+# We fail if we don't end up fitting any models in the auto_arima func
+def test_value_error_on_failed_model_fits():
+    with pytest.raises(ValueError):
+        _post_ppc_arima(None)
+
+
+# We fail when error action is raise and the model can't be fit
+def test_failing_model_fit():
+    with pytest.raises(ValueError):
+        # raise ValueError('non-invertible starting MA parameters found'
+        auto_arima(wineind, seasonal=True, suppress_warnings=True,
+                   error_action='raise', m=2, random=True, random_state=1,
+                   n_fits=2)

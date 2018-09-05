@@ -38,5 +38,6 @@ def safe_mkdirs(loc):
         os.makedirs(loc)
     # since this is a race condition, just try to make it
     except OSError as e:
+        # Anything OTHER than the dir already exists error
         if e.errno != 17:
             raise

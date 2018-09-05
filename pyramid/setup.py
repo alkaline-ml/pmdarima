@@ -30,6 +30,7 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('compat')
     config.add_subpackage('compat/tests')
     config.add_subpackage('datasets')
+    config.add_subpackage('datasets/tests')
     config.add_subpackage('utils')
     config.add_subpackage('utils/tests')
 

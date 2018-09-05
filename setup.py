@@ -26,7 +26,10 @@ builtins.__PYRAMID_SETUP__ = True
 DISTNAME = 'pyramid'
 PYPIDIST = '%s-arima' % DISTNAME
 DESCRIPTION = "Python's forecast::auto.arima equivalent"
-# todo: long description from README rst
+
+# Get the long desc
+with open("README.md", "r") as fh:
+    LONG_DESCRIPTION = fh.read()
 
 MAINTAINER = 'Taylor G. Smith'
 MAINTAINER_GIT = 'tgsmith61591'
@@ -167,6 +170,8 @@ def do_setup():
                     maintainer=MAINTAINER,
                     maintainer_email=MAINTAINER_EMAIL,
                     description=DESCRIPTION,
+                    long_description=LONG_DESCRIPTION,
+                    long_description_content_type="text/markdown",
                     license=LICENSE,
                     version=VERSION,
                     classifiers=[

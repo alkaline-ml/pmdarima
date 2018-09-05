@@ -22,9 +22,9 @@ import datetime
 import warnings
 import os
 
-# DTYPE for arrays
-from ..compat.numpy import DTYPE
+from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.python import long, safe_mkdirs
+from ..compat import statsmodels as sm_compat
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
 from .._config import PYRAMID_ARIMA_CACHE, PICKLE_HASH_PATTERN
@@ -345,10 +345,7 @@ class ARIMA(BaseEstimator):
             fit, self.arima_res_ = _fit_wrapper()
 
         # Set df_model attribute for SARIMAXResults object
-        if not hasattr(self.arima_res_, 'df_model'):
-            df_model = fit.k_exog + fit.k_trend + fit.k_ar + \
-                       fit.k_ma + fit.k_seasonal_ar + fit.k_seasonal_ma
-            setattr(self.arima_res_, 'df_model', df_model)
+        sm_compat.bind_df_model(fit, self.arima_res_)
 
         # if the model is fit with an exogenous array, it must
         # be predicted with one as well.
@@ -497,9 +494,7 @@ class ARIMA(BaseEstimator):
             # The confidence intervals may be a Pandas frame if it comes from
             # SARIMAX & we want Numpy. We will to duck type it so we don't add
             # new explicit requirements for the package
-            if hasattr(conf_int, "iloc"):  # duck type for pd.DataFrame
-                conf_int = conf_int.values
-            return f, conf_int
+            return f, check_array(conf_int)  # duck type for pd.DataFrame
         return f
 
     def fit_predict(self, y, exogenous=None, n_periods=10, **fit_args):
@@ -670,7 +665,7 @@ class ARIMA(BaseEstimator):
         n_samples = y.shape[0]
 
         # if exogenous is None and new exog provided, or vice versa, raise
-        self._check_exog(exogenous)
+        exogenous = self._check_exog(exogenous)  # type: np.ndarray
 
         # ensure the k_exog matches
         if exogenous is not None:
