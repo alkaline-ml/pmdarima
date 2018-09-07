@@ -49,9 +49,10 @@ def _warn_for_cache_size():
         if cache_size > CACHE_WARN_BYTES:
             warnings.warn("The Pyramid cache ({cache_loc}) has grown to "
                           "{nbytes:,} bytes. Consider cleaning out old ARIMA "
-                          "models or increasing the max cache size in "
-                          "pyramid/_config.py (currently {current_max:,} "
-                          "bytes) to avoid this warning in the future."
+                          "models or increasing the max cache bytes with "
+                          "'PYRAMID_ARIMA_CACHE_WARN_SIZE' (currently "
+                          "{current_max:,} bytes) to avoid this warning in "
+                          "the future."
                           .format(cache_loc=PYRAMID_ARIMA_CACHE,
                                   nbytes=cache_size,
                                   current_max=int(CACHE_WARN_BYTES)),
