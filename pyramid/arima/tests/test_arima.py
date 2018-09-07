@@ -31,11 +31,6 @@ y = rs.rand(25)
 # more interesting heart rate data (asserts we can use a series)
 hr = load_heartrate(as_series=True)
 
-# Yes, m is ACTUALLY 12... but that takes a LONG time. If we set it to
-# 1, we actually get a much, much faster model fit. We can only use this
-# if we're NOT testing the output of the model, but just the functionality!
-wineind_m = 1
-
 # > set.seed(123)
 # > abc <- rnorm(50, 5, 1)
 abc = np.array([4.439524, 4.769823, 6.558708, 5.070508,
@@ -54,6 +49,14 @@ abc = np.array([4.439524, 4.769823, 6.558708, 5.070508,
 
 wineind = load_wineind()
 lynx = load_lynx()
+
+# Yes, m is ACTUALLY 12... but that takes a LONG time. If we set it to
+# 1, we actually get a much, much faster model fit. We can only use this
+# if we're NOT testing the output of the model, but just the functionality!
+wineind_m = 1
+
+# A random xreg for the wineind array
+wineind_xreg = rs.rand(wineind.shape[0], 2)
 
 
 def test_basic_arima():
@@ -530,7 +533,7 @@ def test_with_seasonality7():
                out_of_sample_size=10, information_criterion='oob',
                suppress_warnings=True,
                error_action='raise',  # do raise so it fails fast
-               random=True, random_state=42, n_fits=3,
+               random=True, random_state=42, n_fits=2,
                stepwise=False)
 
 
@@ -646,15 +649,24 @@ def test_failing_model_fit():
 def test_warn_for_large_differences():
     # First: d is too large
     with warnings.catch_warnings(record=True) as w:
-        auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
-                   d=3, error_action='warn')
+        _ = auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
+                       d=3, error_action='warn')
 
         assert len(w) > 0
 
-    # Second: D is too large
+    # Second: D is too large. M needs to be > 1 or D will be set to 0...
+    # unfortunately, this takes a long time.
     with warnings.catch_warnings(record=True) as w:
-        auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
-                   D=3, error_action='warn')
+        _ = auto_arima(wineind, seasonal=True, m=2, suppress_warnings=False,
+                       D=3, error_action='warn')
+
+        assert len(w) > 0
+
+
+def test_warn_for_stepwise_and_parallel():
+    with warnings.catch_warnings(record=True) as w:
+        _ = auto_arima(lynx, suppress_warnings=False, d=1,
+                       error_action='ignore', stepwise=True, n_jobs=2)
 
         assert len(w) > 0
 
@@ -668,3 +680,76 @@ def test_force_polynomial_error():
     with pytest.raises(ValueError) as ve:
         auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg)
         assert 'simple polynomial' in str(ve), str(ve)
+
+    # but it should pass when xreg is not none
+    xreg = rs.rand(x.shape[0], 2)
+    _ = auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg,
+                   error_action='ignore', suppress_warnings=True)
+
+
+# Test if exogenous is not None and D > 0
+def test_seasonal_xreg_differencing():
+    # Test both a small M and a large M since M is used as the lag parameter
+    # in the xreg array differencing. If M is 1, D is set to 0
+    for m in (2,):  # 12): takes FOREVER
+        _ = auto_arima(wineind, d=1, D=1, seasonal=True,
+                       exogenous=wineind_xreg, error_action='ignore',
+                       suppress_warnings=True, m=m)
+
+
+# Show that we can complete when max order is None
+def test_inf_max_order():
+    _ = auto_arima(lynx, max_order=None, suppress_warnings=True,
+                   error_action='ignore')
+
+
+# Regression testing for unpickling an ARIMA from an older version
+def test_for_older_version():
+    # Fit an ARIMA
+    arima = ARIMA(order=(0, 0, 0), trend='c', suppress_warnings=True)
+
+    # There are three possibilities here:
+    # 1. The model is serialized/deserialized BEFORE it has been fit.
+    #    This means we should not get a warning.
+    #
+    # 2. The model is saved after being fit, but it does not have a
+    #    pkg_version_ attribute due to it being an old (very old) version.
+    #    We still warn for this
+    #
+    # 3. The model is saved after the fit, and it's version does not match.
+    #    We warn for this.
+    for case, do_fit, expect_warning in [(1, False, False),
+                                         (2, True, True),
+                                         (3, True, True)]:
+
+        # Only fit it if we should
+        if do_fit:
+            arima.fit(y)
+
+        # If it's case 2, we remove the pkg_version_. If 3, we set it low
+        if case == 2:
+            delattr(arima, 'pkg_version_')
+        elif case == 3:
+            arima.pkg_version_ = '0.0.1'  # will always be < than current
+
+        # Pickle it
+        pickle_file = 'model.pkl'
+        try:
+            joblib.dump(arima, pickle_file)
+
+            # Now unpickle it and show that we get a warning (if expected)
+            with warnings.catch_warnings(record=True) as w:
+                arm = joblib.load(pickle_file)  # type: ARIMA
+
+                if expect_warning:
+                    assert len(w) > 0
+                else:
+                    assert not len(w)
+
+                # we can still produce predictions (only if we fit)
+                if do_fit:
+                    arm.predict(n_periods=4)
+
+        finally:
+            arima._clear_cached_state()
+            os.unlink(pickle_file)

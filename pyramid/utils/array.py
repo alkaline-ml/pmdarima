@@ -218,7 +218,7 @@ def diff(x, lag=1, differences=1):
         raise ValueError('lag and differences must be positive (> 0) integers')
 
     x = check_array(x, ensure_2d=False, dtype=np.float32)  # type: np.ndarray
-    fun = _diff_vector if len(x.shape) == 1 else _diff_matrix
+    fun = _diff_vector if x.ndim == 1 else _diff_matrix
     res = x
 
     # "recurse" over range of differences
