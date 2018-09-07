@@ -16,6 +16,7 @@ if PY3:
     xrange = range
     long = int
 
+# Python 2.7
 else:
     xrange = xrange
     long = long
