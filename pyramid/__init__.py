@@ -54,32 +54,15 @@ else:
     ]
 
     # On first import, check the cache, warn if needed
-    from ._config import CACHE_WARN_BYTES, PYRAMID_ARIMA_CACHE as PAC
-    from os.path import join as j, getsize as gf, isfile as isf
-    import warnings
-
-    cache_size = sum(gf(j(PAC, f)) for f in _os.listdir(PAC) if isf(j(PAC, f)))
-    if cache_size > CACHE_WARN_BYTES:
-        warnings.warn("The Pyramid cache ({0}) has grown to {1:,} bytes. "
-                      "Consider cleaning out old ARIMA models or increasing "
-                      "the max cache size in pyramid/_config.py (currently "
-                      "{2:,} bytes) to avoid this warning in the future."
-                      .format(PAC, cache_size, int(CACHE_WARN_BYTES)),
-                      UserWarning)
+    from ._config import _warn_for_cache_size
+    _warn_for_cache_size()
 
     # Delete unwanted variables from global
     del _os
+    # del _config  # don't delete in case user wants to amend it at top level
+    del _warn_for_cache_size
     del __check_build
     del __PYRAMID_SETUP__
-
-    # Delete the variables we just created for the cache check
-    del CACHE_WARN_BYTES
-    del PAC
-    del j
-    del gf
-    del isf
-    del warnings
-    del cache_size
 
 
 def setup_module(module):
