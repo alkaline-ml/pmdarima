@@ -18,7 +18,14 @@ PYRAMID_ARIMA_CACHE = os.environ.get('PYRAMID_ARIMA_CACHE',
 PICKLE_HASH_PATTERN = '%s-%s-%i.pmdpkl'
 
 # The size of the pyramid cache above which to warn the user
-CACHE_WARN_BYTES = 1e8  # 100MB
+cwb = os.environ.get('PYRAMID_ARIMA_CACHE_WARN_SIZE', 1e8)
+try:
+    CACHE_WARN_BYTES = int(cwb)
+except ValueError:
+    warnings.warn('The value of PYRAMID_ARIMA_CACHE_WARN_SIZE should be '
+                  'an integer, but got "{cache_val}". Defaulting to 1e8.'
+                  .format(cache_val=cwb))
+    CACHE_WARN_BYTES = 1e8  # 100MB default
 
 
 def _warn_for_cache_size():
@@ -27,11 +34,11 @@ def _warn_for_cache_size():
     This is called on the initial import and warns if the size of the cached
     statsmodels TS objects exceeds the CACHE_WARN_BYTES value.
     """
-    from os.path import join as j, getsize as gf, isfile as isf
+    from os.path import join, getsize, isfile
     try:
-        cache_size = sum(gf(j(PYRAMID_ARIMA_CACHE, f))
+        cache_size = sum(getsize(join(PYRAMID_ARIMA_CACHE, f))
                          for f in os.listdir(PYRAMID_ARIMA_CACHE)
-                         if isf(j(PYRAMID_ARIMA_CACHE, f)))
+                         if isfile(join(PYRAMID_ARIMA_CACHE, f)))
     except OSError as ose:
         # If it's OSError no 2, it means the cache doesn't exist yet, which
         # is fine. Otherwise it's something else and we need to raise.

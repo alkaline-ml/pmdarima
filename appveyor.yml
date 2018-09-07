@@ -61,7 +61,7 @@ build_script:
   - activate testenv
 
   # Things we'll need for deployment
-  - pip install wheel twine
+  - pip install wheel twine pytest
 
   # Build the package
   - python setup.py develop
