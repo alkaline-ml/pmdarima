@@ -657,3 +657,14 @@ def test_warn_for_large_differences():
                    D=3, error_action='warn')
 
         assert len(w) > 0
+
+
+# Force case where data is simple polynomial after differencing
+def test_force_polynomial_error():
+    x = np.array([1, 2, 3, 4, 5, 6])
+    d = 2
+    xreg = None
+
+    with pytest.raises(ValueError) as ve:
+        auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg)
+        assert 'simple polynomial' in str(ve), str(ve)

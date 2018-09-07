@@ -21,6 +21,9 @@ v0.9.0
 
 * Added pyramid cache check on initial import to warn user if the cache size has grown too large.
 
+* If ``d`` or ``D`` are explicitly defined for ``auto_arima`` (rather than ``None``), do not
+  raise an error if they exceed ``max_d`` or ``max_D``, respectively.
+
 v0.8.1
 ------
 
