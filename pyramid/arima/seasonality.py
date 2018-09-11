@@ -19,7 +19,7 @@ import numpy as np
 from ..utils.array import c
 from .stationarity import _BaseStationarityTest
 from ..compat.numpy import DTYPE
-from ._arima import C_compute_frecob_fast, C_pop_A
+from ._arima import C_compute_frecob_fast, C_pop_A, C_update_Omnw_fast
 
 __all__ = [
     'CHTest'
@@ -88,7 +88,6 @@ class CHTest(_SeasonalStationarityTest):
 
         # no use checking, because this is an internal method
         # if n <= s:  raise ValueError('too few samples (%i<=%i)' % (n, s))
-
         frec = np.ones(int((s + 1) / 2), dtype=np.int)
         ltrunc = int(np.round(s * ((n / 100.0) ** 0.25)))
         R1 = CHTest._seas_dummy(wts, s)
@@ -115,21 +114,21 @@ class CHTest(_SeasonalStationarityTest):
 
         # more efficient numpy:
         Fhat = Fhataux.cumsum(axis=0)
-
-        # wnw <- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)
-        wnw = 1. - (np.arange(ltrunc) + 1.) / (ltrunc + 1.)
         Ne = Fhataux.shape[0]
-        Omnw = 0
 
         # original R code:
         # for (k in 1:ltrunc)
         #     Omnw <- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%
         #         Fhataux[1:(Ne - k), ]) * wnw[k]
 
-        # translated R code:
-        for k in range(ltrunc):
-            Omnw = Omnw + (Fhataux.T[:, k + 1:Ne].dot(
-                Fhataux[:(Ne - (k + 1)), :])) * wnw[k]
+        # translated R code (and old Python as of v0.9.1):
+        # Omnw = 0
+        # wnw <- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)
+        # wnw = 1. - (np.arange(ltrunc) + 1.) / (ltrunc + 1.)
+        # for k in range(ltrunc):
+        #     Omnw = Omnw + (Fhataux.T[:, k + 1:Ne].dot(
+        #         Fhataux[:(Ne - (k + 1)), :])) * wnw[k]
+        Omnw = C_update_Omnw_fast(ltrunc, Ne, Fhataux)
 
         # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
         Omfhat = (Fhataux.T.dot(Fhataux) + Omnw + Omnw.T) / Ne

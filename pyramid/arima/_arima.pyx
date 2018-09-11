@@ -166,6 +166,23 @@ def C_pop_A(intp_array_2d_t A, intp1d frecob):
                 j += 1
 
 
+def C_update_Omnw_fast(INTP ltrunc, INTP Ne, floating_array_2d_t Fhataux):
+    cdef int Omnw, k
+
+    k = 0
+    Omnw = 0
+
+    # Define wnw
+    cdef np.ndarray[double, ndim=1, mode='c'] wnw = 1. - (np.arange(ltrunc) + 1.) / (ltrunc + 1.)
+
+    # Can this be nogil?
+    for k in range(ltrunc):
+        Omnw = Omnw + (Fhataux.T[:, k + 1:Ne].dot(
+            Fhataux[:(Ne - (k + 1)), :])) * wnw[k]
+
+    return Omnw
+
+
 def C_compute_frecob_fast(intp1d frec, INTP s, floating_array_2d_t Omfhat):
     cdef int i, j, a, half_s
     cdef INTP n, v
