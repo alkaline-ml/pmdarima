@@ -15,6 +15,10 @@ cimport numpy as np
 cdef extern from "_arima_fast_helpers.h":
     bint pyr_isfinite(double) nogil
 
+cdef extern from "cblas.h":
+    double ddot "cblas_ddot"(int N, double *X, int incX, double *Y,
+                             int incY) nogil
+
 ctypedef float [:, :] float_array_2d_t
 ctypedef double [:, :] double_array_2d_t
 ctypedef int [:, :] int_array_2d_t
@@ -166,11 +170,16 @@ def C_pop_A(intp_array_2d_t A, intp1d frecob):
                 j += 1
 
 
-def C_update_Omnw_fast(INTP ltrunc, INTP Ne, floating_array_2d_t Fhataux):
+def C_canova_hansen_sd_test(INTP ltrunc,
+                            INTP Ne,
+                            floating_array_2d_t Fhataux):
     cdef int Omnw, k
+    cdef unsigned int n_features, n_samples
 
     k = 0
     Omnw = 0
+    n_samples = Fhataux.shape[0]
+    n_features = Fhataux.shape[1]
 
     # Define wnw
     cdef np.ndarray[double, ndim=1, mode='c'] wnw = 1. - (np.arange(ltrunc) + 1.) / (ltrunc + 1.)
@@ -180,7 +189,10 @@ def C_update_Omnw_fast(INTP ltrunc, INTP Ne, floating_array_2d_t Fhataux):
         Omnw = Omnw + (Fhataux.T[:, k + 1:Ne].dot(
             Fhataux[:(Ne - (k + 1)), :])) * wnw[k]
 
-    return Omnw
+    # Omfhat = (np.dot(Fhataux.T, Fhataux) + Omnw + Omnw.T) / Ne
+    for k in range(n_features):
+        # TODO:
+        ddot(n_samples, &Fhataux[0, k], 1, )
 
 
 def C_compute_frecob_fast(intp1d frec, INTP s, floating_array_2d_t Omfhat):

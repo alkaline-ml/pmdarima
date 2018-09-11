@@ -19,7 +19,7 @@ import numpy as np
 from ..utils.array import c
 from .stationarity import _BaseStationarityTest
 from ..compat.numpy import DTYPE
-from ._arima import C_compute_frecob_fast, C_pop_A, C_update_Omnw_fast
+from ._arima import C_compute_frecob_fast, C_pop_A
 
 __all__ = [
     'CHTest'
@@ -122,13 +122,12 @@ class CHTest(_SeasonalStationarityTest):
         #         Fhataux[1:(Ne - k), ]) * wnw[k]
 
         # translated R code (and old Python as of v0.9.1):
-        # Omnw = 0
-        # wnw <- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)
-        # wnw = 1. - (np.arange(ltrunc) + 1.) / (ltrunc + 1.)
-        # for k in range(ltrunc):
-        #     Omnw = Omnw + (Fhataux.T[:, k + 1:Ne].dot(
-        #         Fhataux[:(Ne - (k + 1)), :])) * wnw[k]
-        Omnw = C_update_Omnw_fast(ltrunc, Ne, Fhataux)
+        Omnw = 0
+        # R code: wnw <- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)
+        wnw = 1. - (np.arange(ltrunc) + 1.) / (ltrunc + 1.)
+        for k in range(ltrunc):
+            Omnw = Omnw + (Fhataux.T[:, k + 1:Ne].dot(
+                Fhataux[:(Ne - (k + 1)), :])) * wnw[k]
 
         # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
         Omfhat = (Fhataux.T.dot(Fhataux) + Omnw + Omnw.T) / Ne
