@@ -1,27 +1,29 @@
+# -*- coding: utf-8 -*-
+
 import os
-import os.path
+from os.path import join
 
 import numpy
 from numpy.distutils.misc_util import Configuration
+
 from pyramid._build_utils import get_blas_info
 
 
 def configuration(parent_package="", top_path=None):
     cblas_libs, blas_info = get_blas_info()
 
-    libraries = []
     if os.name == 'posix':
         cblas_libs.append('m')
-        libraries.append('m')
 
     config = Configuration("arima", parent_package, top_path)
     config.add_extension("_arima",
                          sources=["_arima.pyx"],
-                         include_dirs=[numpy.get_include(),
+                         include_dirs=[join('..', 'src', 'cblas'),
+                                       numpy.get_include(),
                                        # Should this be explicitly included?:
                                        '_arima_fast_helpers.h',
                                        blas_info.pop('include_dirs', [])],
-                         libraries=libraries,
+                         libraries=cblas_libs,
                          extra_compile_args=blas_info.pop(
                              'extra_compile_args', []),
                          **blas_info)

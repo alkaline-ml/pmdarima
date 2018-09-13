@@ -19,7 +19,7 @@ import numpy as np
 from ..utils.array import c
 from .stationarity import _BaseStationarityTest
 from ..compat.numpy import DTYPE
-from ._arima import C_compute_frecob_fast, C_pop_A
+from ._arima import C_canova_hansen_sd_test
 
 __all__ = [
     'CHTest'
@@ -88,7 +88,6 @@ class CHTest(_SeasonalStationarityTest):
 
         # no use checking, because this is an internal method
         # if n <= s:  raise ValueError('too few samples (%i<=%i)' % (n, s))
-
         frec = np.ones(int((s + 1) / 2), dtype=np.int)
         ltrunc = int(np.round(s * ((n / 100.0) ** 0.25)))
         R1 = CHTest._seas_dummy(wts, s)
@@ -115,33 +114,16 @@ class CHTest(_SeasonalStationarityTest):
 
         # more efficient numpy:
         Fhat = Fhataux.cumsum(axis=0)
-
-        # wnw <- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)
-        wnw = 1. - (np.arange(ltrunc) + 1.) / (ltrunc + 1.)
         Ne = Fhataux.shape[0]
-        Omnw = 0
 
-        # original R code:
-        # for (k in 1:ltrunc)
-        #     Omnw <- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%
-        #         Fhataux[1:(Ne - k), ]) * wnw[k]
-
-        # translated R code:
-        for k in range(ltrunc):
-            Omnw = Omnw + (Fhataux.T[:, k + 1:Ne].dot(
-                Fhataux[:(Ne - (k + 1)), :])) * wnw[k]
-
-        # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
-        Omfhat = (Fhataux.T.dot(Fhataux) + Omnw + Omnw.T) / Ne
-
-        # populate the A matrix
-        A, frecob = C_compute_frecob_fast(frec, s, Omfhat)
-        C_pop_A(A, frecob)
-        tmp = A.T.dot(Omfhat).dot(A)
+        # As of v0.9.1, use the C_canova_hansen_sd_test function to compute
+        # Omnw, Omfhat, A, frecob. This avoids the overhead of multiple calls
+        # to C functions
+        A, AtOmfhatA = C_canova_hansen_sd_test(ltrunc, Ne, Fhataux, frec, s)
 
         # UPDATE 01/04/2018 - we can get away without computing u, v
         # (this is also MUCH MUCH faster!!!)
-        sv = svd(tmp, compute_uv=False)  # type: np.ndarray
+        sv = svd(AtOmfhatA, compute_uv=False)  # type: np.ndarray
 
         # From R:
         # double.eps: the smallest positive floating-point number ‘x’ such that
@@ -157,7 +139,7 @@ class CHTest(_SeasonalStationarityTest):
         # a nasty mess of dot products... this is the (horrendous) R code:
         # (1/N^2) * sum(diag(solve(tmp) %*% t(A) %*% t(Fhat) %*% Fhat %*% A))
         # https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L321
-        solved = solve(tmp, np.identity(tmp.shape[0]))
+        solved = solve(AtOmfhatA, np.identity(AtOmfhatA.shape[0]))
         return (1.0 / n ** 2) * solved.dot(A.T).dot(
             Fhat.T).dot(Fhat).dot(A).diagonal().sum()
 
