@@ -15,10 +15,6 @@ cimport numpy as np
 cdef extern from "_arima_fast_helpers.h":
     bint pyr_isfinite(double) nogil
 
-cdef extern from "cblas.h":
-    double ddot "cblas_ddot"(int N, double *X, int incX, double *Y,
-                             int incY) nogil
-
 ctypedef float [:, :] float_array_2d_t
 ctypedef double [:, :] double_array_2d_t
 ctypedef int [:, :] int_array_2d_t

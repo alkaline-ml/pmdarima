@@ -6,9 +6,7 @@
 
 from __future__ import absolute_import
 
-import warnings
 import os
-from os.path import join
 
 from pyramid._build_utils import maybe_cythonize_extensions
 
@@ -16,7 +14,6 @@ from pyramid._build_utils import maybe_cythonize_extensions
 # DEFINE CONFIG
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
-    from numpy.distutils.system_info import get_info, BlasNotFoundError
 
     libs = []
     if os.name == 'posix':
@@ -38,15 +35,7 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('utils')
     config.add_subpackage('utils/tests')
 
-    # some libs needs cblas, fortran-compiled BLAS will not be sufficient
-    blas_info = get_info('blas_opt', 0)
-    if (not blas_info) or (
-            ('NO_ATLAS_INFO', 1) in blas_info.get('define_macros', [])):
-        config.add_library('cblas',
-                           sources=[join('src', 'cblas', '*.c')])
-        warnings.warn(BlasNotFoundError.__doc__)
-
-    # the following packages depend on cblas, so they have to be build
+    # the following packages have cython, so they have to be build
     # after the above.
     config.add_subpackage('arima')
     config.add_subpackage('arima/tests')

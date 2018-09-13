@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-from os.path import join
 
 import numpy
 from numpy.distutils.misc_util import Configuration
@@ -18,8 +17,7 @@ def configuration(parent_package="", top_path=None):
     config = Configuration("arima", parent_package, top_path)
     config.add_extension("_arima",
                          sources=["_arima.pyx"],
-                         include_dirs=[join('..', 'src', 'cblas'),
-                                       numpy.get_include(),
+                         include_dirs=[numpy.get_include(),
                                        # Should this be explicitly included?:
                                        '_arima_fast_helpers.h',
                                        blas_info.pop('include_dirs', [])],
