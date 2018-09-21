@@ -1,0 +1,30 @@
+version: 2
+
+jobs:
+  # For testing PyPy rather than CPython
+  pypy36:
+    docker:
+      - image: pypy:3-6.0.0
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - pypy3-ccache-{{ .Branch }}
+          # fallback to using the latest cache if no exact match is found
+          - pypy3-ccache
+
+      - checkout
+      - run: ./build_tools/circle/build_test_pypy.sh
+      - save_cache:
+          key: pypy3-ccache-{{ .Branch }}-{{ .BuildNum }}
+          paths:
+            - ~/.ccache
+            - ~/.cache/pip
+
+workflows:
+  version: 2
+
+  # All PyPy jobs:
+  pypy:
+    jobs:
+      - pypy36
