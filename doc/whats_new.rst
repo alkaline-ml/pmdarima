@@ -24,6 +24,8 @@ v0.9.0
 * If ``d`` or ``D`` are explicitly defined for ``auto_arima`` (rather than ``None``), do not
   raise an error if they exceed ``max_d`` or ``max_D``, respectively.
 
+* Added Circle CI for validating PyPy builds (rather than CPython)
+
 v0.8.1
 ------
 
