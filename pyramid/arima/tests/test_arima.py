@@ -464,7 +464,7 @@ def test_with_seasonality2():
     def do_fit():
         return auto_arima(wineind, start_p=1, start_q=1, max_p=2,
                           max_q=2, m=2, start_P=0,
-                          seasonal=True, n_jobs=-1,
+                          seasonal=True, n_jobs=2,
                           d=1, D=1, stepwise=False,
                           suppress_warnings=True,
                           error_action='ignore',
