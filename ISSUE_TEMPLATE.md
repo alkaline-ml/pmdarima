@@ -32,4 +32,5 @@ import statsmodels; print("Statsmodels", statsmodels.__version__)
 -->
 
 
+<!-- PLEASE do not be a lazy issue-filer! Include all the above information to make the maintainer's life easier -->
 <!-- Thanks for contributing! -->
