@@ -19,6 +19,7 @@ environment:
       MINICONDA_MICRO_VERSION: "30"
       MPL_VERSION: "2.1.0"
       PYRAMID_MPL_DEBUG: "true"
+      CONDA: C:\Miniconda
 
     - PY_MAJOR_VER: 2
       PYTHON_ARCH: "x86_64"
@@ -26,6 +27,7 @@ environment:
       MINICONDA_MICRO_VERSION: "30"
       MPL_VERSION: "2.1.0"
       PYRAMID_MPL_DEBUG: "true"
+      CONDA: C:\Miniconda-x64
 
     - PY_MAJOR_VER: 3
       PYTHON_ARCH: "x86"
@@ -33,6 +35,7 @@ environment:
       MINICONDA_MICRO_VERSION: "31"
       MPL_VERSION: "2.2.3"
       PYRAMID_MPL_DEBUG: "true"
+      CONDA: C:\Miniconda35
 
     - PY_MAJOR_VER: 3
       PYTHON_ARCH: "x86_64"
@@ -40,21 +43,45 @@ environment:
       MINICONDA_MICRO_VERSION: "31"
       MPL_VERSION: "2.2.3"
       PYRAMID_MPL_DEBUG: "true"
+      CONDA: C:\Miniconda35-x64
 
-# 3/27/18 - Conda is not working well on Windows because they haven't gotten
-# their act together RE: powershell...
-build_script:
-  - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-4.3.$env:MINICONDA_MICRO_VERSION-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
-  # - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-latest-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
-  - cmd: C:\Miniconda.exe /S /D=C:\Py
-  - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
+init:
+  - "ECHO %CONDA% %PYTHON_VERSION% %PYTHON_ARCH%"
+  - "ECHO \"%APPVEYOR_SCHEDULED_BUILD%\""
+
+  # If there is a newer build queued for the same PR, cancel this one.
+  # The AppVeyor 'rollout builds' option is supposed to serve the same
+  # purpose but it is problematic because it tends to cancel builds pushed
+  # directly to master instead of just PR builds (or the converse).
+  # credits: JuliaLang developers.
+  - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
+        https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
+        Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
+          Write-Host "There are newer queued builds for this pull request, skipping build."
+          Exit-AppveyorBuild
+        }
+  - ps: |
+      If (($env:SKIP_NOTAG -eq "true") -and ($env:APPVEYOR_REPO_TAG -ne "true")) {
+          Write-Host "Skipping build, not at a tag."
+          Exit-AppveyorBuild
+      }
+
+install:
+  - C:\cygwin\bin\du -hs "%LOCALAPPDATA%\pip\Cache"
+
+  # Prepend newly installed Python to the PATH of this build (this cannot be
+  # done from inside the powershell script as it would require to restart
+  # the parent CMD process).
+  - SET PATH=%CONDA%;%CONDA%\Scripts;%PATH%
+
+  # 3/27/18 - Conda is not working well on Windows because they haven't gotten
+  # their act together RE: powershell...
+  # 9/24/18 - Use the built-in Miniconda rather than downloading fresh
   - conda config --set always_yes yes
-  # - conda update conda
 
   # Debugging because Appveyor gives us no stack traces when this stuff breaks.
   - ps: echo "Conda version:"
   - conda --version
-  - ps: echo "Python version=$env:PYTHON_VERSION"
 
   # Install conda env
   - ps: conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy matplotlib=$env:MPL_VERSION
@@ -63,18 +90,28 @@ build_script:
   # Things we'll need for deployment
   - pip install wheel twine pytest
 
+build_script:
   # Build the package
   - python setup.py develop
 
-test_script:
-  # Change to a non-source folder to make sure we run the tests on the
-  # installed library.
-  - "mkdir empty_folder"
-  - "cd empty_folder"
-  - nosetests --exe -v -A "not slow" pyramid
+after_build:
+  # Remove old or huge cache files to hopefully not exceed the 1GB cache limit.
+  #
+  # If the cache limit is reached, the cache will not be updated (of not even
+  # created in the first run). So this is a trade of between keeping the cache
+  # current and having a cache at all.
+  # NB: This is done only `on_success` since the cache in uploaded only on
+  # success anyway.
+  - C:\cygwin\bin\find "%LOCALAPPDATA%\pip" -type f -mtime +360 -delete
+  - C:\cygwin\bin\find "%LOCALAPPDATA%\pip" -type f -size +10M -delete
+  - C:\cygwin\bin\find "%LOCALAPPDATA%\pip" -empty -delete
 
-  # Move back to the project folder
-  - "cd .."
+  # Show size of cache
+  - C:\cygwin\bin\du -hs "%LOCALAPPDATA%\pip\Cache"
+
+test_script:
+  # Test with pytest
+  - pytest --pyargs pyramid
 
 after_test:
   # After the test, build the wheels (let travis handle the source build).
