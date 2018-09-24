@@ -13,7 +13,7 @@ environment:
     secure: okvMa3VgIXdlnMC48iMefQ==
 
   matrix:
-    - PY_MAJOR_VER: 2
+    - MAJOR_PYTHON_VERSION: 2
       PYTHON_ARCH: "x86"
       PYTHON_VERSION: "2.7"
       MINICONDA_MICRO_VERSION: "30"
@@ -21,15 +21,15 @@ environment:
       PYRAMID_MPL_DEBUG: "true"
       CONDA: C:\Miniconda
 
-    - PY_MAJOR_VER: 2
-      PYTHON_ARCH: "x86_64"
+    - MAJOR_PYTHON_VERSION: 2
+      PYTHON_ARCH: "64"
       PYTHON_VERSION: "2.7"
       MINICONDA_MICRO_VERSION: "30"
       MPL_VERSION: "2.1.0"
       PYRAMID_MPL_DEBUG: "true"
       CONDA: C:\Miniconda-x64
 
-    - PY_MAJOR_VER: 3
+    - MAJOR_PYTHON_VERSION: 3
       PYTHON_ARCH: "x86"
       PYTHON_VERSION: "3.5"
       MINICONDA_MICRO_VERSION: "31"
@@ -37,8 +37,8 @@ environment:
       PYRAMID_MPL_DEBUG: "true"
       CONDA: C:\Miniconda35
 
-    - PY_MAJOR_VER: 3
-      PYTHON_ARCH: "x86_64"
+    - MAJOR_PYTHON_VERSION: 3
+      PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.5"
       MINICONDA_MICRO_VERSION: "31"
       MPL_VERSION: "2.2.3"
@@ -76,23 +76,24 @@ install:
 
   # 3/27/18 - Conda is not working well on Windows because they haven't gotten
   # their act together RE: powershell...
-  # 9/24/18 - Use the built-in Miniconda rather than downloading fresh
-  - conda config --set always_yes yes
+  # 9/24/18 - Use the built-in Miniconda rather than downloading fresh, and use
+  # CMD prompt rather than PS
+  - %CMD_IN_ENV% conda config --set always_yes yes
 
   # Debugging because Appveyor gives us no stack traces when this stuff breaks.
   - ps: echo "Conda version:"
-  - conda --version
+  - %CMD_IN_ENV% conda --version
 
   # Install conda env
-  - ps: conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy matplotlib=$env:MPL_VERSION
-  - activate testenv
+  - %CMD_IN_ENV% conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy matplotlib=$env:MPL_VERSION
+  - %CMD_IN_ENV% activate testenv
 
   # Things we'll need for deployment
-  - pip install wheel twine pytest
+  - %CMD_IN_ENV% pip install wheel twine pytest
 
 build_script:
   # Build the package
-  - python setup.py develop
+  - python setup.py install
 
 after_build:
   # Remove old or huge cache files to hopefully not exceed the 1GB cache limit.
@@ -110,8 +111,14 @@ after_build:
   - C:\cygwin\bin\du -hs "%LOCALAPPDATA%\pip\Cache"
 
 test_script:
+  # Change to a non-source folder to make sure we run the tests on the
+  # installed library
+  - mkdir "../empty_folder"
+  - "cd ../empty_folder"
+
   # Test with pytest
   - pytest --pyargs pyramid
+  - "cd ../pyramid"
 
 after_test:
   # After the test, build the wheels (let travis handle the source build).
