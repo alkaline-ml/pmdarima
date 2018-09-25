@@ -14,39 +14,42 @@ environment:
 
   matrix:
     - MAJOR_PYTHON_VERSION: 2
-      PYTHON_ARCH: "x86"
-      PYTHON_VERSION: "2.7"
-      MINICONDA_MICRO_VERSION: "30"
+      PYTHON_ARCH: "32"
+      PYTHON_VERSION: "2.7.8"
       MPL_VERSION: "2.1.0"
       PYRAMID_MPL_DEBUG: "true"
-      CONDA: C:\Miniconda
+      PYTHON: "C:\\Python27"
 
     - MAJOR_PYTHON_VERSION: 2
       PYTHON_ARCH: "64"
-      PYTHON_VERSION: "2.7"
-      MINICONDA_MICRO_VERSION: "30"
+      PYTHON_VERSION: "2.7.8"
       MPL_VERSION: "2.1.0"
       PYRAMID_MPL_DEBUG: "true"
-      CONDA: C:\Miniconda-x64
+      PYTHON: "C:\\Python27-x64"
 
     - MAJOR_PYTHON_VERSION: 3
-      PYTHON_ARCH: "x86"
-      PYTHON_VERSION: "3.5"
-      MINICONDA_MICRO_VERSION: "31"
+      PYTHON_ARCH: "32"
+      PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
       PYRAMID_MPL_DEBUG: "true"
-      CONDA: C:\Miniconda35
+      PYTHON: "C:\\Python35"
 
     - MAJOR_PYTHON_VERSION: 3
       PYTHON_ARCH: "64"
-      PYTHON_VERSION: "3.5"
-      MINICONDA_MICRO_VERSION: "31"
+      PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
       PYRAMID_MPL_DEBUG: "true"
-      CONDA: C:\Miniconda35-x64
+      PYTHON: "C:\\Python35-x64"
+
+# Because we only have a single worker, we don't want to waste precious
+# appveyor CI time and make other PRs wait for repeated failures in a failing
+# PR. The following option cancels pending jobs in a given PR after the first
+# job failure in that specific PR.
+matrix:
+    fast_finish: true
 
 init:
-  - "ECHO %CONDA% %PYTHON_VERSION% %PYTHON_ARCH%"
+  - "ECHO %PYTHON_VERSION% %PYTHON_ARCH%"
   - "ECHO \"%APPVEYOR_SCHEDULED_BUILD%\""
 
   # If there is a newer build queued for the same PR, cancel this one.
@@ -67,50 +70,28 @@ init:
       }
 
 install:
-  - C:\cygwin\bin\du -hs "%LOCALAPPDATA%\pip\Cache"
+  # Install Python (from the official .msi of http://python.org) and pip when
+  # not already installed.
+  - "powershell ./build_tools/appveyor/install.ps1"
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "python -m pip install -U pip"
 
-  # Prepend newly installed Python to the PATH of this build (this cannot be
-  # done from inside the powershell script as it would require to restart
-  # the parent CMD process).
-  - SET PATH=%CONDA%;%CONDA%\Scripts;%PATH%
+  # Check that we have the expected version and architecture for Python
+  - "python --version"
+  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+  - "pip --version"
 
-  # 3/27/18 - Conda is not working well on Windows because they haven't gotten
-  # their act together RE: powershell...
-  # 9/24/18 - Use the built-in Miniconda rather than downloading fresh, and use
-  # CMD prompt rather than PS
-  - "%CMD_IN_ENV% conda config --set always_yes yes"
-
-  # Debugging because Appveyor gives us no stack traces when this stuff breaks.
-  - ps: echo "Conda version:"
-  - "%CMD_IN_ENV% conda --version"
-
-  # Install conda env
-  - "%CMD_IN_ENV% conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy matplotlib=$env:MPL_VERSION"
-  - "%CMD_IN_ENV% activate testenv"
-
-  # Things we'll need for deployment
-  - "%CMD_IN_ENV% pip install wheel twine pytest"
-
-build_script:
+  # 9/25/18 - Use the scikit approach
   # Build the package (and the wheels!)
+  - "%CMD_IN_ENV% pip install --timeout=60 -r build_tools/appveyor/requirements.txt"
   - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
   - ps: "ls dist"
+
+  # Install the generated wheel file
   - "pip install --pre --no-index --find-links dist/ pyramid"
 
-after_build:
-  # Remove old or huge cache files to hopefully not exceed the 1GB cache limit.
-  #
-  # If the cache limit is reached, the cache will not be updated (of not even
-  # created in the first run). So this is a trade of between keeping the cache
-  # current and having a cache at all.
-  # NB: This is done only `on_success` since the cache in uploaded only on
-  # success anyway.
-  - C:\cygwin\bin\find "%LOCALAPPDATA%\pip" -type f -mtime +360 -delete
-  - C:\cygwin\bin\find "%LOCALAPPDATA%\pip" -type f -size +10M -delete
-  - C:\cygwin\bin\find "%LOCALAPPDATA%\pip" -empty -delete
-
-  # Show size of cache
-  - C:\cygwin\bin\du -hs "%LOCALAPPDATA%\pip\Cache"
+# Not a .NET project, we build pyramid in the install step instead
+build: false
 
 test_script:
   # Change to a non-source folder to make sure we run the tests on the
