@@ -78,22 +78,24 @@ install:
   # their act together RE: powershell...
   # 9/24/18 - Use the built-in Miniconda rather than downloading fresh, and use
   # CMD prompt rather than PS
-  - %CMD_IN_ENV% conda config --set always_yes yes
+  - "%CMD_IN_ENV% conda config --set always_yes yes"
 
   # Debugging because Appveyor gives us no stack traces when this stuff breaks.
   - ps: echo "Conda version:"
-  - %CMD_IN_ENV% conda --version
+  - "%CMD_IN_ENV% conda --version"
 
   # Install conda env
-  - %CMD_IN_ENV% conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy matplotlib=$env:MPL_VERSION
-  - %CMD_IN_ENV% activate testenv
+  - "%CMD_IN_ENV% conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy matplotlib=$env:MPL_VERSION"
+  - "%CMD_IN_ENV% activate testenv"
 
   # Things we'll need for deployment
-  - %CMD_IN_ENV% pip install wheel twine pytest
+  - "%CMD_IN_ENV% pip install wheel twine pytest"
 
 build_script:
-  # Build the package
-  - python setup.py install
+  # Build the package (and the wheels!)
+  - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
+  - ps: "ls dist"
+  - "pip install --pre --no-index --find-links dist/ pyramid"
 
 after_build:
   # Remove old or huge cache files to hopefully not exceed the 1GB cache limit.
@@ -117,13 +119,10 @@ test_script:
   - "cd ../empty_folder"
 
   # Test with pytest
-  - pytest --pyargs pyramid
+  - "pytest --showlocals --durations=20 --pyargs pyramid"
   - "cd ../pyramid"
 
 after_test:
-  # After the test, build the wheels (let travis handle the source build).
-  - ECHO "Test complete, building wheels"
-  - python setup.py sdist bdist_wheel
   - set PATH=%BK_PATH%
 
 artifacts:
@@ -134,3 +133,10 @@ deploy_script:
   - set PATH=%BK_PATH%
   - ps: If ($env:APPVEYOR_REPO_TAG -eq "true") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --skip-existing dist/*" } Else { write-output "Not on a tagged commit, won't deploy to pypi"}
   #- ps: If ($env:APPVEYOR_REPO_BRANCH -eq "develop") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*" } Else { write-output "Not on a development commit, won't deploy to pypitest"}
+
+cache:
+  # Use the appveyor cache to avoid re-downloading large archives such
+  # the MKL numpy and scipy wheels mirrored on a rackspace cloud
+  # container, speed up the appveyor jobs and reduce bandwidth
+  # usage on our rackspace account.
+  - '%APPDATA%\pip\Cache'
