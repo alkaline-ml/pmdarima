@@ -2,6 +2,8 @@
 # This .yml file is based on scikit-learn and statsmodels' Appveyor CI setups, adapted for
 # use with Pyramid https://ci.appveyor.com/project/tgsmith61591/pyramid
 
+os: Visual Studio 2015
+
 environment:
   global:
     # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
