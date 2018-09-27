@@ -13,25 +13,25 @@ environment:
     secure: okvMa3VgIXdlnMC48iMefQ==
 
   matrix:
-      PYTHON_ARCH: "32"
+    - PYTHON_ARCH: "32"
       PYTHON_VERSION: "2.7.8"
       MPL_VERSION: "2.1.0"
       PYRAMID_MPL_DEBUG: "true"
       PYTHON: "C:\\Python27"
 
-      PYTHON_ARCH: "64"
+    - PYTHON_ARCH: "64"
       PYTHON_VERSION: "2.7.8"
       MPL_VERSION: "2.1.0"
       PYRAMID_MPL_DEBUG: "true"
       PYTHON: "C:\\Python27-x64"
 
-      PYTHON_ARCH: "32"
+    - PYTHON_ARCH: "32"
       PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
       PYRAMID_MPL_DEBUG: "true"
       PYTHON: "C:\\Python35"
 
-      PYTHON_ARCH: "64"
+    - PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
       PYRAMID_MPL_DEBUG: "true"
