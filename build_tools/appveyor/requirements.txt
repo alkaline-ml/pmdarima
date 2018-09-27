@@ -1,4 +1,3 @@
-mkl
 numpy
 scipy
 # Pin Cython to avoid bug with 0.28.x on Python 3.7
