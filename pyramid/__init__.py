@@ -53,12 +53,27 @@ else:
         'plot_pacf'
     ]
 
+    # Warn for Issue #34 (https://github.com/tgsmith61591/pyramid/issues/34)
+    import warnings
+    warnings.warn("""
+    The 'pyramid' package will be migrating to a new namespace beginning in 
+    version 1.0.0: 'pmdarima'. This is due to a package name collision with the
+    Pyramid web framework. For more information, see Issue #34:
+    
+        https://github.com/tgsmith61591/pyramid/issues/34
+        
+    The package will still be installable via the name 'pyramid-arima'; the only
+    change to the user will be the import name. All imports from 'pyramid' will
+    change to 'pmdarima'.
+    """, UserWarning)
+
     # On first import, check the cache, warn if needed
     from ._config import _warn_for_cache_size
     _warn_for_cache_size()
 
     # Delete unwanted variables from global
     del _os
+    del warnings
     # del _config  # don't delete in case user wants to amend it at top level
     del _warn_for_cache_size
     del __check_build
