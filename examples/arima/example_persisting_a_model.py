@@ -16,7 +16,7 @@ print(__doc__)
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
 import pyramid as pm
-from pyramid.datasets import load_wineind
+from pmdarima.datasets import load_wineind
 from sklearn.externals import joblib  # for persistence
 import os
 

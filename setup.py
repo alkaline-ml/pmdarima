@@ -5,6 +5,7 @@
 # Setup the pyramid module
 
 from __future__ import print_function, absolute_import, division
+
 from distutils.command.clean import clean
 import shutil
 import os
@@ -16,15 +17,15 @@ else:
     import builtins
 
 # Hacky (!!), adopted from sklearn. This sets a global variable
-# so pyramid __init__ can detect if it's being loaded in the setup
+# so pmdarima __init__ can detect if it's being loaded in the setup
 # routine, so it won't load submodules that haven't yet been built.
-# This is because of the numpy distutils extensions that are used by pyramid
+# This is because of the numpy distutils extensions that are used by pmdarima
 # to build the compiled extensions in sub-packages
-builtins.__PYRAMID_SETUP__ = True
+builtins.__PMDARIMA_SETUP__ = True
 
 # metadata
-DISTNAME = 'pyramid'
-PYPIDIST = '%s-arima' % DISTNAME
+DISTNAME = 'pmdarima'
+PYPIDIST = 'pyramid-arima'
 DESCRIPTION = "Python's forecast::auto.arima equivalent"
 
 # Get the long desc
@@ -37,8 +38,8 @@ MAINTAINER_EMAIL = 'taylor.smith@alkaline-ml.com'
 LICENSE = 'MIT'
 
 # import restricted version
-import pyramid
-VERSION = pyramid.__version__
+import pmdarima
+VERSION = pmdarima.__version__
 
 # get the installation requirements:
 with open('requirements.txt') as req:
@@ -101,7 +102,7 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     extra_setuptools_args = dict(
         zip_safe=False,  # the package can run out of an .egg file
         include_package_data=True,
-        package_data={'pyramid': ['*']},
+        package_data={'pmdarima': ['*']},
         distclass=BinaryDistribution,
         install_requires=REQUIREMENTS,
     )
@@ -166,7 +167,7 @@ def do_setup():
     # setup the config
     metadata = dict(name=PYPIDIST,
                     packages=[DISTNAME],
-                    url="https://github.com/%s/%s" % (MAINTAINER_GIT, DISTNAME),
+                    url="https://github.com/%s/pyramid" % MAINTAINER_GIT,
                     maintainer=MAINTAINER,
                     maintainer_email=MAINTAINER_EMAIL,
                     description=DESCRIPTION,
@@ -190,11 +191,11 @@ def do_setup():
                         'Programming Language :: Python :: 3.5',
                         'Programming Language :: Python :: 3.6',
                     ],
-                    keywords='arima timeseries forecasting pyramid '
+                    keywords='arima timeseries forecasting pyramid pmdarima '
                              'pyramid-arima scikit-learn statsmodels',
                     # this will only work for releases that have the right tag
-                    download_url='https://github.com/%s/%s/archive/v%s.tar.gz'
-                                 % (MAINTAINER_GIT, DISTNAME, VERSION),
+                    download_url='https://github.com/%s/pyramid/archive/'
+                                 'v%s.tar.gz' % (MAINTAINER_GIT, VERSION),
                     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, '
                                     '!=3.3.*, !=3.4.*, <4',
                     cmdclass=cmdclass,
@@ -229,7 +230,7 @@ def do_setup():
             try:
                 from numpy.distutils.core import setup
             except ImportError:
-                raise RuntimeError('Need numpy to build %s' % DISTNAME)
+                raise RuntimeError('Need numpy to build pmdarima')
 
         # if we are building to or from a wheel, we do not need numpy,
         # because it will be handled in the requirements.txt

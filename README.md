@@ -26,7 +26,7 @@ $ pip install pyramid-arima
 To ensure the package was built correctly, import the following module in python:
 
 ```python
-from pyramid.arima import auto_arima
+from pmdarima.arima import auto_arima
 ```
 
 

@@ -15,7 +15,7 @@ print(__doc__)
 
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
-import pyramid as pm
+import pmdarima as pm
 import numpy as np
 from matplotlib import pyplot as plt
 

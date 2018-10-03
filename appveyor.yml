@@ -87,7 +87,7 @@ test_script:
   - "cd ../empty_folder"
 
   # Test with pytest
-  - "pytest --showlocals --durations=20 --pyargs pyramid"
+  - "pytest --showlocals --durations=20 --pyargs pmdarima"
   - "cd ../pyramid"
 
 after_test:

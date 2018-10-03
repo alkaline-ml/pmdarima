@@ -28,7 +28,7 @@ run_tests() {
     if [[ "$COVERAGE" == "true" ]]; then
         TEST_CMD="$TEST_CMD --cov-config .coveragerc --cov pyramid"
     fi
-    $TEST_CMD pyramid
+    $TEST_CMD pmdarima
 
     # Going back to git checkout folder needed for make test-doc
     cd $OLDPWD

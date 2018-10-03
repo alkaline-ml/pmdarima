@@ -30,7 +30,7 @@ matplotlib.use('agg')  # RISK: could be overridden via environment variables...
 
 import os
 import sys
-import pyramid
+import pmdarima
 from pkg_resources import parse_version
 from sklearn.externals.six import u
 
@@ -92,7 +92,7 @@ author = 'Taylor G Smith'
 # built documents.
 #
 # The short X.Y version.
-version = str(parse_version(pyramid.__version__))
+version = str(parse_version(pmdarima.__version__))
 # The full version, including alpha/beta/rc tags.
 release = version
 
