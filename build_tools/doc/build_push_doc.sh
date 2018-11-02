@@ -95,7 +95,7 @@ if [[ -d ${tmp_idea_dir} ]]; then
     echo "Found stashed temporary .idea/ directory at ${tmp_idea_dir}"
 
     # if there is already an .idea dir, don't do anything
-    if [[ ! -d ${tmp_idea_dir} ]]; then
+    if [[ ! -d .idea/ ]]; then
         echo "Moving stashed temporary .idea/ back to git repo"
         mv ${tmp_idea_dir} .idea/
     else

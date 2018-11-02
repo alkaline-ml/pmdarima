@@ -4,7 +4,7 @@ scipy>=0.9
 scikit-learn>=0.17
 pandas
 statsmodels>=0.9
-sphinx
+sphinx==1.7.2
 sphinx_gallery==0.1.13
 sphinx_rtd_theme
 matplotlib==2.2.0rc1
