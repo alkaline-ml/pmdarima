@@ -22,7 +22,7 @@ ${PIP} wheel /io/ -w /io/dist/
 # Bundle external shared libraries into the wheels.
 for whl in /io/dist/*.whl; do
     if [[ "$whl" =~ "$PYMODULE" ]]; then
-        auditwheel repair $whl -w /io/dist/ #repair pyramid_arima wheel and output to /io/dist
+        auditwheel repair $whl -w /io/dist/ #repair pmdarima wheel and output to /io/dist
     fi
 
     rm $whl # remove wheel

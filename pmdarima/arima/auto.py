@@ -864,7 +864,7 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
                           ModelFitWarning)
         elif error_action == 'raise':
             # todo: can we do something more informative in case
-            # the error is not on the pyramid side?
+            # the error is not on the pmdarima side?
             raise v
         # if it's 'ignore' or 'warn', we just return None
         fit = None

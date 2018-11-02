@@ -6,10 +6,11 @@
 ![Supported versions](https://img.shields.io/badge/python-2.7-blue.svg)
 ![Supported versions](https://img.shields.io/badge/python-3.5-blue.svg)
 
-# pyramid
-Pyramid is a no-nonsense statistical Python library with a solitary objective: bring R's
+# pmdarima
+
+Pmdarima (originally `pyramid-arima`, for the anagram) is a no-nonsense statistical Python library with a solitary objective: bring R's
 [`auto.arima`](https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima)
-functionality to Python. Pyramid operates by wrapping
+functionality to Python. Pmdarima operates by wrapping
 [`statsmodels.tsa.ARIMA`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/arima_model.py) and
 [`statsmodels.tsa.statespace.SARIMAX`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/statespace/sarimax.py)
 into one estimator class and creating a more user-friendly estimator interface for programmers familiar with scikit-learn.
@@ -17,10 +18,19 @@ into one estimator class and creating a more user-friendly estimator interface f
 
 ## Installation
 
-Pyramid is on pypi under the package name `pyramid-arima` and can be downloaded via `pip`:
+Pmdarima is on pypi under the package name `pmdarima` and can be downloaded via `pip`:
 
 ```bash
+$ pip install pmdarima
+```
+
+Note that legacy versions (<1.0.0) are available under the name "`pyramid-arima`" and
+can be pip installed via:
+
+```bash
+# Legacy warning:
 $ pip install pyramid-arima
+# python -c 'import pyramid;'
 ```
 
 To ensure the package was built correctly, import the following module in python:

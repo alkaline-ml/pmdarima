@@ -582,8 +582,8 @@ def test_m_too_large():
                    stepwise=True, suppress_warnings=True, D=10, max_D=10,
                    error_action='ignore', m=20)
 
-        msg = str(v)
-        assert 'The seasonal differencing order' in msg
+    msg = str(v)
+    assert 'The seasonal differencing order' in msg
 
 
 # Test that (as of v0.9.1) we can pickle a model, pickle it again, load both
@@ -623,8 +623,8 @@ def test_double_pickle():
         # ARIMA from statsmodels and caused an OSError and a corrupted pickle
         with pytest.raises(OSError) as o:
             joblib.load(file_a)  # fails since no cached state there!
-            msg = str(o)
-            assert 'Could not read saved model state' in msg, msg
+        msg = str(o)
+        assert 'Could not read saved model state' in msg, msg
 
     # Always remove in case we fail in try, leaving residual files
     finally:
@@ -680,7 +680,7 @@ def test_force_polynomial_error():
 
     with pytest.raises(ValueError) as ve:
         auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg)
-        assert 'simple polynomial' in str(ve), str(ve)
+    assert 'simple polynomial' in str(ve), str(ve)
 
     # but it should pass when xreg is not none
     xreg = rs.rand(x.shape[0], 2)

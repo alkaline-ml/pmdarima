@@ -16,7 +16,7 @@ python -c "import multiprocessing as mp; print('%d CPUs' % mp.cpu_count())"
 run_tests() {
     TEST_CMD="pytest --showlocals --durations=20 --pyargs"
 
-    # Get into a temp directory to run test from the installed pyramid and
+    # Get into a temp directory to run test from the installed pmdarima and
     # check if we do not leave artifacts
     mkdir -p $TEST_DIR
 
@@ -26,7 +26,7 @@ run_tests() {
     cd $TEST_DIR
 
     if [[ "$COVERAGE" == "true" ]]; then
-        TEST_CMD="$TEST_CMD --cov-config .coveragerc --cov pyramid"
+        TEST_CMD="$TEST_CMD --cov-config .coveragerc --cov"
     fi
     $TEST_CMD pmdarima
 

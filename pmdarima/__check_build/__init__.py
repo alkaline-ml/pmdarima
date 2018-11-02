@@ -1,5 +1,5 @@
 """ Module to give helpful messages to the user that did not
-compile the pyramid properly.
+compile the pmdarima lib properly.
 """
 import os
 

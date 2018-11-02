@@ -10,7 +10,8 @@ from os.path import expanduser
 import warnings
 
 # The directory in which we'll store TimeSeries models from statsmodels
-# during the internal ARIMA pickling operation.
+# during the internal ARIMA pickling operation. NOTE: This does not change from
+# version 0.9.0, when we moved from 'pyramid' -> 'pmd'!!!
 PYRAMID_ARIMA_CACHE = os.environ.get('PYRAMID_ARIMA_CACHE',
                                      expanduser('~/.pyramid-arima-cache'))
 

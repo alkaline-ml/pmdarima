@@ -2,7 +2,7 @@
 #
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 #
-# Setup the pyramid module
+# Setup the pmdarima module
 
 from __future__ import print_function, absolute_import, division
 
@@ -25,7 +25,8 @@ builtins.__PMDARIMA_SETUP__ = True
 
 # metadata
 DISTNAME = 'pmdarima'
-PYPIDIST = 'pyramid-arima'
+PYPIDIST = 'pmdarima'
+GIT_REPO_NAME = 'pyramid'  # TODO: eventually migrate
 DESCRIPTION = "Python's forecast::auto.arima equivalent"
 
 # Get the long desc
@@ -85,7 +86,7 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
             return False
 
         def has_ext_modules(self):
-            """Pyramid has external modules. Therefore, unsurprisingly, this
+            """Pmdarima has external modules. Therefore, unsurprisingly, this
             returns True to indicate that there are, in fact, external modules.
 
             Returns
@@ -167,7 +168,8 @@ def do_setup():
     # setup the config
     metadata = dict(name=PYPIDIST,
                     packages=[DISTNAME],
-                    url="https://github.com/%s/pyramid" % MAINTAINER_GIT,
+                    url="https://github.com/%s/%s" % (MAINTAINER_GIT,
+                                                      GIT_REPO_NAME),
                     maintainer=MAINTAINER,
                     maintainer_email=MAINTAINER_EMAIL,
                     description=DESCRIPTION,
@@ -194,8 +196,8 @@ def do_setup():
                     keywords='arima timeseries forecasting pyramid pmdarima '
                              'pyramid-arima scikit-learn statsmodels',
                     # this will only work for releases that have the right tag
-                    download_url='https://github.com/%s/pyramid/archive/'
-                                 'v%s.tar.gz' % (MAINTAINER_GIT, VERSION),
+                    download_url='https://github.com/%s/%s/archive/v%s.tar.gz'
+                                 % (MAINTAINER_GIT, GIT_REPO_NAME, VERSION),
                     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, '
                                     '!=3.3.*, !=3.4.*, <4',
                     cmdclass=cmdclass,
