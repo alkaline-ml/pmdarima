@@ -62,9 +62,9 @@ else:
     
         https://github.com/tgsmith61591/pyramid/issues/34
         
-    The package will still be installable via the name 'pyramid-arima'; the only
-    change to the user will be the import name. All imports from 'pyramid' will
-    change to 'pmdarima'.
+    The package will subsequently be installable via the name 'pmdarima'; the
+    only functional change to the user will be the import name. All imports
+    from 'pyramid' will change to 'pmdarima'.
     """, UserWarning)
 
     # On first import, check the cache, warn if needed
