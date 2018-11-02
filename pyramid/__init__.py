@@ -6,7 +6,7 @@
 
 import os as _os
 
-__version__ = "0.9.0-dev"
+__version__ = "0.9.0"
 
 try:
     # this var is injected in the setup build to enable

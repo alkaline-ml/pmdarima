@@ -26,7 +26,7 @@ v0.9.0
 
 * Added Circle CI for validating PyPy builds (rather than CPython)
 
-* Deploy python wheel for version 3.6 on Linux
+* Deploy python wheel for version 3.6 on Linux and Windows
 
 * Include warning for upcoming package name change (``pmdarima``).
 
