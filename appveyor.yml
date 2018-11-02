@@ -87,9 +87,9 @@ install:
   - ps: "ls dist"
 
   # Install the generated wheel file
-  - "pip install --pre --no-index --find-links dist/ pyramid-arima"
+  - "pip install --pre --no-index --find-links dist/ pmdarima"
 
-# Not a .NET project, we build pyramid in the install step instead
+# Not a .NET project, we build pmdarima in the install step instead
 build: false
 
 test_script:
