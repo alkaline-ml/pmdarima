@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.utils.wrapped &mdash; pyramid 0.8.1 documentation</title>
+  <title>pyramid.utils.wrapped &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -90,7 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -209,16 +209,16 @@
     <span class="k">return</span> <span class="n">wrapper</span>
 
 
-<span class="nd">@inheritdoc</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">sm_acf</span><span class="p">)</span>
-<div class="viewcode-block" id="acf"><a class="viewcode-back" href="../../../modules/generated/pyramid.utils.acf.html#pyramid.utils.acf">[docs]</a><span class="k">def</span> <span class="nf">acf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">qstat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fft</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<div class="viewcode-block" id="acf"><a class="viewcode-back" href="../../../modules/generated/pyramid.utils.acf.html#pyramid.utils.acf">[docs]</a><span class="nd">@inheritdoc</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">sm_acf</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">acf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">qstat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fft</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">sm_acf</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="n">unbiased</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="n">nlags</span><span class="p">,</span>
                   <span class="n">qstat</span><span class="o">=</span><span class="n">qstat</span><span class="p">,</span> <span class="n">fft</span><span class="o">=</span><span class="n">fft</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
                   <span class="n">missing</span><span class="o">=</span><span class="n">missing</span><span class="p">)</span></div>
 
 
-<span class="nd">@inheritdoc</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">sm_pacf</span><span class="p">)</span>
-<div class="viewcode-block" id="pacf"><a class="viewcode-back" href="../../../modules/generated/pyramid.utils.pacf.html#pyramid.utils.pacf">[docs]</a><span class="k">def</span> <span class="nf">pacf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ywunbiased&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="pacf"><a class="viewcode-back" href="../../../modules/generated/pyramid.utils.pacf.html#pyramid.utils.pacf">[docs]</a><span class="nd">@inheritdoc</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">sm_pacf</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pacf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ywunbiased&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">sm_pacf</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">nlags</span><span class="o">=</span><span class="n">nlags</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span></div>
 </pre></div>
 
@@ -232,7 +232,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -251,21 +251,24 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

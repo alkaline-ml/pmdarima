@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Dataset loading &mdash; pyramid 0.8.1 documentation</title>
+  <title>Dataset loading &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -101,7 +101,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -168,40 +168,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="sphx-glr-download-link-note admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-datasets-example-load-data-py"><span class="std std-ref">here</span></a> to download the full example code</p>
-</div>
-<div class="sphx-glr-example-title section" id="dataset-loading">
+  <div class="section" id="dataset-loading">
 <span id="sphx-glr-auto-examples-datasets-example-load-data-py"></span><h1>Dataset loading<a class="headerlink" href="#dataset-loading" title="Permalink to this headline">¶</a></h1>
-<p>In this example, we demonstrate pyramid&#8217;s built-in toy datasets that can be
+<p>In this example, we demonstrate pyramid’s built-in toy datasets that can be
 used for benchmarking or experimentation. Pyramid has several built-in datasets
 that exhibit seasonality, non-stationarity, and other time series nuances.</p>
 <br/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Lynx array:
-[ 269  321  585  871 1475 2821 3928 5943 4950 2577  523   98  184  279
-  409 2285 2685 3409 1824  409  151   45   68  213  546 1033 2129 2536
-  957  361  377  225  360  731 1638 2725 2871 2119  684  299  236  245
-  552 1623 3311 6721 4254  687  255  473  358  784 1594 1676 2251 1426
-  756  299  201  229  469  736 2042 2811 4431 2511  389   73   39   49
-   59  188  377 1292 4031 3495  587  105  153  387  758 1307 3465 6991
- 6313 3794 1836  345  382  808 1388 2713 3800 3091 2985 3790  674   81
-   80  108  229  399 1132 2432 3574 2935 1537  529  485  662 1000 1590
- 2657 3396]
+<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Lynx</span> <span class="n">array</span><span class="p">:</span>
+<span class="p">[</span> <span class="mi">269</span>  <span class="mi">321</span>  <span class="mi">585</span>  <span class="mi">871</span> <span class="mi">1475</span> <span class="mi">2821</span> <span class="mi">3928</span> <span class="mi">5943</span> <span class="mi">4950</span> <span class="mi">2577</span>  <span class="mi">523</span>   <span class="mi">98</span>  <span class="mi">184</span>  <span class="mi">279</span>
+  <span class="mi">409</span> <span class="mi">2285</span> <span class="mi">2685</span> <span class="mi">3409</span> <span class="mi">1824</span>  <span class="mi">409</span>  <span class="mi">151</span>   <span class="mi">45</span>   <span class="mi">68</span>  <span class="mi">213</span>  <span class="mi">546</span> <span class="mi">1033</span> <span class="mi">2129</span> <span class="mi">2536</span>
+  <span class="mi">957</span>  <span class="mi">361</span>  <span class="mi">377</span>  <span class="mi">225</span>  <span class="mi">360</span>  <span class="mi">731</span> <span class="mi">1638</span> <span class="mi">2725</span> <span class="mi">2871</span> <span class="mi">2119</span>  <span class="mi">684</span>  <span class="mi">299</span>  <span class="mi">236</span>  <span class="mi">245</span>
+  <span class="mi">552</span> <span class="mi">1623</span> <span class="mi">3311</span> <span class="mi">6721</span> <span class="mi">4254</span>  <span class="mi">687</span>  <span class="mi">255</span>  <span class="mi">473</span>  <span class="mi">358</span>  <span class="mi">784</span> <span class="mi">1594</span> <span class="mi">1676</span> <span class="mi">2251</span> <span class="mi">1426</span>
+  <span class="mi">756</span>  <span class="mi">299</span>  <span class="mi">201</span>  <span class="mi">229</span>  <span class="mi">469</span>  <span class="mi">736</span> <span class="mi">2042</span> <span class="mi">2811</span> <span class="mi">4431</span> <span class="mi">2511</span>  <span class="mi">389</span>   <span class="mi">73</span>   <span class="mi">39</span>   <span class="mi">49</span>
+   <span class="mi">59</span>  <span class="mi">188</span>  <span class="mi">377</span> <span class="mi">1292</span> <span class="mi">4031</span> <span class="mi">3495</span>  <span class="mi">587</span>  <span class="mi">105</span>  <span class="mi">153</span>  <span class="mi">387</span>  <span class="mi">758</span> <span class="mi">1307</span> <span class="mi">3465</span> <span class="mi">6991</span>
+ <span class="mi">6313</span> <span class="mi">3794</span> <span class="mi">1836</span>  <span class="mi">345</span>  <span class="mi">382</span>  <span class="mi">808</span> <span class="mi">1388</span> <span class="mi">2713</span> <span class="mi">3800</span> <span class="mi">3091</span> <span class="mi">2985</span> <span class="mi">3790</span>  <span class="mi">674</span>   <span class="mi">81</span>
+   <span class="mi">80</span>  <span class="mi">108</span>  <span class="mi">229</span>  <span class="mi">399</span> <span class="mi">1132</span> <span class="mi">2432</span> <span class="mi">3574</span> <span class="mi">2935</span> <span class="mi">1537</span>  <span class="mi">529</span>  <span class="mi">485</span>  <span class="mi">662</span> <span class="mi">1000</span> <span class="mi">1590</span>
+ <span class="mi">2657</span> <span class="mi">3396</span><span class="p">]</span>
 
-Lynx series head:
-1821     269
-1822     321
-1823     585
-1824     871
-1825    1475
-dtype: int64
+<span class="n">Lynx</span> <span class="n">series</span> <span class="n">head</span><span class="p">:</span>
+<span class="mi">1821</span>     <span class="mi">269</span>
+<span class="mi">1822</span>     <span class="mi">321</span>
+<span class="mi">1823</span>     <span class="mi">585</span>
+<span class="mi">1824</span>     <span class="mi">871</span>
+<span class="mi">1825</span>    <span class="mi">1475</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="n">int64</span>
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
@@ -224,11 +220,11 @@ dtype: int64
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.001 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-datasets-example-load-data-py">
+<div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_load_data.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_load_data.py</span></code></a></div>
+<a class="reference download internal" href="../../_downloads/example_load_data.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_load_data.py</span></code></a></div>
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_load_data.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_load_data.ipynb</span></code></a></div>
+<a class="reference download internal" href="../../_downloads/example_load_data.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_load_data.ipynb</span></code></a></div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
@@ -253,7 +249,7 @@ dtype: int64
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -272,21 +268,24 @@ dtype: int64
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

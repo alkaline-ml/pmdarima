@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sklearn.base &mdash; pyramid 0.8.1 documentation</title>
+  <title>sklearn.base &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -90,7 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -161,20 +161,13 @@
 
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">sparse</span>
 <span class="kn">from</span> <span class="nn">.externals</span> <span class="k">import</span> <span class="n">six</span>
 <span class="kn">from</span> <span class="nn">.utils.fixes</span> <span class="k">import</span> <span class="n">signature</span>
-<span class="kn">from</span> <span class="nn">.utils.deprecation</span> <span class="k">import</span> <span class="n">deprecated</span>
-<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">ChangedBehaviorWarning</span> <span class="k">as</span> <span class="n">_ChangedBehaviorWarning</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">__version__</span>
-
-
-<span class="nd">@deprecated</span><span class="p">(</span><span class="s2">&quot;ChangedBehaviorWarning has been moved into the sklearn.exceptions&quot;</span>
-            <span class="s2">&quot; module. It will not be available here from version 0.19&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">ChangedBehaviorWarning</span><span class="p">(</span><span class="n">_ChangedBehaviorWarning</span><span class="p">):</span>
-    <span class="k">pass</span>
 
 
 <span class="c1">##############################################################################</span>
@@ -199,11 +192,11 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    estimator: estimator object, or list, tuple or set of objects</span>
+<span class="sd">    estimator : estimator object, or list, tuple or set of objects</span>
 <span class="sd">        The estimator or group of estimators to be cloned</span>
 
-<span class="sd">    safe: boolean, optional</span>
-<span class="sd">        If safe is false, clone will fall back to a deepcopy on objects</span>
+<span class="sd">    safe : boolean, optional</span>
+<span class="sd">        If safe is false, clone will fall back to a deep copy on objects</span>
 <span class="sd">        that are not estimators.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -230,57 +223,10 @@
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">new_object_params</span><span class="p">:</span>
         <span class="n">param1</span> <span class="o">=</span> <span class="n">new_object_params</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="n">param2</span> <span class="o">=</span> <span class="n">params_set</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">param1</span> <span class="ow">is</span> <span class="n">param2</span><span class="p">:</span>
-            <span class="c1"># this should always happen</span>
-            <span class="k">continue</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="c1"># For most ndarrays, we do not test for complete equality</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param2</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">param1</span><span class="p">)):</span>
-                <span class="n">equality_test</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">elif</span> <span class="p">(</span><span class="n">param1</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">0</span>
-                    <span class="ow">and</span> <span class="n">param1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
-                    <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
-                    <span class="ow">and</span> <span class="n">param2</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">0</span>
-                    <span class="ow">and</span> <span class="n">param2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">equality_test</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">param1</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">param2</span><span class="o">.</span><span class="n">shape</span>
-                    <span class="ow">and</span> <span class="n">param1</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">param2</span><span class="o">.</span><span class="n">dtype</span>
-                    <span class="ow">and</span> <span class="p">(</span><span class="n">_first_and_last_element</span><span class="p">(</span><span class="n">param1</span><span class="p">)</span> <span class="o">==</span>
-                         <span class="n">_first_and_last_element</span><span class="p">(</span><span class="n">param2</span><span class="p">))</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">equality_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">param1</span> <span class="o">==</span> <span class="n">param2</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">param1</span><span class="p">):</span>
-            <span class="c1"># For sparse matrices equality doesn&#39;t work</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">param2</span><span class="p">):</span>
-                <span class="n">equality_test</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">elif</span> <span class="n">param1</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">param2</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">equality_test</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">param1</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">==</span> <span class="n">param2</span><span class="o">.</span><span class="vm">__class__</span>
-                    <span class="ow">and</span> <span class="n">param1</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span>
-                    <span class="ow">and</span> <span class="n">param2</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">equality_test</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">param1</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">==</span> <span class="n">param2</span><span class="o">.</span><span class="vm">__class__</span>
-                    <span class="ow">and</span> <span class="p">(</span><span class="n">_first_and_last_element</span><span class="p">(</span><span class="n">param1</span><span class="p">)</span> <span class="o">==</span>
-                         <span class="n">_first_and_last_element</span><span class="p">(</span><span class="n">param2</span><span class="p">))</span>
-                    <span class="ow">and</span> <span class="n">param1</span><span class="o">.</span><span class="n">nnz</span> <span class="o">==</span> <span class="n">param2</span><span class="o">.</span><span class="n">nnz</span>
-                    <span class="ow">and</span> <span class="n">param1</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">param2</span><span class="o">.</span><span class="n">shape</span>
-                <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># fall back on standard equality</span>
-            <span class="n">equality_test</span> <span class="o">=</span> <span class="n">param1</span> <span class="o">==</span> <span class="n">param2</span>
-        <span class="k">if</span> <span class="n">equality_test</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Estimator </span><span class="si">%s</span><span class="s2"> modifies parameters in __init__.&quot;</span>
-                          <span class="s2">&quot; This behavior is deprecated as of 0.18 and &quot;</span>
-                          <span class="s2">&quot;support for this behavior will be removed in 0.20.&quot;</span>
-                          <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">param1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">param2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Cannot clone object </span><span class="si">%s</span><span class="s1">, as the constructor &#39;</span>
-                               <span class="s1">&#39;does not seem to set parameter </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                               <span class="s1">&#39;either does not set or modifies parameter </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
                                <span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
-
     <span class="k">return</span> <span class="n">new_object</span>
 
 
@@ -290,13 +236,13 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    params: dict</span>
+<span class="sd">    params : dict</span>
 <span class="sd">        The dictionary to pretty print</span>
 
-<span class="sd">    offset: int</span>
+<span class="sd">    offset : int</span>
 <span class="sd">        The offset in characters to add at the begin of each line.</span>
 
-<span class="sd">    printer:</span>
+<span class="sd">    printer : callable</span>
 <span class="sd">        The function to convert entries to strings, typically</span>
 <span class="sd">        the builtin str or repr</span>
 
@@ -389,21 +335,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">out</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_param_names</span><span class="p">():</span>
-            <span class="c1"># We need deprecation warnings to always be on in order to</span>
-            <span class="c1"># catch deprecated param values.</span>
-            <span class="c1"># This is set in utils/__init__.py but it gets overwritten</span>
-            <span class="c1"># when running under python3 somehow.</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">(</span><span class="n">record</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
-                    <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="ow">and</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">category</span> <span class="o">==</span> <span class="ne">DeprecationWarning</span><span class="p">:</span>
-                    <span class="c1"># if the parameter is deprecated, don&#39;t show it</span>
-                    <span class="k">continue</span>
-            <span class="k">finally</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-            <span class="c1"># XXX: should we rather test if instance of estimator?</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">deep</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;get_params&#39;</span><span class="p">):</span>
                 <span class="n">deep_items</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                 <span class="n">out</span><span class="o">.</span><span class="n">update</span><span class="p">((</span><span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;__&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">deep_items</span><span class="p">)</span>
@@ -423,29 +355,28 @@
 <span class="sd">        self</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">params</span><span class="p">:</span>
-            <span class="c1"># Simple optimisation to gain speed (inspect is slow)</span>
+            <span class="c1"># Simple optimization to gain speed (inspect is slow)</span>
             <span class="k">return</span> <span class="bp">self</span>
         <span class="n">valid_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_params</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
-            <span class="n">split</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">split</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="c1"># nested objects case</span>
-                <span class="n">name</span><span class="p">,</span> <span class="n">sub_name</span> <span class="o">=</span> <span class="n">split</span>
-                <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_params</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid parameter </span><span class="si">%s</span><span class="s1"> for estimator </span><span class="si">%s</span><span class="s1">. &#39;</span>
-                                     <span class="s1">&#39;Check the list of available parameters &#39;</span>
-                                     <span class="s1">&#39;with `estimator.get_params().keys()`.&#39;</span> <span class="o">%</span>
-                                     <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
-                <span class="n">sub_object</span> <span class="o">=</span> <span class="n">valid_params</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-                <span class="n">sub_object</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">sub_name</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+
+        <span class="n">nested_params</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># grouped by prefix</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">key</span><span class="p">,</span> <span class="n">delim</span><span class="p">,</span> <span class="n">sub_key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_params</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid parameter </span><span class="si">%s</span><span class="s1"> for estimator </span><span class="si">%s</span><span class="s1">. &#39;</span>
+                                 <span class="s1">&#39;Check the list of available parameters &#39;</span>
+                                 <span class="s1">&#39;with `estimator.get_params().keys()`.&#39;</span> <span class="o">%</span>
+                                 <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">delim</span><span class="p">:</span>
+                <span class="n">nested_params</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">sub_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># simple objects case</span>
-                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_params</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid parameter </span><span class="si">%s</span><span class="s1"> for estimator </span><span class="si">%s</span><span class="s1">. &#39;</span>
-                                     <span class="s1">&#39;Check the list of available parameters &#39;</span>
-                                     <span class="s1">&#39;with `estimator.get_params().keys()`.&#39;</span> <span class="o">%</span>
-                                     <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">valid_params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">sub_params</span> <span class="ow">in</span> <span class="n">nested_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">valid_params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="o">**</span><span class="n">sub_params</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -454,10 +385,15 @@
                                                <span class="n">offset</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">class_name</span><span class="p">),),)</span>
 
     <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;sklearn.&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">_sklearn_version</span><span class="o">=</span><span class="n">__version__</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">_sklearn_version</span><span class="o">=</span><span class="n">__version__</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">state</span>
 
     <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;sklearn.&#39;</span><span class="p">):</span>
@@ -469,7 +405,10 @@
                     <span class="s2">&quot;invalid results. Use at your own risk.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">pickle_version</span><span class="p">,</span> <span class="n">__version__</span><span class="p">),</span>
                     <span class="ne">UserWarning</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
 
 <span class="c1">###############################################################################</span>
@@ -513,10 +452,10 @@
     <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the coefficient of determination R^2 of the prediction.</span>
 
-<span class="sd">        The coefficient R^2 is defined as (1 - u/v), where u is the regression</span>
-<span class="sd">        sum of squares ((y_true - y_pred) ** 2).sum() and v is the residual</span>
+<span class="sd">        The coefficient R^2 is defined as (1 - u/v), where u is the residual</span>
+<span class="sd">        sum of squares ((y_true - y_pred) ** 2).sum() and v is the total</span>
 <span class="sd">        sum of squares ((y_true - y_true.mean()) ** 2).sum().</span>
-<span class="sd">        Best possible score is 1.0 and it can be negative (because the</span>
+<span class="sd">        The best possible score is 1.0 and it can be negative (because the</span>
 <span class="sd">        model can be arbitrarily worse). A constant model that always</span>
 <span class="sd">        predicts the expected value of y, disregarding the input features,</span>
 <span class="sd">        would get a R^2 score of 0.0.</span>
@@ -524,7 +463,10 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        X : array-like, shape = (n_samples, n_features)</span>
-<span class="sd">            Test samples.</span>
+<span class="sd">            Test samples. For some estimators this may be a</span>
+<span class="sd">            precomputed kernel matrix instead, shape = (n_samples,</span>
+<span class="sd">            n_samples_fitted], where n_samples_fitted is the number of</span>
+<span class="sd">            samples used in the fitting for the estimator.</span>
 
 <span class="sd">        y : array-like, shape = (n_samples) or (n_samples, n_outputs)</span>
 <span class="sd">            True values for X.</span>
@@ -556,9 +498,12 @@
 <span class="sd">        X : ndarray, shape (n_samples, n_features)</span>
 <span class="sd">            Input data.</span>
 
+<span class="sd">        y : Ignored</span>
+<span class="sd">            not used, present for API consistency by convention.</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        y : ndarray, shape (n_samples,)</span>
+<span class="sd">        labels : ndarray, shape (n_samples,)</span>
 <span class="sd">            cluster labels</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># non-optimized default implementation; override when a better</span>
@@ -583,6 +528,11 @@
 
 <span class="sd">        Only works if ``rows_`` and ``columns_`` attributes exist.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i : int</span>
+<span class="sd">            The index of the cluster.</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        row_ind : np.array, dtype=np.intp</span>
@@ -598,6 +548,11 @@
     <span class="k">def</span> <span class="nf">get_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Shape of the i&#39;th bicluster.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i : int</span>
+<span class="sd">            The index of the cluster.</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        shape : (int, int)</span>
@@ -609,9 +564,22 @@
     <span class="k">def</span> <span class="nf">get_submatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the submatrix corresponding to bicluster `i`.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i : int</span>
+<span class="sd">            The index of the cluster.</span>
+<span class="sd">        data : array</span>
+<span class="sd">            The data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        submatrix : array</span>
+<span class="sd">            The submatrix corresponding to bicluster i.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
 <span class="sd">        Works with sparse matrices. Only works if ``rows_`` and</span>
 <span class="sd">        ``columns_`` attributes exist.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">)</span>
@@ -666,9 +634,35 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        score: float</span>
+<span class="sd">        score : float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">OutlierMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mixin class for all outlier detection estimators in scikit-learn.&quot;&quot;&quot;</span>
+    <span class="n">_estimator_type</span> <span class="o">=</span> <span class="s2">&quot;outlier_detector&quot;</span>
+
+    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Performs outlier detection on X.</span>
+
+<span class="sd">        Returns -1 for outliers and 1 for inliers.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : ndarray, shape (n_samples, n_features)</span>
+<span class="sd">            Input data.</span>
+
+<span class="sd">        y : Ignored</span>
+<span class="sd">            not used, present for API consistency by convention.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : ndarray, shape (n_samples,)</span>
+<span class="sd">            1 for inliers, -1 for outliers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># override for transductive outlier detectors like LocalOulierFactor</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 
 <span class="c1">###############################################################################</span>
@@ -680,13 +674,51 @@
 <span class="c1">###############################################################################</span>
 
 <span class="k">def</span> <span class="nf">is_classifier</span><span class="p">(</span><span class="n">estimator</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns True if the given estimator is (probably) a classifier.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Returns True if the given estimator is (probably) a classifier.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    estimator : object</span>
+<span class="sd">        Estimator object to test.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : bool</span>
+<span class="sd">        True if estimator is a classifier and False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="s2">&quot;_estimator_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;classifier&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">is_regressor</span><span class="p">(</span><span class="n">estimator</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns True if the given estimator is (probably) a regressor.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Returns True if the given estimator is (probably) a regressor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    estimator : object</span>
+<span class="sd">        Estimator object to test.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : bool</span>
+<span class="sd">        True if estimator is a regressor and False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="s2">&quot;_estimator_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;regressor&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">is_outlier_detector</span><span class="p">(</span><span class="n">estimator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns True if the given estimator is (probably) an outlier detector.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    estimator : object</span>
+<span class="sd">        Estimator object to test.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    out : bool</span>
+<span class="sd">        True if estimator is an outlier detector and False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="s2">&quot;_estimator_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;outlier_detector&quot;</span>
 </pre></div>
 
            </div>
@@ -699,7 +731,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -718,21 +750,24 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

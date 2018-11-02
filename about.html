@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>1. About the project &mdash; pyramid 0.8.1 documentation</title>
+  <title>1. About the project &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -102,7 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="quickstart.html">3. Pyramid Quickstart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal"><span class="pre">auto_arima</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/datasets.html">7. Toy time-series datasets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributing.html">8. Contributing to Pyramid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributors.html">9. Contributors</a></li>
@@ -111,7 +111,7 @@
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#api-reference">API reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -180,32 +180,32 @@
             
   <div class="section" id="about-the-project">
 <span id="about"></span><h1>1. About the project<a class="headerlink" href="#about-the-project" title="Permalink to this headline">¶</a></h1>
-<p>Pyramid is designed to behave as similarly to R&#8217;s well-known
+<p>Pyramid is designed to behave as similarly to R’s well-known
 <a class="reference external" href="https://www.rdocumentation.org/packages/forecast/versions/8.4/topics/auto.arima">auto.arima</a>
 as possible.</p>
 <p>The project emerged as a result of a long-standing personal debate between
 my colleagues and <a class="reference external" href="https://github.com/tgsmith61591">me</a> about why python is
-vastly superior to R. Since R&#8217;s forecasting capabilities far superceded those of Python&#8217;s
+vastly superior to R. Since R’s forecasting capabilities far superceded those of Python’s
 existing libraries, Pyramid was created to close that gap and give analysts/researchers
 one less reason why R is a viable language for practical machine learning.</p>
-<p><em>(Of course, take my soapbox speech with a grain of salt... I once was an R addict but am now recovering)</em></p>
+<p><em>(Of course, take my soapbox speech with a grain of salt… I once was an R addict but am now recovering)</em></p>
 <div class="section" id="how-it-works">
 <h2>1.1. How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
 <p>Pyramid is essentially a Python &amp; Cython wrapper of several different statistical
 and machine learning libraries (statsmodels and scikit-learn), and operates by generalizing
 all ARIMA models into a single class (unlike statsmodels).</p>
 <p>It does this by wrapping the respective statsmodels interfaces
-(<code class="docutils literal"><span class="pre">ARMA</span></code>, <code class="docutils literal"><span class="pre">ARIMA</span></code> and <code class="docutils literal"><span class="pre">SARIMAX</span></code>) inside the <code class="docutils literal"><span class="pre">pyramid.ARIMA</span></code> class,
+(<code class="docutils literal notranslate"><span class="pre">ARMA</span></code>, <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> and <code class="docutils literal notranslate"><span class="pre">SARIMAX</span></code>) inside the <code class="docutils literal notranslate"><span class="pre">pyramid.ARIMA</span></code> class,
 and as a result there is a bit of monkey patching that happens beneath the hood.</p>
 <div class="section" id="how-auto-arima-works">
-<h3>1.1.1. How <code class="docutils literal"><span class="pre">auto_arima</span></code> works<a class="headerlink" href="#how-auto-arima-works" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">auto_arima</span></code> function itself operates a bit like a grid search, in that it
-tries various sets of <code class="docutils literal"><span class="pre">p</span></code> and <code class="docutils literal"><span class="pre">q</span></code> (also <code class="docutils literal"><span class="pre">P</span></code> and <code class="docutils literal"><span class="pre">Q</span></code> for seasonal models)
+<h3>1.1.1. How <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> works<a class="headerlink" href="#how-auto-arima-works" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> function itself operates a bit like a grid search, in that it
+tries various sets of <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">q</span></code> (also <code class="docutils literal notranslate"><span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">Q</span></code> for seasonal models)
 parameters, selecting the model that minimizes the AIC (or BIC, or whatever
-information criterion you select). To select the differencing terms, <code class="docutils literal"><span class="pre">auto_arima</span></code>
+information criterion you select). To select the differencing terms, <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code>
 uses a test of stationarity (such as an augmented Dickey-Fuller test) and seasonality
 (such as the Canova-Hansen test) for seasonal models.</p>
-<p>For more in-depth information on the process by which <code class="docutils literal"><span class="pre">auto_arima</span></code> selects
+<p>For more in-depth information on the process by which <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> selects
 the best model, check out the <a class="reference internal" href="tips_and_tricks.html#tips-and-tricks"><span class="std std-ref">Tips to using auto_arima</span></a> section.</p>
 </div>
 </div>
@@ -214,17 +214,17 @@ the best model, check out the <a class="reference internal" href="tips_and_trick
 <p>This is an open-source (read: <em>FREE</em>) project. That means several things:</p>
 <ul class="simple">
 <li>It is not infallible</li>
-<li>It&#8217;s a community effort</li>
-<li>Making demands doesn&#8217;t go over well</li>
+<li>It’s a community effort</li>
+<li>Making demands doesn’t go over well</li>
 </ul>
 <p>I know that there are those who have built models with Pyramid as a tool
 to support their work. I also know that people can depend on the functionality of
-this library in order to do their job well. And for that, I&#8217;m committed to
+this library in order to do their job well. And for that, I’m committed to
 keeping things running smoothly.</p>
-<p>However, as I&#8217;m the sole maintainer, things can sometimes stack up.
+<p>However, as I’m the sole maintainer, things can sometimes stack up.
 Please feel free to make pull requests (see <a class="reference internal" href="contributing.html#contrib"><span class="std std-ref">Contributing to Pyramid</span></a>), file issues, and
 make feature requests. But note the third point: <a class="reference internal" href="contributors.html#contributors"><span class="std std-ref">Contributors</span></a> to this
-project do it for fun. Let&#8217;s keep it cordial.</p>
+project do it for fun. Let’s keep it cordial.</p>
 <p><strong>If you encounter any issues in the project, please see the</strong> <a class="reference internal" href="contributing.html#filing-bugs"><span class="std std-ref">Filing bugs</span></a> <strong>section for how to file an issue.</strong></p>
 </div>
 </div>
@@ -249,7 +249,7 @@ project do it for fun. Let&#8217;s keep it cordial.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -268,21 +268,24 @@ project do it for fun. Let&#8217;s keep it cordial.</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

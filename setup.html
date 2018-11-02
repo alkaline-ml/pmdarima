@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>2. Setup &mdash; pyramid 0.8.1 documentation</title>
+  <title>2. Setup &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -102,7 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="quickstart.html">3. Pyramid Quickstart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal"><span class="pre">auto_arima</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/datasets.html">7. Toy time-series datasets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributing.html">8. Contributing to Pyramid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributors.html">9. Contributors</a></li>
@@ -111,7 +111,7 @@
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#api-reference">API reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -190,35 +190,35 @@
 </ul>
 <div class="section" id="install-from-pypi">
 <h2>2.1. Install from PyPi<a class="headerlink" href="#install-from-pypi" title="Permalink to this headline">¶</a></h2>
-<p>Pyramid is on pypi under the package name <code class="docutils literal"><span class="pre">pyramid-arima</span></code> and can be
-downloaded via <code class="docutils literal"><span class="pre">pip</span></code>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ pip install pyramid-arima
+<p>Pyramid is on pypi under the package name <code class="docutils literal notranslate"><span class="pre">pyramid-arima</span></code> and can be
+downloaded via <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install pyramid-arima
 </pre></div>
 </div>
 <p>Pyramid uses Cython, which means there is some C source that was built in
 the distribution process. To ensure the package was built correctly, import
 the following module in python:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.arima</span> <span class="kn">import</span> <span class="n">auto_arima</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.arima</span> <span class="kn">import</span> <span class="n">auto_arima</span>
 </pre></div>
 </div>
-<p>If you encounter an <code class="docutils literal"><span class="pre">ImportError</span></code>, try updating numpy and re-installing. Outdated
+<p>If you encounter an <code class="docutils literal notranslate"><span class="pre">ImportError</span></code>, try updating numpy and re-installing. Outdated
 numpy versions have been observed to break the Pyramid build.</p>
 </div>
 <div class="section" id="build-from-source">
 <h2>2.2. Build from source<a class="headerlink" href="#build-from-source" title="Permalink to this headline">¶</a></h2>
-<p>If you&#8217;d like to install a development or bleeding edge version of Pyramid,
+<p>If you’d like to install a development or bleeding edge version of Pyramid,
 you can always build it from the git source. First clone it from Git:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ git clone https://github.com/tgsmith61591/pyramid.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/tgsmith61591/pyramid.git
 $ <span class="nb">cd</span> pyramid
 </pre></div>
 </div>
-<p>Building the package will require <code class="docutils literal"><span class="pre">gcc</span></code> (unix) or a Windows equivalent, like
-<code class="docutils literal"><span class="pre">MinGW</span></code>. To build in development mode (for running unit tests):</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python setup.py develop
+<p>Building the package will require <code class="docutils literal notranslate"><span class="pre">gcc</span></code> (unix) or a Windows equivalent, like
+<code class="docutils literal notranslate"><span class="pre">MinGW</span></code>. To build in development mode (for running unit tests):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python setup.py develop
 </pre></div>
 </div>
-<p>Alternatively, to install the package in your <code class="docutils literal"><span class="pre">site-packages</span></code>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python setup.py install
+<p>Alternatively, to install the package in your <code class="docutils literal notranslate"><span class="pre">site-packages</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python setup.py install
 </pre></div>
 </div>
 </div>
@@ -244,7 +244,7 @@ $ <span class="nb">cd</span> pyramid
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -263,21 +263,24 @@ $ <span class="nb">cd</span> pyramid
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

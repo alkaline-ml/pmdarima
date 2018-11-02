@@ -131,3 +131,19 @@ following rules before submitting:
       import pandas; print("Pandas", pandas.__version__)
       import statsmodels; print("Statsmodels", statsmodels.__version__)
       import pyramid; print("Pyramid", pyramid.__version__)
+
+- Please don't be a **lazy issue-filer!** Submitting a screen shot of an Excel document,
+  or poorly-formatted/incomplete code makes the maintainers' lives difficult. Please include your data inline
+  in a code-block so maintainers can easily try to replicate. What not to do:
+
+.. image:: img/bad_issue.png
+    :align: center
+    :scale: 40%
+    :alt: Bad issue
+
+A better way to file the same issue (made up; this issue was not actually filed):
+
+.. image:: img/good_issue.png
+    :align: center
+    :scale: 40%
+    :alt: Good issue

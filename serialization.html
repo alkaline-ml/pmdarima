@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>4. Serializing your ARIMA models &mdash; pyramid 0.8.1 documentation</title>
+  <title>4. Serializing your ARIMA models &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -101,7 +101,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal"><span class="pre">auto_arima</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/datasets.html">7. Toy time-series datasets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributing.html">8. Contributing to Pyramid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributors.html">9. Contributors</a></li>
@@ -110,7 +110,7 @@
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#api-reference">API reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -179,11 +179,11 @@
             
   <div class="section" id="serializing-your-arima-models">
 <span id="serializing"></span><h1>4. Serializing your ARIMA models<a class="headerlink" href="#serializing-your-arima-models" title="Permalink to this headline">¶</a></h1>
-<p>After you&#8217;ve fit your model and you&#8217;re ready to start making predictions out
-in your production environment, it&#8217;s time to save your ARIMA to disk.
-Pyramid models can be serialized with <code class="docutils literal"><span class="pre">pickle</span></code> or <code class="docutils literal"><span class="pre">joblib</span></code>, just as with
+<p>After you’ve fit your model and you’re ready to start making predictions out
+in your production environment, it’s time to save your ARIMA to disk.
+Pyramid models can be serialized with <code class="docutils literal notranslate"><span class="pre">pickle</span></code> or <code class="docutils literal notranslate"><span class="pre">joblib</span></code>, just as with
 most other python objects:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.arima</span> <span class="kn">import</span> <span class="n">auto_arima</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.arima</span> <span class="kn">import</span> <span class="n">auto_arima</span>
 <span class="kn">from</span> <span class="nn">pyramid.datasets</span> <span class="kn">import</span> <span class="n">load_lynx</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
@@ -214,7 +214,7 @@ most other python objects:</p>
 <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">pickle_preds</span><span class="p">,</span> <span class="n">joblib_preds</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If your job is to build models, that&#8217;s probably all you really care to know about
+<p>If your job is to build models, that’s probably all you really care to know about
 the serialization process. However, there are several intricacies of how Pyramid
 internally saves a model that you might care to know for development purposes.</p>
 <div class="section" id="intricacies-of-arima-serialization">
@@ -222,18 +222,18 @@ internally saves a model that you might care to know for development purposes.</
 <p>The ARIMA class is a generalization of three models:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">statsmodels.tsa.ARMA</span></code></li>
-<li><code class="docutils literal"><span class="pre">statsmodels.tsa.ARIMA</span></code></li>
-<li><code class="docutils literal"><span class="pre">statsmodels.tsa.statespace.SARIMAX</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">statsmodels.tsa.ARMA</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">statsmodels.tsa.ARIMA</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">statsmodels.tsa.statespace.SARIMAX</span></code></li>
 </ul>
 </div></blockquote>
-<p>The <code class="docutils literal"><span class="pre">statsmodels</span></code> library does not play very nicely with pickling, so under
+<p>The <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code> library does not play very nicely with pickling, so under
 the hood the pyramid ARIMA class does some monkey-patching.</p>
 <div class="section" id="the-serialization-process">
 <h3>4.1.1. The serialization process<a class="headerlink" href="#the-serialization-process" title="Permalink to this headline">¶</a></h3>
 <p>When the pickling process begins, the ARIMA class will first save the internal
-model into a directory defined by the <code class="docutils literal"><span class="pre">pyramid._config.PYRAMID_ARIMA_CACHE</span></code>
-variable (default is <code class="docutils literal"><span class="pre">.pyramid-arima-cache/</span></code>). Next, it will pickle the class
+model into a directory defined by the <code class="docutils literal notranslate"><span class="pre">pyramid._config.PYRAMID_ARIMA_CACHE</span></code>
+variable (default is <code class="docutils literal notranslate"><span class="pre">.pyramid-arima-cache/</span></code>). Next, it will pickle the class
 instance to the defined location, save the location as a temporary attribute,
 and re-attach the model state to the instance so that you can continue to make
 predictions or otherwise use the ARIMA model after pickling.</p>
@@ -241,7 +241,7 @@ predictions or otherwise use the ARIMA model after pickling.</p>
 <div class="section" id="the-de-serialization-process">
 <h3>4.1.2. The de-serialization process<a class="headerlink" href="#the-de-serialization-process" title="Permalink to this headline">¶</a></h3>
 <p>When unpickling an ARIMA, the class instance is unpickled first, and then the
-internal <code class="docutils literal"><span class="pre">statsmodels</span></code> object is loaded from the cached directory, re-attached
+internal <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code> object is loaded from the cached directory, re-attached
 to the model state, and returned.</p>
 </div>
 </div>
@@ -267,7 +267,7 @@ to the model state, and returned.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -286,21 +286,24 @@ to the model state, and returned.</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

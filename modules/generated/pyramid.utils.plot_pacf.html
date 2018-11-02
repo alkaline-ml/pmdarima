@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.utils.plot_pacf &mdash; pyramid 0.8.1 documentation</title>
+  <title>pyramid.utils.plot_pacf &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -90,14 +90,14 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal"><span class="pre">pyramid.datasets</span></code>: Toy univariate timeseries datasets</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-utils-utilities"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>: Utilities</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pyramid.datasets</span></code>: Toy univariate timeseries datasets</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>: Utilities</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../classes.html#array-helper-functions-metaestimators">Array helper functions &amp; metaestimators</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#plotting-utilities-wrappers">Plotting utilities &amp; wrappers</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.autocorr_plot.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.autocorr_plot</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.plot_acf.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.plot_acf</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.plot_pacf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.autocorr_plot.html"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.autocorr_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.plot_acf.html"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.plot_acf</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.plot_pacf</a></li>
 </ul>
 </li>
 </ul>
@@ -106,7 +106,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -154,7 +154,7 @@
         
           <li><a href="../classes.html">API Reference</a> &raquo;</li>
         
-      <li><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.plot_pacf</li>
+      <li><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.plot_pacf</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -174,12 +174,12 @@
            <div itemprop="articleBody">
             
   <div class="section" id="pyramid-utils-plot-pacf">
-<h1><a class="reference internal" href="../classes.html#module-pyramid.utils" title="pyramid.utils"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.utils</span></code></a>.plot_pacf<a class="headerlink" href="#pyramid-utils-plot-pacf" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="../classes.html#module-pyramid.utils" title="pyramid.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyramid.utils</span></code></a>.plot_pacf<a class="headerlink" href="#pyramid-utils-plot-pacf" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyramid.utils.plot_pacf">
-<code class="descclassname">pyramid.utils.</code><code class="descname">plot_pacf</code><span class="sig-paren">(</span><em>series</em>, <em>ax=None</em>, <em>lags=None</em>, <em>alpha=None</em>, <em>method='yw'</em>, <em>use_vlines=True</em>, <em>title='Partial Autocorrelation'</em>, <em>zero=True</em>, <em>vlines_kwargs=None</em>, <em>show=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/utils/visualization.py#L176"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/utils/visualization.html#plot_pacf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.utils.plot_pacf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plot a series&#8217; partial auto-correlation as a line plot.</p>
-<p>A wrapper method for the statsmodels <code class="docutils literal"><span class="pre">plot_pacf</span></code> method.</p>
+<code class="descclassname">pyramid.utils.</code><code class="descname">plot_pacf</code><span class="sig-paren">(</span><em>series</em>, <em>ax=None</em>, <em>lags=None</em>, <em>alpha=None</em>, <em>method='yw'</em>, <em>use_vlines=True</em>, <em>title='Partial Autocorrelation'</em>, <em>zero=True</em>, <em>vlines_kwargs=None</em>, <em>show=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/fd4626a/pyramid/utils/visualization.py#L176"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/utils/visualization.html#plot_pacf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.utils.plot_pacf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a series’ partial auto-correlation as a line plot.</p>
+<p>A wrapper method for the statsmodels <code class="docutils literal notranslate"><span class="pre">plot_pacf</span></code> method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -197,19 +197,19 @@ created.</p>
 <blockquote>
 <div><p>int or Array of lag values, used on horizontal axis. Uses
 np.arange(lags) when lags is an int.  If not provided,
-<code class="docutils literal"><span class="pre">lags=np.arange(len(corr))</span></code> is used.</p>
+<code class="docutils literal notranslate"><span class="pre">lags=np.arange(len(corr))</span></code> is used.</p>
 </div></blockquote>
 <p><strong>alpha</strong> : scalar, optional (default=None)</p>
 <blockquote>
 <div><p>If a number is given, the confidence intervals for the given level are
 returned. For instance if alpha=.05, 95 % confidence intervals are
 returned where the standard deviation is computed according to
-Bartlett&#8217;s formula. If None, no confidence intervals are plotted.</p>
+Bartlett’s formula. If None, no confidence intervals are plotted.</p>
 </div></blockquote>
-<p><strong>method</strong> : str, optional (default=&#8217;yw&#8217;)</p>
+<p><strong>method</strong> : str, optional (default=’yw’)</p>
 <blockquote>
 <div><p>Specifies which method for the calculations to use. One of
-{&#8216;ywunbiased&#8217;, &#8216;ywmle&#8217;, &#8216;ols&#8217;, &#8216;ld&#8217;, &#8216;ldb&#8217;, &#8216;ldunbiased&#8217;, &#8216;ldbiased&#8217;}:</p>
+{‘ywunbiased’, ‘ywmle’, ‘ols’, ‘ld’, ‘ldb’, ‘ldunbiased’, ‘ldbiased’}:</p>
 <ul class="simple">
 <li>yw or ywunbiased : yule walker with bias correction in denominator
 for acovf. Default.</li>
@@ -222,12 +222,12 @@ for acovf. Default.</li>
 <p><strong>use_vlines</strong> : bool, optional (default=True)</p>
 <blockquote>
 <div><p>If True, vertical lines and markers are plotted.
-If False, only markers are plotted.  The default marker is &#8216;o&#8217;; it can
-be overridden with a <code class="docutils literal"><span class="pre">marker</span></code> kwarg.</p>
+If False, only markers are plotted.  The default marker is ‘o’; it can
+be overridden with a <code class="docutils literal notranslate"><span class="pre">marker</span></code> kwarg.</p>
 </div></blockquote>
-<p><strong>title</strong> : str, optional (default=&#8217;Partial Autocorrelation&#8217;)</p>
+<p><strong>title</strong> : str, optional (default=’Partial Autocorrelation’)</p>
 <blockquote>
-<div><p>Title to place on plot. Default is &#8216;Partial Autocorrelation&#8217;</p>
+<div><p>Title to place on plot. Default is ‘Partial Autocorrelation’</p>
 </div></blockquote>
 <p><strong>zero</strong> : bool, optional (default=True)</p>
 <blockquote>
@@ -240,19 +240,19 @@ Default is True.</p>
 </div></blockquote>
 <p><strong>show</strong> : bool, optional (default=True)</p>
 <blockquote>
-<div><p>Whether to show the plot after it&#8217;s been created. If not, will return
+<div><p>Whether to show the plot after it’s been created. If not, will return
 the plot as an Axis object instead.</p>
 </div></blockquote>
 <p><strong>**kwargs</strong> : kwargs, optional</p>
 <blockquote>
 <div><p>Optional keyword arguments that are directly passed on to the
-Matplotlib <code class="docutils literal"><span class="pre">plot</span></code> and <code class="docutils literal"><span class="pre">axhline</span></code> functions.</p>
+Matplotlib <code class="docutils literal notranslate"><span class="pre">plot</span></code> and <code class="docutils literal notranslate"><span class="pre">axhline</span></code> functions.</p>
 </div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>plt</strong> : Axis or None</p>
 <blockquote class="last">
-<div><p>If <code class="docutils literal"><span class="pre">show</span></code> is True, does not return anything. If False, returns
+<div><p>If <code class="docutils literal notranslate"><span class="pre">show</span></code> is True, does not return anything. If False, returns
 the Axis object.</p>
 </div></blockquote>
 </td>
@@ -260,11 +260,11 @@ the Axis object.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>This method will only show the plot if <code class="docutils literal"><span class="pre">show=True</span></code> (which is the default
+<p>This method will only show the plot if <code class="docutils literal notranslate"><span class="pre">show=True</span></code> (which is the default
 behavior). To simply get the axis back (say, to add to another canvas),
-use <code class="docutils literal"><span class="pre">show=False</span></code>.</p>
+use <code class="docutils literal notranslate"><span class="pre">show=False</span></code>.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot_pacf</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot_pacf</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
 <span class="go">&lt;matplotlib.figure.Figure object at 0x129df1630&gt;</span>
 </pre></div>
 </div>
@@ -292,7 +292,7 @@ use <code class="docutils literal"><span class="pre">show=False</span></code>.</
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -311,21 +311,24 @@ use <code class="docutils literal"><span class="pre">show=False</span></code>.</
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Persisting an ARIMA model &mdash; pyramid 0.8.1 documentation</title>
+  <title>Persisting an ARIMA model &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -103,7 +103,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -170,34 +170,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="sphx-glr-download-link-note admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-arima-example-persisting-a-model-py"><span class="std std-ref">here</span></a> to download the full example code</p>
-</div>
-<div class="sphx-glr-example-title section" id="persisting-an-arima-model">
+  <div class="section" id="persisting-an-arima-model">
 <span id="sphx-glr-auto-examples-arima-example-persisting-a-model-py"></span><h1>Persisting an ARIMA model<a class="headerlink" href="#persisting-an-arima-model" title="Permalink to this headline">¶</a></h1>
 <p>This example demonstrates how we can persist an ARIMA model to disk after
 fitting it. It can then be loaded back up and used to generate forecasts.</p>
 <br/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Predictions: array([21966.69716052, 25983.70919898, 30225.3097858 , 35417.12496062,
-       13011.36188002, 19639.41027497, 21506.58176014, 23674.33998152,
-       21685.76394094, 23669.77818699, 26955.35255966, 22755.25061814,
-       19808.16132384, 23578.78184644, 27845.86719682, 32923.89426587,
-       10475.68778148, 17024.74533504, 18831.64797441, 20929.54671541,
-       18876.02414677, 20792.57512822, 24011.97547388, 19745.03907326,
-       16731.45363651, 20435.40470867, 24635.90938834, 29647.31030788,
-        7132.5009712 , 13614.94373811, 15355.23770438, 17386.52464053,
-       15266.39187133, 17116.33183039, 20269.12157466, 15935.57435698,
-       12855.37821366, 16492.71852265, 20626.61246813, 25571.40263864,
-        2989.98256053,  9405.81458213, 11079.49780507, 13044.17399687,
-       10857.43048384, 12640.75969882, 15726.93869913, 11326.78073743,
-        8179.97385012, 11750.7034151 , 15817.98661659])
+<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Predictions</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">21966.6971941</span> <span class="p">,</span> <span class="mf">25983.70920892</span><span class="p">,</span> <span class="mf">30225.30980232</span><span class="p">,</span> <span class="mf">35417.12497981</span><span class="p">,</span>
+       <span class="mf">13011.36189601</span><span class="p">,</span> <span class="mf">19639.41029796</span><span class="p">,</span> <span class="mf">21506.58178159</span><span class="p">,</span> <span class="mf">23674.34000671</span><span class="p">,</span>
+       <span class="mf">21685.76396612</span><span class="p">,</span> <span class="mf">23669.77821621</span><span class="p">,</span> <span class="mf">26955.35258819</span><span class="p">,</span> <span class="mf">22755.25064686</span><span class="p">,</span>
+       <span class="mf">19808.16137427</span><span class="p">,</span> <span class="mf">23578.7818855</span> <span class="p">,</span> <span class="mf">27845.8672411</span> <span class="p">,</span> <span class="mf">32923.89431303</span><span class="p">,</span>
+       <span class="mf">10475.68782763</span><span class="p">,</span> <span class="mf">17024.74538795</span><span class="p">,</span> <span class="mf">18831.6480275</span> <span class="p">,</span> <span class="mf">20929.54677258</span><span class="p">,</span>
+       <span class="mf">18876.02420517</span><span class="p">,</span> <span class="mf">20792.57519134</span><span class="p">,</span> <span class="mf">24011.97553733</span><span class="p">,</span> <span class="mf">19745.03913772</span><span class="p">,</span>
+       <span class="mf">16731.45372362</span><span class="p">,</span> <span class="mf">20435.40478528</span><span class="p">,</span> <span class="mf">24635.90947108</span><span class="p">,</span> <span class="mf">29647.31039438</span><span class="p">,</span>
+        <span class="mf">7132.50105759</span><span class="p">,</span> <span class="mf">13614.94383214</span><span class="p">,</span> <span class="mf">15355.2377995</span> <span class="p">,</span> <span class="mf">17386.52474061</span><span class="p">,</span>
+       <span class="mf">15266.39197353</span><span class="p">,</span> <span class="mf">17116.33193821</span><span class="p">,</span> <span class="mf">20269.12168371</span><span class="p">,</span> <span class="mf">15935.57446793</span><span class="p">,</span>
+       <span class="mf">12855.37834815</span><span class="p">,</span> <span class="mf">16492.71864753</span><span class="p">,</span> <span class="mf">20626.61260004</span><span class="p">,</span> <span class="mf">25571.40277521</span><span class="p">,</span>
+        <span class="mf">2989.98269789</span><span class="p">,</span>  <span class="mf">9405.81472801</span><span class="p">,</span> <span class="mf">11079.49795294</span><span class="p">,</span> <span class="mf">13044.1741506</span> <span class="p">,</span>
+       <span class="mf">10857.43064059</span><span class="p">,</span> <span class="mf">12640.75986207</span><span class="p">,</span> <span class="mf">15726.9388645</span> <span class="p">,</span> <span class="mf">11326.7809056</span> <span class="p">,</span>
+        <span class="mf">8179.97404272</span><span class="p">,</span> <span class="mf">11750.70359899</span><span class="p">,</span> <span class="mf">15817.9868084</span> <span class="p">])</span>
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
@@ -235,12 +231,12 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
         <span class="k">pass</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.807 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-arima-example-persisting-a-model-py">
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.958 seconds)</p>
+<div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_persisting_a_model.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_persisting_a_model.py</span></code></a></div>
+<a class="reference download internal" href="../../_downloads/example_persisting_a_model.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_persisting_a_model.py</span></code></a></div>
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_persisting_a_model.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_persisting_a_model.ipynb</span></code></a></div>
+<a class="reference download internal" href="../../_downloads/example_persisting_a_model.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_persisting_a_model.ipynb</span></code></a></div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
@@ -265,7 +261,7 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -284,21 +280,24 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

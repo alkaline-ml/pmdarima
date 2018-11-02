@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>3. Pyramid Quickstart &mdash; pyramid 0.8.1 documentation</title>
+  <title>3. Pyramid Quickstart &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -101,7 +101,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal"><span class="pre">auto_arima</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/datasets.html">7. Toy time-series datasets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributing.html">8. Contributing to Pyramid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributors.html">9. Contributors</a></li>
@@ -110,7 +110,7 @@
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#api-reference">API reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -179,10 +179,10 @@
             
   <div class="section" id="pyramid-quickstart">
 <span id="quickstart"></span><h1>3. Pyramid Quickstart<a class="headerlink" href="#pyramid-quickstart" title="Permalink to this headline">¶</a></h1>
-<p>Since pyramid is intended to replace R&#8217;s <code class="docutils literal"><span class="pre">auto.arima</span></code>, the interface is
+<p>Since pyramid is intended to replace R’s <code class="docutils literal notranslate"><span class="pre">auto.arima</span></code>, the interface is
 designed to be quick to learn and easy to use, even for R users making the switch.
 Common functions and tools are elevated to the top-level of the package:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
 
 <span class="c1"># Create an array like you would in R</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
@@ -196,8 +196,8 @@ Common functions and tools are elevated to the top-level of the package:</p>
 </div>
 <div class="section" id="auto-arima-example">
 <h2>3.1. Auto-ARIMA example<a class="headerlink" href="#auto-arima-example" title="Permalink to this headline">¶</a></h2>
-<p>Here&#8217;s a quick example of how we can fit an <code class="docutils literal"><span class="pre">auto_arima</span></code> with pyramid:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<p>Here’s a quick example of how we can fit an <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> with pyramid:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
 <span class="kn">from</span> <span class="nn">pyramid.datasets</span> <span class="kn">import</span> <span class="n">load_wineind</span>
 
@@ -214,8 +214,8 @@ Common functions and tools are elevated to the top-level of the package:</p>
                              <span class="n">stepwise</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># set to stepwise</span>
 </pre></div>
 </div>
-<p>It&#8217;s easy to examine your model fit results. Simply use the <code class="docutils literal"><span class="pre">summary</span></code> method:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stepwise_fit</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<p>It’s easy to examine your model fit results. Simply use the <code class="docutils literal notranslate"><span class="pre">summary</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stepwise_fit</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 <span class="go">&lt;class &#39;statsmodels.iolib.summary.Summary&#39;&gt;</span>
 <span class="go">&quot;&quot;&quot;</span>
 <span class="go">                                 Statespace Model Results</span>
@@ -272,7 +272,7 @@ Common functions and tools are elevated to the top-level of the package:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -291,21 +291,24 @@ Common functions and tools are elevated to the top-level of the package:</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

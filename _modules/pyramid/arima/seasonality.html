@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.arima.seasonality &mdash; pyramid 0.8.1 documentation</title>
+  <title>pyramid.arima.seasonality &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -90,7 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -175,7 +175,7 @@
 <span class="kn">from</span> <span class="nn">..utils.array</span> <span class="k">import</span> <span class="n">c</span>
 <span class="kn">from</span> <span class="nn">.stationarity</span> <span class="k">import</span> <span class="n">_BaseStationarityTest</span>
 <span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="k">import</span> <span class="n">DTYPE</span>
-<span class="kn">from</span> <span class="nn">._arima</span> <span class="k">import</span> <span class="n">C_compute_frecob_fast</span><span class="p">,</span> <span class="n">C_pop_A</span>
+<span class="kn">from</span> <span class="nn">._arima</span> <span class="k">import</span> <span class="n">C_canova_hansen_sd_test</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;CHTest&#39;</span>
@@ -244,7 +244,6 @@
 
         <span class="c1"># no use checking, because this is an internal method</span>
         <span class="c1"># if n &lt;= s:  raise ValueError(&#39;too few samples (%i&lt;=%i)&#39; % (n, s))</span>
-
         <span class="n">frec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
         <span class="n">ltrunc</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="p">((</span><span class="n">n</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span><span class="p">)))</span>
         <span class="n">R1</span> <span class="o">=</span> <span class="n">CHTest</span><span class="o">.</span><span class="n">_seas_dummy</span><span class="p">(</span><span class="n">wts</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
@@ -271,33 +270,16 @@
 
         <span class="c1"># more efficient numpy:</span>
         <span class="n">Fhat</span> <span class="o">=</span> <span class="n">Fhataux</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-        <span class="c1"># wnw &lt;- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)</span>
-        <span class="n">wnw</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ltrunc</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">ltrunc</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span>
         <span class="n">Ne</span> <span class="o">=</span> <span class="n">Fhataux</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">Omnw</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="c1"># original R code:</span>
-        <span class="c1"># for (k in 1:ltrunc)</span>
-        <span class="c1">#     Omnw &lt;- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%</span>
-        <span class="c1">#         Fhataux[1:(Ne - k), ]) * wnw[k]</span>
-
-        <span class="c1"># translated R code:</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ltrunc</span><span class="p">):</span>
-            <span class="n">Omnw</span> <span class="o">=</span> <span class="n">Omnw</span> <span class="o">+</span> <span class="p">(</span><span class="n">Fhataux</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">Ne</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
-                <span class="n">Fhataux</span><span class="p">[:(</span><span class="n">Ne</span> <span class="o">-</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="p">:]))</span> <span class="o">*</span> <span class="n">wnw</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-
-        <span class="c1"># Omfhat &lt;- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne</span>
-        <span class="n">Omfhat</span> <span class="o">=</span> <span class="p">(</span><span class="n">Fhataux</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Fhataux</span><span class="p">)</span> <span class="o">+</span> <span class="n">Omnw</span> <span class="o">+</span> <span class="n">Omnw</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">Ne</span>
-
-        <span class="c1"># populate the A matrix</span>
-        <span class="n">A</span><span class="p">,</span> <span class="n">frecob</span> <span class="o">=</span> <span class="n">C_compute_frecob_fast</span><span class="p">(</span><span class="n">frec</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">Omfhat</span><span class="p">)</span>
-        <span class="n">C_pop_A</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">frecob</span><span class="p">)</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Omfhat</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="c1"># As of v0.9.1, use the C_canova_hansen_sd_test function to compute</span>
+        <span class="c1"># Omnw, Omfhat, A, frecob. This avoids the overhead of multiple calls</span>
+        <span class="c1"># to C functions</span>
+        <span class="n">A</span><span class="p">,</span> <span class="n">AtOmfhatA</span> <span class="o">=</span> <span class="n">C_canova_hansen_sd_test</span><span class="p">(</span><span class="n">ltrunc</span><span class="p">,</span> <span class="n">Ne</span><span class="p">,</span> <span class="n">Fhataux</span><span class="p">,</span> <span class="n">frec</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
 
         <span class="c1"># UPDATE 01/04/2018 - we can get away without computing u, v</span>
         <span class="c1"># (this is also MUCH MUCH faster!!!)</span>
-        <span class="n">sv</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">compute_uv</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
+        <span class="n">sv</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">AtOmfhatA</span><span class="p">,</span> <span class="n">compute_uv</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
 
         <span class="c1"># From R:</span>
         <span class="c1"># double.eps: the smallest positive floating-point number ‘x’ such that</span>
@@ -313,7 +295,7 @@
         <span class="c1"># a nasty mess of dot products... this is the (horrendous) R code:</span>
         <span class="c1"># (1/N^2) * sum(diag(solve(tmp) %*% t(A) %*% t(Fhat) %*% Fhat %*% A))</span>
         <span class="c1"># https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L321</span>
-        <span class="n">solved</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">solved</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">AtOmfhatA</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">AtOmfhatA</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">solved</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
             <span class="n">Fhat</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Fhat</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
@@ -407,7 +389,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -426,21 +408,24 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

@@ -1,8 +1,4 @@
-.. note::
-    :class: sphx-glr-download-link-note
 
-    Click :ref:`here <sphx_glr_download_auto_examples_arima_example_add_new_samples.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
 
 .. _sphx_glr_auto_examples_arima_example_add_new_samples.py:
 
@@ -24,7 +20,7 @@ with respect to true, observed values.
 
 
 .. image:: /auto_examples/arima/images/sphx_glr_example_add_new_samples_001.png
-    :class: sphx-glr-single-img
+    :align: center
 
 
 
@@ -82,17 +78,13 @@ with respect to true, observed values.
     axes[1].set_title("Added new observed values with new forecasts")
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.290 seconds)
+**Total running time of the script:** ( 0 minutes  0.156 seconds)
 
-
-.. _sphx_glr_download_auto_examples_arima_example_add_new_samples.py:
 
 
 .. only :: html
 
  .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
-
 
 
   .. container:: sphx-glr-download

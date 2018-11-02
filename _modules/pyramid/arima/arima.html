@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.arima.arima &mdash; pyramid 0.8.1 documentation</title>
+  <title>pyramid.arima.arima &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -90,7 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -178,9 +178,9 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="c1"># DTYPE for arrays</span>
-<span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="k">import</span> <span class="n">DTYPE</span>
-<span class="kn">from</span> <span class="nn">..compat.python</span> <span class="k">import</span> <span class="n">long</span>
+<span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="k">import</span> <span class="n">DTYPE</span>  <span class="c1"># DTYPE for arrays</span>
+<span class="kn">from</span> <span class="nn">..compat.python</span> <span class="k">import</span> <span class="n">long</span><span class="p">,</span> <span class="n">safe_mkdirs</span>
+<span class="kn">from</span> <span class="nn">..compat</span> <span class="k">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">get_callable</span><span class="p">,</span> <span class="n">if_has_delegate</span>
 <span class="kn">from</span> <span class="nn">..utils.array</span> <span class="k">import</span> <span class="n">diff</span>
 <span class="kn">from</span> <span class="nn">.._config</span> <span class="k">import</span> <span class="n">PYRAMID_ARIMA_CACHE</span><span class="p">,</span> <span class="n">PICKLE_HASH_PATTERN</span>
@@ -501,10 +501,7 @@
             <span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span> <span class="o">=</span> <span class="n">_fit_wrapper</span><span class="p">()</span>
 
         <span class="c1"># Set df_model attribute for SARIMAXResults object</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="p">,</span> <span class="s1">&#39;df_model&#39;</span><span class="p">):</span>
-            <span class="n">df_model</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">k_exog</span> <span class="o">+</span> <span class="n">fit</span><span class="o">.</span><span class="n">k_trend</span> <span class="o">+</span> <span class="n">fit</span><span class="o">.</span><span class="n">k_ar</span> <span class="o">+</span> \
-                       <span class="n">fit</span><span class="o">.</span><span class="n">k_ma</span> <span class="o">+</span> <span class="n">fit</span><span class="o">.</span><span class="n">k_seasonal_ar</span> <span class="o">+</span> <span class="n">fit</span><span class="o">.</span><span class="n">k_seasonal_ma</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="p">,</span> <span class="s1">&#39;df_model&#39;</span><span class="p">,</span> <span class="n">df_model</span><span class="p">)</span>
+        <span class="n">sm_compat</span><span class="o">.</span><span class="n">bind_df_model</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="p">)</span>
 
         <span class="c1"># if the model is fit with an exogenous array, it must</span>
         <span class="c1"># be predicted with one as well.</span>
@@ -653,9 +650,7 @@
             <span class="c1"># The confidence intervals may be a Pandas frame if it comes from</span>
             <span class="c1"># SARIMAX &amp; we want Numpy. We will to duck type it so we don&#39;t add</span>
             <span class="c1"># new explicit requirements for the package</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">conf_int</span><span class="p">,</span> <span class="s2">&quot;iloc&quot;</span><span class="p">):</span>  <span class="c1"># duck type for pd.DataFrame</span>
-                <span class="n">conf_int</span> <span class="o">=</span> <span class="n">conf_int</span><span class="o">.</span><span class="n">values</span>
-            <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">conf_int</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">check_array</span><span class="p">(</span><span class="n">conf_int</span><span class="p">)</span>  <span class="c1"># duck type for pd.DataFrame</span>
         <span class="k">return</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="ARIMA.fit_predict"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.fit_predict">[docs]</a>    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
@@ -698,13 +693,16 @@
 
     <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;I am being pickled...&quot;&quot;&quot;</span>
-        <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tmp_pkl_&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-        <span class="c1"># if this already contains a pointer to a &quot;saved state&quot; model,</span>
-        <span class="c1"># delete that model and replace it with a new one</span>
-        <span class="c1"># FIXME: v0.7.2+ - do we want to keep this around for later unpickling?</span>
-        <span class="k">if</span> <span class="n">loc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+        <span class="c1"># In versions &lt;0.9.0, if this already contains a pointer to a</span>
+        <span class="c1"># &quot;saved state&quot; model, we deleted that model and replaced it with the</span>
+        <span class="c1"># new one.</span>
+        <span class="c1"># In version &gt;= v0.9.0, we keep the old model around, since that&#39;s how</span>
+        <span class="c1"># the user expects it should probably work (otherwise unpickling the</span>
+        <span class="c1"># previous state of the model would raise an OSError).</span>
+        <span class="c1"># loc = self.__dict__.get(&#39;tmp_pkl_&#39;, None)</span>
+        <span class="c1"># if loc is not None:</span>
+        <span class="c1">#     os.unlink(loc)</span>
 
         <span class="c1"># get the new location for where to save the results</span>
         <span class="n">new_loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pickle_hash_file</span><span class="p">()</span>
@@ -712,12 +710,7 @@
 
         <span class="c1"># check that the cache folder exists, and if not, make it.</span>
         <span class="n">cache_loc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="n">PYRAMID_ARIMA_CACHE</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">cache_loc</span><span class="p">)</span>
-        <span class="c1"># since this is a race condition, just try to make it</span>
-        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="mi">17</span><span class="p">:</span>
-                <span class="k">raise</span>
+        <span class="n">safe_mkdirs</span><span class="p">(</span><span class="n">cache_loc</span><span class="p">)</span>
 
         <span class="c1"># now create the full path with the cache folder</span>
         <span class="n">new_loc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cache_loc</span><span class="p">,</span> <span class="n">new_loc</span><span class="p">)</span>
@@ -754,7 +747,7 @@
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">_warn_for_older_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Added in v0.7.2 - check for the version pickled under and warn</span>
+        <span class="c1"># Added in v0.8.1 - check for the version pickled under and warn</span>
         <span class="c1"># if it&#39;s different from the current version</span>
         <span class="n">do_warn</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">modl_version</span> <span class="o">=</span> <span class="kc">None</span>
@@ -772,7 +765,7 @@
             <span class="c1"># the arima_res_ attr.</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">):</span>  <span class="c1"># it was fit, but is older</span>
                 <span class="n">do_warn</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="n">modl_version</span> <span class="o">=</span> <span class="s1">&#39;&lt;0.7.2&#39;</span>
+                <span class="n">modl_version</span> <span class="o">=</span> <span class="s1">&#39;&lt;0.8.1&#39;</span>
 
             <span class="c1"># else: it may not have the model (not fit) and still be older,</span>
             <span class="c1"># but we can&#39;t detect that.</span>
@@ -780,7 +773,7 @@
         <span class="c1"># Means it was older</span>
         <span class="k">if</span> <span class="n">do_warn</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;You&#39;ve deserialized an ARIMA from a version (</span><span class="si">%s</span><span class="s2">) &quot;</span>
-                          <span class="s2">&quot;that differs from your installed version of &quot;</span>
+                          <span class="s2">&quot;that does not match your installed version of &quot;</span>
                           <span class="s2">&quot;Pyramid (</span><span class="si">%s</span><span class="s2">). This could cause unforeseen behavior.&quot;</span>
                           <span class="o">%</span> <span class="p">(</span><span class="n">modl_version</span><span class="p">,</span> <span class="n">this_version</span><span class="p">),</span> <span class="ne">UserWarning</span><span class="p">)</span>
 
@@ -828,7 +821,7 @@
         <span class="n">n_samples</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># if exogenous is None and new exog provided, or vice versa, raise</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_exog</span><span class="p">(</span><span class="n">exogenous</span><span class="p">)</span>
+        <span class="n">exogenous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_exog</span><span class="p">(</span><span class="n">exogenous</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
 
         <span class="c1"># ensure the k_exog matches</span>
         <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -928,8 +921,8 @@
             <span class="c1"># Point the arima result to the new model</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">new_model</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.aic"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.aic">[docs]</a>    <span class="k">def</span> <span class="nf">aic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.aic"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.aic">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">aic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the AIC, the Akaike Information Criterion:</span>
 
 <span class="sd">            :code:`-2 * llf + 2 * df_model`</span>
@@ -949,8 +942,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">aic</span></div>
 
-    <span class="nd">@if_has_delegate</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.aicc"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.aicc">[docs]</a>    <span class="k">def</span> <span class="nf">aicc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.aicc"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.aicc">[docs]</a>    <span class="nd">@if_has_delegate</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">aicc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the AICc, the corrected Akaike Information Criterion:</span>
 
 <span class="sd">            :code:`AIC + 2 * df_model * (df_model + 1) / (nobs - df_model - 1)`</span>
@@ -978,8 +971,8 @@
         <span class="n">df_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">df_model</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># add one for constant term</span>
         <span class="k">return</span> <span class="n">aic</span> <span class="o">+</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">df_model</span> <span class="o">*</span> <span class="p">(</span><span class="n">nobs</span> <span class="o">/</span> <span class="p">(</span><span class="n">nobs</span> <span class="o">-</span> <span class="n">df_model</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.arparams"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.arparams">[docs]</a>    <span class="k">def</span> <span class="nf">arparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.arparams"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.arparams">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">arparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the parameters associated with the AR coefficients in the model.</span>
 
 <span class="sd">        Returns</span>
@@ -989,8 +982,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">arparams</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.arroots"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.arroots">[docs]</a>    <span class="k">def</span> <span class="nf">arroots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.arroots"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.arroots">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">arroots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The roots of the AR coefficients are the solution to:</span>
 
 <span class="sd">            :code:`(1 - arparams[0] * z - arparams[1] * z^2 - ... - arparams[</span>
@@ -1006,8 +999,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">arroots</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.bic"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.bic">[docs]</a>    <span class="k">def</span> <span class="nf">bic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.bic"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.bic">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">bic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the BIC, the Bayes Information Criterion:</span>
 
 <span class="sd">            :code:`-2 * llf + log(nobs) * df_model`</span>
@@ -1027,8 +1020,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">bic</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.bse"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.bse">[docs]</a>    <span class="k">def</span> <span class="nf">bse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.bse"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.bse">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">bse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the standard errors of the parameters. These are</span>
 <span class="sd">        computed using the numerical Hessian.</span>
 
@@ -1039,8 +1032,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">bse</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.conf_int"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.conf_int">[docs]</a>    <span class="k">def</span> <span class="nf">conf_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.conf_int"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.conf_int">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">conf_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the confidence interval of the fitted parameters.</span>
 
 <span class="sd">        Returns</span>
@@ -1055,8 +1048,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">conf_int</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.df_model"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.df_model">[docs]</a>    <span class="k">def</span> <span class="nf">df_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.df_model"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.df_model">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">df_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The model degrees of freedom: ``k_exog`` + ``k_trend`` +</span>
 <span class="sd">        ``k_ar`` + ``k_ma``.</span>
 
@@ -1067,8 +1060,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">df_model</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.df_resid"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.df_resid">[docs]</a>    <span class="k">def</span> <span class="nf">df_resid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.df_resid"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.df_resid">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">df_resid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the residual degrees of freedom:</span>
 
 <span class="sd">            :code:`nobs - df_model`</span>
@@ -1080,8 +1073,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">df_resid</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.hqic"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.hqic">[docs]</a>    <span class="k">def</span> <span class="nf">hqic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.hqic"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.hqic">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">hqic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the Hannan-Quinn Information Criterion:</span>
 
 <span class="sd">            :code:`-2 * llf + 2 * (`df_model`) * log(log(nobs))`</span>
@@ -1100,8 +1093,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">hqic</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.maparams"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.maparams">[docs]</a>    <span class="k">def</span> <span class="nf">maparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.maparams"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.maparams">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">maparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the value of the moving average coefficients.</span>
 
 <span class="sd">        Returns</span>
@@ -1111,8 +1104,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">maparams</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.maroots"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.maroots">[docs]</a>    <span class="k">def</span> <span class="nf">maroots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.maroots"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.maroots">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">maroots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The roots of the MA coefficients are the solution to:</span>
 
 <span class="sd">            :code:`(1 + maparams[0] * z + maparams[1] * z^2 + ... + maparams[</span>
@@ -1139,8 +1132,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">oob_</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.params"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.params">[docs]</a>    <span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.params"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.params">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the parameters of the model. The order of variables is the trend</span>
 <span class="sd">        coefficients and the :func:`k_exog` exogenous coefficients, then the</span>
 <span class="sd">        :func:`k_ar` AR coefficients, and finally the :func:`k_ma` MA</span>
@@ -1153,8 +1146,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">params</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.pvalues"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.pvalues">[docs]</a>    <span class="k">def</span> <span class="nf">pvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.pvalues"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.pvalues">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">pvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the p-values associated with the t-values of the coefficients.</span>
 <span class="sd">        Note that the coefficients are assumed to have a Student&#39;s T</span>
 <span class="sd">        distribution.</span>
@@ -1166,8 +1159,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">pvalues</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.resid"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.resid">[docs]</a>    <span class="k">def</span> <span class="nf">resid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.resid"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.resid">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">resid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the model residuals. If the model is fit using &#39;mle&#39;, then the</span>
 <span class="sd">        residuals are created via the Kalman Filter. If the model is fit</span>
 <span class="sd">        using &#39;css&#39; then the residuals are obtained via</span>
@@ -1181,8 +1174,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">resid</span></div>
 
-    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="ARIMA.summary"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.summary"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.summary">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a summary of the ARIMA model&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span></div></div>
 </pre></div>
@@ -1197,7 +1190,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -1216,21 +1209,24 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Fitting an auto_arima model &mdash; pyramid 0.8.1 documentation</title>
+  <title>Fitting an auto_arima model &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -103,7 +103,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -170,24 +170,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="sphx-glr-download-link-note admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-arima-example-auto-arima-py"><span class="std std-ref">here</span></a> to download the full example code</p>
-</div>
-<div class="sphx-glr-example-title section" id="fitting-an-auto-arima-model">
+  <div class="section" id="fitting-an-auto-arima-model">
 <span id="sphx-glr-auto-examples-arima-example-auto-arima-py"></span><h1>Fitting an auto_arima model<a class="headerlink" href="#fitting-an-auto-arima-model" title="Permalink to this headline">¶</a></h1>
-<p>This example demonstrates how we can use the <code class="docutils literal"><span class="pre">auto_arima</span></code> function to
-select an optimal time series model. We&#8217;ll be fitting our model on the lynx
+<p>This example demonstrates how we can use the <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> function to
+select an optimal time series model. We’ll be fitting our model on the lynx
 dataset available in the <a class="reference internal" href="../../modules/datasets.html#datasets"><span class="std std-ref">Toy time-series datasets</span></a> submodule.</p>
-<br/><img alt="../../_images/sphx_glr_example_auto_arima_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_example_auto_arima_001.png" />
+<br/><img alt="../../_images/sphx_glr_example_auto_arima_001.png" class="align-center" src="../../_images/sphx_glr_example_auto_arima_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Test RMSE: 1258.625
+<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Test</span> <span class="n">RMSE</span><span class="p">:</span> <span class="mf">1258.625</span>
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
@@ -230,12 +226,12 @@ dataset available in the <a class="reference internal" href="../../modules/datas
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Year&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.227 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-arima-example-auto-arima-py">
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.162 seconds)</p>
+<div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_auto_arima.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_auto_arima.py</span></code></a></div>
+<a class="reference download internal" href="../../_downloads/example_auto_arima.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_auto_arima.py</span></code></a></div>
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_auto_arima.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_auto_arima.ipynb</span></code></a></div>
+<a class="reference download internal" href="../../_downloads/example_auto_arima.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_auto_arima.ipynb</span></code></a></div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
@@ -260,7 +256,7 @@ dataset available in the <a class="reference internal" href="../../modules/datas
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -279,21 +275,24 @@ dataset available in the <a class="reference internal" href="../../modules/datas
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

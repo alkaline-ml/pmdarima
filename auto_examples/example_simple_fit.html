@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Simple auto_arima model &mdash; pyramid 0.8.1 documentation</title>
+  <title>Simple auto_arima model &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -101,7 +101,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -168,42 +168,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="sphx-glr-download-link-note admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Click <a class="reference internal" href="#sphx-glr-download-auto-examples-example-simple-fit-py"><span class="std std-ref">here</span></a> to download the full example code</p>
-</div>
-<div class="sphx-glr-example-title section" id="simple-auto-arima-model">
+  <div class="section" id="simple-auto-arima-model">
 <span id="sphx-glr-auto-examples-example-simple-fit-py"></span><h1>Simple auto_arima model<a class="headerlink" href="#simple-auto-arima-model" title="Permalink to this headline">¶</a></h1>
 <p>This is a simple example of how we can fit an ARIMA model in several lines
 without knowing anything about our data or optimal hyper parameters.</p>
-<br/><img alt="../_images/sphx_glr_example_simple_fit_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_example_simple_fit_001.png" />
+<br/><img alt="../_images/sphx_glr_example_simple_fit_001.png" class="align-center" src="../_images/sphx_glr_example_simple_fit_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none"><div class="highlight"><pre><span></span>Fit ARIMA: order=(2, 1, 2) seasonal_order=(1, 0, 1, 12); AIC=2891.551, BIC=2915.582, Fit time=0.777 seconds
-Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 12); AIC=3049.597, BIC=3055.604, Fit time=0.015 seconds
-Fit ARIMA: order=(1, 1, 0) seasonal_order=(1, 0, 0, 12); AIC=2895.906, BIC=2907.922, Fit time=0.259 seconds
-Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 1, 12); AIC=2917.891, BIC=2929.907, Fit time=0.405 seconds
-Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 1, 12); AIC=2918.638, BIC=2939.666, Fit time=0.647 seconds
-Fit ARIMA: order=(2, 1, 2) seasonal_order=(2, 0, 1, 12); AIC=2884.947, BIC=2911.983, Fit time=1.601 seconds
-Fit ARIMA: order=(2, 1, 2) seasonal_order=(2, 0, 0, 12); AIC=2880.550, BIC=2904.582, Fit time=1.647 seconds
-Fit ARIMA: order=(1, 1, 2) seasonal_order=(2, 0, 0, 12); AIC=2874.284, BIC=2895.312, Fit time=1.347 seconds
-Fit ARIMA: order=(1, 1, 1) seasonal_order=(2, 0, 0, 12); AIC=nan, BIC=nan, Fit time=nan seconds
-Fit ARIMA: order=(1, 1, 3) seasonal_order=(2, 0, 0, 12); AIC=2879.105, BIC=2903.136, Fit time=1.570 seconds
-Fit ARIMA: order=(0, 1, 1) seasonal_order=(2, 0, 0, 12); AIC=2870.992, BIC=2886.012, Fit time=0.906 seconds
-Fit ARIMA: order=(0, 1, 1) seasonal_order=(1, 0, 0, 12); AIC=2858.035, BIC=2870.050, Fit time=0.467 seconds
-Fit ARIMA: order=(0, 1, 1) seasonal_order=(1, 0, 1, 12); AIC=2916.125, BIC=2931.144, Fit time=0.475 seconds
-Fit ARIMA: order=(0, 1, 1) seasonal_order=(2, 0, 1, 12); AIC=2902.673, BIC=2920.697, Fit time=1.152 seconds
-Fit ARIMA: order=(1, 1, 1) seasonal_order=(1, 0, 0, 12); AIC=nan, BIC=nan, Fit time=nan seconds
-Fit ARIMA: order=(0, 1, 0) seasonal_order=(1, 0, 0, 12); AIC=2909.240, BIC=2918.251, Fit time=0.144 seconds
-Fit ARIMA: order=(0, 1, 2) seasonal_order=(1, 0, 0, 12); AIC=2858.621, BIC=2873.641, Fit time=0.458 seconds
-Fit ARIMA: order=(1, 1, 2) seasonal_order=(1, 0, 0, 12); AIC=2881.302, BIC=2899.326, Fit time=0.694 seconds
-Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 12); AIC=2988.640, BIC=2997.652, Fit time=0.137 seconds
-Total fit time: 12.722 seconds
+<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2894.518</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2918.550</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.278</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">3049.597</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">3055.604</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.008</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2895.906</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2907.922</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.222</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2917.891</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2929.907</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.377</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2919.813</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2940.840</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.966</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2900.411</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2927.446</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.111</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2883.210</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2904.238</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.651</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2882.018</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2900.042</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.500</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="n">nan</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="n">nan</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="n">nan</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2880.460</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2901.487</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.588</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2858.621</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2873.641</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.412</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2986.505</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2998.521</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.085</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2859.337</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2877.361</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.362</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2917.316</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2935.340</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.826</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2903.006</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2924.034</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.691</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2878.950</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2890.966</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.398</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2903.212</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2921.236</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.455</span> <span class="n">seconds</span>
+<span class="n">Total</span> <span class="n">fit</span> <span class="n">time</span><span class="p">:</span> <span class="mf">11.938</span> <span class="n">seconds</span>
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
@@ -229,12 +223,12 @@ Total fit time: 12.722 seconds
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  12.825 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-example-simple-fit-py">
+<p><strong>Total running time of the script:</strong> ( 0 minutes  11.956 seconds)</p>
+<div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/example_simple_fit.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_simple_fit.py</span></code></a></div>
+<a class="reference download internal" href="../_downloads/example_simple_fit.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_simple_fit.py</span></code></a></div>
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/example_simple_fit.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_simple_fit.ipynb</span></code></a></div>
+<a class="reference download internal" href="../_downloads/example_simple_fit.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_simple_fit.ipynb</span></code></a></div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
@@ -259,7 +253,7 @@ Total fit time: 12.722 seconds
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -278,21 +272,24 @@ Total fit time: 12.722 seconds
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

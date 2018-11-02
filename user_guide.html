@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>User guide: contents &mdash; pyramid 0.8.1 documentation</title>
+  <title>User guide: contents &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -98,7 +98,7 @@
 <li class="toctree-l3"><a class="reference internal" href="quickstart.html">3. Pyramid Quickstart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal"><span class="pre">auto_arima</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="modules/datasets.html">7. Toy time-series datasets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributing.html">8. Contributing to Pyramid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributors.html">9. Contributors</a></li>
@@ -107,7 +107,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#api-reference">API reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -177,13 +177,13 @@
 <div class="section" id="getting-started">
 <h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <p>The following guides cover how to get started with a pyramid distribution. The
-easiest solution is simply installing from PyPi, but if you&#8217;d like to
-contribute you&#8217;ll need to be able to build from source.</p>
+easiest solution is simply installing from PyPi, but if you’d like to
+contribute you’ll need to be able to build from source.</p>
 <br/><div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">1. About the project</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="about.html#how-it-works">1.1. How it works</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="about.html#how-auto-arima-works">1.1.1. How <code class="docutils literal"><span class="pre">auto_arima</span></code> works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="about.html#how-auto-arima-works">1.1.1. How <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> works</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="about.html#feedback">1.2. Feedback</a></li>
@@ -210,15 +210,15 @@ contribute you&#8217;ll need to be able to build from source.</p>
 <li class="toctree-l2"><a class="reference internal" href="refreshing.html#adding-observations-to-your-model">5.1. Adding observations to your model</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal"><span class="pre">auto_arima</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tips_and_tricks.html#understand-p-d-and-q">6.1. Understand <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">d</span></code>, and <code class="docutils literal"><span class="pre">q</span></code></a><ul>
+<li class="toctree-l1"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tips_and_tricks.html#understand-p-d-and-q">6.1. Understand <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code>, and <code class="docutils literal notranslate"><span class="pre">q</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html#understanding-differencing">6.1.1. Understanding differencing</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tips_and_tricks.html#enforcing-stationarity">6.2. Enforcing stationarity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tips_and_tricks.html#understand-p-d-q-and-m">6.3. Understand <code class="docutils literal"><span class="pre">P</span></code>, <code class="docutils literal"><span class="pre">D</span></code>, <code class="docutils literal"><span class="pre">Q</span></code> and <code class="docutils literal"><span class="pre">m</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html#estimating-the-seasonal-differencing-term-d">6.3.1. Estimating the seasonal differencing term, <code class="docutils literal"><span class="pre">D</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html#setting-m">6.3.2. Setting <code class="docutils literal"><span class="pre">m</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tips_and_tricks.html#understand-p-d-q-and-m">6.3. Understand <code class="docutils literal notranslate"><span class="pre">P</span></code>, <code class="docutils literal notranslate"><span class="pre">D</span></code>, <code class="docutils literal notranslate"><span class="pre">Q</span></code> and <code class="docutils literal notranslate"><span class="pre">m</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html#estimating-the-seasonal-differencing-term-d">6.3.1. Estimating the seasonal differencing term, <code class="docutils literal notranslate"><span class="pre">D</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html#setting-m">6.3.2. Setting <code class="docutils literal notranslate"><span class="pre">m</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tips_and_tricks.html#parallel-vs-stepwise">6.4. Parallel vs. stepwise</a></li>
@@ -244,7 +244,7 @@ contribute you&#8217;ll need to be able to build from source.</p>
 <div class="section" id="api-reference">
 <h2>API reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="modules/classes.html#api-ref"><span class="std std-ref">API Reference</span></a> covers documentation and examples of each of the Pyramid
-package&#8217;s submodules.</p>
+package’s submodules.</p>
 <br/></div>
 </div>
 
@@ -268,7 +268,7 @@ package&#8217;s submodules.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -287,21 +287,24 @@ package&#8217;s submodules.</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

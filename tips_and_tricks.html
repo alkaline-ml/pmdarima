@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>6. Tips to using auto_arima &mdash; pyramid 0.8.1 documentation</title>
+  <title>6. Tips to using auto_arima &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -98,10 +98,10 @@
 <li class="toctree-l3"><a class="reference internal" href="quickstart.html">3. Pyramid Quickstart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">6. Tips to using <code class="docutils literal"><span class="pre">auto_arima</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#understand-p-d-and-q">6.1. Understand <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">d</span></code>, and <code class="docutils literal"><span class="pre">q</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#understand-p-d-and-q">6.1. Understand <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code>, and <code class="docutils literal notranslate"><span class="pre">q</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#enforcing-stationarity">6.2. Enforcing stationarity</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#understand-p-d-q-and-m">6.3. Understand <code class="docutils literal"><span class="pre">P</span></code>, <code class="docutils literal"><span class="pre">D</span></code>, <code class="docutils literal"><span class="pre">Q</span></code> and <code class="docutils literal"><span class="pre">m</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#understand-p-d-q-and-m">6.3. Understand <code class="docutils literal notranslate"><span class="pre">P</span></code>, <code class="docutils literal notranslate"><span class="pre">D</span></code>, <code class="docutils literal notranslate"><span class="pre">Q</span></code> and <code class="docutils literal notranslate"><span class="pre">m</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parallel-vs-stepwise">6.4. Parallel vs. stepwise</a></li>
 </ul>
 </li>
@@ -113,7 +113,7 @@
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#api-reference">API reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -161,7 +161,7 @@
         
           <li><a href="user_guide.html">User Guide</a> &raquo;</li>
         
-      <li>6. Tips to using <code class="docutils literal"><span class="pre">auto_arima</span></code></li>
+      <li>6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -181,8 +181,8 @@
            <div itemprop="articleBody">
             
   <div class="section" id="tips-to-using-auto-arima">
-<span id="tips-and-tricks"></span><h1>6. Tips to using <code class="docutils literal"><span class="pre">auto_arima</span></code><a class="headerlink" href="#tips-to-using-auto-arima" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal"><span class="pre">auto_arima</span></code> function fits the best <code class="docutils literal"><span class="pre">ARIMA</span></code> model to a univariate time
+<span id="tips-and-tricks"></span><h1>6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code><a class="headerlink" href="#tips-to-using-auto-arima" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> function fits the best <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> model to a univariate time
 series according to either
 <a class="reference external" href="https://en.wikipedia.org/wiki/Akaike_information_criterion">AIC</a>,
 <a class="reference external" href="https://en.wikipedia.org/wiki/Akaike_information_criterion#AICc">AICc</a>,
@@ -190,28 +190,28 @@ series according to either
 <a class="reference external" href="https://en.wikipedia.org/wiki/Hannan–Quinn_information_criterion">HQIC</a>.
 The function performs a search (either stepwise or parallelized)
 over possible model orders within the constraints provided.</p>
-<p>The <code class="docutils literal"><span class="pre">auto_arima</span></code> function can be daunting. There are a lot of parameters to
+<p>The <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> function can be daunting. There are a lot of parameters to
 tune, and the outcome is heavily dependent on a number of them. In this section,
-we lay out several considerations you&#8217;ll want to make when you fit your ARIMA
+we lay out several considerations you’ll want to make when you fit your ARIMA
 models.</p>
 <div class="section" id="understand-p-d-and-q">
-<h2>6.1. Understand <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">d</span></code>, and <code class="docutils literal"><span class="pre">q</span></code><a class="headerlink" href="#understand-p-d-and-q" title="Permalink to this headline">¶</a></h2>
+<h2>6.1. Understand <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code>, and <code class="docutils literal notranslate"><span class="pre">q</span></code><a class="headerlink" href="#understand-p-d-and-q" title="Permalink to this headline">¶</a></h2>
 <p>ARIMA models are made up of <a class="reference external" href="http://people.duke.edu/~rnau/411arim.htm">three different terms</a>:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">p</span></code>: The order of the auto-regressive (AR) model.</li>
-<li><code class="docutils literal"><span class="pre">d</span></code>: The degree of differencing.</li>
-<li><code class="docutils literal"><span class="pre">q</span></code>: The order of the moving average (MA) model.</li>
+<li><code class="docutils literal notranslate"><span class="pre">p</span></code>: The order of the auto-regressive (AR) model.</li>
+<li><code class="docutils literal notranslate"><span class="pre">d</span></code>: The degree of differencing.</li>
+<li><code class="docutils literal notranslate"><span class="pre">q</span></code>: The order of the moving average (MA) model.</li>
 </ul>
-<p>Often times, ARIMA models are written in the form <span class="math">\(ARIMA(p, d, q)\)</span>, where a
-model with no differencing term, e.g., <span class="math">\(ARIMA(1, 0, 12)\)</span>, would be an ARMA
+<p>Often times, ARIMA models are written in the form <span class="math notranslate">\(ARIMA(p, d, q)\)</span>, where a
+model with no differencing term, e.g., <span class="math notranslate">\(ARIMA(1, 0, 12)\)</span>, would be an ARMA
 (made up of an auto-regressive term and a moving average term, but no
 integrative term).</p>
 <div class="section" id="understanding-differencing">
 <h3>6.1.1. Understanding differencing<a class="headerlink" href="#understanding-differencing" title="Permalink to this headline">¶</a></h3>
-<p>An integrative term, <code class="docutils literal"><span class="pre">d</span></code>, is typically only used in the case of non-stationary
-data. The value of <code class="docutils literal"><span class="pre">d</span></code> determines the number of periods to lag the response prior
+<p>An integrative term, <code class="docutils literal notranslate"><span class="pre">d</span></code>, is typically only used in the case of non-stationary
+data. The value of <code class="docutils literal notranslate"><span class="pre">d</span></code> determines the number of periods to lag the response prior
 to computing differences. E.g.,</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.utils</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.utils</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
 
 <span class="c1"># lag 1, diff 1</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
@@ -219,19 +219,19 @@ to computing differences. E.g.,</p>
 <span class="c1"># Returns: array([ -6.,  -2.,   7.,  25.], dtype=float32)</span>
 </pre></div>
 </div>
-<p>Note that <code class="docutils literal"><span class="pre">lag</span></code> and <code class="docutils literal"><span class="pre">differences</span></code> are not the same!</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">lag</span></code> and <code class="docutils literal notranslate"><span class="pre">differences</span></code> are not the same!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="c1"># Returns: array([ 4.,  9., 18.], dtype=float32)</span>
 
 <span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1"># Returns: array([-8.,  5., 32.], dtype=float32)</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">lag</span></code> corresponds to the offset in the time period lag, whereas the
-<code class="docutils literal"><span class="pre">differences</span></code> parameter is the number of times the differences are computed.
-Therefore, e.g., for <code class="docutils literal"><span class="pre">differences=2</span></code>, the procedure is essentially computing
+<p>The <code class="docutils literal notranslate"><span class="pre">lag</span></code> corresponds to the offset in the time period lag, whereas the
+<code class="docutils literal notranslate"><span class="pre">differences</span></code> parameter is the number of times the differences are computed.
+Therefore, e.g., for <code class="docutils literal notranslate"><span class="pre">differences=2</span></code>, the procedure is essentially computing
 the difference twice:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
 
 <span class="c1"># 1</span>
 <span class="n">x_lag</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># first lag</span>
@@ -248,21 +248,21 @@ the difference twice:</p>
 </div>
 <div class="section" id="enforcing-stationarity">
 <span id="id1"></span><h2>6.2. Enforcing stationarity<a class="headerlink" href="#enforcing-stationarity" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">pyramid.arima.stationarity</span></code> sub-module defines various tests of stationarity for
+<p>The <code class="docutils literal notranslate"><span class="pre">pyramid.arima.stationarity</span></code> sub-module defines various tests of stationarity for
 testing a null hypothesis that an observable univariate time series is stationary around
 a deterministic trend (i.e. trend-stationary).</p>
 <p>A time series is stationary when its mean, variance and auto-correlation, etc.,
 are constant over time. Many time-series methods may perform better when a time-series
 is stationary, since forecasting values becomes a far easier task for a
-stationary time series. ARIMAs that include differencing (i.e., <code class="docutils literal"><span class="pre">d</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>)
+stationary time series. ARIMAs that include differencing (i.e., <code class="docutils literal notranslate"><span class="pre">d</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>)
 assume that the data becomes stationary after differencing. This is called
 <strong>difference-stationary</strong>. Auto-correlation plots are an easy way to determine
 whether your time series is sufficiently stationary for modeling. If the plot
 does not appear relatively stationary, your model will likely need a
 differencing term. These can be determined by using an Augmented Dickey-Fuller
-test, or various other statistical testing methods. Note that <code class="docutils literal"><span class="pre">auto_arima</span></code>
+test, or various other statistical testing methods. Note that <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code>
 will automatically determine the appropriate differencing term for you by default.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
 <span class="kn">from</span> <span class="nn">pyramid</span> <span class="kn">import</span> <span class="n">datasets</span>
 
 <span class="n">y</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span><span class="p">()</span>
@@ -270,10 +270,10 @@ will automatically determine the appropriate differencing term for you by defaul
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/lynx_autocorr.png"><img alt="Auto-correlation" class="align-center" src="_images/lynx_autocorr.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p>We can examine a time-series&#8217; auto-correlation plot given the code above.
+<p>We can examine a time-series’ auto-correlation plot given the code above.
 However, to more quantitatively determine whether we need to difference our
 data in order to make it stationary, we can conduct an ADF test:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.arima.stationarity</span> <span class="kn">import</span> <span class="n">ADFTest</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.arima.stationarity</span> <span class="kn">import</span> <span class="n">ADFTest</span>
 
 <span class="c1"># Test whether we should difference at the alpha=0.05</span>
 <span class="c1"># significance level</span>
@@ -282,8 +282,8 @@ data in order to make it stationary, we can conduct an ADF test:</p>
 </pre></div>
 </div>
 <p>The verdict, per the ADF test, is that we should <em>not</em> difference. Pyramid also
-provides a more handy interface for estimating your <code class="docutils literal"><span class="pre">d</span></code> parameter more directly:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.arima.utils</span> <span class="kn">import</span> <span class="n">ndiffs</span>
+provides a more handy interface for estimating your <code class="docutils literal notranslate"><span class="pre">d</span></code> parameter more directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.arima.utils</span> <span class="kn">import</span> <span class="n">ndiffs</span>
 
 <span class="c1"># Estimate the number of differences using an ADF test:</span>
 <span class="n">n_adf</span> <span class="o">=</span> <span class="n">ndiffs</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;adf&#39;</span><span class="p">)</span>  <span class="c1"># -&gt; 0</span>
@@ -297,7 +297,7 @@ provides a more handy interface for estimating your <code class="docutils litera
 </pre></div>
 </div>
 <p>The easiest way to make your data stationary in the case of ARIMA models is
-to allow <code class="docutils literal"><span class="pre">auto_arima</span></code> to work its magic, estimate the appropriate <code class="docutils literal"><span class="pre">d</span></code>
+to allow <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> to work its magic, estimate the appropriate <code class="docutils literal notranslate"><span class="pre">d</span></code>
 value, and difference the time series accordingly. However, other
 common transformations for enforcing stationarity include (sometimes in
 combination with one another):</p>
@@ -307,30 +307,30 @@ combination with one another):</p>
 <li>Differencing your time series one or more times</li>
 <li>Log transformations</li>
 </ul>
-<p>When in doubt, let the <code class="docutils literal"><span class="pre">auto_arima</span></code> function do the heavy lifting for you. Read more on
+<p>When in doubt, let the <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> function do the heavy lifting for you. Read more on
 difference stationarity <a class="reference external" href="https://people.duke.edu/~rnau/411diff.htm">in this Duke article</a>.</p>
 </div>
 <div class="section" id="understand-p-d-q-and-m">
-<h2>6.3. Understand <code class="docutils literal"><span class="pre">P</span></code>, <code class="docutils literal"><span class="pre">D</span></code>, <code class="docutils literal"><span class="pre">Q</span></code> and <code class="docutils literal"><span class="pre">m</span></code><a class="headerlink" href="#understand-p-d-q-and-m" title="Permalink to this headline">¶</a></h2>
-<p>Seasonal ARIMA models have three parameters that heavily resemble our <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">d</span></code> and <code class="docutils literal"><span class="pre">q</span></code>
+<h2>6.3. Understand <code class="docutils literal notranslate"><span class="pre">P</span></code>, <code class="docutils literal notranslate"><span class="pre">D</span></code>, <code class="docutils literal notranslate"><span class="pre">Q</span></code> and <code class="docutils literal notranslate"><span class="pre">m</span></code><a class="headerlink" href="#understand-p-d-q-and-m" title="Permalink to this headline">¶</a></h2>
+<p>Seasonal ARIMA models have three parameters that heavily resemble our <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code> and <code class="docutils literal notranslate"><span class="pre">q</span></code>
 parameters:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">P</span></code>: The order of the seasonal component for the auto-regressive (AR) model.</li>
-<li><code class="docutils literal"><span class="pre">D</span></code>: The integration order of the seasonal process.</li>
-<li><code class="docutils literal"><span class="pre">Q</span></code>: The order of the seasonal component of the moving average (MA) model.</li>
+<li><code class="docutils literal notranslate"><span class="pre">P</span></code>: The order of the seasonal component for the auto-regressive (AR) model.</li>
+<li><code class="docutils literal notranslate"><span class="pre">D</span></code>: The integration order of the seasonal process.</li>
+<li><code class="docutils literal notranslate"><span class="pre">Q</span></code>: The order of the seasonal component of the moving average (MA) model.</li>
 </ul>
-<p><code class="docutils literal"><span class="pre">P</span></code> and <code class="docutils literal"><span class="pre">Q</span></code> and be estimated similarly to <code class="docutils literal"><span class="pre">p</span></code> and <code class="docutils literal"><span class="pre">q</span></code> via <code class="docutils literal"><span class="pre">auto_arima</span></code>, and
-<code class="docutils literal"><span class="pre">D</span></code> can be estimated via a Canova-Hansen test, however <code class="docutils literal"><span class="pre">m</span></code> generally requires subject matter
+<p><code class="docutils literal notranslate"><span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">Q</span></code> and be estimated similarly to <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">q</span></code> via <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">D</span></code> can be estimated via a Canova-Hansen test, however <code class="docutils literal notranslate"><span class="pre">m</span></code> generally requires subject matter
 knowledge of the data.</p>
 <div class="section" id="estimating-the-seasonal-differencing-term-d">
-<span id="seasonality"></span><h3>6.3.1. Estimating the seasonal differencing term, <code class="docutils literal"><span class="pre">D</span></code><a class="headerlink" href="#estimating-the-seasonal-differencing-term-d" title="Permalink to this headline">¶</a></h3>
+<span id="seasonality"></span><h3>6.3.1. Estimating the seasonal differencing term, <code class="docutils literal notranslate"><span class="pre">D</span></code><a class="headerlink" href="#estimating-the-seasonal-differencing-term-d" title="Permalink to this headline">¶</a></h3>
 <p>Seasonality can manifest itself in timeseries data in unexpected ways. Sometimes
 trends are partially dependent on the time of year or month. Other times, they
 may be related to weather patterns. In either case, seasonality is a real consideration
 that must be made. The pyramid package provides a test of seasonality for including
 seasonal terms in your ARIMA models.</p>
 <p>We can use a Canova-Hansen test to estimate our seasonal differencing term:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.datasets</span> <span class="kn">import</span> <span class="n">load_lynx</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.datasets</span> <span class="kn">import</span> <span class="n">load_lynx</span>
 <span class="kn">from</span> <span class="nn">pyramid.arima.utils</span> <span class="kn">import</span> <span class="n">nsdiffs</span>
 
 <span class="c1"># load lynx</span>
@@ -343,23 +343,23 @@ seasonal terms in your ARIMA models.</p>
             <span class="n">test</span><span class="o">=</span><span class="s1">&#39;ch&#39;</span><span class="p">)</span>  <span class="c1"># -&gt; 0</span>
 </pre></div>
 </div>
-<p>By default, this will be estimated in <code class="docutils literal"><span class="pre">auto_arima</span></code> if <code class="docutils literal"><span class="pre">seasonal=True</span></code>. Make
-sure to pay attention to the <code class="docutils literal"><span class="pre">m</span></code> and the <code class="docutils literal"><span class="pre">max_D</span></code> parameters.</p>
+<p>By default, this will be estimated in <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> if <code class="docutils literal notranslate"><span class="pre">seasonal=True</span></code>. Make
+sure to pay attention to the <code class="docutils literal notranslate"><span class="pre">m</span></code> and the <code class="docutils literal notranslate"><span class="pre">max_D</span></code> parameters.</p>
 </div>
 <div class="section" id="setting-m">
-<span id="period"></span><h3>6.3.2. Setting <code class="docutils literal"><span class="pre">m</span></code><a class="headerlink" href="#setting-m" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">m</span></code> parameter is the number of observations per seasonal cycle, and is
-one that must be known apriori. Typically, <code class="docutils literal"><span class="pre">m</span></code> will correspond to some
+<span id="period"></span><h3>6.3.2. Setting <code class="docutils literal notranslate"><span class="pre">m</span></code><a class="headerlink" href="#setting-m" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">m</span></code> parameter is the number of observations per seasonal cycle, and is
+one that must be known apriori. Typically, <code class="docutils literal notranslate"><span class="pre">m</span></code> will correspond to some
 recurrent periodicity such as:</p>
 <ul class="simple">
 <li>7 - daily</li>
 <li>12 - monthly</li>
 <li>52 - weekly</li>
 </ul>
-<p>Depending on how it&#8217;s set, it can dramatically impact the outcome of an
+<p>Depending on how it’s set, it can dramatically impact the outcome of an
 ARIMA model. For instance, consider the wineind dataset when fit with
-<code class="docutils literal"><span class="pre">m=1</span></code> vs. <code class="docutils literal"><span class="pre">m=12</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
+<code class="docutils literal notranslate"><span class="pre">m=1</span></code> vs. <code class="docutils literal notranslate"><span class="pre">m=12</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span><span class="p">()</span>
 <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="mi">150</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">150</span><span class="p">:]</span>
@@ -370,7 +370,7 @@ ARIMA model. For instance, consider the wineind dataset when fit with
 </pre></div>
 </div>
 <p>The forecasts these two models will produce are wildly different (code to reproduce):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -389,15 +389,15 @@ ARIMA model. For instance, consider the wineind dataset when fit with
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/m_matters.png"><img alt="The 'm' parameter" class="align-center" src="_images/m_matters.png" style="width: 600.0px; height: 400.0px;" /></a>
-<p>As you can see, depending on the value of <code class="docutils literal"><span class="pre">m</span></code>, you may either get a very good model
-or a very bad one!!! The author of R&#8217;s <code class="docutils literal"><span class="pre">auto.arima</span></code>, Rob Hyndman, wrote a very good
+<p>As you can see, depending on the value of <code class="docutils literal notranslate"><span class="pre">m</span></code>, you may either get a very good model
+or a very bad one!!! The author of R’s <code class="docutils literal notranslate"><span class="pre">auto.arima</span></code>, Rob Hyndman, wrote a very good
 <a class="reference external" href="https://robjhyndman.com/hyndsight/seasonal-periods/">blog post</a> on the period
 of a seasonal time series.</p>
 </div>
 </div>
 <div class="section" id="parallel-vs-stepwise">
 <h2>6.4. Parallel vs. stepwise<a class="headerlink" href="#parallel-vs-stepwise" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">auto_arima</span></code> function has two modes:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> function has two modes:</p>
 <ul class="simple">
 <li>Stepwise</li>
 <li>Parallelized (slower)</li>
@@ -406,33 +406,33 @@ of a seasonal time series.</p>
 of hyper parameters. It will commonly take longer for several reasons. First of all,
 there is no intelligent procedure as to how model orders are tested; they are all
 tested (no short-circuiting), which can take a while. Second, there is more overhead
-in model serialization due to the method in which <code class="docutils literal"><span class="pre">joblib</span></code> parallelizes operations.</p>
+in model serialization due to the method in which <code class="docutils literal notranslate"><span class="pre">joblib</span></code> parallelizes operations.</p>
 <p>The stepwise approach follows the strategy laid out by Hyndman and Khandakar in
 their <a class="reference external" href="https://www.jstatsoft.org/article/view/v027i03/v27i03.pdf">2008 paper</a>,
-<em>&#8220;Automatic Time Series Forecasting: The forecast Package for R&#8221;</em>.</p>
+<em>“Automatic Time Series Forecasting: The forecast Package for R”</em>.</p>
 <p><strong>Step 1</strong>: Try four possible models to start:</p>
 <blockquote>
 <div><ul class="simple">
-<li><span class="math">\(ARIMA(2, d, 2)\)</span> if <code class="docutils literal"><span class="pre">m</span> <span class="pre">=</span> <span class="pre">1</span></code> and <span class="math">\(ARIMA(2, d, 2)(1, D, 1)\)</span> if <code class="docutils literal"><span class="pre">m</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></li>
-<li><span class="math">\(ARIMA(0, d, 0)\)</span> if <code class="docutils literal"><span class="pre">m</span> <span class="pre">=</span> <span class="pre">1</span></code> and <span class="math">\(ARIMA(0, d, 0)(0, D, 0)\)</span> if <code class="docutils literal"><span class="pre">m</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></li>
-<li><span class="math">\(ARIMA(1, d, 0)\)</span> if <code class="docutils literal"><span class="pre">m</span> <span class="pre">=</span> <span class="pre">1</span></code> and <span class="math">\(ARIMA(1, d, 0)(1, D, 0)\)</span> if <code class="docutils literal"><span class="pre">m</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></li>
-<li><span class="math">\(ARIMA(0, d, 1)\)</span> if <code class="docutils literal"><span class="pre">m</span> <span class="pre">=</span> <span class="pre">1</span></code> and <span class="math">\(ARIMA(0, d, 1)(0, D, 1)\)</span> if <code class="docutils literal"><span class="pre">m</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></li>
+<li><span class="math notranslate">\(ARIMA(2, d, 2)\)</span> if <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">=</span> <span class="pre">1</span></code> and <span class="math notranslate">\(ARIMA(2, d, 2)(1, D, 1)\)</span> if <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></li>
+<li><span class="math notranslate">\(ARIMA(0, d, 0)\)</span> if <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">=</span> <span class="pre">1</span></code> and <span class="math notranslate">\(ARIMA(0, d, 0)(0, D, 0)\)</span> if <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></li>
+<li><span class="math notranslate">\(ARIMA(1, d, 0)\)</span> if <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">=</span> <span class="pre">1</span></code> and <span class="math notranslate">\(ARIMA(1, d, 0)(1, D, 0)\)</span> if <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></li>
+<li><span class="math notranslate">\(ARIMA(0, d, 1)\)</span> if <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">=</span> <span class="pre">1</span></code> and <span class="math notranslate">\(ARIMA(0, d, 1)(0, D, 1)\)</span> if <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></li>
 </ul>
 </div></blockquote>
 <p>The model with the smallest AIC (or BIC, or AICc, etc., depending on the minimization criteria)
-is selected. This is the &#8220;current best&#8221; model.</p>
+is selected. This is the “current best” model.</p>
 <p><strong>Step 2</strong>: Consider a number of other models:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Where one of <span class="math">\(p\)</span>, <span class="math">\(q\)</span>, <span class="math">\(P\)</span> and <span class="math">\(Q\)</span> is allowed to vary by <span class="math">\(\pm 1\)</span> from the current best model</li>
-<li>Where <span class="math">\(p\)</span> and <span class="math">\(q\)</span> both vary by <span class="math">\(\pm 1\)</span> from the current best model</li>
-<li>Where <span class="math">\(P\)</span> and <span class="math">\(Q\)</span> both vary by <span class="math">\(\pm 1\)</span> from the current best model</li>
+<li>Where one of <span class="math notranslate">\(p\)</span>, <span class="math notranslate">\(q\)</span>, <span class="math notranslate">\(P\)</span> and <span class="math notranslate">\(Q\)</span> is allowed to vary by <span class="math notranslate">\(\pm 1\)</span> from the current best model</li>
+<li>Where <span class="math notranslate">\(p\)</span> and <span class="math notranslate">\(q\)</span> both vary by <span class="math notranslate">\(\pm 1\)</span> from the current best model</li>
+<li>Where <span class="math notranslate">\(P\)</span> and <span class="math notranslate">\(Q\)</span> both vary by <span class="math notranslate">\(\pm 1\)</span> from the current best model</li>
 </ul>
 </div></blockquote>
 <p>Whenever a model with a lower information criteria is found, it becomes the new current best model,
 and the procedure is repeated until it cannot find a model close to the current best model
 with a lower information criterion.</p>
-<p>When in doubt, <code class="docutils literal"><span class="pre">stepwise=True</span></code> is encouraged.</p>
+<p>When in doubt, <code class="docutils literal notranslate"><span class="pre">stepwise=True</span></code> is encouraged.</p>
 </div>
 </div>
 
@@ -456,7 +456,7 @@ with a lower information criterion.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -475,21 +475,24 @@ with a lower information criterion.</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

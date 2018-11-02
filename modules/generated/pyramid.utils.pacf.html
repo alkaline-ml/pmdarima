@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyramid.utils.pacf &mdash; pyramid 0.8.1 documentation</title>
+  <title>pyramid.utils.pacf &mdash; pyramid 0.9.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.8.1
+                0.9.0
               </div>
             
           
@@ -90,17 +90,17 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal"><span class="pre">pyramid.datasets</span></code>: Toy univariate timeseries datasets</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-utils-utilities"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>: Utilities</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pyramid.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pyramid-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pyramid.datasets</span></code>: Toy univariate timeseries datasets</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pyramid-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>: Utilities</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#array-helper-functions-metaestimators">Array helper functions &amp; metaestimators</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.acf.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.acf</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.as_series.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.as_series</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.c.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.c</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.diff.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.diff</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.if_has_delegate.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.if_has_delegate</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.is_iterable.html"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.is_iterable</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.pacf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.acf.html"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.acf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.as_series.html"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.as_series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.c.html"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.c</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.diff.html"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.diff</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.if_has_delegate.html"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.if_has_delegate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyramid.utils.is_iterable.html"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.is_iterable</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.pacf</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../classes.html#plotting-utilities-wrappers">Plotting utilities &amp; wrappers</a></li>
@@ -110,7 +110,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
 </ul>
 
             
@@ -158,7 +158,7 @@
         
           <li><a href="../classes.html">API Reference</a> &raquo;</li>
         
-      <li><code class="docutils literal"><span class="pre">pyramid.utils</span></code>.pacf</li>
+      <li><code class="docutils literal notranslate"><span class="pre">pyramid.utils</span></code>.pacf</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -178,10 +178,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="pyramid-utils-pacf">
-<h1><a class="reference internal" href="../classes.html#module-pyramid.utils" title="pyramid.utils"><code class="xref py py-mod docutils literal"><span class="pre">pyramid.utils</span></code></a>.pacf<a class="headerlink" href="#pyramid-utils-pacf" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="../classes.html#module-pyramid.utils" title="pyramid.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyramid.utils</span></code></a>.pacf<a class="headerlink" href="#pyramid-utils-pacf" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyramid.utils.pacf">
-<code class="descclassname">pyramid.utils.</code><code class="descname">pacf</code><span class="sig-paren">(</span><em>x</em>, <em>nlags=40</em>, <em>method='ywunbiased'</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/461251a/pyramid/utils/wrapped.py#L64"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/utils/wrapped.html#pacf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.utils.pacf" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyramid.utils.</code><code class="descname">pacf</code><span class="sig-paren">(</span><em>x</em>, <em>nlags=40</em>, <em>method='ywunbiased'</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pyramid/blob/fd4626a/pyramid/utils/wrapped.py#L64"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pyramid/utils/wrapped.html#pacf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyramid.utils.pacf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partial autocorrelation estimated</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -195,7 +195,7 @@
 <blockquote>
 <div><p>largest lag for which pacf is returned</p>
 </div></blockquote>
-<p><strong>method</strong> : {&#8216;ywunbiased&#8217;, &#8216;ywmle&#8217;, &#8216;ols&#8217;}</p>
+<p><strong>method</strong> : {‘ywunbiased’, ‘ywmle’, ‘ols’}</p>
 <blockquote>
 <div><p>specifies which method for the calculations to use:</p>
 <ul class="simple">
@@ -255,7 +255,7 @@ and contains currently duplicate calculations.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith.
+        &copy; Copyright 2017-2018, Taylor G Smith
 
     </p>
   </div>
@@ -274,21 +274,24 @@ and contains currently duplicate calculations.</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.8.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 
