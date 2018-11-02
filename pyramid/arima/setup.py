@@ -1,14 +1,17 @@
+# -*- coding: utf-8 -*-
+
 import os
-import os.path
 
 import numpy
 from numpy.distutils.misc_util import Configuration
+
 from pyramid._build_utils import get_blas_info
 
 
 def configuration(parent_package="", top_path=None):
     cblas_libs, blas_info = get_blas_info()
 
+    # Use this rather than cblas_libs so we don't fail on Windows
     libraries = []
     if os.name == 'posix':
         cblas_libs.append('m')

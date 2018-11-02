@@ -22,9 +22,9 @@ import datetime
 import warnings
 import os
 
-# DTYPE for arrays
-from ..compat.numpy import DTYPE
-from ..compat.python import long
+from ..compat.numpy import DTYPE  # DTYPE for arrays
+from ..compat.python import long, safe_mkdirs
+from ..compat import statsmodels as sm_compat
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
 from .._config import PYRAMID_ARIMA_CACHE, PICKLE_HASH_PATTERN
@@ -345,10 +345,7 @@ class ARIMA(BaseEstimator):
             fit, self.arima_res_ = _fit_wrapper()
 
         # Set df_model attribute for SARIMAXResults object
-        if not hasattr(self.arima_res_, 'df_model'):
-            df_model = fit.k_exog + fit.k_trend + fit.k_ar + \
-                       fit.k_ma + fit.k_seasonal_ar + fit.k_seasonal_ma
-            setattr(self.arima_res_, 'df_model', df_model)
+        sm_compat.bind_df_model(fit, self.arima_res_)
 
         # if the model is fit with an exogenous array, it must
         # be predicted with one as well.
@@ -497,9 +494,7 @@ class ARIMA(BaseEstimator):
             # The confidence intervals may be a Pandas frame if it comes from
             # SARIMAX & we want Numpy. We will to duck type it so we don't add
             # new explicit requirements for the package
-            if hasattr(conf_int, "iloc"):  # duck type for pd.DataFrame
-                conf_int = conf_int.values
-            return f, conf_int
+            return f, check_array(conf_int)  # duck type for pd.DataFrame
         return f
 
     def fit_predict(self, y, exogenous=None, n_periods=10, **fit_args):
@@ -542,13 +537,16 @@ class ARIMA(BaseEstimator):
 
     def __getstate__(self):
         """I am being pickled..."""
-        loc = self.__dict__.get('tmp_pkl_', None)
 
-        # if this already contains a pointer to a "saved state" model,
-        # delete that model and replace it with a new one
-        # FIXME: v0.7.2+ - do we want to keep this around for later unpickling?
-        if loc is not None:
-            os.unlink(loc)
+        # In versions <0.9.0, if this already contains a pointer to a
+        # "saved state" model, we deleted that model and replaced it with the
+        # new one.
+        # In version >= v0.9.0, we keep the old model around, since that's how
+        # the user expects it should probably work (otherwise unpickling the
+        # previous state of the model would raise an OSError).
+        # loc = self.__dict__.get('tmp_pkl_', None)
+        # if loc is not None:
+        #     os.unlink(loc)
 
         # get the new location for where to save the results
         new_loc = self._get_pickle_hash_file()
@@ -556,12 +554,7 @@ class ARIMA(BaseEstimator):
 
         # check that the cache folder exists, and if not, make it.
         cache_loc = os.path.join(cwd, PYRAMID_ARIMA_CACHE)
-        try:
-            os.makedirs(cache_loc)
-        # since this is a race condition, just try to make it
-        except OSError as e:
-            if e.errno != 17:
-                raise
+        safe_mkdirs(cache_loc)
 
         # now create the full path with the cache folder
         new_loc = os.path.join(cache_loc, new_loc)
@@ -598,7 +591,7 @@ class ARIMA(BaseEstimator):
         return self
 
     def _warn_for_older_version(self):
-        # Added in v0.7.2 - check for the version pickled under and warn
+        # Added in v0.8.1 - check for the version pickled under and warn
         # if it's different from the current version
         do_warn = False
         modl_version = None
@@ -616,7 +609,7 @@ class ARIMA(BaseEstimator):
             # the arima_res_ attr.
             if hasattr(self, 'arima_res_'):  # it was fit, but is older
                 do_warn = True
-                modl_version = '<0.7.2'
+                modl_version = '<0.8.1'
 
             # else: it may not have the model (not fit) and still be older,
             # but we can't detect that.
@@ -624,7 +617,7 @@ class ARIMA(BaseEstimator):
         # Means it was older
         if do_warn:
             warnings.warn("You've deserialized an ARIMA from a version (%s) "
-                          "that differs from your installed version of "
+                          "that does not match your installed version of "
                           "Pyramid (%s). This could cause unforeseen behavior."
                           % (modl_version, this_version), UserWarning)
 
@@ -672,7 +665,7 @@ class ARIMA(BaseEstimator):
         n_samples = y.shape[0]
 
         # if exogenous is None and new exog provided, or vice versa, raise
-        self._check_exog(exogenous)
+        exogenous = self._check_exog(exogenous)  # type: np.ndarray
 
         # ensure the k_exog matches
         if exogenous is not None:

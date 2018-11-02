@@ -5,6 +5,7 @@
 # Setup for submodules of pyramid
 
 from __future__ import absolute_import
+
 import os
 
 from pyramid._build_utils import maybe_cythonize_extensions
@@ -30,10 +31,12 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('compat')
     config.add_subpackage('compat/tests')
     config.add_subpackage('datasets')
+    config.add_subpackage('datasets/tests')
     config.add_subpackage('utils')
     config.add_subpackage('utils/tests')
 
-    # modules with cython
+    # the following packages have cython, so they have to be build
+    # after the above.
     config.add_subpackage('arima')
     config.add_subpackage('arima/tests')
 

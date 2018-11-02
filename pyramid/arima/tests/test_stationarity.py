@@ -1,13 +1,15 @@
 # stationarity/seasonality tests
 
 from __future__ import absolute_import
-from numpy.testing import assert_array_almost_equal, assert_almost_equal
+
 from pyramid.arima.stationarity import ADFTest, PPTest, KPSSTest
 from pyramid.arima.seasonality import CHTest
 from pyramid.arima.utils import ndiffs, nsdiffs
+
 from sklearn.utils import check_random_state
-from nose.tools import assert_raises
+from numpy.testing import assert_array_almost_equal, assert_almost_equal
 import numpy as np
+import pytest
 
 # for testing rand of len 400 for m==365
 random_state = check_random_state(42)
@@ -69,7 +71,8 @@ def test_non_default_kpss():
 
 def test_kpss_corner():
     test = KPSSTest(alpha=0.05, null='something-else', lshort=True)
-    assert_raises(ValueError, test.is_stationary, austres)
+    with pytest.raises(ValueError):
+        test.is_stationary(austres)
 
 
 def test_pp():
@@ -92,7 +95,8 @@ def test_adf():
 
 
 def test_adf_corner():
-    assert_raises(ValueError, ADFTest, alpha=0.05, k=-1)
+    with pytest.raises(ValueError):
+        ADFTest(alpha=0.05, k=-1)
 
     # show we can fit with k is None
     test = ADFTest(alpha=0.05, k=None)
@@ -134,19 +138,22 @@ def test_ch_base():
 
 
 def test_ndiffs_corner_cases():
-    assert_raises(ValueError, ndiffs, austres, max_d=0)
+    with pytest.raises(ValueError):
+        ndiffs(austres, max_d=0)
 
 
 def test_nsdiffs_corner_cases():
     # max_D must be a positive int
-    assert_raises(ValueError, nsdiffs, austres, m=2, max_D=0)
+    with pytest.raises(ValueError):
+        nsdiffs(austres, m=2, max_D=0)
 
     # assert 0 for constant
     assert nsdiffs([1, 1, 1, 1], m=2) == 0
 
     # show fails for m <= 1
-    assert_raises(ValueError, nsdiffs, austres, m=1)
-    assert_raises(ValueError, nsdiffs, austres, m=0)
+    for m in (0, 1):
+        with pytest.raises(ValueError):
+            nsdiffs(austres, m=m)
 
 
 def test_base_cases():

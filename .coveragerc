@@ -8,6 +8,7 @@ omit =
     */setup.py
     */pyramid/__check_build/*
     */pyramid/_build_utils/*
+    */pyramid/_config.py
     */pyramid/setup.py
     */pyramid/__init__.py
     */pyramid/compat/matplotlib.py

@@ -5,8 +5,8 @@ from pyramid.utils.array import diff, c, is_iterable, as_series
 from pyramid.utils import get_callable
 
 from numpy.testing import assert_array_equal
-from nose.tools import assert_raises
 
+import pytest
 import pandas as pd
 import numpy as np
 
@@ -40,12 +40,14 @@ def test_concatenate():
 
 def test_corner_in_callable():
     # test the ValueError in the get-callable method
-    assert_raises(ValueError, get_callable, 'fake-key', {'a': 1})
+    with pytest.raises(ValueError):
+        get_callable('fake-key', {'a': 1})
 
 
 def test_corner():
     # fails because lag < 1
-    assert_raises(ValueError, diff, x=x, lag=0)
+    with pytest.raises(ValueError):
+        diff(x=x, lag=0)
 
 
 def test_is_iterable():

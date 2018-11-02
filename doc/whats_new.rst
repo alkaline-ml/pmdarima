@@ -7,6 +7,29 @@ What's new in Pyramid
 As new releases of Pyramid are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+v0.9.0
+------
+
+* Explicitly catch case in ``auto_arima`` where a value of ``m`` that is too large may over-estimate
+  ``D``, causing the time series to be differenced down to an empty array. This is now handled by
+  raising a separate error for this case that better explains what happened.
+
+* Re-pickling an ``ARIMA`` will no longer remove the location on disk of the cached ``statsmodels``
+  ARIMA models. Older versions encountered an issue where an older version of the model would be
+  reinstated and immediately fail due to an OSError since the cached state no longer existed. This
+  means that a user must be very intentional about clearing out the pyramid cache over time.
+
+* Added pyramid cache check on initial import to warn user if the cache size has grown too large.
+
+* If ``d`` or ``D`` are explicitly defined for ``auto_arima`` (rather than ``None``), do not
+  raise an error if they exceed ``max_d`` or ``max_D``, respectively.
+
+* Added Circle CI for validating PyPy builds (rather than CPython)
+
+* Deploy python wheel for version 3.6 on Linux and Windows
+
+* Include warning for upcoming package name change (``pmdarima``).
+
 v0.8.1
 ------
 

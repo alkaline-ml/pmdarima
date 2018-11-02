@@ -367,10 +367,10 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             if _d < 0:
                 raise ValueError('d & D must be None or a positive '
                                  'integer (>= 0)')
-            if _d > _max_d:
-                # TODO: should ignore if explicitly defined?...
-                raise ValueError('if explicitly defined, d & D must be <= '
-                                 'max_d & <= max_D, respectively')
+            # v0.9.0+ - ignore this if it's explicitly set...
+            # if _d > _max_d:
+            #     raise ValueError('if explicitly defined, d & D must be <= '
+            #                      'max_d & <= max_D, respectively')
 
     # is stepwise AND parallel enabled?
     if stepwise and n_jobs != 1:
@@ -476,6 +476,16 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         dx = diff(xx, differences=D, lag=m)
     else:
         dx = xx
+
+    # If D was too big, we might have gotten rid of x altogether!
+    if dx.shape[0] == 0:
+        raise ValueError("The seasonal differencing order, D=%i, was too "
+                         "large for your time series, and after differencing, "
+                         "there are no samples remaining in your data. "
+                         "Try a smaller value for D, or if you didn't set D "
+                         "to begin with, try setting it explicitly. This can "
+                         "also occur in seasonal settings when m is too large."
+                         % D)
 
     # difference the exogenous matrix
     if exogenous is not None:

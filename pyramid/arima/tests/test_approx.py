@@ -1,10 +1,12 @@
 # Test the approximation function
 
 from __future__ import absolute_import
+
 from pyramid.arima.approx import approx, _regularize
 from pyramid.utils.array import c
+from pyramid.utils.testing import assert_raises
+
 from numpy.testing import assert_array_almost_equal
-from nose.tools import assert_raises
 import numpy as np
 
 table = c(0.216, 0.176, 0.146, 0.119)
@@ -51,3 +53,9 @@ def test_corners():
     # fails for linear when < 2 samples
     assert_raises(ValueError, approx, x=[1], y=[1], xout=[],
                   method='linear', ties='ordered')
+
+    # but *doesn't* fail for constant when < 2 samples
+    approx(x=[1], y=[1], xout=[], method='constant', ties='ordered')
+
+    # fails for bad length
+    assert_raises(ValueError, approx, x=[], y=[], xout=[], method='constant')

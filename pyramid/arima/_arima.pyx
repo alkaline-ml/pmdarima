@@ -153,32 +153,58 @@ def C_Approx(floating1d x, floating1d y, floating1d xout,
     return yout
 
 
-def C_pop_A(intp_array_2d_t A, intp1d frecob):
+def C_canova_hansen_sd_test(INTP ltrunc,
+                            INTP Ne,
+                            floating_array_2d_t Fhataux,
+                            intp1d frec,
+                            INTP s):
+    """As of v0.9.0, this is used to compute the Omnw matrix iteratively.
+    The python loop took extremely long, since it's a series of repeated
+    matrix products.
 
-    cdef int i, j, n
-    n = frecob.shape[0]
-    j = 0
-
-    with nogil:
-        for i in range(n):
-            if frecob[i] == 1:
-                A[i, j] = 1
-                j += 1
-
-
-def C_compute_frecob_fast(intp1d frec, INTP s, floating_array_2d_t Omfhat):
-    cdef int i, j, a, half_s
+    TODO: make this faster still?...
+    """
+    cdef int k, i, j, a, half_s
     cdef INTP n, v
+    cdef unsigned int n_features, n_samples
 
+    k = 0
     i = 0
     j = 0
     a = 0
     half_s = <int>(s / 2) - 1
     n = frec.shape[0]
+    n_features = Fhataux.shape[1]
 
-    cdef np.ndarray[int, ndim=1, mode='c'] sq = np.arange(0, s - 1, 2, dtype=np.int32)
-    cdef np.ndarray[int, ndim=1, mode='c'] frecob = np.zeros(s - 1, dtype=np.int32)
-    cdef np.ndarray[int, ndim=2, mode='c'] A = None
+    # Define vector wnw, Omnw matrix
+    cdef np.ndarray[double, ndim=1, mode='c'] wnw
+    cdef np.ndarray[double, ndim=2, mode='c'] Omnw, Omfhat
+
+    # Omnw is a square matrix of n x n
+    Omnw = np.zeros((n_features, n_features), dtype=np.float64, order='c')
+
+    # R code: wnw <- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)
+    wnw = 1. - (np.arange(ltrunc, dtype=np.float64) + 1.) / (ltrunc + 1.)
+
+    # original R code:
+    # for (k in 1:ltrunc)
+    #     Omnw <- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%
+    #         Fhataux[1:(Ne - k), ]) * wnw[k]
+    # Old code was in python (not cython) but reads about the same
+    for k in range(ltrunc):
+        Omnw = Omnw + \
+               np.dot(Fhataux.T[:, k + 1:Ne],
+                      Fhataux[:(Ne - (k + 1)), :]) * \
+               wnw[k]
+
+    # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
+    Omfhat = (np.dot(Fhataux.T, Fhataux) + Omnw + Omnw.T) / float(Ne)
+
+    cdef np.ndarray[int, ndim=1, mode='c'] sq, frecob
+    cdef np.ndarray[int, ndim=2, mode='c'] A
+
+    sq = np.arange(0, s - 1, 2, dtype=np.int32)
+    frecob = np.zeros(s - 1, dtype=np.int32, order='c')
 
     with nogil:
         for i in range(n):
@@ -195,4 +221,15 @@ def C_compute_frecob_fast(intp1d frec, INTP s, floating_array_2d_t Omfhat):
                 a += 1
 
     A = np.zeros((s - 1, a), dtype=np.int32, order='c')
-    return A, frecob
+
+    # C_pop_A
+    i = 0
+    j = 0
+    with nogil:
+        for i in range(s - 1):
+            if frecob[i] == 1:
+                A[i, j] = 1
+                j += 1
+
+    # Now create the 'tmp' matrix pre-SVD
+    return A, np.dot(np.dot(A.T, Omfhat), A)

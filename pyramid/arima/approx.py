@@ -166,13 +166,12 @@ def approx(x, y, xout, method='linear', rule=1, f=0, yleft=None,
     x, y = _regularize(x, y, ties)
     nx = x.shape[0]
 
-    # if len 1?
-    if nx <= 1:
+    # if len 1? (we've already handled where the size is 0, since we check that
+    # in the _regularize function when we call c1d)
+    if nx == 1:
         if method_key == 'linear':
             raise ValueError('need at least two points to '
                              'linearly interpolate')
-        if nx == 0:
-            raise ValueError('empty array')
 
     # get yleft, yright
     if yleft is None:

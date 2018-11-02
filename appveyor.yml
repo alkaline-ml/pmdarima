@@ -2,6 +2,8 @@
 # This .yml file is based on scikit-learn and statsmodels' Appveyor CI setups, adapted for
 # use with Pyramid https://ci.appveyor.com/project/tgsmith61591/pyramid
 
+os: Visual Studio 2015
+
 environment:
   global:
     # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
@@ -13,73 +15,94 @@ environment:
     secure: okvMa3VgIXdlnMC48iMefQ==
 
   matrix:
-    - PY_MAJOR_VER: 2
-      PYTHON_ARCH: "x86"
-      PYTHON_VERSION: "2.7"
-      MINICONDA_MICRO_VERSION: "30"
+    - PYTHON_ARCH: "32"
+      PYTHON_VERSION: "2.7.8"
       MPL_VERSION: "2.1.0"
       PYRAMID_MPL_DEBUG: "true"
+      PYTHON: "C:\\Python27"
 
-    - PY_MAJOR_VER: 2
-      PYTHON_ARCH: "x86_64"
-      PYTHON_VERSION: "2.7"
-      MINICONDA_MICRO_VERSION: "30"
+    - PYTHON_ARCH: "64"
+      PYTHON_VERSION: "2.7.8"
       MPL_VERSION: "2.1.0"
       PYRAMID_MPL_DEBUG: "true"
+      PYTHON: "C:\\Python27-x64"
 
-    - PY_MAJOR_VER: 3
-      PYTHON_ARCH: "x86"
-      PYTHON_VERSION: "3.5"
-      MINICONDA_MICRO_VERSION: "31"
+    - PYTHON_ARCH: "32"
+      PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
       PYRAMID_MPL_DEBUG: "true"
+      PYTHON: "C:\\Python35"
 
-    - PY_MAJOR_VER: 3
-      PYTHON_ARCH: "x86_64"
-      PYTHON_VERSION: "3.5"
-      MINICONDA_MICRO_VERSION: "31"
+    - PYTHON_ARCH: "64"
+      PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
       PYRAMID_MPL_DEBUG: "true"
+      PYTHON: "C:\\Python35-x64"
 
-# 3/27/18 - Conda is not working well on Windows because they haven't gotten
-# their act together RE: powershell...
-build_script:
-  - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-4.3.$env:MINICONDA_MICRO_VERSION-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
-  # - ps: Start-FileDownload "https://repo.continuum.io/miniconda/Miniconda$env:PY_MAJOR_VER-latest-Windows-$env:PYTHON_ARCH.exe" C:\Miniconda.exe; echo "Finished downloading miniconda"
-  - cmd: C:\Miniconda.exe /S /D=C:\Py
-  - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
-  - conda config --set always_yes yes
-  # - conda update conda
+    - PYTHON_ARCH: "32"
+      PYTHON_VERSION: "3.6.6"
+      MPL_VERSION: "2.2.3"
+      PYRAMID_MPL_DEBUG: "true"
+      PYTHON: "C:\\Python36"
 
-  # Debugging because Appveyor gives us no stack traces when this stuff breaks.
-  - ps: echo "Conda version:"
-  - conda --version
-  - ps: echo "Python version=$env:PYTHON_VERSION"
+    - PYTHON_ARCH: "64"
+      PYTHON_VERSION: "3.6.6"
+      MPL_VERSION: "2.2.3"
+      PYRAMID_MPL_DEBUG: "true"
+      PYTHON: "C:\\Python36-x64"
 
-  # Install conda env
-  - ps: conda create -n testenv --yes python=$env:PYTHON_VERSION numpy scipy cython scikit-learn statsmodels pip nose patsy matplotlib=$env:MPL_VERSION
-  - activate testenv
+# Because we only have a single worker, we don't want to waste precious
+# appveyor CI time and make other PRs wait for repeated failures in a failing
+# PR. The following option cancels pending jobs in a given PR after the first
+# job failure in that specific PR.
+matrix:
+    fast_finish: true
 
-  # Things we'll need for deployment
-  - pip install wheel twine
+install:
+  # If there is a newer build queued for the same PR, cancel this one.
+  # The AppVeyor 'rollout builds' option is supposed to serve the same
+  # purpose but is problematic because it tends to cancel builds pushed
+  # directly to master instead of just PR builds.
+  # credits: JuliaLang developers.
+  - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
+        https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=500).builds | `
+        Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
+        throw "There are newer queued builds for this pull request, failing early." }
 
-  # Build the package
-  - python setup.py develop
+  # Install Python (from the official .msi of http://python.org) and pip when
+  # not already installed.
+  - "powershell ./build_tools/appveyor/install.ps1"
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "python -m pip install -U pip"
+
+  # Check that we have the expected version and architecture for Python
+  - "python --version"
+  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+  - "pip --version"
+
+  # 9/25/18 - Use the scikit approach
+  # Build the package (and the wheels!)
+  - "%CMD_IN_ENV% pip install --timeout=60 -r build_tools/appveyor/requirements.txt"
+  - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
+  - ps: "ls dist"
+
+  # Install the generated wheel file
+  - "pip install --pre --no-index --find-links dist/ pyramid-arima"
+
+# Not a .NET project, we build pyramid in the install step instead
+build: false
 
 test_script:
   # Change to a non-source folder to make sure we run the tests on the
-  # installed library.
-  - "mkdir empty_folder"
-  - "cd empty_folder"
-  - nosetests --exe -v -A "not slow" pyramid
+  # installed library
+  - mkdir "../empty_folder"
+  - "cd ../empty_folder"
 
-  # Move back to the project folder
-  - "cd .."
+  # Test with pytest
+  - "pytest --showlocals --durations=20 --pyargs pyramid"
+  - "cd ../pyramid"
 
 after_test:
-  # After the test, build the wheels (let travis handle the source build).
-  - ECHO "Test complete, building wheels"
-  - python setup.py sdist bdist_wheel
   - set PATH=%BK_PATH%
 
 artifacts:
@@ -90,3 +113,10 @@ deploy_script:
   - set PATH=%BK_PATH%
   - ps: If ($env:APPVEYOR_REPO_TAG -eq "true") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --skip-existing dist/*" } Else { write-output "Not on a tagged commit, won't deploy to pypi"}
   #- ps: If ($env:APPVEYOR_REPO_BRANCH -eq "develop") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*" } Else { write-output "Not on a development commit, won't deploy to pypitest"}
+
+cache:
+  # Use the appveyor cache to avoid re-downloading large archives such
+  # the MKL numpy and scipy wheels mirrored on a rackspace cloud
+  # container, speed up the appveyor jobs and reduce bandwidth
+  # usage on our rackspace account.
+  - '%APPDATA%\pip\Cache'
