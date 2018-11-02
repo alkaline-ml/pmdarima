@@ -26,7 +26,7 @@ run_tests() {
     cd $TEST_DIR
 
     if [[ "$COVERAGE" == "true" ]]; then
-        TEST_CMD="$TEST_CMD --cov-config .coveragerc --cov"
+        TEST_CMD="$TEST_CMD --cov-config .coveragerc --cov pmdarima"
     fi
     $TEST_CMD pmdarima
 
