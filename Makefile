@@ -30,7 +30,7 @@ inplace:
 	$(PYTHON) setup.py build_ext -i
 
 test-code: in
-	$(NOSETESTS) -s -v pyramid
+	$(NOSETESTS) -s -v pmdarima
 
 # test-sphinxext:
 #	$(NOSETESTS) -s -v doc/sphinxext/
@@ -43,7 +43,7 @@ test-code: in
 
 test-coverage:
 	rm -rf coverage .coverage
-	$(NOSETESTS) -s -v --with-coverage pyramid
+	$(NOSETESTS) -s -v --with-coverage pmdarima
 
 #test: test-code test-sphinxext test-doc
 
@@ -56,7 +56,7 @@ cython:
 ctags:
 	# make tags for symbol based navigation in emacs and vim
 	# Install with: sudo apt-get install exuberant-ctags
-	$(CTAGS) --python-kinds=-i -R pyramid
+	$(CTAGS) --python-kinds=-i -R pmdarima
 
 #doc: inplace
 #	$(MAKE) -C doc html
@@ -65,8 +65,8 @@ ctags:
 #	$(MAKE) -C doc html-noplot
 
 code-analysis:
-	flake8 pyramid | grep -v __init__ | grep -v external
-	pylint -E -i y pyramid/ -d E1103,E0611,E1101
+	flake8 pmdarima | grep -v __init__ | grep -v external
+	pylint -E -i y pmdarima/ -d E1103,E0611,E1101
 
 #flake8-diff:
 #./build_tools/travis/flake8_diff.sh

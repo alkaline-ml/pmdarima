@@ -16,7 +16,7 @@ print(__doc__)
 
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
-import pyramid as pm
+import pmdarima as pm
 
 # #############################################################################
 # You can load the datasets via load_<name>

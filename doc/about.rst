@@ -4,7 +4,7 @@
 About the project
 =================
 
-Pyramid is designed to behave as similarly to R's well-known
+Pyramid-arima is designed to behave as similarly to R's well-known
 `auto.arima <https://www.rdocumentation.org/packages/forecast/versions/8.4/topics/auto.arima>`_
 as possible.
 
@@ -25,7 +25,7 @@ and machine learning libraries (statsmodels and scikit-learn), and operates by g
 all ARIMA models into a single class (unlike statsmodels).
 
 It does this by wrapping the respective statsmodels interfaces
-(``ARMA``, ``ARIMA`` and ``SARIMAX``) inside the ``pyramid.ARIMA`` class,
+(``ARMA``, ``ARIMA`` and ``SARIMAX``) inside the ``pmdarima.ARIMA`` class,
 and as a result there is a bit of monkey patching that happens beneath the hood.
 
 How ``auto_arima`` works
@@ -50,7 +50,7 @@ This is an open-source (read: *FREE*) project. That means several things:
 * It's a community effort
 * Making demands doesn't go over well
 
-I know that there are those who have built models with Pyramid as a tool
+I know that there are those who have built models with Pyramid-arima as a tool
 to support their work. I also know that people can depend on the functionality of
 this library in order to do their job well. And for that, I'm committed to
 keeping things running smoothly.

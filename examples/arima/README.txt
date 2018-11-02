@@ -3,7 +3,7 @@
 ARIMA examples
 --------------
 
-Examples of how to use the :mod:`pyramid.arima` module to fit timeseries
+Examples of how to use the :mod:`pmdarima.arima` module to fit timeseries
 models.
 
 .. raw:: html

@@ -23,7 +23,7 @@ def _do_time(func, n_iter=10, *args, **kwargs):
 
 
 def benchmark_is_constant():
-    """This benchmarks the "is_constant" function from ``pyramid.arima.utils``.
+    """This benchmarks the "is_constant" function from ``pmdarima.arima.utils``
     This was added in 0.6.2.
     """
     # WINNER!

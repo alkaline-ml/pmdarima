@@ -1,8 +1,8 @@
 .. _contrib:
 
-=======================
-Contributing to Pyramid
-=======================
+=============================
+Contributing to Pyramid-arima
+=============================
 
 **Note: This document is a 'getting started' summary for contributing code,
 documentation, testing, and filing issues.** Please read it carefully to help

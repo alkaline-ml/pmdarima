@@ -29,7 +29,7 @@ fi
 pip install twine || "pip installing twine failed"
 
 # remove the .egg-info dir so Mac won't bomb on bdist_wheel cmd (absolute path in SOURCES.txt)
-rm -r pyramid_arima.egg-info/ || echo "No local .egg cache to remove"
+rm -r pmdarima.egg-info/ || echo "No local .egg cache to remove"
 
 # make a dist folder if not there, then make sure permissions are sufficient
 mkdir -p dist

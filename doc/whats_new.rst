@@ -1,11 +1,19 @@
 .. _whats_new:
 
-=====================
-What's new in Pyramid
-=====================
+======================
+What's new in pmdarima
+======================
 
-As new releases of Pyramid are pushed out, the following list (introduced in
+As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
+
+v1.0.0
+------
+
+* Migrate namespace from 'pyramid-arima' to 'pmdarima'. This is due to the fact that
+  a growing web-framework (also named Pyramid) is causing namespace collisions when
+  both packages are installed on a machine. See [Issue #34](https://github.com/tgsmith61591/pyramid/issues/34)
+  for more detail.
 
 v0.9.0
 ------

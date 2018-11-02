@@ -4,8 +4,8 @@ set -e
 
 # this is a hack, but we have to make sure we're only ever running this from
 # the top level of the package and not in the subdirectory...
-if [[ ! -d pyramid/__check_build ]]; then
-    echo "This must be run from the pyramid project directory"
+if [[ ! -d pmdarima/__check_build ]]; then
+    echo "This must be run from the pmdarima project directory"
     exit 3
 fi
 
@@ -60,8 +60,8 @@ declare -a leftover=(".cache/"
                      "build_tools/"
                      "doc/"
                      "examples/"
-                     "pyramid/"
-                     "pyramid.egg-info/"
+                     "pmdarima/"
+                     "pmdarima.egg-info/"
                      "_downloads/"
                      "_images/"
                      "_modules/"

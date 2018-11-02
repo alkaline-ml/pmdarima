@@ -31,7 +31,8 @@ __pycache__/
 
 # C extensions
 *.so
-pyramid/arima/_arima.html
+*.c
+pmdarima/arima/_arima.html
 
 # Distribution / packaging
 .Python
