@@ -53,13 +53,6 @@ matrix:
            DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64" DOCKER_CONTAINER_NAME="pyramidcontainer"
            UCS_SETTING="ucs4"
 
-    # This environment tests the same conditions as above, but tests against MAC OS X,
-    # using virtualenv instead of the conda python distribution
-    - os: osx
-      language: generic
-      env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=false
-
     # This environment tests Python 3.5 support on linux
     - os: linux
       dist: trusty
@@ -71,36 +64,30 @@ matrix:
            DEPLOY=true CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
            DOCKER_CONTAINER_NAME="pyramidcontainer"
 
-    # This environment tests Python 3.5 support on MAC OS X, using virtualenv
-    # instead of the conda python distribution
+    # This test runs on linux 3.6 & as of v0.9+, deploys python 3.6 wheel
+    - os: linux
+      dist: trusty
+      services:
+      - docker
+      env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
+        NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
+        COVERAGE=false SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
+        DEPLOY=true CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+        DOCKER_CONTAINER_NAME="pyramidcontainer"
+
+    # This environment tests against MAC OS X for python 2.7
+    - os: osx
+      language: generic
+      env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
+           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=false
+
+    # This environment tests Python 3.5 support on MAC OS X
     - os: osx
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="3.5"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
            DEPLOY=true CACHEC=false
-
-    # This environment tests the newest supported Anaconda release (4.4.0) and
-    # runs on linux
-    - os: linux
-      dist: trusty
-      env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
-           DEPLOY=false CACHEC=true
-
-    # This environment use pytest to run the tests. It uses the newest
-    # supported Anaconda release (4.4.0) and tests with pytests instead of nosetests.
-    # This test runs on linux. As of v0.9+, deploy python 3.6 wheel
-    - os: linux
-      dist: trusty
-      services:
-        - docker
-      env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=false SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
-           DEPLOY=true CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
-           DOCKER_CONTAINER_NAME="pyramidcontainer"
 
 install: source build_tools/travis/install.sh
 before_script: bash build_tools/travis/before_script.sh
