@@ -70,6 +70,7 @@ declare -a leftover=(".cache/"
                      "_sources/"
                      "_static/"
                      "auto_examples/"
+                     "includes"
                      "modules/")
 
 # check for each left over file/dir and remove it
