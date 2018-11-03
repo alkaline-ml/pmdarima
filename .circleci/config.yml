@@ -21,6 +21,18 @@ jobs:
             - ~/.ccache
             - ~/.cache/pip
 
+  # For testing lint
+  test-linting:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pyramid
+    steps:
+    - checkout
+    - run: make test-lint
+
+  # For building and deploying documentation
+  # documentation:
+
 workflows:
   version: 2
 
@@ -28,3 +40,4 @@ workflows:
   pypy:
     jobs:
       - pypy36
+      - test-linting

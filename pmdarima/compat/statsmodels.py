@@ -25,6 +25,6 @@ def bind_df_model(model_fit, arima_results):
     """
     if not hasattr(arima_results, 'df_model'):
         df_model = model_fit.k_exog + model_fit.k_trend + \
-                   model_fit.k_ar + model_fit.k_ma + \
-                   model_fit.k_seasonal_ar + model_fit.k_seasonal_ma
+            model_fit.k_ar + model_fit.k_ma + \
+            model_fit.k_seasonal_ar + model_fit.k_seasonal_ma
         setattr(arima_results, 'df_model', df_model)

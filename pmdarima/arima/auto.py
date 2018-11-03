@@ -459,8 +459,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
 
     # m must be > 1 for nsdiffs
     elif D is None:  # we don't have a D yet and we need one (seasonal)
-        seasonal_test_args = seasonal_test_args if seasonal_test_args is \
-                                                   not None else dict()
+        seasonal_test_args = seasonal_test_args \
+            if seasonal_test_args is not None else dict()
         D = nsdiffs(xx, m=m, test=seasonal_test, max_D=max_D,
                     **seasonal_test_args)
 
@@ -503,8 +503,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
     # determine/set the order of differencing by estimating the number of
     # orders it would take in order to make the TS stationary.
     if d is None:
-        offset_test_args = offset_test_args if offset_test_args is \
-                                               not None else dict()
+        offset_test_args = offset_test_args \
+            if offset_test_args is not None else dict()
         d = ndiffs(dx, test=test, alpha=alpha, max_d=max_d, **offset_test_args)
 
         if d > 0 and exogenous is not None:

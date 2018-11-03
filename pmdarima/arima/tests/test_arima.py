@@ -79,16 +79,16 @@ def test_basic_arima():
 
     # Make sure we can get confidence intervals
     expected_intervals = np.array([
-        [-0.10692387,  0.98852139],
-        [-0.10692387,  0.98852139],
-        [-0.10692387,  0.98852139],
-        [-0.10692387,  0.98852139],
-        [-0.10692387,  0.98852139],
-        [-0.10692387,  0.98852139],
-        [-0.10692387,  0.98852139],
-        [-0.10692387,  0.98852139],
-        [-0.10692387,  0.98852139],
-        [-0.10692387,  0.98852139]
+        [-0.10692387, 0.98852139],
+        [-0.10692387, 0.98852139],
+        [-0.10692387, 0.98852139],
+        [-0.10692387, 0.98852139],
+        [-0.10692387, 0.98852139],
+        [-0.10692387, 0.98852139],
+        [-0.10692387, 0.98852139],
+        [-0.10692387, 0.98852139],
+        [-0.10692387, 0.98852139],
+        [-0.10692387, 0.98852139]
     ])
 
     _, intervals = arima.predict(n_periods=10, return_conf_int=True,
@@ -111,7 +111,7 @@ def test_with_oob():
     assert_raises(TypeError, arima.predict, n_periods="5")
 
     # But that we CAN forecast with an int...
-    _ = arima.predict(n_periods=5)
+    _ = arima.predict(n_periods=5)  # noqa: F841
 
     # Show we fail if cv > n_samples
     assert_raises(ValueError,
@@ -143,9 +143,9 @@ def test_oob_for_issue_28():
     # first IS in fact only applied to the first (train - n_out_of_bag)
     # samples
     arima_no_oob = ARIMA(
-            order=(2, 1, 2), suppress_warnings=True,
-            out_of_sample_size=0)\
-        .fit(y=hr[:-10], exogenous=xreg[:-10, :])
+        order=(2, 1, 2), suppress_warnings=True,
+        out_of_sample_size=0).fit(y=hr[:-10],
+                                  exogenous=xreg[:-10, :])
 
     scoring = get_callable(arima_no_oob.scoring, VALID_SCORING)
     preds = arima_no_oob.predict(n_periods=10, exogenous=xreg[-10:, :])
@@ -193,10 +193,11 @@ def test_oob_sarimax():
                 seasonal_order=(0, 1, 1, 12),
                 out_of_sample_size=15).fit(y=wineind, exogenous=xreg)
 
-    fit_no_oob = ARIMA(
-            order=(1, 1, 1), seasonal_order=(0, 1, 1, 12),
-            out_of_sample_size=0, suppress_warnings=True)\
-        .fit(y=wineind[:-15], exogenous=xreg[:-15, :])
+    fit_no_oob = ARIMA(order=(1, 1, 1),
+                       seasonal_order=(0, 1, 1, 12),
+                       out_of_sample_size=0,
+                       suppress_warnings=True).fit(y=wineind[:-15],
+                                                   exogenous=xreg[:-15, :])
 
     # now assert some of the same things here that we did in the former test
     oob = fit.oob()
@@ -236,8 +237,9 @@ def test_oob_for_issue_29():
 
                 # surround with try/except so we can log the failing combo
                 try:
-                    model = ARIMA(order=(2, d, 0), out_of_sample_size=cv)\
-                            .fit(dta, exogenous=exog)
+                    model = ARIMA(order=(2, d, 0),
+                                  out_of_sample_size=cv).fit(dta,
+                                                             exogenous=exog)
 
                     # If exogenous is defined, we need to pass n_periods of
                     # exogenous rows to the predict function. Otherwise we'll
@@ -658,7 +660,8 @@ def test_warn_for_large_differences():
     # Second: D is too large. M needs to be > 1 or D will be set to 0...
     # unfortunately, this takes a long time.
     with warnings.catch_warnings(record=True) as w:
-        _ = auto_arima(wineind, seasonal=True, m=2, suppress_warnings=False,
+        _ = auto_arima(wineind, seasonal=True, m=2,  # noqa: F841
+                       suppress_warnings=False,
                        D=3, error_action='warn')
 
         assert len(w) > 0
@@ -666,7 +669,7 @@ def test_warn_for_large_differences():
 
 def test_warn_for_stepwise_and_parallel():
     with warnings.catch_warnings(record=True) as w:
-        _ = auto_arima(lynx, suppress_warnings=False, d=1,
+        _ = auto_arima(lynx, suppress_warnings=False, d=1,  # noqa: F841
                        error_action='ignore', stepwise=True, n_jobs=2)
 
         assert len(w) > 0
@@ -684,7 +687,8 @@ def test_force_polynomial_error():
 
     # but it should pass when xreg is not none
     xreg = rs.rand(x.shape[0], 2)
-    _ = auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg,
+    _ = auto_arima(x, d=d, D=0, seasonal=False,  # noqa: F841
+                   exogenous=xreg,
                    error_action='ignore', suppress_warnings=True)
 
 
@@ -693,14 +697,16 @@ def test_seasonal_xreg_differencing():
     # Test both a small M and a large M since M is used as the lag parameter
     # in the xreg array differencing. If M is 1, D is set to 0
     for m in (2,):  # 12): takes FOREVER
-        _ = auto_arima(wineind, d=1, D=1, seasonal=True,
+        _ = auto_arima(wineind, d=1, D=1,  # noqa: F841
+                       seasonal=True,
                        exogenous=wineind_xreg, error_action='ignore',
                        suppress_warnings=True, m=m)
 
 
 # Show that we can complete when max order is None
 def test_inf_max_order():
-    _ = auto_arima(lynx, max_order=None, suppress_warnings=True,
+    _ = auto_arima(lynx, max_order=None,  # noqa: F841
+                   suppress_warnings=True,
                    error_action='ignore')
 
 

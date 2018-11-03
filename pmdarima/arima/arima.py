@@ -213,9 +213,9 @@ class ARIMA(BaseEstimator):
 
     .. [2] Statsmodels ARIMA documentation: http://bit.ly/2wc9Ra8
     """
-    def __init__(self, order, seasonal_order=None, start_params=None, trend='c',
-                 method=None, transparams=True, solver='lbfgs', maxiter=50,
-                 disp=0, callback=None, suppress_warnings=False,
+    def __init__(self, order, seasonal_order=None, start_params=None,
+                 trend='c', method=None, transparams=True, solver='lbfgs',
+                 maxiter=50, disp=0, callback=None, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None):
 
         # XXX: This isn't actually required--sklearn doesn't need a super call
@@ -582,7 +582,7 @@ class ARIMA(BaseEstimator):
         if loc is not None:
             try:
                 self.arima_res_ = TimeSeriesModelResults.load(loc)
-            except:
+            except:  # noqa: E722
                 raise OSError('Could not read saved model state from %s. '
                               'Does it still exist?' % loc)
 

@@ -51,8 +51,20 @@ Building the package will require ``gcc`` (unix) or a Windows equivalent, like
 
     $ python setup.py develop
 
+You can also use the ``Makefile`` if you're on a posix machine:
+
+.. code-block:: bash
+
+    $ make develop
+
 Alternatively, to install the package in your ``site-packages``:
 
 .. code-block:: bash
 
     $ python setup.py install
+
+Or, with the ``Makefile``:
+
+.. code-block:: bash
+
+    $ make install

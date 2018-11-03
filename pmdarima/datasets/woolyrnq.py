@@ -52,7 +52,7 @@ def load_woolyrnq(as_series=False):
 
     References
     ----------
-    .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/woolyrnq
+    .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/woolyrnq  # noqa: E501
 
     Returns
     -------

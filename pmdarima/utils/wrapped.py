@@ -31,11 +31,11 @@ def inheritdoc(parent):
     >>> def a(x=1):
     ...     '''This is documentation'''
     ...     return x
-    ... 
+    ...
     >>> @inheritdoc(a)
     ... def b(x):
     ...     return 2 * a(x)
-    ... 
+    ...
     >>> print(b.__doc__)
     This is documentation
 

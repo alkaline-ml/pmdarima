@@ -139,14 +139,14 @@ def _diff_vector(x, lag):
     # compute the lag for a vector (not a matrix)
     n = x.shape[0]
     lag = min(n, lag)  # if lag > n, then we just want an empty array back
-    return x[lag:n] - x[:n-lag]
+    return x[lag: n] - x[: n-lag]  # noqa: E226
 
 
 def _diff_matrix(x, lag):
     # compute the lag for a matrix (not a vector)
     m, _ = x.shape
     lag = min(m, lag)  # if lag > n, then we just want an empty array back
-    return x[lag:m, :] - x[:m-lag, :]
+    return x[lag: m, :] - x[: m-lag, :]  # noqa: E226
 
 
 def diff(x, lag=1, differences=1):

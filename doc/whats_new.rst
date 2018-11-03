@@ -15,6 +15,12 @@ v1.0.0
   both packages are installed on a machine. See [Issue #34](https://github.com/tgsmith61591/pyramid/issues/34)
   for more detail.
 
+* Remove redundant Travis tests
+
+* Automate documentation build on Circle CI
+
+* Move lots of the build/test functionality into the ``Makefile`` for ease.
+
 v0.9.0
 ------
 

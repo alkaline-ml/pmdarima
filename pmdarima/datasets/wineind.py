@@ -63,7 +63,7 @@ def load_wineind(as_series=False):
 
     References
     ----------
-    .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/wineind
+    .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/wineind  # noqa: E501
 
     Returns
     -------

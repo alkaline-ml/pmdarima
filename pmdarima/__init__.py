@@ -18,8 +18,8 @@ except NameError:
 
 if __PMDARIMA_SETUP__:
     import sys
-    sys.stderr.write('Partial import of pmdarima during the build process.' +
-                     _os.linesep)
+    sys.stderr.write('Partial import of pmdarima during the build process.%s'
+                     % _os.linesep)
 else:
     # check that the build completed properly. This prints an informative
     # message in the case that any of the C code was not properly compiled.
