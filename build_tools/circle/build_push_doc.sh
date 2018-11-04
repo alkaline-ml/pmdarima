@@ -12,21 +12,6 @@ fi
 # get the running branch
 branch=$(git symbolic-ref --short HEAD)
 
-# we only really want to do this from master
-if [[ ${branch} != "master" ]]; then
-    echo "This must be run from the master branch"
-    exit 5
-fi
-
-# make sure no untracked changes in git
-if [[ -n $(git status -s) ]]; then
-    echo "You have untracked changes in git"
-    exit 7
-fi
-
-# setup the project
-python setup.py install
-
 # cd into docs, make them
 cd doc
 make clean html EXAMPLES_PATTERN=ex_*
@@ -35,20 +20,17 @@ cd ..
 # move the docs to the top-level directory, stash for checkout
 mv doc/_build/html ./
 
-# We do NOT want to remove the .idea/ folder if it's there, because it contains
-# user preferences for PyCharm. So we'll move it back one level, rename it, and
-# then retrieve it after we switch back over to master
-tmp_idea_dir="../.tmp_idea/"
-if [[ -d .idea/ ]]; then
-    echo "Found .idea/ directory. Moving it to ${tmp_idea_dir} for the push"
-    mv .idea/ ${tmp_idea_dir}
-fi
-
 # html/ will stay there actually...
 git stash
 
 # checkout gh-pages, remove everything but .git, pop the stash
+# switch into the gh-pages branch
 git checkout gh-pages
+
+# Make sure to set the credentials!
+git config --global user.email "$GH_EMAIL" > /dev/null 2>&1
+git config --global user.name "$GH_NAME" > /dev/null 2>&1
+
 # remove all files that are not in the .git dir
 find . -not -name ".git/*" -type f -maxdepth 1 -delete
 
@@ -62,8 +44,6 @@ declare -a leftover=(".cache/"
                      "examples/"
                      "pmdarima/"
                      "pmdarima.egg-info/"
-                     "pyramid/"
-                     "pyramid.egg-info"
                      "_downloads/"
                      "_images/"
                      "_modules/"
@@ -84,24 +64,17 @@ touch .nojekyll
 mv html/* ./
 rm -r html/
 
-# add everything, get ready for commit
-git add --all
-git commit -m "[ci skip] publishing updated documentation..."
-git push origin gh-pages
+# Add everything, get ready for commit. But only do it if we're on master
+if [[ "${CIRCLE_BRANCH}" =~ ^master$|^[0-9]+\.[0-9]+\.X$ ]]; then
+    git add --all
+    git commit -m "[ci skip] publishing updated documentation..."
 
-# switch back to master
-git checkout master
+    # We have to re-add the origin with the GH_TOKEN credentials
+    git remote rm origin
+    git remote add origin https://${GH_NAME}:${GH_TOKEN}@github.com/${GH_NAME}/pyramid.git
 
-# Check for the existing .tmp_idea/ and move it back into the directory
-# if needed
-if [[ -d ${tmp_idea_dir} ]]; then
-    echo "Found stashed temporary .idea/ directory at ${tmp_idea_dir}"
-
-    # if there is already an .idea dir, don't do anything
-    if [[ ! -d .idea/ ]]; then
-        echo "Moving stashed temporary .idea/ back to git repo"
-        mv ${tmp_idea_dir} .idea/
-    else
-        echo "Existing .idea/ found. Will not replace with ${tmp_idea_dir}"
-    fi
+    # NOW we should be able to push it
+    git push origin gh-pages
+else
+    echo "Not on master, so won't push doc"
 fi

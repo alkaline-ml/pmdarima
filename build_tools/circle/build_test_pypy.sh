@@ -2,9 +2,6 @@
 set -x
 set -e
 
-apt-get -yq update
-apt-get -yq install libatlas-dev libatlas-base-dev liblapack-dev gfortran ccache
-
 # Don't test with Conda here, use virtualenv instead
 pip install virtualenv
 

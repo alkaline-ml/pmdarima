@@ -12,6 +12,9 @@ clean:
 	rm -rf dist
 	rm -rf build
 
+doc-requirements:
+	$(PYTHON) -m pip install -r build_tools/doc/doc_requirements.txt
+
 requirements:
 	$(PYTHON) -m pip install -r requirements.txt
 
