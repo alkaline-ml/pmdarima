@@ -14,7 +14,7 @@ jobs:
           - pypy3-ccache
 
       - checkout
-        - run: ./build_tools/circle/before_install.sh
+      - run: ./build_tools/circle/before_install.sh
       - run: ./build_tools/circle/build_test_pypy.sh
       - save_cache:
           key: pypy3-ccache-{{ .Branch }}-{{ .BuildNum }}
