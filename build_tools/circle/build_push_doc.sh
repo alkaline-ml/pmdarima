@@ -26,6 +26,7 @@ git stash
 # checkout gh-pages, remove everything but .git, pop the stash
 # switch into the gh-pages branch
 git checkout gh-pages
+git pull origin gh-pages
 
 # Make sure to set the credentials!
 git config --global user.email "$GH_EMAIL" > /dev/null 2>&1
