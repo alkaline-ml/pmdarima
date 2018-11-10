@@ -1,4 +1,4 @@
-<!-- Instructions For Filing a Bug: https://github.com/scikit-learn/scikit-learn/blob/master/CONTRIBUTING.md#filing-bugs -->
+<!-- Instructions For Filing a Bug: https://www.alkaline-ml.com/pyramid/contributing.html#filing-bugs -->
 
 #### Description
 <!-- Example: ValueError raised when fitting very high-frequency data -->
@@ -14,7 +14,7 @@ model = auto_arima(your_data, stepwise=True)
 -->
 
 #### Expected Results
-<!-- Example: No error is thrown. Please paste or describe the expected results.-->
+<!-- Please paste or describe the expected results. -->
 
 #### Actual Results
 <!-- Please paste or specifically describe the actual output or traceback. -->

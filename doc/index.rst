@@ -3,13 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-====================================
-Pyramid: ARIMA estimators for Python
-====================================
+=====================================
+pmdarima: ARIMA estimators for Python
+=====================================
 
-Pyramid brings R's beloved ``auto.arima`` to Python, making an even stronger
-case for why you don't need R for data science. Pyramid is 100% Python + Cython
-and does not leverage any R code, and implements a single, easy-to-use scikit-learn-esque estimator.
+Pmdarima brings R's beloved ``auto.arima`` to Python, making an even stronger
+case for why you don't need R for data science. Pmdarima is 100% Python + Cython
+and does not leverage any R code, and implements a single, easy-to-use
+scikit-learn-esque estimator.
 
 .. toctree::
    :maxdepth: 2

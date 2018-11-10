@@ -17,6 +17,16 @@ one less reason why R is a viable language for practical machine learning.
 *(Of course, take my soapbox speech with a grain of salt... I once was an R addict but am now recovering)*
 
 
+The name...
+-----------
+
+The name "pyramid" originally was the result of an anagram between the "py" prefix and
+the characters needed to spell "arima". However, the emerging web framework sharing the
+same name caused a `namespace collision <https://github.com/tgsmith61591/pyramid/issues/34>`_
+and the package has since been renamed `pmdarima`. You may still see it referred to interchangeably
+as "pyramid".
+
+
 How it works
 ------------
 

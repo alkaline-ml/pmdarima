@@ -1,8 +1,8 @@
 .. _contrib:
 
-=============================
-Contributing to Pyramid-arima
-=============================
+========================
+Contributing to pmdarima
+========================
 
 **Note: This document is a 'getting started' summary for contributing code,
 documentation, testing, and filing issues.** Please read it carefully to help
@@ -12,7 +12,7 @@ likelihood of your contribution being merged.
 How to contribute
 -----------------
 
-The preferred workflow for contributing to pyramid is to fork the
+The preferred workflow for contributing to pmdarima is to fork the
 `main repository <https://github.com/tgsmith61591/pyramid>`_ on
 Github, clone, and develop on a branch. Steps:
 
@@ -96,6 +96,12 @@ rules may hinder the speed with which your contribution is merged:
           $ python setup.py develop
           $ pytest
 
+   You can also use the ``Makefile`` on posix machines:
+
+      .. code-block:: bash
+
+          $ make test
+
    You may need to see the :ref:`setup` section for instructions on how
    to build the package. For instructions on how to test (using nose or pytest)
    see `Numpy's testing instructions <https://github.com/numpy/numpy/blob/master/doc/TESTS.rst.txt>`_.
@@ -130,7 +136,7 @@ following rules before submitting:
       import sklearn; print("Scikit-Learn", sklearn.__version__)
       import pandas; print("Pandas", pandas.__version__)
       import statsmodels; print("Statsmodels", statsmodels.__version__)
-      import pyramid; print("Pyramid", pyramid.__version__)
+      import pmdarima; print("Pyramid", pmdarima.__version__)
 
 - Please don't be a **lazy issue-filer!** Submitting a screen shot of an Excel document,
   or poorly-formatted/incomplete code makes the maintainers' lives difficult. Please include your data inline

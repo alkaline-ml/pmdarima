@@ -6,13 +6,13 @@ Serializing your ARIMA models
 
 After you've fit your model and you're ready to start making predictions out
 in your production environment, it's time to save your ARIMA to disk.
-Pyramid models can be serialized with ``pickle`` or ``joblib``, just as with
+Pmdarima models can be serialized with ``pickle`` or ``joblib``, just as with
 most other python objects:
 
 .. code-block:: python
 
-    from pyramid.arima import auto_arima
-    from pyramid.datasets import load_lynx
+    from pmdarima.arima import auto_arima
+    from pmdarima.datasets import load_lynx
     import numpy as np
 
     # For serialization:
@@ -42,7 +42,7 @@ most other python objects:
     np.allclose(pickle_preds, joblib_preds)
 
 If your job is to build models, that's probably all you really care to know about
-the serialization process. However, there are several intricacies of how Pyramid
+the serialization process. However, there are several intricacies of how pmdarima
 internally saves a model that you might care to know for development purposes.
 
 
@@ -56,14 +56,14 @@ The ARIMA class is a generalization of three models:
   * ``statsmodels.tsa.statespace.SARIMAX``
 
 The ``statsmodels`` library does not play very nicely with pickling, so under
-the hood the pyramid ARIMA class does some monkey-patching.
+the hood the pmdarima ARIMA class does some monkey-patching.
 
 
 The serialization process
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When the pickling process begins, the ARIMA class will first save the internal
-model into a directory defined by the ``pyramid._config.PYRAMID_ARIMA_CACHE``
+model into a directory defined by the ``pmdarima._config.PYRAMID_ARIMA_CACHE``
 variable (default is ``.pyramid-arima-cache/``). Next, it will pickle the class
 instance to the defined location, save the location as a temporary attribute,
 and re-attach the model state to the instance so that you can continue to make

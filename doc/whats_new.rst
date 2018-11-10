@@ -10,9 +10,12 @@ v0.8.1) will document the latest features.
 v1.0.0
 ------
 
+* **Wheels will no longer be built for Python versions < 3.5.** You may still be able to build
+  from source, but support for 2.x python versions will diminish in future versions.
+
 * Migrate namespace from 'pyramid-arima' to 'pmdarima'. This is due to the fact that
   a growing web-framework (also named Pyramid) is causing namespace collisions when
-  both packages are installed on a machine. See [Issue #34](https://github.com/tgsmith61591/pyramid/issues/34)
+  both packages are installed on a machine. See `Issue #34 <https://github.com/tgsmith61591/pyramid/issues/34>`_
   for more detail.
 
 * Remove redundant Travis tests
@@ -20,6 +23,8 @@ v1.0.0
 * Automate documentation build on Circle CI
 
 * Move lots of the build/test functionality into the ``Makefile`` for ease.
+
+
 
 v0.9.0
 ------
@@ -76,7 +81,7 @@ v0.8.1
 v0.7.0
 ------
 
-* ``ARIMA`` ``out_of_sample_size`` behavior
+* ``out_of_sample_size`` behavior in :class:`pmdarima.arima.ARIMA`
 
   - In prior versions, the ``out_of_sample_size`` (OOSS) parameter misbehaved in the sense that it
     ended up fitting the model on the entire sample, and scoring the number specified. This
@@ -84,12 +89,12 @@ v0.7.0
     ARIMA models will be fit on :math:`n - OOSS` samples, scored on the last OOSS samples,
     and the held-out samples are then added to the model.
 
-* ``ARIMA`` ``add_new_samples`` method
+* ``add_new_samples`` method added to :class:`pmdarima.arima.ARIMA`
 
   - This method adds new samples to the model, effectively refreshing the point from
     which it creates new forecasts without impacting the model parameters.
 
-* ``ARIMA`` confidence intervals on ``predict``
+* Add confidence intervals on ``predict`` in :class:`pmdarima.arima.ARIMA`
 
   - When ``return_conf_int`` is true, the confidence intervals will now be returned
     with the forecasts.
@@ -97,7 +102,7 @@ v0.7.0
 v0.6.5
 ------
 
-* ``CHTest`` of seasonality
+* :class:`pmdarima.arima.CHTest` of seasonality
 
   - No longer compute the :math:`U` or :math:`V` matrix in the SVD computation in the
     Canova-Hansen test. This makes the test *much* faster.
