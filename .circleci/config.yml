@@ -31,6 +31,16 @@ jobs:
     - checkout
     - run: make test-lint
 
+  # Regression testing for switch-over to new pmdarima namespace
+  regression-testing:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: ./build_tools/circle/before_install.sh
+    - run: ./build_tools/regression_testing.sh
+
   # For documentation deployment. You'll need the following environment vars
   # in your Circle CI settings, otherwise this will not work.
   #
@@ -56,6 +66,7 @@ workflows:
     jobs:
       - pypy36
       - test-linting
+      - regression-testing
 
   # All deployment
   deploy:
