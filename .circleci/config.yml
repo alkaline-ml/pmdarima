@@ -39,7 +39,7 @@ jobs:
     steps:
     - checkout
     - run: ./build_tools/circle/before_install.sh
-    - run: ./build_tools/regression_testing.sh
+    - run: ./build_tools/circle/regression_testing.sh
 
   # For documentation deployment. You'll need the following environment vars
   # in your Circle CI settings, otherwise this will not work.
