@@ -26,7 +26,7 @@ jobs:
   test-linting:
     docker:
       - image: python:3.6
-    working_directory: ~/pyramid
+    working_directory: ~/pmdarima
     steps:
     - checkout
     - run: make test-lint
@@ -40,7 +40,7 @@ jobs:
   deploy-doc:
     docker:
     - image: python:3.6
-    working_directory: ~/pyramid
+    working_directory: ~/pmdarima
     steps:
     - checkout
     - run: ./build_tools/circle/before_install.sh

@@ -41,8 +41,8 @@ you can always build it from the git source. First clone it from Git:
 
 .. code-block:: bash
 
-    $ git clone https://github.com/tgsmith61591/pyramid.git
-    $ cd pyramid
+    $ git clone https://github.com/tgsmith61591/pmdarima.git
+    $ cd pmdarima
 
 Building the package will require ``gcc`` (unix) or a Windows equivalent, like
 ``MinGW``. To build in development mode (for running unit tests):

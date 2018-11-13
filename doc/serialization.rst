@@ -63,7 +63,7 @@ The serialization process
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When the pickling process begins, the ARIMA class will first save the internal
-model into a directory defined by the ``pmdarima._config.PYRAMID_ARIMA_CACHE``
+model into a directory defined by the ``pmdarima._config.PMDARIMA_CACHE``
 variable (default is ``.pyramid-arima-cache/``). Next, it will pickle the class
 instance to the defined location, save the location as a temporary attribute,
 and re-attach the model state to the instance so that you can continue to make

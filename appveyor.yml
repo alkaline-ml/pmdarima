@@ -1,6 +1,6 @@
 # AppVeyor.com is a Continuous Integration service to build and run tests under Windows
 # This .yml file is based on scikit-learn and statsmodels' Appveyor CI setups, adapted for
-# use with Pyramid https://ci.appveyor.com/project/tgsmith61591/pyramid
+# use with pmdarima https://ci.appveyor.com/project/tgsmith61591/pmdarima
 
 os: Visual Studio 2015
 
@@ -18,37 +18,37 @@ environment:
     - PYTHON_ARCH: "32"
       PYTHON_VERSION: "2.7.8"
       MPL_VERSION: "2.1.0"
-      PYRAMID_MPL_DEBUG: "true"
+      PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python27"
 
     - PYTHON_ARCH: "64"
       PYTHON_VERSION: "2.7.8"
       MPL_VERSION: "2.1.0"
-      PYRAMID_MPL_DEBUG: "true"
+      PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python27-x64"
 
     - PYTHON_ARCH: "32"
       PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
-      PYRAMID_MPL_DEBUG: "true"
+      PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python35"
 
     - PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
-      PYRAMID_MPL_DEBUG: "true"
+      PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python35-x64"
 
     - PYTHON_ARCH: "32"
       PYTHON_VERSION: "3.6.6"
       MPL_VERSION: "2.2.3"
-      PYRAMID_MPL_DEBUG: "true"
+      PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python36"
 
     - PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.6.6"
       MPL_VERSION: "2.2.3"
-      PYRAMID_MPL_DEBUG: "true"
+      PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python36-x64"
 
 # Because we only have a single worker, we don't want to waste precious
@@ -100,7 +100,7 @@ test_script:
 
   # Test with pytest
   - "pytest --showlocals --durations=20 --pyargs pmdarima"
-  - "cd ../pyramid"
+  - "cd ../pmdarima"
 
 after_test:
   - set PATH=%BK_PATH%

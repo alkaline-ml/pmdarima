@@ -15,7 +15,7 @@ v1.0.0
 
 * Migrate namespace from 'pyramid-arima' to 'pmdarima'. This is due to the fact that
   a growing web-framework (also named Pyramid) is causing namespace collisions when
-  both packages are installed on a machine. See `Issue #34 <https://github.com/tgsmith61591/pyramid/issues/34>`_
+  both packages are installed on a machine. See `Issue #34 <https://github.com/tgsmith61591/pmdarima/issues/34>`_
   for more detail.
 
 * Remove redundant Travis tests
@@ -24,6 +24,12 @@ v1.0.0
 
 * Move lots of the build/test functionality into the ``Makefile`` for ease.
 
+* Warn for impending deprecation of various environment variable name changes. The following
+  will be completely switched over in version 1.2.0:
+
+  - ``'PYRAMID_MPL_DEBUG'`` will become ``'PMDARIMA_MPL_DEBUG'``
+  - ``'PYRAMID_MPL_BACKEND'`` will become ``'PMDARIMA_MPL_BACKEND'``
+  - ``'PYRAMID_ARIMA_CACHE_WARN_SIZE'`` will become ``'PMDARIMA_CACHE_WARN_SIZE'``
 
 
 v0.9.0
@@ -63,7 +69,7 @@ v0.8.1
   - Specifies the location of the ARIMA result pickles (see :ref:`serializing`)
   - Specifies the ARIMA result pickle name pattern
 
-* Fix bug (`Issue #30 <https://github.com/tgsmith61591/pyramid/issues/30>`_) in ``ARIMA``
+* Fix bug (`Issue #30 <https://github.com/tgsmith61591/pmdarima/issues/30>`_) in ``ARIMA``
   where using CV with differencing and no seasonality caused a dim mismatch in the model's
   exog array and its endog array
 
