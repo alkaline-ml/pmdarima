@@ -189,7 +189,6 @@ def do_setup():
                         'Operating System :: POSIX',
                         'Operating System :: Unix',
                         'Operating System :: MacOS',
-                        'Programming Language :: Python :: 2.7',
                         'Programming Language :: Python :: 3.5',
                         'Programming Language :: Python :: 3.6',
                     ],
@@ -198,8 +197,7 @@ def do_setup():
                     # this will only work for releases that have the right tag
                     download_url='https://github.com/%s/%s/archive/v%s.tar.gz'
                                  % (MAINTAINER_GIT, GIT_REPO_NAME, VERSION),
-                    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, '
-                                    '!=3.3.*, !=3.4.*, <4',
+                    python_requires='>=3.5',
                     cmdclass=cmdclass,
                     **extra_setuptools_args)
 

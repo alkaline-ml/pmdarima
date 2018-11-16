@@ -3,7 +3,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/0ntddrmtrdopt5rf?svg=true)](https://ci.appveyor.com/project/tgsmith61591/pmdarima)
 [![CircleCI](https://circleci.com/gh/tgsmith61591/pmdarima.svg?style=svg)](https://circleci.com/gh/tgsmith61591/pmdarima)
 [![codecov](https://codecov.io/gh/tgsmith61591/pmdarima/branch/master/graph/badge.svg)](https://codecov.io/gh/tgsmith61591/pmdarima)
-![Supported versions](https://img.shields.io/badge/python-2.7-blue.svg)
 ![Supported versions](https://img.shields.io/badge/python-3.5-blue.svg)
 ![Supported versions](https://img.shields.io/badge/python-3.6-blue.svg)
 
