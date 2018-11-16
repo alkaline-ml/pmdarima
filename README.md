@@ -44,15 +44,12 @@ from pmdarima.arima import auto_arima
 
 `pmdarima` is available in pre-built Wheel files for the following Python versions:
 
-* Python 2.7:
-  * Mac
-  * Linux (manylinux)
-  * Windows (32 & 64-bit)
 * Python 3.5:
   * Mac
   * Linux (manylinux)
   * Windows (32 & 64-bit)
 * Python 3.6:
+  * Mac
   * Linux (manylinux)
   * Windows (32 & 64-bit)
   
