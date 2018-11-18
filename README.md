@@ -60,5 +60,5 @@ build from the source distribution tarball.
 ### Documentation
 
 All of your questions and more (including examples and guides) can be answered
-by the [Pyramid documentation](https://www.alkaline-ml.com/pyramid). If not,
+by the [`pmdarima` documentation](https://www.alkaline-ml.com/pmdarima). If not,
 always feel free to file an issue.
