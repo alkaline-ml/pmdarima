@@ -1,4 +1,4 @@
-<!-- Instructions For Filing a Bug: https://github.com/scikit-learn/scikit-learn/blob/master/CONTRIBUTING.md#filing-bugs -->
+<!-- Instructions For Filing a Bug: https://www.alkaline-ml.com/pmdarima/contributing.html#filing-bugs -->
 
 #### Description
 <!-- Example: ValueError raised when fitting very high-frequency data -->
@@ -7,14 +7,14 @@
 <!--
 Example:
 ```python
-from pyramid.arima import auto_arima
+from pmdarima.arima import auto_arima
 
 model = auto_arima(your_data, stepwise=True)
 ```
 -->
 
 #### Expected Results
-<!-- Example: No error is thrown. Please paste or describe the expected results.-->
+<!-- Please paste or describe the expected results. -->
 
 #### Actual Results
 <!-- Please paste or specifically describe the actual output or traceback. -->
@@ -24,7 +24,7 @@ model = auto_arima(your_data, stepwise=True)
 Please run the following snippet and paste the output below.
 import platform; print(platform.platform())
 import sys; print("Python", sys.version)
-import pmdarima; print("Pyramid", pmdarima.__version__)
+import pmdarima; print("pmdarima", pmdarima.__version__)
 import numpy; print("NumPy", numpy.__version__)
 import scipy; print("SciPy", scipy.__version__)
 import sklearn; print("Scikit-Learn", sklearn.__version__)

@@ -1,8 +1,8 @@
 .. _contrib:
 
-=============================
-Contributing to Pyramid-arima
-=============================
+========================
+Contributing to pmdarima
+========================
 
 **Note: This document is a 'getting started' summary for contributing code,
 documentation, testing, and filing issues.** Please read it carefully to help
@@ -12,21 +12,21 @@ likelihood of your contribution being merged.
 How to contribute
 -----------------
 
-The preferred workflow for contributing to pyramid is to fork the
-`main repository <https://github.com/tgsmith61591/pyramid>`_ on
+The preferred workflow for contributing to pmdarima is to fork the
+`main repository <https://github.com/tgsmith61591/pmdarima>`_ on
 Github, clone, and develop on a branch. Steps:
 
-1. Fork the `project repository <https://github.com/tgsmith61591/pyramid>`_
+1. Fork the `project repository <https://github.com/tgsmith61591/pmdarima>`_
    by clicking on the 'Fork' button near the top right of the page. This
    creates a copy of the code under your Github user account.
 
-2. Clone your fork of the pyramid repo from your Github account to your
+2. Clone your fork of the pmdarima repo from your Github account to your
    local disk:
 
    .. code-block:: bash
 
-       $ git clone https://github.com/tgsmith61591/pyramid.git
-       $ cd pyramid
+       $ git clone https://github.com/tgsmith61591/pmdarima.git
+       $ cd pmdarima
 
 3. Create a ``feature`` branch to hold your development changes:
 
@@ -59,7 +59,7 @@ We recommended (and prefer that) that your contribution complies with the
 following rules before you submit a pull request. Failure to adhere to the
 rules may hinder the speed with which your contribution is merged:
 
--  Pyramid uses the `gitflow branching model <http://nvie.com/posts/a-successful-git-branching-model/>`_.
+-  ``pmdarima`` uses the `gitflow branching model <http://nvie.com/posts/a-successful-git-branching-model/>`_.
    That means all of your feature branches should be merged back to the `develop`
    branch, and *not* `master`!
 
@@ -69,7 +69,7 @@ rules may hinder the speed with which your contribution is merged:
    `Numpy guidelines for documenting your code  <https://numpydoc.readthedocs.io/en/latest/>`_
 
 -  Use, when applicable, the validation tools and scripts in the
-   `pyramid.utils` submodule.
+   ``pmdarima.utils`` submodule.
 
 -  Give your merge request a helpful title that summarizes what your
    contribution does. In some cases ``Fix <ISSUE TITLE>`` is enough.
@@ -96,6 +96,12 @@ rules may hinder the speed with which your contribution is merged:
           $ python setup.py develop
           $ pytest
 
+   You can also use the ``Makefile`` on posix machines:
+
+      .. code-block:: bash
+
+          $ make test
+
    You may need to see the :ref:`setup` section for instructions on how
    to build the package. For instructions on how to test (using nose or pytest)
    see `Numpy's testing instructions <https://github.com/numpy/numpy/blob/master/doc/TESTS.rst.txt>`_.
@@ -111,14 +117,14 @@ It is recommended to check that your issue complies with the
 following rules before submitting:
 
 -  Verify that your issue is not being currently addressed by other
-   `issues <https://github.com/tgsmith61591/pyramid/issues>`_
-   or `pull requests <https://github.com/tgsmith61591/pyramid/pulls>`_.
+   `issues <https://github.com/tgsmith61591/pmdarima/issues>`_
+   or `pull requests <https://github.com/tgsmith61591/pmdarima/pulls>`_.
 
 -  If your issue references and pull request, reference it in the body of your
    descriptive text using ``!<PULL REQUEST NUMBER>``
 
 -  Please include your operating system type and version number, as well
-   as your Python, scikit-learn, numpy, scipy, pandas and pyramid versions. This
+   as your Python, scikit-learn, numpy, scipy, pandas and pmdarima versions. This
    information can be found by running the following code snippet:
 
   .. code-block:: python
@@ -130,7 +136,7 @@ following rules before submitting:
       import sklearn; print("Scikit-Learn", sklearn.__version__)
       import pandas; print("Pandas", pandas.__version__)
       import statsmodels; print("Statsmodels", statsmodels.__version__)
-      import pyramid; print("Pyramid", pyramid.__version__)
+      import pmdarima; print("pmdarima", pmdarima.__version__)
 
 - Please don't be a **lazy issue-filer!** Submitting a screen shot of an Excel document,
   or poorly-formatted/incomplete code makes the maintainers' lives difficult. Please include your data inline

@@ -8,7 +8,7 @@ User Guide
 
 Getting started
 ---------------
-The following guides cover how to get started with a pyramid distribution. The
+The following guides cover how to get started with a pmdarima distribution. The
 easiest solution is simply installing from PyPi, but if you'd like to
 contribute you'll need to be able to build from source.
 
@@ -32,7 +32,7 @@ contribute you'll need to be able to build from source.
 API reference
 -------------
 
-The :ref:`api_ref` covers documentation and examples of each of the Pyramid
+The :ref:`api_ref` covers documentation and examples of each of the pmdarima
 package's submodules.
 
 .. raw:: html

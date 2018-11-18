@@ -27,7 +27,7 @@ from ..compat.python import long, safe_mkdirs
 from ..compat import statsmodels as sm_compat
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
-from .._config import PYRAMID_ARIMA_CACHE, PICKLE_HASH_PATTERN
+from .._config import PMDARIMA_CACHE, PICKLE_HASH_PATTERN
 
 # Get the version
 import pmdarima
@@ -553,7 +553,7 @@ class ARIMA(BaseEstimator):
         cwd = os.path.abspath(os.getcwd())
 
         # check that the cache folder exists, and if not, make it.
-        cache_loc = os.path.join(cwd, PYRAMID_ARIMA_CACHE)
+        cache_loc = os.path.join(cwd, PMDARIMA_CACHE)
         safe_mkdirs(cache_loc)
 
         # now create the full path with the cache folder

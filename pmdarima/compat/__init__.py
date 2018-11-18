@@ -1,7 +1,7 @@
 """
 The variables defined in compat are designed to provide
 compatibility between Python 2 & 3. Each sub-module is specifically
-designed not to make calls out to other portions of Pyramid and to
+designed not to make calls out to other portions of pmdarima and to
 remove circular dependencies.
 """
 

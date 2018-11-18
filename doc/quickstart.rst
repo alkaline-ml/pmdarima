@@ -1,16 +1,16 @@
 .. _quickstart:
 
-==================
-Pyramid Quickstart
-==================
+==========
+Quickstart
+==========
 
-Since pyramid is intended to replace R's ``auto.arima``, the interface is
+Since pmdarima is intended to replace R's ``auto.arima``, the interface is
 designed to be quick to learn and easy to use, even for R users making the switch.
 Common functions and tools are elevated to the top-level of the package:
 
 .. code-block:: python
 
-    import pyramid as pm
+    import pmdarima as pm
 
     # Create an array like you would in R
     x = pm.c(1, 2, 3, 4, 5, 6, 7)
@@ -25,13 +25,13 @@ Common functions and tools are elevated to the top-level of the package:
 Auto-ARIMA example
 ------------------
 
-Here's a quick example of how we can fit an ``auto_arima`` with pyramid:
+Here's a quick example of how we can fit an ``auto_arima`` with pmdarima:
 
 .. code-block:: python
 
     import numpy as np
-    import pyramid as pm
-    from pyramid.datasets import load_wineind
+    import pmdarima as pm
+    from pmdarima.datasets import load_wineind
 
     # this is a dataset from R
     wineind = load_wineind().astype(np.float64)

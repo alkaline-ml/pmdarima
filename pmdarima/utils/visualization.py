@@ -18,11 +18,27 @@ import os
 try:
     # Gets the MPL.pyplot import (combatibilitized). Only use debug mode if set
     # on the machine in an environment variable
-    debug = os.environ.get("PYRAMID_MPL_DEBUG", "false").lower() == "true"
+    # TODO: REMOVE OLD VAR
+    debug = os.environ.get(
+        "PMDARIMA_MPL_DEBUG",
+        os.environ.get("PYRAMID_MPL_DEBUG", "false")).lower() == "true"
 
     # If it's a Travis CI machine, we want to set the backend via env variable
-    backend = os.environ.get("PYRAMID_MPL_BACKEND", None)
+    # TODO: REMOVE OLD VAR
+    backend = os.environ.get("PMD_MPL_BACKEND",
+                             os.environ.get("PYRAMID_MPL_BACKEND", None))
+
     plt = get_compatible_pyplot(backend=backend, debug=debug)
+
+    # Warn the user for changing OS environment vars
+    if any(_v in os.environ
+           for _v in ("PYRAMID_MPL_DEBUG", "PYRAMID_MPL_BACKEND")):
+        warnings.warn("The environment variable names "
+                      "'PYRAMID_MPL_DEBUG' and 'PYRAMID_MPL_BACKEND' "
+                      "have changed to "
+                      "'PMDARIMA_MPL_DEBUG' and 'PMD_MPL_BACKEND' "
+                      "respectively, and will be removed in version 1.2.0 ",
+                      DeprecationWarning)
 except ImportError:
     plt = None
 
