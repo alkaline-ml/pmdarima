@@ -1,0 +1,1243 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.arima.arima &mdash; pmdarima 1.0.0.dev0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pmdarima.arima.arima</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pmdarima.arima.arima</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># A much more user-friendly wrapper to the statsmodels ARIMA.</span>
+<span class="c1"># Mimics the familiar sklearn interface.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">BaseEstimator</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">mean_squared_error</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="k">import</span> <span class="n">if_delegate_has_method</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_is_fitted</span><span class="p">,</span> \
+    <span class="n">column_or_1d</span> <span class="k">as</span> <span class="n">c1d</span>
+
+<span class="kn">from</span> <span class="nn">statsmodels.tsa.arima_model</span> <span class="k">import</span> <span class="n">ARIMA</span> <span class="k">as</span> <span class="n">_ARIMA</span>
+<span class="kn">from</span> <span class="nn">statsmodels.tsa.base.tsa_model</span> <span class="k">import</span> <span class="n">TimeSeriesModelResults</span>
+<span class="kn">from</span> <span class="nn">statsmodels</span> <span class="k">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">sm</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="k">import</span> <span class="n">DTYPE</span>  <span class="c1"># DTYPE for arrays</span>
+<span class="kn">from</span> <span class="nn">..compat.python</span> <span class="k">import</span> <span class="n">long</span><span class="p">,</span> <span class="n">safe_mkdirs</span>
+<span class="kn">from</span> <span class="nn">..compat</span> <span class="k">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">get_callable</span><span class="p">,</span> <span class="n">if_has_delegate</span>
+<span class="kn">from</span> <span class="nn">..utils.array</span> <span class="k">import</span> <span class="n">diff</span>
+<span class="kn">from</span> <span class="nn">.._config</span> <span class="k">import</span> <span class="n">PMDARIMA_CACHE</span><span class="p">,</span> <span class="n">PICKLE_HASH_PATTERN</span>
+
+<span class="c1"># Get the version</span>
+<span class="kn">import</span> <span class="nn">pmdarima</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;ARIMA&#39;</span>
+<span class="p">]</span>
+
+<span class="n">VALID_SCORING</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;mse&#39;</span><span class="p">:</span> <span class="n">mean_squared_error</span><span class="p">,</span>
+    <span class="s1">&#39;mae&#39;</span><span class="p">:</span> <span class="n">mean_absolute_error</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">_append_to_endog</span><span class="p">(</span><span class="n">endog</span><span class="p">,</span> <span class="n">new_y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Append to the endogenous array</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    endog : np.ndarray, shape=(n_samples, [1])</span>
+<span class="sd">        The existing endogenous array</span>
+
+<span class="sd">    new_y : np.ndarray, shape=(n_samples)</span>
+<span class="sd">        The new endogenous array to append</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">endog</span><span class="p">,</span> <span class="n">new_y</span><span class="p">))</span> <span class="k">if</span> \
+        <span class="n">endog</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> \
+        <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">endog</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">new_y</span><span class="p">))[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ARIMA"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA">[docs]</a><span class="k">class</span> <span class="nc">ARIMA</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An ARIMA estimator.</span>
+
+<span class="sd">    An ARIMA, or autoregressive integrated moving average, is a</span>
+<span class="sd">    generalization of an autoregressive moving average (ARMA) and is fitted to</span>
+<span class="sd">    time-series data in an effort to forecast future points. ARIMA models can</span>
+<span class="sd">    be especially efficacious in cases where data shows evidence of</span>
+<span class="sd">    non-stationarity.</span>
+
+<span class="sd">    The &quot;AR&quot; part of ARIMA indicates that the evolving variable of interest is</span>
+<span class="sd">    regressed on its own lagged (i.e., prior observed) values. The &quot;MA&quot; part</span>
+<span class="sd">    indicates that the regression error is actually a linear combination of</span>
+<span class="sd">    error terms whose values occurred contemporaneously and at various times</span>
+<span class="sd">    in the past. The &quot;I&quot; (for &quot;integrated&quot;) indicates that the data values</span>
+<span class="sd">    have been replaced with the difference between their values and the</span>
+<span class="sd">    previous values (and this differencing process may have been performed</span>
+<span class="sd">    more than once). The purpose of each of these features is to make the model</span>
+<span class="sd">    fit the data as well as possible.</span>
+
+<span class="sd">    Non-seasonal ARIMA models are generally denoted ``ARIMA(p,d,q)`` where</span>
+<span class="sd">    parameters ``p``, ``d``, and ``q`` are non-negative integers, ``p`` is the</span>
+<span class="sd">    order (number of time lags) of the autoregressive model, ``d`` is the</span>
+<span class="sd">    degree of differencing (the number of times the data have had past values</span>
+<span class="sd">    subtracted), and ``q`` is the order of the moving-average model. Seasonal</span>
+<span class="sd">    ARIMA models are usually denoted ``ARIMA(p,d,q)(P,D,Q)m``, where ``m``</span>
+<span class="sd">    refers to the number of periods in each season, and the uppercase ``P``,</span>
+<span class="sd">    ``D``, ``Q`` refer to the autoregressive, differencing, and moving average</span>
+<span class="sd">    terms for the seasonal part of the ARIMA model.</span>
+
+<span class="sd">    When two out of the three terms are zeros, the model may be referred to</span>
+<span class="sd">    based on the non-zero parameter, dropping &quot;AR&quot;, &quot;I&quot; or &quot;MA&quot; from the</span>
+<span class="sd">    acronym describing the model. For example, ``ARIMA(1,0,0)`` is ``AR(1)``,</span>
+<span class="sd">    ``ARIMA(0,1,0)`` is ``I(1)``, and ``ARIMA(0,0,1)`` is ``MA(1)``. [1]</span>
+
+<span class="sd">    See notes for more practical information on the ``ARIMA`` class.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    order : iterable or array-like, shape=(3,)</span>
+<span class="sd">        The (p,d,q) order of the model for the number of AR parameters,</span>
+<span class="sd">        differences, and MA parameters to use. ``p`` is the order (number of</span>
+<span class="sd">        time lags) of the auto-regressive model, and is a non-negative integer.</span>
+<span class="sd">        ``d`` is the degree of differencing (the number of times the data have</span>
+<span class="sd">        had past values subtracted), and is a non-negative integer. ``q`` is</span>
+<span class="sd">        the order of the moving-average model, and is a non-negative integer.</span>
+
+<span class="sd">    seasonal_order : array-like, shape=(4,), optional (default=None)</span>
+<span class="sd">        The (P,D,Q,s) order of the seasonal component of the model for the</span>
+<span class="sd">        AR parameters, differences, MA parameters, and periodicity. ``D`` must</span>
+<span class="sd">        be an integer indicating the integration order of the process, while</span>
+<span class="sd">        ``P`` and ``Q`` may either be an integers indicating the AR and MA</span>
+<span class="sd">        orders (so that all lags up to those orders are included) or else</span>
+<span class="sd">        iterables giving specific AR and / or MA lags to include. ``S`` is an</span>
+<span class="sd">        integer giving the periodicity (number of periods in season), often it</span>
+<span class="sd">        is 4 for quarterly data or 12 for monthly data. Default is no seasonal</span>
+<span class="sd">        effect.</span>
+
+<span class="sd">    start_params : array-like, optional (default=None)</span>
+<span class="sd">        Starting parameters for ``ARMA(p,q)``.  If None, the default is given</span>
+<span class="sd">        by ``ARMA._fit_start_params``.</span>
+
+<span class="sd">    transparams : bool, optional (default=True)</span>
+<span class="sd">        Whehter or not to transform the parameters to ensure stationarity.</span>
+<span class="sd">        Uses the transformation suggested in Jones (1980).  If False,</span>
+<span class="sd">        no checking for stationarity or invertibility is done.</span>
+
+<span class="sd">    method : str, one of {&#39;css-mle&#39;,&#39;mle&#39;,&#39;css&#39;}, optional (default=None)</span>
+<span class="sd">        This is the loglikelihood to maximize.  If &quot;css-mle&quot;, the</span>
+<span class="sd">        conditional sum of squares likelihood is maximized and its values</span>
+<span class="sd">        are used as starting values for the computation of the exact</span>
+<span class="sd">        likelihood via the Kalman filter.  If &quot;mle&quot;, the exact likelihood</span>
+<span class="sd">        is maximized via the Kalman Filter.  If &quot;css&quot; the conditional sum</span>
+<span class="sd">        of squares likelihood is maximized.  All three methods use</span>
+<span class="sd">        `start_params` as starting parameters.  See above for more</span>
+<span class="sd">        information. If fitting a seasonal ARIMA, the default is &#39;lbfgs&#39;</span>
+
+<span class="sd">    trend : str or iterable, optional (default=&#39;c&#39;)</span>
+<span class="sd">        Parameter controlling the deterministic trend polynomial :math:`A(t)`.</span>
+<span class="sd">        Can be specified as a string where &#39;c&#39; indicates a constant (i.e. a</span>
+<span class="sd">        degree zero component of the trend polynomial), &#39;t&#39; indicates a</span>
+<span class="sd">        linear trend with time, and &#39;ct&#39; is both. Can also be specified as an</span>
+<span class="sd">        iterable defining the polynomial as in ``numpy.poly1d``, where</span>
+<span class="sd">        ``[1,1,0,1]`` would denote :math:`a + bt + ct^3`.</span>
+
+<span class="sd">    solver : str or None, optional (default=&#39;lbfgs&#39;)</span>
+<span class="sd">        Solver to be used.  The default is &#39;lbfgs&#39; (limited memory</span>
+<span class="sd">        Broyden-Fletcher-Goldfarb-Shanno).  Other choices are &#39;bfgs&#39;,</span>
+<span class="sd">        &#39;newton&#39; (Newton-Raphson), &#39;nm&#39; (Nelder-Mead), &#39;cg&#39; -</span>
+<span class="sd">        (conjugate gradient), &#39;ncg&#39; (non-conjugate gradient), and</span>
+<span class="sd">        &#39;powell&#39;. By default, the limited memory BFGS uses m=12 to</span>
+<span class="sd">        approximate the Hessian, projected gradient tolerance of 1e-8 and</span>
+<span class="sd">        factr = 1e2. You can change these by using kwargs.</span>
+
+<span class="sd">    maxiter : int, optional (default=50)</span>
+<span class="sd">        The maximum number of function evaluations. Default is 50.</span>
+
+<span class="sd">    disp : int, optional (default=0)</span>
+<span class="sd">        If True, convergence information is printed.  For the default</span>
+<span class="sd">        &#39;lbfgs&#39; ``solver``, disp controls the frequency of the output during</span>
+<span class="sd">        the iterations. disp &lt; 0 means no output in this case.</span>
+
+<span class="sd">    callback : callable, optional (default=None)</span>
+<span class="sd">        Called after each iteration as callback(xk) where xk is the current</span>
+<span class="sd">        parameter vector. This is only used in non-seasonal ARIMA models.</span>
+
+<span class="sd">    suppress_warnings : bool, optional (default=False)</span>
+<span class="sd">        Many warnings might be thrown inside of statsmodels. If</span>
+<span class="sd">        ``suppress_warnings`` is True, all of these warnings will be squelched.</span>
+
+<span class="sd">    out_of_sample_size : int, optional (default=0)</span>
+<span class="sd">        The number of examples from the tail of the time series to hold out</span>
+<span class="sd">        and use as validation examples. The model will not be fit on these</span>
+<span class="sd">        samples, but the observations will be added into the model&#39;s ``endog``</span>
+<span class="sd">        and ``exog`` arrays so that future forecast values originate from the</span>
+<span class="sd">        end of the endogenous vector. See :func:`add_new_observations`.</span>
+
+<span class="sd">        For instance::</span>
+
+<span class="sd">            y = [0, 1, 2, 3, 4, 5, 6]</span>
+<span class="sd">            out_of_sample_size = 2</span>
+
+<span class="sd">            &gt; Fit on: [0, 1, 2, 3, 4]</span>
+<span class="sd">            &gt; Score on: [5, 6]</span>
+<span class="sd">            &gt; Append [5, 6] to end of self.arima_res_.data.endog values</span>
+
+<span class="sd">    scoring : str, optional (default=&#39;mse&#39;)</span>
+<span class="sd">        If performing validation (i.e., if ``out_of_sample_size`` &gt; 0), the</span>
+<span class="sd">        metric to use for scoring the out-of-sample data. One of {&#39;mse&#39;, &#39;mae&#39;}</span>
+
+<span class="sd">    scoring_args : dict, optional (default=None)</span>
+<span class="sd">        A dictionary of key-word arguments to be passed to the</span>
+<span class="sd">        ``scoring`` metric.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    * Since the ``ARIMA`` class currently wraps</span>
+<span class="sd">      ``statsmodels.tsa.arima_model.ARIMA``, which does not provide support</span>
+<span class="sd">      for seasonality, the only way to fit seasonal ARIMAs is to manually</span>
+<span class="sd">      lag/pre-process your data appropriately. This might change in</span>
+<span class="sd">      the future. [2]</span>
+
+<span class="sd">    * After the model fit, many more methods will become available to the</span>
+<span class="sd">      fitted model (i.e., :func:`pvalues`, :func:`params`, etc.). These are</span>
+<span class="sd">      delegate methods which wrap the internal ARIMA results instance.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`pmdarima.arima.auto_arima`</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</span>
+
+<span class="sd">    .. [2] Statsmodels ARIMA documentation: http://bit.ly/2wc9Ra8</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ARIMA.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">trend</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparams</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span>
+                 <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">out_of_sample_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span> <span class="n">scoring_args</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># XXX: This isn&#39;t actually required--sklearn doesn&#39;t need a super call</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ARIMA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span> <span class="o">=</span> <span class="n">seasonal_order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_params</span> <span class="o">=</span> <span class="n">start_params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trend</span> <span class="o">=</span> <span class="n">trend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transparams</span> <span class="o">=</span> <span class="n">transparams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">solver</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxiter</span> <span class="o">=</span> <span class="n">maxiter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disp</span> <span class="o">=</span> <span class="n">disp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suppress_warnings</span> <span class="o">=</span> <span class="n">suppress_warnings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_of_sample_size</span> <span class="o">=</span> <span class="n">out_of_sample_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scoring</span> <span class="o">=</span> <span class="n">scoring</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">scoring_args</span> <span class="k">else</span> <span class="n">scoring_args</span></div>
+
+<div class="viewcode-block" id="ARIMA.fit"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit an ARIMA to a vector, ``y``, of observations with an</span>
+<span class="sd">        optional matrix of ``exogenous`` variables.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or iterable, shape=(n_samples,)</span>
+<span class="sd">            The time-series to which to fit the ``ARIMA`` estimator. This may</span>
+<span class="sd">            either be a Pandas ``Series`` object (statsmodels can internally</span>
+<span class="sd">            use the dates in the index), or a numpy array. This should be a</span>
+<span class="sd">            one-dimensional array of floats, and should not contain any</span>
+<span class="sd">            ``np.nan`` or ``np.inf`` values.</span>
+
+<span class="sd">        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">            An optional 2-d array of exogenous variables. If provided, these</span>
+<span class="sd">            variables are used as additional features in the regression</span>
+<span class="sd">            operation. This should not include a constant or trend. Note that</span>
+<span class="sd">            if an ``ARIMA`` is fit on exogenous features, it must be provided</span>
+<span class="sd">            exogenous features for making predictions.</span>
+
+<span class="sd">        **fit_args : dict or kwargs</span>
+<span class="sd">            Any keyword arguments to pass to the statsmodels ARIMA fit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">c1d</span><span class="p">(</span><span class="n">check_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">))</span>  <span class="c1"># type: np.ndarray</span>
+        <span class="n">n_samples</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># if exog was included, check the array...</span>
+        <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">exogenous</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                    <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+
+        <span class="c1"># determine the CV args, if any</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_of_sample_size</span>
+        <span class="n">scoring</span> <span class="o">=</span> <span class="n">get_callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scoring</span><span class="p">,</span> <span class="n">VALID_SCORING</span><span class="p">)</span>
+
+        <span class="c1"># don&#39;t allow negative, don&#39;t allow &gt; n_samples</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cv</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># if cv is too big, raise</span>
+        <span class="k">if</span> <span class="n">cv</span> <span class="o">&gt;=</span> <span class="n">n_samples</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;out-of-sample size must be less than number &quot;</span>
+                             <span class="s2">&quot;of samples!&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If we want to get a score on the out-of-sample, we need to trim</span>
+        <span class="c1"># down the size of our y vec for fitting. Addressed due to Issue #28</span>
+        <span class="n">cv_samples</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">cv_exog</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">cv</span><span class="p">:</span>
+            <span class="n">cv_samples</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="n">cv</span><span class="p">:]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="n">cv</span><span class="p">]</span>
+
+            <span class="c1"># This also means we have to address the exogenous matrix</span>
+            <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">cv_exog</span> <span class="o">=</span> <span class="n">exogenous</span><span class="p">[</span><span class="o">-</span><span class="n">cv</span><span class="p">:,</span> <span class="p">:]</span>
+                <span class="n">exogenous</span> <span class="o">=</span> <span class="n">exogenous</span><span class="p">[:</span><span class="o">-</span><span class="n">cv</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># This wrapper is used for fitting either an ARIMA or a SARIMAX</span>
+        <span class="k">def</span> <span class="nf">_fit_wrapper</span><span class="p">():</span>
+            <span class="c1"># these might change depending on which one</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
+
+            <span class="c1"># if not seasonal:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;css-mle&quot;</span>
+
+                <span class="c1"># create the statsmodels ARIMA</span>
+                <span class="n">arima</span> <span class="o">=</span> <span class="n">_ARIMA</span><span class="p">(</span><span class="n">endog</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span>
+                               <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">dates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+                <span class="c1"># there&#39;s currently a bug in the ARIMA model where on pickling</span>
+                <span class="c1"># it tries to acquire an attribute called</span>
+                <span class="c1"># &#39;self.{dates|freq|missing}&#39;, but they do not exist as class</span>
+                <span class="c1"># attrs! They&#39;re passed up to TimeSeriesModel in base, but</span>
+                <span class="c1"># are never set. So we inject them here so as not to get an</span>
+                <span class="c1"># AttributeError later. (see http://bit.ly/2f7SkKH)</span>
+                <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">((</span><span class="s1">&#39;dates&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;freq&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                                  <span class="p">(</span><span class="s1">&#39;missing&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arima</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+                        <span class="nb">setattr</span><span class="p">(</span><span class="n">arima</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;lbfgs&#39;</span>
+
+                <span class="c1"># create the SARIMAX</span>
+                <span class="n">arima</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">statespace</span><span class="o">.</span><span class="n">SARIMAX</span><span class="p">(</span>
+                    <span class="n">endog</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
+                    <span class="n">seasonal_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trend</span><span class="p">,</span>
+                    <span class="n">enforce_stationarity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transparams</span><span class="p">)</span>
+
+            <span class="c1"># actually fit the model, now...</span>
+            <span class="k">return</span> <span class="n">arima</span><span class="p">,</span> <span class="n">arima</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">start_params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_params</span><span class="p">,</span>
+                                    <span class="n">trend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trend</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                                    <span class="n">transparams</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transparams</span><span class="p">,</span>
+                                    <span class="n">solver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">maxiter</span><span class="p">,</span>
+                                    <span class="n">disp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">disp</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">,</span>
+                                    <span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
+
+        <span class="c1"># sometimes too many warnings...</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">suppress_warnings</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">(</span><span class="n">record</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+                <span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span> <span class="o">=</span> <span class="n">_fit_wrapper</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span> <span class="o">=</span> <span class="n">_fit_wrapper</span><span class="p">()</span>
+
+        <span class="c1"># Set df_model attribute for SARIMAXResults object</span>
+        <span class="n">sm_compat</span><span class="o">.</span><span class="n">bind_df_model</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="p">)</span>
+
+        <span class="c1"># if the model is fit with an exogenous array, it must</span>
+        <span class="c1"># be predicted with one as well.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_with_exog_</span> <span class="o">=</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="c1"># now make a forecast if we&#39;re validating to compute the</span>
+        <span class="c1"># out-of-sample score</span>
+        <span class="k">if</span> <span class="n">cv_samples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># get the predictions (use self.predict, which calls forecast</span>
+            <span class="c1"># from statsmodels internally)</span>
+            <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">cv_exog</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">oob_</span> <span class="o">=</span> <span class="n">scoring</span><span class="p">(</span><span class="n">cv_samples</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span><span class="p">)</span>
+
+            <span class="c1"># If we compute out of sample scores, we have to now update the</span>
+            <span class="c1"># observed time points so future forecasts originate from the end</span>
+            <span class="c1"># of our y vec</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_new_observations</span><span class="p">(</span><span class="n">cv_samples</span><span class="p">,</span> <span class="n">cv_exog</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">oob_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># Save nobs since we might change it later if using OOB</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nobs_</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># As of version 0.7.2, start saving the version with the model so</span>
+        <span class="c1"># we can track changes over time.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pkg_version_</span> <span class="o">=</span> <span class="n">pmdarima</span><span class="o">.</span><span class="n">__version__</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="k">def</span> <span class="nf">_check_exog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">):</span>
+        <span class="c1"># if we fit with exog, make sure one was passed, or else fail out:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_with_exog_</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;When an ARIMA is fit with an exogenous &#39;</span>
+                                 <span class="s1">&#39;array, it must also be provided one for &#39;</span>
+                                 <span class="s1">&#39;predicting or updating observations.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">check_array</span><span class="p">(</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ARIMA.predict_in_sample"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.predict_in_sample">[docs]</a>    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate in-sample predictions from the fit ARIMA model. This can</span>
+<span class="sd">        be useful when wanting to visualize the fit, and qualitatively inspect</span>
+<span class="sd">        the efficacy of the model, or when wanting to compute the residuals</span>
+<span class="sd">        of the model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">            An optional 2-d array of exogenous variables. If provided, these</span>
+<span class="sd">            variables are used as additional features in the regression</span>
+<span class="sd">            operation. This should not include a constant or trend. Note that</span>
+<span class="sd">            if an ``ARIMA`` is fit on exogenous features, it must be provided</span>
+<span class="sd">            exogenous features for making predictions.</span>
+
+<span class="sd">        start : int, optional (default=None)</span>
+<span class="sd">            Zero-indexed observation number at which to start forecasting, ie.,</span>
+<span class="sd">            the first forecast is start.</span>
+
+<span class="sd">        end : int, optional (default=None)</span>
+<span class="sd">            Zero-indexed observation number at which to end forecasting, ie.,</span>
+<span class="sd">            the first forecast is start.</span>
+
+<span class="sd">        dynamic : bool, optional</span>
+<span class="sd">            The `dynamic` keyword affects in-sample prediction. If dynamic</span>
+<span class="sd">            is False, then the in-sample lagged values are used for</span>
+<span class="sd">            prediction. If `dynamic` is True, then in-sample forecasts are</span>
+<span class="sd">            used in place of lagged dependent variables. The first forecasted</span>
+<span class="sd">            value is `start`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        predict : array</span>
+<span class="sd">            The predicted values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+
+        <span class="c1"># if we fit with exog, make sure one was passed:</span>
+        <span class="n">exogenous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_exog</span><span class="p">(</span><span class="n">exogenous</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+                                       <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ARIMA.predict"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate predictions (forecasts) ``n_periods`` in the future.</span>
+<span class="sd">        Note that if ``exogenous`` variables were used in the model fit, they</span>
+<span class="sd">        will be expected for the predict procedure and will fail otherwise.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_periods : int, optional (default=10)</span>
+<span class="sd">            The number of periods in the future to forecast.</span>
+
+<span class="sd">        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">            An optional 2-d array of exogenous variables. If provided, these</span>
+<span class="sd">            variables are used as additional features in the regression</span>
+<span class="sd">            operation. This should not include a constant or trend. Note that</span>
+<span class="sd">            if an ``ARIMA`` is fit on exogenous features, it must be provided</span>
+<span class="sd">            exogenous features for making predictions.</span>
+
+<span class="sd">        return_conf_int : bool, optional (default=False)</span>
+<span class="sd">            Whether to get the confidence intervals of the forecasts.</span>
+
+<span class="sd">        alpha : float, optional (default=0.05)</span>
+<span class="sd">            The confidence intervals for the forecasts are (1 - alpha) %</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        forecasts : array-like, shape=(n_periods,)</span>
+<span class="sd">            The array of fore-casted values.</span>
+
+<span class="sd">        conf_int : array-like, shape=(n_periods, 2), optional</span>
+<span class="sd">            The confidence intervals for the forecasts. Only returned if</span>
+<span class="sd">            ``return_conf_int`` is True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_periods</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;n_periods must be an int or a long&quot;</span><span class="p">)</span>
+
+        <span class="c1"># if we fit with exog, make sure one was passed:</span>
+        <span class="n">exogenous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_exog</span><span class="p">(</span><span class="n">exogenous</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
+        <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">exogenous</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n_periods</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Exogenous array dims (n_rows) != n_periods&#39;</span><span class="p">)</span>
+
+        <span class="c1"># ARIMA predicts differently...</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># use the results wrapper to predict so it injects its own params</span>
+            <span class="c1"># (also if I was 0, ARMA will not have a forecast method natively)</span>
+            <span class="n">f</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">conf_int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span>
+                <span class="n">steps</span><span class="o">=</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># SARIMAX</span>
+            <span class="c1"># Unfortunately, SARIMAX does not really provide a nice way to get</span>
+            <span class="c1"># the confidence intervals out of the box, so we have to perform</span>
+            <span class="c1"># the get_prediction code here and unpack the confidence intervals</span>
+            <span class="c1"># manually.</span>
+            <span class="c1"># f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)</span>
+            <span class="n">arima</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">arima</span><span class="o">.</span><span class="n">nobs</span> <span class="o">+</span> <span class="n">n_periods</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">arima</span><span class="o">.</span><span class="n">get_prediction</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">arima</span><span class="o">.</span><span class="n">nobs</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+                                           <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">predicted_mean</span>
+            <span class="n">conf_int</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">conf_int</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">return_conf_int</span><span class="p">:</span>
+            <span class="c1"># The confidence intervals may be a Pandas frame if it comes from</span>
+            <span class="c1"># SARIMAX &amp; we want Numpy. We will to duck type it so we don&#39;t add</span>
+            <span class="c1"># new explicit requirements for the package</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">check_array</span><span class="p">(</span><span class="n">conf_int</span><span class="p">)</span>  <span class="c1"># duck type for pd.DataFrame</span>
+        <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="ARIMA.fit_predict"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.fit_predict">[docs]</a>    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit an ARIMA to a vector, ``y``, of observations with an</span>
+<span class="sd">        optional matrix of ``exogenous`` variables, and then generate</span>
+<span class="sd">        predictions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or iterable, shape=(n_samples,)</span>
+<span class="sd">            The time-series to which to fit the ``ARIMA`` estimator. This may</span>
+<span class="sd">            either be a Pandas ``Series`` object (statsmodels can internally</span>
+<span class="sd">            use the dates in the index), or a numpy array. This should be a</span>
+<span class="sd">            one-dimensional array of floats, and should not contain any</span>
+<span class="sd">            ``np.nan`` or ``np.inf`` values.</span>
+
+<span class="sd">        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">            An optional 2-d array of exogenous variables. If provided, these</span>
+<span class="sd">            variables are used as additional features in the regression</span>
+<span class="sd">            operation. This should not include a constant or trend. Note that</span>
+<span class="sd">            if an ``ARIMA`` is fit on exogenous features, it must be provided</span>
+<span class="sd">            exogenous features for making predictions.</span>
+
+<span class="sd">        n_periods : int, optional (default=10)</span>
+<span class="sd">            The number of periods in the future to forecast.</span>
+
+<span class="sd">        fit_args : dict or kwargs, optional (default=None)</span>
+<span class="sd">            Any keyword args to pass to the fit method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exogenous</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_pickle_hash_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Mmmm, pickle hash...</span>
+        <span class="k">return</span> <span class="n">PICKLE_HASH_PATTERN</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="c1"># cannot use &#39;:&#39; in Windows file names. Whoops!</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">]),</span>
+            <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;I am being pickled...&quot;&quot;&quot;</span>
+
+        <span class="c1"># In versions &lt;0.9.0, if this already contains a pointer to a</span>
+        <span class="c1"># &quot;saved state&quot; model, we deleted that model and replaced it with the</span>
+        <span class="c1"># new one.</span>
+        <span class="c1"># In version &gt;= v0.9.0, we keep the old model around, since that&#39;s how</span>
+        <span class="c1"># the user expects it should probably work (otherwise unpickling the</span>
+        <span class="c1"># previous state of the model would raise an OSError).</span>
+        <span class="c1"># loc = self.__dict__.get(&#39;tmp_pkl_&#39;, None)</span>
+        <span class="c1"># if loc is not None:</span>
+        <span class="c1">#     os.unlink(loc)</span>
+
+        <span class="c1"># get the new location for where to save the results</span>
+        <span class="n">new_loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pickle_hash_file</span><span class="p">()</span>
+        <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+
+        <span class="c1"># check that the cache folder exists, and if not, make it.</span>
+        <span class="n">cache_loc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="n">PMDARIMA_CACHE</span><span class="p">)</span>
+        <span class="n">safe_mkdirs</span><span class="p">(</span><span class="n">cache_loc</span><span class="p">)</span>
+
+        <span class="c1"># now create the full path with the cache folder</span>
+        <span class="n">new_loc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cache_loc</span><span class="p">,</span> <span class="n">new_loc</span><span class="p">)</span>
+
+        <span class="c1"># save the results - but only if it&#39;s fit...</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">):</span>
+            <span class="c1"># statsmodels result views work by caching metrics. If they</span>
+            <span class="c1"># are not cached prior to pickling, we might hit issues. This is</span>
+            <span class="c1"># a bug documented here:</span>
+            <span class="c1"># https://github.com/statsmodels/statsmodels/issues/3290</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">new_loc</span><span class="p">)</span>  <span class="c1"># , remove_data=False)</span>
+
+            <span class="c1"># point to the location of the saved MLE model</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tmp_pkl_</span> <span class="o">=</span> <span class="n">new_loc</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="c1"># I am being unpickled...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">state</span>
+
+        <span class="c1"># re-set the results class</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tmp_pkl_&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">loc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span> <span class="o">=</span> <span class="n">TimeSeriesModelResults</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>  <span class="c1"># noqa: E722</span>
+                <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s1">&#39;Could not read saved model state from </span><span class="si">%s</span><span class="s1">. &#39;</span>
+                              <span class="s1">&#39;Does it still exist?&#39;</span> <span class="o">%</span> <span class="n">loc</span><span class="p">)</span>
+
+        <span class="c1"># Warn for unpickling a different version&#39;s model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_warn_for_older_version</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">_warn_for_older_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Added in v0.8.1 - check for the version pickled under and warn</span>
+        <span class="c1"># if it&#39;s different from the current version</span>
+        <span class="n">do_warn</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">modl_version</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">this_version</span> <span class="o">=</span> <span class="n">pmdarima</span><span class="o">.</span><span class="n">__version__</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">modl_version</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;pkg_version_&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Either &lt; or &gt; or &#39;-dev&#39; vs. release version</span>
+            <span class="k">if</span> <span class="n">modl_version</span> <span class="o">!=</span> <span class="n">this_version</span><span class="p">:</span>
+                <span class="n">do_warn</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># Either wasn&#39;t fit when pickled or didn&#39;t have the attr due to</span>
+            <span class="c1"># it being an older version. If it wasn&#39;t fit, it will be missing</span>
+            <span class="c1"># the arima_res_ attr.</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">):</span>  <span class="c1"># it was fit, but is older</span>
+                <span class="n">do_warn</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">modl_version</span> <span class="o">=</span> <span class="s1">&#39;&lt;0.8.1&#39;</span>
+
+            <span class="c1"># else: it may not have the model (not fit) and still be older,</span>
+            <span class="c1"># but we can&#39;t detect that.</span>
+
+        <span class="c1"># Means it was older</span>
+        <span class="k">if</span> <span class="n">do_warn</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;You&#39;ve deserialized an ARIMA from a version (</span><span class="si">%s</span><span class="s2">) &quot;</span>
+                          <span class="s2">&quot;that does not match your installed version of &quot;</span>
+                          <span class="s2">&quot;pmdarima (</span><span class="si">%s</span><span class="s2">). This could cause unforeseen &quot;</span>
+                          <span class="s2">&quot;behavior.&quot;</span>
+                          <span class="o">%</span> <span class="p">(</span><span class="n">modl_version</span><span class="p">,</span> <span class="n">this_version</span><span class="p">),</span> <span class="ne">UserWarning</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_clear_cached_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># when fit in an auto-arima, a lot of cached .pmdpkl files</span>
+        <span class="c1"># are generated if fit in parallel... this removes the tmp file</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tmp_pkl_&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">loc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ARIMA.add_new_observations"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.add_new_observations">[docs]</a>    <span class="k">def</span> <span class="nf">add_new_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the endog/exog samples after a model fit.</span>
+
+<span class="sd">        After fitting your model and creating forecasts, you&#39;re going</span>
+<span class="sd">        to need to attach new samples to the data you fit on. These are</span>
+<span class="sd">        used to compute new forecasts (but using the same estimated</span>
+<span class="sd">        parameters).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or iterable, shape=(n_samples,)</span>
+<span class="sd">            The time-series data to add to the endogenous samples on which the</span>
+<span class="sd">            ``ARIMA`` estimator was previously fit. This may either be a Pandas</span>
+<span class="sd">            ``Series`` object or a numpy array. This should be a one-</span>
+<span class="sd">            dimensional array of finite floats.</span>
+
+<span class="sd">        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">            An optional 2-d array of exogenous variables. If the model was</span>
+<span class="sd">            fit with an exogenous array of covariates, it will be required for</span>
+<span class="sd">            updating the observed values.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This does not constitute re-fitting, as the model params do not</span>
+<span class="sd">        change, so do not use this in place of periodically refreshing the</span>
+<span class="sd">        model. Use it only to add new observed values from which to forecast</span>
+<span class="sd">        new values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+        <span class="n">model_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span>
+
+        <span class="c1"># validate the new samples to add</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">c1d</span><span class="p">(</span><span class="n">check_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">))</span>  <span class="c1"># type: np.ndarray</span>
+        <span class="n">n_samples</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># if exogenous is None and new exog provided, or vice versa, raise</span>
+        <span class="n">exogenous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_exog</span><span class="p">(</span><span class="n">exogenous</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
+
+        <span class="c1"># ensure the k_exog matches</span>
+        <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k_exog</span> <span class="o">=</span> <span class="n">model_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">k_exog</span>
+            <span class="n">n_exog</span><span class="p">,</span> <span class="n">exog_dim</span> <span class="o">=</span> <span class="n">exogenous</span><span class="o">.</span><span class="n">shape</span>
+
+            <span class="k">if</span> <span class="n">exogenous</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">k_exog</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Dim mismatch in fit exogenous (</span><span class="si">%i</span><span class="s2">) and new &quot;</span>
+                                 <span class="s2">&quot;exogenous (</span><span class="si">%i</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k_exog</span><span class="p">,</span> <span class="n">exog_dim</span><span class="p">))</span>
+
+            <span class="c1"># make sure the number of samples in exogenous match the number</span>
+            <span class="c1"># of samples in the endog</span>
+            <span class="k">if</span> <span class="n">n_exog</span> <span class="o">!=</span> <span class="n">n_samples</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Dim mismatch in n_samples &quot;</span>
+                                 <span class="s2">&quot;(endog=</span><span class="si">%i</span><span class="s2">, exog=</span><span class="si">%i</span><span class="s2">)&quot;</span>
+                                 <span class="o">%</span> <span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_exog</span><span class="p">))</span>
+
+        <span class="c1"># difference the y array to concatenate (now n_samples - d)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># first concatenate the original data (might be 2d or 1d)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">_append_to_endog</span><span class="p">(</span><span class="n">model_res</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">endog</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Now create the new exogenous.</span>
+        <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Concatenate</span>
+            <span class="n">exog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">model_res</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">exog</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Just so it&#39;s in the namespace</span>
+            <span class="n">exog</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Update the arrays in the data class. The statsmodels ARIMA class</span>
+        <span class="c1"># stores the values a bit differently than it does in the SARIMAX</span>
+        <span class="c1"># class...</span>
+        <span class="n">sarimax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sarimax</span><span class="p">:</span>  <span class="c1"># ARIMA or ARMA</span>
+
+            <span class="c1"># Set the endog in two places. The undifferenced array in the</span>
+            <span class="c1"># model_res.data, and the differenced array in the model_res.model</span>
+            <span class="n">model_res</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">endog</span> <span class="o">=</span> <span class="n">c1d</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
+
+            <span class="c1"># The model endog is stored differently in the ARIMA class than</span>
+            <span class="c1"># in the SARIMAX class, where the ARIMA actually stores the diffed</span>
+            <span class="c1"># array. However, ARMA does not (and we cannot diff for d &lt; 1).</span>
+            <span class="n">do_diff</span> <span class="o">=</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">do_diff</span><span class="p">:</span>  <span class="c1"># ARIMA</span>
+                <span class="n">y_diffed</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># ARMA</span>
+                <span class="n">y_diffed</span> <span class="o">=</span> <span class="n">y</span>
+
+            <span class="c1"># This changes the length of the array!</span>
+            <span class="n">model_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">endog</span> <span class="o">=</span> <span class="n">y_diffed</span>
+
+            <span class="c1"># Set the model result nobs (must be the differenced shape!)</span>
+            <span class="n">model_res</span><span class="o">.</span><span class="n">nobs</span> <span class="o">=</span> <span class="n">y_diffed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># Set the exogenous</span>
+            <span class="k">if</span> <span class="n">exog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Set in data class (this is NOT differenced, unlike the</span>
+                <span class="c1"># model data)</span>
+                <span class="n">model_res</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">exog</span> <span class="o">=</span> <span class="n">exog</span>
+
+                <span class="c1"># Difference and add intercept, then add to model class</span>
+                <span class="n">k_intercept</span> <span class="o">=</span> <span class="p">(</span><span class="n">model_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exog</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span>
+                               <span class="n">exogenous</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">exog_diff</span> <span class="o">=</span> <span class="n">exog</span><span class="p">[</span><span class="n">d</span><span class="p">:,</span> <span class="p">:]</span>
+                <span class="n">intercept</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">exog_diff</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k_intercept</span><span class="p">))</span>
+                <span class="n">exog_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">intercept</span><span class="p">,</span> <span class="n">exog_diff</span><span class="p">))</span>
+
+                <span class="c1"># set in the model itself</span>
+                <span class="n">model_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exog</span> <span class="o">=</span> <span class="n">exog_diff</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Otherwise we STILL have to set the exogenous array as an</span>
+                <span class="c1"># intercept in the model class for both ARMA and ARIMA.</span>
+                <span class="c1"># Make sure to use y_diffed in case d &gt; 0, since the exog</span>
+                <span class="c1"># array will be multiplied by the endog at some point and we</span>
+                <span class="c1"># need the dimensions to match (Issue #30)</span>
+                <span class="n">model_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">y_diffed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># SARIMAX</span>
+            <span class="c1"># The model endog is stored differently in the ARIMA class than</span>
+            <span class="c1"># in the SARIMAX class, where the SARIMAX is a 2d (n x 1) array</span>
+            <span class="c1"># that is NOT diffed. We also handle this piece a bit differently..</span>
+            <span class="c1"># In the SARIMAX class, statsmodels creates a &quot;pseudo new&quot; model</span>
+            <span class="c1"># with the same parameters for forecasting, and we&#39;ll do the same.</span>
+            <span class="n">model_kwargs</span> <span class="o">=</span> <span class="n">model_res</span><span class="o">.</span><span class="n">_init_kwds</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">exog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">model_kwargs</span><span class="p">[</span><span class="s1">&#39;exog&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exog</span>
+
+            <span class="c1"># Create the pseudo &quot;new&quot; model and set its parameters with the</span>
+            <span class="c1"># existing model fit parameters</span>
+            <span class="n">new_model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">statespace</span><span class="o">.</span><span class="n">SARIMAX</span><span class="p">(</span><span class="n">endog</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">model_kwargs</span><span class="p">)</span>
+            <span class="n">new_model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model_res</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+
+            <span class="c1"># Point the arima result to the new model</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">new_model</span></div>
+
+<div class="viewcode-block" id="ARIMA.aic"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.aic">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">aic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the AIC, the Akaike Information Criterion:</span>
+
+<span class="sd">            :code:`-2 * llf + 2 * df_model`</span>
+
+<span class="sd">        Where ``df_model`` (the number of degrees of freedom in the model)</span>
+<span class="sd">        includes all AR parameters, MA parameters, constant terms parameters</span>
+<span class="sd">        on constant terms and the variance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        aic : float</span>
+<span class="sd">            The AIC</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        .. [1] https://en.wikipedia.org/wiki/Akaike_information_criterion</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">aic</span></div>
+
+<div class="viewcode-block" id="ARIMA.aicc"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.aicc">[docs]</a>    <span class="nd">@if_has_delegate</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">aicc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the AICc, the corrected Akaike Information Criterion:</span>
+
+<span class="sd">            :code:`AIC + 2 * df_model * (df_model + 1) / (nobs - df_model - 1)`</span>
+
+<span class="sd">        Where ``df_model`` (the number of degrees of freedom in the model)</span>
+<span class="sd">        includes all AR parameters, MA parameters, constant terms parameters</span>
+<span class="sd">        on constant terms and the variance. And ``nobs`` is the sample size.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        aicc : float</span>
+<span class="sd">            The AICc</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        .. [1] https://en.wikipedia.org/wiki/Akaike_information_criterion#AICc</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># FIXME:</span>
+        <span class="c1"># this code should really be added to statsmodels. Rewrite</span>
+        <span class="c1"># this function to reflect other metric implementations if/when</span>
+        <span class="c1"># statsmodels incorporates AICc</span>
+
+        <span class="n">aic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">aic</span>
+        <span class="n">nobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nobs_</span>
+        <span class="n">df_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">df_model</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># add one for constant term</span>
+        <span class="k">return</span> <span class="n">aic</span> <span class="o">+</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">df_model</span> <span class="o">*</span> <span class="p">(</span><span class="n">nobs</span> <span class="o">/</span> <span class="p">(</span><span class="n">nobs</span> <span class="o">-</span> <span class="n">df_model</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ARIMA.arparams"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.arparams">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">arparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the parameters associated with the AR coefficients in the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        arparams : array-like</span>
+<span class="sd">            The AR coefficients.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">arparams</span></div>
+
+<div class="viewcode-block" id="ARIMA.arroots"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.arroots">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">arroots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The roots of the AR coefficients are the solution to:</span>
+
+<span class="sd">            :code:`(1 - arparams[0] * z - arparams[1] * z^2 - ... - arparams[</span>
+<span class="sd">            p-1] * z^k_ar) = 0`</span>
+
+<span class="sd">        Stability requires that the roots in modulus lie outside the unit</span>
+<span class="sd">        circle.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        arroots : array-like</span>
+<span class="sd">            The roots of the AR coefficients.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">arroots</span></div>
+
+<div class="viewcode-block" id="ARIMA.bic"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.bic">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">bic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the BIC, the Bayes Information Criterion:</span>
+
+<span class="sd">            :code:`-2 * llf + log(nobs) * df_model`</span>
+
+<span class="sd">        Where if the model is fit using conditional sum of squares, the</span>
+<span class="sd">        number of observations ``nobs`` does not include the ``p`` pre-sample</span>
+<span class="sd">        observations.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bse : float</span>
+<span class="sd">            The BIC</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        .. [1] https://en.wikipedia.org/wiki/Bayesian_information_criterion</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">bic</span></div>
+
+<div class="viewcode-block" id="ARIMA.bse"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.bse">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">bse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the standard errors of the parameters. These are</span>
+<span class="sd">        computed using the numerical Hessian.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bse : array-like</span>
+<span class="sd">            The BSE</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">bse</span></div>
+
+<div class="viewcode-block" id="ARIMA.conf_int"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.conf_int">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">conf_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the confidence interval of the fitted parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        alpha : float, optional (default=0.05)</span>
+<span class="sd">            The significance level for the confidence interval. ie.,</span>
+<span class="sd">            the default alpha = .05 returns a 95% confidence interval.</span>
+
+<span class="sd">        **kwargs : keyword args or dict</span>
+<span class="sd">            Keyword arguments to pass to the confidence interval function.</span>
+<span class="sd">            Could include &#39;cols&#39; or &#39;method&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">conf_int</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ARIMA.df_model"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.df_model">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">df_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The model degrees of freedom: ``k_exog`` + ``k_trend`` +</span>
+<span class="sd">        ``k_ar`` + ``k_ma``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        df_model : array-like</span>
+<span class="sd">            The degrees of freedom in the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">df_model</span></div>
+
+<div class="viewcode-block" id="ARIMA.df_resid"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.df_resid">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">df_resid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the residual degrees of freedom:</span>
+
+<span class="sd">            :code:`nobs - df_model`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        df_resid : array-like</span>
+<span class="sd">            The residual degrees of freedom.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">df_resid</span></div>
+
+<div class="viewcode-block" id="ARIMA.hqic"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.hqic">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">hqic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the Hannan-Quinn Information Criterion:</span>
+
+<span class="sd">            :code:`-2 * llf + 2 * (`df_model`) * log(log(nobs))`</span>
+
+<span class="sd">        Like :func:`bic` if the model is fit using conditional sum of squares</span>
+<span class="sd">        then the ``k_ar`` pre-sample observations are not counted in ``nobs``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        hqic : float</span>
+<span class="sd">            The HQIC</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        .. [1] https://en.wikipedia.org/wiki/Hannan-Quinn_information_criterion</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">hqic</span></div>
+
+<div class="viewcode-block" id="ARIMA.maparams"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.maparams">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">maparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the value of the moving average coefficients.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        maparams : array-like</span>
+<span class="sd">            The MA coefficients.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">maparams</span></div>
+
+<div class="viewcode-block" id="ARIMA.maroots"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.maroots">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">maroots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The roots of the MA coefficients are the solution to:</span>
+
+<span class="sd">            :code:`(1 + maparams[0] * z + maparams[1] * z^2 + ... + maparams[</span>
+<span class="sd">            q-1] * z^q) = 0`</span>
+
+<span class="sd">        Stability requires that the roots in modules lie outside the unit</span>
+<span class="sd">        circle.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        maroots : array-like</span>
+<span class="sd">            The MA roots.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">maroots</span></div>
+
+<div class="viewcode-block" id="ARIMA.oob"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.oob">[docs]</a>    <span class="k">def</span> <span class="nf">oob</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;If the model was built with ``out_of_sample_size`` &gt; 0, a validation</span>
+<span class="sd">        score will have been computed. Otherwise it will be np.nan.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        oob_ : float</span>
+<span class="sd">            The &quot;out-of-bag&quot; score.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">oob_</span></div>
+
+<div class="viewcode-block" id="ARIMA.params"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.params">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the parameters of the model. The order of variables is the trend</span>
+<span class="sd">        coefficients and the :func:`k_exog` exogenous coefficients, then the</span>
+<span class="sd">        :func:`k_ar` AR coefficients, and finally the :func:`k_ma` MA</span>
+<span class="sd">        coefficients.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        params : array-like</span>
+<span class="sd">            The parameters of the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">params</span></div>
+
+<div class="viewcode-block" id="ARIMA.pvalues"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.pvalues">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">pvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the p-values associated with the t-values of the coefficients.</span>
+<span class="sd">        Note that the coefficients are assumed to have a Student&#39;s T</span>
+<span class="sd">        distribution.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pvalues : array-like</span>
+<span class="sd">            The p-values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">pvalues</span></div>
+
+<div class="viewcode-block" id="ARIMA.resid"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.resid">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">resid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the model residuals. If the model is fit using &#39;mle&#39;, then the</span>
+<span class="sd">        residuals are created via the Kalman Filter. If the model is fit</span>
+<span class="sd">        using &#39;css&#39; then the residuals are obtained via</span>
+<span class="sd">        ``scipy.signal.lfilter`` adjusted such that the first :func:`k_ma`</span>
+<span class="sd">        residuals are zero. These zero residuals are not returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        resid : array-like</span>
+<span class="sd">            The model residuals.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">resid</span></div>
+
+<div class="viewcode-block" id="ARIMA.summary"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.summary">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a summary of the ARIMA model&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2018, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'1.0.0.dev0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

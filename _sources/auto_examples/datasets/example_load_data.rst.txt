@@ -55,7 +55,7 @@ that exhibit seasonality, non-stationarity, and other time series nuances.
 
     # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
-    import pyramid as pm
+    import pmdarima as pm
 
     # #############################################################################
     # You can load the datasets via load_<name>

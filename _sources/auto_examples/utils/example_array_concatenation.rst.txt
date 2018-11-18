@@ -29,7 +29,7 @@ the package, but one you should understand if you're contributing.
 
     # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
-    import pyramid as pm
+    import pmdarima as pm
     import numpy as np
 
     # #############################################################################

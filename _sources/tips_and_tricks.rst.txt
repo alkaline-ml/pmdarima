@@ -41,7 +41,7 @@ to computing differences. E.g.,
 
 .. code-block:: python
 
-    from pyramid.utils import c, diff
+    from pmdarima.utils import c, diff
 
     # lag 1, diff 1
     x = c(10, 4, 2, 9, 34)
@@ -82,7 +82,7 @@ the difference twice:
 Enforcing stationarity
 ----------------------
 
-The ``pyramid.arima.stationarity`` sub-module defines various tests of stationarity for
+The ``pmdarima.arima.stationarity`` sub-module defines various tests of stationarity for
 testing a null hypothesis that an observable univariate time series is stationary around
 a deterministic trend (i.e. trend-stationary).
 
@@ -100,8 +100,8 @@ will automatically determine the appropriate differencing term for you by defaul
 
 .. code-block:: python
 
-    import pyramid as pm
-    from pyramid import datasets
+    import pmdarima as pm
+    from pmdarima import datasets
 
     y = datasets.load_lynx()
     pm.plot_acf(y)
@@ -118,19 +118,19 @@ data in order to make it stationary, we can conduct an ADF test:
 
 .. code-block:: python
 
-    from pyramid.arima.stationarity import ADFTest
+    from pmdarima.arima.stationarity import ADFTest
 
     # Test whether we should difference at the alpha=0.05
     # significance level
     adf_test = ADFTest(alpha=0.05)
     p_val, should_diff = adf_test.is_stationary(y)  # (0.99, False)
 
-The verdict, per the ADF test, is that we should *not* difference. Pyramid also
+The verdict, per the ADF test, is that we should *not* difference. Pmdarima also
 provides a more handy interface for estimating your ``d`` parameter more directly:
 
 .. code-block:: python
 
-    from pyramid.arima.utils import ndiffs
+    from pmdarima.arima.utils import ndiffs
 
     # Estimate the number of differences using an ADF test:
     n_adf = ndiffs(y, test='adf')  # -> 0
@@ -179,15 +179,15 @@ Estimating the seasonal differencing term, ``D``
 Seasonality can manifest itself in timeseries data in unexpected ways. Sometimes
 trends are partially dependent on the time of year or month. Other times, they
 may be related to weather patterns. In either case, seasonality is a real consideration
-that must be made. The pyramid package provides a test of seasonality for including
+that must be made. The pmdarima package provides a test of seasonality for including
 seasonal terms in your ARIMA models.
 
 We can use a Canova-Hansen test to estimate our seasonal differencing term:
 
 .. code-block:: python
 
-    from pyramid.datasets import load_lynx
-    from pyramid.arima.utils import nsdiffs
+    from pmdarima.datasets import load_lynx
+    from pmdarima.arima.utils import nsdiffs
 
     # load lynx
     lynx = load_lynx()
@@ -220,7 +220,7 @@ ARIMA model. For instance, consider the wineind dataset when fit with
 
 .. code-block:: python
 
-    import pyramid as pm
+    import pmdarima as pm
 
     data = pm.datasets.load_wineind()
     train, test = data[:150], data[150:]

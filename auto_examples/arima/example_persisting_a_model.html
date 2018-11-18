@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Persisting an ARIMA model &mdash; pyramid 0.9.0 documentation</title>
+  <title>Persisting an ARIMA model &mdash; pmdarima 1.0.0.dev0 documentation</title>
   
 
   
@@ -54,7 +54,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> pyramid
+            <a href="../../index.html" class="icon icon-home"> pmdarima
           
 
           
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.9.0
+                1.0.0.dev0
               </div>
             
           
@@ -118,7 +118,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">pyramid</a>
+          <a href="../../index.html">pmdarima</a>
         
       </nav>
 
@@ -175,19 +175,19 @@
 <p>This example demonstrates how we can persist an ARIMA model to disk after
 fitting it. It can then be loaded back up and used to generate forecasts.</p>
 <br/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Predictions</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">21966.6971941</span> <span class="p">,</span> <span class="mf">25983.70920892</span><span class="p">,</span> <span class="mf">30225.30980232</span><span class="p">,</span> <span class="mf">35417.12497981</span><span class="p">,</span>
-       <span class="mf">13011.36189601</span><span class="p">,</span> <span class="mf">19639.41029796</span><span class="p">,</span> <span class="mf">21506.58178159</span><span class="p">,</span> <span class="mf">23674.34000671</span><span class="p">,</span>
-       <span class="mf">21685.76396612</span><span class="p">,</span> <span class="mf">23669.77821621</span><span class="p">,</span> <span class="mf">26955.35258819</span><span class="p">,</span> <span class="mf">22755.25064686</span><span class="p">,</span>
-       <span class="mf">19808.16137427</span><span class="p">,</span> <span class="mf">23578.7818855</span> <span class="p">,</span> <span class="mf">27845.8672411</span> <span class="p">,</span> <span class="mf">32923.89431303</span><span class="p">,</span>
-       <span class="mf">10475.68782763</span><span class="p">,</span> <span class="mf">17024.74538795</span><span class="p">,</span> <span class="mf">18831.6480275</span> <span class="p">,</span> <span class="mf">20929.54677258</span><span class="p">,</span>
-       <span class="mf">18876.02420517</span><span class="p">,</span> <span class="mf">20792.57519134</span><span class="p">,</span> <span class="mf">24011.97553733</span><span class="p">,</span> <span class="mf">19745.03913772</span><span class="p">,</span>
-       <span class="mf">16731.45372362</span><span class="p">,</span> <span class="mf">20435.40478528</span><span class="p">,</span> <span class="mf">24635.90947108</span><span class="p">,</span> <span class="mf">29647.31039438</span><span class="p">,</span>
-        <span class="mf">7132.50105759</span><span class="p">,</span> <span class="mf">13614.94383214</span><span class="p">,</span> <span class="mf">15355.2377995</span> <span class="p">,</span> <span class="mf">17386.52474061</span><span class="p">,</span>
-       <span class="mf">15266.39197353</span><span class="p">,</span> <span class="mf">17116.33193821</span><span class="p">,</span> <span class="mf">20269.12168371</span><span class="p">,</span> <span class="mf">15935.57446793</span><span class="p">,</span>
-       <span class="mf">12855.37834815</span><span class="p">,</span> <span class="mf">16492.71864753</span><span class="p">,</span> <span class="mf">20626.61260004</span><span class="p">,</span> <span class="mf">25571.40277521</span><span class="p">,</span>
-        <span class="mf">2989.98269789</span><span class="p">,</span>  <span class="mf">9405.81472801</span><span class="p">,</span> <span class="mf">11079.49795294</span><span class="p">,</span> <span class="mf">13044.1741506</span> <span class="p">,</span>
-       <span class="mf">10857.43064059</span><span class="p">,</span> <span class="mf">12640.75986207</span><span class="p">,</span> <span class="mf">15726.9388645</span> <span class="p">,</span> <span class="mf">11326.7809056</span> <span class="p">,</span>
-        <span class="mf">8179.97404272</span><span class="p">,</span> <span class="mf">11750.70359899</span><span class="p">,</span> <span class="mf">15817.9868084</span> <span class="p">])</span>
+<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Predictions</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">21966.69715352</span><span class="p">,</span> <span class="mf">25983.70920565</span><span class="p">,</span> <span class="mf">30225.30978848</span><span class="p">,</span> <span class="mf">35417.12496267</span><span class="p">,</span>
+       <span class="mf">13011.3618805</span> <span class="p">,</span> <span class="mf">19639.41027742</span><span class="p">,</span> <span class="mf">21506.58176159</span><span class="p">,</span> <span class="mf">23674.33998321</span><span class="p">,</span>
+       <span class="mf">21685.76394174</span><span class="p">,</span> <span class="mf">23669.77818948</span><span class="p">,</span> <span class="mf">26955.35255979</span><span class="p">,</span> <span class="mf">22755.2506162</span> <span class="p">,</span>
+       <span class="mf">19808.16131764</span><span class="p">,</span> <span class="mf">23578.7818493</span> <span class="p">,</span> <span class="mf">27845.86719673</span><span class="p">,</span> <span class="mf">32923.89426476</span><span class="p">,</span>
+       <span class="mf">10475.6877784</span> <span class="p">,</span> <span class="mf">17024.74533391</span><span class="p">,</span> <span class="mf">18831.64797186</span><span class="p">,</span> <span class="mf">20929.546713</span>  <span class="p">,</span>
+       <span class="mf">18876.02414315</span><span class="p">,</span> <span class="mf">20792.57512611</span><span class="p">,</span> <span class="mf">24011.97546913</span><span class="p">,</span> <span class="mf">19745.03906623</span><span class="p">,</span>
+       <span class="mf">16731.45362497</span><span class="p">,</span> <span class="mf">20435.40470597</span><span class="p">,</span> <span class="mf">24635.90938245</span><span class="p">,</span> <span class="mf">29647.31030073</span><span class="p">,</span>
+        <span class="mf">7132.50096185</span><span class="p">,</span> <span class="mf">13614.94373048</span><span class="p">,</span> <span class="mf">15355.2376951</span> <span class="p">,</span> <span class="mf">17386.52463115</span><span class="p">,</span>
+       <span class="mf">15266.3918605</span> <span class="p">,</span> <span class="mf">17116.33182084</span><span class="p">,</span> <span class="mf">20269.12156224</span><span class="p">,</span> <span class="mf">15935.57434204</span><span class="p">,</span>
+       <span class="mf">12855.37819397</span><span class="p">,</span> <span class="mf">16492.71851157</span><span class="p">,</span> <span class="mf">20626.61245363</span><span class="p">,</span> <span class="mf">25571.40262264</span><span class="p">,</span>
+        <span class="mf">2989.9825421</span> <span class="p">,</span>  <span class="mf">9405.81456517</span><span class="p">,</span> <span class="mf">11079.49778624</span><span class="p">,</span> <span class="mf">13044.1739777</span> <span class="p">,</span>
+       <span class="mf">10857.430463</span>  <span class="p">,</span> <span class="mf">12640.75967901</span><span class="p">,</span> <span class="mf">15726.93867622</span><span class="p">,</span> <span class="mf">11326.78071176</span><span class="p">,</span>
+        <span class="mf">8179.97381947</span><span class="p">,</span> <span class="mf">11750.70339282</span><span class="p">,</span> <span class="mf">15817.98659065</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -197,14 +197,14 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pyramid.datasets</span> <span class="kn">import</span> <a href="../../modules/generated/pyramid.datasets.load_wineind.html#pyramid.datasets.load_wineind" title="View documentation for pyramid.datasets.load_wineind"><span class="n">load_wineind</span></a>
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
+<span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <a href="../../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="View documentation for pmdarima.datasets.load_wineind"><span class="n">load_wineind</span></a>
 <span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="kn">import</span> <span class="n">joblib</span>  <span class="c1"># for persistence</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="c1"># #############################################################################</span>
 <span class="c1"># Load the data and split it into separate pieces</span>
-<span class="n">y</span> <span class="o">=</span> <a href="../../modules/generated/pyramid.datasets.load_wineind.html#pyramid.datasets.load_wineind" title="View documentation for pyramid.datasets.load_wineind"><span class="n">load_wineind</span></a><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="View documentation for pmdarima.datasets.load_wineind"><span class="n">load_wineind</span></a><span class="p">()</span>
 <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">125</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">125</span><span class="p">:]</span>
 
 <span class="c1"># Fit an ARIMA</span>
@@ -231,7 +231,7 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
         <span class="k">pass</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.958 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  1.613 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../../_downloads/example_persisting_a_model.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_persisting_a_model.py</span></code></a></div>
@@ -285,7 +285,7 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../',
-              VERSION:'0.9.0',
+              VERSION:'1.0.0.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',

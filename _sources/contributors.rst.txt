@@ -4,7 +4,7 @@
 Contributors
 ============
 
-Thanks to the following users for their contributions to Pyramid!
+Thanks to the following users for their contributions to pmdarima!
 
 .. raw:: html
 

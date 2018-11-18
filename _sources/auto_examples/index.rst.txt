@@ -8,7 +8,7 @@ Examples
 General examples
 ----------------
 
-General-purpose and introductory examples for pyramid. These examples are
+General-purpose and introductory examples for ``pmdarima``. These examples are
 designed to introduce you to the package style and layout.
 
 .. raw:: html
@@ -45,7 +45,7 @@ designed to introduce you to the package style and layout.
 ARIMA examples
 --------------
 
-Examples of how to use the :mod:`pyramid.arima` module to fit timeseries
+Examples of how to use the :mod:`pmdarima.arima` module to fit timeseries
 models.
 
 .. raw:: html
@@ -122,7 +122,7 @@ models.
 Datasets examples
 -----------------
 
-Examples of how to use the :mod:`pyramid.datasets` module to conveniently load
+Examples of how to use the :mod:`pmdarima.datasets` module to conveniently load
 toy time series data for model benchmarking and experimentation.
 
 .. raw:: html
@@ -159,7 +159,7 @@ toy time series data for model benchmarking and experimentation.
 Utils examples
 --------------
 
-Examples of how to use the :mod:`pyramid.utils` module to plot timeseries
+Examples of how to use the :mod:`pmdarima.utils` module to plot timeseries
 data, difference arrays, and more.
 
 .. raw:: html
@@ -200,13 +200,13 @@ data, difference arrays, and more.
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: auto_examples_python.zip <//Users/taylor.smith/Documents/Personal/pyramid/doc/auto_examples/auto_examples_python.zip>`
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//root/pmdarima/doc/auto_examples/auto_examples_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//Users/taylor.smith/Documents/Personal/pyramid/doc/auto_examples/auto_examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//root/pmdarima/doc/auto_examples/auto_examples_jupyter.zip>`
 
 
 .. only:: html

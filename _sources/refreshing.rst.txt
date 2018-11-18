@@ -4,7 +4,7 @@
 Refreshing your ARIMA models
 ============================
 
-There are two ways to keep your models up-to-date with Pyramid:
+There are two ways to keep your models up-to-date with pmdarima:
 
 1. Periodically, your ARIMA will need to be refreshed given new observations. See
    `this discussion <https://stats.stackexchange.com/questions/34139/updating-arima-models-at-frequent-intervals>`_
@@ -13,7 +13,7 @@ There are two ways to keep your models up-to-date with Pyramid:
 
 2. If you're not ready to refresh your model parameters, but would like to add observations to
    your model (so new forecasts originate from the latest samples), the ARIMA class makes it
-   possible to `add new samples <./modules/generated/pyramid.arima.ARIMA.html#pyramid.arima.ARIMA.add_new_observations>`_.
+   possible to `add new samples <./modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.add_new_observations>`_.
    See `this example <auto_examples/arima/example_add_new_samples.html#adding-new-observations-to-your-model>`_
    for more info.
 
@@ -27,8 +27,8 @@ into consideration. Assume that you fit the following model:
 
 .. code-block:: python
 
-    import pyramid as pm
-    from pyramid.datasets import load_wineind
+    import pmdarima as pm
+    from pmdarima.datasets import load_wineind
 
     y = load_wineind()
     train, test = y[:125], y[125:]

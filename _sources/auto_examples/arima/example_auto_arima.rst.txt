@@ -41,8 +41,8 @@ dataset available in the :ref:`datasets` submodule.
 
     # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
-    from pyramid.datasets import load_lynx
-    from pyramid.arima import auto_arima
+    from pmdarima.datasets import load_lynx
+    from pmdarima.arima import auto_arima
     from sklearn.metrics import mean_squared_error
     import matplotlib.pyplot as plt
     import numpy as np
@@ -79,7 +79,7 @@ dataset available in the :ref:`datasets` submodule.
     plt.title("Lynx forecasts")
     plt.xlabel("Year")
 
-**Total running time of the script:** ( 0 minutes  0.162 seconds)
+**Total running time of the script:** ( 0 minutes  0.800 seconds)
 
 
 

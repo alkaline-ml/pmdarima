@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>6. Tips to using auto_arima &mdash; pyramid 0.9.0 documentation</title>
+  <title>6. Tips to using auto_arima &mdash; pmdarima 1.0.0.dev0 documentation</title>
   
 
   
@@ -54,7 +54,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> pyramid
+            <a href="index.html" class="icon icon-home"> pmdarima
           
 
           
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.9.0
+                1.0.0.dev0
               </div>
             
           
@@ -95,7 +95,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="user_guide.html#getting-started">Getting started</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="about.html">1. About the project</a></li>
 <li class="toctree-l3"><a class="reference internal" href="setup.html">2. Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart.html">3. Pyramid Quickstart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
 <li class="toctree-l3"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a><ul>
@@ -106,7 +106,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="modules/datasets.html">7. Toy time-series datasets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="contributing.html">8. Contributing to Pyramid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html">8. Contributing to pmdarima</a></li>
 <li class="toctree-l3"><a class="reference internal" href="contributors.html">9. Contributors</a></li>
 </ul>
 </li>
@@ -128,7 +128,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">pyramid</a>
+          <a href="index.html">pmdarima</a>
         
       </nav>
 
@@ -211,7 +211,7 @@ integrative term).</p>
 <p>An integrative term, <code class="docutils literal notranslate"><span class="pre">d</span></code>, is typically only used in the case of non-stationary
 data. The value of <code class="docutils literal notranslate"><span class="pre">d</span></code> determines the number of periods to lag the response prior
 to computing differences. E.g.,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.utils</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.utils</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
 
 <span class="c1"># lag 1, diff 1</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
@@ -248,7 +248,7 @@ the difference twice:</p>
 </div>
 <div class="section" id="enforcing-stationarity">
 <span id="id1"></span><h2>6.2. Enforcing stationarity<a class="headerlink" href="#enforcing-stationarity" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">pyramid.arima.stationarity</span></code> sub-module defines various tests of stationarity for
+<p>The <code class="docutils literal notranslate"><span class="pre">pmdarima.arima.stationarity</span></code> sub-module defines various tests of stationarity for
 testing a null hypothesis that an observable univariate time series is stationary around
 a deterministic trend (i.e. trend-stationary).</p>
 <p>A time series is stationary when its mean, variance and auto-correlation, etc.,
@@ -262,8 +262,8 @@ does not appear relatively stationary, your model will likely need a
 differencing term. These can be determined by using an Augmented Dickey-Fuller
 test, or various other statistical testing methods. Note that <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code>
 will automatically determine the appropriate differencing term for you by default.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pyramid</span> <span class="kn">import</span> <span class="n">datasets</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
+<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">datasets</span>
 
 <span class="n">y</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span><span class="p">()</span>
 <span class="n">pm</span><span class="o">.</span><span class="n">plot_acf</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
@@ -273,7 +273,7 @@ will automatically determine the appropriate differencing term for you by defaul
 <p>We can examine a time-series’ auto-correlation plot given the code above.
 However, to more quantitatively determine whether we need to difference our
 data in order to make it stationary, we can conduct an ADF test:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.arima.stationarity</span> <span class="kn">import</span> <span class="n">ADFTest</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.arima.stationarity</span> <span class="kn">import</span> <span class="n">ADFTest</span>
 
 <span class="c1"># Test whether we should difference at the alpha=0.05</span>
 <span class="c1"># significance level</span>
@@ -281,9 +281,9 @@ data in order to make it stationary, we can conduct an ADF test:</p>
 <span class="n">p_val</span><span class="p">,</span> <span class="n">should_diff</span> <span class="o">=</span> <span class="n">adf_test</span><span class="o">.</span><span class="n">is_stationary</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># (0.99, False)</span>
 </pre></div>
 </div>
-<p>The verdict, per the ADF test, is that we should <em>not</em> difference. Pyramid also
+<p>The verdict, per the ADF test, is that we should <em>not</em> difference. Pmdarima also
 provides a more handy interface for estimating your <code class="docutils literal notranslate"><span class="pre">d</span></code> parameter more directly:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.arima.utils</span> <span class="kn">import</span> <span class="n">ndiffs</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.arima.utils</span> <span class="kn">import</span> <span class="n">ndiffs</span>
 
 <span class="c1"># Estimate the number of differences using an ADF test:</span>
 <span class="n">n_adf</span> <span class="o">=</span> <span class="n">ndiffs</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;adf&#39;</span><span class="p">)</span>  <span class="c1"># -&gt; 0</span>
@@ -327,11 +327,11 @@ knowledge of the data.</p>
 <p>Seasonality can manifest itself in timeseries data in unexpected ways. Sometimes
 trends are partially dependent on the time of year or month. Other times, they
 may be related to weather patterns. In either case, seasonality is a real consideration
-that must be made. The pyramid package provides a test of seasonality for including
+that must be made. The pmdarima package provides a test of seasonality for including
 seasonal terms in your ARIMA models.</p>
 <p>We can use a Canova-Hansen test to estimate our seasonal differencing term:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyramid.datasets</span> <span class="kn">import</span> <span class="n">load_lynx</span>
-<span class="kn">from</span> <span class="nn">pyramid.arima.utils</span> <span class="kn">import</span> <span class="n">nsdiffs</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_lynx</span>
+<span class="kn">from</span> <span class="nn">pmdarima.arima.utils</span> <span class="kn">import</span> <span class="n">nsdiffs</span>
 
 <span class="c1"># load lynx</span>
 <span class="n">lynx</span> <span class="o">=</span> <span class="n">load_lynx</span><span class="p">()</span>
@@ -359,7 +359,7 @@ recurrent periodicity such as:</p>
 <p>Depending on how it’s set, it can dramatically impact the outcome of an
 ARIMA model. For instance, consider the wineind dataset when fit with
 <code class="docutils literal notranslate"><span class="pre">m=1</span></code> vs. <code class="docutils literal notranslate"><span class="pre">m=12</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span><span class="p">()</span>
 <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="mi">150</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">150</span><span class="p">:]</span>
@@ -480,7 +480,7 @@ with a lower information criterion.</p>
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'./',
-              VERSION:'0.9.0',
+              VERSION:'1.0.0.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',

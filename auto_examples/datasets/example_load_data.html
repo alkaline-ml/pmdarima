@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Dataset loading &mdash; pyramid 0.9.0 documentation</title>
+  <title>Dataset loading &mdash; pmdarima 1.0.0.dev0 documentation</title>
   
 
   
@@ -54,7 +54,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> pyramid
+            <a href="../../index.html" class="icon icon-home"> pmdarima
           
 
           
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.9.0
+                1.0.0.dev0
               </div>
             
           
@@ -116,7 +116,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">pyramid</a>
+          <a href="../../index.html">pmdarima</a>
         
       </nav>
 
@@ -201,21 +201,21 @@ that exhibit seasonality, non-stationarity, and other time series nuances.</p>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
 
 <span class="c1"># #############################################################################</span>
 <span class="c1"># You can load the datasets via load_&lt;name&gt;</span>
-<span class="n">lynx</span> <span class="o">=</span> <a href="../../modules/generated/pyramid.datasets.load_lynx.html#pyramid.datasets.load_lynx" title="View documentation for pyramid.datasets.load_lynx"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span></a><span class="p">()</span>
+<span class="n">lynx</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="View documentation for pmdarima.datasets.load_lynx"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span></a><span class="p">()</span>
 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Lynx array:&quot;</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">lynx</span><span class="p">)</span>
 
 <span class="c1"># You can also get a series, if you rather</span>
 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Lynx series head:&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><a href="../../modules/generated/pyramid.datasets.load_lynx.html#pyramid.datasets.load_lynx" title="View documentation for pyramid.datasets.load_lynx"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span></a><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="View documentation for pmdarima.datasets.load_lynx"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span></a><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 
 <span class="c1"># Several other datasets:</span>
-<span class="n">heart_rate</span> <span class="o">=</span> <a href="../../modules/generated/pyramid.datasets.load_heartrate.html#pyramid.datasets.load_heartrate" title="View documentation for pyramid.datasets.load_heartrate"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_heartrate</span></a><span class="p">()</span>
-<span class="n">wineind</span> <span class="o">=</span> <a href="../../modules/generated/pyramid.datasets.load_wineind.html#pyramid.datasets.load_wineind" title="View documentation for pyramid.datasets.load_wineind"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
+<span class="n">heart_rate</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_heartrate.html#pmdarima.datasets.load_heartrate" title="View documentation for pmdarima.datasets.load_heartrate"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_heartrate</span></a><span class="p">()</span>
+<span class="n">wineind</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="View documentation for pmdarima.datasets.load_wineind"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
 <span class="n">woolyrnq</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_woolyrnq</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -273,7 +273,7 @@ that exhibit seasonality, non-stationarity, and other time series nuances.</p>
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../',
-              VERSION:'0.9.0',
+              VERSION:'1.0.0.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',

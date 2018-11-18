@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>What’s new in Pyramid &mdash; pyramid 0.9.0 documentation</title>
+  <title>What’s new in pmdarima &mdash; pmdarima 1.0.0.dev0 documentation</title>
   
 
   
@@ -53,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> pyramid
+            <a href="index.html" class="icon icon-home"> pmdarima
           
 
           
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                0.9.0
+                1.0.0.dev0
               </div>
             
           
@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">What's New?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v1-0-0">v1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-9-0">v0.9.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-8-1">v0.8.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-7-0">v0.7.0</a></li>
@@ -112,7 +113,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">pyramid</a>
+          <a href="index.html">pmdarima</a>
         
       </nav>
 
@@ -143,7 +144,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>What’s new in Pyramid</li>
+      <li>What’s new in pmdarima</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,10 +163,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="what-s-new-in-pyramid">
-<span id="whats-new"></span><h1>What’s new in Pyramid<a class="headerlink" href="#what-s-new-in-pyramid" title="Permalink to this headline">¶</a></h1>
-<p>As new releases of Pyramid are pushed out, the following list (introduced in
+  <div class="section" id="what-s-new-in-pmdarima">
+<span id="whats-new"></span><h1>What’s new in pmdarima<a class="headerlink" href="#what-s-new-in-pmdarima" title="Permalink to this headline">¶</a></h1>
+<p>As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.</p>
+<div class="section" id="v1-0-0">
+<h2>v1.0.0<a class="headerlink" href="#v1-0-0" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>Wheels will no longer be built for Python versions &lt; 3.5.</strong> You may still be able to build
+from source, but support for 2.x python versions will diminish in future versions.</li>
+<li>Migrate namespace from ‘pyramid-arima’ to ‘pmdarima’. This is due to the fact that
+a growing web-framework (also named Pyramid) is causing namespace collisions when
+both packages are installed on a machine. See <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/34">Issue #34</a>
+for more detail.</li>
+<li>Remove redundant Travis tests</li>
+<li>Automate documentation build on Circle CI</li>
+<li>Move lots of the build/test functionality into the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> for ease.</li>
+<li>Warn for impending deprecation of various environment variable name changes. The following
+will be completely switched over in version 1.2.0:<ul>
+<li><code class="docutils literal notranslate"><span class="pre">'PYRAMID_MPL_DEBUG'</span></code> will become <code class="docutils literal notranslate"><span class="pre">'PMDARIMA_MPL_DEBUG'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">'PYRAMID_MPL_BACKEND'</span></code> will become <code class="docutils literal notranslate"><span class="pre">'PMDARIMA_MPL_BACKEND'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">'PYRAMID_ARIMA_CACHE_WARN_SIZE'</span></code> will become <code class="docutils literal notranslate"><span class="pre">'PMDARIMA_CACHE_WARN_SIZE'</span></code></li>
+</ul>
+</li>
+</ul>
+</div>
 <div class="section" id="v0-9-0">
 <h2>v0.9.0<a class="headerlink" href="#v0-9-0" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -200,7 +222,7 @@ was serialized, a <code class="docutils literal notranslate"><span class="pre">U
 <li>Specifies the ARIMA result pickle name pattern</li>
 </ul>
 </li>
-<li><p class="first">Fix bug (<a class="reference external" href="https://github.com/tgsmith61591/pyramid/issues/30">Issue #30</a>) in <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code>
+<li><p class="first">Fix bug (<a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/30">Issue #30</a>) in <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code>
 where using CV with differencing and no seasonality caused a dim mismatch in the model’s
 exog array and its endog array</p>
 </li>
@@ -222,7 +244,7 @@ exog array and its endog array</p>
 <div class="section" id="v0-7-0">
 <h2>v0.7.0<a class="headerlink" href="#v0-7-0" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> <code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> behavior<ul>
+<li><code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> behavior in <a class="reference internal" href="modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA" title="pmdarima.arima.ARIMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA</span></code></a><ul>
 <li>In prior versions, the <code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> (OOSS) parameter misbehaved in the sense that it
 ended up fitting the model on the entire sample, and scoring the number specified. This
 behavior changed in v0.7.0. Going forward, when OOSS is not None,
@@ -230,12 +252,12 @@ ARIMA models will be fit on <span class="math notranslate">\(n - OOSS\)</span> s
 and the held-out samples are then added to the model.</li>
 </ul>
 </li>
-<li><code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> <code class="docutils literal notranslate"><span class="pre">add_new_samples</span></code> method<ul>
+<li><code class="docutils literal notranslate"><span class="pre">add_new_samples</span></code> method added to <a class="reference internal" href="modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA" title="pmdarima.arima.ARIMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA</span></code></a><ul>
 <li>This method adds new samples to the model, effectively refreshing the point from
 which it creates new forecasts without impacting the model parameters.</li>
 </ul>
 </li>
-<li><code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> confidence intervals on <code class="docutils literal notranslate"><span class="pre">predict</span></code><ul>
+<li>Add confidence intervals on <code class="docutils literal notranslate"><span class="pre">predict</span></code> in <a class="reference internal" href="modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA" title="pmdarima.arima.ARIMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA</span></code></a><ul>
 <li>When <code class="docutils literal notranslate"><span class="pre">return_conf_int</span></code> is true, the confidence intervals will now be returned
 with the forecasts.</li>
 </ul>
@@ -245,7 +267,7 @@ with the forecasts.</li>
 <div class="section" id="v0-6-5">
 <h2>v0.6.5<a class="headerlink" href="#v0-6-5" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">CHTest</span></code> of seasonality<ul>
+<li><a class="reference internal" href="modules/generated/pmdarima.arima.CHTest.html#pmdarima.arima.CHTest" title="pmdarima.arima.CHTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">pmdarima.arima.CHTest</span></code></a> of seasonality<ul>
 <li>No longer compute the <span class="math notranslate">\(U\)</span> or <span class="math notranslate">\(V\)</span> matrix in the SVD computation in the
 Canova-Hansen test. This makes the test <em>much</em> faster.</li>
 </ul>
@@ -296,7 +318,7 @@ Canova-Hansen test. This makes the test <em>much</em> faster.</li>
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'./',
-              VERSION:'0.9.0',
+              VERSION:'1.0.0.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
