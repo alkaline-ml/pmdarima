@@ -44,12 +44,7 @@ if [[ "$DISTRIB" == "conda" ]]; then
 
     # Configure the conda environment and put it in the path using the
     # provided versions
-    if [[ "$PYTHON_VERSION" == "2.7" ]]; then
-        conda create -n testenv --yes python=$PYTHON_VERSION \
-            numpy scipy cython=$CYTHON_VERSION statsmodels \
-            scikit-learn=$SCIKIT_LEARN_VERSION pytest pytest-cov
-
-    elif [[ "$INSTALL_MKL" == "true" ]]; then
+    if [[ "$INSTALL_MKL" == "true" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
             numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
             mkl cython=$CYTHON_VERSION \
@@ -91,7 +86,7 @@ fi
 # now run the python setup. This implicitly builds all the C code with build_ext
 python setup.py develop
 
-# Build pyramid in the install.sh script to collapse the verbose
+# Build pmdarima in the install.sh script to collapse the verbose
 # build output in the travis output when it succeeds.
 python --version
 python -c "import numpy; print('numpy %s' % numpy.__version__)"

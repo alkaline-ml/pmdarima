@@ -6,7 +6,7 @@ API Reference
 
 .. include:: ../includes/api_css.rst
 
-This is the class and function reference for pyramid. Please refer to
+This is the class and function reference for ``pmdarima``. Please refer to
 the :ref:`full user guide <user_guide>` for further details, as the class and
 function raw specifications may not be enough to give full guidelines on their
 uses.
@@ -14,14 +14,14 @@ uses.
 
 .. _arima_ref:
 
-:mod:`pyramid.arima`: ARIMA estimator & differencing tests
-==========================================================
+:mod:`pmdarima.arima`: ARIMA estimator & differencing tests
+===========================================================
 
-The ``pyramid.arima`` sub-module defines the ``ARIMA`` estimator and the
+The ``pmdarima.arima`` sub-module defines the ``ARIMA`` estimator and the
 ``auto_arima`` function, as well as a set of tests of seasonality and
 stationarity.
 
-.. automodule:: pyramid.arima
+.. automodule:: pmdarima.arima
     :no-members:
     :no-inherited-members:
 
@@ -31,7 +31,7 @@ ARIMA estimator & statistical tests
 **User guide:** See the :ref:`seasonality` and :ref:`enforcing_stationarity`
 sections for further details.
 
-.. currentmodule:: pyramid
+.. currentmodule:: pmdarima
 
 .. autosummary::
     :toctree: generated/
@@ -48,7 +48,7 @@ ARIMA auto-parameter selection
 
 **User guide:** See the :ref:`tips_and_tricks` section for further details.
 
-.. currentmodule:: pyramid
+.. currentmodule:: pmdarima
 
 .. autosummary::
     :toctree: generated/
@@ -60,7 +60,7 @@ ARIMA auto-parameter selection
 Differencing helpers
 --------------------
 
-.. currentmodule:: pyramid
+.. currentmodule:: pmdarima
 
 .. autosummary::
     :toctree: generated/
@@ -73,23 +73,23 @@ Differencing helpers
 
 .. _datasets_ref:
 
-:mod:`pyramid.datasets`: Toy univariate timeseries datasets
-===========================================================
+:mod:`pmdarima.datasets`: Toy univariate timeseries datasets
+============================================================
 
-The ``pyramid.datasets`` submodule provides several different univariate time-
+The ``pmdarima.datasets`` submodule provides several different univariate time-
 series datasets used in various examples and tests across the package. If you
 would like to prototype a model, this is a good place to find easy-to-access data.
 
 **User guide:** See the :ref:`datasets` section for further details.
 
-.. automodule:: pyramid.datasets
+.. automodule:: pmdarima.datasets
     :no-members:
     :no-inherited-members:
 
 Dataset loading functions
 -------------------------
 
-.. currentmodule:: pyramid
+.. currentmodule:: pmdarima
 
 .. autosummary::
     :toctree: generated/
@@ -102,19 +102,19 @@ Dataset loading functions
 
 .. _utils_ref:
 
-:mod:`pyramid.utils`: Utilities
-===============================
+:mod:`pmdarima.utils`: Utilities
+================================
 
 Utilities and array differencing functions used commonly across the package.
 
-.. automodule:: pyramid.utils
+.. automodule:: pmdarima.utils
     :no-members:
     :no-inherited-members:
 
 Array helper functions & metaestimators
 ---------------------------------------
 
-.. currentmodule:: pyramid
+.. currentmodule:: pmdarima
 
 .. autosummary::
     :toctree: generated/
@@ -131,7 +131,7 @@ Array helper functions & metaestimators
 Plotting utilities & wrappers
 -----------------------------
 
-.. currentmodule:: pyramid
+.. currentmodule:: pmdarima
 
 .. autosummary::
     :toctree: generated/

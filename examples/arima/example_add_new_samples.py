@@ -16,8 +16,8 @@ print(__doc__)
 
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
-from pyramid.datasets import load_lynx
-from pyramid.arima import auto_arima
+from pmdarima.datasets import load_lynx
+from pmdarima.arima import auto_arima
 import matplotlib.pyplot as plt
 import numpy as np
 

@@ -2,9 +2,6 @@
 set -x
 set -e
 
-apt-get -yq update
-apt-get -yq install libatlas-dev libatlas-base-dev liblapack-dev gfortran ccache
-
 # Don't test with Conda here, use virtualenv instead
 pip install virtualenv
 
@@ -32,4 +29,4 @@ pip install -vv -e .
 
 # Pytest is known to consume lots of memory for a large number of tests,
 # and Circle 2.0 limits 4GB per container.
-python -m pytest pyramid/ -p no:logging
+python -m pytest pmdarima/ -p no:logging

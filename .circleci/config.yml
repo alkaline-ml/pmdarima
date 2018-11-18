@@ -14,6 +14,7 @@ jobs:
           - pypy3-ccache
 
       - checkout
+      - run: ./build_tools/circle/before_install.sh
       - run: ./build_tools/circle/build_test_pypy.sh
       - save_cache:
           key: pypy3-ccache-{{ .Branch }}-{{ .BuildNum }}
@@ -21,10 +22,53 @@ jobs:
             - ~/.ccache
             - ~/.cache/pip
 
+  # For testing lint
+  test-linting:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: make test-lint
+
+  # Regression testing for switch-over to new pmdarima namespace
+  regression-testing:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: ./build_tools/circle/before_install.sh
+    - run: ./build_tools/circle/regression_testing.sh
+
+  # For documentation deployment. You'll need the following environment vars
+  # in your Circle CI settings, otherwise this will not work.
+  #
+  # GH_NAME (your git username)
+  # GH_EMAIL (your git email)
+  # GH_TOKEN (the personal Git token with pushes enabled)
+  deploy-doc:
+    docker:
+    - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: ./build_tools/circle/before_install.sh
+    - run: make doc-requirements
+    - run: make install
+    - run: ./build_tools/circle/build_push_doc.sh
+
 workflows:
   version: 2
 
   # All PyPy jobs:
-  pypy:
+  testing:
     jobs:
       - pypy36
+      - test-linting
+      - regression-testing
+
+  # All deployment
+  deploy:
+    jobs:
+      - deploy-doc

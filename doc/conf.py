@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# pyramid documentation build configuration file, created by
+# pmdarima documentation build configuration file, created by
 # sphinx-quickstart on Sun Sep  3 15:16:29 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -30,7 +30,7 @@ matplotlib.use('agg')  # RISK: could be overridden via environment variables...
 
 import os
 import sys
-import pyramid
+import pmdarima
 from pkg_resources import parse_version
 from sklearn.externals.six import u
 
@@ -83,7 +83,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'pyramid'
+project = 'pmdarima'
 copyright = '2017-2018, Taylor G Smith'
 author = 'Taylor G Smith'
 
@@ -92,7 +92,7 @@ author = 'Taylor G Smith'
 # built documents.
 #
 # The short X.Y version.
-version = str(parse_version(pyramid.__version__))
+version = str(parse_version(pmdarima.__version__))
 # The full version, including alpha/beta/rc tags.
 release = version
 
@@ -157,7 +157,7 @@ html_favicon = 'img/favicon.ico'
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'pyramiddoc'
+htmlhelp_basename = 'pmdarimadoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -184,7 +184,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'pyramid.tex', 'pyramid Documentation',
+    (master_doc, 'pmdarima.tex', 'pmdarima Documentation',
      'Taylor G Smith', 'manual'),
 ]
 
@@ -194,7 +194,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pyramid', u('pyramid Documentation'),
+    (master_doc, 'pmdarima', u('pmdarima Documentation'),
      [author], 1)
 ]
 
@@ -205,15 +205,15 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'pyramid', 'pyramid Documentation',
-     author, 'pyramid', 'One line description of project.',
+    (master_doc, 'pmdarima', 'pmdarima Documentation',
+     author, 'pmdarima', 'One line description of project.',
      'Miscellaneous'),
 ]
 
 sphinx_gallery_conf = {
-    'doc_module': 'pyramid',
+    'doc_module': 'pmdarima',
     'backreferences_dir': os.path.join('modules', 'generated'),
-    'reference_url': {'pyramid': None}
+    'reference_url': {'pmdarima': None}
 }
 
 
@@ -230,6 +230,6 @@ def setup(app):
 
 # The following is used by sphinx.ext.linkcode to provide links to github
 linkcode_resolve = make_linkcode_resolve(
-    'pyramid', u('https://github.com/tgsmith61591/'
-                 'pyramid/blob/{revision}/'
-                 '{package}/{path}#L{lineno}'))
+    'pmdarima', u('https://github.com/tgsmith61591/'
+                  'pmdarima/blob/{revision}/'
+                  '{package}/{path}#L{lineno}'))

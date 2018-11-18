@@ -15,13 +15,13 @@ before_install:
   - source build_tools/travis/before_install.sh
 env:
   global:
-    - PYMODULE=pyramid
-    - TEST_DIR=/tmp/pyramid
+    - PYMODULE=pmdarima
+    - TEST_DIR=/tmp/pmdarima
     - OMP_NUM_THREADS=4
     - OPENBLAS_NUM_THREADS=4
     # Matplotlib variables:
-    - PYRAMID_MPL_DEBUG="true"
-    - PYRAMID_MPL_BACKEND="TkAgg"
+    - PMDARIMA_MPL_DEBUG="true"
+    - PMDARIMA_MPL_BACKEND="TkAgg"
     - MPL_VERSION="2.2.3"
     # So we don't test MPL
     - TESTING_ON_TRAVIS="true"
@@ -32,34 +32,6 @@ env:
 
 matrix:
   include:
-    # This environment tests the oldest supported anaconda env. Except some of these (i.e., statsmodels
-    # and sklearn) require higher versions of numpy, so cannot really test *actual* oldest... this also
-    # tests against linux.
-    - os: linux
-      dist: trusty
-      services:
-        - docker
-      env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=true
-           DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64" DOCKER_CONTAINER_NAME="pyramidcontainer"
-
-    # This environment tests against Linux with CPython 2.7.x built with UCS-4 encoding
-    - os: linux
-      dist: trusty
-      services:
-        - docker
-      env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=true
-           DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64" DOCKER_CONTAINER_NAME="pyramidcontainer"
-           UCS_SETTING="ucs4"
-
-    # This environment tests the same conditions as above, but tests against MAC OS X,
-    # using virtualenv instead of the conda python distribution
-    - os: osx
-      language: generic
-      env: DISTRIB="conda" PYTHON_VERSION="2.7" CYTHON_VERSION="0.23.5"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.17.1" DEPLOY=true CACHEC=false
-
     # This environment tests Python 3.5 support on linux
     - os: linux
       dist: trusty
@@ -69,10 +41,20 @@ matrix:
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
            DEPLOY=true CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
-           DOCKER_CONTAINER_NAME="pyramidcontainer"
+           DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
-    # This environment tests Python 3.5 support on MAC OS X, using virtualenv
-    # instead of the conda python distribution
+    # This test runs on linux 3.6 & as of v0.9+, deploys python 3.6 wheel
+    - os: linux
+      dist: trusty
+      services:
+      - docker
+      env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
+        CYTHON_VERSION="0.25.2" COVERAGE=false SCIKIT_LEARN_VERSION="0.19"
+        STATSMODELS_VERSION="0.9.0" DEPLOY=true CACHEC=true
+        DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+        DOCKER_CONTAINER_NAME="pmdarimacontainer"
+
+    # This environment tests Python 3.5 support on MAC OS X
     - os: osx
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="3.5"
@@ -80,25 +62,12 @@ matrix:
            COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
            DEPLOY=true CACHEC=false
 
-    # This environment tests the newest supported Anaconda release (4.4.0) and
-    # runs on linux
-    - os: linux
-      dist: trusty
-      env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
-           DEPLOY=false CACHEC=true
-
-    # This environment use pytest to run the tests. It uses the newest
-    # supported Anaconda release (4.4.0) and tests with pytests instead of nosetests.
-    # This test runs on linux. As of v0.9+, deploy python 3.6 wheel
-    - os: linux
-      dist: trusty
-      env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=false SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
-           DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
-           DOCKER_CONTAINER_NAME="pyramidcontainer" DEPLOY=true CACHEC=true
+    # This environment tests Python 3.6 support on MAC OS X
+    - os: osx
+      language: generic
+      env: DISTRIB="conda" PYTHON_VERSION="3.6" CYTHON_VERSION="0.25.2"
+        COVERAGE=true SCIKIT_LEARN_VERSION="0.20" STATSMODELS_VERSION="0.9.0"
+        DEPLOY=true CACHEC=false
 
 install: source build_tools/travis/install.sh
 before_script: bash build_tools/travis/before_script.sh
@@ -126,7 +95,7 @@ notifications:
 deploy:
   provider: script
   skip_cleanup: true
-  script: python -m twine upload --skip-existing dist/*.whl
+  script: python -m twine upload --skip-existing dist/pmdarima-*
   on:
     tags: true # Upload on tagged releases
     condition: "$DEPLOY = true"

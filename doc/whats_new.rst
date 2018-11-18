@@ -1,11 +1,36 @@
 .. _whats_new:
 
-=====================
-What's new in Pyramid
-=====================
+======================
+What's new in pmdarima
+======================
 
-As new releases of Pyramid are pushed out, the following list (introduced in
+As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
+
+v1.0.0
+------
+
+* **Wheels will no longer be built for Python versions < 3.5.** You may still be able to build
+  from source, but support for 2.x python versions will diminish in future versions.
+
+* Migrate namespace from 'pyramid-arima' to 'pmdarima'. This is due to the fact that
+  a growing web-framework (also named Pyramid) is causing namespace collisions when
+  both packages are installed on a machine. See `Issue #34 <https://github.com/tgsmith61591/pmdarima/issues/34>`_
+  for more detail.
+
+* Remove redundant Travis tests
+
+* Automate documentation build on Circle CI
+
+* Move lots of the build/test functionality into the ``Makefile`` for ease.
+
+* Warn for impending deprecation of various environment variable name changes. The following
+  will be completely switched over in version 1.2.0:
+
+  - ``'PYRAMID_MPL_DEBUG'`` will become ``'PMDARIMA_MPL_DEBUG'``
+  - ``'PYRAMID_MPL_BACKEND'`` will become ``'PMDARIMA_MPL_BACKEND'``
+  - ``'PYRAMID_ARIMA_CACHE_WARN_SIZE'`` will become ``'PMDARIMA_CACHE_WARN_SIZE'``
+
 
 v0.9.0
 ------
@@ -44,7 +69,7 @@ v0.8.1
   - Specifies the location of the ARIMA result pickles (see :ref:`serializing`)
   - Specifies the ARIMA result pickle name pattern
 
-* Fix bug (`Issue #30 <https://github.com/tgsmith61591/pyramid/issues/30>`_) in ``ARIMA``
+* Fix bug (`Issue #30 <https://github.com/tgsmith61591/pmdarima/issues/30>`_) in ``ARIMA``
   where using CV with differencing and no seasonality caused a dim mismatch in the model's
   exog array and its endog array
 
@@ -62,7 +87,7 @@ v0.8.1
 v0.7.0
 ------
 
-* ``ARIMA`` ``out_of_sample_size`` behavior
+* ``out_of_sample_size`` behavior in :class:`pmdarima.arima.ARIMA`
 
   - In prior versions, the ``out_of_sample_size`` (OOSS) parameter misbehaved in the sense that it
     ended up fitting the model on the entire sample, and scoring the number specified. This
@@ -70,12 +95,12 @@ v0.7.0
     ARIMA models will be fit on :math:`n - OOSS` samples, scored on the last OOSS samples,
     and the held-out samples are then added to the model.
 
-* ``ARIMA`` ``add_new_samples`` method
+* ``add_new_samples`` method added to :class:`pmdarima.arima.ARIMA`
 
   - This method adds new samples to the model, effectively refreshing the point from
     which it creates new forecasts without impacting the model parameters.
 
-* ``ARIMA`` confidence intervals on ``predict``
+* Add confidence intervals on ``predict`` in :class:`pmdarima.arima.ARIMA`
 
   - When ``return_conf_int`` is true, the confidence intervals will now be returned
     with the forecasts.
@@ -83,7 +108,7 @@ v0.7.0
 v0.6.5
 ------
 
-* ``CHTest`` of seasonality
+* :class:`pmdarima.arima.CHTest` of seasonality
 
   - No longer compute the :math:`U` or :math:`V` matrix in the SVD computation in the
     Canova-Hansen test. This makes the test *much* faster.
