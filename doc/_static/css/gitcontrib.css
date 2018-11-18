@@ -7,7 +7,7 @@
 }
 
 .contrib-wrapper {
-  position: absolute;
+  /* position: absolute; */
   display: block;
   height: 80px;
   width: 450px;
