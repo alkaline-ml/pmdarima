@@ -1023,3 +1023,8 @@ class ARIMA(BaseEstimator):
     def summary(self):
         """Get a summary of the ARIMA model"""
         return self.arima_res_.summary()
+
+    @if_has_delegate('arima_res_')
+    def plot_diagnostics(self, variable=0, lags=10, fig=None, figsize=None):
+        """Get plot_diagnostics of the ARIMA model"""
+        return type(self.arima_res_.plot_diagnostics(variable, lags, fig, figsize))
