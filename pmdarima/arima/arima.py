@@ -15,6 +15,7 @@ from sklearn.utils.validation import check_array, check_is_fitted, \
 
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
+from statsmodels.tsa.statespace.sarimax import SARIMAXResultsWrapper
 from statsmodels import api as sm
 
 import numpy as np
@@ -1023,3 +1024,53 @@ class ARIMA(BaseEstimator):
     def summary(self):
         """Get a summary of the ARIMA model"""
         return self.arima_res_.summary()
+
+    @if_has_delegate('arima_res_')
+    def plot_diagnostics(self, variable=0, lags=10, fig=None, figsize=None):
+        """Diagnostic plots for standardized residuals of one endogenous variable
+
+        Parameters
+        ----------
+        variable : integer, optional
+            Index of the endogenous variable for which the diagnostic plots
+            should be created. Default is 0.
+        lags : integer, optional
+            Number of lags to include in the correlogram. Default is 10.
+        fig : Matplotlib Figure instance, optional
+            If given, subplots are created in this figure instead of in a new
+            figure. Note that the 2x2 grid will be created in the provided
+            figure using `fig.add_subplot()`.
+        figsize : tuple, optional
+            If a figure is created, this argument allows specifying a size.
+            The tuple is (width, height).
+
+        Notes
+        -----
+        Produces a 2x2 plot grid with the following plots (ordered clockwise
+        from top left):
+
+        1. Standardized residuals over time
+        2. Histogram plus estimated density of standardized residulas, along
+           with a Normal(0,1) density plotted for reference.
+        3. Normal Q-Q plot, with Normal reference line.
+        4. Correlogram
+
+        See Also
+        --------
+        statsmodels.graphics.gofplots.qqplot
+        statsmodels.graphics.tsaplots.plot_acf
+
+        References
+        ----------
+        .. [1] https://www.statsmodels.org/dev/_modules/statsmodels/tsa/statespace/mlemodel.html#MLEResults.plot_diagnostics
+
+        """
+        if isinstance(self.arima_res_, SARIMAXResultsWrapper):
+            # a bit hacky to take the type of the function in order to prevent plotting twice.
+            return type(self.arima_res_.plot_diagnostics(variable, lags, fig, figsize))
+        else:
+            raise NotImplementedError(
+                "plot_diagnostics() is currently only implemented for the "
+                "statsmodels.tsa.statespace.sarimax.SARIMAXResultsWrapper class. Class is %s."
+                % str(type(self.arima_res_))
+            )
