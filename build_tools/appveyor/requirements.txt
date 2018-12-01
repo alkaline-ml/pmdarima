@@ -9,3 +9,4 @@ patsy
 pytest
 wheel
 twine
+matplotlib
