@@ -7,6 +7,12 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+v1.1.0
+------
+
+* Add ``ARIMA.plot_diagnostics`` method
+
+
 v1.0.0
 ------
 

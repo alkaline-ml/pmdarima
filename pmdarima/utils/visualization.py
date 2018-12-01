@@ -28,7 +28,7 @@ try:
     backend = os.environ.get("PMD_MPL_BACKEND",
                              os.environ.get("PYRAMID_MPL_BACKEND", None))
 
-    plt = get_compatible_pyplot(backend=backend, debug=debug)
+    mpl = get_compatible_pyplot(backend=backend, debug=debug)
 
     # Warn the user for changing OS environment vars
     if any(_v in os.environ
@@ -40,7 +40,7 @@ try:
                       "respectively, and will be removed in version 1.2.0 ",
                       DeprecationWarning)
 except ImportError:
-    plt = None
+    mpl = None
 
 __all__ = [
     'autocorr_plot',
@@ -49,10 +49,18 @@ __all__ = [
 ]
 
 
-def warn_for_no_mpl():
-    if plt is None:
-        warnings.warn("You do not have matplotlib installed. In order to "
-                      "create plots, you'll need to pip install matplotlib!")
+def _err_for_no_mpl():
+    if mpl is None:
+        # Per Issue #47:
+        raise ImportError(
+            "You do not have matplotlib installed. In order to "
+            "create plots, you'll need to pip install matplotlib!")
+
+
+def _get_plt():
+    """Get MPL pyplot if it exists or raise an error if not"""
+    _err_for_no_mpl()
+    return mpl
 
 
 def _show_or_return(obj, show):
@@ -60,7 +68,7 @@ def _show_or_return(obj, show):
         # We never cover this in tests, unfortunately. Even with the
         # cleanup tag, Travis doesn't play super nice with showing and
         # closing lots of plots over and over. But it's just one line...
-        plt.show()
+        mpl.show()
         # returns None implicitly
     else:
         return obj
@@ -97,10 +105,7 @@ def autocorr_plot(series, show=True):
         If ``show`` is True, does not return anything. If False, returns
         the Axis object.
     """
-    if plt is None:
-        warn_for_no_mpl()
-        return None
-
+    _err_for_no_mpl()
     res = ap(series)
     return _show_or_return(res, show)
 
@@ -178,10 +183,7 @@ def plot_acf(series, ax=None, lags=None, alpha=None, use_vlines=True,
         If ``show`` is True, does not return anything. If False, returns
         the Axis object.
     """
-    if plt is None:
-        warn_for_no_mpl()
-        return None
-
+    _err_for_no_mpl()
     res = pacf(x=series, ax=ax, lags=lags, alpha=alpha, use_vlines=use_vlines,
                unbiased=unbiased, fft=fft, title=title, zero=zero,
                vlines_kwargs=vlines_kwargs, **kwargs)
@@ -267,10 +269,7 @@ def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
         If ``show`` is True, does not return anything. If False, returns
         the Axis object.
     """
-    if plt is None:
-        warn_for_no_mpl()
-        return None
-
+    _err_for_no_mpl()
     res = ppacf(x=series, ax=ax, lags=lags, alpha=alpha, method=method,
                 use_vlines=use_vlines, title=title, zero=zero,
                 vlines_kwargs=vlines_kwargs, **kwargs)
