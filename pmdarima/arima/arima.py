@@ -15,9 +15,9 @@ from sklearn.utils.validation import check_array, check_is_fitted, \
 
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
-from statsmodels.tsa.statespace.sarimax import SARIMAXResultsWrapper
 from statsmodels import api as sm
 
+from scipy.stats import gaussian_kde, norm
 import numpy as np
 import datetime
 import warnings
@@ -28,6 +28,7 @@ from ..compat.python import long, safe_mkdirs
 from ..compat import statsmodels as sm_compat
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
+from ..utils.visualization import _get_plt
 from .._config import PMDARIMA_CACHE, PICKLE_HASH_PATTERN
 
 # Get the version
@@ -1027,19 +1028,24 @@ class ARIMA(BaseEstimator):
 
     @if_has_delegate('arima_res_')
     def plot_diagnostics(self, variable=0, lags=10, fig=None, figsize=None):
-        """Diagnostic plots for standardized residuals of one endogenous variable
+        """Plot an ARIMA's diagnostics.
+
+        Diagnostic plots for standardized residuals of one endogenous variable
 
         Parameters
         ----------
         variable : integer, optional
             Index of the endogenous variable for which the diagnostic plots
             should be created. Default is 0.
+
         lags : integer, optional
             Number of lags to include in the correlogram. Default is 10.
+
         fig : Matplotlib Figure instance, optional
             If given, subplots are created in this figure instead of in a new
             figure. Note that the 2x2 grid will be created in the provided
             figure using `fig.add_subplot()`.
+
         figsize : tuple, optional
             If a figure is created, this argument allows specifying a size.
             The tuple is (width, height).
@@ -1058,19 +1064,91 @@ class ARIMA(BaseEstimator):
         See Also
         --------
         statsmodels.graphics.gofplots.qqplot
-        statsmodels.graphics.tsaplots.plot_acf
+        pmdarima.utils.visualization.plot_acf
 
         References
         ----------
-        .. [1] https://www.statsmodels.org/dev/_modules/statsmodels/tsa/statespace/mlemodel.html#MLEResults.plot_diagnostics
-
+        .. [1] https://www.statsmodels.org/dev/_modules/statsmodels/tsa/statespace/mlemodel.html#MLEResults.plot_diagnostics  # noqa: E501
         """
-        if isinstance(self.arima_res_, SARIMAXResultsWrapper):
-            # a bit hacky to take the type of the function in order to prevent plotting twice.
-            return type(self.arima_res_.plot_diagnostics(variable, lags, fig, figsize))
+        # implicitly checks whether installed, and does our backend magic:
+        _get_plt()
+
+        # We originally delegated down to SARIMAX model wrapper, but
+        # statsmodels makes it difficult to trust their API, so we just re-
+        # implemented a common method for all results wrappers.
+        from statsmodels.graphics.utils import create_mpl_fig
+        fig = create_mpl_fig(fig, figsize)
+
+        res_wpr = self.arima_res_
+        data = res_wpr.data
+
+        # Eliminate residuals associated with burned or diffuse likelihoods.
+        # The statsmodels code for the Kalman Filter takes the loglik_burn
+        # as a parameter:
+
+        # loglikelihood_burn : int, optional
+        #     The number of initial periods during which the loglikelihood is
+        #     not recorded. Default is 0.
+
+        # If the class has it, it's a SARIMAX and we'll use it. Otherwise we
+        # will just access the residuals as we normally would...
+        if hasattr(res_wpr, 'loglikelihood_burn'):
+            # This is introduced in the bleeding edge version, but is not
+            # backwards compatible with 0.9.0 and less:
+            d = res_wpr.loglikelihood_burn
+            if hasattr(res_wpr, 'nobs_diffuse'):
+                d = np.maximum(d, res_wpr.nobs_diffuse)
+
+            resid = res_wpr.filter_results\
+                           .standardized_forecasts_error[variable, d:]
         else:
-            raise NotImplementedError(
-                "plot_diagnostics() is currently only implemented for the "
-                "statsmodels.tsa.statespace.sarimax.SARIMAXResultsWrapper class. Class is %s."
-                % str(type(self.arima_res_))
-            )
+            # This gets the residuals, but they need to be standardized
+            d = 0
+            r = res_wpr.resid
+            resid = (r - np.nanmean(r)) / np.nanstd(r)
+
+        # Top-left: residuals vs time
+        ax = fig.add_subplot(221)
+        if hasattr(data, 'dates') and data.dates is not None:
+            x = data.dates[d:]._mpl_repr()
+        else:
+            x = np.arange(len(resid))
+        ax.plot(x, resid)
+        ax.hlines(0, x[0], x[-1], alpha=0.5)
+        ax.set_xlim(x[0], x[-1])
+        ax.set_title('Standardized residual')
+
+        # Top-right: histogram, Gaussian kernel density, Normal density
+        # Can only do histogram and Gaussian kernel density on the non-null
+        # elements
+        resid_nonmissing = resid[~(np.isnan(resid))]
+        ax = fig.add_subplot(222)
+        # temporarily disable Deprecation warning, normed -> density
+        # hist needs to use `density` in future when minimum matplotlib has it
+        with warnings.catch_warnings(record=True):
+            ax.hist(resid_nonmissing, normed=True, label='Hist')
+
+        kde = gaussian_kde(resid_nonmissing)
+        xlim = (-1.96 * 2, 1.96 * 2)
+        x = np.linspace(xlim[0], xlim[1])
+        ax.plot(x, kde(x), label='KDE')
+        ax.plot(x, norm.pdf(x), label='N(0,1)')
+        ax.set_xlim(xlim)
+        ax.legend()
+        ax.set_title('Histogram plus estimated density')
+
+        # Bottom-left: QQ plot
+        ax = fig.add_subplot(223)
+        from statsmodels.graphics.gofplots import qqplot
+        qqplot(resid_nonmissing, line='s', ax=ax)
+        ax.set_title('Normal Q-Q')
+
+        # Bottom-right: Correlogram
+        ax = fig.add_subplot(224)
+        from statsmodels.graphics.tsaplots import plot_acf
+        plot_acf(resid, ax=ax, lags=lags)
+        ax.set_title('Correlogram')
+
+        ax.set_ylim(-1, 1)
+
+        return fig

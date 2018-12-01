@@ -760,3 +760,19 @@ def test_for_older_version():
         finally:
             arima._clear_cached_state()
             os.unlink(pickle_file)
+
+
+def test_plot_diagnostics():
+    models = [ARIMA(order=(1, 0, 0)),  # ARMA
+              ARIMA(order=(1, 1, 0)),  # ARIMA
+              ARIMA(order=(1, 1, 0), seasonal_order=(1, 0, 0, 12))]  # SARIMAX
+
+    # Do not test on travis because they hate MPL
+    # @charlesdrotar if you can figure out how to get this to work on travis
+    # our coverage will be much better.
+    travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
+    for model in models:
+        model.fit(lynx)
+
+        if not travis:
+            model.plot_diagnostics()
