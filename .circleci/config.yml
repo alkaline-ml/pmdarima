@@ -32,6 +32,7 @@ jobs:
     - run: make develop
     - run: make test-requirements
     - run: make coverage-dependencies
+    - run: python -m pip install matplotlib
     - run: make test-unit
     - run: codecov || echo "codecov upload failed"
 
