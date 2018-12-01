@@ -34,7 +34,10 @@ install: requirements
 #endif
 
 test-requirements:
-	$(PYTHON) -m pip install pytest pytest-cov flake8
+	$(PYTHON) -m pip install pytest flake8
+
+coverage-dependencies:
+	$(PYTHON) -m pip install coverage pytest-cov codecov
 
 test-lint: test-requirements
 	$(PYTHON) -m flake8 pmdarima --filename='*.py' --ignore E803,F401,F403,W293,W504
