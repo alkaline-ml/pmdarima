@@ -776,3 +776,28 @@ def test_plot_diagnostics():
 
         if not travis:
             model.plot_diagnostics()
+
+
+@pytest.mark.parametrize(
+    'order,seasonal', [
+        # ARMA
+        pytest.param((1, 0, 0), None),
+
+        # ARIMA
+        pytest.param((1, 1, 0), None),
+
+        # SARIMAX
+        pytest.param((1, 1, 0), (1, 0, 0, 12))
+    ])
+def test_with_intercept(order, seasonal):
+    n_params = None
+    for intercept in (False, True):
+        modl = ARIMA(order=order,
+                     seasonal_order=seasonal,
+                     with_intercept=intercept).fit(lynx)
+
+        if not intercept:  # first time
+            n_params = modl.params().shape[0]
+        else:
+            # With an intercept, should be 1 more
+            assert modl.params().shape[0] == n_params + 1

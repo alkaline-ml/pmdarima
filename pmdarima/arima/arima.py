@@ -136,14 +136,6 @@ class ARIMA(BaseEstimator):
         `start_params` as starting parameters.  See above for more
         information. If fitting a seasonal ARIMA, the default is 'lbfgs'
 
-    trend : str or iterable, optional (default='c')
-        Parameter controlling the deterministic trend polynomial :math:`A(t)`.
-        Can be specified as a string where 'c' indicates a constant (i.e. a
-        degree zero component of the trend polynomial), 't' indicates a
-        linear trend with time, and 'ct' is both. Can also be specified as an
-        iterable defining the polynomial as in ``numpy.poly1d``, where
-        ``[1,1,0,1]`` would denote :math:`a + bt + ct^3`.
-
     solver : str or None, optional (default='lbfgs')
         Solver to be used.  The default is 'lbfgs' (limited memory
         Broyden-Fletcher-Goldfarb-Shanno).  Other choices are 'bfgs',
@@ -193,6 +185,14 @@ class ARIMA(BaseEstimator):
         A dictionary of key-word arguments to be passed to the
         ``scoring`` metric.
 
+    trend : str or None, optional (default=None)
+        The trend parameter. If ``with_intercept`` is True, ``trend`` will be
+        used. If ``with_intercept`` is False, the trend will be set to a no-
+        intercept value.
+
+    with_intercept : bool, optional (default=True)
+        Whether to include an intercept term. Default is True.
+
     Notes
     -----
     * Since the ``ARIMA`` class currently wraps
@@ -216,9 +216,10 @@ class ARIMA(BaseEstimator):
     .. [2] Statsmodels ARIMA documentation: http://bit.ly/2wc9Ra8
     """
     def __init__(self, order, seasonal_order=None, start_params=None,
-                 trend='c', method=None, transparams=True, solver='lbfgs',
+                 method=None, transparams=True, solver='lbfgs',
                  maxiter=50, disp=0, callback=None, suppress_warnings=False,
-                 out_of_sample_size=0, scoring='mse', scoring_args=None):
+                 out_of_sample_size=0, scoring='mse', scoring_args=None,
+                 trend=None, with_intercept=True):
 
         # XXX: This isn't actually required--sklearn doesn't need a super call
         super(ARIMA, self).__init__()
@@ -226,7 +227,6 @@ class ARIMA(BaseEstimator):
         self.order = order
         self.seasonal_order = seasonal_order
         self.start_params = start_params
-        self.trend = trend
         self.method = method
         self.transparams = transparams
         self.solver = solver
@@ -237,6 +237,8 @@ class ARIMA(BaseEstimator):
         self.out_of_sample_size = out_of_sample_size
         self.scoring = scoring
         self.scoring_args = dict() if not scoring_args else scoring_args
+        self.trend = trend
+        self.with_intercept = with_intercept
 
     def fit(self, y, exogenous=None, **fit_args):
         """Fit an ARIMA to a vector, ``y``, of observations with an
@@ -301,10 +303,19 @@ class ARIMA(BaseEstimator):
             # these might change depending on which one
             method = self.method
 
+            # If it's in kwargs, we'll use it
+            trend = self.trend
+
             # if not seasonal:
             if self.seasonal_order is None:
                 if method is None:
                     method = "css-mle"
+
+                if trend is None:
+                    if self.with_intercept:
+                        trend = 'c'
+                    else:
+                        trend = 'nc'
 
                 # create the statsmodels ARIMA
                 arima = _ARIMA(endog=y, order=self.order, missing='none',
@@ -324,15 +335,21 @@ class ARIMA(BaseEstimator):
                 if method is None:
                     method = 'lbfgs'
 
+                if trend is None:
+                    if self.with_intercept:
+                        trend = 'c'
+                    else:
+                        trend = None
+
                 # create the SARIMAX
                 arima = sm.tsa.statespace.SARIMAX(
                     endog=y, exog=exogenous, order=self.order,
-                    seasonal_order=self.seasonal_order, trend=self.trend,
+                    seasonal_order=self.seasonal_order, trend=trend,
                     enforce_stationarity=self.transparams)
 
             # actually fit the model, now...
             return arima, arima.fit(start_params=self.start_params,
-                                    trend=self.trend, method=method,
+                                    trend=trend, method=method,
                                     transparams=self.transparams,
                                     solver=self.solver, maxiter=self.maxiter,
                                     disp=self.disp, callback=self.callback,
