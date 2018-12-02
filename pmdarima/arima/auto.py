@@ -39,13 +39,13 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                max_D=1, max_Q=2, max_order=10, m=1, seasonal=True,
                stationary=False, information_criterion='aic', alpha=0.05,
                test='kpss', seasonal_test='ch', stepwise=True, n_jobs=1,
-               start_params=None, trend='c', method=None, transparams=True,
+               start_params=None, trend=None, method=None, transparams=True,
                solver='lbfgs', maxiter=50, disp=0, callback=None,
                offset_test_args=None, seasonal_test_args=None,
                suppress_warnings=False, error_action='warn', trace=False,
                random=False, random_state=None, n_fits=10,
                return_valid_fits=False, out_of_sample_size=0, scoring='mse',
-               scoring_args=None, **fit_args):
+               scoring_args=None, with_intercept=True, **fit_args):
     """Automatically discover the optimal order for an ARIMA model.
 
     The ``auto_arima`` function seeks to identify the most optimal
@@ -215,13 +215,10 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         `start_params` as starting parameters.  See above for more
         information. If fitting a seasonal ARIMA, the default is 'lbfgs'
 
-    trend : str or iterable, optional (default='c')
-        Parameter controlling the deterministic trend polynomial :math:`A(t)`.
-        Can be specified as a string where 'c' indicates a constant (i.e. a
-        degree zero component of the trend polynomial), 't' indicates a
-        linear trend with time, and 'ct' is both. Can also be specified as an
-        iterable defining the polynomial as in ``numpy.poly1d``, where
-        ``[1,1,0,1]`` would denote :math:`a + bt + ct^3`.
+    trend : str or None, optional (default=None)
+        The trend parameter. If ``with_intercept`` is True, ``trend`` will be
+        used. If ``with_intercept`` is False, the trend will be set to a no-
+        intercept value.
 
     solver : str or None, optional (default='lbfgs')
         Solver to be used.  The default is 'lbfgs' (limited memory
@@ -314,6 +311,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
     scoring_args : dict, optional (default=None)
         A dictionary of key-word arguments to be passed to the ``scoring``
         metric.
+
+    with_intercept : bool, optional (default=True)
+        Whether to include an intercept term. Default is True.
 
     **fit_args : dict, optional (default=None)
         A dictionary of keyword arguments to pass to the :func:`ARIMA.fit`
