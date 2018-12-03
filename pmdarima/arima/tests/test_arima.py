@@ -18,11 +18,22 @@ from sklearn.externals import joblib
 from statsmodels import api as sm
 import pandas as pd
 
+from matplotlib.pyplot import savefig
+
+from .utils.images import compare_images
+
 import warnings
 import pickle
 import pytest
 import time
 import os
+
+# test images directories
+test_images_input_path = os.path.join(os.path.dirname(__file__), 'input_images')
+test_images_output_path = test_images_input_path.replace('input_images', 'output_images')
+if not os.path.exists(test_images_output_path):
+    os.makedirs(test_images_output_path)
+
 
 # initialize the random state
 rs = RandomState(42)
@@ -763,19 +774,27 @@ def test_for_older_version():
 
 
 def test_plot_diagnostics():
-    models = [ARIMA(order=(1, 0, 0)),  # ARMA
-              ARIMA(order=(1, 1, 0)),  # ARIMA
-              ARIMA(order=(1, 1, 0), seasonal_order=(1, 0, 0, 12))]  # SARIMAX
 
     # Do not test on travis because they hate MPL
     # @charlesdrotar if you can figure out how to get this to work on travis
     # our coverage will be much better.
     travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
-    for model in models:
-        model.fit(lynx)
 
-        if not travis:
-            model.plot_diagnostics()
+    if not travis:
+
+        models = dict(
+            arma=ARIMA(order=(1, 0, 0)),
+            arima=ARIMA(order=(1, 1, 0)),
+            sarimax=ARIMA(order=(1, 1, 0), seasonal_order=(1, 0, 0, 12))
+        )
+
+        for model_type, model in models.items():
+            expected = os.path.join(test_images_input_path, 'plot_diagnostics_{}.png'.format(model_type))
+            actual = os.path.join(test_images_output_path, 'plot_diagnostics_{}.png'.format(model_type))
+            model.fit(lynx)
+            model.plot_diagnostics(figsize=(15,12))
+            savefig(fname=actual)
+            compare_images(expected, actual, tol=0.001)
 
 
 @pytest.mark.parametrize(
