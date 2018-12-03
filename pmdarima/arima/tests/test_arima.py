@@ -18,8 +18,6 @@ from sklearn.externals import joblib
 from statsmodels import api as sm
 import pandas as pd
 
-from matplotlib.pyplot import savefig
-
 from .utils.images import compare_images
 
 import warnings
@@ -783,6 +781,8 @@ def test_plot_diagnostics():
     travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
 
     if not travis:
+
+        from matplotlib.pyplot import savefig
 
         models = dict(
             arma=ARIMA(order=(1, 0, 0)),
