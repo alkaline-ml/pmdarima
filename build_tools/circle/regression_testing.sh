@@ -26,6 +26,7 @@ joblib.dump(arima, 'model.pkl')
 
 # Show we can import it with the new namespace
 python -c "\
+print('Test loading old model with pmdarima:')
 import pmdarima as pm
 from sklearn.externals import joblib
 modl = joblib.load('model.pkl')
