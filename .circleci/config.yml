@@ -22,6 +22,20 @@ jobs:
             - ~/.ccache
             - ~/.cache/pip
 
+  cpython36:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: ./build_tools/circle/before_install.sh
+    - run: make develop
+    - run: make test-requirements
+    - run: make coverage-dependencies
+    - run: python -m pip install matplotlib
+    - run: make test-unit
+    - run: codecov || echo "codecov upload failed"
+
   # For testing lint
   test-linting:
     docker:
@@ -61,10 +75,11 @@ jobs:
 workflows:
   version: 2
 
-  # All PyPy jobs:
+  # All testing jobs:
   testing:
     jobs:
       - pypy36
+      - cpython36
       - test-linting
       - regression-testing
 
