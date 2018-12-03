@@ -829,6 +829,11 @@ def test_new_serialization():
         arima._clear_cached_state()
         assert not os.path.exists(new_loc)
 
+        # Show we get an OSError now
+        with pytest.raises(OSError) as ose:
+            joblib.load(pkl_file)
+        assert "Does it still" in str(ose), ose
+
     finally:
         _unlink_if_exists(pkl_file)
         _unlink_if_exists(new_loc)

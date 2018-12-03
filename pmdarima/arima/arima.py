@@ -20,7 +20,6 @@ from statsmodels import api as sm
 from scipy.stats import gaussian_kde, norm
 import numpy as np
 import warnings
-import datetime
 import os
 
 from ..compat.numpy import DTYPE  # DTYPE for arrays
@@ -29,7 +28,6 @@ from ..compat import statsmodels as sm_compat
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
 from ..utils.visualization import _get_plt
-from .._config import PICKLE_HASH_PATTERN
 
 # Get the version
 import pmdarima
@@ -567,14 +565,6 @@ class ARIMA(BaseEstimator):
         # due to statsmodels v0.9.0+. As a result, we no longer really need
         # this subhook...
         return self.__dict__
-
-    def _get_pickle_hash_file(self):
-        # Mmmm, pickle hash...
-        return PICKLE_HASH_PATTERN % (
-            # cannot use ':' in Windows file names. Whoops!
-            str(datetime.datetime.now()).replace(' ', '_').replace(':', '-'),
-            ''.join([str(e) for e in self.order]),
-            hash(self))
 
     def _legacy_set_state(self, state):
         # re-set the results class

@@ -43,3 +43,5 @@ test-unit: test-requirements
 	$(PYTHON) -m pytest -v --durations=20 --cov-config .coveragerc --cov pmdarima
 
 test: develop test-unit test-lint
+	# Coverage creates all these random little artifacts we don't want
+	rm .coverage.*
