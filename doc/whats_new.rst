@@ -12,7 +12,7 @@ v1.1.0
 
 * Add ``ARIMA.plot_diagnostics`` method
 
-* Add new arg to ``ARIMA`` constructor: ``with_intercept`` (default is True).
+* Add new arg to ``ARIMA`` constructor and ``auto_arima``: ``with_intercept`` (default is True).
 
 * New default for ``trend`` is no longer ``'c'``, it is ``None``.
 

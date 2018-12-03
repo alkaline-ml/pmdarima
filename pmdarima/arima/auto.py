@@ -410,7 +410,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                        suppress_warnings=suppress_warnings, trace=trace,
                        error_action=error_action, scoring=scoring,
                        out_of_sample_size=out_of_sample_size,
-                       scoring_args=scoring_args)),
+                       scoring_args=scoring_args,
+                       with_intercept=with_intercept)),
             return_valid_fits, start, trace)
 
     # test ic, and use AIC if n <= 3
@@ -550,7 +551,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                                        error_action=error_action,
                                        scoring=scoring,
                                        out_of_sample_size=out_of_sample_size,
-                                       scoring_args=scoring_args)),
+                                       scoring_args=scoring_args,
+                                       with_intercept=with_intercept)),
             return_valid_fits, start, trace)
 
     # seasonality issues
@@ -604,7 +606,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                                 suppress_warnings=suppress_warnings,
                                 trace=trace, error_action=error_action,
                                 out_of_sample_size=out_of_sample_size,
-                                scoring=scoring, scoring_args=scoring_args)
+                                scoring=scoring, scoring_args=scoring_args,
+                                with_intercept=with_intercept)
             for order, seasonal_order in gen)
 
     # otherwise, we're fitting the stepwise algorithm...
@@ -632,7 +635,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             start_P=start_P, start_Q=start_Q, max_p=max_p, max_q=max_q,
             max_P=max_P, max_Q=max_Q, seasonal=seasonal,
             information_criterion=information_criterion,
-            max_order=max_order)
+            max_order=max_order, with_intercept=with_intercept)
 
         # fit a baseline p, d, q model and then a null model
         stepwise_wrapper.fit_increment_k_cache_set(True)  # p, d, q, P, D, Q
@@ -690,7 +693,7 @@ class _StepwiseFitWrapper(object):
                  suppress_warnings, trace, error_action, out_of_sample_size,
                  scoring, scoring_args, p, d, q, P, D, Q, m, start_p, start_q,
                  start_P, start_Q, max_p, max_q, max_P, max_Q, seasonal,
-                 information_criterion, max_order):
+                 information_criterion, max_order, with_intercept):
         # todo: I really hate how congested this block is, and just for the
         #       sake of a stateful __init__... Could we just pass **kwargs
         #       (MUCH less expressive...) in here? It would be much more
@@ -715,6 +718,7 @@ class _StepwiseFitWrapper(object):
         self.scoring = scoring
         self.scoring_args = scoring_args
         self.information_criterion = information_criterion
+        self.with_intercept = with_intercept
 
         # order stuff
         self.p = p
@@ -742,7 +746,7 @@ class _StepwiseFitWrapper(object):
 
         # results list to store intermittent hashes of orders to determine if
         # we've seen this order before...
-        self.results_dict = dict()  # type: dict[tuple, ARIMA]
+        self.results_dict = dict()  # dict[tuple -> ARIMA]
 
         # define the info criterion getter ONCE to avoid multiple lambda
         # creation calls
@@ -788,7 +792,8 @@ class _StepwiseFitWrapper(object):
                              trace=self.trace, error_action=self.error_action,
                              out_of_sample_size=self.out_of_sample_size,
                              scoring=self.scoring,
-                             scoring_args=self.scoring_args)
+                             scoring_args=self.scoring_args,
+                             with_intercept=self.with_intercept)
 
             # use the orders as a key to be hashed for
             # the dictionary (pointing to fit)
@@ -845,7 +850,7 @@ class _StepwiseFitWrapper(object):
 def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
                method, transparams, solver, maxiter, disp, callback,
                fit_params, suppress_warnings, trace, error_action,
-               out_of_sample_size, scoring, scoring_args):
+               out_of_sample_size, scoring, scoring_args, with_intercept):
     start = time.time()
     try:
         fit = ARIMA(order=order, seasonal_order=seasonal_order,
@@ -854,7 +859,8 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
                     disp=disp, callback=callback,
                     suppress_warnings=suppress_warnings,
                     out_of_sample_size=out_of_sample_size, scoring=scoring,
-                    scoring_args=scoring_args)\
+                    scoring_args=scoring_args,
+                    with_intercept=with_intercept)\
             .fit(x, exogenous=xreg, **fit_params)
 
     # for non-stationarity errors or singular matrices, return None
