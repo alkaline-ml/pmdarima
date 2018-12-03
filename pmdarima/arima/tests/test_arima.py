@@ -329,8 +329,7 @@ def test_more_elaborate():
     _other_preds = other.predict(n_periods=5, exogenous=new_xreg)
     assert_array_almost_equal(_preds, _other_preds)
 
-    # now clear the cache and remove the pickle file
-    arima._clear_cached_state()
+    # now remove the pickle file
     os.unlink(fl)
 
     # now show that since we fit the ARIMA with an exogenous array,
@@ -617,17 +616,6 @@ def test_double_pickle():
         pred_b = loaded_b.predict(n_periods=5)
         assert np.allclose(pred_a, pred_b)
 
-        # Remove the caches from each
-        loaded_a._clear_cached_state()
-        loaded_b._clear_cached_state()
-
-        # Test the previous condition where we removed the saved state of an
-        # ARIMA from statsmodels and caused an OSError and a corrupted pickle
-        with pytest.raises(OSError) as o:
-            joblib.load(file_a)  # fails since no cached state there!
-        msg = str(o)
-        assert 'Could not read saved model state' in msg, msg
-
     # Always remove in case we fail in try, leaving residual files
     finally:
         os.unlink(file_a)
@@ -758,7 +746,6 @@ def test_for_older_version():
                     arm.predict(n_periods=4)
 
         finally:
-            arima._clear_cached_state()
             os.unlink(pickle_file)
 
 

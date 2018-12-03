@@ -14,22 +14,18 @@ from sklearn.utils.validation import check_array, check_is_fitted, \
     column_or_1d as c1d
 
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
-from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 from statsmodels import api as sm
 
 from scipy.stats import gaussian_kde, norm
 import numpy as np
-import datetime
 import warnings
-import os
 
 from ..compat.numpy import DTYPE  # DTYPE for arrays
-from ..compat.python import long, safe_mkdirs
+from ..compat.python import long
 from ..compat import statsmodels as sm_compat
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
 from ..utils.visualization import _get_plt
-from .._config import PMDARIMA_CACHE, PICKLE_HASH_PATTERN
 
 # Get the version
 import pmdarima
@@ -504,7 +500,8 @@ class ARIMA(BaseEstimator):
             # f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
             arima = self.arima_res_
             end = arima.nobs + n_periods - 1
-            results = arima.get_prediction(start=arima.nobs, end=end,
+            results = arima.get_prediction(start=arima.nobs,
+                                           end=end,
                                            exog=exogenous)
             f = results.predicted_mean
             conf_int = results.conf_int(alpha=alpha)
@@ -546,14 +543,6 @@ class ARIMA(BaseEstimator):
         self.fit(y, exogenous, **fit_args)
         return self.predict(n_periods=n_periods, exogenous=exogenous)
 
-    def _get_pickle_hash_file(self):
-        # Mmmm, pickle hash...
-        return PICKLE_HASH_PATTERN % (
-            # cannot use ':' in Windows file names. Whoops!
-            str(datetime.datetime.now()).replace(' ', '_').replace(':', '-'),
-            ''.join([str(e) for e in self.order]),
-            hash(self))
-
     def __getstate__(self):
         """I am being pickled..."""
 
@@ -563,47 +552,15 @@ class ARIMA(BaseEstimator):
         # In version >= v0.9.0, we keep the old model around, since that's how
         # the user expects it should probably work (otherwise unpickling the
         # previous state of the model would raise an OSError).
-        # loc = self.__dict__.get('tmp_pkl_', None)
-        # if loc is not None:
-        #     os.unlink(loc)
-
-        # get the new location for where to save the results
-        new_loc = self._get_pickle_hash_file()
-        cwd = os.path.abspath(os.getcwd())
-
-        # check that the cache folder exists, and if not, make it.
-        cache_loc = os.path.join(cwd, PMDARIMA_CACHE)
-        safe_mkdirs(cache_loc)
-
-        # now create the full path with the cache folder
-        new_loc = os.path.join(cache_loc, new_loc)
-
-        # save the results - but only if it's fit...
-        if hasattr(self, 'arima_res_'):
-            # statsmodels result views work by caching metrics. If they
-            # are not cached prior to pickling, we might hit issues. This is
-            # a bug documented here:
-            # https://github.com/statsmodels/statsmodels/issues/3290
-            self.arima_res_.summary()
-            self.arima_res_.save(fname=new_loc)  # , remove_data=False)
-
-            # point to the location of the saved MLE model
-            self.tmp_pkl_ = new_loc
-
+        # In version >= 1.1.0, we allow statsmodels results wrappers to be
+        # bundled into the same pickle file (see Issue #48) which is possible
+        # due to statsmodels v0.9.0+. As a result, we no longer really need
+        # this subhook...
         return self.__dict__
 
     def __setstate__(self, state):
         # I am being unpickled...
         self.__dict__ = state
-
-        # re-set the results class
-        loc = state.get('tmp_pkl_', None)
-        if loc is not None:
-            try:
-                self.arima_res_ = TimeSeriesModelResults.load(loc)
-            except:  # noqa: E722
-                raise OSError('Could not read saved model state from %s. '
-                              'Does it still exist?' % loc)
 
         # Warn for unpickling a different version's model
         self._warn_for_older_version()
@@ -640,13 +597,6 @@ class ARIMA(BaseEstimator):
                           "pmdarima (%s). This could cause unforeseen "
                           "behavior."
                           % (modl_version, this_version), UserWarning)
-
-    def _clear_cached_state(self):
-        # when fit in an auto-arima, a lot of cached .pmdpkl files
-        # are generated if fit in parallel... this removes the tmp file
-        loc = self.__dict__.get('tmp_pkl_', None)
-        if loc is not None:
-            os.unlink(loc)
 
     def add_new_observations(self, y, exogenous=None):
         """Update the endog/exog samples after a model fit.
