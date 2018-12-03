@@ -4,6 +4,7 @@ import matplotlib._png as _png
 import os
 import numpy as np
 
+
 def calculate_rms(expected_image, actual_image):
     """
 
@@ -27,7 +28,6 @@ def calculate_rms(expected_image, actual_image):
     .. [1] https://github.com/matplotlib/matplotlib/blob/master/lib/matplotlib/testing/compare.py
     """
 
-
     if expected_image.shape != actual_image.shape:
         raise ImageComparisonFailure(
             "Image sizes do not match expected size: {} "
@@ -42,6 +42,7 @@ def compare_images(expected, actual, tol):
     The two given filenames may point to files which are convertible to
     PNG via the `.converter` dictionary. The underlying RMS is calculated
     with the `.calculate_rms` function.
+
     Parameters
     ----------
     expected : str
@@ -55,6 +56,7 @@ def compare_images(expected, actual, tol):
     in_decorator : bool
         Determines the output format. If called from image_comparison
         decorator, this should be True. (default=False)
+
     Returns
     -------
     comparison_result : None or dict or str
@@ -69,6 +71,7 @@ def compare_images(expected, actual, tol):
         - *tol*: The comparison tolerance.
         Otherwise, a human-readable multi-line string representation of this
         information is returned.
+
     Examples
     --------
     ::
