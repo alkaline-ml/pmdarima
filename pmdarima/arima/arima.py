@@ -14,11 +14,14 @@ from sklearn.utils.validation import check_array, check_is_fitted, \
     column_or_1d as c1d
 
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
+from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 from statsmodels import api as sm
 
 from scipy.stats import gaussian_kde, norm
 import numpy as np
 import warnings
+import datetime
+import os
 
 from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.python import long
@@ -26,6 +29,7 @@ from ..compat import statsmodels as sm_compat
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
 from ..utils.visualization import _get_plt
+from .._config import PICKLE_HASH_PATTERN
 
 # Get the version
 import pmdarima
@@ -54,6 +58,12 @@ def _append_to_endog(endog, new_y):
     return np.concatenate((endog, new_y)) if \
         endog.ndim == 1 else \
         np.concatenate((endog.ravel(), new_y))[:, np.newaxis]
+
+
+def _uses_legacy_pickling(arima):
+    # If the package version is < 1.1.0 it uses legacy pickling behavior, but
+    # a later version of the package may actually try to load a legacy model..
+    return hasattr(arima, "tmp_pkl_")
 
 
 class ARIMA(BaseEstimator):
@@ -558,9 +568,30 @@ class ARIMA(BaseEstimator):
         # this subhook...
         return self.__dict__
 
+    def _get_pickle_hash_file(self):
+        # Mmmm, pickle hash...
+        return PICKLE_HASH_PATTERN % (
+            # cannot use ':' in Windows file names. Whoops!
+            str(datetime.datetime.now()).replace(' ', '_').replace(':', '-'),
+            ''.join([str(e) for e in self.order]),
+            hash(self))
+
+    def _legacy_set_state(self, state):
+        # re-set the results class
+        loc = state.get('tmp_pkl_', None)
+        if loc is not None:
+            try:
+                self.arima_res_ = TimeSeriesModelResults.load(loc)
+            except:  # noqa: E722
+                raise OSError('Could not read saved model state from %s. '
+                              'Does it still exist?' % loc)
+
     def __setstate__(self, state):
         # I am being unpickled...
         self.__dict__ = state
+
+        if _uses_legacy_pickling(self):
+            self._legacy_set_state(state)
 
         # Warn for unpickling a different version's model
         self._warn_for_older_version()
@@ -597,6 +628,14 @@ class ARIMA(BaseEstimator):
                           "pmdarima (%s). This could cause unforeseen "
                           "behavior."
                           % (modl_version, this_version), UserWarning)
+
+    def _clear_cached_state(self):
+        if _uses_legacy_pickling(self):
+            # when fit in an auto-arima, a lot of cached .pmdpkl files
+            # are generated if fit in parallel... this removes the tmp file
+            loc = self.__dict__.get('tmp_pkl_', None)
+            if loc is not None:
+                os.unlink(loc)
 
     def add_new_observations(self, y, exogenous=None):
         """Update the endog/exog samples after a model fit.

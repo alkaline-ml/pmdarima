@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 from pmdarima.arima import ARIMA, auto_arima
-from pmdarima.arima.arima import VALID_SCORING
+from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
 from pmdarima.arima.auto import _fmt_warning_str, _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate
@@ -16,6 +16,7 @@ from numpy.random import RandomState
 from sklearn.externals import joblib
 
 from statsmodels import api as sm
+from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 import pandas as pd
 
 import warnings
@@ -59,8 +60,13 @@ wineind_m = 1
 wineind_xreg = rs.rand(wineind.shape[0], 2)
 
 
+def _unlink_if_exists(path):
+    if os.path.exists(path):
+        os.unlink(path)
+
+
 def test_basic_arima():
-    arima = ARIMA(order=(0, 0, 0), trend='c', suppress_warnings=True)
+    arima = ARIMA(order=(0, 0, 0), suppress_warnings=True)
     preds = arima.fit_predict(y)  # fit/predict for coverage
 
     # test some of the attrs
@@ -788,3 +794,41 @@ def test_with_intercept(order, seasonal):
         else:
             # With an intercept, should be 1 more
             assert modl.params().shape[0] == n_params + 1
+
+
+def test_new_serialization():
+    arima = ARIMA(order=(0, 0, 0), suppress_warnings=True).fit(y)
+
+    # Serialize it, show there is no tmp_loc_
+    pkl_file = "file.pkl"
+    new_loc = "ts_wrapper.pkl"
+    try:
+        joblib.dump(arima, pkl_file)
+
+        # Assert it does NOT use the old-style pickling
+        assert not _uses_legacy_pickling(arima)
+        loaded = joblib.load(pkl_file)
+        assert not _uses_legacy_pickling(loaded)
+        preds = loaded.predict()
+        os.unlink(pkl_file)
+
+        # Now save out the arima_res_ piece separately, and show we can load
+        # it from the legacy method
+        arima.summary()
+        arima.arima_res_.save(fname=new_loc)
+        arima.tmp_pkl_ = new_loc
+
+        assert _uses_legacy_pickling(arima)
+
+        # Save/load it and show it works
+        joblib.dump(arima, pkl_file)
+        loaded2 = joblib.load(pkl_file)
+        assert_array_almost_equal(loaded2.predict(), preds)
+
+        # De-cache
+        arima._clear_cached_state()
+        assert not os.path.exists(new_loc)
+
+    finally:
+        _unlink_if_exists(pkl_file)
+        _unlink_if_exists(new_loc)

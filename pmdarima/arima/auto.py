@@ -667,6 +667,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                         key=(lambda mod:
                              getattr(mod, information_criterion)()))
 
+    # remove all the cached .pmdpkl files... someday write this as an exit hook
+    # in case of a KeyboardInterrupt or anything
+    for model in sorted_res:
+        model._clear_cached_state()
+
     return _return_wrapper(sorted_res, return_valid_fits, start, trace)
 
 
