@@ -22,10 +22,9 @@ def calculate_rms(expected_image, actual_image):
     rms: float
         RMSE of the the two images.
 
-
     References
     ----------
-    .. [1] https://github.com/matplotlib/matplotlib/blob/master/lib/matplotlib/testing/compare.py
+    .. [1] Matplotlib's : matplotlib.testing.compare.calculate_rms
     """
 
     if expected_image.shape != actual_image.shape:
@@ -81,7 +80,7 @@ def compare_images(expected, actual, tol):
 
     References
     ----------
-    .. [1] https://github.com/matplotlib/matplotlib/blob/master/lib/matplotlib/testing/compare.py
+    .. [1] Matplotlib's : matplotlib.testing.compare.compare_images
 
     """
     if not os.path.exists(actual):
