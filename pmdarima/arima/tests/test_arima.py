@@ -18,8 +18,6 @@ from sklearn.externals import joblib
 from statsmodels import api as sm
 import pandas as pd
 
-from .utils.images import compare_images
-
 import warnings
 import pickle
 import pytest
@@ -27,13 +25,23 @@ import time
 import os
 
 # test images directories
-test_images_input_path = \
-    os.path.join(os.path.dirname(__file__), 'input_images')
-test_images_output_path = \
-    test_images_input_path.replace('input_images', 'output_images')
-if not os.path.exists(test_images_output_path):
-    os.makedirs(test_images_output_path)
+travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
 
+if not travis:
+
+    # Only do this setup if we are not running on Travis CI.
+    from matplotlib.pyplot import savefig
+    from matplotlib.testing.exceptions import ImageComparisonFailure
+    import matplotlib._png as _png
+
+    test_images_input_path = \
+        os.path.join(os.path.dirname(__file__), 'input_images')
+    test_images_output_path = \
+        test_images_input_path.replace('input_images', 'output_images')
+
+    # make output directory if it doesn't exist
+    if not os.path.exists(test_images_output_path):
+        os.makedirs(test_images_output_path)
 
 # initialize the random state
 rs = RandomState(42)
@@ -773,36 +781,6 @@ def test_for_older_version():
             os.unlink(pickle_file)
 
 
-def test_plot_diagnostics():
-
-    # Do not test on travis because they hate MPL
-    # @charlesdrotar if you can figure out how to get this to work on travis
-    # our coverage will be much better.
-    travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
-
-    if not travis:
-
-        from matplotlib.pyplot import savefig
-
-        models = dict(
-            arma=ARIMA(order=(1, 0, 0)),
-            arima=ARIMA(order=(1, 1, 0)),
-            sarimax=ARIMA(order=(1, 1, 0), seasonal_order=(1, 0, 0, 12))
-        )
-
-        for model_type, model in models.items():
-            expected = \
-                os.path.join(test_images_input_path,
-                             'plot_diagnostics_{}.png'.format(model_type))
-            actual = \
-                os.path.join(test_images_output_path,
-                             'plot_diagnostics_{}.png'.format(model_type))
-            model.fit(lynx)
-            model.plot_diagnostics(figsize=(15, 12))
-            savefig(fname=actual)
-            compare_images(expected, actual, tol=2)
-
-
 @pytest.mark.parametrize(
     'order,seasonal', [
         # ARMA
@@ -826,3 +804,152 @@ def test_with_intercept(order, seasonal):
         else:
             # With an intercept, should be 1 more
             assert modl.params().shape[0] == n_params + 1
+
+
+if not travis:
+
+    def test_plot_diagnostics():
+
+        # Do not test on travis because they hate MPL
+        # @charlesdrotar if you can figure out how to get this to work on travis
+        # our coverage will be much better.
+
+        models = dict(
+            arma=ARIMA(order=(1, 0, 0)),
+            arima=ARIMA(order=(1, 1, 0)),
+            sarimax=ARIMA(order=(1, 1, 0), seasonal_order=(1, 0, 0, 12))
+        )
+
+        for model_type, model in models.items():
+            expected = \
+                os.path.join(test_images_input_path,
+                             'plot_diagnostics_{}.png'.format(model_type))
+            actual = \
+                os.path.join(test_images_output_path,
+                             'plot_diagnostics_{}.png'.format(model_type))
+            model.fit(lynx)
+            model.plot_diagnostics(figsize=(15, 12))
+            savefig(fname=actual)
+            compare_images(expected, actual, tol=2)
+
+
+    def calculate_rms(expected_image, actual_image):
+        """
+
+        Calculate the per-pixel errors, then compute the root mean square error.
+
+        Parameters
+        ----------
+        expected_image : str
+            Singed integer representation of expected image
+        actual_image : str
+            Signed integer representation of actual/generated image.
+
+        Returns
+        -------
+        rms: float
+            RMSE of the the two images.
+
+        References
+        ----------
+        .. [1] Matplotlib's : matplotlib.testing.compare.calculate_rms
+        """
+
+        if expected_image.shape != actual_image.shape:
+            raise ImageComparisonFailure(
+                "Image sizes do not match expected size: {} "
+                "actual size {}".format(expected_image.shape,
+                                        actual_image.shape))
+        # Convert to float to avoid overflowing finite integer types.
+        return np.sqrt(((expected_image - actual_image).astype(float) ** 2)
+                       .mean())
+
+
+    def compare_images(expected, actual, tol):
+        """
+        Compare two "image" files checking differences within a tolerance.
+        The two given filenames may point to files which are convertible to
+        PNG via the `.converter` dictionary. The underlying RMS is calculated
+        with the `.calculate_rms` function.
+
+        Parameters
+        ----------
+        expected : str
+            The filename of the expected image.
+        actual : str
+            The filename of the actual image.
+        tol : float
+            The tolerance (a color value difference, where 255 is the
+            maximal difference).  The test fails if the average pixel
+            difference is greater than this value.
+        in_decorator : bool
+            Determines the output format. If called from image_comparison
+            decorator, this should be True. (default=False)
+
+        Returns
+        -------
+        comparison_result : None or dict or str
+            Return *None* if the images are equal within the given tolerance.
+            If the images differ, the return value depends on  *in_decorator*.
+            If *in_decorator* is true, a dict with the following entries is
+            returned:
+            - *rms*: The RMS of the image difference.
+            - *expected*: The filename of the expected image.
+            - *actual*: The filename of the actual image.
+            - *diff_image*: The filename of the difference image.
+            - *tol*: The comparison tolerance.
+            Otherwise, a human-readable multi-line string representation of this
+            information is returned.
+
+        Examples
+        --------
+        ::
+            img1 = "./baseline/plot.png"
+            img2 = "./output/plot.png"
+            compare_images(img1, img2, 0.001)
+
+        References
+        ----------
+        .. [1] Matplotlib's : matplotlib.testing.compare.compare_images
+
+        """
+
+        if not os.path.exists(actual):
+            raise Exception("Output image %s does not exist." % actual)
+
+        if os.stat(actual).st_size == 0:
+            raise Exception("Output image file %s is empty." % actual)
+
+        if not os.path.exists(expected):
+            raise IOError('Baseline image %r does not exist.' % expected)
+
+        # open the image files and remove the alpha channel (if it exists)
+        expected_image = _png.read_png_int(expected)
+        actual_image = _png.read_png_int(actual)
+        expected_image = expected_image[:, :, :3]
+        actual_image = actual_image[:, :, :3]
+
+        if tol <= 0:
+            if np.array_equal(expected_image, actual_image):
+                return None
+
+        # convert to signed integers,
+        # so that the images can be subtracted without overflow
+        expected_image = expected_image.astype(np.int16)
+        actual_image = actual_image.astype(np.int16)
+
+        rms = calculate_rms(expected_image, actual_image)
+        if rms <= tol:
+            return None
+        else:
+            results = dict(rms=rms, expected=str(expected),
+                           actual=str(actual), tol=tol)
+
+            # Then the results should be a string suitable for stdout.
+            template = ['Error: Image files did not match.',
+                        'RMS Value: {rms}',
+                        'Expected:  \n    {expected}',
+                        'Actual:    \n    {actual}',
+                        'Tolerance: \n    {tol}', ]
+            results = '\n  '.join([line.format(**results) for line in template])
+            raise AssertionError(results)
