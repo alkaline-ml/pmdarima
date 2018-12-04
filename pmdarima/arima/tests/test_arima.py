@@ -912,4 +912,3 @@ def test_new_serialization():
     finally:
         _unlink_if_exists(pkl_file)
         _unlink_if_exists(new_loc)
-        
