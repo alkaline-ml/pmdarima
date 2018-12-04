@@ -1023,6 +1023,30 @@ class ARIMA(BaseEstimator):
         return self.arima_res_.summary()
 
     @if_has_delegate('arima_res_')
+    def to_dict(self):
+        """Get the ARIMA model as a dictionary
+
+        Return the dictionary representation of the ARIMA model
+
+        Returns
+        -------
+        res : dictionary
+            The ARIMA model as a dictionary.
+        """
+        return {
+            'pvalues': self.pvalues(),
+            'resid': self.resid(),
+            'order': self.order,
+            'seasonal_order': self.seasonal_order,
+            'oob': self.oob(),
+            'aic': self.aic(),
+            'aicc': self.aicc(),
+            'bic': self.bic(),
+            'bse': self.bse(),
+            'params': self.params()
+        }
+
+    @if_has_delegate('arima_res_')
     def plot_diagnostics(self, variable=0, lags=10, fig=None, figsize=None):
         """Plot an ARIMA's diagnostics.
 
