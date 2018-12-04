@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 from pmdarima.arima import ARIMA, auto_arima
-from pmdarima.arima.arima import VALID_SCORING
+from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
 from pmdarima.arima.auto import _fmt_warning_str, _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate
@@ -16,6 +16,7 @@ from numpy.random import RandomState
 from sklearn.externals import joblib
 
 from statsmodels import api as sm
+from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 import pandas as pd
 
 import warnings
@@ -59,8 +60,13 @@ wineind_m = 1
 wineind_xreg = rs.rand(wineind.shape[0], 2)
 
 
+def _unlink_if_exists(path):
+    if os.path.exists(path):
+        os.unlink(path)
+
+
 def test_basic_arima():
-    arima = ARIMA(order=(0, 0, 0), trend='c', suppress_warnings=True)
+    arima = ARIMA(order=(0, 0, 0), suppress_warnings=True)
     preds = arima.fit_predict(y)  # fit/predict for coverage
 
     # test some of the attrs
@@ -329,8 +335,7 @@ def test_more_elaborate():
     _other_preds = other.predict(n_periods=5, exogenous=new_xreg)
     assert_array_almost_equal(_preds, _other_preds)
 
-    # now clear the cache and remove the pickle file
-    arima._clear_cached_state()
+    # now remove the pickle file
     os.unlink(fl)
 
     # now show that since we fit the ARIMA with an exogenous array,
@@ -617,17 +622,6 @@ def test_double_pickle():
         pred_b = loaded_b.predict(n_periods=5)
         assert np.allclose(pred_a, pred_b)
 
-        # Remove the caches from each
-        loaded_a._clear_cached_state()
-        loaded_b._clear_cached_state()
-
-        # Test the previous condition where we removed the saved state of an
-        # ARIMA from statsmodels and caused an OSError and a corrupted pickle
-        with pytest.raises(OSError) as o:
-            joblib.load(file_a)  # fails since no cached state there!
-        msg = str(o)
-        assert 'Could not read saved model state' in msg, msg
-
     # Always remove in case we fail in try, leaving residual files
     finally:
         os.unlink(file_a)
@@ -758,7 +752,6 @@ def test_for_older_version():
                     arm.predict(n_periods=4)
 
         finally:
-            arima._clear_cached_state()
             os.unlink(pickle_file)
 
 
@@ -876,3 +869,47 @@ def test_to_dict_is_accurate():
     assert_almost_equal(actual['bic'], expected['bic'], decimal=5)
     assert_almost_equal(actual['bse'], expected['bse'], decimal=3)
     assert_almost_equal(actual['params'], expected['params'], decimal=3)
+
+
+def test_new_serialization():
+    arima = ARIMA(order=(0, 0, 0), suppress_warnings=True).fit(y)
+
+    # Serialize it, show there is no tmp_loc_
+    pkl_file = "file.pkl"
+    new_loc = "ts_wrapper.pkl"
+    try:
+        joblib.dump(arima, pkl_file)
+
+        # Assert it does NOT use the old-style pickling
+        assert not _uses_legacy_pickling(arima)
+        loaded = joblib.load(pkl_file)
+        assert not _uses_legacy_pickling(loaded)
+        preds = loaded.predict()
+        os.unlink(pkl_file)
+
+        # Now save out the arima_res_ piece separately, and show we can load
+        # it from the legacy method
+        arima.summary()
+        arima.arima_res_.save(fname=new_loc)
+        arima.tmp_pkl_ = new_loc
+
+        assert _uses_legacy_pickling(arima)
+
+        # Save/load it and show it works
+        joblib.dump(arima, pkl_file)
+        loaded2 = joblib.load(pkl_file)
+        assert_array_almost_equal(loaded2.predict(), preds)
+
+        # De-cache
+        arima._clear_cached_state()
+        assert not os.path.exists(new_loc)
+
+        # Show we get an OSError now
+        with pytest.raises(OSError) as ose:
+            joblib.load(pkl_file)
+        assert "Does it still" in str(ose), ose
+
+    finally:
+        _unlink_if_exists(pkl_file)
+        _unlink_if_exists(new_loc)
+        

@@ -21,9 +21,6 @@ PMDARIMA_CACHE = os.environ.get(
                    # TODO: do we EVER want to change this?
                    expanduser('~/.pyramid-arima-cache')))
 
-# The pattern of the pickle file for a saved ARIMA
-PICKLE_HASH_PATTERN = '%s-%s-%i.pmdpkl'
-
 # The size of the pyramid cache above which to warn the user
 cwb = os.environ.get('PMDARIMA_CACHE_WARN_SIZE',
                      os.environ.get('PYRAMID_ARIMA_CACHE_WARN_SIZE', 1e8))

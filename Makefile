@@ -24,15 +24,6 @@ develop: requirements
 install: requirements
 	$(PYTHON) setup.py install
 
-# test-sphinxext:
-#	$(NOSETESTS) -s -v doc/sphinxext/
-#test-doc:
-#ifeq ($(BITS),64)
-#	$(NOSETESTS) -s -v doc/*.rst doc/modules/ doc/datasets/ \
-#	doc/developers doc/tutorial/basic doc/tutorial/statistical_inference \
-#	doc/tutorial/text_analytics
-#endif
-
 test-requirements:
 	$(PYTHON) -m pip install pytest flake8
 
@@ -46,3 +37,5 @@ test-unit: test-requirements
 	$(PYTHON) -m pytest -v --durations=20 --cov-config .coveragerc --cov pmdarima
 
 test: develop test-unit test-lint
+	# Coverage creates all these random little artifacts we don't want
+	rm .coverage.*
