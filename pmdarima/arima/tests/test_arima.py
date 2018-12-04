@@ -797,7 +797,7 @@ def test_with_intercept(order, seasonal):
 
 
 def test_to_dict_returns_dict():
-    train, test = lynx[:90], lynx[90:]
+    train = lynx[:90]
     modl = auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
                       max_p=5, max_q=5, max_P=5, max_Q=5, seasonal=True,
                       stepwise=True, suppress_warnings=True, D=10, max_D=10,
@@ -812,7 +812,7 @@ def test_to_dict_raises_attribute_error_on_unfit_model():
 
 
 def test_to_dict_is_accurate():
-    train, test = lynx[:90], lynx[90:]
+    train = lynx[:90]
     modl = auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
                       max_p=5, max_q=5, max_P=5, max_Q=5, seasonal=True,
                       stepwise=True, suppress_warnings=True, D=10, max_D=10,
