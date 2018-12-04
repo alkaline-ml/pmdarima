@@ -16,6 +16,8 @@ v1.1.0
 
 * New default for ``trend`` is no longer ``'c'``, it is ``None``.
 
+* Added ``to_dict`` method to ``ARIMA`` class to address `Issue 54 <https://github.com/tgsmith61591/pmdarima/issues/54>`_
+
 
 v1.0.0
 ------
