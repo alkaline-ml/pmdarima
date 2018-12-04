@@ -16,6 +16,13 @@ v1.1.0
 
 * New default for ``trend`` is no longer ``'c'``, it is ``None``.
 
+* ARIMA serialization no longer stores statsmodels results wrappers in the cache,
+  but bundles them into the pickle file. This solves `Issue #48 <https://github.com/tgsmith61591/pmdarima/issues/48>`_
+  and only works on statsmodels 0.9.0+ since they've fixed a bug on their end.
+
+* The ``'PMDARIMA_CACHE'`` and ``'PMDARIMA_CACHE_WARN_SIZE'`` environment variables are
+  now deprecated, since they no longer need to be used.
+
 
 v1.0.0
 ------
