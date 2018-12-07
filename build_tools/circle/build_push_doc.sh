@@ -32,50 +32,106 @@ git pull origin gh-pages
 git config --global user.email "$GH_EMAIL" > /dev/null 2>&1
 git config --global user.name "$GH_NAME" > /dev/null 2>&1
 
-# remove all files that are not in the .git dir
-find . -not -name ".git/*" -type f -maxdepth 1 -delete
 
-# Remove the remaining directories. Some of these are artifacts of the LAST
-# gh-pages build, and others are remnants of the package itself
-declare -a leftover=(".cache/"
-                     ".idea/"
-                     "build/"
-                     "build_tools/"
-                     "doc/"
-                     "examples/"
-                     "pmdarima/"
-                     "pmdarima.egg-info/"
-                     "_downloads/"
-                     "_images/"
-                     "_modules/"
-                     "_sources/"
-                     "_static/"
-                     "auto_examples/"
-                     "includes"
-                     "modules/")
+function deploy() {
+  git add --all
+  git commit -m "[ci skip] Publishing updated documentation for '${CIRCLE_BRANCH}' branch"
 
-# check for each left over file/dir and remove it
-for left in "${leftover[@]}"
-do
+  # We have to re-add the origin with the GH_TOKEN credentials
+  git remote rm origin
+  git remote add origin https://${GH_NAME}:${GH_TOKEN}@github.com/${GH_NAME}/pmdarima.git
+
+  # NOW we should be able to push it
+  git push origin gh-pages
+}
+
+
+# If we're on master or develop, we'll end up deploying
+echo "Branch name: ${CIRCLE_BRANCH}"
+if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
+
+  # On both of these, we'll need to remove the artifacts from the package
+  # build itself
+  declare -a leftover=(".cache/"
+                       ".idea/"
+                       "build/"
+                       "build_tools/"
+                       "doc/"
+                       "examples/"
+                       "pmdarima/"
+                       "pmdarima.egg-info/")
+
+  # check for each left over file/dir and remove it
+  for left in "${leftover[@]}"
+  do
     rm -r ${left} || echo "${left} does not exist; will not remove"
-done
+  done
 
-# we need this empty file for git not to try to build a jekyll project
-touch .nojekyll
-mv html/* ./
-rm -r html/
+  # If it's develop, we can simply rename the "html" directory as the
+  # "develop" directory
+  if [[ ${CIRCLE_BRANCH} == "develop" ]]; then
 
-# Add everything, get ready for commit. But only do it if we're on master
-if [[ "${CIRCLE_BRANCH}" =~ ^master$|^[0-9]+\.[0-9]+\.X$ ]]; then
-    git add --all
-    git commit -m "[ci skip] publishing updated documentation..."
+    # Remove the existing 'dev' folder (if it's there. might not be the
+    # first time we do this)
+    if [[ -d "develop" ]]; then
+      rm -r develop/
+    fi
 
-    # We have to re-add the origin with the GH_TOKEN credentials
-    git remote rm origin
-    git remote add origin https://${GH_NAME}:${GH_TOKEN}@github.com/${GH_NAME}/pmdarima.git
+    # Rename the html dir
+    mv html develop
+    # That's it for dev
 
-    # NOW we should be able to push it
-    git push origin gh-pages
+  # Otherwise it's master, which is a bit more involved. Remove the artifacts
+  # from the previous deployment, move the new ones into the folder as well
+  # as into the versioned folder
+  else
+
+    # These are the web artifacts we want to remove from the base
+    declare -a artifacts=("_downloads/",
+                          "_images/",
+                          "_modules/",
+                          "_sources/",
+                          "_static/",
+                          "auto_examples/",
+                          "includes/",
+                          "modules/",
+                          "VERSION")
+
+    for artifact in "${artifacts[@]}"
+    do
+      rm -r ${artifact} || echo "${artifact} does not exist; will not remove"
+    done
+
+    # Make a copy of the html directory. We'll rename this as the versioned dir
+    cp -a html html_copy
+
+    # Move the HTML contents into the local dir
+    mv html/* ./
+    rm -r html/
+
+    # Get the new version.
+    python -c "import pmdarima; print(pmdarima.__version__)" > VERSION
+
+    # If the version already has a folder, we have to fail out. We don't
+    # want to overwrite an existing version's documentation
+    # TODO: test this out locally
+    version=`cat VERSION`
+    if [[ -d ${version} ]]; then
+      echo "Version ${version} already exists!! Will not overwrite. Failing job."
+      exit 9
+    fi
+
+    # If we get here, we can simply rename the html_copy dir as the versioned
+    # directory to be deployed.
+    mv html_copy ${version}
+  fi
+
+  # we need this empty file for git not to try to build a jekyll project
+  touch .nojekyll
+
+  # Finally, deploy the branch
+  deploy
+
 else
-    echo "Not on master, so won't push doc"
+  echo "Not on master or develop. Will not deploy doc"
 fi
