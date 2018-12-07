@@ -48,7 +48,8 @@ function deploy() {
 
 # If we're on master or develop, we'll end up deploying
 echo "Branch name: ${CIRCLE_BRANCH}"
-if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
+# TODO: REMOVE THE TEST PIECE
+if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_BRANCH} == "versioned-doc" ]]; then
 
   # On both of these, we'll need to remove the artifacts from the package
   # build itself
@@ -103,6 +104,7 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
     done
 
     # Make a copy of the html directory. We'll rename this as the versioned dir
+    echo "Copying html directory"
     cp -a html html_copy
 
     # Move the HTML contents into the local dir
@@ -114,8 +116,8 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
 
     # If the version already has a folder, we have to fail out. We don't
     # want to overwrite an existing version's documentation
-    # TODO: test this out locally
     version=`cat VERSION`
+    echo "New version: ${version}"
     if [[ -d ${version} ]]; then
       echo "Version ${version} already exists!! Will not overwrite. Failing job."
       exit 9
@@ -128,9 +130,12 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
 
   # we need this empty file for git not to try to build a jekyll project
   touch .nojekyll
+  echo "Final directory contents:"
+  ls -la
 
   # Finally, deploy the branch
-  deploy
+  # TODO: UNCOMMENT THIS LINE:
+  # deploy
 
 else
   echo "Not on master or develop. Will not deploy doc"
