@@ -438,7 +438,7 @@ class PPTest(_DifferencingStationarityTest):
         alpha = coef[2]  # it's the last col...
         STAT = n * (alpha - 1) - (n ** 6) / (24.0 * dx) * (ssqrtl - ssqru)
 
-        tableipl = np.array([
+        tableipl = np.array([   
             approx(self.tableT, self.table[:, i], xout=n, rule=2)[1]
             for i in range(self.tablen)])
 
