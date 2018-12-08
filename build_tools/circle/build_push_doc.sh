@@ -51,16 +51,19 @@ echo "Branch name: ${CIRCLE_BRANCH}"
 # TODO: REMOVE THE TEST PIECE
 if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_BRANCH} == "versioned-doc" ]]; then
 
+  # Show the present files:
+  ls -la
+
   # On both of these, we'll need to remove the artifacts from the package
   # build itself
-  declare -a leftover=(".cache/"
-                       ".idea/"
-                       "build/"
-                       "build_tools/"
-                       "doc/"
-                       "examples/"
-                       "pmdarima/"
-                       "pmdarima.egg-info/")
+  declare -a leftover=(".cache"
+                       ".idea"
+                       "build"
+                       "build_tools"
+                       "doc"
+                       "examples"
+                       "pmdarima"
+                       "pmdarima.egg-info")
 
   # check for each left over file/dir and remove it
   for left in "${leftover[@]}"
@@ -88,19 +91,19 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_
   else
 
     # These are the web artifacts we want to remove from the base
-    declare -a artifacts=("_downloads/",
-                          "_images/",
-                          "_modules/",
-                          "_sources/",
-                          "_static/",
-                          "auto_examples/",
-                          "includes/",
-                          "modules/",
+    declare -a artifacts=("_downloads",
+                          "_images",
+                          "_modules",
+                          "_sources",
+                          "_static",
+                          "auto_examples",
+                          "includes",
+                          "modules",
                           "VERSION")
 
     for artifact in "${artifacts[@]}"
     do
-      rm -r ${artifact} || echo "${artifact} does not exist; will not remove"
+      rm -r ./${artifact} || echo "${artifact} does not exist; will not remove"
     done
 
     # Make a copy of the html directory. We'll rename this as the versioned dir
