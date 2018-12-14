@@ -11,7 +11,7 @@ PIP="/opt/python/${PYTHON_VERSION}/bin/pip"
 # function from the package after 0.31.1 and it fails for Python 3.6?!
 ${PIP} install --upgrade pip wheel==0.31.1
 ${PIP} install --upgrade setuptools
-if [[ "${PYTHON_VERSION}" == "3.7*" ]]; then
+if [[ "${PYTHON_VERSION}" == "cp37*" ]]; then
   # https://github.com/cython/cython/issues/1916
   ${PIP} install --upgrade cython==0.27.2
 else
