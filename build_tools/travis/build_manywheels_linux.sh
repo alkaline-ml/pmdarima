@@ -11,7 +11,12 @@ PIP="/opt/python/${PYTHON_VERSION}/bin/pip"
 # function from the package after 0.31.1 and it fails for Python 3.6?!
 ${PIP} install --upgrade pip wheel==0.31.1
 ${PIP} install --upgrade setuptools
-${PIP} install --upgrade cython==0.23.5
+if [[ "${PYTHON_VERSION}" == "3.7*" ]]; then
+  # https://github.com/cython/cython/issues/1916
+  ${PIP} install --upgrade cython==0.27.2
+else
+  ${PIP} install --upgrade cython==0.23.5
+fi
 
 # One of our envs is not building correctly anymore. Need Numpy up front since
 # statsmodels 0.9.0 now requires numpy to install from pip
