@@ -54,6 +54,17 @@ matrix:
         DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
         DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
+    # This test runs on linux 3.7 & as of v1.0+, deploys python 3.7 wheel
+    - os: linux
+      dist: trusty
+      services:
+      - docker
+      env: DISTRIB="conda" PYTHON_VERSION="3.7.1" INSTALL_MKL="true"
+        CYTHON_VERSION="0.28.3" COVERAGE=false SCIKIT_LEARN_VERSION="0.19"
+        STATSMODELS_VERSION="0.9.0" DEPLOY=true CACHEC=true
+        DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+        DOCKER_CONTAINER_NAME="pmdarimacontainer"
+
     # This environment tests Python 3.5 support on MAC OS X
     - os: osx
       language: generic
@@ -66,6 +77,13 @@ matrix:
     - os: osx
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="3.6" CYTHON_VERSION="0.25.2"
+        COVERAGE=true SCIKIT_LEARN_VERSION="0.20" STATSMODELS_VERSION="0.9.0"
+        DEPLOY=true CACHEC=false
+
+    # This environment tests Python 3.7 support on MAC OS X
+    - os: osx
+      language: generic
+      env: DISTRIB="conda" PYTHON_VERSION="3.7" CYTHON_VERSION="0.28.3"
         COVERAGE=true SCIKIT_LEARN_VERSION="0.20" STATSMODELS_VERSION="0.9.0"
         DEPLOY=true CACHEC=false
 
