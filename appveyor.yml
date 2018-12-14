@@ -43,7 +43,7 @@ environment:
       PYTHON_VERSION: "3.7.1"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
-      PYTHON: "C:\\Python36-x64"
+      PYTHON: "C:\\Python37-x64"
 
 # Because we only have a single worker, we don't want to waste precious
 # appveyor CI time and make other PRs wait for repeated failures in a failing
