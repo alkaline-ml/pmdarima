@@ -138,9 +138,8 @@ ls -la
 if [[ ! -z $CI_PULL_REQUEST ]]; then
   echo "Will not deploy doc on pull request ($CI_PULL_REQUEST)"
 elif [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
-  # TODO: UNCOMMENT THIS AFTER WE VERIFY PR BRANCH NAMES!!!!
   echo "Deploying documentation"
-  # deploy
+  deploy
 else
   echo "Not on master or develop. Will not deploy doc"
 fi
