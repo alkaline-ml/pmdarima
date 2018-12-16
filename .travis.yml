@@ -39,7 +39,7 @@ matrix:
         - docker
       env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
+           SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
            DEPLOY=true CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
            DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
@@ -49,10 +49,11 @@ matrix:
       services:
       - docker
       env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
-        CYTHON_VERSION="0.25.2" COVERAGE=false SCIKIT_LEARN_VERSION="0.19"
-        STATSMODELS_VERSION="0.9.0" DEPLOY=true CACHEC=true
-        DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
-        DOCKER_CONTAINER_NAME="pmdarimacontainer"
+           CYTHON_VERSION="0.25.2" SCIKIT_LEARN_VERSION="0.19"
+           STATSMODELS_VERSION="0.9.0" DEPLOY=true CACHEC=true
+           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0"
+           DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+           DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
     # This test runs on linux 3.7 & as of v1.0+, deploys python 3.7 wheel
     - os: linux
@@ -70,15 +71,15 @@ matrix:
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="3.5"
            NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0" CYTHON_VERSION="0.25.2"
-           COVERAGE=true SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
+           SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
            DEPLOY=true CACHEC=false
 
     # This environment tests Python 3.6 support on MAC OS X
     - os: osx
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="3.6" CYTHON_VERSION="0.25.2"
-        COVERAGE=true SCIKIT_LEARN_VERSION="0.20" STATSMODELS_VERSION="0.9.0"
-        DEPLOY=true CACHEC=false
+           SCIKIT_LEARN_VERSION="0.20" STATSMODELS_VERSION="0.9.0"
+           DEPLOY=true CACHEC=false
 
     # This environment tests Python 3.7 support on MAC OS X
     - os: osx
