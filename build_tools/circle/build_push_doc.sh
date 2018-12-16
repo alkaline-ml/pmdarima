@@ -14,7 +14,7 @@ branch=$(git symbolic-ref --short HEAD)
 
 # cd into docs, make them
 cd doc
-make clean html EXAMPLES_PATTERN=ex_*
+make clean html EXAMPLES_PATTERN=example_*
 cd ..
 
 # move the docs to the top-level directory, stash for checkout
@@ -55,15 +55,12 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
 
   # On both of these, we'll need to remove the artifacts from the package
   # build itself
-  declare -a leftover=(".pyramid-cache"
-                       ".pytest_cache"
-                       "benchmarks"
+  declare -a leftover=("benchmarks"
                        "build"
                        "dist"
                        "doc"
                        "pmdarima"
-                       "pmdarima.egg-info"
-                       "pyramid_arima.egg-info")
+                       "pmdarima.egg-info")
 
   # check for each left over file/dir and remove it
   for left in "${leftover[@]}"
@@ -137,9 +134,14 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
   echo "Final directory contents:"
   ls -la
 
-  # Finally, deploy the branch
-  # TODO: UNCOMMENT THIS AFTER WE VERIFY PR BRANCH NAMES!!!!
-  # deploy
+  # Finally, deploy the branch, but if it's a pull request, don't do anything
+  if [[ ! -z $CI_PULL_REQUEST ]]; then
+    echo "Will not deploy doc on pull request ($CI_PULL_REQUEST)"
+  else
+    # TODO: UNCOMMENT THIS AFTER WE VERIFY PR BRANCH NAMES!!!!
+    echo "Deploying documentation"
+    # deploy
+  fi
 
 else
   echo "Not on master or develop. Will not deploy doc"
