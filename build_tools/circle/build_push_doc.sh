@@ -48,8 +48,7 @@ function deploy() {
 
 # If we're on master or develop, we'll end up deploying
 echo "Branch name: ${CIRCLE_BRANCH}"
-# TODO: REMOVE THE TEST PIECE
-if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_BRANCH} == "versioned-doc" ]]; then
+if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
 
   # Show the present files:
   ls -la
@@ -139,7 +138,7 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_
   ls -la
 
   # Finally, deploy the branch
-  # TODO: UNCOMMENT THIS LINE:
+  # TODO: UNCOMMENT THIS AFTER WE VERIFY PR BRANCH NAMES!!!!
   # deploy
 
 else
