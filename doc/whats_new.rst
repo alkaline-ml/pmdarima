@@ -25,6 +25,9 @@ v0.8.1) will document the latest features.
 * The ``'PMDARIMA_CACHE'`` and ``'PMDARIMA_CACHE_WARN_SIZE'`` environment variables are
   now deprecated, since they no longer need to be used.
 
+* Add versioned documentation. All releases' doc (from 0.9.0 onward) is now available
+  at ``alkaline-ml.com/pmdarima/<version>``
+
 
 `v1.0.0 <http://alkaline-ml.com/pmdarima/1.0.0/>`_
 --------------------------------------------------
