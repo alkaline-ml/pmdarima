@@ -223,6 +223,7 @@ class ADFTest(_DifferencingStationarityTest):
     References
     ----------
     .. [1] https://wikipedia.org/wiki/Augmented_Dickey–Fuller_test
+    .. [2] R's tseries ADF source code: https://bit.ly/2EnvM5V
     """
     table = -np.array([(4.38, 4.15, 4.04, 3.99, 3.98, 3.96),
                        (3.95, 3.80, 3.73, 3.69, 3.68, 3.66),
