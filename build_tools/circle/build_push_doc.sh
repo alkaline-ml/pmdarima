@@ -69,8 +69,8 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_
   # check for each left over file/dir and remove it
   for left in "${leftover[@]}"
   do
-    echo "Removing ./${left}"
-    rm -rf ./${left}
+    echo "Removing ${left}"
+    rm -rf ${left}
   done
 
   # If it's develop, we can simply rename the "html" directory as the
@@ -93,37 +93,31 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_
   else
 
     # These are the web artifacts we want to remove from the base
-    declare -a artifacts=("_downloads",
-                          "_images",
-                          "_modules",
-                          "_sources",
-                          "_static",
-                          "auto_examples",
-                          "includes",
-                          "modules",
-                          "VERSION")
+    declare -a artifacts=("_downloads"
+                          "_images"
+                          "_modules"
+                          "_sources"
+                          "_static"
+                          "auto_examples"
+                          "includes"
+                          "modules")
 
     for artifact in "${artifacts[@]}"
     do
-      echo "Removing ./${artifact}"
-      rm -rf ./${artifact}
+      echo "Removing ${artifact}"
+      rm -rf ${artifact}
     done
 
     # Make a copy of the html directory. We'll rename this as the versioned dir
     echo "Copying html directory"
     cp -a html html_copy
 
-    ls -la
-
     # Move the HTML contents into the local dir
     mv html/* ./
     rm -r html/
 
-    # Get the new version.
+    # Get the new version. This overwrites the old one.
     python -c "import pmdarima; print(pmdarima.__version__)" > VERSION
-
-    # Print what's there now
-    ls -la
 
     # If the version already has a folder, we have to fail out. We don't
     # want to overwrite an existing version's documentation
