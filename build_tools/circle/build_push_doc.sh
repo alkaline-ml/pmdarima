@@ -56,19 +56,21 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_
 
   # On both of these, we'll need to remove the artifacts from the package
   # build itself
-  declare -a leftover=(".cache"
-                       ".idea"
+  declare -a leftover=(".pyramid-cache"
+                       ".pytest_cache"
+                       "benchmarks"
                        "build"
-                       "build_tools"
+                       "dist"
                        "doc"
-                       "examples"
                        "pmdarima"
-                       "pmdarima.egg-info")
+                       "pmdarima.egg-info"
+                       "pyramid_arima.egg-info")
 
   # check for each left over file/dir and remove it
   for left in "${leftover[@]}"
   do
-    rm -r ${left} || echo "${left} does not exist; will not remove"
+    echo "Removing ./${left}"
+    rm -rf ./${left}
   done
 
   # If it's develop, we can simply rename the "html" directory as the
@@ -103,7 +105,8 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_
 
     for artifact in "${artifacts[@]}"
     do
-      rm -r ./${artifact} || echo "${artifact} does not exist; will not remove"
+      echo "Removing ./${artifact}"
+      rm -rf ./${artifact}
     done
 
     # Make a copy of the html directory. We'll rename this as the versioned dir
@@ -116,6 +119,9 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_
 
     # Get the new version.
     python -c "import pmdarima; print(pmdarima.__version__)" > VERSION
+
+    # Print what's there now
+    ls -la
 
     # If the version already has a folder, we have to fail out. We don't
     # want to overwrite an existing version's documentation
