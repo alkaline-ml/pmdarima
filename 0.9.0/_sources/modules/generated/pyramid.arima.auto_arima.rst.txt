@@ -1,0 +1,12 @@
+:mod:`pyramid.arima`.auto_arima
+============================================
+
+.. currentmodule:: pyramid.arima
+
+.. autofunction:: auto_arima
+
+.. include:: pyramid.arima.auto_arima.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

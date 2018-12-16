@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3. Pyramid Quickstart &mdash; pyramid 0.9.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Serializing your ARIMA models" href="serialization.html" />
+    <link rel="prev" title="2. Setup" href="setup.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyramid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="user_guide.html">User Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="user_guide.html#getting-started">Getting started</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="about.html">1. About the project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html">2. Setup</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">3. Pyramid Quickstart</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#auto-arima-example">3.1. Auto-ARIMA example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/datasets.html">7. Toy time-series datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html">8. Contributing to Pyramid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributors.html">9. Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyramid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="user_guide.html">User Guide</a> &raquo;</li>
+        
+      <li>3. Pyramid Quickstart</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pyramid-quickstart">
+<span id="quickstart"></span><h1>3. Pyramid Quickstart<a class="headerlink" href="#pyramid-quickstart" title="Permalink to this headline">¶</a></h1>
+<p>Since pyramid is intended to replace R’s <code class="docutils literal notranslate"><span class="pre">auto.arima</span></code>, the interface is
+designed to be quick to learn and easy to use, even for R users making the switch.
+Common functions and tools are elevated to the top-level of the package:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
+
+<span class="c1"># Create an array like you would in R</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+
+<span class="c1"># Compute an auto-correlation like you would in R:</span>
+<span class="n">pm</span><span class="o">.</span><span class="n">acf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Plot an auto-correlation:</span>
+<span class="n">pm</span><span class="o">.</span><span class="n">plot_acf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="auto-arima-example">
+<h2>3.1. Auto-ARIMA example<a class="headerlink" href="#auto-arima-example" title="Permalink to this headline">¶</a></h2>
+<p>Here’s a quick example of how we can fit an <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> with pyramid:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pyramid</span> <span class="kn">as</span> <span class="nn">pm</span>
+<span class="kn">from</span> <span class="nn">pyramid.datasets</span> <span class="kn">import</span> <span class="n">load_wineind</span>
+
+<span class="c1"># this is a dataset from R</span>
+<span class="n">wineind</span> <span class="o">=</span> <span class="n">load_wineind</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+<span class="c1"># fit stepwise auto-ARIMA</span>
+<span class="n">stepwise_fit</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">wineind</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                             <span class="n">max_p</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                             <span class="n">start_P</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                             <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                             <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span>  <span class="c1"># don&#39;t want to know if an order does not work</span>
+                             <span class="n">suppress_warnings</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>  <span class="c1"># don&#39;t want convergence warnings</span>
+                             <span class="n">stepwise</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># set to stepwise</span>
+</pre></div>
+</div>
+<p>It’s easy to examine your model fit results. Simply use the <code class="docutils literal notranslate"><span class="pre">summary</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stepwise_fit</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<span class="go">&lt;class &#39;statsmodels.iolib.summary.Summary&#39;&gt;</span>
+<span class="go">&quot;&quot;&quot;</span>
+<span class="go">                                 Statespace Model Results</span>
+<span class="go">==========================================================================================</span>
+<span class="go">Dep. Variable:                                  y   No. Observations:                  176</span>
+<span class="go">Model:             SARIMAX(1, 1, 2)x(0, 1, 1, 12)   Log Likelihood               -1527.386</span>
+<span class="go">Date:                            Mon, 04 Sep 2017   AIC                           3066.771</span>
+<span class="go">Time:                                    13:59:01   BIC                           3085.794</span>
+<span class="go">Sample:                                         0   HQIC                          3074.487</span>
+<span class="go">                                            - 176</span>
+<span class="go">Covariance Type:                              opg</span>
+<span class="go">==============================================================================</span>
+<span class="go">                 coef    std err          z      P&gt;|z|      [0.025      0.975]</span>
+<span class="go">------------------------------------------------------------------------------</span>
+<span class="go">intercept   -100.7446     72.306     -1.393      0.164    -242.462      40.973</span>
+<span class="go">ar.L1         -0.5139      0.390     -1.319      0.187      -1.278       0.250</span>
+<span class="go">ma.L1         -0.0791      0.403     -0.196      0.844      -0.869       0.710</span>
+<span class="go">ma.L2         -0.4438      0.223     -1.988      0.047      -0.881      -0.006</span>
+<span class="go">ma.S.L12      -0.4021      0.054     -7.448      0.000      -0.508      -0.296</span>
+<span class="go">sigma2      7.663e+06    7.3e+05     10.500      0.000    6.23e+06    9.09e+06</span>
+<span class="go">===================================================================================</span>
+<span class="go">Ljung-Box (Q):                       48.66   Jarque-Bera (JB):                21.62</span>
+<span class="go">Prob(Q):                              0.16   Prob(JB):                         0.00</span>
+<span class="go">Heteroskedasticity (H):               1.18   Skew:                            -0.61</span>
+<span class="go">Prob(H) (two-sided):                  0.54   Kurtosis:                         4.31</span>
+<span class="go">===================================================================================</span>
+
+<span class="go">Warnings:</span>
+<span class="go">[1] Covariance matrix calculated using the outer product of gradients (complex-step).</span>
+<span class="go">[2] Covariance matrix is singular or near-singular, with condition number 8.15e+14. Standard errors may be unstable.</span>
+<span class="go">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="serialization.html" class="btn btn-neutral float-right" title="4. Serializing your ARIMA models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="setup.html" class="btn btn-neutral" title="2. Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2018, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

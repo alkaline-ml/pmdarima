@@ -1,0 +1,1176 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyramid.arima.auto &mdash; pyramid 0.9.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pyramid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyramid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyramid.arima.auto</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyramid.arima.auto</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># Automatically find optimal parameters for an ARIMA</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">column_or_1d</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
+<span class="kn">from</span> <span class="nn">sklearn.externals.joblib</span> <span class="k">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LinearRegression</span>
+
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span class="n">LinAlgError</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">ndiffs</span><span class="p">,</span> <span class="n">is_constant</span><span class="p">,</span> <span class="n">nsdiffs</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">diff</span><span class="p">,</span> <span class="n">is_iterable</span>
+<span class="kn">from</span> <span class="nn">.arima</span> <span class="k">import</span> <span class="n">ARIMA</span>
+<span class="kn">from</span> <span class="nn">.warnings</span> <span class="k">import</span> <span class="n">ModelFitWarning</span>
+
+<span class="c1"># for python 3 compat</span>
+<span class="kn">from</span> <span class="nn">..compat.python</span> <span class="k">import</span> <span class="n">xrange</span>
+<span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="k">import</span> <span class="n">DTYPE</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;auto_arima&#39;</span>
+<span class="p">]</span>
+
+<span class="c1"># The valid information criteria</span>
+<span class="n">VALID_CRITERIA</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;aic&#39;</span><span class="p">,</span> <span class="s1">&#39;aicc&#39;</span><span class="p">,</span> <span class="s1">&#39;bic&#39;</span><span class="p">,</span> <span class="s1">&#39;hqic&#39;</span><span class="p">,</span> <span class="s1">&#39;oob&#39;</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="auto_arima"><a class="viewcode-back" href="../../../modules/generated/pyramid.arima.auto_arima.html#pyramid.arima.auto_arima">[docs]</a><span class="k">def</span> <span class="nf">auto_arima</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+               <span class="n">max_d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">start_P</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_Q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_P</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+               <span class="n">max_D</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_Q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_order</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">stationary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">information_criterion</span><span class="o">=</span><span class="s1">&#39;aic&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+               <span class="n">test</span><span class="o">=</span><span class="s1">&#39;kpss&#39;</span><span class="p">,</span> <span class="n">seasonal_test</span><span class="o">=</span><span class="s1">&#39;ch&#39;</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+               <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparams</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">offset_test_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seasonal_test_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">random</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_fits</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+               <span class="n">return_valid_fits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">out_of_sample_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span>
+               <span class="n">scoring_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Automatically discover the optimal order for an ARIMA model.</span>
+
+<span class="sd">    The ``auto_arima`` function seeks to identify the most optimal</span>
+<span class="sd">    parameters for an ``ARIMA`` model, and returns a fitted ARIMA model. This</span>
+<span class="sd">    function is based on the commonly-used R function,</span>
+<span class="sd">    ``forecast::auto.arima`` [3].</span>
+
+<span class="sd">    The ``auro_arima`` function works by conducting differencing tests (i.e.,</span>
+<span class="sd">    Kwiatkowski–Phillips–Schmidt–Shin, Augmented Dickey-Fuller or</span>
+<span class="sd">    Phillips–Perron) to determine the order of differencing, ``d``, and then</span>
+<span class="sd">    fitting models within ranges of defined ``start_p``, ``max_p``,</span>
+<span class="sd">    ``start_q``, ``max_q`` ranges. If the ``seasonal`` optional is enabled,</span>
+<span class="sd">    ``auto_arima`` also seeks to identify the optimal ``P`` and ``Q`` hyper-</span>
+<span class="sd">    parameters after conducting the Canova-Hansen to determine the optimal</span>
+<span class="sd">    order of seasonal differencing, ``D``.</span>
+
+<span class="sd">    In order to find the best model, ``auto_arima`` optimizes for a given</span>
+<span class="sd">    ``information_criterion``, one of {&#39;aic&#39;, &#39;aicc&#39;, &#39;bic&#39;, &#39;hqic&#39;, &#39;oob&#39;}</span>
+<span class="sd">    (Akaike Information Criterion, Corrected Akaike Information Criterion,</span>
+<span class="sd">    Bayesian Information Criterion, Hannan-Quinn Information Criterion, or</span>
+<span class="sd">    &quot;out of bag&quot;--for validation scoring--respectively) and returns the ARIMA</span>
+<span class="sd">    which minimizes the value.</span>
+
+<span class="sd">    Note that due to stationarity issues, ``auto_arima`` might not find a</span>
+<span class="sd">    suitable model that will converge. If this is the case, a ``ValueError``</span>
+<span class="sd">    will be thrown suggesting stationarity-inducing measures be taken prior</span>
+<span class="sd">    to re-fitting or that a new range of ``order`` values be selected. Non-</span>
+<span class="sd">    stepwise (i.e., essentially a grid search) selection can be slow,</span>
+<span class="sd">    especially for seasonal data. Stepwise algorithm is outlined in Hyndman and</span>
+<span class="sd">    Khandakar (2008).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : array-like or iterable, shape=(n_samples,)</span>
+<span class="sd">        The time-series to which to fit the ``ARIMA`` estimator. This may</span>
+<span class="sd">        either be a Pandas ``Series`` object (statsmodels can internally</span>
+<span class="sd">        use the dates in the index), or a numpy array. This should be a</span>
+<span class="sd">        one-dimensional array of floats, and should not contain any</span>
+<span class="sd">        ``np.nan`` or ``np.inf`` values.</span>
+
+<span class="sd">    exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">        An optional 2-d array of exogenous variables. If provided, these</span>
+<span class="sd">        variables are used as additional features in the regression</span>
+<span class="sd">        operation. This should not include a constant or trend. Note that</span>
+<span class="sd">        if an ``ARIMA`` is fit on exogenous features, it must be provided</span>
+<span class="sd">        exogenous features for making predictions.</span>
+
+<span class="sd">    start_p : int, optional (default=2)</span>
+<span class="sd">        The starting value of ``p``, the order (or number of time lags)</span>
+<span class="sd">        of the auto-regressive (&quot;AR&quot;) model. Must be a positive integer.</span>
+
+<span class="sd">    d : int, optional (default=None)</span>
+<span class="sd">        The order of first-differencing. If None (by default), the value</span>
+<span class="sd">        will automatically be selected based on the results of the ``test``</span>
+<span class="sd">        (i.e., either the Kwiatkowski–Phillips–Schmidt–Shin, Augmented</span>
+<span class="sd">        Dickey-Fuller or the Phillips–Perron test will be conducted to find</span>
+<span class="sd">        the most probable value). Must be a positive integer or None. Note</span>
+<span class="sd">        that if ``d`` is None, the runtime could be significantly longer.</span>
+
+<span class="sd">    start_q : int, optional (default=2)</span>
+<span class="sd">        The starting value of ``q``, the order of the moving-average</span>
+<span class="sd">        (&quot;MA&quot;) model. Must be a positive integer.</span>
+
+<span class="sd">    max_p : int, optional (default=5)</span>
+<span class="sd">        The maximum value of ``p``, inclusive. Must be a positive integer</span>
+<span class="sd">        greater than or equal to ``start_p``.</span>
+
+<span class="sd">    max_d : int, optional (default=2)</span>
+<span class="sd">        The maximum value of ``d``, or the maximum number of non-seasonal</span>
+<span class="sd">        differences. Must be a positive integer greater than or equal to ``d``.</span>
+
+<span class="sd">    max_q : int, optional (default=5)</span>
+<span class="sd">        The maximum value of ``q``, inclusive. Must be a positive integer</span>
+<span class="sd">        greater than ``start_q``.</span>
+
+<span class="sd">    start_P : int, optional (default=1)</span>
+<span class="sd">        The starting value of ``P``, the order of the auto-regressive portion</span>
+<span class="sd">        of the seasonal model.</span>
+
+<span class="sd">    D : int, optional (default=None)</span>
+<span class="sd">        The order of the seasonal differencing. If None (by default, the value</span>
+<span class="sd">        will automatically be selected based on the results of the</span>
+<span class="sd">        ``seasonal_test``. Must be a positive integer or None.</span>
+
+<span class="sd">    start_Q : int, optional (default=1)</span>
+<span class="sd">        The starting value of ``Q``, the order of the moving-average portion</span>
+<span class="sd">        of the seasonal model.</span>
+
+<span class="sd">    max_P : int, optional (default=2)</span>
+<span class="sd">        The maximum value of ``P``, inclusive. Must be a positive integer</span>
+<span class="sd">        greater than ``start_P``.</span>
+
+<span class="sd">    max_D : int, optional (default=1)</span>
+<span class="sd">        The maximum value of ``D``. Must be a positive integer greater</span>
+<span class="sd">        than ``D``.</span>
+
+<span class="sd">    max_Q : int, optional (default=2)</span>
+<span class="sd">        The maximum value of ``Q``, inclusive. Must be a positive integer</span>
+<span class="sd">        greater than ``start_Q``.</span>
+
+<span class="sd">    max_order : int, optional (default=10)</span>
+<span class="sd">        If the sum of ``p`` and ``q`` is &gt;= ``max_order``, a model will</span>
+<span class="sd">        *not* be fit with those parameters, but will progress to the next</span>
+<span class="sd">        combination. Default is 5. If ``max_order`` is None, it means there</span>
+<span class="sd">        are no constraints on maximum order.</span>
+
+<span class="sd">    m : int, optional (default=1)</span>
+<span class="sd">        The period for seasonal differencing, ``m`` refers to the number of</span>
+<span class="sd">        periods in each season. For example, ``m`` is 4 for quarterly data, 12</span>
+<span class="sd">        for monthly data, or 1 for annual (non-seasonal) data. Default is 1.</span>
+<span class="sd">        Note that if ``m`` == 1 (i.e., is non-seasonal), ``seasonal`` will be</span>
+<span class="sd">        set to False. For more information on setting this parameter, see</span>
+<span class="sd">        :ref:`period`.</span>
+
+<span class="sd">    seasonal : bool, optional (default=True)</span>
+<span class="sd">        Whether to fit a seasonal ARIMA. Default is True. Note that if</span>
+<span class="sd">        ``seasonal`` is True and ``m`` == 1, ``seasonal`` will be set to False.</span>
+
+<span class="sd">    stationary : bool, optional (default=False)</span>
+<span class="sd">        Whether the time-series is stationary and ``d`` should be set to zero.</span>
+
+<span class="sd">    information_criterion : str, optional (default=&#39;aic&#39;)</span>
+<span class="sd">        The information criterion used to select the best ARIMA model. One of</span>
+<span class="sd">        ``pyramid.arima.auto_arima.VALID_CRITERIA``, (&#39;aic&#39;, &#39;bic&#39;, &#39;hqic&#39;,</span>
+<span class="sd">        &#39;oob&#39;).</span>
+
+<span class="sd">    alpha : float, optional (default=0.05)</span>
+<span class="sd">        Level of the test for testing significance.</span>
+
+<span class="sd">    test : str, optional (default=&#39;kpss&#39;)</span>
+<span class="sd">        Type of unit root test to use in order to detect stationarity if</span>
+<span class="sd">        ``stationary`` is False and ``d`` is None. Default is &#39;kpss&#39;</span>
+<span class="sd">        (Kwiatkowski–Phillips–Schmidt–Shin).</span>
+
+<span class="sd">    seasonal_test : str, optional (default=&#39;ch&#39;)</span>
+<span class="sd">        This determines which seasonal unit root test is used if ``seasonal``</span>
+<span class="sd">        is True and ``D`` is None. Default is &#39;ch&#39; (Canova-Hansen).</span>
+
+<span class="sd">    stepwise : bool, optional (default=True)</span>
+<span class="sd">        Whether to use the stepwise algorithm outlined in Hyndman and Khandakar</span>
+<span class="sd">        (2008) to identify the optimal model parameters. The stepwise algorithm</span>
+<span class="sd">        can be significantly faster than fitting all (or a ``random`` subset</span>
+<span class="sd">        of) hyper-parameter combinations and is less likely to over-fit</span>
+<span class="sd">        the model.</span>
+
+<span class="sd">    n_jobs : int, optional (default=1)</span>
+<span class="sd">        The number of models to fit in parallel in the case of a grid search</span>
+<span class="sd">        (``stepwise=False``). Default is 1, but -1 can be used to designate</span>
+<span class="sd">        &quot;as many as possible&quot;.</span>
+
+<span class="sd">    start_params : array-like, optional (default=None)</span>
+<span class="sd">        Starting parameters for ``ARMA(p,q)``.  If None, the default is given</span>
+<span class="sd">        by ``ARMA._fit_start_params``.</span>
+
+<span class="sd">    transparams : bool, optional (default=True)</span>
+<span class="sd">        Whether or not to transform the parameters to ensure stationarity.</span>
+<span class="sd">        Uses the transformation suggested in Jones (1980).  If False,</span>
+<span class="sd">        no checking for stationarity or invertibility is done.</span>
+
+<span class="sd">    method : str, one of {&#39;css-mle&#39;,&#39;mle&#39;,&#39;css&#39;}, optional (default=None)</span>
+<span class="sd">        This is the loglikelihood to maximize.  If &quot;css-mle&quot;, the</span>
+<span class="sd">        conditional sum of squares likelihood is maximized and its values</span>
+<span class="sd">        are used as starting values for the computation of the exact</span>
+<span class="sd">        likelihood via the Kalman filter.  If &quot;mle&quot;, the exact likelihood</span>
+<span class="sd">        is maximized via the Kalman Filter.  If &quot;css&quot; the conditional sum</span>
+<span class="sd">        of squares likelihood is maximized.  All three methods use</span>
+<span class="sd">        `start_params` as starting parameters.  See above for more</span>
+<span class="sd">        information. If fitting a seasonal ARIMA, the default is &#39;lbfgs&#39;</span>
+
+<span class="sd">    trend : str or iterable, optional (default=&#39;c&#39;)</span>
+<span class="sd">        Parameter controlling the deterministic trend polynomial :math:`A(t)`.</span>
+<span class="sd">        Can be specified as a string where &#39;c&#39; indicates a constant (i.e. a</span>
+<span class="sd">        degree zero component of the trend polynomial), &#39;t&#39; indicates a</span>
+<span class="sd">        linear trend with time, and &#39;ct&#39; is both. Can also be specified as an</span>
+<span class="sd">        iterable defining the polynomial as in ``numpy.poly1d``, where</span>
+<span class="sd">        ``[1,1,0,1]`` would denote :math:`a + bt + ct^3`.</span>
+
+<span class="sd">    solver : str or None, optional (default=&#39;lbfgs&#39;)</span>
+<span class="sd">        Solver to be used.  The default is &#39;lbfgs&#39; (limited memory</span>
+<span class="sd">        Broyden-Fletcher-Goldfarb-Shanno).  Other choices are &#39;bfgs&#39;,</span>
+<span class="sd">        &#39;newton&#39; (Newton-Raphson), &#39;nm&#39; (Nelder-Mead), &#39;cg&#39; -</span>
+<span class="sd">        (conjugate gradient), &#39;ncg&#39; (non-conjugate gradient), and</span>
+<span class="sd">        &#39;powell&#39;. By default, the limited memory BFGS uses m=12 to</span>
+<span class="sd">        approximate the Hessian, projected gradient tolerance of 1e-8 and</span>
+<span class="sd">        factr = 1e2. You can change these by using kwargs.</span>
+
+<span class="sd">    maxiter : int, optional (default=50)</span>
+<span class="sd">        The maximum number of function evaluations. Default is 50.</span>
+
+<span class="sd">    disp : int, optional (default=0)</span>
+<span class="sd">        If True, convergence information is printed.  For the default</span>
+<span class="sd">        &#39;lbfgs&#39; ``solver``, disp controls the frequency of the output during</span>
+<span class="sd">        the iterations. disp &lt; 0 means no output in this case.</span>
+
+<span class="sd">    callback : callable, optional (default=None)</span>
+<span class="sd">        Called after each iteration as callback(xk) where xk is the current</span>
+<span class="sd">        parameter vector. This is only used in non-seasonal ARIMA models.</span>
+
+<span class="sd">    offset_test_args : dict, optional (default=None)</span>
+<span class="sd">        The args to pass to the constructor of the offset (``d``) test. See</span>
+<span class="sd">        ``pyramid.arima.stationarity`` for more details.</span>
+
+<span class="sd">    seasonal_test_args : dict, optional (default=None)</span>
+<span class="sd">        The args to pass to the constructor of the seasonal offset (``D``)</span>
+<span class="sd">        test. See ``pyramid.arima.seasonality`` for more details.</span>
+
+<span class="sd">    suppress_warnings : bool, optional (default=False)</span>
+<span class="sd">        Many warnings might be thrown inside of statsmodels. If</span>
+<span class="sd">        ``suppress_warnings`` is True, all of the warnings coming from</span>
+<span class="sd">        ``ARIMA`` will be squelched.</span>
+
+<span class="sd">    error_action : str, optional (default=&#39;warn&#39;)</span>
+<span class="sd">        If unable to fit an ``ARIMA`` due to stationarity issues, whether to</span>
+<span class="sd">        warn (&#39;warn&#39;), raise the ``ValueError`` (&#39;raise&#39;) or ignore (&#39;ignore&#39;).</span>
+<span class="sd">        Note that the default behavior is to warn, and fits that fail will be</span>
+<span class="sd">        returned as None. This is the recommended behavior, as statsmodels</span>
+<span class="sd">        ARIMA and SARIMAX models hit bugs periodically that can cause</span>
+<span class="sd">        an otherwise healthy parameter combination to fail for reasons not</span>
+<span class="sd">        related to pyramid.</span>
+
+<span class="sd">    trace : bool, optional (default=False)</span>
+<span class="sd">        Whether to print status on the fits. Note that this can be</span>
+<span class="sd">        very verbose...</span>
+
+<span class="sd">    random : bool, optional (default=False)</span>
+<span class="sd">        Similar to grid searches, ``auto_arima`` provides the capability to</span>
+<span class="sd">        perform a &quot;random search&quot; over a hyper-parameter space. If ``random``</span>
+<span class="sd">        is True, rather than perform an exhaustive search or ``stepwise``</span>
+<span class="sd">        search, only ``n_fits`` ARIMA models will be fit (``stepwise`` must be</span>
+<span class="sd">        False for this option to do anything).</span>
+
+<span class="sd">    random_state : int, long or numpy ``RandomState``, optional (default=None)</span>
+<span class="sd">        The PRNG for when ``random=True``. Ensures replicable testing and</span>
+<span class="sd">        results.</span>
+
+<span class="sd">    n_fits : int, optional (default=10)</span>
+<span class="sd">        If ``random`` is True and a &quot;random search&quot; is going to be performed,</span>
+<span class="sd">        ``n_iter`` is the number of ARIMA models to be fit.</span>
+
+<span class="sd">    return_valid_fits : bool, optional (default=False)</span>
+<span class="sd">        If True, will return all valid ARIMA fits in a list. If False (by</span>
+<span class="sd">        default), will only return the best fit.</span>
+
+<span class="sd">    out_of_sample_size : int, optional (default=0)</span>
+<span class="sd">        The ``ARIMA`` class can fit only a portion of the data if specified,</span>
+<span class="sd">        in order to retain an &quot;out of bag&quot; sample score. This is the</span>
+<span class="sd">        number of examples from the tail of the time series to hold out</span>
+<span class="sd">        and use as validation examples. The model will not be fit on these</span>
+<span class="sd">        samples, but the observations will be added into the model&#39;s ``endog``</span>
+<span class="sd">        and ``exog`` arrays so that future forecast values originate from the</span>
+<span class="sd">        end of the endogenous vector.</span>
+
+<span class="sd">        For instance::</span>
+
+<span class="sd">            y = [0, 1, 2, 3, 4, 5, 6]</span>
+<span class="sd">            out_of_sample_size = 2</span>
+
+<span class="sd">            &gt; Fit on: [0, 1, 2, 3, 4]</span>
+<span class="sd">            &gt; Score on: [5, 6]</span>
+<span class="sd">            &gt; Append [5, 6] to end of self.arima_res_.data.endog values</span>
+
+<span class="sd">    scoring : str, optional (default=&#39;mse&#39;)</span>
+<span class="sd">        If performing validation (i.e., if ``out_of_sample_size`` &gt; 0), the</span>
+<span class="sd">        metric to use for scoring the out-of-sample data. One of {&#39;mse&#39;, &#39;mae&#39;}</span>
+
+<span class="sd">    scoring_args : dict, optional (default=None)</span>
+<span class="sd">        A dictionary of key-word arguments to be passed to the ``scoring``</span>
+<span class="sd">        metric.</span>
+
+<span class="sd">    **fit_args : dict, optional (default=None)</span>
+<span class="sd">        A dictionary of keyword arguments to pass to the :func:`ARIMA.fit`</span>
+<span class="sd">        method.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`pyramid.arima.ARIMA`</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Fitting with `stepwise=False` can prove slower, especially when</span>
+<span class="sd">    `seasonal=True`.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</span>
+<span class="sd">    .. [2] R&#39;s auto-arima source code: http://bit.ly/2gOh5z2</span>
+<span class="sd">    .. [3] R&#39;s auto-arima documentation: http://bit.ly/2wbBvUN</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># validate start/max points</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">_</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="p">(</span><span class="n">max_p</span><span class="p">,</span> <span class="n">max_q</span><span class="p">,</span> <span class="n">max_P</span><span class="p">,</span> <span class="n">max_Q</span><span class="p">,</span> <span class="n">start_p</span><span class="p">,</span>
+                           <span class="n">start_q</span><span class="p">,</span> <span class="n">start_P</span><span class="p">,</span> <span class="n">start_Q</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;starting and max p, q, P &amp; Q values must &#39;</span>
+                         <span class="s1">&#39;be positive integers (&gt;= 0)&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">max_p</span> <span class="o">&lt;</span> <span class="n">start_p</span> <span class="ow">or</span> <span class="n">max_q</span> <span class="o">&lt;</span> <span class="n">start_q</span> \
+            <span class="ow">or</span> <span class="n">max_P</span> <span class="o">&lt;</span> <span class="n">start_P</span> <span class="ow">or</span> <span class="n">max_Q</span> <span class="o">&lt;</span> <span class="n">start_Q</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max p, q, P &amp; Q must be &gt;= than &#39;</span>
+                         <span class="s1">&#39;their starting values&#39;</span><span class="p">)</span>
+
+    <span class="c1"># validate max_order</span>
+    <span class="k">if</span> <span class="n">max_order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">max_order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="k">elif</span> <span class="n">max_order</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_order must be None or a positive integer (&gt;= 0)&#39;</span><span class="p">)</span>
+
+    <span class="c1"># alternatively, if the start_p and start_q supercede</span>
+    <span class="c1"># the max order, that&#39;s a failable offense...</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">seasonal</span> <span class="ow">and</span> <span class="n">start_p</span> <span class="o">+</span> <span class="n">start_q</span> <span class="o">&gt;</span> <span class="n">max_order</span><span class="p">)</span> <span class="ow">or</span> \
+            <span class="p">(</span><span class="n">seasonal</span> <span class="ow">and</span> <span class="n">start_P</span> <span class="o">+</span> <span class="n">start_p</span> <span class="o">+</span> <span class="n">start_Q</span> <span class="o">+</span> <span class="n">start_q</span> <span class="o">&gt;</span> <span class="n">max_order</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;If max_order is prescribed, it must &#39;</span>
+                         <span class="s1">&#39;exceed sum of starting orders&#39;</span><span class="p">)</span>
+
+    <span class="c1"># validate d &amp; D</span>
+    <span class="k">for</span> <span class="n">_d</span><span class="p">,</span> <span class="n">_max_d</span> <span class="ow">in</span> <span class="p">((</span><span class="n">d</span><span class="p">,</span> <span class="n">max_d</span><span class="p">),</span> <span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">max_D</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">_max_d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_d &amp; max_D must be positive integers (&gt;= 0)&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;d &amp; D must be None or a positive &#39;</span>
+                                 <span class="s1">&#39;integer (&gt;= 0)&#39;</span><span class="p">)</span>
+            <span class="c1"># v0.9.0+ - ignore this if it&#39;s explicitly set...</span>
+            <span class="c1"># if _d &gt; _max_d:</span>
+            <span class="c1">#     raise ValueError(&#39;if explicitly defined, d &amp; D must be &lt;= &#39;</span>
+            <span class="c1">#                      &#39;max_d &amp; &lt;= max_D, respectively&#39;)</span>
+
+    <span class="c1"># is stepwise AND parallel enabled?</span>
+    <span class="k">if</span> <span class="n">stepwise</span> <span class="ow">and</span> <span class="n">n_jobs</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">n_jobs</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;stepwise model cannot be fit in parallel (n_jobs=</span><span class="si">%i</span><span class="s1">). &#39;</span>
+                      <span class="s1">&#39;Falling back to stepwise parameter search.&#39;</span> <span class="o">%</span> <span class="n">n_jobs</span><span class="p">)</span>
+
+    <span class="c1"># check on m</span>
+    <span class="k">if</span> <span class="n">m</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;m must be a positive integer (&gt; 0)&#39;</span><span class="p">)</span>
+
+    <span class="c1"># check on n_iter</span>
+    <span class="k">if</span> <span class="n">random</span> <span class="ow">and</span> <span class="n">n_fits</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;n_iter must be a positive integer &#39;</span>
+                         <span class="s1">&#39;for a random search&#39;</span><span class="p">)</span>
+
+    <span class="c1"># validate error action</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="s1">&#39;raise&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">error_action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;error_action must be one of </span><span class="si">%r</span><span class="s1">, but got </span><span class="si">%r</span><span class="s1">&#39;</span>
+                         <span class="o">%</span> <span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">error_action</span><span class="p">))</span>
+
+    <span class="c1"># copy array</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">column_or_1d</span><span class="p">(</span><span class="n">check_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                 <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>  <span class="c1"># type: np.ndarray</span>
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># check for constant data</span>
+    <span class="k">if</span> <span class="n">is_constant</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Input time-series is completely constant; &#39;</span>
+                      <span class="s1">&#39;returning a (0, 0, 0) ARMA.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_return_wrapper</span><span class="p">(</span><span class="n">_post_ppc_arima</span><span class="p">(</span>
+            <span class="n">_fit_arima</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">xreg</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                       <span class="n">transparams</span><span class="o">=</span><span class="n">transparams</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span>
+                       <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span> <span class="n">fit_params</span><span class="o">=</span><span class="n">fit_args</span><span class="p">,</span>
+                       <span class="n">suppress_warnings</span><span class="o">=</span><span class="n">suppress_warnings</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="n">trace</span><span class="p">,</span>
+                       <span class="n">error_action</span><span class="o">=</span><span class="n">error_action</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
+                       <span class="n">out_of_sample_size</span><span class="o">=</span><span class="n">out_of_sample_size</span><span class="p">,</span>
+                       <span class="n">scoring_args</span><span class="o">=</span><span class="n">scoring_args</span><span class="p">)),</span>
+            <span class="n">return_valid_fits</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+
+    <span class="c1"># test ic, and use AIC if n &lt;= 3</span>
+    <span class="k">if</span> <span class="n">information_criterion</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_CRITERIA</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;auto_arima not defined for information_criteria=</span><span class="si">%s</span><span class="s1">. &#39;</span>
+                         <span class="s1">&#39;Valid information criteria include: </span><span class="si">%r</span><span class="s1">&#39;</span>
+                         <span class="o">%</span> <span class="p">(</span><span class="n">information_criterion</span><span class="p">,</span> <span class="n">VALID_CRITERIA</span><span class="p">))</span>
+
+    <span class="c1"># the R code handles this, but I don&#39;t think statsmodels</span>
+    <span class="c1"># will even fit a model this small...</span>
+    <span class="c1"># if n_samples &lt;= 3:</span>
+    <span class="c1">#     if information_criterion != &#39;aic&#39;:</span>
+    <span class="c1">#         warnings.warn(&#39;n_samples (%i) &lt;= 3 &#39;</span>
+    <span class="c1">#                       &#39;necessitates using AIC&#39; % n_samples)</span>
+    <span class="c1">#     information_criterion = &#39;aic&#39;</span>
+
+    <span class="c1"># adjust max p, q -- R code:</span>
+    <span class="c1"># max.p &lt;- min(max.p, floor(serieslength/3))</span>
+    <span class="c1"># max.q &lt;- min(max.q, floor(serieslength/3))</span>
+    <span class="n">max_p</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">max_p</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">n_samples</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)))</span>
+    <span class="n">max_q</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">max_q</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">n_samples</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)))</span>
+
+    <span class="c1"># this is not in the R code and poses a risk that R did not consider...</span>
+    <span class="c1"># if max_p|q has now dropped below start_p|q, correct it.</span>
+    <span class="n">start_p</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span><span class="p">)</span>
+    <span class="n">start_q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span><span class="p">)</span>
+
+    <span class="c1"># if it&#39;s not seasonal, we can avoid multiple &#39;if not is None&#39; comparisons</span>
+    <span class="c1"># later by just using this shortcut (hack):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">seasonal</span><span class="p">:</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">m</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="c1"># choose the order of differencing</span>
+    <span class="n">xx</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">lm</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">xx</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">lm</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">exogenous</span><span class="p">)</span>
+
+    <span class="c1"># is the TS stationary?</span>
+    <span class="k">if</span> <span class="n">stationary</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">D</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># now for seasonality</span>
+    <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">max_P</span> <span class="o">=</span> <span class="n">max_Q</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># m must be &gt; 1 for nsdiffs</span>
+    <span class="k">elif</span> <span class="n">D</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># we don&#39;t have a D yet and we need one (seasonal)</span>
+        <span class="n">seasonal_test_args</span> <span class="o">=</span> <span class="n">seasonal_test_args</span> <span class="k">if</span> <span class="n">seasonal_test_args</span> <span class="ow">is</span> \
+                                                   <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">nsdiffs</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="n">seasonal_test</span><span class="p">,</span> <span class="n">max_D</span><span class="o">=</span><span class="n">max_D</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">seasonal_test_args</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">D</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">diffxreg</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+            <span class="c1"># check for constance on any column</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">is_constant</span><span class="p">,</span> <span class="n">arr</span><span class="o">=</span><span class="n">diffxreg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">D</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="c1"># D might still be None if not seasonal. Py 3 will throw and error for that</span>
+    <span class="c1"># unless we explicitly check for ``seasonal``</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">xx</span>
+
+    <span class="c1"># If D was too big, we might have gotten rid of x altogether!</span>
+    <span class="k">if</span> <span class="n">dx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The seasonal differencing order, D=</span><span class="si">%i</span><span class="s2">, was too &quot;</span>
+                         <span class="s2">&quot;large for your time series, and after differencing, &quot;</span>
+                         <span class="s2">&quot;there are no samples remaining in your data. &quot;</span>
+                         <span class="s2">&quot;Try a smaller value for D, or if you didn&#39;t set D &quot;</span>
+                         <span class="s2">&quot;to begin with, try setting it explicitly. This can &quot;</span>
+                         <span class="s2">&quot;also occur in seasonal settings when m is too large.&quot;</span>
+                         <span class="o">%</span> <span class="n">D</span><span class="p">)</span>
+
+    <span class="c1"># difference the exogenous matrix</span>
+    <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">D</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">diffxreg</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">diffxreg</span> <span class="o">=</span> <span class="n">exogenous</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># here&#39;s the thing... we&#39;re only going to use diffxreg if exogenous</span>
+        <span class="c1"># was not None in the first place. However, PyCharm doesn&#39;t know that</span>
+        <span class="c1"># and it thinks we might use it before assigning it. Therefore, assign</span>
+        <span class="c1"># it to None as a default value and it won&#39;t raise the warning anymore.</span>
+        <span class="n">diffxreg</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># determine/set the order of differencing by estimating the number of</span>
+    <span class="c1"># orders it would take in order to make the TS stationary.</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">offset_test_args</span> <span class="o">=</span> <span class="n">offset_test_args</span> <span class="k">if</span> <span class="n">offset_test_args</span> <span class="ow">is</span> \
+                                               <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">ndiffs</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">max_d</span><span class="o">=</span><span class="n">max_d</span><span class="p">,</span> <span class="o">**</span><span class="n">offset_test_args</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">diffxreg</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">diffxreg</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># if any columns are constant, subtract one order of differencing</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">is_constant</span><span class="p">,</span> <span class="n">arr</span><span class="o">=</span><span class="n">diffxreg</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">d</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="c1"># check differences (do we want to warn?...)</span>
+    <span class="k">if</span> <span class="n">error_action</span> <span class="o">==</span> <span class="s1">&#39;warn&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">suppress_warnings</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">D</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Having more than one seasonal differences is &quot;</span>
+                          <span class="s2">&quot;not recommended. Please consider using only one &quot;</span>
+                          <span class="s2">&quot;seasonal difference.&quot;</span><span class="p">)</span>
+        <span class="c1"># if D is -1, this will be off, so we include the OR</span>
+        <span class="k">elif</span> <span class="n">D</span> <span class="o">+</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Having 3 or more differencing operations is not &quot;</span>
+                          <span class="s2">&quot;recommended. Please consider reducing the total &quot;</span>
+                          <span class="s2">&quot;number of differences.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># check for constance</span>
+    <span class="k">if</span> <span class="n">is_constant</span><span class="p">(</span><span class="n">dx</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">D</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;data follow a simple polynomial and are not &#39;</span>
+                             <span class="s1">&#39;suitable for ARIMA modeling&#39;</span><span class="p">)</span>
+
+        <span class="c1"># perfect regression</span>
+        <span class="n">ssn</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">seasonal</span> <span class="k">else</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_return_wrapper</span><span class="p">(</span>
+            <span class="n">_post_ppc_arima</span><span class="p">(</span><span class="n">_fit_arima</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">xreg</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                                       <span class="n">seasonal_order</span><span class="o">=</span><span class="n">ssn</span><span class="p">,</span>
+                                       <span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
+                                       <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">transparams</span><span class="o">=</span><span class="n">transparams</span><span class="p">,</span>
+                                       <span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span>
+                                       <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span>
+                                       <span class="n">fit_params</span><span class="o">=</span><span class="n">fit_args</span><span class="p">,</span>
+                                       <span class="n">suppress_warnings</span><span class="o">=</span><span class="n">suppress_warnings</span><span class="p">,</span>
+                                       <span class="n">trace</span><span class="o">=</span><span class="n">trace</span><span class="p">,</span>
+                                       <span class="n">error_action</span><span class="o">=</span><span class="n">error_action</span><span class="p">,</span>
+                                       <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
+                                       <span class="n">out_of_sample_size</span><span class="o">=</span><span class="n">out_of_sample_size</span><span class="p">,</span>
+                                       <span class="n">scoring_args</span><span class="o">=</span><span class="n">scoring_args</span><span class="p">)),</span>
+            <span class="n">return_valid_fits</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+
+    <span class="c1"># seasonality issues</span>
+    <span class="k">if</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">max_P</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">max_p</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_p</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">max_Q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">max_q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_q</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># generate the set of (p, q, P, Q) FIRST, since it is contingent</span>
+    <span class="c1"># on whether or not the user is interested in a seasonal ARIMA result.</span>
+    <span class="c1"># This will reduce the search space for non-seasonal ARIMA models.</span>
+    <span class="c1"># loop p, q. Make sure to loop at +1 interval,</span>
+    <span class="c1"># since max_{p|q} is inclusive.</span>
+    <span class="k">if</span> <span class="n">seasonal</span><span class="p">:</span>
+        <span class="n">gen</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_P</span><span class="p">,</span> <span class="n">max_P</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">Q</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_Q</span><span class="p">,</span> <span class="n">max_Q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">+</span> <span class="n">P</span> <span class="o">+</span> <span class="n">Q</span> <span class="o">&lt;=</span> <span class="n">max_order</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># otherwise it&#39;s not seasonal, and we don&#39;t need the seasonal pieces</span>
+        <span class="n">gen</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">&lt;=</span> <span class="n">max_order</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stepwise</span><span class="p">:</span>
+        <span class="c1"># if we are fitting a random search rather than an exhaustive one, we</span>
+        <span class="c1"># will scramble up the generator (as a list) and only fit n_iter ARIMAs</span>
+        <span class="k">if</span> <span class="n">random</span><span class="p">:</span>
+            <span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+            <span class="c1"># make a list to scramble...</span>
+            <span class="n">gen</span> <span class="o">=</span> <span class="n">random_state</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gen</span><span class="p">))[:</span><span class="n">n_fits</span><span class="p">]</span>
+
+        <span class="c1"># get results in parallel</span>
+        <span class="n">all_res</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)(</span>
+            <span class="n">delayed</span><span class="p">(</span><span class="n">_fit_arima</span><span class="p">)(</span><span class="n">y</span><span class="p">,</span> <span class="n">xreg</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
+                                <span class="n">seasonal_order</span><span class="o">=</span><span class="n">seasonal_order</span><span class="p">,</span>
+                                <span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
+                                <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">transparams</span><span class="o">=</span><span class="n">transparams</span><span class="p">,</span>
+                                <span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span>
+                                <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span>
+                                <span class="n">fit_params</span><span class="o">=</span><span class="n">fit_args</span><span class="p">,</span>
+                                <span class="n">suppress_warnings</span><span class="o">=</span><span class="n">suppress_warnings</span><span class="p">,</span>
+                                <span class="n">trace</span><span class="o">=</span><span class="n">trace</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="n">error_action</span><span class="p">,</span>
+                                <span class="n">out_of_sample_size</span><span class="o">=</span><span class="n">out_of_sample_size</span><span class="p">,</span>
+                                <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">scoring_args</span><span class="o">=</span><span class="n">scoring_args</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span> <span class="ow">in</span> <span class="n">gen</span><span class="p">)</span>
+
+    <span class="c1"># otherwise, we&#39;re fitting the stepwise algorithm...</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">n_samples</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">start_p</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">start_q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">start_P</span> <span class="o">=</span> <span class="n">start_Q</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># adjust to p, q, P, Q vals</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">start_p</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">start_q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span><span class="p">)</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">start_P</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_P</span><span class="p">,</span> <span class="n">max_P</span><span class="p">)</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">start_Q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_Q</span><span class="p">,</span> <span class="n">max_Q</span><span class="p">)</span>
+
+        <span class="c1"># init the stepwise model wrapper</span>
+        <span class="n">stepwise_wrapper</span> <span class="o">=</span> <span class="n">_StepwiseFitWrapper</span><span class="p">(</span>
+            <span class="n">y</span><span class="p">,</span> <span class="n">xreg</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">transparams</span><span class="o">=</span><span class="n">transparams</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span>
+            <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span> <span class="n">fit_params</span><span class="o">=</span><span class="n">fit_args</span><span class="p">,</span>
+            <span class="n">suppress_warnings</span><span class="o">=</span><span class="n">suppress_warnings</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="n">trace</span><span class="p">,</span>
+            <span class="n">error_action</span><span class="o">=</span><span class="n">error_action</span><span class="p">,</span> <span class="n">out_of_sample_size</span><span class="o">=</span><span class="n">out_of_sample_size</span><span class="p">,</span>
+            <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">scoring_args</span><span class="o">=</span><span class="n">scoring_args</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">P</span><span class="o">=</span><span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="n">start_p</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="n">start_q</span><span class="p">,</span>
+            <span class="n">start_P</span><span class="o">=</span><span class="n">start_P</span><span class="p">,</span> <span class="n">start_Q</span><span class="o">=</span><span class="n">start_Q</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="n">max_p</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="n">max_q</span><span class="p">,</span>
+            <span class="n">max_P</span><span class="o">=</span><span class="n">max_P</span><span class="p">,</span> <span class="n">max_Q</span><span class="o">=</span><span class="n">max_Q</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="n">seasonal</span><span class="p">,</span>
+            <span class="n">information_criterion</span><span class="o">=</span><span class="n">information_criterion</span><span class="p">,</span>
+            <span class="n">max_order</span><span class="o">=</span><span class="n">max_order</span><span class="p">)</span>
+
+        <span class="c1"># fit a baseline p, d, q model and then a null model</span>
+        <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># p, d, q, P, D, Q</span>
+        <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span>
+            <span class="kc">True</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># null model</span>
+
+        <span class="c1"># fit a basic AR model</span>
+        <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span>
+            <span class="n">max_p</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">max_P</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">max_p</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">q</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">max_P</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Q</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># fit a basic MA model now</span>
+        <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span>
+            <span class="n">max_q</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">max_Q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">max_q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">P</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">max_Q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="c1"># might not be 4 if p, q etc. are already 0</span>
+        <span class="c1"># assert stepwise_wrapper.k == 4  # sanity check...</span>
+
+        <span class="c1"># do the step-through...</span>
+        <span class="n">all_res</span> <span class="o">=</span> <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">step_through</span><span class="p">()</span>
+
+    <span class="c1"># filter the non-successful ones</span>
+    <span class="n">filtered</span> <span class="o">=</span> <span class="n">_post_ppc_arima</span><span class="p">(</span><span class="n">all_res</span><span class="p">)</span>
+
+    <span class="c1"># sort by the criteria - lower is better for both AIC and BIC</span>
+    <span class="c1"># (https://stats.stackexchange.com/questions/81427/aic-guidelines-in-model-selection)</span>
+    <span class="n">sorted_res</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span>
+                        <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">mod</span><span class="p">:</span>
+                             <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">information_criterion</span><span class="p">)()))</span>
+
+    <span class="c1"># remove all the cached .pmdpkl files... someday write this as an exit hook</span>
+    <span class="c1"># in case of a KeyboardInterrupt or anything</span>
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">sorted_res</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">_clear_cached_state</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">_return_wrapper</span><span class="p">(</span><span class="n">sorted_res</span><span class="p">,</span> <span class="n">return_valid_fits</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span></div>
+
+
+<span class="k">class</span> <span class="nc">_StepwiseFitWrapper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The stepwise algorithm fluctuates the more sensitive pieces of the ARIMA</span>
+<span class="sd">    (the seasonal components) first, adjusting towards the direction of the</span>
+<span class="sd">    smaller {A|B|HQ}IC(c), and continues to step down as long as the error</span>
+<span class="sd">    shrinks. As long as the error term decreases and the best parameters have</span>
+<span class="sd">    not shifted to a point where they can no longer change, ``k`` will</span>
+<span class="sd">    increase, and the models will continue to be fit until the ``max_k`` is</span>
+<span class="sd">    reached.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] R&#39;s auto-arima stepwise source code: http://bit.ly/2vOma0W</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xreg</span><span class="p">,</span> <span class="n">start_params</span><span class="p">,</span> <span class="n">trend</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">transparams</span><span class="p">,</span>
+                 <span class="n">solver</span><span class="p">,</span> <span class="n">maxiter</span><span class="p">,</span> <span class="n">disp</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">fit_params</span><span class="p">,</span>
+                 <span class="n">suppress_warnings</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">error_action</span><span class="p">,</span> <span class="n">out_of_sample_size</span><span class="p">,</span>
+                 <span class="n">scoring</span><span class="p">,</span> <span class="n">scoring_args</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">start_p</span><span class="p">,</span> <span class="n">start_q</span><span class="p">,</span>
+                 <span class="n">start_P</span><span class="p">,</span> <span class="n">start_Q</span><span class="p">,</span> <span class="n">max_p</span><span class="p">,</span> <span class="n">max_q</span><span class="p">,</span> <span class="n">max_P</span><span class="p">,</span> <span class="n">max_Q</span><span class="p">,</span> <span class="n">seasonal</span><span class="p">,</span>
+                 <span class="n">information_criterion</span><span class="p">,</span> <span class="n">max_order</span><span class="p">):</span>
+        <span class="c1"># todo: I really hate how congested this block is, and just for the</span>
+        <span class="c1">#       sake of a stateful __init__... Could we just pass **kwargs</span>
+        <span class="c1">#       (MUCH less expressive...) in here? It would be much more</span>
+        <span class="c1">#       difficult to debug later...</span>
+
+        <span class="c1"># stuff for the fit call</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xreg</span> <span class="o">=</span> <span class="n">xreg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_params</span> <span class="o">=</span> <span class="n">start_params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trend</span> <span class="o">=</span> <span class="n">trend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transparams</span> <span class="o">=</span> <span class="n">transparams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">solver</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxiter</span> <span class="o">=</span> <span class="n">maxiter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disp</span> <span class="o">=</span> <span class="n">disp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_params</span> <span class="o">=</span> <span class="n">fit_params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suppress_warnings</span> <span class="o">=</span> <span class="n">suppress_warnings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="n">trace</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_action</span> <span class="o">=</span> <span class="n">error_action</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_of_sample_size</span> <span class="o">=</span> <span class="n">out_of_sample_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scoring</span> <span class="o">=</span> <span class="n">scoring</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span> <span class="o">=</span> <span class="n">scoring_args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">information_criterion</span> <span class="o">=</span> <span class="n">information_criterion</span>
+
+        <span class="c1"># order stuff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">P</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">D</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_p</span> <span class="o">=</span> <span class="n">start_p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_q</span> <span class="o">=</span> <span class="n">start_q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_P</span> <span class="o">=</span> <span class="n">start_P</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_Q</span> <span class="o">=</span> <span class="n">start_Q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_p</span> <span class="o">=</span> <span class="n">max_p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_q</span> <span class="o">=</span> <span class="n">max_q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_P</span> <span class="o">=</span> <span class="n">max_P</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_Q</span> <span class="o">=</span> <span class="n">max_Q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seasonal</span> <span class="o">=</span> <span class="n">seasonal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_order</span> <span class="o">=</span> <span class="n">max_order</span>
+
+        <span class="c1"># other internal start vars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bestfit</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_k</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_k</span> <span class="o">=</span> <span class="mi">100</span>
+
+        <span class="c1"># results list to store intermittent hashes of orders to determine if</span>
+        <span class="c1"># we&#39;ve seen this order before...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># type: dict[tuple, ARIMA]</span>
+
+        <span class="c1"># define the info criterion getter ONCE to avoid multiple lambda</span>
+        <span class="c1"># creation calls</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_ic</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">mod</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">information_criterion</span><span class="p">)())</span>
+
+    <span class="k">def</span> <span class="nf">is_new_better</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_model</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bestfit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">new_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">current_ic</span><span class="p">,</span> <span class="n">new_ic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bestfit</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ic</span><span class="p">(</span><span class="n">new_model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_ic</span> <span class="o">&lt;</span> <span class="n">current_ic</span>
+
+    <span class="c1"># this function takes a boolean expression, fits &amp; caches a model,</span>
+    <span class="c1"># increments k, and then sets the new value for p, d, P, Q, etc.</span>
+    <span class="k">def</span> <span class="nf">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># extract p, q, P, Q</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">p</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">q</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="k">if</span> <span class="n">P</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">P</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="k">if</span> <span class="n">Q</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Q</span>
+
+        <span class="n">order</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+        <span class="n">ssnl</span> <span class="o">=</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1"># if the sum of the orders &gt; max_order we do not build this model...</span>
+        <span class="n">order_sum</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">+</span> <span class="p">(</span><span class="n">P</span> <span class="o">+</span> <span class="n">Q</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># if all conditions hold true, good to build this model.</span>
+        <span class="k">if</span> <span class="n">expr</span> <span class="ow">and</span> <span class="n">order_sum</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_order</span> <span class="ow">and</span> <span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">ssnl</span><span class="p">)</span> <span class="ow">not</span> \
+                <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_dict</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># cache the fit</span>
+            <span class="n">fit</span> <span class="o">=</span> <span class="n">_fit_arima</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">xreg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xreg</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
+                             <span class="n">seasonal_order</span><span class="o">=</span><span class="n">ssnl</span><span class="p">,</span>
+                             <span class="n">start_params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_params</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trend</span><span class="p">,</span>
+                             <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">transparams</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transparams</span><span class="p">,</span>
+                             <span class="n">solver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">maxiter</span><span class="p">,</span>
+                             <span class="n">disp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">disp</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">,</span>
+                             <span class="n">fit_params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_params</span><span class="p">,</span>
+                             <span class="n">suppress_warnings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">suppress_warnings</span><span class="p">,</span>
+                             <span class="n">trace</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">error_action</span><span class="p">,</span>
+                             <span class="n">out_of_sample_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_of_sample_size</span><span class="p">,</span>
+                             <span class="n">scoring</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scoring</span><span class="p">,</span>
+                             <span class="n">scoring_args</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span><span class="p">)</span>
+
+            <span class="c1"># use the orders as a key to be hashed for</span>
+            <span class="c1"># the dictionary (pointing to fit)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">results_dict</span><span class="p">[(</span><span class="n">order</span><span class="p">,</span> <span class="n">ssnl</span><span class="p">)]</span> <span class="o">=</span> <span class="n">fit</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new_better</span><span class="p">(</span><span class="n">fit</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bestfit</span> <span class="o">=</span> <span class="n">fit</span>
+
+                <span class="c1"># reset p, d, P, Q, etc.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span>
+
+    <span class="k">def</span> <span class="nf">step_through</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_k</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_k</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+
+            <span class="c1"># Each of these fit the models for an expression, a new p,</span>
+            <span class="c1"># q, P or Q, and then reset best models</span>
+            <span class="c1"># This takes the place of a lot of copy/pasted code....</span>
+
+            <span class="c1"># P fluctuations:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_P</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># Q fluctuations:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_Q</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># P &amp; Q fluctuations:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+                                           <span class="n">P</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_Q</span> <span class="ow">and</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_P</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                           <span class="n">Q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># p fluctuations:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_p</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># q fluctuations:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_q</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># p &amp; q fluctuations:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+                                           <span class="n">q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_q</span> <span class="ow">and</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_p</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                           <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># return the values</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">_fit_arima</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xreg</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="p">,</span> <span class="n">start_params</span><span class="p">,</span> <span class="n">trend</span><span class="p">,</span>
+               <span class="n">method</span><span class="p">,</span> <span class="n">transparams</span><span class="p">,</span> <span class="n">solver</span><span class="p">,</span> <span class="n">maxiter</span><span class="p">,</span> <span class="n">disp</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span>
+               <span class="n">fit_params</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">error_action</span><span class="p">,</span>
+               <span class="n">out_of_sample_size</span><span class="p">,</span> <span class="n">scoring</span><span class="p">,</span> <span class="n">scoring_args</span><span class="p">):</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">fit</span> <span class="o">=</span> <span class="n">ARIMA</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="n">seasonal_order</span><span class="p">,</span>
+                    <span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                    <span class="n">transparams</span><span class="o">=</span><span class="n">transparams</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span>
+                    <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span>
+                    <span class="n">suppress_warnings</span><span class="o">=</span><span class="n">suppress_warnings</span><span class="p">,</span>
+                    <span class="n">out_of_sample_size</span><span class="o">=</span><span class="n">out_of_sample_size</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
+                    <span class="n">scoring_args</span><span class="o">=</span><span class="n">scoring_args</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">xreg</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_params</span><span class="p">)</span>
+
+    <span class="c1"># for non-stationarity errors or singular matrices, return None</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">LinAlgError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">v</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">error_action</span> <span class="o">==</span> <span class="s1">&#39;warn&#39;</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">_fmt_warning_str</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="p">),</span>
+                          <span class="n">ModelFitWarning</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">error_action</span> <span class="o">==</span> <span class="s1">&#39;raise&#39;</span><span class="p">:</span>
+            <span class="c1"># todo: can we do something more informative in case</span>
+            <span class="c1"># the error is not on the pyramid side?</span>
+            <span class="k">raise</span> <span class="n">v</span>
+        <span class="c1"># if it&#39;s &#39;ignore&#39; or &#39;warn&#39;, we just return None</span>
+        <span class="n">fit</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># do trace</span>
+    <span class="k">if</span> <span class="n">trace</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fit ARIMA: </span><span class="si">%s</span><span class="s1">; AIC=</span><span class="si">%.3f</span><span class="s1">, BIC=</span><span class="si">%.3f</span><span class="s1">, Fit time=</span><span class="si">%.3f</span><span class="s1"> seconds&#39;</span>
+              <span class="o">%</span> <span class="p">(</span><span class="n">_fmt_order_info</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="p">),</span>
+                 <span class="n">fit</span><span class="o">.</span><span class="n">aic</span><span class="p">()</span> <span class="k">if</span> <span class="n">fit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                 <span class="n">fit</span><span class="o">.</span><span class="n">bic</span><span class="p">()</span> <span class="k">if</span> <span class="n">fit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                 <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span> <span class="k">if</span> <span class="n">fit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">fit</span>
+
+
+<span class="k">def</span> <span class="nf">_fmt_order_info</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;order=(</span><span class="si">%i</span><span class="s1">, </span><span class="si">%i</span><span class="s1">, </span><span class="si">%i</span><span class="s1">)</span><span class="si">%s</span><span class="s1">&#39;</span> \
+           <span class="o">%</span> <span class="p">(</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+              <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">seasonal_order</span> <span class="ow">is</span> <span class="kc">None</span>
+              <span class="k">else</span> <span class="s1">&#39; seasonal_order=(</span><span class="si">%i</span><span class="s1">, </span><span class="si">%i</span><span class="s1">, </span><span class="si">%i</span><span class="s1">, </span><span class="si">%i</span><span class="s1">)&#39;</span>
+              <span class="o">%</span> <span class="p">(</span><span class="n">seasonal_order</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">seasonal_order</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                 <span class="n">seasonal_order</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">seasonal_order</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+
+
+<span class="k">def</span> <span class="nf">_fmt_warning_str</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This is just so we can test that the string will format</span>
+<span class="sd">    even if we don&#39;t want the warnings in the tests</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;Unable to fit ARIMA for </span><span class="si">%s</span><span class="s1">; data is likely non-stationary. &#39;</span>
+            <span class="s1">&#39;(if you do not want to see these warnings, run &#39;</span>
+            <span class="s1">&#39;with error_action=&quot;ignore&quot;)&#39;</span>
+            <span class="o">%</span> <span class="n">_fmt_order_info</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_post_ppc_arima</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;If there are no suitable models, raise a ValueError.</span>
+<span class="sd">    Otherwise, return ``a``. In the case that ``a`` is an iterable</span>
+<span class="sd">    (i.e., it made it to the end of the function), this method will</span>
+<span class="sd">    filter out the None values and assess whether the list is empty.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : ARIMA or iterable</span>
+<span class="sd">        The list or ARIMAs, or an ARIMA</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># if it&#39;s a result of making it to the end, it will</span>
+    <span class="c1"># be a list of ARIMA models. Filter out the Nones</span>
+    <span class="c1"># (the failed models)...</span>
+    <span class="k">if</span> <span class="n">is_iterable</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">a</span> <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+
+    <span class="c1"># if the list is empty, or if it was an ARIMA and it&#39;s None</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">a</span><span class="p">:</span>  <span class="c1"># check for truthiness rather than None explicitly</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not successfully fit ARIMA to input data. &#39;</span>
+                         <span class="s1">&#39;It is likely your data is non-stationary. Please &#39;</span>
+                         <span class="s1">&#39;induce stationarity or try a different &#39;</span>
+                         <span class="s1">&#39;range of model order params. If your data is &#39;</span>
+                         <span class="s1">&#39;seasonal, check the period (m) of the data.&#39;</span><span class="p">)</span>
+    <span class="c1"># good to return</span>
+    <span class="k">return</span> <span class="n">a</span>
+
+
+<span class="k">def</span> <span class="nf">_return_wrapper</span><span class="p">(</span><span class="n">fits</span><span class="p">,</span> <span class="n">return_all</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">trace</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;If the user wants to get all of the models back, this will</span>
+<span class="sd">    return a list of the ARIMA models, otherwise it will just return</span>
+<span class="sd">    the model. If this is called from the end of the function, ``fits``</span>
+<span class="sd">    will already be a list.</span>
+
+<span class="sd">    We *know* that if a function call makes it here, ``fits`` is NOT None</span>
+<span class="sd">    or it would have thrown an exception in :func:`_post_ppc_arima`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fits : iterable or ARIMA</span>
+<span class="sd">        The ARIMA(s)</span>
+
+<span class="sd">    return_all : bool</span>
+<span class="sd">        Whether to return all.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># make sure it&#39;s an iterable</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_iterable</span><span class="p">(</span><span class="n">fits</span><span class="p">):</span>
+        <span class="n">fits</span> <span class="o">=</span> <span class="p">[</span><span class="n">fits</span><span class="p">]</span>
+
+    <span class="c1"># whether to print the final runtime</span>
+    <span class="k">if</span> <span class="n">trace</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total fit time: </span><span class="si">%.3f</span><span class="s1"> seconds&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">))</span>
+
+    <span class="c1"># which to return? if not all, then first index (assume sorted)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">fits</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2018, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

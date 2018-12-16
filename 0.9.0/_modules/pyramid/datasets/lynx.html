@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyramid.datasets.lynx &mdash; pyramid 0.9.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pyramid
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyramid</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyramid.datasets.lynx</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyramid.datasets.lynx</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># This is the lynx dataset found in R.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;load_lynx&#39;</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="load_lynx"><a class="viewcode-back" href="../../../modules/generated/pyramid.datasets.load_lynx.html#pyramid.datasets.load_lynx">[docs]</a><span class="k">def</span> <span class="nf">load_lynx</span><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Annual numbers of lynx trappings for 1821–1934 in Canada.</span>
+
+<span class="sd">    This time-series records the number of skins of predators (lynx) that were</span>
+<span class="sd">    collected over several years by the Hudson&#39;s Bay Company. The dataset was</span>
+<span class="sd">    taken from Brockwell &amp; Davis (1991) and appears to be the series</span>
+<span class="sd">    considered by Campbell &amp; Walker (1977).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    as_series : bool, optional (default=False)</span>
+<span class="sd">        Whether to return a Pandas series. If True, the index will be set to</span>
+<span class="sd">        the observed years. If False, will return a 1d numpy array.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from pyramid.datasets import load_lynx</span>
+<span class="sd">    &gt;&gt;&gt; load_lynx()</span>
+<span class="sd">    array([ 269,  321,  585,  871, 1475, 2821, 3928, 5943, 4950, 2577,  523,</span>
+<span class="sd">             98,  184,  279,  409, 2285, 2685, 3409, 1824,  409,  151,   45,</span>
+<span class="sd">             68,  213,  546, 1033, 2129, 2536,  957,  361,  377,  225,  360,</span>
+<span class="sd">            731, 1638, 2725, 2871, 2119,  684,  299,  236,  245,  552, 1623,</span>
+<span class="sd">           3311, 6721, 4254,  687,  255,  473,  358,  784, 1594, 1676, 2251,</span>
+<span class="sd">           1426,  756,  299,  201,  229,  469,  736, 2042, 2811, 4431, 2511,</span>
+<span class="sd">            389,   73,   39,   49,   59,  188,  377, 1292, 4031, 3495,  587,</span>
+<span class="sd">            105,  153,  387,  758, 1307, 3465, 6991, 6313, 3794, 1836,  345,</span>
+<span class="sd">            382,  808, 1388, 2713, 3800, 3091, 2985, 3790,  674,   81,   80,</span>
+<span class="sd">            108,  229,  399, 1132, 2432, 3574, 2935, 1537,  529,  485,  662,</span>
+<span class="sd">           1000, 1590, 2657, 3396])</span>
+
+<span class="sd">    &gt;&gt;&gt; load_lynx(True).head()</span>
+<span class="sd">    1821     269</span>
+<span class="sd">    1822     321</span>
+<span class="sd">    1823     585</span>
+<span class="sd">    1824     871</span>
+<span class="sd">    1825    1475</span>
+<span class="sd">    dtype: int64</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Brockwell, P. J. and Davis, R. A. (1991)</span>
+<span class="sd">           Time Series and Forecasting Methods. Second edition.</span>
+<span class="sd">           Springer. Series G (page 557).</span>
+
+<span class="sd">    .. [2] https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/lynx.html</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    lynx : array-like, shape=(n_samples,)</span>
+<span class="sd">        The lynx dataset. There are 114 observations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rslt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">269</span><span class="p">,</span>  <span class="mi">321</span><span class="p">,</span>  <span class="mi">585</span><span class="p">,</span>  <span class="mi">871</span><span class="p">,</span>  <span class="mi">1475</span><span class="p">,</span> <span class="mi">2821</span><span class="p">,</span> <span class="mi">3928</span><span class="p">,</span> <span class="mi">5943</span><span class="p">,</span> <span class="mi">4950</span><span class="p">,</span>
+                     <span class="mi">2577</span><span class="p">,</span> <span class="mi">523</span><span class="p">,</span>  <span class="mi">98</span><span class="p">,</span>   <span class="mi">184</span><span class="p">,</span>  <span class="mi">279</span><span class="p">,</span>  <span class="mi">409</span><span class="p">,</span>  <span class="mi">2285</span><span class="p">,</span> <span class="mi">2685</span><span class="p">,</span> <span class="mi">3409</span><span class="p">,</span>
+                     <span class="mi">1824</span><span class="p">,</span> <span class="mi">409</span><span class="p">,</span>  <span class="mi">151</span><span class="p">,</span>  <span class="mi">45</span><span class="p">,</span>   <span class="mi">68</span><span class="p">,</span>   <span class="mi">213</span><span class="p">,</span>  <span class="mi">546</span><span class="p">,</span>  <span class="mi">1033</span><span class="p">,</span> <span class="mi">2129</span><span class="p">,</span>
+                     <span class="mi">2536</span><span class="p">,</span> <span class="mi">957</span><span class="p">,</span>  <span class="mi">361</span><span class="p">,</span>  <span class="mi">377</span><span class="p">,</span>  <span class="mi">225</span><span class="p">,</span>  <span class="mi">360</span><span class="p">,</span>  <span class="mi">731</span><span class="p">,</span>  <span class="mi">1638</span><span class="p">,</span> <span class="mi">2725</span><span class="p">,</span>
+                     <span class="mi">2871</span><span class="p">,</span> <span class="mi">2119</span><span class="p">,</span> <span class="mi">684</span><span class="p">,</span>  <span class="mi">299</span><span class="p">,</span>  <span class="mi">236</span><span class="p">,</span>  <span class="mi">245</span><span class="p">,</span>  <span class="mi">552</span><span class="p">,</span>  <span class="mi">1623</span><span class="p">,</span> <span class="mi">3311</span><span class="p">,</span>
+                     <span class="mi">6721</span><span class="p">,</span> <span class="mi">4254</span><span class="p">,</span> <span class="mi">687</span><span class="p">,</span>  <span class="mi">255</span><span class="p">,</span>  <span class="mi">473</span><span class="p">,</span>  <span class="mi">358</span><span class="p">,</span>  <span class="mi">784</span><span class="p">,</span>  <span class="mi">1594</span><span class="p">,</span> <span class="mi">1676</span><span class="p">,</span>
+                     <span class="mi">2251</span><span class="p">,</span> <span class="mi">1426</span><span class="p">,</span> <span class="mi">756</span><span class="p">,</span>  <span class="mi">299</span><span class="p">,</span>  <span class="mi">201</span><span class="p">,</span>  <span class="mi">229</span><span class="p">,</span>  <span class="mi">469</span><span class="p">,</span>  <span class="mi">736</span><span class="p">,</span>  <span class="mi">2042</span><span class="p">,</span>
+                     <span class="mi">2811</span><span class="p">,</span> <span class="mi">4431</span><span class="p">,</span> <span class="mi">2511</span><span class="p">,</span> <span class="mi">389</span><span class="p">,</span>  <span class="mi">73</span><span class="p">,</span>   <span class="mi">39</span><span class="p">,</span>   <span class="mi">49</span><span class="p">,</span>   <span class="mi">59</span><span class="p">,</span>   <span class="mi">188</span><span class="p">,</span>
+                     <span class="mi">377</span><span class="p">,</span>  <span class="mi">1292</span><span class="p">,</span> <span class="mi">4031</span><span class="p">,</span> <span class="mi">3495</span><span class="p">,</span> <span class="mi">587</span><span class="p">,</span>  <span class="mi">105</span><span class="p">,</span>  <span class="mi">153</span><span class="p">,</span>  <span class="mi">387</span><span class="p">,</span>  <span class="mi">758</span><span class="p">,</span>
+                     <span class="mi">1307</span><span class="p">,</span> <span class="mi">3465</span><span class="p">,</span> <span class="mi">6991</span><span class="p">,</span> <span class="mi">6313</span><span class="p">,</span> <span class="mi">3794</span><span class="p">,</span> <span class="mi">1836</span><span class="p">,</span> <span class="mi">345</span><span class="p">,</span>  <span class="mi">382</span><span class="p">,</span>  <span class="mi">808</span><span class="p">,</span>
+                     <span class="mi">1388</span><span class="p">,</span> <span class="mi">2713</span><span class="p">,</span> <span class="mi">3800</span><span class="p">,</span> <span class="mi">3091</span><span class="p">,</span> <span class="mi">2985</span><span class="p">,</span> <span class="mi">3790</span><span class="p">,</span> <span class="mi">674</span><span class="p">,</span>  <span class="mi">81</span><span class="p">,</span>   <span class="mi">80</span><span class="p">,</span>
+                     <span class="mi">108</span><span class="p">,</span>  <span class="mi">229</span><span class="p">,</span>  <span class="mi">399</span><span class="p">,</span>  <span class="mi">1132</span><span class="p">,</span> <span class="mi">2432</span><span class="p">,</span> <span class="mi">3574</span><span class="p">,</span> <span class="mi">2935</span><span class="p">,</span> <span class="mi">1537</span><span class="p">,</span> <span class="mi">529</span><span class="p">,</span>
+                     <span class="mi">485</span><span class="p">,</span>  <span class="mi">662</span><span class="p">,</span>  <span class="mi">1000</span><span class="p">,</span> <span class="mi">1590</span><span class="p">,</span> <span class="mi">2657</span><span class="p">,</span> <span class="mi">3396</span><span class="p">])</span>
+
+    <span class="c1"># Set the index if necessary</span>
+    <span class="k">if</span> <span class="n">as_series</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rslt</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1821</span><span class="p">,</span> <span class="mi">1935</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">rslt</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2018, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'0.9.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
