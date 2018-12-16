@@ -181,5 +181,5 @@ def approx(x, y, xout, method='linear', rule=1, f=0, yleft=None,
         yright = y[-1] if rule != 1 else np.nan
 
     # call the C subroutine
-    yout = C_Approx(x, y, xout, method, f, yleft, yright)
-    return xout, yout
+    yout = C_Approx(x, y, xout, method, f, yleft, yright)  # MemoryView
+    return xout, np.asarray(yout)
