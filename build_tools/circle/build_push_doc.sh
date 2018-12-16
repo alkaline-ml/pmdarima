@@ -113,6 +113,8 @@ if [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" || ${CIRCLE_
     echo "Copying html directory"
     cp -a html html_copy
 
+    ls -la
+
     # Move the HTML contents into the local dir
     mv html/* ./
     rm -r html/
