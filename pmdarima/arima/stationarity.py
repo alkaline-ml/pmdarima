@@ -223,6 +223,7 @@ class ADFTest(_DifferencingStationarityTest):
     References
     ----------
     .. [1] https://wikipedia.org/wiki/Augmented_Dickey–Fuller_test
+    .. [2] R's tseries ADF source code: https://bit.ly/2EnvM5V
     """
     table = -np.array([(4.38, 4.15, 4.04, 3.99, 3.98, 3.96),
                        (3.95, 3.80, 3.73, 3.69, 3.68, 3.66),
@@ -304,10 +305,10 @@ class ADFTest(_DifferencingStationarityTest):
         res = sm.OLS(yt, X).fit()
         STAT = res.params[0] / res.HC0_se[0]  # XXX: is the denom correct?...
 
-        tableipl = np.zeros(self.tablen)
-        for i in range(self.tablen):
-            _, pval = approx(self.tableT, self.table[:, i], xout=n, rule=2)
-            tableipl[i] = pval
+        # In the past we assigned to the np memory view which is slower
+        tableipl = np.array([
+            approx(self.tableT, self.table[:, i], xout=n, rule=2)[1]  # xt,yt
+            for i in range(self.tablen)])
 
         # make sure to do 1 - x...
         _, interpol = approx(tableipl, self.tablep, xout=STAT, rule=2)
@@ -438,10 +439,9 @@ class PPTest(_DifferencingStationarityTest):
         alpha = coef[2]  # it's the last col...
         STAT = n * (alpha - 1) - (n ** 6) / (24.0 * dx) * (ssqrtl - ssqru)
 
-        tableipl = np.zeros(self.tablen)
-        for i in range(self.tablen):
-            _, pval = approx(self.tableT, self.table[:, i], xout=n, rule=2)
-            tableipl[i] = pval
+        tableipl = np.array([
+            approx(self.tableT, self.table[:, i], xout=n, rule=2)[1]
+            for i in range(self.tablen)])
 
         # make sure to do 1 - x...
         _, interpol = approx(tableipl, self.tablep, xout=STAT, rule=2)

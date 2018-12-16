@@ -7,8 +7,8 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
-v1.1.0
-------
+`v1.1.0 <http://alkaline-ml.com/pmdarima/1.1.0/>`_
+--------------------------------------------------
 
 * Add ``ARIMA.plot_diagnostics`` method
 
@@ -16,7 +16,7 @@ v1.1.0
 
 * New default for ``trend`` is no longer ``'c'``, it is ``None``.
 
-* Added ``to_dict`` method to ``ARIMA`` class to address `Issue 54 <https://github.com/tgsmith61591/pmdarima/issues/54>`_
+* Added ``to_dict`` method to ``ARIMA`` class to address `Issue #54 <https://github.com/tgsmith61591/pmdarima/issues/54>`_
 
 * ARIMA serialization no longer stores statsmodels results wrappers in the cache,
   but bundles them into the pickle file. This solves `Issue #48 <https://github.com/tgsmith61591/pmdarima/issues/48>`_
@@ -25,9 +25,12 @@ v1.1.0
 * The ``'PMDARIMA_CACHE'`` and ``'PMDARIMA_CACHE_WARN_SIZE'`` environment variables are
   now deprecated, since they no longer need to be used.
 
+* Add versioned documentation. All releases' doc (from 0.9.0 onward) is now available
+  at ``alkaline-ml.com/pmdarima/<version>``
 
-v1.0.0
-------
+
+`v1.0.0 <http://alkaline-ml.com/pmdarima/1.0.0/>`_
+--------------------------------------------------
 
 * **Wheels will no longer be built for Python versions < 3.5.** You may still be able to build
   from source, but support for 2.x python versions will diminish in future versions.
@@ -51,8 +54,8 @@ v1.0.0
   - ``'PYRAMID_ARIMA_CACHE_WARN_SIZE'`` will become ``'PMDARIMA_CACHE_WARN_SIZE'``
 
 
-v0.9.0
-------
+`v0.9.0 <http://alkaline-ml.com/pmdarima/0.9.0/>`_
+--------------------------------------------------
 
 * Explicitly catch case in ``auto_arima`` where a value of ``m`` that is too large may over-estimate
   ``D``, causing the time series to be differenced down to an empty array. This is now handled by
