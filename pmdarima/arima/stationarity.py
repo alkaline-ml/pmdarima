@@ -43,6 +43,9 @@ class _BaseStationarityTest(six.with_metaclass(ABCMeta, BaseEstimator)):
     def _embed(x, k):
         # lag the vector and put the lags into columns
         n = x.shape[0]
+        if k > n:
+            raise ValueError("k cannot exceed y dim")
+
         rows = [
             # so, if k=2, it'll be (x[1:n], x[:n-1])
             x[j:n - i] for i, j in enumerate(range(k - 1, -1, -1))
@@ -245,6 +248,38 @@ class ADFTest(_DifferencingStationarityTest):
         if k is not None and k < 0:
             raise ValueError('k must be a positive integer (>= 0)')
 
+    @staticmethod
+    def _ols(x, y, z, k):
+        n = y.shape[0]
+        yt = z[:, 0]  # type: np.ndarray
+        tt = np.arange(k - 1, n)
+
+        # R does [k:n].. but that's 1-based indexing and inclusive on the tail
+        xt1 = x[tt]
+
+        # make tt inclusive again (it was used as a mask before)
+        tt += 1
+
+        # the array that will create the LM:
+        _n = xt1.shape[0]  # row dim for predictors
+        X = np.hstack([np.ones(_n).reshape((_n, 1)),
+                       xt1.reshape((_n, 1)),
+                       tt.reshape((_n, 1))])
+
+        if k > 1:
+            yt1 = z[:, 1:k]  # R had 2:k
+            X = np.hstack([X, yt1])
+
+        # fit the linear regression - this one is a bit strange in that we
+        # are using OLS from statsmodels rather than LR from sklearn. This is
+        # because we need the std errors, and sklearn does not have a way to
+        # store them.
+        return sm.OLS(yt, X).fit()
+
+    @staticmethod
+    def _ols_std_error(res):
+        return res.params[1] / res.HC2_se[1]  # XXX: is the denom correct?...
+
     def is_stationary(self, x):
         """Test whether the time series is stationary.
 
@@ -275,35 +310,15 @@ class ADFTest(_DifferencingStationarityTest):
         if k is None:
             k = np.trunc(np.power(x.shape[0] - 1, 1 / 3.0))
 
+        # See [2] for the R source. This is L153 - L160
         k = int(k) + 1
-        y = diff(x)
+        y = diff(x)  # diff(as.vector(x, mode='double'))
         n = y.shape[0]
-        z = self._embed(y, k)
-        yt = z[0, :]
-        tt = np.arange(k - 1, n)
+        z = self._embed(y, k).T  # Same as R embed(x, k)
 
-        # R does [k:n].. but that's 1-based indexing and inclusive on the tail
-        xt1 = x[tt]
-
-        # make tt inclusive again (it was used as a mask before)
-        tt += 1
-
-        # the array that will create the LM:
-        _n = xt1.shape[0]
-        X = np.hstack([xt1.reshape((_n, 1)),
-                       np.ones(_n).reshape((_n, 1)),
-                       tt.reshape((_n, 1))])
-
-        if k > 1:
-            yt1 = z[1:k, :]  # R had 2:k
-            X = np.hstack([X, yt1.T])
-
-        # fit the linear regression - this one is a bit strange in that we
-        # are using OLS from statsmodels rather than LR from sklearn. This is
-        # because we need the std errors, and sklearn does not have a way to
-        # store them.
-        res = sm.OLS(yt, X).fit()
-        STAT = res.params[0] / res.HC0_se[0]  # XXX: is the denom correct?...
+        # Compute ordinary least squares
+        res = self._ols(x, y, z, k)
+        STAT = self._ols_std_error(res)
 
         # In the past we assigned to the np memory view which is slower
         tableipl = np.array([
@@ -312,10 +327,13 @@ class ADFTest(_DifferencingStationarityTest):
 
         # make sure to do 1 - x...
         _, interpol = approx(tableipl, self.tablep, xout=STAT, rule=2)
-        pval = 1 - interpol[0]
+        # pval = 1 - interpol[0]  # explosive
+        pval = interpol[0]  # stationarity
 
         # in the R code, here is where the P value warning is tested again...
-        return pval, pval < self.alpha
+        # else if (test == "adf")
+        #     suppressWarnings(dodiff < - tseries::adf.test(x)$p.value > alpha)
+        return pval, pval > self.alpha  # > since not 1-pval
 
 
 class PPTest(_DifferencingStationarityTest):
@@ -398,7 +416,7 @@ class PPTest(_DifferencingStationarityTest):
         # embed the vector. This is some funkiness that goes on in the R
         # code... basically, make a matrix where the column (rows if not T)
         # are lagged windows of x
-        z = self._embed(x, 2)
+        z = self._embed(x, 2)  # Same as R t(embed(x, k))
         yt = z[0, :]
         yt1 = z[1, :]  # type: np.ndarray
 
