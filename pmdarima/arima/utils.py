@@ -148,6 +148,10 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
         The estimated differencing term. This is the maximum value of ``d``
         such that ``d <= max_d`` and the time series is judged stationary.
         If the time series is constant, will return 0.
+
+    References
+    ----------
+    .. [1] R's auto_arima ndiffs function: https://bit.ly/2Bu8CHN
     """
     if max_d <= 0:
         raise ValueError('max_d must be a positive integer')

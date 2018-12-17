@@ -175,10 +175,14 @@ class KPSSTest(_DifferencingStationarityTest):
         eta = (s * s).sum() / (n**2)
         s2 = (e * e).sum() / n
 
-        scalar, denom = 10, 14
+        # scalar, denom = 10, 14
+        # if self.lshort:
+        #     scalar, denom = 3, 13
+        # l_ = int(np.trunc(scalar * np.sqrt(n) / denom))
         if self.lshort:
-            scalar, denom = 3, 13
-        l_ = int(np.trunc(scalar * np.sqrt(n) / denom))
+            l_ = int(np.trunc(4 * (n / 100) ** 0.25))
+        else:
+            l_ = int(np.trunc(12 * (n / 100) ** 0.25))
 
         # compute the C subroutine
         s2 = C_tseries_pp_sum(e, n, l_, s2)
@@ -228,14 +232,14 @@ class ADFTest(_DifferencingStationarityTest):
     .. [1] https://wikipedia.org/wiki/Augmented_Dickey–Fuller_test
     .. [2] R's tseries ADF source code: https://bit.ly/2EnvM5V
     """
-    table = -np.array([(4.38, 4.15, 4.04, 3.99, 3.98, 3.96),
-                       (3.95, 3.80, 3.73, 3.69, 3.68, 3.66),
-                       (3.60, 3.50, 3.45, 3.43, 3.42, 3.41),
-                       (3.24, 3.18, 3.15, 3.13, 3.13, 3.12),
-                       (1.14, 1.19, 1.22, 1.23, 1.24, 1.25),
-                       (0.80, 0.87, 0.90, 0.92, 0.93, 0.94),
-                       (0.50, 0.58, 0.62, 0.64, 0.65, 0.66),
-                       (0.15, 0.24, 0.28, 0.31, 0.32, 0.33)]).T
+    table = np.array([
+        (-4.38, -3.95, -3.60, -3.24, -1.14, -0.80, -0.50, -0.15),
+        (-4.15, -3.80, -3.50, -3.18, -1.19, -0.87, -0.58, -0.24),
+        (-4.04, -3.73, -3.45, -3.15, -1.22, -0.90, -0.62, -0.28),
+        (-3.99, -3.69, -3.43, -3.13, -1.23, -0.92, -0.64, -0.31),
+        (-3.98, -3.68, -3.42, -3.13, -1.24, -0.93, -0.65, -0.32),
+        (-3.96, -3.66, -3.41, -3.12, -1.25, -0.94, -0.66, -0.33)
+    ])
 
     tablen = table.shape[1]
     tableT = c(25, 50, 100, 250, 500, 100000)
@@ -274,11 +278,12 @@ class ADFTest(_DifferencingStationarityTest):
         # are using OLS from statsmodels rather than LR from sklearn. This is
         # because we need the std errors, and sklearn does not have a way to
         # store them.
-        return sm.OLS(yt, X).fit()
+        return sm.OLS(yt, X, hasconst=True).fit(method='qr')
 
     @staticmethod
     def _ols_std_error(res):
-        return res.params[1] / res.HC2_se[1]  # XXX: is the denom correct?...
+        stderrs = res.bse  # this was a pain in the ARSE to locate
+        return res.params[1] / stderrs[1]
 
     def is_stationary(self, x):
         """Test whether the time series is stationary.
@@ -327,6 +332,15 @@ class ADFTest(_DifferencingStationarityTest):
 
         # make sure to do 1 - x...
         _, interpol = approx(tableipl, self.tablep, xout=STAT, rule=2)
+
+        # Added in v1.1.0. Not sure whether it's likely we'll hit it, but it's
+        # how R is warning the user...
+        # if np.isnan(approx(tableipl, self.tablep, xout=STAT, rule=1)[1]):
+        #     if interpol == self.tablep.min():
+        #         warnings.warn("p-value is smaller than printed value")
+        #     else:
+        #         warnings.warn("p-value is larger than printed value")
+
         # pval = 1 - interpol[0]  # explosive
         pval = interpol[0]  # stationarity
 
@@ -461,9 +475,9 @@ class PPTest(_DifferencingStationarityTest):
             approx(self.tableT, self.table[:, i], xout=n, rule=2)[1]
             for i in range(self.tablen)])
 
-        # make sure to do 1 - x...
+        # we don't do 1 - pval, so check for GREATER THAN
         _, interpol = approx(tableipl, self.tablep, xout=STAT, rule=2)
-        pval = 1 - interpol[0]
+        pval = interpol[0]
 
         # in the R code, here is where the P value warning is tested again...
-        return pval, pval < self.alpha
+        return pval, pval > self.alpha

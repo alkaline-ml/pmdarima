@@ -124,21 +124,34 @@ def test_adf_p_value():
     assert not do_diff
 
 
-def test_kpss():
-    test = KPSSTest(alpha=0.05, null='level', lshort=True)
-    pval, is_sig = test.is_stationary(austres)
-    assert is_sig  # show it is significant
+@pytest.mark.parametrize('null', ('level', 'trend'))
+def test_kpss(null):
+    test = KPSSTest(alpha=0.05, null=null, lshort=True)
+    pval, do_diff = test.is_stationary(austres)
+    assert do_diff  # show it is significant
     assert_almost_equal(pval, 0.01)
 
+    # Test on the data provided in issue #67
+    x = np.array([1, -1, 0, 2, -1, -2, 3])
+    pval2, do_diff2 = test.is_stationary(x)
+
+    # We expect Trend to be significant, but NOT Level
+    if null == 'level':
+        assert not do_diff2
+        assert_almost_equal(pval2, 0.1)
+    else:
+        assert do_diff2
+        assert_almost_equal(pval2, 0.01)
+
     # test the ndiffs with the KPSS test
-    assert ndiffs(austres, test='kpss', max_d=2) == 2
+    assert ndiffs(austres, test='kpss', max_d=5, null=null) == 2
 
 
 def test_non_default_kpss():
     test = KPSSTest(alpha=0.05, null='trend', lshort=False)
-    pval, is_sig = test.is_stationary(austres)
-    assert is_sig  # show it is significant
-    assert_almost_equal(pval, 0.01)
+    pval, do_diff = test.is_stationary(austres)
+    assert do_diff  # show it is significant
+    assert np.allclose(pval, 0.01, atol=0.005)
 
     # test the ndiffs with the KPSS test
     assert ndiffs(austres, test='kpss', max_d=2) == 2
@@ -152,22 +165,50 @@ def test_kpss_corner():
 
 def test_pp():
     test = PPTest(alpha=0.05, lshort=True)
-    pval, is_sig = test.is_stationary(austres)
-    assert is_sig
-    assert_almost_equal(pval, 0.02139, decimal=5)
+    pval, do_diff = test.is_stationary(austres)
+    assert do_diff
+
+    # Result from R code: 0.9786066
+    # > pp.test(austres, lshort=TRUE)$p.value
+    assert_almost_equal(pval, 0.9786066, decimal=5)
 
     # test n diffs
-    nd = ndiffs(austres, test='pp', max_d=2)
-    assert nd == 1
+    assert ndiffs(austres, test='pp', max_d=2) == 1
+
+    # If we use lshort is FALSE, it will be different
+    test = PPTest(alpha=0.05, lshort=False)
+    pval, do_diff = test.is_stationary(austres)
+    assert do_diff
+
+    # Result from R code: 0.9514589
+    # > pp.test(austres, lshort=FALSE)$p.value
+    assert_almost_equal(pval, 0.9514589, decimal=5)
+    assert ndiffs(austres, test='pp', max_d=2, lshort=False) == 1
 
 
 def test_adf():
+    # Test where k = 1
+    test = ADFTest(alpha=0.05, k=1)
+    pval, do_diff = test.is_stationary(austres)
+
+    # R's value: 0.8488036
+    # > adf.test(austres, k=1, alternative='stationary')$p.value
+    assert np.isclose(pval, 0.8488036)
+    assert do_diff
+
+    # Test for k = 2. R's value: 0.7060733
+    # > adf.test(austres, k=2, alternative='stationary')$p.value
     test = ADFTest(alpha=0.05, k=2)
     pval, do_diff = test.is_stationary(austres)
-    assert not do_diff
+    assert np.isclose(pval, 0.7060733)
+    assert do_diff
 
-    # TODO: fix where k == 2
-    # TODO: FIX THISSSSSS
+    # Test for k is None. R's value: 0.3493465
+    # > adf.test(austres, alternative='stationary')$p.value
+    test = ADFTest(alpha=0.05, k=None)
+    pval, do_diff = test.is_stationary(austres)
+    assert np.isclose(pval, 0.3493465, rtol=0.0001)
+    assert do_diff
 
 
 def test_adf_corner():
