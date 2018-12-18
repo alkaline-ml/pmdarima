@@ -63,7 +63,7 @@ rules may hinder the speed with which your contribution is merged:
    That means all of your feature branches should be merged back to the `develop`
    branch, and *not* `master`!
 
--  Write detailed docstrings for all of public your functions. The preferred
+-  Write detailed docstrings for all of your public functions. The preferred
    format for docstrings is the `numpy standard <https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt#docstring-standard>`_.
    Also include usage examples where appropriate. See also the
    `Numpy guidelines for documenting your code  <https://numpydoc.readthedocs.io/en/latest/>`_
