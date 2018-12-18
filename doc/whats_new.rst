@@ -28,6 +28,10 @@ v0.8.1) will document the latest features.
 * Add versioned documentation. All releases' doc (from 0.9.0 onward) is now available
   at ``alkaline-ml.com/pmdarima/<version>``
 
+* Fix bug in ``ADFTest`` where ``OLS`` was computed with ``method="pinv"`` rather
+  than ``"method=qr"``. This fix means better parity with R's results. See
+  `#71 <https://github.com/tgsmith61591/pmdarima/pull/71>`_ for more context.
+
 
 `v1.0.0 <http://alkaline-ml.com/pmdarima/1.0.0/>`_
 --------------------------------------------------
