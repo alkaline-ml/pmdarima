@@ -12,7 +12,7 @@ from distutils.version import LooseVersion
 import os
 
 DEFAULT_ROOT = 'pmdarima'
-CYTHON_MIN_VERSION = '0.23'
+CYTHON_MIN_VERSION = '0.29'
 
 
 def get_blas_info():
