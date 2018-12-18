@@ -304,6 +304,10 @@
 <span class="sd">        The estimated differencing term. This is the maximum value of ``d``</span>
 <span class="sd">        such that ``d &lt;= max_d`` and the time series is judged stationary.</span>
 <span class="sd">        If the time series is constant, will return 0.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] R&#39;s auto_arima ndiffs function: https://bit.ly/2Bu8CHN</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">max_d</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_d must be a positive integer&#39;</span><span class="p">)</span>

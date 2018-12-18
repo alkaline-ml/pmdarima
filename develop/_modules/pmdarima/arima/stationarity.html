@@ -199,6 +199,9 @@
     <span class="k">def</span> <span class="nf">_embed</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="c1"># lag the vector and put the lags into columns</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;k cannot exceed y dim&quot;</span><span class="p">)</span>
+
         <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
             <span class="c1"># so, if k=2, it&#39;ll be (x[1:n], x[:n-1])</span>
             <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
@@ -328,10 +331,14 @@
         <span class="n">eta</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">s2</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span> <span class="o">*</span> <span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">n</span>
 
-        <span class="n">scalar</span><span class="p">,</span> <span class="n">denom</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span>
+        <span class="c1"># scalar, denom = 10, 14</span>
+        <span class="c1"># if self.lshort:</span>
+        <span class="c1">#     scalar, denom = 3, 13</span>
+        <span class="c1"># l_ = int(np.trunc(scalar * np.sqrt(n) / denom))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lshort</span><span class="p">:</span>
-            <span class="n">scalar</span><span class="p">,</span> <span class="n">denom</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">13</span>
-        <span class="n">l_</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trunc</span><span class="p">(</span><span class="n">scalar</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">denom</span><span class="p">))</span>
+            <span class="n">l_</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trunc</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">l_</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trunc</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span><span class="p">))</span>
 
         <span class="c1"># compute the C subroutine</span>
         <span class="n">s2</span> <span class="o">=</span> <span class="n">C_tseries_pp_sum</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">l_</span><span class="p">,</span> <span class="n">s2</span><span class="p">)</span>
@@ -381,14 +388,14 @@
 <span class="sd">    .. [1] https://wikipedia.org/wiki/Augmented_Dickey–Fuller_test</span>
 <span class="sd">    .. [2] R&#39;s tseries ADF source code: https://bit.ly/2EnvM5V</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">table</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mf">4.38</span><span class="p">,</span> <span class="mf">4.15</span><span class="p">,</span> <span class="mf">4.04</span><span class="p">,</span> <span class="mf">3.99</span><span class="p">,</span> <span class="mf">3.98</span><span class="p">,</span> <span class="mf">3.96</span><span class="p">),</span>
-                       <span class="p">(</span><span class="mf">3.95</span><span class="p">,</span> <span class="mf">3.80</span><span class="p">,</span> <span class="mf">3.73</span><span class="p">,</span> <span class="mf">3.69</span><span class="p">,</span> <span class="mf">3.68</span><span class="p">,</span> <span class="mf">3.66</span><span class="p">),</span>
-                       <span class="p">(</span><span class="mf">3.60</span><span class="p">,</span> <span class="mf">3.50</span><span class="p">,</span> <span class="mf">3.45</span><span class="p">,</span> <span class="mf">3.43</span><span class="p">,</span> <span class="mf">3.42</span><span class="p">,</span> <span class="mf">3.41</span><span class="p">),</span>
-                       <span class="p">(</span><span class="mf">3.24</span><span class="p">,</span> <span class="mf">3.18</span><span class="p">,</span> <span class="mf">3.15</span><span class="p">,</span> <span class="mf">3.13</span><span class="p">,</span> <span class="mf">3.13</span><span class="p">,</span> <span class="mf">3.12</span><span class="p">),</span>
-                       <span class="p">(</span><span class="mf">1.14</span><span class="p">,</span> <span class="mf">1.19</span><span class="p">,</span> <span class="mf">1.22</span><span class="p">,</span> <span class="mf">1.23</span><span class="p">,</span> <span class="mf">1.24</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">),</span>
-                       <span class="p">(</span><span class="mf">0.80</span><span class="p">,</span> <span class="mf">0.87</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">,</span> <span class="mf">0.92</span><span class="p">,</span> <span class="mf">0.93</span><span class="p">,</span> <span class="mf">0.94</span><span class="p">),</span>
-                       <span class="p">(</span><span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.58</span><span class="p">,</span> <span class="mf">0.62</span><span class="p">,</span> <span class="mf">0.64</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.66</span><span class="p">),</span>
-                       <span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.24</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mf">0.31</span><span class="p">,</span> <span class="mf">0.32</span><span class="p">,</span> <span class="mf">0.33</span><span class="p">)])</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">(</span><span class="o">-</span><span class="mf">4.38</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.95</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.60</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.14</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.80</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.50</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mf">4.15</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.80</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.50</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.18</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.19</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.87</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.58</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mf">4.04</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.73</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.45</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.15</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.22</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.90</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.62</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.28</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mf">3.99</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.69</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.43</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.13</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.23</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.92</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.64</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.31</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mf">3.98</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.68</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.42</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.13</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.93</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.65</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.32</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mf">3.96</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.66</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.41</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.12</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.25</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.94</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.66</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.33</span><span class="p">)</span>
+    <span class="p">])</span>
 
     <span class="n">tablen</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">tableT</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
@@ -400,6 +407,39 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;k must be a positive integer (&gt;= 0)&#39;</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_ols</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">yt</span> <span class="o">=</span> <span class="n">z</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: np.ndarray</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+        <span class="c1"># R does [k:n].. but that&#39;s 1-based indexing and inclusive on the tail</span>
+        <span class="n">xt1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">tt</span><span class="p">]</span>
+
+        <span class="c1"># make tt inclusive again (it was used as a mask before)</span>
+        <span class="n">tt</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># the array that will create the LM:</span>
+        <span class="n">_n</span> <span class="o">=</span> <span class="n">xt1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># row dim for predictors</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">_n</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">_n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                       <span class="n">xt1</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">_n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                       <span class="n">tt</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">_n</span><span class="p">,</span> <span class="mi">1</span><span class="p">))])</span>
+
+        <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">yt1</span> <span class="o">=</span> <span class="n">z</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">k</span><span class="p">]</span>  <span class="c1"># R had 2:k</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">yt1</span><span class="p">])</span>
+
+        <span class="c1"># fit the linear regression - this one is a bit strange in that we</span>
+        <span class="c1"># are using OLS from statsmodels rather than LR from sklearn. This is</span>
+        <span class="c1"># because we need the std errors, and sklearn does not have a way to</span>
+        <span class="c1"># store them.</span>
+        <span class="k">return</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">hasconst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;qr&#39;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_ols_std_error</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="n">stderrs</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">bse</span>  <span class="c1"># this was a pain in the ARSE to locate</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">stderrs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
 <div class="viewcode-block" id="ADFTest.is_stationary"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ADFTest.html#pmdarima.arima.ADFTest.is_stationary">[docs]</a>    <span class="k">def</span> <span class="nf">is_stationary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary.</span>
@@ -431,35 +471,15 @@
         <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trunc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">))</span>
 
+        <span class="c1"># See [2] for the R source. This is L153 - L160</span>
         <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># diff(as.vector(x, mode=&#39;double&#39;))</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embed</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
-        <span class="n">yt</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="n">tt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embed</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># Same as R embed(x, k)</span>
 
-        <span class="c1"># R does [k:n].. but that&#39;s 1-based indexing and inclusive on the tail</span>
-        <span class="n">xt1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">tt</span><span class="p">]</span>
-
-        <span class="c1"># make tt inclusive again (it was used as a mask before)</span>
-        <span class="n">tt</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="c1"># the array that will create the LM:</span>
-        <span class="n">_n</span> <span class="o">=</span> <span class="n">xt1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">xt1</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">_n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
-                       <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">_n</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">_n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
-                       <span class="n">tt</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">_n</span><span class="p">,</span> <span class="mi">1</span><span class="p">))])</span>
-
-        <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">yt1</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># R had 2:k</span>
-            <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">yt1</span><span class="o">.</span><span class="n">T</span><span class="p">])</span>
-
-        <span class="c1"># fit the linear regression - this one is a bit strange in that we</span>
-        <span class="c1"># are using OLS from statsmodels rather than LR from sklearn. This is</span>
-        <span class="c1"># because we need the std errors, and sklearn does not have a way to</span>
-        <span class="c1"># store them.</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-        <span class="n">STAT</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">res</span><span class="o">.</span><span class="n">HC0_se</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># XXX: is the denom correct?...</span>
+        <span class="c1"># Compute ordinary least squares</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ols</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+        <span class="n">STAT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ols_std_error</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 
         <span class="c1"># In the past we assigned to the np memory view which is slower</span>
         <span class="n">tableipl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
@@ -468,10 +488,22 @@
 
         <span class="c1"># make sure to do 1 - x...</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">interpol</span> <span class="o">=</span> <span class="n">approx</span><span class="p">(</span><span class="n">tableipl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tablep</span><span class="p">,</span> <span class="n">xout</span><span class="o">=</span><span class="n">STAT</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">pval</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">interpol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Added in v1.1.0. Not sure whether it&#39;s likely we&#39;ll hit it, but it&#39;s</span>
+        <span class="c1"># how R is warning the user...</span>
+        <span class="c1"># if np.isnan(approx(tableipl, self.tablep, xout=STAT, rule=1)[1]):</span>
+        <span class="c1">#     if interpol == self.tablep.min():</span>
+        <span class="c1">#         warnings.warn(&quot;p-value is smaller than printed value&quot;)</span>
+        <span class="c1">#     else:</span>
+        <span class="c1">#         warnings.warn(&quot;p-value is larger than printed value&quot;)</span>
+
+        <span class="c1"># pval = 1 - interpol[0]  # explosive</span>
+        <span class="n">pval</span> <span class="o">=</span> <span class="n">interpol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># stationarity</span>
 
         <span class="c1"># in the R code, here is where the P value warning is tested again...</span>
-        <span class="k">return</span> <span class="n">pval</span><span class="p">,</span> <span class="n">pval</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span></div></div>
+        <span class="c1"># else if (test == &quot;adf&quot;)</span>
+        <span class="c1">#     suppressWarnings(dodiff &lt; - tseries::adf.test(x)$p.value &gt; alpha)</span>
+        <span class="k">return</span> <span class="n">pval</span><span class="p">,</span> <span class="n">pval</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>  <span class="c1"># &gt; since not 1-pval</span></div></div>
 
 
 <div class="viewcode-block" id="PPTest"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.PPTest.html#pmdarima.arima.PPTest">[docs]</a><span class="k">class</span> <span class="nc">PPTest</span><span class="p">(</span><span class="n">_DifferencingStationarityTest</span><span class="p">):</span>
@@ -554,7 +586,7 @@
         <span class="c1"># embed the vector. This is some funkiness that goes on in the R</span>
         <span class="c1"># code... basically, make a matrix where the column (rows if not T)</span>
         <span class="c1"># are lagged windows of x</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embed</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embed</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># Same as R t(embed(x, k))</span>
         <span class="n">yt</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">yt1</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># type: np.ndarray</span>
 
@@ -599,12 +631,12 @@
             <span class="n">approx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tableT</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">xout</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tablen</span><span class="p">)])</span>
 
-        <span class="c1"># make sure to do 1 - x...</span>
+        <span class="c1"># we don&#39;t do 1 - pval, so check for GREATER THAN</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">interpol</span> <span class="o">=</span> <span class="n">approx</span><span class="p">(</span><span class="n">tableipl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tablep</span><span class="p">,</span> <span class="n">xout</span><span class="o">=</span><span class="n">STAT</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">pval</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">interpol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">pval</span> <span class="o">=</span> <span class="n">interpol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># in the R code, here is where the P value warning is tested again...</span>
-        <span class="k">return</span> <span class="n">pval</span><span class="p">,</span> <span class="n">pval</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span></div></div>
+        <span class="k">return</span> <span class="n">pval</span><span class="p">,</span> <span class="n">pval</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span></div></div>
 </pre></div>
 
            </div>
