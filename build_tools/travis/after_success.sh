@@ -8,23 +8,6 @@
 # set -e
 set +e  # because TRAVIS SUCKS
 
-# push coverage if necessary
-if [[ "$COVERAGE" == "true" ]]; then
-
-    # Need to run coveralls from a git checkout, so we copy .coverage
-    # from TEST_DIR where nosetests has been run
-    cp $TEST_DIR/.coverage $TRAVIS_BUILD_DIR
-    cd $TRAVIS_BUILD_DIR
-
-    # Ignore codecov failures as the codecov server is not
-    # very reliable but we don't want travis to report a failure
-    # in the github UI just because the coverage report failed to
-    # be published.
-    codecov || echo "codecov upload failed"
-else
-    echo "Skipping coverage upload since COVERAGE=false"
-fi
-
 # make sure we have twine in case we deploy
 pip install twine || "pip installing twine failed"
 
