@@ -38,8 +38,7 @@ matrix:
       services:
         - docker
       env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0"
-           SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
+           NUMPY_VERSION="1.12.1" SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
            DEPLOY=true CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
            DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
@@ -50,8 +49,7 @@ matrix:
       - docker
       env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
            SCIKIT_LEARN_VERSION="0.19" STATSMODELS_VERSION="0.9.0" DEPLOY=true CACHEC=true
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0"
-           DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+           NUMPY_VERSION="1.12.1" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
            DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
     # This test runs on linux 3.7 & as of v1.1.0+, deploys python 3.7 wheel
@@ -61,7 +59,7 @@ matrix:
       - docker
       env: DISTRIB="conda" PYTHON_VERSION="3.7.1" INSTALL_MKL="true"
            SCIKIT_LEARN_VERSION="0.20.1" STATSMODELS_VERSION="0.9.0"
-           DEPLOY=true CACHEC=true NUMPY_VERSION="1.15.4" SCIPY_VERSION="1.2.0"
+           DEPLOY=true CACHEC=true NUMPY_VERSION="1.15.4"
            DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
            DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
@@ -69,8 +67,7 @@ matrix:
     - os: osx
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="3.5"
-           NUMPY_VERSION="1.12.1" SCIPY_VERSION="0.19.0"
-           SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
+           NUMPY_VERSION="1.12.1" SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
            DEPLOY=true CACHEC=false
 
     # This environment tests Python 3.6 support on MAC OS X

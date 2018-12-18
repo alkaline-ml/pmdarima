@@ -34,7 +34,7 @@ test-lint: test-requirements
 	$(PYTHON) -m flake8 pmdarima --filename='*.py' --ignore E803,F401,F403,W293,W504
 
 test-unit: test-requirements coverage-dependencies
-	$(PYTHON) -m pytest -v --durations=20 --cov-config .coveragerc --cov pmdarima
+	$(PYTHON) -m pytest -v --durations=20 --cov-config .coveragerc --cov pmdarima -p no:logging
 
 test: develop test-unit test-lint
 	# Coverage creates all these random little artifacts we don't want

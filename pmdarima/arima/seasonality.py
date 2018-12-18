@@ -94,6 +94,7 @@ class CHTest(_SeasonalStationarityTest):
 
         # fit model, get residuals
         lmch = LinearRegression().fit(R1, wts)
+        # lmch = sm.OLS(wts, R1).fit(method='qr')
         residuals = wts - lmch.predict(R1)
 
         # translated R code:

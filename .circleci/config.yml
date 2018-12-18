@@ -28,10 +28,7 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
-    - run: ./build_tools/circle/before_install.sh
     - run: make develop
-    - run: make test-requirements
-    - run: make coverage-dependencies
     - run: make test-unit
     - run: codecov || echo "codecov upload failed"
 
@@ -41,10 +38,7 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
-    - run: ./build_tools/circle/before_install.sh
     - run: make develop
-    - run: make test-requirements
-    - run: make coverage-dependencies
     - run: make test-unit
     - run: codecov || echo "codecov upload failed"
 
