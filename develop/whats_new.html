@@ -93,8 +93,8 @@
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">What's New?</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id1">v1.1.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">v1.0.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">v0.9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">v1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">v0.9.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-8-1">v0.8.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-7-0">v0.7.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-6-5">v0.6.5</a></li>
@@ -182,10 +182,13 @@ and only works on statsmodels 0.9.0+ since they’ve fixed a bug on their end.</
 now deprecated, since they no longer need to be used.</li>
 <li>Add versioned documentation. All releases’ doc (from 0.9.0 onward) is now available
 at <code class="docutils literal notranslate"><span class="pre">alkaline-ml.com/pmdarima/&lt;version&gt;</span></code></li>
+<li>Fix bug in <code class="docutils literal notranslate"><span class="pre">ADFTest</span></code> where <code class="docutils literal notranslate"><span class="pre">OLS</span></code> was computed with <code class="docutils literal notranslate"><span class="pre">method=&quot;pinv&quot;</span></code> rather
+than <code class="docutils literal notranslate"><span class="pre">&quot;method=qr&quot;</span></code>. This fix means better parity with R’s results. See
+<a class="reference external" href="https://github.com/tgsmith61591/pmdarima/pull/71">#71</a> for more context.</li>
 </ul>
 </div>
-<div class="section" id="id2">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.0.0/">v1.0.0</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.0.0/">v1.0.0</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><strong>Wheels will no longer be built for Python versions &lt; 3.5.</strong> You may still be able to build
 from source, but support for 2.x python versions will diminish in future versions.</li>
@@ -205,8 +208,8 @@ will be completely switched over in version 1.2.0:<ul>
 </li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/0.9.0/">v0.9.0</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/0.9.0/">v0.9.0</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Explicitly catch case in <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> where a value of <code class="docutils literal notranslate"><span class="pre">m</span></code> that is too large may over-estimate
 <code class="docutils literal notranslate"><span class="pre">D</span></code>, causing the time series to be differenced down to an empty array. This is now handled by

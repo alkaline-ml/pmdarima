@@ -82,7 +82,7 @@ fitting it. It can then be loaded back up and used to generate forecasts.
         except OSError:
             pass
 
-**Total running time of the script:** ( 0 minutes  1.501 seconds)
+**Total running time of the script:** ( 0 minutes  1.366 seconds)
 
 
 
