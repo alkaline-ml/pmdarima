@@ -1,10 +1,10 @@
-# stationarity/seasonality tests
+# -*- coding: utf-8 -*-
+# stationarity tests
 
 from __future__ import absolute_import
 
 from pmdarima.arima.stationarity import ADFTest, PPTest, KPSSTest
-from pmdarima.arima.seasonality import CHTest
-from pmdarima.arima.utils import ndiffs, nsdiffs
+from pmdarima.arima.utils import ndiffs
 from pmdarima.utils.array import diff
 
 from sklearn.utils import check_random_state
@@ -17,6 +17,7 @@ import pytest
 # for testing rand of len 400 for m==365
 random_state = check_random_state(42)
 
+# TODO: redundant code with test_seasonality. Fix this in separate feature
 austres = np.array([13067.3, 13130.5, 13198.4, 13254.2, 13303.7, 13353.9,
                     13409.3, 13459.2, 13504.5, 13552.6, 13614.3, 13669.5,
                     13722.6, 13772.1, 13832.0, 13862.6, 13893.0, 13926.8,
@@ -220,57 +221,9 @@ def test_adf_corner():
     test.is_stationary(austres)
 
 
-def test_ch_test():
-    val = CHTest._sd_test(austres, 3)
-
-    # R code produces 0.07956102
-    assert_almost_equal(val, 0.07956102, decimal=7)
-    assert CHTest(m=3).estimate_seasonal_differencing_term(austres) == 0
-
-    # what if freq > 12?
-    assert_almost_equal(CHTest._sd_test(austres, 24), 4.134289, decimal=5)
-    assert CHTest(m=24).estimate_seasonal_differencing_term(austres) == 0
-    assert CHTest(m=52).estimate_seasonal_differencing_term(austres) == 0
-
-    # this won't even go thru because n < 2 * m + 5:
-    assert CHTest(m=365).estimate_seasonal_differencing_term(austres) == 0
-
-    # change the length to be longer so we can actually test the end case
-    aus_list = austres.tolist()  # type: list
-    y = np.asarray(aus_list * 10)  # type: np.ndarray
-
-    # y len is now 1760, which is > 2 * m + 5, but idk what to assert
-    CHTest(m=365).estimate_seasonal_differencing_term(y)
-
-    # what if m > 365???
-    CHTest(m=366).estimate_seasonal_differencing_term(y)
-
-
-def test_ch_base():
-    test = CHTest(m=2)
-    assert test.estimate_seasonal_differencing_term(None) == 0
-
-    # test really long m for random array
-    CHTest(m=365).estimate_seasonal_differencing_term(random_state.rand(400))
-
-
 def test_ndiffs_corner_cases():
     with pytest.raises(ValueError):
         ndiffs(austres, max_d=0)
-
-
-def test_nsdiffs_corner_cases():
-    # max_D must be a positive int
-    with pytest.raises(ValueError):
-        nsdiffs(austres, m=2, max_D=0)
-
-    # assert 0 for constant
-    assert nsdiffs([1, 1, 1, 1], m=2) == 0
-
-    # show fails for m <= 1
-    for m in (0, 1):
-        with pytest.raises(ValueError):
-            nsdiffs(austres, m=m)
 
 
 def test_base_cases():

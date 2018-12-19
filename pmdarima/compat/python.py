@@ -6,20 +6,11 @@
 
 from __future__ import absolute_import
 
-import sys
 import os
 
-# is this python 3?
-PY3 = sys.version_info.major == 3
-
-if PY3:
-    xrange = range
-    long = int
-
-# Python 2.7
-else:
-    xrange = xrange
-    long = long
+# We only ever support python 3 now, so no 'if' required anymore.
+xrange = range
+long = int
 
 
 def safe_mkdirs(loc):
