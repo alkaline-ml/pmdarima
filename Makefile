@@ -38,4 +38,4 @@ test-unit: test-requirements coverage-dependencies
 
 test: develop test-unit test-lint
 	# Coverage creates all these random little artifacts we don't want
-	rm .coverage.*
+	rm .coverage.* || echo "No coverage artifacts to remove"
