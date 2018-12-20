@@ -25,7 +25,7 @@ install: requirements
 	$(PYTHON) setup.py install
 
 test-requirements:
-	$(PYTHON) -m pip install pytest flake8
+	$(PYTHON) -m pip install pytest flake8 matplotlib
 
 coverage-dependencies:
 	$(PYTHON) -m pip install coverage pytest-cov codecov

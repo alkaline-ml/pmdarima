@@ -81,14 +81,8 @@ install:
 build: false
 
 test_script:
-  # Change to a non-source folder to make sure we run the tests on the
-  # installed library
-  - mkdir "../empty_folder"
-  - "cd ../empty_folder"
-
   # Test with pytest
   - "pytest --showlocals --durations=20 --pyargs pmdarima"
-  - "cd ../pmdarima"
 
 after_test:
   - set PATH=%BK_PATH%
