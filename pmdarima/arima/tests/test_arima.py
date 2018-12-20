@@ -943,7 +943,7 @@ if not travis:
                 model.fit(lynx)
                 model.plot_diagnostics(figsize=(15, 12))
                 savefig(fname=actual)
-                compare_images(expected, actual, tol=2)
+                compare_images(expected, actual, tol=10)
         finally:
             shutil.rmtree(test_images_output_path)
 
