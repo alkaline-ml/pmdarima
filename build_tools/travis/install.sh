@@ -46,22 +46,21 @@ if [[ "$DISTRIB" == "conda" ]]; then
     # provided versions
     if [[ "$INSTALL_MKL" == "true" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
-            numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
-            mkl cython=$CYTHON_VERSION \
-            scikit-learn=$SCIKIT_LEARN_VERSION \
+            numpy=$NUMPY_VERSION scipy \
+            mkl cython scikit-learn=$SCIKIT_LEARN_VERSION \
             statsmodels=$STATSMODELS_VERSION
 
     else
         conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
-            numpy=$NUMPY_VERSION scipy=$SCIPY_VERSION \
-            nomkl cython=$CYTHON_VERSION \
-            scikit-learn=$SCIKIT_LEARN_VERSION \
+            numpy=$NUMPY_VERSION scipy \
+            nomkl cython scikit-learn=$SCIKIT_LEARN_VERSION \
             statsmodels=$STATSMODELS_VERSION
     fi
     source activate testenv
 
     # determine what platform is running
     python -c 'from distutils.util import get_platform; print(get_platform())'
+    python -c 'import cython; print("Cython version: %s" % cython.__version__)'
 
     # Install nose-timer via pip
     pip install nose-timer

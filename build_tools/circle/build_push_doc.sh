@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: what if it's a tag? Will it fail since the version dir already exists?
+
 set -e
 
 # this is a hack, but we have to make sure we're only ever running this from
