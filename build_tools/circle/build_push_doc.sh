@@ -136,9 +136,14 @@ touch .nojekyll
 echo "Final directory contents:"
 ls -la
 
-# Finally, deploy the branch, but if it's a pull request, don't do anything
-if [[ ! -z $CI_PULL_REQUEST ]]; then
-  echo "Will not deploy doc on pull request ($CI_PULL_REQUEST)"
+# Finally, deploy the branch, but if it's a pull request or tag, don't!!
+if [[ ! -z ${CIRCLE_PULL_REQUEST} ]]; then
+  echo "Will not deploy doc on pull request (${CIRCLE_PULL_REQUEST})"
+elif [[ ! -z ${CIRCLE_TAG} ]]; then
+  # We do this since we deploy the documentation on Master anyways, and if it
+  # encounters the already-existing versioned directory, it fails out (as coded
+  # above with exit 9)
+  echo "Will not re-deploy doc on tag (${CIRCLE_TAG})"
 elif [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
   echo "Deploying documentation"
   deploy

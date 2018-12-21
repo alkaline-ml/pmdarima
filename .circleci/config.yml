@@ -61,6 +61,14 @@ jobs:
     - run: ./build_tools/circle/before_install.sh
     - run: ./build_tools/circle/regression_testing.sh
 
+  testing-passed:
+    docker:
+      - image: bash:latest
+    steps:
+      - run:
+          name: pmdarima Testing passed
+          command: echo "All tests passed"
+
   # For documentation deployment. You'll need the following environment vars
   # in your Circle CI settings, otherwise this will not work.
   #
@@ -81,16 +89,23 @@ jobs:
 workflows:
   version: 2
 
-  # All testing jobs:
-  testing:
+  pmdarima-pipeline:
     jobs:
+      # All testing jobs:
       - pypy36
       - cpython36
       - cpython37
       - test-linting
       - regression-testing
+      - testing-passed:
+          requires:
+              - pypy36
+              - cpython36
+              - cpython37
+              - test-linting
+              - regression-testing
 
-  # All deployment
-  deploy:
-    jobs:
+      # Deployment jobs
       - deploy-doc
+          requires:
+              - testing-passed
