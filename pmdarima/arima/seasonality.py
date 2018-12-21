@@ -93,7 +93,7 @@ class CHTest(_SeasonalStationarityTest):
         R1 = CHTest._seas_dummy(wts, s)
 
         # fit model, get residuals
-        lmch = LinearRegression().fit(R1, wts)
+        lmch = LinearRegression(normalize=True).fit(R1, wts)
         # lmch = sm.OLS(wts, R1).fit(method='qr')
         residuals = wts - lmch.predict(R1)
 
