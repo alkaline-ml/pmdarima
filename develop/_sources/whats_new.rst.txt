@@ -10,9 +10,9 @@ v0.8.1) will document the latest features.
 `v1.1.0 <http://alkaline-ml.com/pmdarima/1.1.0/>`_
 --------------------------------------------------
 
-* Add ``ARIMA.plot_diagnostics`` method
+* Added ``ARIMA.plot_diagnostics`` method, as requested in `#49 <https://github.com/tgsmith61591/pmdarima/issues/49>`_
 
-* Add new arg to ``ARIMA`` constructor and ``auto_arima``: ``with_intercept`` (default is True).
+* Added new arg to ``ARIMA`` constructor and ``auto_arima``: ``with_intercept`` (default is True).
 
 * New default for ``trend`` is no longer ``'c'``, it is ``None``.
 
@@ -25,12 +25,17 @@ v0.8.1) will document the latest features.
 * The ``'PMDARIMA_CACHE'`` and ``'PMDARIMA_CACHE_WARN_SIZE'`` environment variables are
   now deprecated, since they no longer need to be used.
 
-* Add versioned documentation. All releases' doc (from 0.9.0 onward) is now available
+* Added versioned documentation. All releases' doc (from 0.9.0 onward) is now available
   at ``alkaline-ml.com/pmdarima/<version>``
 
 * Fix bug in ``ADFTest`` where ``OLS`` was computed with ``method="pinv"`` rather
   than ``"method=qr"``. This fix means better parity with R's results. See
   `#71 <https://github.com/tgsmith61591/pmdarima/pull/71>`_ for more context.
+
+* ``CHTest`` now solves linear regression with ``normalize=True``. This solves
+  `#74 <https://github.com/tgsmith61591/pmdarima/issues/74>`_
+
+* Python 3.7 is now supported(!!)
 
 
 `v1.0.0 <http://alkaline-ml.com/pmdarima/1.0.0/>`_
