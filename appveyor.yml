@@ -39,6 +39,18 @@ environment:
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python36-x64"
 
+    - PYTHON_ARCH: "32"
+      PYTHON_VERSION: "3.7.0"
+      MPL_VERSION: "2.2.3"
+      PMDARIMA_MPL_DEBUG: "true"
+      PYTHON: "C:\\Python37"
+
+    - PYTHON_ARCH: "64"
+      PYTHON_VERSION: "3.7.0"
+      MPL_VERSION: "2.2.3"
+      PMDARIMA_MPL_DEBUG: "true"
+      PYTHON: "C:\\Python37-x64"
+
 # Because we only have a single worker, we don't want to waste precious
 # appveyor CI time and make other PRs wait for repeated failures in a failing
 # PR. The following option cancels pending jobs in a given PR after the first

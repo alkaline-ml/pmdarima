@@ -93,7 +93,8 @@ class CHTest(_SeasonalStationarityTest):
         R1 = CHTest._seas_dummy(wts, s)
 
         # fit model, get residuals
-        lmch = LinearRegression().fit(R1, wts)
+        lmch = LinearRegression(normalize=True).fit(R1, wts)
+        # lmch = sm.OLS(wts, R1).fit(method='qr')
         residuals = wts - lmch.predict(R1)
 
         # translated R code:
@@ -145,6 +146,24 @@ class CHTest(_SeasonalStationarityTest):
 
     @staticmethod
     def _seas_dummy(x, m):
+        # Here is the R code:
+        # (https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L132)
+        #
+        # SeasDummy <- function(x) {
+        #   n <- length(x)
+        #   m <- frequency(x)
+        #   if (m == 1) {
+        #     stop("Non-seasonal data")
+        #   }
+        #   tt <- 1:n
+        #   fmat <- matrix(NA, nrow = n, ncol = 2 * m)
+        #   for (i in 1:m) {
+        #     fmat[, 2 * i] <- sin(2 * pi * i * tt / m)
+        #     fmat[, 2 * (i - 1) + 1] <- cos(2 * pi * i * tt / m)
+        #   }
+        #   return(fmat[, 1:(m - 1)])
+        # }
+
         # set up seasonal dummies using fourier series
         n = x.shape[0]
 

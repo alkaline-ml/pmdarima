@@ -28,11 +28,17 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
-    - run: ./build_tools/circle/before_install.sh
     - run: make develop
-    - run: make test-requirements
-    - run: make coverage-dependencies
-    - run: python -m pip install matplotlib
+    - run: make test-unit
+    - run: codecov || echo "codecov upload failed"
+
+  cpython37:
+    docker:
+      - image: python:3.7
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: make develop
     - run: make test-unit
     - run: codecov || echo "codecov upload failed"
 
@@ -80,6 +86,7 @@ workflows:
     jobs:
       - pypy36
       - cpython36
+      - cpython37
       - test-linting
       - regression-testing
 
