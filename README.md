@@ -49,7 +49,8 @@ from pmdarima.arima import auto_arima
   * Windows (32 & 64-bit)
   
 If a wheel doesn't exist for your platform, you can still `pip install` and it will
-build from the source distribution tarball.
+build from the source distribution tarball, however you'll need `cython>=0.28` and
+`gcc` (Mac/Linux) or `MinGW` (Windows) in order to build the package from source.
 
 
 ### Documentation
