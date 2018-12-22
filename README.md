@@ -3,8 +3,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/0ntddrmtrdopt5rf/branch/master?svg=true)](https://ci.appveyor.com/project/tgsmith61591/pmdarima/branch/master)
 [![CircleCI](https://circleci.com/gh/tgsmith61591/pmdarima.svg?style=svg)](https://circleci.com/gh/tgsmith61591/pmdarima)
 [![codecov](https://codecov.io/gh/tgsmith61591/pmdarima/branch/master/graph/badge.svg)](https://codecov.io/gh/tgsmith61591/pmdarima)
-![Supported versions](https://img.shields.io/badge/python-3.5-blue.svg)
-![Supported versions](https://img.shields.io/badge/python-3.6-blue.svg)
+![Supported versions](https://img.shields.io/badge/python-3.5+-blue.svg)
 
 # pmdarima
 
@@ -44,13 +43,9 @@ from pmdarima.arima import auto_arima
 
 `pmdarima` is available in pre-built Wheel files for the following Python versions:
 
-* Python 3.5:
-  * Mac
-  * Linux (manylinux)
-  * Windows (32 & 64-bit)
-* Python 3.6:
-  * Mac
-  * Linux (manylinux)
+* Python 3.5+:
+  * Mac (64-bit)
+  * Linux (64-bit manylinux)
   * Windows (32 & 64-bit)
   
 If a wheel doesn't exist for your platform, you can still `pip install` and it will
