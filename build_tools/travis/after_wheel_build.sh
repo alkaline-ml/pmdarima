@@ -7,9 +7,11 @@ if [[ "${DEPLOY}" != true ]]; then
 fi
 
 # Check for presence of wheel and tarball post-build
-if [[ ! -f dist/*.whl && ! -f dist/*.tar.gz ]]; then
-    echo "Artifacts did not build successfully"
-    exit 1
-else
+WHEEL=$(find dist/ -name '*.whl' | wc -l)
+TAR=$(find dist/ -name '*.tar.gz' | wc -l)
+if [[ ${WHEEL} -gt 0 && ${TAR} -gt 0 ]]; then
     echo "Build artifacts created successfully"
+else
+    echo "Build artifacts were not created. Skipping deployment..."
+    exit 1
 fi
