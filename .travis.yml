@@ -96,7 +96,9 @@ after_success:
   - source build_tools/travis/after_success.sh  # || echo "shell_session_update failed"
   # Build the wheels every time so we can debug
   - bash build_tools/travis/build_wheels.sh
-  - ls dist/
+
+before_deploy:
+  - bash build_tools/travis/after_wheel_build.sh
 
 # TODO: do we want "always?"
 notifications:
