@@ -7,7 +7,7 @@ if [[ "${DEPLOY}" != true ]]; then
 fi
 
 # Check for presence of wheel and tarball post-build
-if [[ ! -f dist/*.whl ]] && [[ ! -f dist/*.tar.gz ]]; then
+if [[ ! -f dist/*.whl && ! -f dist/*.tar.gz ]]; then
     echo "Artifacts did not build successfully"
     exit 1
 else
