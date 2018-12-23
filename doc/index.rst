@@ -38,3 +38,17 @@ Helpful sections to get started:
 * :ref:`contributors`
 * :ref:`quickstart`
 * :ref:`user_guide`
+
+
+Other versions
+==============
+
+Documentation for other release versions of ``pmdarima``:
+
+* `v1.1.0 <http://alkaline-ml.com/pmdarima/1.1.0>`_
+* `v1.0.0 <http://alkaline-ml.com/pmdarima/1.0.0>`_
+* `v0.9.0 <http://alkaline-ml.com/pmdarima/0.9.0>`_
+
+Documentation for the bleeding edge (``develop`` branch) can also be found here:
+
+* `Bleeding edge <http://alkaline-ml.com/pmdarima/develop>`_
