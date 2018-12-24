@@ -30,7 +30,7 @@ if not travis:
             pytest.param('sarimax', ARIMA(order=(1, 1, 0),
                                           seasonal_order=(1, 0, 0, 12)))
         ])
-    @pytest.mark.mpl_image_compare(tolerance=10)
+    @pytest.mark.mpl_image_compare(tolerance=tolerance)
     def test_plot_diagnostics(model_type, model):
         model.fit(lynx)
         return model.plot_diagnostics(figsize=(15, 12))
