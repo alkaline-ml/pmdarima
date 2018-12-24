@@ -94,7 +94,7 @@ build: false
 
 test_script:
   # Test with pytest
-  - "pytest --showlocals --durations=20 --pyargs pmdarima"
+  - "pytest --showlocals --durations=20 --mpl --mpl-baseline-path=pytest_images --pyargs pmdarima"
 
 after_test:
   - set PATH=%BK_PATH%
