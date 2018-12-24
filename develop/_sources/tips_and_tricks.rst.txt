@@ -123,7 +123,7 @@ data in order to make it stationary, we can conduct an ADF test:
     # Test whether we should difference at the alpha=0.05
     # significance level
     adf_test = ADFTest(alpha=0.05)
-    p_val, should_diff = adf_test.is_stationary(y)  # (0.99, False)
+    p_val, should_diff = adf_test.is_stationary(y)  # (0.01, False)
 
 The verdict, per the ADF test, is that we should *not* difference. Pmdarima also
 provides a more handy interface for estimating your ``d`` parameter more directly:
@@ -207,7 +207,7 @@ Setting ``m``
 ~~~~~~~~~~~~~
 
 The ``m`` parameter is the number of observations per seasonal cycle, and is
-one that must be known apriori. Typically, ``m`` will correspond to some
+one that **must be known apriori**. Typically, ``m`` will correspond to some
 recurrent periodicity such as:
 
 * 7 - daily

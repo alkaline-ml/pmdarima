@@ -278,7 +278,7 @@ data in order to make it stationary, we can conduct an ADF test:</p>
 <span class="c1"># Test whether we should difference at the alpha=0.05</span>
 <span class="c1"># significance level</span>
 <span class="n">adf_test</span> <span class="o">=</span> <span class="n">ADFTest</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-<span class="n">p_val</span><span class="p">,</span> <span class="n">should_diff</span> <span class="o">=</span> <span class="n">adf_test</span><span class="o">.</span><span class="n">is_stationary</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># (0.99, False)</span>
+<span class="n">p_val</span><span class="p">,</span> <span class="n">should_diff</span> <span class="o">=</span> <span class="n">adf_test</span><span class="o">.</span><span class="n">is_stationary</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># (0.01, False)</span>
 </pre></div>
 </div>
 <p>The verdict, per the ADF test, is that we should <em>not</em> difference. Pmdarima also
@@ -349,7 +349,7 @@ sure to pay attention to the <code class="docutils literal notranslate"><span cl
 <div class="section" id="setting-m">
 <span id="period"></span><h3>6.3.2. Setting <code class="docutils literal notranslate"><span class="pre">m</span></code><a class="headerlink" href="#setting-m" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">m</span></code> parameter is the number of observations per seasonal cycle, and is
-one that must be known apriori. Typically, <code class="docutils literal notranslate"><span class="pre">m</span></code> will correspond to some
+one that <strong>must be known apriori</strong>. Typically, <code class="docutils literal notranslate"><span class="pre">m</span></code> will correspond to some
 recurrent periodicity such as:</p>
 <ul class="simple">
 <li>7 - daily</li>
