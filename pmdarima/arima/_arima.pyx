@@ -1,6 +1,8 @@
 #cython: boundscheck=False
 #cython: cdivision=True
 #cython: wraparound=False
+#cython: nonecheck=False
+#cython: language_level=3
 #
 # This is the Cython translation of the tseries test (https://github.com/cran/tseries/)
 # R source code. If you make amendments (especially to the loop declarations!) try to
@@ -11,6 +13,7 @@
 
 import numpy as np
 cimport numpy as np
+from libc.math cimport NAN
 
 cdef extern from "_arima_fast_helpers.h":
     bint pyr_isfinite(double) nogil
@@ -43,6 +46,8 @@ cdef fused intp_array_2d_t:
 
 np.import_array()
 
+# __all__ = ['C_tseries_pp_sum']
+
 
 # This is simply here to test the pyr_finite function against nan values.
 # This shouldn't be used internally, since it has the overhead of being
@@ -51,7 +56,7 @@ def C_is_not_finite(v):
     return not pyr_isfinite(v)
 
 
-def C_tseries_pp_sum(floating1d u, INTP n, INTP L, DOUBLE s):
+cpdef DOUBLE C_tseries_pp_sum(floating1d u, INTP n, INTP L, DOUBLE s) nogil:
     """Translation of the ``tseries_pp_sum`` C source code located at:
     https://github.com/cran/tseries/blob/8ceb31fa77d0b632dd511fc70ae2096fa4af3537/src/ppsum.c
 
@@ -79,50 +84,49 @@ def C_tseries_pp_sum(floating1d u, INTP n, INTP L, DOUBLE s):
 
 
 cdef DOUBLE approx1(DOUBLE v, floating1d x, floating1d y, INTP n, DOUBLE ylow,
-                    DOUBLE yhigh, INTP kind, DOUBLE f1, DOUBLE f2):
+                    DOUBLE yhigh, INTP kind, DOUBLE f1, DOUBLE f2) nogil:
 
     # Approximate  y(v),  given (x,y)[i], i = 0,..,n-1
     cdef INTP i, j, ij
     if n == 0:
-        return np.nan
+        return NAN
 
-    with nogil:
-        i = 0
-        j = n - 1
+    i = 0
+    j = n - 1
 
-        # out-of-domain points
-        if v < x[i]:
-            return ylow
-        if v > x[j]:
-            return yhigh
+    # out-of-domain points
+    if v < x[i]:
+        return ylow
+    if v > x[j]:
+        return yhigh
 
-        # find the correct interval by bisection
-        while i < j - 1:  # x[i] <= v <= x[j]
-            ij = (i + j) / 2  # i+1 <= ij <= j-1
-            if v < x[ij]:
-                j = ij
-            else:
-                i = ij
-            # still i < j
+    # find the correct interval by bisection
+    while i < j - 1:  # x[i] <= v <= x[j]
+        ij = (i + j) / 2  # i+1 <= ij <= j-1
+        if v < x[ij]:
+            j = ij
+        else:
+            i = ij
+        # still i < j
 
-        # probably i == j-1
+    # probably i == j-1
 
-        # interpolate
-        if v == x[j]:
-            return y[j]
-        if v == x[i]:
-            return y[i]
+    # interpolate
+    if v == x[j]:
+        return y[j]
+    if v == x[i]:
+        return y[i]
 
-        # impossible: if x[j] == x[i] return y[i]
-        if kind == 1:  # linear
-            return y[i] + (y[j] - y[i]) * ((v - x[i]) / (x[j] - x[i]))
-        else:  # 2 == constant
-            # is this necessary? if f1 or f2 is zero, won't the multiplication cause 0.0 anyways?
-            return (y[i] * f1 if f1 != 0.0 else 0.0) + (y[j] * f2 if f2 != 0.0 else 0.0)
+    # impossible: if x[j] == x[i] return y[i]
+    if kind == 1:  # linear
+        return y[i] + (y[j] - y[i]) * ((v - x[i]) / (x[j] - x[i]))
+    else:  # 2 == constant
+        # is this necessary? if f1 or f2 is zero, won't the multiplication cause 0.0 anyways?
+        return (y[i] * f1 if f1 != 0.0 else 0.0) + (y[j] * f2 if f2 != 0.0 else 0.0)
 
 
-def C_Approx(floating1d x, floating1d y, floating1d xout,
-             INTP method, INTP f, DOUBLE yleft, DOUBLE yright):
+cpdef double[:] C_Approx(floating1d x, floating1d y, floating1d xout,
+                         INTP method, INTP f, DOUBLE yleft, DOUBLE yright):
 
     cdef INTP i, nxy, nout, f1, f2
     cdef DOUBLE v
@@ -138,16 +142,17 @@ def C_Approx(floating1d x, floating1d y, floating1d xout,
                                                               dtype=np.float64,
                                                               order='c')
 
-    for i in range(nout):
-        v = xout[i]
+    with nogil:
+        for i in range(nout):
+            v = xout[i]
 
-        # yout[i] = ISNAN(xout[i]) ? xout[i] : approx1(xout[i], x, y, nxy, &M);
-        # XXX: Does this work?
-        if pyr_isfinite(v):
-            v = approx1(v, x, y, nxy, yleft, yright, method, f1, f2)
+            # yout[i] = ISNAN(xout[i]) ? xout[i] : approx1(xout[i], x, y, nxy, &M);
+            # XXX: Does this work?
+            if pyr_isfinite(v):
+                v = approx1(v, x, y, nxy, yleft, yright, method, f1, f2)
 
-        # assign to the interpolation vector
-        yout[i] = v
+            # assign to the interpolation vector
+            yout[i] = v
 
     # return
     return yout

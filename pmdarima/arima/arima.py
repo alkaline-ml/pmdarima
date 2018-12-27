@@ -17,17 +17,17 @@ from statsmodels.tsa.arima_model import ARIMA as _ARIMA
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 from statsmodels import api as sm
 
+from scipy.stats import gaussian_kde, norm
 import numpy as np
-import datetime
 import warnings
 import os
 
 from ..compat.numpy import DTYPE  # DTYPE for arrays
-from ..compat.python import long, safe_mkdirs
+from ..compat.python import long
 from ..compat import statsmodels as sm_compat
 from ..utils import get_callable, if_has_delegate
 from ..utils.array import diff
-from .._config import PMDARIMA_CACHE, PICKLE_HASH_PATTERN
+from ..utils.visualization import _get_plt
 
 # Get the version
 import pmdarima
@@ -56,6 +56,12 @@ def _append_to_endog(endog, new_y):
     return np.concatenate((endog, new_y)) if \
         endog.ndim == 1 else \
         np.concatenate((endog.ravel(), new_y))[:, np.newaxis]
+
+
+def _uses_legacy_pickling(arima):
+    # If the package version is < 1.1.0 it uses legacy pickling behavior, but
+    # a later version of the package may actually try to load a legacy model..
+    return hasattr(arima, "tmp_pkl_")
 
 
 class ARIMA(BaseEstimator):
@@ -134,14 +140,6 @@ class ARIMA(BaseEstimator):
         `start_params` as starting parameters.  See above for more
         information. If fitting a seasonal ARIMA, the default is 'lbfgs'
 
-    trend : str or iterable, optional (default='c')
-        Parameter controlling the deterministic trend polynomial :math:`A(t)`.
-        Can be specified as a string where 'c' indicates a constant (i.e. a
-        degree zero component of the trend polynomial), 't' indicates a
-        linear trend with time, and 'ct' is both. Can also be specified as an
-        iterable defining the polynomial as in ``numpy.poly1d``, where
-        ``[1,1,0,1]`` would denote :math:`a + bt + ct^3`.
-
     solver : str or None, optional (default='lbfgs')
         Solver to be used.  The default is 'lbfgs' (limited memory
         Broyden-Fletcher-Goldfarb-Shanno).  Other choices are 'bfgs',
@@ -191,6 +189,14 @@ class ARIMA(BaseEstimator):
         A dictionary of key-word arguments to be passed to the
         ``scoring`` metric.
 
+    trend : str or None, optional (default=None)
+        The trend parameter. If ``with_intercept`` is True, ``trend`` will be
+        used. If ``with_intercept`` is False, the trend will be set to a no-
+        intercept value.
+
+    with_intercept : bool, optional (default=True)
+        Whether to include an intercept term. Default is True.
+
     Notes
     -----
     * Since the ``ARIMA`` class currently wraps
@@ -214,9 +220,10 @@ class ARIMA(BaseEstimator):
     .. [2] Statsmodels ARIMA documentation: http://bit.ly/2wc9Ra8
     """
     def __init__(self, order, seasonal_order=None, start_params=None,
-                 trend='c', method=None, transparams=True, solver='lbfgs',
+                 method=None, transparams=True, solver='lbfgs',
                  maxiter=50, disp=0, callback=None, suppress_warnings=False,
-                 out_of_sample_size=0, scoring='mse', scoring_args=None):
+                 out_of_sample_size=0, scoring='mse', scoring_args=None,
+                 trend=None, with_intercept=True):
 
         # XXX: This isn't actually required--sklearn doesn't need a super call
         super(ARIMA, self).__init__()
@@ -224,7 +231,6 @@ class ARIMA(BaseEstimator):
         self.order = order
         self.seasonal_order = seasonal_order
         self.start_params = start_params
-        self.trend = trend
         self.method = method
         self.transparams = transparams
         self.solver = solver
@@ -235,6 +241,8 @@ class ARIMA(BaseEstimator):
         self.out_of_sample_size = out_of_sample_size
         self.scoring = scoring
         self.scoring_args = dict() if not scoring_args else scoring_args
+        self.trend = trend
+        self.with_intercept = with_intercept
 
     def fit(self, y, exogenous=None, **fit_args):
         """Fit an ARIMA to a vector, ``y``, of observations with an
@@ -299,10 +307,19 @@ class ARIMA(BaseEstimator):
             # these might change depending on which one
             method = self.method
 
+            # If it's in kwargs, we'll use it
+            trend = self.trend
+
             # if not seasonal:
             if self.seasonal_order is None:
                 if method is None:
                     method = "css-mle"
+
+                if trend is None:
+                    if self.with_intercept:
+                        trend = 'c'
+                    else:
+                        trend = 'nc'
 
                 # create the statsmodels ARIMA
                 arima = _ARIMA(endog=y, order=self.order, missing='none',
@@ -322,15 +339,21 @@ class ARIMA(BaseEstimator):
                 if method is None:
                     method = 'lbfgs'
 
+                if trend is None:
+                    if self.with_intercept:
+                        trend = 'c'
+                    else:
+                        trend = None
+
                 # create the SARIMAX
                 arima = sm.tsa.statespace.SARIMAX(
                     endog=y, exog=exogenous, order=self.order,
-                    seasonal_order=self.seasonal_order, trend=self.trend,
+                    seasonal_order=self.seasonal_order, trend=trend,
                     enforce_stationarity=self.transparams)
 
             # actually fit the model, now...
             return arima, arima.fit(start_params=self.start_params,
-                                    trend=self.trend, method=method,
+                                    trend=trend, method=method,
                                     transparams=self.transparams,
                                     solver=self.solver, maxiter=self.maxiter,
                                     disp=self.disp, callback=self.callback,
@@ -485,7 +508,8 @@ class ARIMA(BaseEstimator):
             # f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
             arima = self.arima_res_
             end = arima.nobs + n_periods - 1
-            results = arima.get_prediction(start=arima.nobs, end=end,
+            results = arima.get_prediction(start=arima.nobs,
+                                           end=end,
                                            exog=exogenous)
             f = results.predicted_mean
             conf_int = results.conf_int(alpha=alpha)
@@ -527,14 +551,6 @@ class ARIMA(BaseEstimator):
         self.fit(y, exogenous, **fit_args)
         return self.predict(n_periods=n_periods, exogenous=exogenous)
 
-    def _get_pickle_hash_file(self):
-        # Mmmm, pickle hash...
-        return PICKLE_HASH_PATTERN % (
-            # cannot use ':' in Windows file names. Whoops!
-            str(datetime.datetime.now()).replace(' ', '_').replace(':', '-'),
-            ''.join([str(e) for e in self.order]),
-            hash(self))
-
     def __getstate__(self):
         """I am being pickled..."""
 
@@ -544,39 +560,13 @@ class ARIMA(BaseEstimator):
         # In version >= v0.9.0, we keep the old model around, since that's how
         # the user expects it should probably work (otherwise unpickling the
         # previous state of the model would raise an OSError).
-        # loc = self.__dict__.get('tmp_pkl_', None)
-        # if loc is not None:
-        #     os.unlink(loc)
-
-        # get the new location for where to save the results
-        new_loc = self._get_pickle_hash_file()
-        cwd = os.path.abspath(os.getcwd())
-
-        # check that the cache folder exists, and if not, make it.
-        cache_loc = os.path.join(cwd, PMDARIMA_CACHE)
-        safe_mkdirs(cache_loc)
-
-        # now create the full path with the cache folder
-        new_loc = os.path.join(cache_loc, new_loc)
-
-        # save the results - but only if it's fit...
-        if hasattr(self, 'arima_res_'):
-            # statsmodels result views work by caching metrics. If they
-            # are not cached prior to pickling, we might hit issues. This is
-            # a bug documented here:
-            # https://github.com/statsmodels/statsmodels/issues/3290
-            self.arima_res_.summary()
-            self.arima_res_.save(fname=new_loc)  # , remove_data=False)
-
-            # point to the location of the saved MLE model
-            self.tmp_pkl_ = new_loc
-
+        # In version >= 1.1.0, we allow statsmodels results wrappers to be
+        # bundled into the same pickle file (see Issue #48) which is possible
+        # due to statsmodels v0.9.0+. As a result, we no longer really need
+        # this subhook...
         return self.__dict__
 
-    def __setstate__(self, state):
-        # I am being unpickled...
-        self.__dict__ = state
-
+    def _legacy_set_state(self, state):
         # re-set the results class
         loc = state.get('tmp_pkl_', None)
         if loc is not None:
@@ -585,6 +575,13 @@ class ARIMA(BaseEstimator):
             except:  # noqa: E722
                 raise OSError('Could not read saved model state from %s. '
                               'Does it still exist?' % loc)
+
+    def __setstate__(self, state):
+        # I am being unpickled...
+        self.__dict__ = state
+
+        if _uses_legacy_pickling(self):
+            self._legacy_set_state(state)
 
         # Warn for unpickling a different version's model
         self._warn_for_older_version()
@@ -623,11 +620,12 @@ class ARIMA(BaseEstimator):
                           % (modl_version, this_version), UserWarning)
 
     def _clear_cached_state(self):
-        # when fit in an auto-arima, a lot of cached .pmdpkl files
-        # are generated if fit in parallel... this removes the tmp file
-        loc = self.__dict__.get('tmp_pkl_', None)
-        if loc is not None:
-            os.unlink(loc)
+        if _uses_legacy_pickling(self):
+            # when fit in an auto-arima, a lot of cached .pmdpkl files
+            # are generated if fit in parallel... this removes the tmp file
+            loc = self.__dict__.get('tmp_pkl_', None)
+            if loc is not None:
+                os.unlink(loc)
 
     def add_new_observations(self, y, exogenous=None):
         """Update the endog/exog samples after a model fit.
@@ -1023,3 +1021,154 @@ class ARIMA(BaseEstimator):
     def summary(self):
         """Get a summary of the ARIMA model"""
         return self.arima_res_.summary()
+
+    @if_has_delegate('arima_res_')
+    def to_dict(self):
+        """Get the ARIMA model as a dictionary
+
+        Return the dictionary representation of the ARIMA model
+
+        Returns
+        -------
+        res : dictionary
+            The ARIMA model as a dictionary.
+        """
+        return {
+            'pvalues': self.pvalues(),
+            'resid': self.resid(),
+            'order': self.order,
+            'seasonal_order': self.seasonal_order,
+            'oob': self.oob(),
+            'aic': self.aic(),
+            'aicc': self.aicc(),
+            'bic': self.bic(),
+            'bse': self.bse(),
+            'params': self.params()
+        }
+
+    @if_has_delegate('arima_res_')
+    def plot_diagnostics(self, variable=0, lags=10, fig=None, figsize=None):
+        """Plot an ARIMA's diagnostics.
+
+        Diagnostic plots for standardized residuals of one endogenous variable
+
+        Parameters
+        ----------
+        variable : integer, optional
+            Index of the endogenous variable for which the diagnostic plots
+            should be created. Default is 0.
+
+        lags : integer, optional
+            Number of lags to include in the correlogram. Default is 10.
+
+        fig : Matplotlib Figure instance, optional
+            If given, subplots are created in this figure instead of in a new
+            figure. Note that the 2x2 grid will be created in the provided
+            figure using `fig.add_subplot()`.
+
+        figsize : tuple, optional
+            If a figure is created, this argument allows specifying a size.
+            The tuple is (width, height).
+
+        Notes
+        -----
+        Produces a 2x2 plot grid with the following plots (ordered clockwise
+        from top left):
+
+        1. Standardized residuals over time
+        2. Histogram plus estimated density of standardized residulas, along
+           with a Normal(0,1) density plotted for reference.
+        3. Normal Q-Q plot, with Normal reference line.
+        4. Correlogram
+
+        See Also
+        --------
+        statsmodels.graphics.gofplots.qqplot
+        pmdarima.utils.visualization.plot_acf
+
+        References
+        ----------
+        .. [1] https://www.statsmodels.org/dev/_modules/statsmodels/tsa/statespace/mlemodel.html#MLEResults.plot_diagnostics  # noqa: E501
+        """
+        # implicitly checks whether installed, and does our backend magic:
+        _get_plt()
+
+        # We originally delegated down to SARIMAX model wrapper, but
+        # statsmodels makes it difficult to trust their API, so we just re-
+        # implemented a common method for all results wrappers.
+        from statsmodels.graphics.utils import create_mpl_fig
+        fig = create_mpl_fig(fig, figsize)
+
+        res_wpr = self.arima_res_
+        data = res_wpr.data
+
+        # Eliminate residuals associated with burned or diffuse likelihoods.
+        # The statsmodels code for the Kalman Filter takes the loglik_burn
+        # as a parameter:
+
+        # loglikelihood_burn : int, optional
+        #     The number of initial periods during which the loglikelihood is
+        #     not recorded. Default is 0.
+
+        # If the class has it, it's a SARIMAX and we'll use it. Otherwise we
+        # will just access the residuals as we normally would...
+        if hasattr(res_wpr, 'loglikelihood_burn'):
+            # This is introduced in the bleeding edge version, but is not
+            # backwards compatible with 0.9.0 and less:
+            d = res_wpr.loglikelihood_burn
+            if hasattr(res_wpr, 'nobs_diffuse'):
+                d = np.maximum(d, res_wpr.nobs_diffuse)
+
+            resid = res_wpr.filter_results\
+                           .standardized_forecasts_error[variable, d:]
+        else:
+            # This gets the residuals, but they need to be standardized
+            d = 0
+            r = res_wpr.resid
+            resid = (r - np.nanmean(r)) / np.nanstd(r)
+
+        # Top-left: residuals vs time
+        ax = fig.add_subplot(221)
+        if hasattr(data, 'dates') and data.dates is not None:
+            x = data.dates[d:]._mpl_repr()
+        else:
+            x = np.arange(len(resid))
+        ax.plot(x, resid)
+        ax.hlines(0, x[0], x[-1], alpha=0.5)
+        ax.set_xlim(x[0], x[-1])
+        ax.set_title('Standardized residual')
+
+        # Top-right: histogram, Gaussian kernel density, Normal density
+        # Can only do histogram and Gaussian kernel density on the non-null
+        # elements
+        resid_nonmissing = resid[~(np.isnan(resid))]
+        ax = fig.add_subplot(222)
+        # temporarily disable Deprecation warning, normed -> density
+        # hist needs to use `density` in future when minimum matplotlib has it
+        with warnings.catch_warnings(record=True):
+            ax.hist(resid_nonmissing, normed=True, label='Hist')
+
+        kde = gaussian_kde(resid_nonmissing)
+        xlim = (-1.96 * 2, 1.96 * 2)
+        x = np.linspace(xlim[0], xlim[1])
+        ax.plot(x, kde(x), label='KDE')
+        ax.plot(x, norm.pdf(x), label='N(0,1)')
+        ax.set_xlim(xlim)
+        ax.legend()
+        ax.set_title('Histogram plus estimated density')
+
+        # Bottom-left: QQ plot
+        ax = fig.add_subplot(223)
+        from statsmodels.graphics.gofplots import qqplot
+        qqplot(resid_nonmissing, line='s', ax=ax)
+        ax.set_title('Normal Q-Q')
+
+        # Bottom-right: Correlogram
+        ax = fig.add_subplot(224)
+        from statsmodels.graphics.tsaplots import plot_acf
+        plot_acf(resid, ax=ax, lags=lags)
+        ax.set_title('Correlogram')
+
+        ax.set_ylim(-1, 1)
+
+        return fig

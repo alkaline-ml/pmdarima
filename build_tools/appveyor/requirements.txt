@@ -1,11 +1,13 @@
 numpy
 scipy
 # Pin Cython to avoid bug with 0.28.x on Python 3.7
-cython==0.27.3
-scikit-learn>=0.17
+cython>=0.29
+scikit-learn>=0.19
 pandas>=0.19
 statsmodels>=0.9.0
 patsy
 pytest
+pytest-mpl
 wheel
 twine
+matplotlib

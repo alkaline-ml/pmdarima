@@ -24,22 +24,18 @@ develop: requirements
 install: requirements
 	$(PYTHON) setup.py install
 
-# test-sphinxext:
-#	$(NOSETESTS) -s -v doc/sphinxext/
-#test-doc:
-#ifeq ($(BITS),64)
-#	$(NOSETESTS) -s -v doc/*.rst doc/modules/ doc/datasets/ \
-#	doc/developers doc/tutorial/basic doc/tutorial/statistical_inference \
-#	doc/tutorial/text_analytics
-#endif
-
 test-requirements:
-	$(PYTHON) -m pip install pytest pytest-cov flake8
+	$(PYTHON) -m pip install pytest flake8 matplotlib pytest-mpl
+
+coverage-dependencies:
+	$(PYTHON) -m pip install coverage pytest-cov codecov
 
 test-lint: test-requirements
 	$(PYTHON) -m flake8 pmdarima --filename='*.py' --ignore E803,F401,F403,W293,W504
 
-test-unit: test-requirements
-	$(PYTHON) -m pytest -v --durations=20 --cov-config .coveragerc --cov pmdarima
+test-unit: test-requirements coverage-dependencies
+	$(PYTHON) -m pytest -v --durations=20 --mpl --mpl-baseline-path=pytest_images --cov-config .coveragerc --cov pmdarima -p no:logging
 
 test: develop test-unit test-lint
+	# Coverage creates all these random little artifacts we don't want
+	rm .coverage.* || echo "No coverage artifacts to remove"

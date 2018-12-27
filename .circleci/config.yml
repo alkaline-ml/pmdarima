@@ -1,5 +1,11 @@
 version: 2
 
+test-filters: &test-filters
+    tags:
+        only: /.*/
+    branches:
+        only: /.*/
+
 jobs:
   # For testing PyPy rather than CPython
   pypy36:
@@ -22,6 +28,26 @@ jobs:
             - ~/.ccache
             - ~/.cache/pip
 
+  cpython36:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: make develop
+    - run: make test-unit
+    - run: codecov || echo "codecov upload failed"
+
+  cpython37:
+    docker:
+      - image: python:3.7
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: make develop
+    - run: make test-unit
+    - run: codecov || echo "codecov upload failed"
+
   # For testing lint
   test-linting:
     docker:
@@ -40,6 +66,15 @@ jobs:
     - checkout
     - run: ./build_tools/circle/before_install.sh
     - run: ./build_tools/circle/regression_testing.sh
+
+  # Simple job that passes when all other tests have passed
+  testing-passed:
+      docker:
+        - image: bash:latest
+      steps:
+        - run:
+            name: pmdarima Testing passed
+            command: echo "All tests passed"
 
   # For documentation deployment. You'll need the following environment vars
   # in your Circle CI settings, otherwise this will not work.
@@ -60,15 +95,29 @@ jobs:
 
 workflows:
   version: 2
-
-  # All PyPy jobs:
-  testing:
+  pmdarima-pipeline:
     jobs:
-      - pypy36
-      - test-linting
-      - regression-testing
+        # All testing jobs
+        - pypy36:
+            filters: *test-filters
+        - cpython36:
+            filters: *test-filters
+        - cpython37:
+            filters: *test-filters
+        - test-linting:
+            filters: *test-filters
+        - regression-testing:
+            filters: *test-filters
+        - testing-passed:
+            requires:
+                - pypy36
+                - cpython36
+                - cpython37
+                - test-linting
+                - regression-testing
+            filters: *test-filters
 
-  # All deployment
-  deploy:
-    jobs:
-      - deploy-doc
+        # All deployment jobs
+        - deploy-doc:
+            requires:
+                - testing-passed

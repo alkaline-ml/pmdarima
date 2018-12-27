@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from pmdarima.arima.approx import approx, _regularize
 from pmdarima.utils.array import c
 from pmdarima.utils.testing import assert_raises
+from pmdarima.arima.stationarity import ADFTest
 
 from numpy.testing import assert_array_almost_equal
 import numpy as np
@@ -59,3 +60,20 @@ def test_corners():
 
     # fails for bad length
     assert_raises(ValueError, approx, x=[], y=[], xout=[], method='constant')
+
+
+def test_approx_precision():
+    # Test an example from R vs. Python to compare the expected values and
+    # make sure we get as close as possible. This is from an ADFTest where k=1
+    # and x=austres
+    tableipl = np.array([[-4.0664],
+                         [-3.7468],
+                         [-3.462],
+                         [-3.1572],
+                         [-1.2128],
+                         [-0.8928],
+                         [-0.6104],
+                         [-0.2704]])
+
+    _, interpol = approx(tableipl, ADFTest.tablep, xout=-1.337233, rule=2)
+    assert np.allclose(interpol, 0.84880354)  # in R we get 0.8488036

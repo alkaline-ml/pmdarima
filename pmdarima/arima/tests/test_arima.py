@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 from pmdarima.arima import ARIMA, auto_arima
-from pmdarima.arima.arima import VALID_SCORING
+from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
 from pmdarima.arima.auto import _fmt_warning_str, _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate
@@ -23,6 +23,7 @@ import pickle
 import pytest
 import time
 import os
+
 
 # initialize the random state
 rs = RandomState(42)
@@ -59,8 +60,13 @@ wineind_m = 1
 wineind_xreg = rs.rand(wineind.shape[0], 2)
 
 
+def _unlink_if_exists(path):
+    if os.path.exists(path):
+        os.unlink(path)
+
+
 def test_basic_arima():
-    arima = ARIMA(order=(0, 0, 0), trend='c', suppress_warnings=True)
+    arima = ARIMA(order=(0, 0, 0), suppress_warnings=True)
     preds = arima.fit_predict(y)  # fit/predict for coverage
 
     # test some of the attrs
@@ -329,8 +335,7 @@ def test_more_elaborate():
     _other_preds = other.predict(n_periods=5, exogenous=new_xreg)
     assert_array_almost_equal(_preds, _other_preds)
 
-    # now clear the cache and remove the pickle file
-    arima._clear_cached_state()
+    # now remove the pickle file
     os.unlink(fl)
 
     # now show that since we fit the ARIMA with an exogenous array,
@@ -617,17 +622,6 @@ def test_double_pickle():
         pred_b = loaded_b.predict(n_periods=5)
         assert np.allclose(pred_a, pred_b)
 
-        # Remove the caches from each
-        loaded_a._clear_cached_state()
-        loaded_b._clear_cached_state()
-
-        # Test the previous condition where we removed the saved state of an
-        # ARIMA from statsmodels and caused an OSError and a corrupted pickle
-        with pytest.raises(OSError) as o:
-            joblib.load(file_a)  # fails since no cached state there!
-        msg = str(o)
-        assert 'Could not read saved model state' in msg, msg
-
     # Always remove in case we fail in try, leaving residual files
     finally:
         os.unlink(file_a)
@@ -758,5 +752,147 @@ def test_for_older_version():
                     arm.predict(n_periods=4)
 
         finally:
-            arima._clear_cached_state()
             os.unlink(pickle_file)
+
+
+@pytest.mark.parametrize(
+    'order,seasonal', [
+        # ARMA
+        pytest.param((1, 0, 0), None),
+
+        # ARIMA
+        pytest.param((1, 1, 0), None),
+
+        # SARIMAX
+        pytest.param((1, 1, 0), (1, 0, 0, 12))
+    ])
+def test_with_intercept(order, seasonal):
+    n_params = None
+    for intercept in (False, True):
+        modl = ARIMA(order=order,
+                     seasonal_order=seasonal,
+                     with_intercept=intercept).fit(lynx)
+
+        if not intercept:  # first time
+            n_params = modl.params().shape[0]
+        else:
+            # With an intercept, should be 1 more
+            assert modl.params().shape[0] == n_params + 1
+
+
+def test_to_dict_returns_dict():
+    train = lynx[:90]
+    modl = auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
+                      max_p=5, max_q=5, max_P=5, max_Q=5, seasonal=True,
+                      stepwise=True, suppress_warnings=True, D=10, max_D=10,
+                      error_action='ignore')
+    assert isinstance(modl.to_dict(), dict)
+
+
+def test_to_dict_raises_attribute_error_on_unfit_model():
+    modl = ARIMA(order=(1, 1, 0))
+    with pytest.raises(AttributeError):
+        modl.to_dict()
+
+
+def test_to_dict_is_accurate():
+    train = lynx[:90]
+    modl = auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
+                      max_p=5, max_q=5, max_P=5, max_Q=5, seasonal=True,
+                      stepwise=True, suppress_warnings=True, D=10, max_D=10,
+                      error_action='ignore')
+    expected = {
+        'pvalues': np.array([2.04752445e-03, 1.43710465e-61,
+                             1.29504002e-10, 5.22119887e-15]),
+        'resid': np.array(
+            [-1244.3973072, -302.89697033, -317.63342593, -304.57267897,
+             131.69413491, 956.15566697, 880.37459722, 2445.86460353,
+             -192.84268876, -177.1932523, -101.67727903, 384.05487582,
+             -304.52047818, -570.72748088, -497.48574217, 1286.86848903,
+             -400.22840217, 1017.55518758, -1157.37024626, -295.26213543,
+             104.79931827, -574.9867485, -588.49652697, -535.37707505,
+             -355.71298419, -164.06179682, 574.51900799, 15.45522718,
+             -1358.43416826, 120.42735893, -147.94038284, -685.64124874,
+             -365.18947057, -243.79704985, 317.79437422, 585.59553667,
+             34.70605783, -216.21587989, -692.53375089, 116.87379358,
+             -385.52193301, -540.95554558, -283.16913167, 438.72324376,
+             1078.63542578, 3198.50449405, -2167.76083646, -783.80525821,
+             1384.85947061, -95.84379882, -728.85293118, -35.68476597,
+             211.33538732, -379.91950618, 599.42290213, -839.30599392,
+             -201.97018962, -393.28468589, -376.16010796, -516.52280993,
+             -369.25037143, -362.25159504, 783.17714317, 207.96692746,
+             1744.27617969, -1573.37293342, -479.20751405, 473.18948601,
+             -503.20223823, -648.62384466, -671.12469446, -547.51554005,
+             -501.37768686, 274.76714385, 2073.1897026, -1063.19580729,
+             -1664.39957997, 882.73400004, -304.17429193, -422.60267409,
+             -292.34984241, -27.76090888, 1724.60937822, 3095.90133612,
+             -325.78549678, 110.95150845, 645.21273504, -135.91225092,
+             417.12710097, -118.27553718]),
+        'order': (2, 0, 0),
+        'seasonal_order': (0, 0, 0, 1),
+        'oob': np.nan,
+        'aic': 1487.8850037609368,
+        'aicc': 1488.5992894752226,
+        'bic': 1497.8842424422578,
+        'bse': np.array([2.26237893e+02, 6.97744631e-02,
+                         9.58556537e-02, 1.03225425e+05]),
+        'params': np.array([6.97548186e+02, 1.15522102e+00,
+                            -6.16136459e-01, 8.07374077e+05])
+    }
+
+    actual = modl.to_dict()
+
+    assert actual.keys() == expected.keys()
+    assert_almost_equal(actual['pvalues'], expected['pvalues'], decimal=5)
+    assert_almost_equal(actual['resid'], expected['resid'], decimal=5)
+    assert actual['order'] == expected['order']
+    assert actual['seasonal_order'] == expected['seasonal_order']
+    assert np.isnan(actual['oob'])
+    assert_almost_equal(actual['aic'], expected['aic'], decimal=5)
+    assert_almost_equal(actual['aicc'], expected['aicc'], decimal=5)
+    assert_almost_equal(actual['bic'], expected['bic'], decimal=5)
+    assert_almost_equal(actual['bse'], expected['bse'], decimal=3)
+    assert_almost_equal(actual['params'], expected['params'], decimal=3)
+
+
+def test_new_serialization():
+    arima = ARIMA(order=(0, 0, 0), suppress_warnings=True).fit(y)
+
+    # Serialize it, show there is no tmp_loc_
+    pkl_file = "file.pkl"
+    new_loc = "ts_wrapper.pkl"
+    try:
+        joblib.dump(arima, pkl_file)
+
+        # Assert it does NOT use the old-style pickling
+        assert not _uses_legacy_pickling(arima)
+        loaded = joblib.load(pkl_file)
+        assert not _uses_legacy_pickling(loaded)
+        preds = loaded.predict()
+        os.unlink(pkl_file)
+
+        # Now save out the arima_res_ piece separately, and show we can load
+        # it from the legacy method
+        arima.summary()
+        arima.arima_res_.save(fname=new_loc)
+        arima.tmp_pkl_ = new_loc
+
+        assert _uses_legacy_pickling(arima)
+
+        # Save/load it and show it works
+        joblib.dump(arima, pkl_file)
+        loaded2 = joblib.load(pkl_file)
+        assert_array_almost_equal(loaded2.predict(), preds)
+
+        # De-cache
+        arima._clear_cached_state()
+        assert not os.path.exists(new_loc)
+
+        # Show we get an OSError now
+        with pytest.raises(OSError) as ose:
+            joblib.load(pkl_file)
+        assert "Does it still" in str(ose), ose
+
+    finally:
+        _unlink_if_exists(pkl_file)
+        _unlink_if_exists(new_loc)
