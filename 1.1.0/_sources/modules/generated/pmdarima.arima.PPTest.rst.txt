@@ -1,0 +1,16 @@
+:mod:`pmdarima.arima`.PPTest
+===================================
+
+.. currentmodule:: pmdarima.arima
+
+.. autoclass:: PPTest
+
+   
+   .. automethod:: __init__
+   
+
+.. include:: pmdarima.arima.PPTest.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
