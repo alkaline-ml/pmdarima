@@ -39,7 +39,7 @@ matrix:
         - docker
       env: DISTRIB="conda" PYTHON_VERSION="3.5" INSTALL_MKL="true"
            NUMPY_VERSION="1.12.1" SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
-           DEPLOY=true CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
+           CACHEC=true DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
            DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
     # This test runs on linux 3.6 & as of v0.9+, deploys python 3.6 wheel
@@ -48,7 +48,7 @@ matrix:
       services:
       - docker
       env: DISTRIB="conda" PYTHON_VERSION="3.6.1" INSTALL_MKL="true"
-           SCIKIT_LEARN_VERSION="0.19" STATSMODELS_VERSION="0.9.0" DEPLOY=true CACHEC=true
+           SCIKIT_LEARN_VERSION="0.19" STATSMODELS_VERSION="0.9.0" CACHEC=true
            NUMPY_VERSION="1.12.1" DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
            DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
@@ -59,7 +59,7 @@ matrix:
       - docker
       env: DISTRIB="conda" PYTHON_VERSION="3.7.1" INSTALL_MKL="true"
            SCIKIT_LEARN_VERSION="0.20.1" STATSMODELS_VERSION="0.9.0"
-           DEPLOY=true CACHEC=true NUMPY_VERSION="1.15.4"
+           CACHEC=true NUMPY_VERSION="1.15.4"
            DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
            DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
@@ -68,21 +68,21 @@ matrix:
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="3.5"
            NUMPY_VERSION="1.12.1" SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
-           DEPLOY=true CACHEC=false
+           CACHEC=false
 
     # This environment tests Python 3.6 support on MAC OS X
     - os: osx
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="3.6"
            SCIKIT_LEARN_VERSION="0.20" STATSMODELS_VERSION="0.9.0"
-           DEPLOY=true CACHEC=false
+           CACHEC=false
 
     # This environment tests Python 3.7 support on MAC OS X
     - os: osx
       language: generic
       env: DISTRIB="conda" PYTHON_VERSION="3.7"
            SCIKIT_LEARN_VERSION="0.20" STATSMODELS_VERSION="0.9.0"
-           DEPLOY=true CACHEC=false
+           CACHEC=false
 
 install: source build_tools/travis/install.sh
 before_script: bash build_tools/travis/before_script.sh
@@ -115,4 +115,3 @@ deploy:
   script: python -m twine upload --skip-existing dist/pmdarima-*
   on:
     tags: true # Upload on tagged releases
-    condition: "$DEPLOY = true"

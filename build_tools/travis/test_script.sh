@@ -20,7 +20,7 @@ run_tests() {
     # check if we do not leave artifacts
     mkdir -p $TEST_DIR
 
-    # We need the setup.cfg for the nose settings
+    # We need the setup.cfg for the pytest settings
     cp setup.cfg $TEST_DIR
     cp .coveragerc $TEST_DIR
     cd $TEST_DIR

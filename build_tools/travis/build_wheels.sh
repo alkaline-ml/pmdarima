@@ -2,11 +2,6 @@
 
 set -e -x
 
-if [[ "${DEPLOY}" != true ]]; then
-    # Not a release
-    exit 0
-fi
-
 function build_wheel {
     local pyver=$1
     local arch=$2

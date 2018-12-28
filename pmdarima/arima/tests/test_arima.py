@@ -7,7 +7,7 @@ from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
 from pmdarima.arima.auto import _fmt_warning_str, _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate
-from pmdarima.utils import get_callable, assert_raises
+from pmdarima.utils import get_callable
 
 import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
@@ -114,14 +114,15 @@ def test_with_oob():
     assert np.isnan(arima.oob())
 
     # This will raise since n_steps is not an int
-    assert_raises(TypeError, arima.predict, n_periods="5")
+    with pytest.raises(TypeError):
+        arima.predict(n_periods="5")
 
     # But that we CAN forecast with an int...
     _ = arima.predict(n_periods=5)  # noqa: F841
 
     # Show we fail if cv > n_samples
-    assert_raises(ValueError,
-                  ARIMA(order=(2, 1, 2), out_of_sample_size=1000).fit, hr)
+    with pytest.raises(ValueError):
+        ARIMA(order=(2, 1, 2), out_of_sample_size=1000).fit(hr)
 
 
 # Test Issue #28 ----------------------------------------------------------
@@ -166,23 +167,23 @@ def test_oob_for_issue_28():
     no_oob_forecasts = arima_no_oob.predict(n_periods=5,
                                             exogenous=xreg_test)
 
-    assert_raises(AssertionError, assert_array_almost_equal,
-                  with_oob_forecasts, no_oob_forecasts)
+    with pytest.raises(AssertionError):
+        assert_array_almost_equal(with_oob_forecasts, no_oob_forecasts)
 
     # But after we update the no_oob model with the latest data, we should
     # be producing the same exact forecasts
 
     # First, show we'll fail if we try to add observations with no exogenous
-    assert_raises(ValueError, arima_no_oob.add_new_observations,
-                  hr[-10:], None)
+    with pytest.raises(ValueError):
+        arima_no_oob.add_new_observations(hr[-10:], None)
 
     # Also show we'll fail if we try to add mis-matched shapes of data
-    assert_raises(ValueError, arima_no_oob.add_new_observations,
-                  hr[-10:], xreg_test)
+    with pytest.raises(ValueError):
+        arima_no_oob.add_new_observations(hr[-10:], xreg_test)
 
     # Show we fail if we try to add observations with a different dim exog
-    assert_raises(ValueError, arima_no_oob.add_new_observations,
-                  hr[-10:], xreg_test[:, :2])
+    with pytest.raises(ValueError):
+        arima_no_oob.add_new_observations(hr[-10:], xreg_test[:, :2])
 
     # Actually add them now, and compare the forecasts (should be the same)
     arima_no_oob.add_new_observations(hr[-10:], xreg[-10:, :])
@@ -340,12 +341,13 @@ def test_more_elaborate():
 
     # now show that since we fit the ARIMA with an exogenous array,
     # we need to provide one for predictions otherwise it breaks.
-    assert_raises(ValueError, arima.predict, n_periods=5, exogenous=None)
+    with pytest.raises(ValueError):
+        arima.predict(n_periods=5, exogenous=None)
 
     # show that if we DO provide an exogenous and it's the wrong dims, we
     # also break things down.
-    assert_raises(ValueError, arima.predict, n_periods=5,
-                  exogenous=rs.rand(4, 4))
+    with pytest.raises(ValueError):
+        arima.predict(n_periods=5, exogenous=rs.rand(4, 4))
 
 
 def test_the_r_src():
@@ -388,16 +390,23 @@ def test_errors():
         #     return False
         # except ValueError:
         #     return True
-        assert_raises(ValueError, f, *args, **kwargs)
+        with pytest.raises(ValueError):
+            f(*args, **kwargs)
 
     # show we fail for bad start/max p, q values:
-    _assert_val_error(auto_arima, abc, start_p=-1)
-    _assert_val_error(auto_arima, abc, start_q=-1)
-    _assert_val_error(auto_arima, abc, max_p=-1)
-    _assert_val_error(auto_arima, abc, max_q=-1)
+    with pytest.raises(ValueError):
+        auto_arima(abc, start_p=-1)
+    with pytest.raises(ValueError):
+        auto_arima(abc, start_q=-1)
+    with pytest.raises(ValueError):
+        auto_arima(abc, max_p=-1)
+    with pytest.raises(ValueError):
+        auto_arima(abc, max_q=-1)
     # (where start < max)
-    _assert_val_error(auto_arima, abc, start_p=1, max_p=0)
-    _assert_val_error(auto_arima, abc, start_q=1, max_q=0)
+    with pytest.raises(ValueError):
+        auto_arima(abc, start_p=1, max_p=0)
+    with pytest.raises(ValueError):
+        auto_arima(abc, start_q=1, max_q=0)
 
     # show max order error
     _assert_val_error(auto_arima, abc, max_order=-1)
@@ -546,8 +555,8 @@ def test_with_seasonality7():
 
 
 def test_corner_cases():
-    assert_raises(ValueError, auto_arima, wineind,
-                  error_action='some-bad-string')
+    with pytest.raises(ValueError):
+        auto_arima(wineind, error_action='some-bad-string')
 
     # things that produce warnings
     with warnings.catch_warnings(record=False):
@@ -562,10 +571,12 @@ def test_corner_cases():
         assert hasattr(fits, '__iter__')
 
     # show we fail for n_iter < 0
-    assert_raises(ValueError, auto_arima, np.ones(10), random=True, n_fits=-1)
+    with pytest.raises(ValueError):
+        auto_arima(np.ones(10), random=True, n_fits=-1)
 
     # show if max* < start* it breaks:
-    assert_raises(ValueError, auto_arima, np.ones(10), start_p=5, max_p=0)
+    with pytest.raises(ValueError):
+        auto_arima(np.ones(10), start_p=5, max_p=0)
 
 
 def test_warning_str_fmt():

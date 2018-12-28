@@ -4,11 +4,12 @@ from __future__ import absolute_import
 
 from pmdarima.arima.approx import approx, _regularize
 from pmdarima.utils.array import c
-from pmdarima.utils.testing import assert_raises
 from pmdarima.arima.stationarity import ADFTest
 
 from numpy.testing import assert_array_almost_equal
 import numpy as np
+
+import pytest
 
 table = c(0.216, 0.176, 0.146, 0.119)
 tablep = c(0.01, 0.025, 0.05, 0.10)
@@ -39,27 +40,31 @@ def test_approx_rule2():
 
 def test_corners():
     # fails for length differences
-    assert_raises(ValueError, approx, x=[1, 2, 3], y=[1, 2], xout=1.0)
+    with pytest.raises(ValueError):
+        approx(x=[1, 2, 3], y=[1, 2], xout=1.0)
 
     # fails for bad string
-    assert_raises(ValueError, approx, x=table, y=table,
-                  xout=1.0, method='bad-string')
+    with pytest.raises(ValueError):
+        approx(x=table, y=table, xout=1.0, method='bad-string')
 
     # fails for bad length
-    assert_raises(ValueError, approx, x=[], y=[], xout=[], ties='mean')
+    with pytest.raises(ValueError):
+        approx(x=[], y=[], xout=[], ties='mean')
 
     # fails for bad length
-    assert_raises(ValueError, approx, x=[], y=[], xout=[], method='constant')
+    with pytest.raises(ValueError):
+        approx(x=[], y=[], xout=[], method='constant')
 
     # fails for linear when < 2 samples
-    assert_raises(ValueError, approx, x=[1], y=[1], xout=[],
-                  method='linear', ties='ordered')
+    with pytest.raises(ValueError):
+        approx(x=[1], y=[1], xout=[], method='linear', ties='ordered')
 
     # but *doesn't* fail for constant when < 2 samples
     approx(x=[1], y=[1], xout=[], method='constant', ties='ordered')
 
     # fails for bad length
-    assert_raises(ValueError, approx, x=[], y=[], xout=[], method='constant')
+    with pytest.raises(ValueError):
+        approx(x=[], y=[], xout=[], method='constant')
 
 
 def test_approx_precision():
