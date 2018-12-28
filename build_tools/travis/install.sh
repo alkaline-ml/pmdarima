@@ -46,13 +46,13 @@ if [[ "$DISTRIB" == "conda" ]]; then
     # provided versions
     if [[ "$INSTALL_MKL" == "true" ]]; then
         conda create -n testenv --yes python=$PYTHON_VERSION pip pytest \
-            numpy=$NUMPY_VERSION scipy \
+            pytest-xdist numpy=$NUMPY_VERSION scipy \
             mkl cython scikit-learn=$SCIKIT_LEARN_VERSION \
             statsmodels=$STATSMODELS_VERSION
 
     else
         conda create -n testenv --yes python=$PYTHON_VERSION pip pytest \
-            numpy=$NUMPY_VERSION scipy \
+            pytest-xdist numpy=$NUMPY_VERSION scipy \
             nomkl cython scikit-learn=$SCIKIT_LEARN_VERSION \
             statsmodels=$STATSMODELS_VERSION
     fi

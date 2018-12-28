@@ -16,7 +16,7 @@ source pypy-env/bin/activate
 python --version
 which python
 
-pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy Cython pytest pytest-mpl
+pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy Cython pytest pytest-mpl pytest-xdist
 pip install "scipy>=1.1.0"
 pip install "scikit-learn==0.19.1"
 pip install pandas statsmodels matplotlib
@@ -30,4 +30,4 @@ pip install -vv -e .
 
 # Pytest is known to consume lots of memory for a large number of tests,
 # and Circle 2.0 limits 4GB per container.
-python -m pytest pmdarima/ -p no:logging --mpl --mpl-baseline-path=pytest_images
+python -m pytest pmdarima/ -p no:logging -n 2 -v --mpl --mpl-baseline-path=pytest_images
