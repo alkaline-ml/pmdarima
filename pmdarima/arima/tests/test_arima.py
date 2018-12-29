@@ -6,6 +6,7 @@ from pmdarima.arima import ARIMA, auto_arima
 from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
 from pmdarima.arima.auto import _fmt_warning_str, _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
+from pmdarima.arima.warnings import ModelFitWarning
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate
 from pmdarima.utils import get_callable
 
@@ -656,20 +657,16 @@ def test_failing_model_fit():
 
 def test_warn_for_large_differences():
     # First: d is too large
-    with warnings.catch_warnings(record=True) as w:
-        _ = auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
-                       d=3, error_action='warn')
-
-        assert len(w) > 0
+    with pytest.warns(ModelFitWarning):
+        auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
+                   d=3, error_action='warn')
 
     # Second: D is too large. M needs to be > 1 or D will be set to 0...
     # unfortunately, this takes a long time.
-    with warnings.catch_warnings(record=True) as w:
-        _ = auto_arima(wineind, seasonal=True, m=2,  # noqa: F841
+    with pytest.warns(ModelFitWarning):
+        auto_arima(wineind, seasonal=True, m=2,  # noqa: F841
                        suppress_warnings=False,
                        D=3, error_action='warn')
-
-        assert len(w) > 0
 
 
 def test_warn_for_stepwise_and_parallel():
