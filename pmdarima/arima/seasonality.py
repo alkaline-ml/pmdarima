@@ -21,6 +21,8 @@ from .stationarity import _BaseStationarityTest
 from ..compat.numpy import DTYPE
 from ._arima import C_canova_hansen_sd_test
 
+import time
+
 __all__ = [
     'CHTest'
 ]
@@ -77,6 +79,11 @@ class CHTest(_SeasonalStationarityTest):
     .. [1] Testing for seasonal stability using the Canova
            and Hansen test statisic: http://bit.ly/2wKkrZo
     """
+    crit_vals = c(0.4617146, 0.7479655, 1.0007818,
+                  1.2375350, 1.4625240, 1.6920200,
+                  1.9043096, 2.1169602, 2.3268562,
+                  2.5406922, 2.7391007)
+
     def __init__(self, m):
         super(CHTest, self).__init__(m=m)
 
@@ -120,7 +127,9 @@ class CHTest(_SeasonalStationarityTest):
         # As of v0.9.1, use the C_canova_hansen_sd_test function to compute
         # Omnw, Omfhat, A, frecob. This avoids the overhead of multiple calls
         # to C functions
+        start = time.time()
         A, AtOmfhatA = C_canova_hansen_sd_test(ltrunc, Ne, Fhataux, frec, s)
+        print("C code complete in %.3f" % (time.time() - start))
 
         # UPDATE 01/04/2018 - we can get away without computing u, v
         # (this is also MUCH MUCH faster!!!)
@@ -163,6 +172,7 @@ class CHTest(_SeasonalStationarityTest):
         #   }
         #   return(fmat[, 1:(m - 1)])
         # }
+        start = time.time()
 
         # set up seasonal dummies using fourier series
         n = x.shape[0]
@@ -185,6 +195,7 @@ class CHTest(_SeasonalStationarityTest):
             # fmat[,2*(i-1)+1] <- cos(2*pi*i*tt/m)
             fmat[:, 2 * (i - 1)] = np.cos(2 * pi * i * tt / m)
 
+        print("_seas_dummy complete in %.3f" % (time.time() - start))
         return fmat[:, :m - 1]
 
     def estimate_seasonal_differencing_term(self, x):
@@ -225,13 +236,9 @@ class CHTest(_SeasonalStationarityTest):
             return 0
 
         chstat = self._sd_test(x, m)
-        crit_vals = c(0.4617146, 0.7479655, 1.0007818,
-                      1.2375350, 1.4625240, 1.6920200,
-                      1.9043096, 2.1169602, 2.3268562,
-                      2.5406922, 2.7391007)
 
         if m <= 12:
-            return int(chstat > crit_vals[m - 2])  # R does m - 1...
+            return int(chstat > self.crit_vals[m - 2])  # R does m - 1...
         if m == 24:
             return int(chstat > 5.098624)
         if m == 52:

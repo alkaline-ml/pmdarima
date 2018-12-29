@@ -14,6 +14,7 @@
 import numpy as np
 cimport numpy as np
 from libc.math cimport NAN
+from libc.stdlib cimport malloc, free
 
 cdef extern from "_arima_fast_helpers.h":
     bint pyr_isfinite(double) nogil
@@ -182,28 +183,40 @@ def C_canova_hansen_sd_test(INTP ltrunc,
     n_features = Fhataux.shape[1]
 
     # Define vector wnw, Omnw matrix
-    cdef np.ndarray[double, ndim=1, mode='c'] wnw
     cdef np.ndarray[double, ndim=2, mode='c'] Omnw, Omfhat
 
     # Omnw is a square matrix of n x n
     Omnw = np.zeros((n_features, n_features), dtype=np.float64, order='c')
 
     # R code: wnw <- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)
-    wnw = 1. - (np.arange(ltrunc, dtype=np.float64) + 1.) / (ltrunc + 1.)
+    cdef double* wnw
+    cdef double wnw_denom = <double>(ltrunc + 1.)
+    cdef double wnw_elmt
+    try:
+        wnw = <double*>malloc(ltrunc * sizeof(double))
+        for i in range(0, ltrunc):
+            wnw[i] = 1. - ((i + 1) / wnw_denom)
 
-    # original R code:
-    # for (k in 1:ltrunc)
-    #     Omnw <- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%
-    #         Fhataux[1:(Ne - k), ]) * wnw[k]
-    # Old code was in python (not cython) but reads about the same
-    for k in range(ltrunc):
-        Omnw = Omnw + \
-               np.dot(Fhataux.T[:, k + 1:Ne],
-                      Fhataux[:(Ne - (k + 1)), :]) * \
-               wnw[k]
+        # original R code:
+        # for (k in 1:ltrunc)
+        #     Omnw <- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%
+        #         Fhataux[1:(Ne - k), ]) * wnw[k]
+        # Old code was in python (not cython) but reads about the same
+        for k in range(ltrunc):
+            Omnw = Omnw + \
+                   np.dot(Fhataux.T[:, k + 1:Ne],
+                          Fhataux[:(Ne - (k + 1)), :]) * \
+                   wnw[k]
+            # wnw_elmt = wnw[k]
+            # for i in range(n_features):
+            #     for j in range(n_features):
+            #         Omnw[i, j] += 
 
-    # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
-    Omfhat = (np.dot(Fhataux.T, Fhataux) + Omnw + Omnw.T) / float(Ne)
+        # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
+        Omfhat = (np.dot(Fhataux.T, Fhataux) + Omnw + Omnw.T) / float(Ne)
+
+    finally:
+        free(wnw)
 
     cdef np.ndarray[int, ndim=1, mode='c'] sq, frecob
     cdef np.ndarray[int, ndim=2, mode='c'] A
