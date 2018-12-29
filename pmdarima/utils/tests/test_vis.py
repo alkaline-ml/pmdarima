@@ -24,9 +24,9 @@ if not travis:
 
     # base images are created on Mac/Darwin. Windows needs a higher tolerance
     if platform.system() == "Windows":
-        tolerance = 10
+        tolerance = 15
     else:
-        tolerance = 5
+        tolerance = 10
 
     params = []
     for row in datasets:
