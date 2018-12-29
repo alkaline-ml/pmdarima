@@ -657,7 +657,7 @@ def test_warn_for_large_differences():
 
 
 def test_warn_for_stepwise_and_parallel():
-    with pytest.warns(FutureWarning):
+    with pytest.warns(UserWarning):
         auto_arima(lynx, suppress_warnings=False, d=1,  # noqa: F841
                        error_action='ignore', stepwise=True, n_jobs=2)
 

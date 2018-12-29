@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import
 
+from pmdarima.compat._internal import get_pytest_mpl_threshold
+
 import pmdarima as pm
 import os
 import platform
@@ -22,11 +24,9 @@ travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
 
 if not travis:
 
-    # base images are created on Mac/Darwin. Windows needs a higher tolerance
-    if platform.system() == "Windows":
-        tolerance = 15
-    else:
-        tolerance = 10
+    tolerance = get_pytest_mpl_threshold(
+        {'Windows': 15, 'Darwin': 10, 'Linux': 10}
+    )
 
     params = []
     for row in datasets:
