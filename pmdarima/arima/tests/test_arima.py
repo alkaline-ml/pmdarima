@@ -19,7 +19,6 @@ from sklearn.externals import joblib
 from statsmodels import api as sm
 import pandas as pd
 
-import warnings
 import pickle
 import pytest
 import time
@@ -468,16 +467,6 @@ def test_with_seasonality1():
 
 
 def test_with_seasonality2():
-    # also test the warning, while we're at it...
-    def suppress_warnings(func):
-        def suppressor(*args, **kwargs):
-            with warnings.catch_warnings(record=True):
-                warnings.simplefilter("ignore")
-                return func(*args, **kwargs)
-        return suppressor
-
-    # Use smaller M to make this move faster.
-    @suppress_warnings
     def do_fit():
         return auto_arima(wineind, start_p=1, start_q=1, max_p=2,
                           max_q=2, m=2, start_P=0,
@@ -560,9 +549,7 @@ def test_corner_cases():
         auto_arima(wineind, error_action='some-bad-string')
 
     # things that produce warnings
-    with warnings.catch_warnings(record=False):
-        warnings.simplefilter('ignore')
-
+    with pytest.warns(UserWarning):
         # show a constant result will result in a quick fit
         auto_arima(np.ones(10), suppress_warnings=True)
 
@@ -670,11 +657,9 @@ def test_warn_for_large_differences():
 
 
 def test_warn_for_stepwise_and_parallel():
-    with warnings.catch_warnings(record=True) as w:
-        _ = auto_arima(lynx, suppress_warnings=False, d=1,  # noqa: F841
+    with pytest.warns(FutureWarning):
+        auto_arima(lynx, suppress_warnings=False, d=1,  # noqa: F841
                        error_action='ignore', stepwise=True, n_jobs=2)
-
-        assert len(w) > 0
 
 
 # Force case where data is simple polynomial after differencing
@@ -747,17 +732,15 @@ def test_for_older_version():
             joblib.dump(arima, pickle_file)
 
             # Now unpickle it and show that we get a warning (if expected)
-            with warnings.catch_warnings(record=True) as w:
+            if expect_warning:
+                with pytest.warns(UserWarning):
+                    arm = joblib.load(pickle_file)  # type: ARIMA
+            else:
                 arm = joblib.load(pickle_file)  # type: ARIMA
 
-                if expect_warning:
-                    assert len(w) > 0
-                else:
-                    assert not len(w)
-
-                # we can still produce predictions (only if we fit)
-                if do_fit:
-                    arm.predict(n_periods=4)
+            # we can still produce predictions (only if we fit)
+            if do_fit:
+                arm.predict(n_periods=4)
 
         finally:
             os.unlink(pickle_file)
