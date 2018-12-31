@@ -6,23 +6,26 @@
 
 from __future__ import absolute_import, division
 
-from sklearn.utils.validation import column_or_1d, check_array
-from sklearn.linear_model import LinearRegression
 from sklearn.externals import six
+from sklearn.linear_model import LinearRegression
+from sklearn.utils.validation import column_or_1d, check_array
 
 from scipy.linalg import svd
-from abc import ABCMeta, abstractmethod
+from statsmodels import api as sm
 
+from abc import ABCMeta, abstractmethod
 from numpy.linalg import solve
 import numpy as np
 
-from ..utils.array import c
-from .stationarity import _BaseStationarityTest
 from ..compat.numpy import DTYPE
+from .stationarity import _BaseStationarityTest
+from ..utils.array import c, diff
+
 from ._arima import C_canova_hansen_sd_test
 
 __all__ = [
-    'CHTest'
+    'CHTest',
+    'OCSBTest'
 ]
 
 
@@ -243,3 +246,119 @@ class CHTest(_SeasonalStationarityTest):
             return int(chstat > 65.44445)
 
         return int(chstat > 0.269 * (m ** 0.928))
+
+
+class OCSBTest(_SeasonalStationarityTest):
+    """
+
+    Parameters
+    ----------
+    m : int
+        The seasonal differencing term. For monthly data, e.g., this would be
+        12. For quarterly, 4, etc. For the OCSB test to work, ``m`` must
+        exceed 1.
+
+    lag_method : str, optional (default="aic")
+        The lag method to use. One of ("fixed", "aic", "bic", "aicc"). The
+        metric for assessing model performance after fitting a linear model.
+    """
+    def __init__(self, m, lag_method="aic", max_lag=3):
+        super(OCSBTest, self).__init__(m=m)
+
+        self.lag_method = lag_method
+        self.max_lag = max_lag
+
+    @staticmethod
+    def _calc_ocsb_crit_val(m):
+        log_m = np.log(m)
+        return -0.2937411 * \
+               np.exp(-0.2850853 * (log_m - 0.7656451) + (-0.05983644) *
+                      ((log_m - 0.7656451) ** 2)) - 1.652202
+
+    @staticmethod
+    def _do_lag(y, lag):
+        n = y.shape[0]
+        if lag == 1:
+            return y.reshape(n, 1)
+
+        # Create a 2d array of dims (n + (lag - 1), lag). This looks cryptic..
+        # If there are tons of lags, this may not be super efficient...
+        out = np.ones((n + (lag - 1), lag)) * np.nan
+        for i in range(lag):
+            out[i:i + n, i] = y
+        return out
+
+    @staticmethod
+    def _gen_lags(y, max_lag):
+        if max_lag == 0:
+            return np.zeros(y.shape[0])
+
+        # delegate down
+        return OCSBTest._do_lag(y, max_lag)
+
+    @staticmethod
+    def _fit_ocsb(x, m, lag, max_lag):
+        y_first_order_diff = diff(x, m)
+        y = diff(y_first_order_diff)
+        ylag = OCSBTest._gen_lags(y, lag)
+
+        if max_lag > 0:
+            # y = tail(y, -maxlag)
+            y = y[max_lag:]
+
+        # Make a 2-feature matrix, but first trim out any rows with NaN in
+        # the lag array
+        # ylag_finite = ylag[~np.isnan(ylag).any(axis=1)]
+        ylag_finite = ylag[lag:-lag, :]
+
+        # The constant term is not part of the R code, but is used in the R lm
+        mf = np.hstack((ylag_finite,
+                        np.zeros((y.shape[0], 1))))
+
+        # Fit the first linear model
+        ar_fit = LinearRegression(fit_intercept=False).fit(mf, y)
+
+        # Create Z4
+        z4_lag = OCSBTest._gen_lags(y_first_order_diff, lag)
+        z4lag_finite = z4_lag[~np.isnan(z4_lag).any(axis=1)]
+        Z4_frame = np.hstack((y_first_order_diff,
+                              z4lag_finite[:y_first_order_diff.shape[0]]))
+
+        # TODO: finish this
+
+    def estimate_seasonal_differencing_term(self, x):
+
+        if not self._base_case(x):
+            return 0
+
+        m = int(self.m)
+        if m == 1:
+            raise ValueError("m must exceed 1")
+
+        # ensure vector
+        x = column_or_1d(
+            check_array(x, ensure_2d=False, dtype=np.float64,
+                        force_all_finite=True))  # type: np.ndarray
+
+        n = x.shape[0]
+        if n < 2 * m + 5:
+            return 0
+
+        # TODO: validate method
+
+        maxlag = self.max_lag
+        method = self.lag_method
+        if maxlag > 0:
+            if method != 'fixed':
+                # TODO:
+                pass
+
+        regression = self._fit_ocsb(x, m, maxlag, maxlag)
+
+        # Get the coefficients for the z4 and z5 matrices
+        # TODO:
+        stat = np.nan
+
+        # Get the critical value for m
+        crit_val = self._calc_ocsb_crit_val(m)
+        return int(stat > crit_val)
