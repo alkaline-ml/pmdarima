@@ -21,8 +21,6 @@ from .stationarity import _BaseStationarityTest
 from ..compat.numpy import DTYPE
 from ._arima import C_canova_hansen_sd_test
 
-import time
-
 __all__ = [
     'CHTest'
 ]
@@ -78,6 +76,9 @@ class CHTest(_SeasonalStationarityTest):
     ----------
     .. [1] Testing for seasonal stability using the Canova
            and Hansen test statisic: http://bit.ly/2wKkrZo
+
+    .. [2] R source code for CH test:
+           https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L148
     """
     crit_vals = c(0.4617146, 0.7479655, 1.0007818,
                   1.2375350, 1.4625240, 1.6920200,
@@ -111,7 +112,7 @@ class CHTest(_SeasonalStationarityTest):
         #     Fhataux[:, i] = R1[:, i] * residuals
 
         # more efficient numpy:
-        Fhataux = (R1.T * residuals).T
+        Fhataux = (R1.T * residuals).T.astype(np.float64)
 
         # translated R code
         # matrix row cumsums
@@ -121,15 +122,12 @@ class CHTest(_SeasonalStationarityTest):
         #         Fhat[i, n] = Fhataux[:i, n].sum()
 
         # more efficient numpy:
-        Fhat = Fhataux.cumsum(axis=0)
         Ne = Fhataux.shape[0]
 
         # As of v0.9.1, use the C_canova_hansen_sd_test function to compute
         # Omnw, Omfhat, A, frecob. This avoids the overhead of multiple calls
         # to C functions
-        start = time.time()
         A, AtOmfhatA = C_canova_hansen_sd_test(ltrunc, Ne, Fhataux, frec, s)
-        print("C code complete in %.3f" % (time.time() - start))
 
         # UPDATE 01/04/2018 - we can get away without computing u, v
         # (this is also MUCH MUCH faster!!!)
@@ -149,6 +147,7 @@ class CHTest(_SeasonalStationarityTest):
         # a nasty mess of dot products... this is the (horrendous) R code:
         # (1/N^2) * sum(diag(solve(tmp) %*% t(A) %*% t(Fhat) %*% Fhat %*% A))
         # https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L321
+        Fhat = Fhataux.cumsum(axis=0)
         solved = solve(AtOmfhatA, np.identity(AtOmfhatA.shape[0]))
         return (1.0 / n ** 2) * solved.dot(A.T).dot(
             Fhat.T).dot(Fhat).dot(A).diagonal().sum()
@@ -172,8 +171,6 @@ class CHTest(_SeasonalStationarityTest):
         #   }
         #   return(fmat[, 1:(m - 1)])
         # }
-        start = time.time()
-
         # set up seasonal dummies using fourier series
         n = x.shape[0]
 
@@ -195,7 +192,6 @@ class CHTest(_SeasonalStationarityTest):
             # fmat[,2*(i-1)+1] <- cos(2*pi*i*tt/m)
             fmat[:, 2 * (i - 1)] = np.cos(2 * pi * i * tt / m)
 
-        print("_seas_dummy complete in %.3f" % (time.time() - start))
         return fmat[:, :m - 1]
 
     def estimate_seasonal_differencing_term(self, x):
