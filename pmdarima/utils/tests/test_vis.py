@@ -6,7 +6,6 @@ from pmdarima.compat._internal import get_pytest_mpl_threshold
 
 import pmdarima as pm
 import os
-import platform
 import pytest
 
 # Some as numpy, some as series
@@ -14,7 +13,8 @@ datasets = [
     ['wineind', pm.datasets.load_wineind(True)],
     ['lynx', pm.datasets.load_lynx(False)],
     ['heartrate', pm.datasets.load_heartrate(True)],
-    ['woolyrnq', pm.datasets.load_woolyrnq(True)]
+    ['woolyrnq', pm.datasets.load_woolyrnq(True)],
+    ['austres', pm.datasets.load_austres(False)]
 ]
 
 # We are ONLY going to run these tests if we are NOT on Travis,

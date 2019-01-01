@@ -5,28 +5,14 @@ from __future__ import absolute_import
 
 from pmdarima.arima.seasonality import CHTest
 from pmdarima.arima.utils import nsdiffs
+from pmdarima.datasets import load_austres
 
 import numpy as np
 from numpy.testing import assert_almost_equal
 from sklearn.utils.validation import check_random_state
 import pytest
 
-# TODO: redundant code with test_stationarity. Fix this in separate feature
-austres = np.array([13067.3, 13130.5, 13198.4, 13254.2, 13303.7, 13353.9,
-                    13409.3, 13459.2, 13504.5, 13552.6, 13614.3, 13669.5,
-                    13722.6, 13772.1, 13832.0, 13862.6, 13893.0, 13926.8,
-                    13968.9, 14004.7, 14033.1, 14066.0, 14110.1, 14155.6,
-                    14192.2, 14231.7, 14281.5, 14330.3, 14359.3, 14396.6,
-                    14430.8, 14478.4, 14515.7, 14554.9, 14602.5, 14646.4,
-                    14695.4, 14746.6, 14807.4, 14874.4, 14923.3, 14988.7,
-                    15054.1, 15121.7, 15184.2, 15239.3, 15288.9, 15346.2,
-                    15393.5, 15439.0, 15483.5, 15531.5, 15579.4, 15628.5,
-                    15677.3, 15736.7, 15788.3, 15839.7, 15900.6, 15961.5,
-                    16018.3, 16076.9, 16139.0, 16203.0, 16263.3, 16327.9,
-                    16398.9, 16478.3, 16538.2, 16621.6, 16697.0, 16777.2,
-                    16833.1, 16891.6, 16956.8, 17026.3, 17085.4, 17106.9,
-                    17169.4, 17239.4, 17292.0, 17354.2, 17414.2, 17447.3,
-                    17482.6, 17526.0, 17568.7, 17627.1, 17661.5])
+austres = load_austres()
 
 #  change the length to be longer so we can actually test the large case
 aus_list = austres.tolist()  # type: list
