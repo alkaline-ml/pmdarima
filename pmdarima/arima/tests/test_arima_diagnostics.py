@@ -4,10 +4,10 @@ from __future__ import absolute_import
 
 from pmdarima.datasets import load_lynx
 from pmdarima.arima import ARIMA
+from pmdarima.compat._internal import get_pytest_mpl_threshold
 
 import pytest
 import os
-import platform
 
 lynx = load_lynx()
 
@@ -18,10 +18,9 @@ travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
 if not travis:
 
     # base images are created on Mac/Darwin. Windows needs a higher tolerance
-    if platform.system() == "Windows":
-        tolerance = 10
-    else:
-        tolerance = 5
+    tolerance = get_pytest_mpl_threshold(
+        {'Windows': 10, 'Darwin': 5, 'Linux': 5}
+    )
 
     @pytest.mark.parametrize(
         'model_type,model', [
