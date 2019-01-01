@@ -198,14 +198,21 @@ def test_ch_sd_test(x, m, expected):
 def test_ocsb_do_lag():
     q = np.arange(5)
 
-    assert_array_equal(OCSBTest._do_lag(q, 1),
+    assert_array_equal(OCSBTest._do_lag(q, 1, False),
                        [[0.],
                         [1.],
                         [2.],
                         [3.],
                         [4.]])
 
-    assert_array_equal(OCSBTest._do_lag(q, 2),
+    assert_array_equal(OCSBTest._do_lag(q, 1, True),
+                       [[0.],
+                        [1.],
+                        [2.],
+                        [3.],
+                        [4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 2, False),
                        [[0., np.nan],
                         [1., 0.],
                         [2., 1.],
@@ -213,7 +220,13 @@ def test_ocsb_do_lag():
                         [4., 3.],
                         [np.nan, 4.]])
 
-    assert_array_equal(OCSBTest._do_lag(q, 3),
+    assert_array_equal(OCSBTest._do_lag(q, 2, True),
+                       [[1., 0.],
+                        [2., 1.],
+                        [3., 2.],
+                        [4., 3.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 3, False),
                        [[0., np.nan, np.nan],
                         [1., 0., np.nan],
                         [2., 1., 0.],
@@ -222,7 +235,12 @@ def test_ocsb_do_lag():
                         [np.nan, 4., 3.],
                         [np.nan, np.nan, 4.]])
 
-    assert_array_equal(OCSBTest._do_lag(q, 4),
+    assert_array_equal(OCSBTest._do_lag(q, 3, True),
+                       [[2., 1., 0.],
+                        [3., 2., 1.],
+                        [4., 3., 2.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 4, False),
                        [[0., np.nan, np.nan, np.nan],
                         [1., 0., np.nan, np.nan],
                         [2., 1., 0., np.nan],
@@ -232,9 +250,38 @@ def test_ocsb_do_lag():
                         [np.nan, np.nan, 4., 3.],
                         [np.nan, np.nan, np.nan, 4.]])
 
+    assert_array_equal(OCSBTest._do_lag(q, 4, True),
+                       [[3., 2., 1., 0.],
+                        [4., 3., 2., 1.]])
+
 
 def test_ocsb_gen_lags():
     z_res = OCSBTest._gen_lags(austres, 0)
     assert z_res.shape == austres.shape
     assert (z_res == 0).all()
 
+
+@pytest.mark.parametrize(
+    'lag_method,expected,max_lag', [
+        # ocsb.test(austres, lag.method='fixed', maxlag=2)$stat -> -5.673749
+        pytest.param('fixed', -5.6737, 2),
+
+        # ocsb.test(austres, lag.method='fixed', maxlag=3)$stat -> -5.632227
+        pytest.param('fixed', -5.6280, 3),
+
+        # ocsb.test(austres, lag.method='AIC', maxlag=2)$stat -> -6.834392
+        # We get a singular matrix error in Python that doesn't show up in R,
+        # but we found a way to recover. Unforunately, it means our results are
+        # different...
+        pytest.param('aic', -5.66870, 2),
+        pytest.param('aic', -6.03761, 3),
+        pytest.param('bic', -5.66870, 2),
+        pytest.param('bic', -6.03761, 3),
+        pytest.param('aicc', -5.66870, 2),
+        pytest.param('aicc', -6.03761, 3),
+    ]
+)
+def test_ocsb_test_statistic(lag_method, expected, max_lag):
+    test = OCSBTest(m=4, max_lag=max_lag, lag_method=lag_method)
+    test_stat = test._compute_test_statistic(austres)
+    assert np.allclose(test_stat, expected, rtol=0.01)

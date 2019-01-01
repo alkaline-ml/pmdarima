@@ -42,6 +42,13 @@ VALID_SCORING = {
 }
 
 
+def _aicc(model_results, nobs):
+    """Compute the corrected Akaike Information Criterion"""
+    aic = model_results.aic
+    df_model = model_results.df_model + 1  # add one for constant term
+    return aic + 2. * df_model * (nobs / (nobs - df_model - 1.) - 1.)
+
+
 def _append_to_endog(endog, new_y):
     """Append to the endogenous array
 
@@ -808,11 +815,7 @@ class ARIMA(BaseEstimator):
         # this code should really be added to statsmodels. Rewrite
         # this function to reflect other metric implementations if/when
         # statsmodels incorporates AICc
-
-        aic = self.arima_res_.aic
-        nobs = self.nobs_
-        df_model = self.arima_res_.df_model + 1  # add one for constant term
-        return aic + 2. * df_model * (nobs / (nobs - df_model - 1.) - 1.)
+        return _aicc(self.arima_res_, self.nobs_)
 
     @if_delegate_has_method('arima_res_')
     def arparams(self):
