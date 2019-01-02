@@ -14,7 +14,10 @@ datasets = [
     ['lynx', pm.datasets.load_lynx(False)],
     ['heartrate', pm.datasets.load_heartrate(True)],
     ['woolyrnq', pm.datasets.load_woolyrnq(True)],
-    ['austres', pm.datasets.load_austres(False)]
+
+    # Might need to add these datasets in, but not sure if
+    # it's actually necessary...
+    # ['austres', pm.datasets.load_austres(False)]
 ]
 
 # We are ONLY going to run these tests if we are NOT on Travis,
