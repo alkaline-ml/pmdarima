@@ -124,6 +124,10 @@ workflows:
             filters: *test-filters
         - cpython37:
             filters: *test-filters
+        - cpython36-benchmarking:
+            filters: *test-filters
+        - cpython37-benchmarking:
+            filters: *test-filters
         - test-linting:
             filters: *test-filters
         - regression-testing:
