@@ -285,3 +285,29 @@ def test_ocsb_test_statistic(lag_method, expected, max_lag):
     test = OCSBTest(m=4, max_lag=max_lag, lag_method=lag_method)
     test_stat = test._compute_test_statistic(austres)
     assert np.allclose(test_stat, expected, rtol=0.01)
+
+
+def test_ocsb_regression():
+    # fitOCSB is a closure function inside of forecast::ocsb.test
+    # > fitOCSB(austres, 1, 1)
+    # Coefficients:
+    # xregmf.x    xregZ4    xregZ5
+    #   0.2169    0.2111   -0.8625
+
+    # We get different results here, but only marginally...
+    reg = OCSBTest._fit_ocsb(austres, m=4, lag=1, max_lag=1)
+    coef = reg.params
+    assert np.allclose(coef, [0.2169, 0.2111, -0.8625], rtol=0.01)
+
+
+def test_failing_ocsb():
+    # TODO: should this pass?
+    # This passes in R, but statsmodels can't compute the regression...
+    with pytest.raises(ValueError):
+        OCSBTest(m=4, max_lag=0).estimate_seasonal_differencing_term(austres)
+
+    # Fail for bad method
+    with pytest.raises(ValueError) as v:
+        OCSBTest(m=4, max_lag=3, lag_method="bad_method")\
+            .estimate_seasonal_differencing_term(austres)
+    assert "invalid method" in str(v)

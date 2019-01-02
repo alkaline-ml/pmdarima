@@ -276,15 +276,14 @@ def test_oob_for_issue_29():
                     _, _ = model.predict(n_periods=3, return_conf_int=True,
                                          exogenous=xr)
 
+                # Statsmodels can be fragile with ARMA coefficient
+                # computation. If we encounter that, pass:
+                #   ValueError: The computed initial MA coefficients are
+                #       not invertible. You should induce invertibility,
+                #       choose a different model order, or ...
                 except Exception as ex:
-                    print("Failing combo: d=%i, cv=%i, exog=%r"
-                          % (d, cv, exog))
-
-                    # Statsmodels can be fragile with ARMA coefficient
-                    # computation. If we encounter that, pass:
-                    #   ValueError: The computed initial MA coefficients are
-                    #       not invertible. You should induce invertibility,
-                    #       choose a different model order, or ...
+                    # print("Failing combo: d=%i, cv=%i, exog=%r"
+                    #       % (d, cv, exog))
                     if "invertibility" in str(ex):
                         pass
                     else:

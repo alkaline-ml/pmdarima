@@ -449,9 +449,6 @@ class OCSBTest(_SeasonalStationarityTest):
         if not self._base_case(x):
             return 0
 
-        if self.m == 1:
-            raise ValueError("m must exceed 1")
-
         # ensure vector
         x = column_or_1d(
             check_array(x, ensure_2d=False, dtype=np.float64,
