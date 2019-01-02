@@ -95,9 +95,12 @@ Dataset loading functions
     :toctree: generated/
     :template: function.rst
 
+    datasets.load_airpassengers
+    datasets.load_austres
     datasets.load_heartrate
     datasets.load_lynx
     datasets.load_wineind
+    datasets.load_woolyrnq
 
 
 .. _utils_ref:

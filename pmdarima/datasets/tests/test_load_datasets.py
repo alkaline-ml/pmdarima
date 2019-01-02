@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 from pmdarima.datasets import load_heartrate, load_lynx, \
-    load_wineind, load_woolyrnq, load_austres
+    load_wineind, load_woolyrnq, load_austres, load_airpassengers
 
 import numpy as np
 import pandas as pd
@@ -17,7 +17,8 @@ import pytest
           load_lynx,
           load_wineind,
           load_woolyrnq,
-          load_austres])
+          load_austres,
+          load_airpassengers])
 def test_load(f):
     for as_series in (True, False):
         x = f(as_series=as_series)

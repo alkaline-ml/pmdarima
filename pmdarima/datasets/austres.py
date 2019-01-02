@@ -55,6 +55,11 @@ def load_austres(as_series=False):
     4    13303.7
     dtype: float64
 
+    Notes
+    -----
+    This is quarterly data, so *m* should be set to 4 when using in a seasonal
+    context.
+
     References
     ----------
     .. [1] P. J. Brockwell and R. A. Davis (1996)

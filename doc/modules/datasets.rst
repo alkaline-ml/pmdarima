@@ -14,6 +14,24 @@ All datasets share a common interface::
 
 Where ``as_series=True`` will return a Pandas Series object with the appropriate index.
 
+.. _airpassengers:
+
+Air Passengers
+--------------
+
+The classic Box & Jenkins airline data. Monthly totals of international
+airline passengers, 1949 to 1960.
+
+.. code-block:: python
+
+    >>> load_airpassengers(True).head()
+    0    112.0
+    1    118.0
+    2    132.0
+    3    129.0
+    4    121.0
+    dtype: float64
+
 .. _austres:
 
 Austres

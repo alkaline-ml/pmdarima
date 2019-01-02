@@ -28,6 +28,11 @@ def load_wineind(as_series=False):
         Whether to return a Pandas series. If True, the index will be set to
         the observed years/months. If False, will return a 1d numpy array.
 
+    Notes
+    -----
+    This is monthly data, so *m* should be set to 12 when using in a seasonal
+    context.
+
     Examples
     --------
     >>> from pmdarima.datasets import load_wineind
