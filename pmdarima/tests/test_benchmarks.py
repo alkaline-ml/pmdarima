@@ -42,4 +42,3 @@ class TestBenchMarkTop12SlowestTests():
     @pytest.mark.parametrize('m', ch_test_parameters)
     def test_ch_test_long(self, benchmark, m):
         benchmark(test_seasonality.test_ch_test_long, m=m)
-
