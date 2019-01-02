@@ -48,6 +48,26 @@ jobs:
     - run: make test-unit
     - run: codecov || echo "codecov upload failed"
 
+   cpython36-benchmarking:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: make develop
+    - run: test-benchmark
+    - run: codecov || echo "codecov upload failed"
+
+  cpython37-benchmarking:
+    docker:
+      - image: python:3.7
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: make develop
+    - run: test-benchmark
+    - run: codecov || echo "codecov upload failed"
+
   # For testing lint
   test-linting:
     docker:

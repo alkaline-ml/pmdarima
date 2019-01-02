@@ -25,7 +25,7 @@ install: requirements
 	$(PYTHON) setup.py install
 
 test-requirements:
-	$(PYTHON) -m pip install pytest flake8 matplotlib pytest-mpl
+	$(PYTHON) -m pip install pytest flake8 matplotlib pytest-mpl pytest-benchmark
 
 coverage-dependencies:
 	$(PYTHON) -m pip install coverage pytest-cov codecov
@@ -35,6 +35,9 @@ test-lint: test-requirements
 
 test-unit: test-requirements coverage-dependencies
 	$(PYTHON) -m pytest -v --durations=20 --mpl --mpl-baseline-path=pytest_images --cov-config .coveragerc --cov pmdarima -p no:logging
+
+test-benchmark: test-requirements coverage-dependencies
+	$(PYTHON) -m pytest -v --durations=12 --mpl --mpl-baseline-path=pytest_images --cov-config .coveragerc --cov pmdarima -p no:logging --benchmark-min-rounds=5 --benchmark-min-time=1 --benchmark-only
 
 test: develop test-unit test-lint
 	# Coverage creates all these random little artifacts we don't want
