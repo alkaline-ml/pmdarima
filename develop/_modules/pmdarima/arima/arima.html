@@ -198,6 +198,13 @@
 <span class="p">}</span>
 
 
+<span class="k">def</span> <span class="nf">_aicc</span><span class="p">(</span><span class="n">model_results</span><span class="p">,</span> <span class="n">nobs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the corrected Akaike Information Criterion&quot;&quot;&quot;</span>
+    <span class="n">aic</span> <span class="o">=</span> <span class="n">model_results</span><span class="o">.</span><span class="n">aic</span>
+    <span class="n">df_model</span> <span class="o">=</span> <span class="n">model_results</span><span class="o">.</span><span class="n">df_model</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># add one for constant term</span>
+    <span class="k">return</span> <span class="n">aic</span> <span class="o">+</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">df_model</span> <span class="o">*</span> <span class="p">(</span><span class="n">nobs</span> <span class="o">/</span> <span class="p">(</span><span class="n">nobs</span> <span class="o">-</span> <span class="n">df_model</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
+
+
 <span class="k">def</span> <span class="nf">_append_to_endog</span><span class="p">(</span><span class="n">endog</span><span class="p">,</span> <span class="n">new_y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Append to the endogenous array</span>
 
@@ -964,11 +971,7 @@
         <span class="c1"># this code should really be added to statsmodels. Rewrite</span>
         <span class="c1"># this function to reflect other metric implementations if/when</span>
         <span class="c1"># statsmodels incorporates AICc</span>
-
-        <span class="n">aic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">aic</span>
-        <span class="n">nobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nobs_</span>
-        <span class="n">df_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">df_model</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># add one for constant term</span>
-        <span class="k">return</span> <span class="n">aic</span> <span class="o">+</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">df_model</span> <span class="o">*</span> <span class="p">(</span><span class="n">nobs</span> <span class="o">/</span> <span class="p">(</span><span class="n">nobs</span> <span class="o">-</span> <span class="n">df_model</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">_aicc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nobs_</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ARIMA.arparams"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.arparams">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">arparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

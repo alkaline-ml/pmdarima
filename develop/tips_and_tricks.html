@@ -336,11 +336,17 @@ seasonal terms in your ARIMA models.</p>
 <span class="c1"># load lynx</span>
 <span class="n">lynx</span> <span class="o">=</span> <span class="n">load_lynx</span><span class="p">()</span>
 
-<span class="c1"># estimate number of seasonal differences</span>
+<span class="c1"># estimate number of seasonal differences using a Canova-Hansen test</span>
 <span class="n">D</span> <span class="o">=</span> <span class="n">nsdiffs</span><span class="p">(</span><span class="n">lynx</span><span class="p">,</span>
             <span class="n">m</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c1"># commonly requires knowledge of dataset</span>
             <span class="n">max_D</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
             <span class="n">test</span><span class="o">=</span><span class="s1">&#39;ch&#39;</span><span class="p">)</span>  <span class="c1"># -&gt; 0</span>
+
+<span class="c1"># or use the OCSB test (by default)</span>
+<span class="n">nsdiffs</span><span class="p">(</span><span class="n">lynx</span><span class="p">,</span>
+        <span class="n">m</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">max_D</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+        <span class="n">test</span><span class="o">=</span><span class="s1">&#39;ocsb&#39;</span><span class="p">)</span>  <span class="c1"># -&gt; 0</span>
 </pre></div>
 </div>
 <p>By default, this will be estimated in <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> if <code class="docutils literal notranslate"><span class="pre">seasonal=True</span></code>. Make

@@ -176,7 +176,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.auto_arima<a class="headerlink" href="#pmdarima-arima-auto-arima" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.arima.auto_arima">
-<code class="descclassname">pmdarima.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ch'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=50</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/cdcc66c/pmdarima/arima/auto.py#L37"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=50</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/76ebab0/pmdarima/arima/auto.py#L37"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically discover the optimal order for an ARIMA model.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> function seeks to identify the most optimal
 parameters for an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> model, and returns a fitted ARIMA model. This
@@ -329,10 +329,10 @@ set to False. For more information on setting this parameter, see
 <code class="docutils literal notranslate"><span class="pre">stationary</span></code> is False and <code class="docutils literal notranslate"><span class="pre">d</span></code> is None. Default is ‘kpss’
 (Kwiatkowski–Phillips–Schmidt–Shin).</p>
 </div></blockquote>
-<p><strong>seasonal_test</strong> : str, optional (default=’ch’)</p>
+<p><strong>seasonal_test</strong> : str, optional (default=’ocsb’)</p>
 <blockquote>
 <div><p>This determines which seasonal unit root test is used if <code class="docutils literal notranslate"><span class="pre">seasonal</span></code>
-is True and <code class="docutils literal notranslate"><span class="pre">D</span></code> is None. Default is ‘ch’ (Canova-Hansen).</p>
+is True and <code class="docutils literal notranslate"><span class="pre">D</span></code> is None. Default is ‘OCSB’.</p>
 </div></blockquote>
 <p><strong>stepwise</strong> : bool, optional (default=True)</p>
 <blockquote>
@@ -505,22 +505,22 @@ method.</p>
 <p>Fitting with <cite>stepwise=False</cite> can prove slower, especially when
 <cite>seasonal=True</cite>.</p>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r35" rules="none">
+<table class="docutils citation" frame="void" id="r41" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R35]</a></td><td><a class="reference external" href="https://wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R41]</a></td><td><a class="reference external" href="https://wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r36" rules="none">
+<table class="docutils citation" frame="void" id="r42" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R36]</a></td><td>R’s auto-arima source code: <a class="reference external" href="http://bit.ly/2gOh5z2">http://bit.ly/2gOh5z2</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R42]</a></td><td>R’s auto-arima source code: <a class="reference external" href="http://bit.ly/2gOh5z2">http://bit.ly/2gOh5z2</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r37" rules="none">
+<table class="docutils citation" frame="void" id="r43" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R37]</a></td><td>R’s auto-arima documentation: <a class="reference external" href="http://bit.ly/2wbBvUN">http://bit.ly/2wbBvUN</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R43]</a></td><td>R’s auto-arima documentation: <a class="reference external" href="http://bit.ly/2wbBvUN">http://bit.ly/2wbBvUN</a></td></tr>
 </tbody>
 </table>
 </dd></dl>

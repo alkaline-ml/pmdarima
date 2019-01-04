@@ -79,7 +79,7 @@ dataset available in the :ref:`datasets` submodule.
     plt.title("Lynx forecasts")
     plt.xlabel("Year")
 
-**Total running time of the script:** ( 0 minutes  1.199 seconds)
+**Total running time of the script:** ( 0 minutes  1.051 seconds)
 
 
 

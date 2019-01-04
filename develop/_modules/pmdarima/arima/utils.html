@@ -169,7 +169,7 @@
 <span class="kn">from</span> <span class="nn">..utils.array</span> <span class="k">import</span> <span class="n">diff</span>
 <span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="k">import</span> <span class="n">DTYPE</span>
 <span class="kn">from</span> <span class="nn">.stationarity</span> <span class="k">import</span> <span class="n">KPSSTest</span><span class="p">,</span> <span class="n">ADFTest</span><span class="p">,</span> <span class="n">PPTest</span>
-<span class="kn">from</span> <span class="nn">.seasonality</span> <span class="k">import</span> <span class="n">CHTest</span>  <span class="c1"># OCSBTest</span>
+<span class="kn">from</span> <span class="nn">.seasonality</span> <span class="k">import</span> <span class="n">CHTest</span><span class="p">,</span> <span class="n">OCSBTest</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;get_callable&#39;</span><span class="p">,</span>
@@ -185,7 +185,7 @@
 <span class="p">}</span>
 
 <span class="n">VALID_STESTS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1"># &#39;ocsb&#39;: OCSBTest,  # todo: once this is fixed, enable it</span>
+    <span class="s1">&#39;ocsb&#39;</span><span class="p">:</span> <span class="n">OCSBTest</span><span class="p">,</span>
     <span class="s1">&#39;ch&#39;</span><span class="p">:</span> <span class="n">CHTest</span>
 <span class="p">}</span>
 
@@ -213,7 +213,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="nsdiffs"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.nsdiffs.html#pmdarima.arima.nsdiffs">[docs]</a><span class="k">def</span> <span class="nf">nsdiffs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">max_D</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;ch&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="nsdiffs"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.nsdiffs.html#pmdarima.arima.nsdiffs">[docs]</a><span class="k">def</span> <span class="nf">nsdiffs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">max_D</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;ocsb&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Estimate the seasonal differencing term, ``D``.</span>
 
 <span class="sd">    Perform a test of seasonality for different levels of ``D`` to</span>
@@ -235,10 +235,10 @@
 <span class="sd">        be a positive integer. The estimated value of ``D`` will not</span>
 <span class="sd">        exceed ``max_D``.</span>
 
-<span class="sd">    test : str, optional (default=&#39;ch&#39;)</span>
+<span class="sd">    test : str, optional (default=&#39;ocsb&#39;)</span>
 <span class="sd">        Type of unit root test of seasonality to use in order</span>
-<span class="sd">        to detect seasonal periodicity. Currently, the only allowed value</span>
-<span class="sd">        is &#39;ch&#39;.</span>
+<span class="sd">        to detect seasonal periodicity. Valid tests include (&quot;ocsb&quot;, &quot;ch&quot;).</span>
+<span class="sd">        Note that the CHTest is very slow for large data.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>

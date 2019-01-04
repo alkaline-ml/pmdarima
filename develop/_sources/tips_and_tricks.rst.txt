@@ -192,11 +192,17 @@ We can use a Canova-Hansen test to estimate our seasonal differencing term:
     # load lynx
     lynx = load_lynx()
 
-    # estimate number of seasonal differences
+    # estimate number of seasonal differences using a Canova-Hansen test
     D = nsdiffs(lynx,
                 m=10,  # commonly requires knowledge of dataset
                 max_D=12,
                 test='ch')  # -> 0
+
+    # or use the OCSB test (by default)
+    nsdiffs(lynx,
+            m=10,
+            max_D=12,
+            test='ocsb')  # -> 0
 
 By default, this will be estimated in ``auto_arima`` if ``seasonal=True``. Make
 sure to pay attention to the ``m`` and the ``max_D`` parameters.
