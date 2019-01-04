@@ -38,7 +38,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                max_d=2, max_q=5, start_P=1, D=None, start_Q=1, max_P=2,
                max_D=1, max_Q=2, max_order=10, m=1, seasonal=True,
                stationary=False, information_criterion='aic', alpha=0.05,
-               test='kpss', seasonal_test='ch', stepwise=True, n_jobs=1,
+               test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
                start_params=None, trend=None, method=None, transparams=True,
                solver='lbfgs', maxiter=50, disp=0, callback=None,
                offset_test_args=None, seasonal_test_args=None,
@@ -180,9 +180,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         ``stationary`` is False and ``d`` is None. Default is 'kpss'
         (Kwiatkowski–Phillips–Schmidt–Shin).
 
-    seasonal_test : str, optional (default='ch')
+    seasonal_test : str, optional (default='ocsb')
         This determines which seasonal unit root test is used if ``seasonal``
-        is True and ``D`` is None. Default is 'ch' (Canova-Hansen).
+        is True and ``D`` is None. Default is 'OCSB'.
 
     stepwise : bool, optional (default=True)
         Whether to use the stepwise algorithm outlined in Hyndman and Khandakar

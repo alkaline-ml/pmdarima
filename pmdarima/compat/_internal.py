@@ -8,7 +8,8 @@ __all__ = [
 
 
 def get_pytest_mpl_threshold(threshold_dict):
-    """Get pytest-mpl image comparison threshold based on platform.system()
+    """Get pytest-mpl image comparison threshold based on ``platform.system()``
+
     Parameters
     ----------
     threshold_dict : dict,

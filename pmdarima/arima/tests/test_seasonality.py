@@ -3,11 +3,11 @@
 
 from __future__ import absolute_import
 
-from pmdarima.arima.seasonality import CHTest
+from pmdarima.arima.seasonality import CHTest, OCSBTest
 from pmdarima.arima.utils import nsdiffs
 
 import numpy as np
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_almost_equal, assert_array_equal
 from sklearn.utils.validation import check_random_state
 import pytest
 
@@ -65,21 +65,24 @@ def test_ch_base():
     CHTest(m=365).estimate_seasonal_differencing_term(random_state.rand(400))
 
 
-def test_nsdiffs_corner_cases():
+@pytest.mark.parametrize(
+    'tst', ('ocsb', 'ch')
+)
+def test_nsdiffs_corner_cases(tst):
     # max_D must be a positive int
     with pytest.raises(ValueError):
-        nsdiffs(austres, m=2, max_D=0)
+        nsdiffs(austres, m=2, max_D=0, test=tst)
 
     # assert 0 for constant
-    assert nsdiffs([1, 1, 1, 1], m=2) == 0
+    assert nsdiffs([1, 1, 1, 1], m=2, test=tst) == 0
 
     # show fails for m <= 1
     for m in (0, 1):
         with pytest.raises(ValueError):
-            nsdiffs(austres, m=m)
+            nsdiffs(austres, m=m, test=tst)
 
 
-def test_seas_dummy():
+def test_ch_seas_dummy():
     x = austres
 
     # Results from R. Don't try this in the console; it tends to
@@ -187,6 +190,124 @@ def test_seas_dummy():
         pytest.param(austres, 24, 4.134289)  # R res: 4.134289
     ]
 )
-def test_sd_test(x, m, expected):
+def test_ch_sd_test(x, m, expected):
     res = CHTest._sd_test(x, m)
     assert np.allclose(res, expected)
+
+
+def test_ocsb_do_lag():
+    q = np.arange(5)
+
+    assert_array_equal(OCSBTest._do_lag(q, 1, False),
+                       [[0.],
+                        [1.],
+                        [2.],
+                        [3.],
+                        [4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 1, True),
+                       [[0.],
+                        [1.],
+                        [2.],
+                        [3.],
+                        [4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 2, False),
+                       [[0., np.nan],
+                        [1., 0.],
+                        [2., 1.],
+                        [3., 2.],
+                        [4., 3.],
+                        [np.nan, 4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 2, True),
+                       [[1., 0.],
+                        [2., 1.],
+                        [3., 2.],
+                        [4., 3.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 3, False),
+                       [[0., np.nan, np.nan],
+                        [1., 0., np.nan],
+                        [2., 1., 0.],
+                        [3., 2., 1.],
+                        [4., 3., 2.],
+                        [np.nan, 4., 3.],
+                        [np.nan, np.nan, 4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 3, True),
+                       [[2., 1., 0.],
+                        [3., 2., 1.],
+                        [4., 3., 2.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 4, False),
+                       [[0., np.nan, np.nan, np.nan],
+                        [1., 0., np.nan, np.nan],
+                        [2., 1., 0., np.nan],
+                        [3., 2., 1., 0.],
+                        [4., 3., 2., 1.],
+                        [np.nan, 4., 3., 2.],
+                        [np.nan, np.nan, 4., 3.],
+                        [np.nan, np.nan, np.nan, 4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 4, True),
+                       [[3., 2., 1., 0.],
+                        [4., 3., 2., 1.]])
+
+
+def test_ocsb_gen_lags():
+    z_res = OCSBTest._gen_lags(austres, 0)
+    assert z_res.shape == austres.shape
+    assert (z_res == 0).all()
+
+
+@pytest.mark.parametrize(
+    'lag_method,expected,max_lag', [
+        # ocsb.test(austres, lag.method='fixed', maxlag=2)$stat -> -5.673749
+        pytest.param('fixed', -5.6737, 2),
+
+        # ocsb.test(austres, lag.method='fixed', maxlag=3)$stat -> -5.632227
+        pytest.param('fixed', -5.6280, 3),
+
+        # ocsb.test(austres, lag.method='AIC', maxlag=2)$stat -> -6.834392
+        # We get a singular matrix error in Python that doesn't show up in R,
+        # but we found a way to recover. Unforunately, it means our results are
+        # different...
+        pytest.param('aic', -5.66870, 2),
+        pytest.param('aic', -6.03761, 3),
+        pytest.param('bic', -5.66870, 2),
+        pytest.param('bic', -6.03761, 3),
+        pytest.param('aicc', -5.66870, 2),
+        pytest.param('aicc', -6.03761, 3),
+    ]
+)
+def test_ocsb_test_statistic(lag_method, expected, max_lag):
+    test = OCSBTest(m=4, max_lag=max_lag, lag_method=lag_method)
+    test_stat = test._compute_test_statistic(austres)
+    assert np.allclose(test_stat, expected, rtol=0.01)
+
+
+def test_ocsb_regression():
+    # fitOCSB is a closure function inside of forecast::ocsb.test
+    # > fitOCSB(austres, 1, 1)
+    # Coefficients:
+    # xregmf.x    xregZ4    xregZ5
+    #   0.2169    0.2111   -0.8625
+
+    # We get different results here, but only marginally...
+    reg = OCSBTest._fit_ocsb(austres, m=4, lag=1, max_lag=1)
+    coef = reg.params
+    assert np.allclose(coef, [0.2169, 0.2111, -0.8625], rtol=0.01)
+
+
+def test_failing_ocsb():
+    # TODO: should this pass?
+    # This passes in R, but statsmodels can't compute the regression...
+    with pytest.raises(ValueError):
+        OCSBTest(m=4, max_lag=0).estimate_seasonal_differencing_term(austres)
+
+    # Fail for bad method
+    with pytest.raises(ValueError) as v:
+        OCSBTest(m=4, max_lag=3, lag_method="bad_method")\
+            .estimate_seasonal_differencing_term(austres)
+    assert "invalid method" in str(v)

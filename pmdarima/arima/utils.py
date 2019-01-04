@@ -13,7 +13,7 @@ from ..utils import get_callable
 from ..utils.array import diff
 from ..compat.numpy import DTYPE
 from .stationarity import KPSSTest, ADFTest, PPTest
-from .seasonality import CHTest  # OCSBTest
+from .seasonality import CHTest, OCSBTest
 
 __all__ = [
     'get_callable',
@@ -29,7 +29,7 @@ VALID_TESTS = {
 }
 
 VALID_STESTS = {
-    # 'ocsb': OCSBTest,  # todo: once this is fixed, enable it
+    'ocsb': OCSBTest,
     'ch': CHTest
 }
 
@@ -57,7 +57,7 @@ def is_constant(x):
     return (x == x[0]).all()
 
 
-def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
+def nsdiffs(x, m, max_D=2, test='ocsb', **kwargs):
     """Estimate the seasonal differencing term, ``D``.
 
     Perform a test of seasonality for different levels of ``D`` to
@@ -79,10 +79,10 @@ def nsdiffs(x, m, max_D=2, test='ch', **kwargs):
         be a positive integer. The estimated value of ``D`` will not
         exceed ``max_D``.
 
-    test : str, optional (default='ch')
+    test : str, optional (default='ocsb')
         Type of unit root test of seasonality to use in order
-        to detect seasonal periodicity. Currently, the only allowed value
-        is 'ch'.
+        to detect seasonal periodicity. Valid tests include ("ocsb", "ch").
+        Note that the CHTest is very slow for large data.
 
     Returns
     -------
