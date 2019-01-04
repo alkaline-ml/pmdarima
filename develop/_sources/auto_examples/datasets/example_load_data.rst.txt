@@ -71,6 +71,7 @@ that exhibit seasonality, non-stationarity, and other time series nuances.
     heart_rate = pm.datasets.load_heartrate()
     wineind = pm.datasets.load_wineind()
     woolyrnq = pm.datasets.load_woolyrnq()
+    austres = pm.datasets.load_austres()
 
 **Total running time of the script:** ( 0 minutes  0.001 seconds)
 

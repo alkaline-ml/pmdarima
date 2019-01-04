@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.datasets.airpassengers &mdash; pmdarima 1.2.0.dev0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.0.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pmdarima.datasets.airpassengers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pmdarima.datasets.airpassengers</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;load_airpassengers&#39;</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="load_airpassengers"><a class="viewcode-back" href="../../../modules/generated/pmdarima.datasets.load_airpassengers.html#pmdarima.datasets.load_airpassengers">[docs]</a><span class="k">def</span> <span class="nf">load_airpassengers</span><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Monthly airline passengers.</span>
+
+<span class="sd">    The classic Box &amp; Jenkins airline data. Monthly totals of international</span>
+<span class="sd">    airline passengers, 1949 to 1960.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    as_series : bool, optional (default=False)</span>
+<span class="sd">        Whether to return a Pandas series. If False, will return a 1d</span>
+<span class="sd">        numpy array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rslt : array-like, shape=(n_samples,)</span>
+<span class="sd">        The time series vector.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from pmdarima.datasets import load_airpassengers</span>
+<span class="sd">    &gt;&gt;&gt; load_airpassengers()  # doctest: +SKIP</span>
+<span class="sd">    np.array([</span>
+<span class="sd">        112, 118, 132, 129, 121, 135, 148, 148, 136, 119, 104, 118,</span>
+<span class="sd">        115, 126, 141, 135, 125, 149, 170, 170, 158, 133, 114, 140,</span>
+<span class="sd">        145, 150, 178, 163, 172, 178, 199, 199, 184, 162, 146, 166,</span>
+<span class="sd">        171, 180, 193, 181, 183, 218, 230, 242, 209, 191, 172, 194,</span>
+<span class="sd">        196, 196, 236, 235, 229, 243, 264, 272, 237, 211, 180, 201,</span>
+<span class="sd">        204, 188, 235, 227, 234, 264, 302, 293, 259, 229, 203, 229,</span>
+<span class="sd">        242, 233, 267, 269, 270, 315, 364, 347, 312, 274, 237, 278,</span>
+<span class="sd">        284, 277, 317, 313, 318, 374, 413, 405, 355, 306, 271, 306,</span>
+<span class="sd">        315, 301, 356, 348, 355, 422, 465, 467, 404, 347, 305, 336,</span>
+<span class="sd">        340, 318, 362, 348, 363, 435, 491, 505, 404, 359, 310, 337,</span>
+<span class="sd">        360, 342, 406, 396, 420, 472, 548, 559, 463, 407, 362, 405,</span>
+<span class="sd">        417, 391, 419, 461, 472, 535, 622, 606, 508, 461, 390, 432])</span>
+
+<span class="sd">    &gt;&gt;&gt; load_airpassengers(True).head()</span>
+<span class="sd">    0    112.0</span>
+<span class="sd">    1    118.0</span>
+<span class="sd">    2    132.0</span>
+<span class="sd">    3    129.0</span>
+<span class="sd">    4    121.0</span>
+<span class="sd">    dtype: float64</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This is monthly data, so *m* should be set to 12 when using in a seasonal</span>
+<span class="sd">    context.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Box, G. E. P., Jenkins, G. M. and Reinsel, G. C. (1976)</span>
+<span class="sd">           &quot;Time Series Analysis, Forecasting and Control. Third Edition.&quot;</span>
+<span class="sd">           Holden-Day. Series G.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rslt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="mi">112</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> <span class="mi">132</span><span class="p">,</span> <span class="mi">129</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">148</span><span class="p">,</span> <span class="mi">148</span><span class="p">,</span> <span class="mi">136</span><span class="p">,</span> <span class="mi">119</span><span class="p">,</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span>
+        <span class="mi">115</span><span class="p">,</span> <span class="mi">126</span><span class="p">,</span> <span class="mi">141</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">149</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">158</span><span class="p">,</span> <span class="mi">133</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span>
+        <span class="mi">145</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">178</span><span class="p">,</span> <span class="mi">163</span><span class="p">,</span> <span class="mi">172</span><span class="p">,</span> <span class="mi">178</span><span class="p">,</span> <span class="mi">199</span><span class="p">,</span> <span class="mi">199</span><span class="p">,</span> <span class="mi">184</span><span class="p">,</span> <span class="mi">162</span><span class="p">,</span> <span class="mi">146</span><span class="p">,</span> <span class="mi">166</span><span class="p">,</span>
+        <span class="mi">171</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">193</span><span class="p">,</span> <span class="mi">181</span><span class="p">,</span> <span class="mi">183</span><span class="p">,</span> <span class="mi">218</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">242</span><span class="p">,</span> <span class="mi">209</span><span class="p">,</span> <span class="mi">191</span><span class="p">,</span> <span class="mi">172</span><span class="p">,</span> <span class="mi">194</span><span class="p">,</span>
+        <span class="mi">196</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">236</span><span class="p">,</span> <span class="mi">235</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span> <span class="mi">243</span><span class="p">,</span> <span class="mi">264</span><span class="p">,</span> <span class="mi">272</span><span class="p">,</span> <span class="mi">237</span><span class="p">,</span> <span class="mi">211</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span>
+        <span class="mi">204</span><span class="p">,</span> <span class="mi">188</span><span class="p">,</span> <span class="mi">235</span><span class="p">,</span> <span class="mi">227</span><span class="p">,</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">264</span><span class="p">,</span> <span class="mi">302</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="mi">259</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span> <span class="mi">203</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span>
+        <span class="mi">242</span><span class="p">,</span> <span class="mi">233</span><span class="p">,</span> <span class="mi">267</span><span class="p">,</span> <span class="mi">269</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">315</span><span class="p">,</span> <span class="mi">364</span><span class="p">,</span> <span class="mi">347</span><span class="p">,</span> <span class="mi">312</span><span class="p">,</span> <span class="mi">274</span><span class="p">,</span> <span class="mi">237</span><span class="p">,</span> <span class="mi">278</span><span class="p">,</span>
+        <span class="mi">284</span><span class="p">,</span> <span class="mi">277</span><span class="p">,</span> <span class="mi">317</span><span class="p">,</span> <span class="mi">313</span><span class="p">,</span> <span class="mi">318</span><span class="p">,</span> <span class="mi">374</span><span class="p">,</span> <span class="mi">413</span><span class="p">,</span> <span class="mi">405</span><span class="p">,</span> <span class="mi">355</span><span class="p">,</span> <span class="mi">306</span><span class="p">,</span> <span class="mi">271</span><span class="p">,</span> <span class="mi">306</span><span class="p">,</span>
+        <span class="mi">315</span><span class="p">,</span> <span class="mi">301</span><span class="p">,</span> <span class="mi">356</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">355</span><span class="p">,</span> <span class="mi">422</span><span class="p">,</span> <span class="mi">465</span><span class="p">,</span> <span class="mi">467</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="mi">347</span><span class="p">,</span> <span class="mi">305</span><span class="p">,</span> <span class="mi">336</span><span class="p">,</span>
+        <span class="mi">340</span><span class="p">,</span> <span class="mi">318</span><span class="p">,</span> <span class="mi">362</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">363</span><span class="p">,</span> <span class="mi">435</span><span class="p">,</span> <span class="mi">491</span><span class="p">,</span> <span class="mi">505</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="mi">359</span><span class="p">,</span> <span class="mi">310</span><span class="p">,</span> <span class="mi">337</span><span class="p">,</span>
+        <span class="mi">360</span><span class="p">,</span> <span class="mi">342</span><span class="p">,</span> <span class="mi">406</span><span class="p">,</span> <span class="mi">396</span><span class="p">,</span> <span class="mi">420</span><span class="p">,</span> <span class="mi">472</span><span class="p">,</span> <span class="mi">548</span><span class="p">,</span> <span class="mi">559</span><span class="p">,</span> <span class="mi">463</span><span class="p">,</span> <span class="mi">407</span><span class="p">,</span> <span class="mi">362</span><span class="p">,</span> <span class="mi">405</span><span class="p">,</span>
+        <span class="mi">417</span><span class="p">,</span> <span class="mi">391</span><span class="p">,</span> <span class="mi">419</span><span class="p">,</span> <span class="mi">461</span><span class="p">,</span> <span class="mi">472</span><span class="p">,</span> <span class="mi">535</span><span class="p">,</span> <span class="mi">622</span><span class="p">,</span> <span class="mi">606</span><span class="p">,</span> <span class="mi">508</span><span class="p">,</span> <span class="mi">461</span><span class="p">,</span> <span class="mi">390</span><span class="p">,</span> <span class="mi">432</span>
+    <span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">as_series</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rslt</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rslt</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2018, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'1.2.0.dev0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
