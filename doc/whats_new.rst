@@ -7,6 +7,18 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v1.2.0 <http://alkaline-ml.com/pmdarima/1.2.0/>`_
+--------------------------------------------------
+
+* Added the ``OCSBTest`` of seasonality, as discussed in `#88 <https://github.com/tgsmith61591/pmdarima/issues/88>`_
+
+* Default value of ``seasonal_test`` changed from "ch" to "ocsb" in ``auto_arima``
+
+* Default value of ``test`` changed from "ch" to "ocsb" in ``nsdiffs``
+
+* Add benchmarking notebook and capabilities in ``pytest`` plugins
+
+
 `v1.1.0 <http://alkaline-ml.com/pmdarima/1.1.0/>`_
 --------------------------------------------------
 

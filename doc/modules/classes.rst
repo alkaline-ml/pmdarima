@@ -41,6 +41,7 @@ sections for further details.
     arima.ARIMA
     arima.CHTest
     arima.KPSSTest
+    arima.OCSBTest
     arima.PPTest
 
 ARIMA auto-parameter selection

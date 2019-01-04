@@ -26,10 +26,11 @@ def safe_mkdirs(loc):
     loc : str or unicode
         The absolute path to the directory to create.
     """
-    try:
-        os.makedirs(loc)
-    # since this is a race condition, just try to make it
-    except OSError as e:
-        # Anything OTHER than the dir already exists error
-        if e.errno != 17:
-            raise
+    # try:
+    #     os.makedirs(loc)
+    # # since this is a race condition, just try to make it
+    # except OSError as e:
+    #     # Anything OTHER than the dir already exists error
+    #     if e.errno != 17:
+    #         raise
+    return os.makedirs(loc, exist_ok=True)
