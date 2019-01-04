@@ -50,6 +50,11 @@ def load_woolyrnq(as_series=False):
     Q1 1966    6786
     dtype: int64
 
+    Notes
+    -----
+    This is quarterly data, so *m* should be set to 4 when using in a seasonal
+    context.
+
     References
     ----------
     .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/woolyrnq  # noqa: E501
