@@ -5,13 +5,14 @@ Tips to using ``auto_arima``
 ============================
 
 The ``auto_arima`` function fits the best ``ARIMA`` model to a univariate time
-series according to either
+series according to a provided information criterion (either
 `AIC <https://en.wikipedia.org/wiki/Akaike_information_criterion>`_,
 `AICc <https://en.wikipedia.org/wiki/Akaike_information_criterion#AICc>`_,
 `BIC <https://en.wikipedia.org/wiki/Bayesian_information_criterion>`_ or
-`HQIC <https://en.wikipedia.org/wiki/Hannan–Quinn_information_criterion>`_.
+`HQIC <https://en.wikipedia.org/wiki/Hannan–Quinn_information_criterion>`_).
 The function performs a search (either stepwise or parallelized)
-over possible model orders within the constraints provided.
+over possible model & seasonal orders within the constraints provided, and selects
+the parameters that minimize the given metric.
 
 The ``auto_arima`` function can be daunting. There are a lot of parameters to
 tune, and the outcome is heavily dependent on a number of them. In this section,
@@ -30,13 +31,34 @@ ARIMA models are made up of `three different terms <http://people.duke.edu/~rnau
 Often times, ARIMA models are written in the form :math:`ARIMA(p, d, q)`, where a
 model with no differencing term, e.g., :math:`ARIMA(1, 0, 12)`, would be an ARMA
 (made up of an auto-regressive term and a moving average term, but no
-integrative term).
+integrative term, hence no "I").
 
-Understanding differencing
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+In ``pmdarima.ARIMA``, these parameters are specified in the ``order`` argument
+as a tuple:
+
+.. code-block:: python
+
+    order = (1, 0, 12)  # p=1, d=0, q=12
+    order = (1, 1, 3)  # p=1, d=1, q=3
+    # etc.
+
+The parameters ``p`` and ``q`` can be iteratively searched-for with the ``auto_arima``
+function, but the differencing term, ``d``, requires a special set of tests of stationarity
+to estimate.
+
+Understanding differencing (``d``)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An integrative term, ``d``, is typically only used in the case of non-stationary
-data. The value of ``d`` determines the number of periods to lag the response prior
+data. Stationarity in a time series indicates that a series' statistical attributes,
+such as mean, variance, etc., are constant over time (i.e., it exhibits low
+`heteroskedasticity <http://www.statsmakemecry.com/smmctheblog/confusing-stats-terms-explained-heteroscedasticity-heteroske.html>`_.
+
+A stationary time series is far more easy to learn and forecast from. With the
+``d`` parameter, you can force the ARIMA model to adjust for non-stationarity on
+its own, without having to worry about doing so manually.
+
+The value of ``d`` determines the number of periods to lag the response prior
 to computing differences. E.g.,
 
 .. code-block:: python
@@ -80,7 +102,7 @@ the difference twice:
 .. _enforcing_stationarity:
 
 Enforcing stationarity
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 The ``pmdarima.arima.stationarity`` sub-module defines various tests of stationarity for
 testing a null hypothesis that an observable univariate time series is stationary around
