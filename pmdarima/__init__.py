@@ -53,16 +53,8 @@ else:
         'plot_pacf'
     ]
 
-    # On first import, check the cache, warn if needed
-    from ._config import _warn_for_cache_size
-
-    _warn_for_cache_size()
-
     # Delete unwanted variables from global
     del _os
-    # del _config  # don't delete in case user wants to amend it at top level
-    del _warn_for_cache_size
-    # del _config  # don't delete in case user wants to amend it at top level
     del __check_build
     del __PMDARIMA_SETUP__
 
