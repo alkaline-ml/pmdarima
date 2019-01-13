@@ -18,6 +18,12 @@ v0.8.1) will document the latest features.
 
 * Add benchmarking notebook and capabilities in ``pytest`` plugins
 
+* Remove the following environment variables, which are now deprecated:
+    * ``'PMDARIMA_CACHE'`` and ``'PYRAMID_ARIMA_CACHE'``
+    * ``'PMDARIMA_CACHE_WARN_SIZE'`` and ``PYRAMID_ARIMA_CACHE_WARN_SIZE``
+    * ``PYRAMID_MPL_DEBUG``
+    * ``PYRAMID_MPL_BACKEND``
+
 
 `v1.1.0 <http://alkaline-ml.com/pmdarima/1.1.0/>`_
 --------------------------------------------------
