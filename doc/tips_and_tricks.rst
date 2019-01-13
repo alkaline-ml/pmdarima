@@ -136,7 +136,12 @@ will automatically determine the appropriate differencing term for you by defaul
 
 We can examine a time-series' auto-correlation plot given the code above.
 However, to more quantitatively determine whether we need to difference our
-data in order to make it stationary, we can conduct an ADF test:
+data in order to make it stationary, we can conduct a test of stationarity
+(either ``ADFTest``, ``PPTest`` or ``KPSSTest``).
+
+Each of these tests is based on the R source code, and **are primarily intended to**
+**be used internally**. See `this issue <https://github.com/tgsmith61591/pmdarima/issues/67>`_
+for more info. Here's an example of an ADF test:
 
 .. code-block:: python
 
@@ -148,7 +153,8 @@ data in order to make it stationary, we can conduct an ADF test:
     p_val, should_diff = adf_test.is_stationary(y)  # (0.01, False)
 
 The verdict, per the ADF test, is that we should *not* difference. Pmdarima also
-provides a more handy interface for estimating your ``d`` parameter more directly:
+provides a more handy interface for estimating your ``d`` parameter more directly.
+This is the preferred public method for accessing tests of stationarity:
 
 .. code-block:: python
 
@@ -176,8 +182,10 @@ combination with one another):
 * Differencing your time series one or more times
 * Log transformations
 
-When in doubt, let the ``auto_arima`` function do the heavy lifting for you. Read more on
-difference stationarity `in this Duke article <https://people.duke.edu/~rnau/411diff.htm>`_.
+Note, however, that a transformation on data as a pre-processing stage will
+result in forecasts in the transformed space. When in doubt, let the ``auto_arima``
+function do the heavy lifting for you. Read more on difference stationarity
+`in this Duke article <https://people.duke.edu/~rnau/411diff.htm>`_.
 
 Understand ``P``, ``D``, ``Q`` and ``m``
 ----------------------------------------
