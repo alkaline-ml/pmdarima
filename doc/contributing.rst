@@ -87,8 +87,7 @@ rules may hinder the speed with which your contribution is merged:
    to: indicate you are working on something to avoid duplicated work,
    request broad review of functionality or API, or seek collaborators.
 
--  All other tests pass when everything is rebuilt from scratch. Note that this
-   will actually require a Spark distribution to work locally.
+-  All other tests pass when everything is rebuilt from scratch.
    On Unix-like systems, check with (from the toplevel source folder):
 
       .. code-block:: bash
