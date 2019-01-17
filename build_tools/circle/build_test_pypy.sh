@@ -16,7 +16,9 @@ source pypy-env/bin/activate
 python --version
 which python
 
-pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy Cython pytest pytest-mpl pytest-benchmark
+# This is a temporary fix for #93:
+pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy==1.15
+pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu Cython pytest pytest-mpl pytest-benchmark
 pip install "scipy>=1.1.0"
 pip install "scikit-learn==0.19.1"
 pip install pandas statsmodels matplotlib
