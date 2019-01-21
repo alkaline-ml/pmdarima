@@ -18,6 +18,12 @@ v0.8.1) will document the latest features.
 
 * Add benchmarking notebook and capabilities in ``pytest`` plugins
 
+* Remove the following environment variables, which are now deprecated:
+    * ``'PMDARIMA_CACHE'`` and ``'PYRAMID_ARIMA_CACHE'``
+    * ``'PMDARIMA_CACHE_WARN_SIZE'`` and ``PYRAMID_ARIMA_CACHE_WARN_SIZE``
+    * ``PYRAMID_MPL_DEBUG``
+    * ``PYRAMID_MPL_BACKEND``
+
 * Deprecate the ``is_stationary`` method in tests of stationarity. This will be removed in
   v1.4.0. Use ``should_diff`` instead.
 
