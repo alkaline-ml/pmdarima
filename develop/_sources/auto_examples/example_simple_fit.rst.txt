@@ -26,29 +26,29 @@ without knowing anything about our data or optimal hyper parameters.
 
  Out::
 
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(1, 0, 1, 12); AIC=2891.624, BIC=2915.656, Fit time=1.169 seconds
-    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 12); AIC=3049.597, BIC=3055.604, Fit time=0.014 seconds
-    Fit ARIMA: order=(1, 1, 0) seasonal_order=(1, 0, 0, 12); AIC=2895.906, BIC=2907.922, Fit time=0.531 seconds
-    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 1, 12); AIC=2917.891, BIC=2929.907, Fit time=0.887 seconds
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 1, 12); AIC=2919.813, BIC=2940.840, Fit time=1.646 seconds
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(2, 0, 1, 12); AIC=2903.304, BIC=2930.339, Fit time=15.614 seconds
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(1, 0, 0, 12); AIC=2883.087, BIC=2904.115, Fit time=2.030 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(1, 0, 0, 12); AIC=2913.016, BIC=2931.040, Fit time=1.367 seconds
-    Fit ARIMA: order=(3, 1, 2) seasonal_order=(1, 0, 0, 12); AIC=2869.086, BIC=2893.118, Fit time=2.623 seconds
-    Fit ARIMA: order=(3, 1, 1) seasonal_order=(1, 0, 0, 12); AIC=2876.643, BIC=2897.670, Fit time=1.467 seconds
-    Fit ARIMA: order=(3, 1, 3) seasonal_order=(1, 0, 0, 12); AIC=2910.860, BIC=2937.895, Fit time=2.224 seconds
-    Fit ARIMA: order=(2, 1, 1) seasonal_order=(1, 0, 0, 12); AIC=2885.486, BIC=2903.510, Fit time=1.680 seconds
-    Fit ARIMA: order=(4, 1, 3) seasonal_order=(1, 0, 0, 12); AIC=2915.476, BIC=2945.516, Fit time=2.704 seconds
-    Fit ARIMA: order=(3, 1, 2) seasonal_order=(0, 0, 0, 12); AIC=2984.608, BIC=3005.636, Fit time=0.418 seconds
-    Fit ARIMA: order=(3, 1, 2) seasonal_order=(2, 0, 0, 12); AIC=2862.085, BIC=2889.120, Fit time=29.800 seconds
-    Fit ARIMA: order=(3, 1, 2) seasonal_order=(2, 0, 1, 12); AIC=2905.687, BIC=2935.726, Fit time=40.452 seconds
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(2, 0, 0, 12); AIC=2880.550, BIC=2904.582, Fit time=22.942 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(1, 0, 1, 12); AIC=2891.624, BIC=2915.656, Fit time=1.695 seconds
+    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 12); AIC=3049.597, BIC=3055.604, Fit time=0.015 seconds
+    Fit ARIMA: order=(1, 1, 0) seasonal_order=(1, 0, 0, 12); AIC=2895.906, BIC=2907.922, Fit time=0.771 seconds
+    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 1, 12); AIC=2917.891, BIC=2929.907, Fit time=1.191 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 1, 12); AIC=2919.813, BIC=2940.840, Fit time=1.750 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(2, 0, 1, 12); AIC=2903.304, BIC=2930.339, Fit time=14.454 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(1, 0, 0, 12); AIC=2883.087, BIC=2904.115, Fit time=1.926 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(1, 0, 0, 12); AIC=2913.016, BIC=2931.040, Fit time=1.109 seconds
+    Fit ARIMA: order=(3, 1, 2) seasonal_order=(1, 0, 0, 12); AIC=2869.086, BIC=2893.118, Fit time=2.697 seconds
+    Fit ARIMA: order=(3, 1, 1) seasonal_order=(1, 0, 0, 12); AIC=2876.643, BIC=2897.670, Fit time=2.197 seconds
+    Fit ARIMA: order=(3, 1, 3) seasonal_order=(1, 0, 0, 12); AIC=2910.860, BIC=2937.895, Fit time=2.963 seconds
+    Fit ARIMA: order=(2, 1, 1) seasonal_order=(1, 0, 0, 12); AIC=2885.486, BIC=2903.510, Fit time=1.962 seconds
+    Fit ARIMA: order=(4, 1, 3) seasonal_order=(1, 0, 0, 12); AIC=2915.476, BIC=2945.516, Fit time=4.390 seconds
+    Fit ARIMA: order=(3, 1, 2) seasonal_order=(0, 0, 0, 12); AIC=2984.608, BIC=3005.636, Fit time=0.513 seconds
+    Fit ARIMA: order=(3, 1, 2) seasonal_order=(2, 0, 0, 12); AIC=2862.085, BIC=2889.120, Fit time=39.559 seconds
+    Fit ARIMA: order=(3, 1, 2) seasonal_order=(2, 0, 1, 12); AIC=2905.687, BIC=2935.726, Fit time=37.691 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(2, 0, 0, 12); AIC=2880.550, BIC=2904.582, Fit time=25.127 seconds
     Fit ARIMA: order=(4, 1, 2) seasonal_order=(2, 0, 0, 12); AIC=nan, BIC=nan, Fit time=nan seconds
-    Fit ARIMA: order=(3, 1, 1) seasonal_order=(2, 0, 0, 12); AIC=2872.877, BIC=2896.909, Fit time=14.693 seconds
-    Fit ARIMA: order=(3, 1, 3) seasonal_order=(2, 0, 0, 12); AIC=2913.464, BIC=2943.504, Fit time=33.018 seconds
-    Fit ARIMA: order=(2, 1, 1) seasonal_order=(2, 0, 0, 12); AIC=2881.198, BIC=2902.225, Fit time=21.359 seconds
-    Fit ARIMA: order=(4, 1, 3) seasonal_order=(2, 0, 0, 12); AIC=2914.571, BIC=2947.614, Fit time=48.702 seconds
-    Total fit time: 245.375 seconds
+    Fit ARIMA: order=(3, 1, 1) seasonal_order=(2, 0, 0, 12); AIC=2872.877, BIC=2896.909, Fit time=33.264 seconds
+    Fit ARIMA: order=(3, 1, 3) seasonal_order=(2, 0, 0, 12); AIC=2913.464, BIC=2943.504, Fit time=43.858 seconds
+    Fit ARIMA: order=(2, 1, 1) seasonal_order=(2, 0, 0, 12); AIC=2881.198, BIC=2902.225, Fit time=22.154 seconds
+    Fit ARIMA: order=(4, 1, 3) seasonal_order=(2, 0, 0, 12); AIC=2914.571, BIC=2947.614, Fit time=53.114 seconds
+    Total fit time: 292.484 seconds
 
 
 
@@ -83,7 +83,7 @@ without knowing anything about our data or optimal hyper parameters.
     plt.title('Actual test samples vs. forecasts')
     plt.show()
 
-**Total running time of the script:** ( 4 minutes  5.413 seconds)
+**Total running time of the script:** ( 4 minutes  52.603 seconds)
 
 
 

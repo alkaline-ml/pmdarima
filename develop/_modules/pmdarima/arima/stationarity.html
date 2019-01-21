@@ -175,6 +175,8 @@
 <span class="kn">from</span> <span class="nn">..utils.array</span> <span class="k">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
 <span class="kn">from</span> <span class="nn">.approx</span> <span class="k">import</span> <span class="n">approx</span>
 
+<span class="kn">import</span> <span class="nn">warnings</span>
+
 <span class="c1"># since the C import relies on the C code having been built with Cython,</span>
 <span class="c1"># and since the platform might name the .so file something funky (like</span>
 <span class="c1"># _arima.cpython-35m-darwin.so), import this absolutely and not relatively.</span>
@@ -221,6 +223,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
 
     <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or it needs differencing.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : array-like, shape=(n_samples,)</span>
+<span class="sd">            The time series vector.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pval : float</span>
+<span class="sd">            The computed P-value of the test.</span>
+
+<span class="sd">        sig : bool</span>
+<span class="sd">            Whether the P-value is significant at the ``alpha`` level.</span>
+<span class="sd">            More directly, whether to difference the time series.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">is_stationary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary.</span>
 
@@ -238,6 +258,12 @@
 <span class="sd">            Whether the P-value is significant at the ``alpha`` level.</span>
 <span class="sd">            More directly, whether to difference the time series.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: REMOVE ME in v1.4.0</span>
+        <span class="n">cls_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">.is_stationary&#39; is deprecated and will be removed &quot;</span>
+                      <span class="s2">&quot;in v1.4.0. Use &#39;</span><span class="si">%s</span><span class="s2">.should_diff&#39; instead&quot;</span>
+                      <span class="o">%</span> <span class="p">(</span><span class="n">cls_name</span><span class="p">,</span> <span class="n">cls_name</span><span class="p">),</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="KPSSTest"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.KPSSTest.html#pmdarima.arima.KPSSTest">[docs]</a><span class="k">class</span> <span class="nc">KPSSTest</span><span class="p">(</span><span class="n">_DifferencingStationarityTest</span><span class="p">):</span>
@@ -280,8 +306,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">null</span> <span class="o">=</span> <span class="n">null</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lshort</span> <span class="o">=</span> <span class="n">lshort</span></div>
 
-<div class="viewcode-block" id="KPSSTest.is_stationary"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.KPSSTest.html#pmdarima.arima.KPSSTest.is_stationary">[docs]</a>    <span class="k">def</span> <span class="nf">is_stationary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary.</span>
+<div class="viewcode-block" id="KPSSTest.should_diff"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.KPSSTest.html#pmdarima.arima.KPSSTest.should_diff">[docs]</a>    <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or needs differencing.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -441,8 +467,8 @@
         <span class="n">stderrs</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">bse</span>  <span class="c1"># this was a pain in the ARSE to locate</span>
         <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">stderrs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-<div class="viewcode-block" id="ADFTest.is_stationary"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ADFTest.html#pmdarima.arima.ADFTest.is_stationary">[docs]</a>    <span class="k">def</span> <span class="nf">is_stationary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary.</span>
+<div class="viewcode-block" id="ADFTest.should_diff"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ADFTest.html#pmdarima.arima.ADFTest.should_diff">[docs]</a>    <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or needs differencing.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -558,8 +584,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lshort</span> <span class="o">=</span> <span class="n">lshort</span></div>
 
-<div class="viewcode-block" id="PPTest.is_stationary"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.PPTest.html#pmdarima.arima.PPTest.is_stationary">[docs]</a>    <span class="k">def</span> <span class="nf">is_stationary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary.</span>
+<div class="viewcode-block" id="PPTest.should_diff"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.PPTest.html#pmdarima.arima.PPTest.should_diff">[docs]</a>    <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or needs differencing.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
