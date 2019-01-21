@@ -176,6 +176,17 @@ v0.8.1) will document the latest features.</p>
 <li>Default value of <code class="docutils literal notranslate"><span class="pre">seasonal_test</span></code> changed from “ch” to “ocsb” in <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></li>
 <li>Default value of <code class="docutils literal notranslate"><span class="pre">test</span></code> changed from “ch” to “ocsb” in <code class="docutils literal notranslate"><span class="pre">nsdiffs</span></code></li>
 <li>Add benchmarking notebook and capabilities in <code class="docutils literal notranslate"><span class="pre">pytest</span></code> plugins</li>
+<li><dl class="first docutils">
+<dt>Remove the following environment variables, which are now deprecated:</dt>
+<dd><ul class="first last">
+<li><code class="docutils literal notranslate"><span class="pre">'PMDARIMA_CACHE'</span></code> and <code class="docutils literal notranslate"><span class="pre">'PYRAMID_ARIMA_CACHE'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">'PMDARIMA_CACHE_WARN_SIZE'</span></code> and <code class="docutils literal notranslate"><span class="pre">PYRAMID_ARIMA_CACHE_WARN_SIZE</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">PYRAMID_MPL_DEBUG</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">PYRAMID_MPL_BACKEND</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
 <li>Deprecate the <code class="docutils literal notranslate"><span class="pre">is_stationary</span></code> method in tests of stationarity. This will be removed in
 v1.4.0. Use <code class="docutils literal notranslate"><span class="pre">should_diff</span></code> instead.</li>
 </ul>
