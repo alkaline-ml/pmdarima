@@ -5,13 +5,14 @@ Tips to using ``auto_arima``
 ============================
 
 The ``auto_arima`` function fits the best ``ARIMA`` model to a univariate time
-series according to either
+series according to a provided information criterion (either
 `AIC <https://en.wikipedia.org/wiki/Akaike_information_criterion>`_,
 `AICc <https://en.wikipedia.org/wiki/Akaike_information_criterion#AICc>`_,
 `BIC <https://en.wikipedia.org/wiki/Bayesian_information_criterion>`_ or
-`HQIC <https://en.wikipedia.org/wiki/Hannan–Quinn_information_criterion>`_.
+`HQIC <https://en.wikipedia.org/wiki/Hannan–Quinn_information_criterion>`_).
 The function performs a search (either stepwise or parallelized)
-over possible model orders within the constraints provided.
+over possible model & seasonal orders within the constraints provided, and selects
+the parameters that minimize the given metric.
 
 The ``auto_arima`` function can be daunting. There are a lot of parameters to
 tune, and the outcome is heavily dependent on a number of them. In this section,
@@ -30,13 +31,34 @@ ARIMA models are made up of `three different terms <http://people.duke.edu/~rnau
 Often times, ARIMA models are written in the form :math:`ARIMA(p, d, q)`, where a
 model with no differencing term, e.g., :math:`ARIMA(1, 0, 12)`, would be an ARMA
 (made up of an auto-regressive term and a moving average term, but no
-integrative term).
+integrative term, hence no "I").
 
-Understanding differencing
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+In ``pmdarima.ARIMA``, these parameters are specified in the ``order`` argument
+as a tuple:
+
+.. code-block:: python
+
+    order = (1, 0, 12)  # p=1, d=0, q=12
+    order = (1, 1, 3)  # p=1, d=1, q=3
+    # etc.
+
+The parameters ``p`` and ``q`` can be iteratively searched-for with the ``auto_arima``
+function, but the differencing term, ``d``, requires a special set of tests of stationarity
+to estimate.
+
+Understanding differencing (``d``)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An integrative term, ``d``, is typically only used in the case of non-stationary
-data. The value of ``d`` determines the number of periods to lag the response prior
+data. Stationarity in a time series indicates that a series' statistical attributes,
+such as mean, variance, etc., are constant over time (i.e., it exhibits low
+`heteroskedasticity <http://www.statsmakemecry.com/smmctheblog/confusing-stats-terms-explained-heteroscedasticity-heteroske.html>`_.
+
+A stationary time series is far more easy to learn and forecast from. With the
+``d`` parameter, you can force the ARIMA model to adjust for non-stationarity on
+its own, without having to worry about doing so manually.
+
+The value of ``d`` determines the number of periods to lag the response prior
 to computing differences. E.g.,
 
 .. code-block:: python
@@ -80,7 +102,7 @@ the difference twice:
 .. _enforcing_stationarity:
 
 Enforcing stationarity
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 The ``pmdarima.arima.stationarity`` sub-module defines various tests of stationarity for
 testing a null hypothesis that an observable univariate time series is stationary around
@@ -114,7 +136,12 @@ will automatically determine the appropriate differencing term for you by defaul
 
 We can examine a time-series' auto-correlation plot given the code above.
 However, to more quantitatively determine whether we need to difference our
-data in order to make it stationary, we can conduct an ADF test:
+data in order to make it stationary, we can conduct a test of stationarity
+(either ``ADFTest``, ``PPTest`` or ``KPSSTest``).
+
+Each of these tests is based on the R source code, and **are primarily intended to**
+**be used internally**. See `this issue <https://github.com/tgsmith61591/pmdarima/issues/67>`_
+for more info. Here's an example of an ADF test:
 
 .. code-block:: python
 
@@ -126,7 +153,8 @@ data in order to make it stationary, we can conduct an ADF test:
     p_val, should_diff = adf_test.is_stationary(y)  # (0.01, False)
 
 The verdict, per the ADF test, is that we should *not* difference. Pmdarima also
-provides a more handy interface for estimating your ``d`` parameter more directly:
+provides a more handy interface for estimating your ``d`` parameter more directly.
+This is the preferred public method for accessing tests of stationarity:
 
 .. code-block:: python
 
@@ -154,8 +182,10 @@ combination with one another):
 * Differencing your time series one or more times
 * Log transformations
 
-When in doubt, let the ``auto_arima`` function do the heavy lifting for you. Read more on
-difference stationarity `in this Duke article <https://people.duke.edu/~rnau/411diff.htm>`_.
+Note, however, that a transformation on data as a pre-processing stage will
+result in forecasts in the transformed space. When in doubt, let the ``auto_arima``
+function do the heavy lifting for you. Read more on difference stationarity
+`in this Duke article <https://people.duke.edu/~rnau/411diff.htm>`_.
 
 Understand ``P``, ``D``, ``Q`` and ``m``
 ----------------------------------------
