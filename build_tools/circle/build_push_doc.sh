@@ -64,13 +64,14 @@ declare -a leftover=("benchmarks"
                      "pmdarima"
                      "pmdarima.egg-info"
                      "_configtest"
+                     "_configtest.c"
                      "_configtest.o")
 
 # check for each left over file/dir and remove it
 for left in "${leftover[@]}"
 do
   echo "Removing ${left}"
-  rm -rf ${left}
+  rm -rf ${left} || echo "${left} does not exist"
 done
 
 # If it's develop, we can simply rename the "html" directory as the
