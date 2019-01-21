@@ -55,13 +55,16 @@ echo "Branch name: ${CIRCLE_BRANCH}"
 ls -la
 
 # On both of these, we'll need to remove the artifacts from the package
-# build itself
+# build itself. The _configtest files are added in the latest version of
+# numpy...
 declare -a leftover=("benchmarks"
                      "build"
                      "dist"
                      "doc"
                      "pmdarima"
-                     "pmdarima.egg-info")
+                     "pmdarima.egg-info"
+                     "_configtest"
+                     "_configtest.o")
 
 # check for each left over file/dir and remove it
 for left in "${leftover[@]}"
