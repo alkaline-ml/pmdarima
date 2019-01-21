@@ -150,7 +150,7 @@ for more info. Here's an example of an ADF test:
     # Test whether we should difference at the alpha=0.05
     # significance level
     adf_test = ADFTest(alpha=0.05)
-    p_val, should_diff = adf_test.is_stationary(y)  # (0.01, False)
+    p_val, should_diff = adf_test.should_diff(y)  # (0.01, False)
 
 The verdict, per the ADF test, is that we should *not* difference. Pmdarima also
 provides a more handy interface for estimating your ``d`` parameter more directly.
