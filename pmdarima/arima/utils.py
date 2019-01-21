@@ -157,7 +157,7 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
         raise ValueError('max_d must be a positive integer')
 
     # get the test
-    testfunc = get_callable(test, VALID_TESTS)(alpha, **kwargs).is_stationary
+    testfunc = get_callable(test, VALID_TESTS)(alpha, **kwargs).should_diff
     x = column_or_1d(check_array(x, ensure_2d=False,
                                  force_all_finite=True, dtype=DTYPE))
 

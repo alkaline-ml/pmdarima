@@ -24,6 +24,9 @@ v0.8.1) will document the latest features.
     * ``PYRAMID_MPL_DEBUG``
     * ``PYRAMID_MPL_BACKEND``
 
+* Deprecate the ``is_stationary`` method in tests of stationarity. This will be removed in
+  v1.4.0. Use ``should_diff`` instead.
+
 
 `v1.1.0 <http://alkaline-ml.com/pmdarima/1.1.0/>`_
 --------------------------------------------------
