@@ -16,13 +16,12 @@ print(__doc__)
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
 import pmdarima as pm
-from pmdarima.datasets import load_wineind
 from sklearn.externals import joblib  # for persistence
 import os
 
 # #############################################################################
 # Load the data and split it into separate pieces
-y = load_wineind()
+y = pm.datasets.load_wineind()
 train, test = y[:125], y[125:]
 
 # Fit an ARIMA
