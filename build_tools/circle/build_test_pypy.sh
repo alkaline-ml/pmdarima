@@ -17,11 +17,15 @@ python --version
 which python
 
 # This is a temporary fix for #93:
-pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy==1.15
-pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu Cython pytest pytest-mpl pytest-benchmark
+# XXX: numpy version pinning can be reverted once PyPy
+#      compatibility is resolved for numpy v1.6.x. For instance,
+#      when PyPy3 >6.0 is released (see numpy/numpy#12740)
+pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy=="1.15.*" Cython pytest
 pip install "scipy>=1.1.0"
-pip install "scikit-learn==0.19.1"
-pip install pandas statsmodels matplotlib
+pip install "scikit-learn==0.19.*"
+# Pandas has starting throwing issues in Pypy now...
+pip install "pandas==0.23.*" statsmodels matplotlib
+pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu pytest-mpl pytest-benchmark
 
 ccache -M 512M
 export CCACHE_COMPRESS=1
