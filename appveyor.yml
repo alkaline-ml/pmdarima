@@ -61,6 +61,10 @@ environment:
       PYTHON: "C:\\Python37-x64"
       DO_TEST: "true"
 
+version: '{branch}-{build}'
+cache:
+  - C:\Users\appveyor\pip\wheels
+
 # Because we only have a single worker, we don't want to waste precious
 # appveyor CI time and make other PRs wait for repeated failures in a failing
 # PR. The following option cancels pending jobs in a given PR after the first
@@ -106,7 +110,7 @@ test_script:
   # Test with pytest
   - ps: |
       if ($env:DO_TEST -Match "true") {
-        pytest --showlocals --durations=20 --mpl --mpl-baseline-path=pytest_images --pyargs pmdarima --benchmark-skip"
+        pytest --showlocals --durations=20 --mpl --mpl-baseline-path=pytest_images --pyargs pmdarima --benchmark-skip
       } else {
         echo "Not running tests since DO_TEST is not 'true'"
       }
@@ -122,10 +126,3 @@ deploy_script:
   - set PATH=%BK_PATH%
   - ps: If ($env:APPVEYOR_REPO_TAG -eq "true") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --skip-existing dist/*" } Else { write-output "Not on a tagged commit, won't deploy to pypi"}
   #- ps: If ($env:APPVEYOR_REPO_BRANCH -eq "develop") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*" } Else { write-output "Not on a development commit, won't deploy to pypitest"}
-
-cache:
-  # Use the appveyor cache to avoid re-downloading large archives such
-  # the MKL numpy and scipy wheels mirrored on a rackspace cloud
-  # container, speed up the appveyor jobs and reduce bandwidth
-  # usage on our rackspace account.
-  - '%APPDATA%\pip\Cache'
