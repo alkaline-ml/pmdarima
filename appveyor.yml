@@ -14,42 +14,52 @@ environment:
   PYPI_PASSWORD:
     secure: okvMa3VgIXdlnMC48iMefQ==
 
+  # For deployments, we have to build on the architecture we want to ship.
+  # However, since there are so many and appveyor doesn't run in parallel,
+  # we don't need to run tests for all of them. We can just build some for
+  # deployments.
   matrix:
     - PYTHON_ARCH: "32"
       PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python35"
+      DO_TEST: "false"
 
     - PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python35-x64"
+      DO_TEST: "true"
 
     - PYTHON_ARCH: "32"
       PYTHON_VERSION: "3.6.6"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python36"
+      DO_TEST: "true"
 
     - PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.6.6"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python36-x64"
+      DO_TEST: "false"
 
     - PYTHON_ARCH: "32"
       PYTHON_VERSION: "3.7.0"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python37"
+      DO_TEST: "false"
 
     - PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.7.0"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python37-x64"
+      DO_TEST: "true"
 
 # Because we only have a single worker, we don't want to waste precious
 # appveyor CI time and make other PRs wait for repeated failures in a failing
@@ -94,7 +104,12 @@ build: false
 
 test_script:
   # Test with pytest
-  - "pytest --showlocals --durations=20 --mpl --mpl-baseline-path=pytest_images --pyargs pmdarima --benchmark-skip"
+  - ps: |
+      if ($env:DO_TEST -Match "true") {
+        pytest --showlocals --durations=20 --mpl --mpl-baseline-path=pytest_images --pyargs pmdarima --benchmark-skip"
+      } else {
+        echo "Not running tests since DO_TEST is not 'true'"
+      }
 
 after_test:
   - set PATH=%BK_PATH%
