@@ -16,22 +16,21 @@ print(__doc__)
 
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
-from pmdarima.datasets import load_lynx
-from pmdarima.arima import auto_arima
+import pmdarima as pm
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 import numpy as np
 
 # #############################################################################
 # Load the data and split it into separate pieces
-data = load_lynx()
+data = pm.datasets.load_lynx()
 train, test = data[:90], data[90:]
 
 # Fit a simple auto_arima model
-modl = auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
-                  max_p=5, max_q=5, max_P=5, max_Q=5, seasonal=True,
-                  stepwise=True, suppress_warnings=True, D=10, max_D=10,
-                  error_action='ignore')
+modl = pm.auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
+                     max_p=5, max_q=5, max_P=5, max_Q=5, seasonal=True,
+                     stepwise=True, suppress_warnings=True, D=10, max_D=10,
+                     error_action='ignore')
 
 # Create predictions for the future, evaluate on test
 preds, conf_int = modl.predict(n_periods=test.shape[0], return_conf_int=True)

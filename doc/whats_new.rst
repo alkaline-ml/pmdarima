@@ -27,6 +27,8 @@ v0.8.1) will document the latest features.
 * Deprecate the ``is_stationary`` method in tests of stationarity. This will be removed in
   v1.4.0. Use ``should_diff`` instead.
 
+* Added two new datasets: ``airpassengers`` & ``austres``
+
 
 `v1.1.0 <http://alkaline-ml.com/pmdarima/1.1.0/>`_
 --------------------------------------------------
