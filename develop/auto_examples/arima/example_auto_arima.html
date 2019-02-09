@@ -187,22 +187,21 @@ dataset available in the <a class="reference internal" href="../../modules/datas
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <a href="../../modules/generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="View documentation for pmdarima.datasets.load_lynx"><span class="n">load_lynx</span></a>
-<span class="kn">from</span> <span class="nn">pmdarima.arima</span> <span class="kn">import</span> <span class="n">auto_arima</span>
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="c1"># #############################################################################</span>
 <span class="c1"># Load the data and split it into separate pieces</span>
-<span class="n">data</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="View documentation for pmdarima.datasets.load_lynx"><span class="n">load_lynx</span></a><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="View documentation for pmdarima.datasets.load_lynx"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span></a><span class="p">()</span>
 <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="mi">90</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">90</span><span class="p">:]</span>
 
 <span class="c1"># Fit a simple auto_arima model</span>
-<span class="n">modl</span> <span class="o">=</span> <span class="n">auto_arima</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_P</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_Q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                  <span class="n">max_p</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_P</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_Q</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                  <span class="n">stepwise</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_D</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                  <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+<span class="n">modl</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_P</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_Q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="n">max_p</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_P</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_Q</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                     <span class="n">stepwise</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_D</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                     <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 
 <span class="c1"># Create predictions for the future, evaluate on test</span>
 <span class="n">preds</span><span class="p">,</span> <span class="n">conf_int</span> <span class="o">=</span> <span class="n">modl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -226,7 +225,7 @@ dataset available in the <a class="reference internal" href="../../modules/datas
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Year&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.183 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.194 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../../_downloads/example_auto_arima.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_auto_arima.py</span></code></a></div>

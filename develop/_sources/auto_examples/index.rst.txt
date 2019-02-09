@@ -187,6 +187,26 @@ data, difference arrays, and more.
    :hidden:
 
    /auto_examples/utils/example_array_concatenation
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s array differencing, and how it&#x27;s used in conjunction...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/utils/images/thumb/sphx_glr_example_array_differencing_thumb.png
+
+        :ref:`sphx_glr_auto_examples_utils_example_array_differencing.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/utils/example_array_differencing
 .. raw:: html
 
     <div style='clear:both'></div>

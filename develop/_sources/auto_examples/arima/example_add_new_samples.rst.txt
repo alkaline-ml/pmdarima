@@ -32,21 +32,20 @@ with respect to true, observed values.
 
     # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
-    from pmdarima.datasets import load_lynx
-    from pmdarima.arima import auto_arima
+    import pmdarima as pm
     import matplotlib.pyplot as plt
     import numpy as np
 
     # #############################################################################
     # Load the data and split it into separate pieces
-    data = load_lynx()
+    data = pm.datasets.load_lynx()
     train, test = data[:100], data[100:]
 
     # #############################################################################
     # Fit with some validation (cv) samples
-    arima = auto_arima(train, start_p=1, start_q=1, d=0, max_p=5, max_q=5,
-                       out_of_sample_size=10, suppress_warnings=True,
-                       stepwise=True, error_action='ignore')
+    arima = pm.auto_arima(train, start_p=1, start_q=1, d=0, max_p=5, max_q=5,
+                          out_of_sample_size=10, suppress_warnings=True,
+                          stepwise=True, error_action='ignore')
 
     # Now plot the results and the forecast for the test set
     preds, conf_int = arima.predict(n_periods=test.shape[0],
@@ -78,7 +77,7 @@ with respect to true, observed values.
     axes[1].set_title("Added new observed values with new forecasts")
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.195 seconds)
+**Total running time of the script:** ( 0 minutes  0.202 seconds)
 
 
 
