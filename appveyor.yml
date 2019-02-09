@@ -14,42 +14,58 @@ environment:
   PYPI_PASSWORD:
     secure: okvMa3VgIXdlnMC48iMefQ==
 
+  # For deployments, we have to build on the architecture we want to ship.
+  # However, since there are so many and appveyor doesn't run in parallel,
+  # we don't need to run tests for all of them. We can just build some for
+  # deployments.
   matrix:
     - PYTHON_ARCH: "32"
       PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python35"
+      DO_TEST: "false"
 
     - PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.5.1"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python35-x64"
+      DO_TEST: "true"
 
     - PYTHON_ARCH: "32"
       PYTHON_VERSION: "3.6.6"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python36"
+      DO_TEST: "true"
 
     - PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.6.6"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python36-x64"
+      DO_TEST: "false"
 
     - PYTHON_ARCH: "32"
       PYTHON_VERSION: "3.7.0"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python37"
+      DO_TEST: "false"
 
     - PYTHON_ARCH: "64"
       PYTHON_VERSION: "3.7.0"
       MPL_VERSION: "2.2.3"
       PMDARIMA_MPL_DEBUG: "true"
       PYTHON: "C:\\Python37-x64"
+      DO_TEST: "true"
+
+version: '{branch}-{build}'
+cache:
+  - '%APPDATA%\pip\Cache'
+  # - C:\Users\appveyor\pip\wheels
+  # - ~\AppData\Local\pip\cache
 
 # Because we only have a single worker, we don't want to waste precious
 # appveyor CI time and make other PRs wait for repeated failures in a failing
@@ -94,7 +110,12 @@ build: false
 
 test_script:
   # Test with pytest
-  - "pytest --showlocals --durations=20 --mpl --mpl-baseline-path=pytest_images --pyargs pmdarima --benchmark-skip"
+  - ps: |
+      if ($env:DO_TEST -Match "true") {
+        pytest --showlocals --durations=20 --mpl --mpl-baseline-path=pytest_images --pyargs pmdarima --benchmark-skip
+      } else {
+        echo "Not running tests since DO_TEST is not 'true'"
+      }
 
 after_test:
   - set PATH=%BK_PATH%
@@ -107,10 +128,3 @@ deploy_script:
   - set PATH=%BK_PATH%
   - ps: If ($env:APPVEYOR_REPO_TAG -eq "true") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --skip-existing dist/*" } Else { write-output "Not on a tagged commit, won't deploy to pypi"}
   #- ps: If ($env:APPVEYOR_REPO_BRANCH -eq "develop") { Invoke-Expression "twine upload -u tgsmith61591.gh -p $env:PYPI_PASSWORD --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*" } Else { write-output "Not on a development commit, won't deploy to pypitest"}
-
-cache:
-  # Use the appveyor cache to avoid re-downloading large archives such
-  # the MKL numpy and scipy wheels mirrored on a rackspace cloud
-  # container, speed up the appveyor jobs and reduce bandwidth
-  # usage on our rackspace account.
-  - '%APPDATA%\pip\Cache'
