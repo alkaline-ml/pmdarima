@@ -64,7 +64,7 @@ environment:
 
 version: '{branch}-{build}'
 cache:
-  - '%APPDATA%\pip\Cache'
+  - '%LOCALAPPDATA%\pip\Cache'
   # - C:\Users\appveyor\pip\wheels
   # - ~\AppData\Local\pip\cache
 
