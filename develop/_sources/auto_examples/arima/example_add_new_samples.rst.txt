@@ -77,7 +77,7 @@ with respect to true, observed values.
     axes[1].set_title("Added new observed values with new forecasts")
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.202 seconds)
+**Total running time of the script:** ( 0 minutes  0.264 seconds)
 
 
 
