@@ -10,7 +10,7 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script interpreter
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\build_tools\\appveyor\\run_with_env.cmd"
-    APPVEYOR_SAVE_CACHE_ON_ERROR: true
+#    APPVEYOR_SAVE_CACHE_ON_ERROR: true
   PYPI_USERNAME: tgsmith61591.gh
   PYPI_PASSWORD:
     secure: okvMa3VgIXdlnMC48iMefQ==
