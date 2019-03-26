@@ -5,7 +5,7 @@
 
 PYTHON ?= python
 
-.PHONY: clean develop test
+.PHONY: clean develop test install bdist_wheel
 
 clean:
 	$(PYTHON) setup.py clean
@@ -17,6 +17,9 @@ doc-requirements:
 
 requirements:
 	$(PYTHON) -m pip install -r requirements.txt
+
+bdist_wheel: requirements
+	$(PYTHON) setup.py bdist_wheel
 
 develop: requirements
 	$(PYTHON) setup.py develop
@@ -39,3 +42,6 @@ test-unit: test-requirements coverage-dependencies
 test: develop test-unit test-lint
 	# Coverage creates all these random little artifacts we don't want
 	rm .coverage.* || echo "No coverage artifacts to remove"
+
+twine-check: bdist_wheel
+	$(PYTHON) -m twine check dist/*
