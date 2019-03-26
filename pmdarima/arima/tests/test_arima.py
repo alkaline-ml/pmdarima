@@ -927,3 +927,44 @@ def test_issue_104(model):
 
     # These should be DIFFERENT
     assert not np.array_equal(preds1, preds2)
+
+
+@pytest.mark.parametrize(
+    'model', [
+        # ARMA
+        ARIMA(order=(1, 0, 0)),
+
+        # ARIMA
+        ARIMA(order=(1, 1, 0))
+    ]
+)
+def test_update_1_iter(model):
+    # The model should *barely* change if we update with one iter.
+    endog = wineind
+    train, test = endog[:145], endog[145:]
+
+    model.fit(train)
+    params1 = model.params()
+
+    # Now update with 1 iteration, and show params have not changed too much
+    model.update(test, maxiter=1)
+    params2 = model.params()
+
+    # They should be close
+    assert np.allclose(params1, params2, atol=0.05)
+
+
+def test_add_new_obs_deprecated():
+    endog = wineind
+    train, test = endog[:125], endog[125:]
+    model = ARIMA(order=(1, 0, 0))
+
+    model.fit(train)
+
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+        model.add_new_observations(test)
+        assert len(w)
+        # Might be more than one warning, so quick pass
+        assert any(issubclass(wrn.category, DeprecationWarning) and
+                   'pmdarima' in str(wrn.message) for wrn in w)

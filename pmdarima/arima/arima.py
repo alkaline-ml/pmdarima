@@ -262,7 +262,7 @@ class ARIMA(BaseEstimator):
             trend = self.trend
 
             # if not seasonal:
-            if self.seasonal_order is None:
+            if not self._is_seasonal():
                 if method is None:
                     method = "css-mle"
 
@@ -682,17 +682,6 @@ class ARIMA(BaseEstimator):
         **kwargs : keyword args
             Any keyword args that should be passed as ``**fit_kwargs`` in the
             new model fit.
-
-        Notes
-        -----
-        * Internally, this calls ``fit`` again (just to create the new model
-          summary), but the OLD model parameters are set back into the model,
-          so it's not truly re-fit.
-
-        * Since this doesn't constitute re-fitting, as the model params do not
-          change, do not use this in place of periodically refreshing the
-          model. Use it only to add new observed values from which to forecast
-          new values.
         """
         return self.update(y, exogenous, **kwargs)
 
@@ -776,7 +765,7 @@ class ARIMA(BaseEstimator):
         # Get the model parameters, then we have to "fit" a new one. If you're
         # reading this source code, don't panic! We're not just fitting a new
         # arbitrary model. Statsmodels does not handle patching new samples in
-        # very well, so we update the new model with the existing parameters.
+        # very well, so we seed the new model with the existing parameters.
         params = model_res.params
         self._fit(y, exog, start_params=params, maxiter=maxiter, **kwargs)
 
