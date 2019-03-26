@@ -218,11 +218,13 @@ def test_oob_sarimax():
     xreg = rs.rand(wineind.shape[0], 2)
     fit = ARIMA(order=(1, 1, 1),
                 seasonal_order=(0, 1, 1, 12),
+                maxiter=5,
                 out_of_sample_size=15).fit(y=wineind, exogenous=xreg)
 
     fit_no_oob = ARIMA(order=(1, 1, 1),
                        seasonal_order=(0, 1, 1, 12),
                        out_of_sample_size=0,
+                       maxiter=5,
                        suppress_warnings=True).fit(y=wineind[:-15],
                                                    exogenous=xreg[:-15, :])
 
@@ -243,6 +245,9 @@ def test_oob_sarimax():
     assert np.allclose(fit.predict(5, xreg_test),
                        fit_no_oob.predict(5, xreg_test),
                        rtol=1e-2)
+
+    # And also the params should be close now after updating
+    assert np.allclose(fit.params(), fit_no_oob.params())
 
     # Show we can get a confidence interval out here
     preds, conf = fit.predict(5, xreg_test, return_conf_int=True)
@@ -493,7 +498,10 @@ def test_with_seasonality2():
                           d=1, D=1, stepwise=False,
                           suppress_warnings=True,
                           error_action='ignore',
-                          n_fits=20, random_state=42)
+                          n_fits=20, random_state=42,
+
+                          # Set to super low iter to make test move quickly
+                          maxiter=5)
 
     # show that we can forecast even after the
     # pickling (this was fit in parallel)
@@ -513,7 +521,10 @@ def test_with_seasonality3():
                start_P=0, seasonal=True, d=1, D=None,
                error_action='ignore', suppress_warnings=True,
                trace=True,  # get the coverage on trace
-               random_state=42, stepwise=True)
+               random_state=42, stepwise=True,
+
+               # Set to super low iter to make test move quickly
+               maxiter=5)
 
 
 def test_with_seasonality4():
@@ -524,7 +535,10 @@ def test_with_seasonality4():
                start_P=0, seasonal=True, n_jobs=1, d=1, D=None, stepwise=False,
                error_action='ignore', suppress_warnings=True,
                random=True, random_state=42, return_valid_fits=True,
-               n_fits=3)  # only a few
+               n_fits=3,  # only a few
+
+               # Set to super low iter to make test move quickly
+               maxiter=5)
 
 
 def test_with_seasonality5():
@@ -537,7 +551,10 @@ def test_with_seasonality5():
                          suppress_warnings=True, stationary=True,
                          random_state=42, return_valid_fits=True,
                          stepwise=True,
-                         exogenous=rs.rand(wineind.shape[0], 4))  # only fit 2
+                         exogenous=rs.rand(wineind.shape[0], 4),  # only fit 2
+
+                         # Set to super low iter to make test move quickly
+                         maxiter=5)
 
     # show it is a list
     assert hasattr(all_res, '__iter__')
@@ -560,7 +577,10 @@ def test_with_seasonality7():
                suppress_warnings=True,
                error_action='raise',  # do raise so it fails fast
                random=True, random_state=42, n_fits=2,
-               stepwise=False)
+               stepwise=False,
+
+               # Set to super low iter to make test move quickly
+               maxiter=5)
 
 
 def test_corner_cases():
@@ -673,14 +693,15 @@ def test_warn_for_large_differences():
     # First: d is too large
     with pytest.warns(ModelFitWarning):
         auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
-                   d=3, error_action='warn')
+                   d=3, error_action='warn', maxiter=5)
 
     # Second: D is too large. M needs to be > 1 or D will be set to 0...
     # unfortunately, this takes a long time.
     with pytest.warns(ModelFitWarning):
         auto_arima(wineind, seasonal=True, m=2,  # noqa: F841
-                       suppress_warnings=False,
-                       D=3, error_action='warn')
+                   suppress_warnings=False,
+                   D=3, error_action='warn',
+                   maxiter=5)
 
 
 def test_warn_for_stepwise_and_parallel():
@@ -714,7 +735,10 @@ def test_seasonal_xreg_differencing():
         _ = auto_arima(wineind, d=1, D=1,  # noqa: F841
                        seasonal=True,
                        exogenous=wineind_xreg, error_action='ignore',
-                       suppress_warnings=True, m=m)
+                       suppress_warnings=True, m=m,
+
+                       # Set to super low iter to make test move quickly
+                       maxiter=5)
 
 
 # Show that we can complete when max order is None

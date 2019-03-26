@@ -318,9 +318,9 @@ class ARIMA(BaseEstimator):
             _maxiter = self.maxiter
             if _maxiter is None:
                 if self._is_seasonal():
-                    _maxiter = 50  # SARIMAX (slower)
+                    _maxiter = sm_compat.DEFAULT_SEASONAL_MAXITER  # 50
                 else:
-                    _maxiter = 500  # ARMA, ARIMA
+                    _maxiter = sm_compat.DEFAULT_NON_SEASONAL_MAXITER  # 500
 
             # If maxiter is provided in the fit_args by a savvy user, we should
             # default to their preference
@@ -657,6 +657,7 @@ class ARIMA(BaseEstimator):
                           % (modl_version, this_version), UserWarning)
 
     def _clear_cached_state(self):
+        # THIS IS A LEGACY METHOD USED PRE-v0.8.0
         if _uses_legacy_pickling(self):
             # when fit in an auto-arima, a lot of cached .pmdpkl files
             # are generated if fit in parallel... this removes the tmp file
