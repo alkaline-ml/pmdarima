@@ -16,12 +16,16 @@ source pypy-env/bin/activate
 python --version
 which python
 
-# Pin to solve pypy issue
-pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy==1.15.3
-pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu Cython pytest pytest-mpl
+# This is a temporary fix for #93:
+# XXX: numpy version pinning can be reverted once PyPy
+#      compatibility is resolved for numpy v1.6.x. For instance,
+#      when PyPy3 >6.0 is released (see numpy/numpy#12740)
+pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy=="1.15.*" Cython pytest
 pip install "scipy>=1.1.0"
-pip install "scikit-learn==0.19.1"
-pip install pandas statsmodels matplotlib
+pip install "scikit-learn==0.19.*"
+# Pandas has starting throwing issues in Pypy now...
+pip install "pandas==0.23.*" statsmodels matplotlib
+pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu pytest-mpl pytest-benchmark
 
 ccache -M 512M
 export CCACHE_COMPRESS=1
@@ -32,4 +36,4 @@ pip install -vv -e .
 
 # Pytest is known to consume lots of memory for a large number of tests,
 # and Circle 2.0 limits 4GB per container.
-python -m pytest pmdarima/ -p no:logging --mpl --mpl-baseline-path=pytest_images
+python -m pytest pmdarima/ -p no:logging --mpl --mpl-baseline-path=pytest_images --benchmark-skip
