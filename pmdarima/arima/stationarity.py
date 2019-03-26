@@ -16,6 +16,7 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 
 from ..compat.numpy import DTYPE
+from ..decorators import deprecated
 from ..utils.array import c, diff
 from .approx import approx
 
@@ -85,6 +86,8 @@ class _DifferencingStationarityTest(six.with_metaclass(ABCMeta,
             More directly, whether to difference the time series.
         """
 
+    # TODO: REMOVE ME in v1.4.0
+    @deprecated(use_instead="should_diff")
     def is_stationary(self, x):
         """Test whether the time series is stationary.
 
@@ -102,11 +105,6 @@ class _DifferencingStationarityTest(six.with_metaclass(ABCMeta,
             Whether the P-value is significant at the ``alpha`` level.
             More directly, whether to difference the time series.
         """
-        # TODO: REMOVE ME in v1.4.0
-        cls_name = self.__class__.__name__
-        warnings.warn("'%s.is_stationary' is deprecated and will be removed "
-                      "in v1.4.0. Use '%s.should_diff' instead"
-                      % (cls_name, cls_name), DeprecationWarning)
         return self.should_diff(x)
 
 

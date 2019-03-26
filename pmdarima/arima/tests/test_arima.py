@@ -121,7 +121,8 @@ def test_basic_arima():
 
 def test_with_oob():
     # show we can fit with CV (kinda)
-    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True,
+    arima = ARIMA(order=(2, 1, 2),
+                  suppress_warnings=True,
                   out_of_sample_size=10).fit(y=hr)
     assert not np.isnan(arima.oob())  # show this works
 
@@ -146,7 +147,8 @@ def test_with_oob():
 def test_oob_for_issue_28():
     # Continuation of above: can we do one with an exogenous array, too?
     xreg = rs.rand(hr.shape[0], 4)
-    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True,
+    arima = ARIMA(order=(2, 1, 2),
+                  suppress_warnings=True,
                   out_of_sample_size=10).fit(
         y=hr, exogenous=xreg)
 
@@ -175,9 +177,10 @@ def test_oob_for_issue_28():
     preds = arima_no_oob.predict(n_periods=10, exogenous=xreg[-10:, :])
     assert np.allclose(oob, scoring(hr[-10:], preds), rtol=1e-2)
 
-    # Show that the model parameters are exactly the same
+    # Show that the model parameters are not the same because the model was
+    # updated.
     xreg_test = rs.rand(5, 4)
-    assert np.allclose(arima.params(), arima_no_oob.params(), rtol=1e-2)
+    assert not np.allclose(arima.params(), arima_no_oob.params(), rtol=1e-2)
 
     # Now assert on the forecast differences.
     with_oob_forecasts = arima.predict(n_periods=5, exogenous=xreg_test)
@@ -192,18 +195,18 @@ def test_oob_for_issue_28():
 
     # First, show we'll fail if we try to add observations with no exogenous
     with pytest.raises(ValueError):
-        arima_no_oob.add_new_observations(hr[-10:], None)
+        arima_no_oob.update(hr[-10:], None)
 
     # Also show we'll fail if we try to add mis-matched shapes of data
     with pytest.raises(ValueError):
-        arima_no_oob.add_new_observations(hr[-10:], xreg_test)
+        arima_no_oob.update(hr[-10:], xreg_test)
 
     # Show we fail if we try to add observations with a different dim exog
     with pytest.raises(ValueError):
-        arima_no_oob.add_new_observations(hr[-10:], xreg_test[:, :2])
+        arima_no_oob.update(hr[-10:], xreg_test[:, :2])
 
     # Actually add them now, and compare the forecasts (should be the same)
-    arima_no_oob.add_new_observations(hr[-10:], xreg[-10:, :])
+    arima_no_oob.update(hr[-10:], xreg[-10:, :])
     assert np.allclose(with_oob_forecasts,
                        arima_no_oob.predict(n_periods=5,
                                             exogenous=xreg_test),
@@ -231,12 +234,12 @@ def test_oob_sarimax():
     no_oob_preds = fit_no_oob.predict(n_periods=15, exogenous=xreg[-15:, :])
     assert np.allclose(oob, scoring(wineind[-15:], no_oob_preds), rtol=1e-2)
 
-    # show params are still the same
-    assert np.allclose(fit.params(), fit_no_oob.params(), rtol=1e-2)
+    # show params are no longer the same
+    assert not np.allclose(fit.params(), fit_no_oob.params(), rtol=1e-2)
 
     # show we can add the new samples and get the exact same forecasts
     xreg_test = rs.rand(5, 2)
-    fit_no_oob.add_new_observations(wineind[-15:], xreg[-15:, :])
+    fit_no_oob.update(wineind[-15:], xreg[-15:, :])
     assert np.allclose(fit.predict(5, xreg_test),
                        fit_no_oob.predict(5, xreg_test),
                        rtol=1e-2)
@@ -911,3 +914,67 @@ def test_new_serialization():
     finally:
         _unlink_if_exists(pkl_file)
         _unlink_if_exists(new_loc)
+
+
+@pytest.mark.parametrize(
+    'model', [
+        # ARMA
+        ARIMA(order=(1, 0, 0)),
+
+        # ARIMA
+        ARIMA(order=(1, 1, 2)),
+
+        # SARIMAX
+        ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12))
+    ]
+)
+def test_issue_104(model):
+    # Issue 104 shows that observations were not being updated appropriately.
+    # We need to make sure they update for ALL models (ARMA, ARIMA, SARIMAX)
+    endog = wineind
+    train, test = endog[:125], endog[125:]
+
+    model.fit(train)
+    preds1 = model.predict(n_periods=100)
+
+    model.update(test)
+    preds2 = model.predict(n_periods=100)
+
+    # These should be DIFFERENT
+    assert not np.array_equal(preds1, preds2)
+
+
+@pytest.mark.parametrize(
+    'model', [
+        # ARMA
+        ARIMA(order=(1, 0, 0)),
+
+        # ARIMA
+        ARIMA(order=(1, 1, 0))
+    ]
+)
+def test_update_1_iter(model):
+    # The model should *barely* change if we update with one iter.
+    endog = wineind
+    train, test = endog[:145], endog[145:]
+
+    model.fit(train)
+    params1 = model.params()
+
+    # Now update with 1 iteration, and show params have not changed too much
+    model.update(test, maxiter=1)
+    params2 = model.params()
+
+    # They should be close
+    assert np.allclose(params1, params2, atol=0.05)
+
+
+def test_add_new_obs_deprecated():
+    endog = wineind
+    train, test = endog[:125], endog[125:]
+    model = ARIMA(order=(1, 0, 0))
+
+    model.fit(train)
+
+    with pytest.warns(DeprecationWarning):
+        model.add_new_observations(test)

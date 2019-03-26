@@ -1,3 +1,5 @@
+# pmdarima
+
 [![PyPI version](https://badge.fury.io/py/pmdarima.svg)](https://badge.fury.io/py/pmdarima)
 [![Linux build status](https://travis-ci.org/tgsmith61591/pmdarima.svg?branch=master)](https://travis-ci.org/tgsmith61591/pmdarima)
 [![Build status](https://ci.appveyor.com/api/projects/status/0ntddrmtrdopt5rf/branch/master?svg=true)](https://ci.appveyor.com/project/tgsmith61591/pmdarima/branch/master)
@@ -5,13 +7,12 @@
 [![codecov](https://codecov.io/gh/tgsmith61591/pmdarima/branch/master/graph/badge.svg)](https://codecov.io/gh/tgsmith61591/pmdarima)
 ![Supported versions](https://img.shields.io/badge/python-3.5+-blue.svg)
 
-# pmdarima
-
-Pmdarima (originally `pyramid-arima`, for the anagram of 'py' + 'arima') is a no-nonsense statistical Python library with a solitary objective: bring R's
+Pmdarima (originally `pyramid-arima`, for the anagram of 'py' + 'arima') is a no-nonsense statistical
+Python library with a solitary objective: bring R's
 [`auto.arima`](https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima)
 functionality to Python. Pmdarima operates by wrapping
-[`statsmodels.tsa.ARIMA`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/arima_model.py) and
-[`statsmodels.tsa.statespace.SARIMAX`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/statespace/sarimax.py)
+[`statsmodels.tsa.ARIMA`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/arima_model.py)
+and [`statsmodels.tsa.statespace.SARIMAX`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/statespace/sarimax.py)
 into one estimator class and creating a more user-friendly estimator interface for programmers familiar with scikit-learn.
 
 
@@ -23,8 +24,8 @@ Pmdarima is on pypi under the package name `pmdarima` and can be downloaded via 
 $ pip install pmdarima
 ```
 
-Note that legacy versions (<1.0.0) are available under the name "`pyramid-arima`" and
-can be pip installed via:
+Note that legacy versions (<1.0.0) are available under the name
+"`pyramid-arima`" and can be pip installed via:
 
 ```bash
 # Legacy warning:
@@ -41,20 +42,19 @@ from pmdarima.arima import auto_arima
 
 ### Availability
 
-`pmdarima` is available in pre-built Wheel files for the following Python versions:
+`pmdarima` is available in pre-built Wheel files for Python 3.5+ for the following platforms:
 
-* Python 3.5+:
-  * Mac (64-bit)
-  * Linux (64-bit manylinux)
-  * Windows (32 & 64-bit)
+* Mac (64-bit)
+* Linux (64-bit manylinux)
+* Windows (32 & 64-bit)
   
-If a wheel doesn't exist for your platform, you can still `pip install` and it will
-build from the source distribution tarball, however you'll need `cython>=0.28` and
-`gcc` (Mac/Linux) or `MinGW` (Windows) in order to build the package from source.
+If a wheel doesn't exist for your platform, you can still `pip install` and it
+will build from the source distribution tarball, however you'll need `cython>=0.29`
+and `gcc` (Mac/Linux) or `MinGW` (Windows) in order to build the package from source.
 
 
 ### Documentation
 
-All of your questions and more (including examples and guides) can be answered
-by the [`pmdarima` documentation](https://www.alkaline-ml.com/pmdarima). If not,
-always feel free to file an issue.
+All of your questions and more (including examples and guides) can be answered by
+the [`pmdarima` documentation](https://www.alkaline-ml.com/pmdarima). If not, always
+feel free to file an issue.
