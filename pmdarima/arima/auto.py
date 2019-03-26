@@ -40,7 +40,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                stationary=False, information_criterion='aic', alpha=0.05,
                test='kpss', seasonal_test='ch', stepwise=True, n_jobs=1,
                start_params=None, trend=None, method=None, transparams=True,
-               solver='lbfgs', maxiter=50, disp=0, callback=None,
+               solver='lbfgs', maxiter=None, disp=0, callback=None,
                offset_test_args=None, seasonal_test_args=None,
                suppress_warnings=False, error_action='warn', trace=False,
                random=False, random_state=None, n_fits=10,
@@ -229,8 +229,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         approximate the Hessian, projected gradient tolerance of 1e-8 and
         factr = 1e2. You can change these by using kwargs.
 
-    maxiter : int, optional (default=50)
-        The maximum number of function evaluations. Default is 50.
+    maxiter : int, optional (default=None)
+        The maximum number of function evaluations. Statsmodels defaults this
+        value to 50 for SARIMAX models and 500 for ARIMA and ARMA models. If
+        passed as None, will use the seasonal order to determine which to use
+        (50 for seasonal, 500 otherwise).
 
     disp : int, optional (default=0)
         If True, convergence information is printed.  For the default

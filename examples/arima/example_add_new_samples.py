@@ -6,7 +6,9 @@ Adding new observations to your model
 
 This example demonstrates how to add new ground truth
 observations to your model so that forecasting continues
-with respect to true, observed values.
+with respect to true, observed values. This also slightly
+updates the model parameters, taking several new steps from
+the existing model parameters.
 
 .. raw:: html
 
@@ -49,7 +51,7 @@ axes[0].fill_between(x_axis[-preds.shape[0]:], conf_int[:, 0], conf_int[:, 1],
 axes[0].set_title("Train samples & forecasted test samples")
 
 # Now add the actual samples to the model and create NEW forecasts
-arima.add_new_observations(test)
+arima.update(test)
 new_preds, new_conf_int = arima.predict(n_periods=10, return_conf_int=True)
 new_x_axis = np.arange(data.shape[0] + 10)
 
