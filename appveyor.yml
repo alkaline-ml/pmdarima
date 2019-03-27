@@ -63,9 +63,7 @@ environment:
 
 version: '{branch}-{build}'
 cache:
-  - '%APPDATA%\pip\Cache'
-  # - C:\Users\appveyor\pip\wheels
-  # - ~\AppData\Local\pip\cache
+  - '%LOCALAPPDATA%\pip\Cache'
 
 # Because we only have a single worker, we don't want to waste precious
 # appveyor CI time and make other PRs wait for repeated failures in a failing
