@@ -10,5 +10,5 @@ pytest
 pytest-mpl
 pytest-benchmark
 wheel
-twine
+twine>=1.13.0
 matplotlib

@@ -99,7 +99,8 @@ install:
   # 9/25/18 - Use the scikit approach
   # Build the package (and the wheels!)
   - "%CMD_IN_ENV% pip install --timeout=60 -r build_tools/appveyor/requirements.txt"
-  - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
+  # - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
+  - "%CMD_IN_ENV% python setup.py bdist_wheel"
   - ps: "ls dist"
 
   # Install the generated wheel file
