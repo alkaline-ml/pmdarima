@@ -111,7 +111,7 @@ test_script:
   # Test with pytest
   - ps: |
       if ($env:DO_TEST -Match "true") {
-        pytest --showlocals --durations=20 --mpl --mpl-baseline-path=pytest_images --pyargs pmdarima --benchmark-skip
+        pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
       } else {
         echo "Not running tests since DO_TEST is not 'true'"
       }

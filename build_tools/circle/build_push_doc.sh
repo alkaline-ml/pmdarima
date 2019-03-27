@@ -15,9 +15,10 @@ fi
 branch=$(git symbolic-ref --short HEAD)
 
 # cd into docs, make them
-cd doc
-make clean html EXAMPLES_PATTERN=example_*
-cd ..
+# cd doc
+# make clean html EXAMPLES_PATTERN=example_*
+# cd ..
+make documentation
 
 # move the docs to the top-level directory, stash for checkout
 mv doc/_build/html ./

@@ -501,7 +501,7 @@ def test_with_seasonality2():
                           n_fits=20, random_state=42,
 
                           # Set to super low iter to make test move quickly
-                          maxiter=5)
+                          maxiter=2)
 
     # show that we can forecast even after the
     # pickling (this was fit in parallel)
