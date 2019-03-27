@@ -19,13 +19,30 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.2.0.dev0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
@@ -36,21 +53,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="6. Tips to using auto_arima" href="tips_and_tricks.html" />
     <link rel="prev" title="4. Serializing your ARIMA models" href="serialization.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -97,7 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">5. Refreshing your ARIMA models</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#adding-observations-to-your-model">5.1. Adding observations to your model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#updating-your-model-with-new-observations">5.1. Updating your model with new observations</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
@@ -181,16 +193,16 @@
 <a class="reference external" href="https://stats.stackexchange.com/questions/34139/updating-arima-models-at-frequent-intervals">this discussion</a>
 and <a class="reference external" href="https://stats.stackexchange.com/questions/57745/what-do-you-consider-a-new-model-versus-an-updated-model-time-series">this one</a>
 on either re-using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code>-estimated order terms or re-fitting altogether.</li>
-<li>If you’re not ready to refresh your model parameters, but would like to add observations to
-your model (so new forecasts originate from the latest samples), the ARIMA class makes it
-possible to <a class="reference external" href="./modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.add_new_observations">add new samples</a>.
+<li>If you’re not ready to totally refresh your model parameters, but would like to add observations to
+your model (so new forecasts originate from the latest samples) with minor parameter updates, the ARIMA class makes it
+possible to <a class="reference external" href="./modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.update">add new samples</a>.
 See <a class="reference external" href="auto_examples/arima/example_add_new_samples.html#adding-new-observations-to-your-model">this example</a>
 for more info.</li>
 </ol>
-<div class="section" id="adding-observations-to-your-model">
-<h2>5.1. Adding observations to your model<a class="headerlink" href="#adding-observations-to-your-model" title="Permalink to this headline">¶</a></h2>
-<p>The easiest way to keep your model up-to-date without refreshing it is simply to
-add observations to your model so that future forecasts take the newest observations
+<div class="section" id="updating-your-model-with-new-observations">
+<h2>5.1. Updating your model with new observations<a class="headerlink" href="#updating-your-model-with-new-observations" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to keep your model up-to-date without completely refitting it is simply to
+update your model with new observations so that future forecasts take the newest observations
 into consideration. Assume that you fit the following model:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
 <span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_wineind</span>
@@ -206,11 +218,14 @@ into consideration. Assume that you fit the following model:</p>
 <p>After fitting and persisting your model (see <a class="reference internal" href="serialization.html#serializing"><span class="std std-ref">Serializing your ARIMA models</span></a>), you use your model
 to produce forecasts. After a few forecasts, you want to record the <em>actual</em> observed
 values so your model considers them when making newer forecasts:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">arima</span><span class="o">.</span><span class="n">add_new_observations</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>  <span class="c1"># pretend these are the new ones</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">arima</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>  <span class="c1"># pretend these are the new ones</span>
 </pre></div>
 </div>
 <p>Your model will now produce forecasts from the <em>new</em> latest observations. Of course,
-you’ll have to re-persist your ARIMA model after updating it!</p>
+you’ll have to re-persist your ARIMA model after updating it! Internally, this step
+uses the existing parameters, taking a small amount of steps and allowing MLE to
+update your parameters a small amount. You can pass the <code class="docutils literal notranslate"><span class="pre">maxiter</span></code> to control the
+amount your model updates.</p>
 </div>
 </div>
 
@@ -225,7 +240,7 @@ you’ll have to re-persist your ARIMA model after updating it!</p>
         <a href="tips_and_tricks.html" class="btn btn-neutral float-right" title="6. Tips to using auto_arima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="serialization.html" class="btn btn-neutral" title="4. Serializing your ARIMA models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="serialization.html" class="btn btn-neutral float-left" title="4. Serializing your ARIMA models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -234,7 +249,7 @@ you’ll have to re-persist your ARIMA model after updating it!</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith
+        &copy; Copyright 2017-2019, Taylor G Smith
 
     </p>
   </div>
@@ -251,36 +266,16 @@ you’ll have to re-persist your ARIMA model after updating it!</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.2.0.dev0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -19,13 +19,30 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'1.2.0.dev0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
@@ -36,21 +53,16 @@
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Dataset loading" href="../datasets/example_load_data.html" />
     <link rel="prev" title="Fitting an auto_arima model" href="example_auto_arima.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -174,7 +186,9 @@
 <span id="sphx-glr-auto-examples-arima-example-add-new-samples-py"></span><h1>Adding new observations to your model<a class="headerlink" href="#adding-new-observations-to-your-model" title="Permalink to this headline">¶</a></h1>
 <p>This example demonstrates how to add new ground truth
 observations to your model so that forecasting continues
-with respect to true, observed values.</p>
+with respect to true, observed values. This also slightly
+updates the model parameters, taking several new steps from
+the existing model parameters.</p>
 <br/><img alt="../../_images/sphx_glr_example_add_new_samples_001.png" class="align-center" src="../../_images/sphx_glr_example_add_new_samples_001.png" />
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
@@ -212,7 +226,7 @@ with respect to true, observed values.</p>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Train samples &amp; forecasted test samples&quot;</span><span class="p">)</span>
 
 <span class="c1"># Now add the actual samples to the model and create NEW forecasts</span>
-<span class="n">arima</span><span class="o">.</span><span class="n">add_new_observations</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+<span class="n">arima</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
 <span class="n">new_preds</span><span class="p">,</span> <span class="n">new_conf_int</span> <span class="o">=</span> <span class="n">arima</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">new_x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span>
 
@@ -226,7 +240,7 @@ with respect to true, observed values.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.264 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.365 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../../_downloads/example_add_new_samples.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_add_new_samples.py</span></code></a></div>
@@ -247,7 +261,7 @@ with respect to true, observed values.</p>
         <a href="../datasets/example_load_data.html" class="btn btn-neutral float-right" title="Dataset loading" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="example_auto_arima.html" class="btn btn-neutral" title="Fitting an auto_arima model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="example_auto_arima.html" class="btn btn-neutral float-left" title="Fitting an auto_arima model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -256,7 +270,7 @@ with respect to true, observed values.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith
+        &copy; Copyright 2017-2019, Taylor G Smith
 
     </p>
   </div>
@@ -273,36 +287,16 @@ with respect to true, observed values.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'1.2.0.dev0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

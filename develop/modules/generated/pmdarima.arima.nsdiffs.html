@@ -19,13 +19,30 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'1.2.0.dev0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
@@ -36,21 +53,16 @@
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pmdarima.datasets.load_airpassengers" href="pmdarima.datasets.load_airpassengers.html" />
     <link rel="prev" title="pmdarima.arima.ndiffs" href="pmdarima.arima.ndiffs.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -178,7 +190,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.nsdiffs<a class="headerlink" href="#pmdarima-arima-nsdiffs" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.arima.nsdiffs">
-<code class="descclassname">pmdarima.arima.</code><code class="descname">nsdiffs</code><span class="sig-paren">(</span><em>x</em>, <em>m</em>, <em>max_D=2</em>, <em>test='ocsb'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/782a03b/pmdarima/arima/utils.py#L60"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/utils.html#nsdiffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.nsdiffs" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.arima.</code><code class="descname">nsdiffs</code><span class="sig-paren">(</span><em>x</em>, <em>m</em>, <em>max_D=2</em>, <em>test='ocsb'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/916740b/pmdarima/arima/utils.py#L60"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/utils.html#nsdiffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.nsdiffs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate the seasonal differencing term, <code class="docutils literal notranslate"><span class="pre">D</span></code>.</p>
 <p>Perform a test of seasonality for different levels of <code class="docutils literal notranslate"><span class="pre">D</span></code> to
 estimate the number of seasonal differences required to make a given time
@@ -236,7 +248,7 @@ seasonally stationary. If the time series is constant, will return 0.</p>
         <a href="pmdarima.datasets.load_airpassengers.html" class="btn btn-neutral float-right" title="pmdarima.datasets.load_airpassengers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pmdarima.arima.ndiffs.html" class="btn btn-neutral" title="pmdarima.arima.ndiffs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pmdarima.arima.ndiffs.html" class="btn btn-neutral float-left" title="pmdarima.arima.ndiffs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -245,7 +257,7 @@ seasonally stationary. If the time series is constant, will return 0.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith
+        &copy; Copyright 2017-2019, Taylor G Smith
 
     </p>
   </div>
@@ -262,36 +274,16 @@ seasonally stationary. If the time series is constant, will return 0.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'1.2.0.dev0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

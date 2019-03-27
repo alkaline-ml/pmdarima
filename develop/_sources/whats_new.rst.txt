@@ -7,6 +7,7 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+
 `v1.2.0 <http://alkaline-ml.com/pmdarima/1.2.0/>`_
 --------------------------------------------------
 
@@ -28,6 +29,27 @@ v0.8.1) will document the latest features.
   v1.4.0. Use ``should_diff`` instead.
 
 * Added two new datasets: ``airpassengers`` & ``austres``
+
+
+`v1.1.1 <http://alkaline-ml.com/pmdarima/1.1.1/>`_
+--------------------------------------------------
+
+v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/pmdarima/issues/104>`_
+
+* Deprecates the ``ARIMA.add_new_observations`` method. This method originally was designed to support
+  updating the endogenous/exogenous arrays with new observations without changing the model parameters,
+  but achieving this behavior for each of statsmodels' ``ARMA``, ``ARIMA`` and ``SARIMAX`` classes proved
+  nearly impossible, given the extremely complex internals of statmodels estimators.
+
+* Replace ``ARIMA.add_new_observations`` with ``ARIMA.update``. This allows the user to update the model
+  with new observations by taking ``maxiter`` new steps from the existing model coefficients and allowing the MLE to
+  converge to an updated set of model parameters.
+
+* Change default ``maxiter`` to None, using 50 for seasonal models and 500 for non-seasonal models (as
+  statsmodels does). The default value used to be 50 for all models.
+
+* New behavior in ``ARIMA.fit`` allows ``start_params`` and ``maxiter`` to be passed as ``**fit_args``,
+  overriding the use of their corresponding instance attributes.
 
 
 `v1.1.0 <http://alkaline-ml.com/pmdarima/1.1.0/>`_

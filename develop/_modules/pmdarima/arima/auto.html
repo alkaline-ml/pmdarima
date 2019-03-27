@@ -19,13 +19,30 @@
   
 
   
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'1.2.0.dev0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
@@ -34,21 +51,16 @@
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-
-  
-  <script src="../../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -196,7 +208,7 @@
                <span class="n">stationary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">information_criterion</span><span class="o">=</span><span class="s1">&#39;aic&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
                <span class="n">test</span><span class="o">=</span><span class="s1">&#39;kpss&#39;</span><span class="p">,</span> <span class="n">seasonal_test</span><span class="o">=</span><span class="s1">&#39;ocsb&#39;</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparams</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-               <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">offset_test_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seasonal_test_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                <span class="n">random</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_fits</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
@@ -385,8 +397,11 @@
 <span class="sd">        approximate the Hessian, projected gradient tolerance of 1e-8 and</span>
 <span class="sd">        factr = 1e2. You can change these by using kwargs.</span>
 
-<span class="sd">    maxiter : int, optional (default=50)</span>
-<span class="sd">        The maximum number of function evaluations. Default is 50.</span>
+<span class="sd">    maxiter : int, optional (default=None)</span>
+<span class="sd">        The maximum number of function evaluations. Statsmodels defaults this</span>
+<span class="sd">        value to 50 for SARIMAX models and 500 for ARIMA and ARMA models. If</span>
+<span class="sd">        passed as None, will use the seasonal order to determine which to use</span>
+<span class="sd">        (50 for seasonal, 500 otherwise).</span>
 
 <span class="sd">    disp : int, optional (default=0)</span>
 <span class="sd">        If True, convergence information is printed.  For the default</span>
@@ -1130,7 +1145,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith
+        &copy; Copyright 2017-2019, Taylor G Smith
 
     </p>
   </div>
@@ -1147,36 +1162,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'1.2.0.dev0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

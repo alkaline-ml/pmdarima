@@ -19,13 +19,30 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'1.2.0.dev0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
@@ -36,21 +53,16 @@
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pmdarima.utils.plot_acf" href="pmdarima.utils.plot_acf.html" />
     <link rel="prev" title="pmdarima.utils.pacf" href="pmdarima.utils.pacf.html" /> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -177,7 +189,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.autocorr_plot<a class="headerlink" href="#pmdarima-utils-autocorr-plot" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.utils.autocorr_plot">
-<code class="descclassname">pmdarima.utils.</code><code class="descname">autocorr_plot</code><span class="sig-paren">(</span><em>series</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/782a03b/pmdarima/utils/visualization.py#L61"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/visualization.html#autocorr_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.autocorr_plot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.utils.</code><code class="descname">autocorr_plot</code><span class="sig-paren">(</span><em>series</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/916740b/pmdarima/utils/visualization.py#L61"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/visualization.html#autocorr_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.autocorr_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a series’ auto-correlation.</p>
 <p>A wrapper method for the Pandas <code class="docutils literal notranslate"><span class="pre">autocorrelation_plot</span></code> method.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -228,7 +240,7 @@ use <code class="docutils literal notranslate"><span class="pre">show=False</spa
         <a href="pmdarima.utils.plot_acf.html" class="btn btn-neutral float-right" title="pmdarima.utils.plot_acf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pmdarima.utils.pacf.html" class="btn btn-neutral" title="pmdarima.utils.pacf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pmdarima.utils.pacf.html" class="btn btn-neutral float-left" title="pmdarima.utils.pacf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -237,7 +249,7 @@ use <code class="docutils literal notranslate"><span class="pre">show=False</spa
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith
+        &copy; Copyright 2017-2019, Taylor G Smith
 
     </p>
   </div>
@@ -254,36 +266,16 @@ use <code class="docutils literal notranslate"><span class="pre">show=False</spa
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'1.2.0.dev0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

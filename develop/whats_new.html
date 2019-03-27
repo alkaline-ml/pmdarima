@@ -19,13 +19,30 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.2.0.dev0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
@@ -35,21 +52,16 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="9. Contributors" href="contributors.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -93,9 +105,10 @@
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">What's New?</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id1">v1.2.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">v1.1.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id7">v1.0.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id8">v0.9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">v1.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">v1.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">v1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">v0.9.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-8-1">v0.8.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-7-0">v0.7.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-6-5">v0.6.5</a></li>
@@ -193,7 +206,24 @@ v1.4.0. Use <code class="docutils literal notranslate"><span class="pre">should_
 </ul>
 </div>
 <div class="section" id="id3">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.1.0/">v1.1.0</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.1.1/">v1.1.1</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>v1.1.1 is a patch release in response to <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/104">#104</a></p>
+<ul class="simple">
+<li>Deprecates the <code class="docutils literal notranslate"><span class="pre">ARIMA.add_new_observations</span></code> method. This method originally was designed to support
+updating the endogenous/exogenous arrays with new observations without changing the model parameters,
+but achieving this behavior for each of statsmodels’ <code class="docutils literal notranslate"><span class="pre">ARMA</span></code>, <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> and <code class="docutils literal notranslate"><span class="pre">SARIMAX</span></code> classes proved
+nearly impossible, given the extremely complex internals of statmodels estimators.</li>
+<li>Replace <code class="docutils literal notranslate"><span class="pre">ARIMA.add_new_observations</span></code> with <code class="docutils literal notranslate"><span class="pre">ARIMA.update</span></code>. This allows the user to update the model
+with new observations by taking <code class="docutils literal notranslate"><span class="pre">maxiter</span></code> new steps from the existing model coefficients and allowing the MLE to
+converge to an updated set of model parameters.</li>
+<li>Change default <code class="docutils literal notranslate"><span class="pre">maxiter</span></code> to None, using 50 for seasonal models and 500 for non-seasonal models (as
+statsmodels does). The default value used to be 50 for all models.</li>
+<li>New behavior in <code class="docutils literal notranslate"><span class="pre">ARIMA.fit</span></code> allows <code class="docutils literal notranslate"><span class="pre">start_params</span></code> and <code class="docutils literal notranslate"><span class="pre">maxiter</span></code> to be passed as <code class="docutils literal notranslate"><span class="pre">**fit_args</span></code>,
+overriding the use of their corresponding instance attributes.</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.1.0/">v1.1.0</a><a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Added <code class="docutils literal notranslate"><span class="pre">ARIMA.plot_diagnostics</span></code> method, as requested in <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/49">#49</a></li>
 <li>Added new arg to <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> constructor and <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code>: <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> (default is True).</li>
@@ -214,8 +244,8 @@ than <code class="docutils literal notranslate"><span class="pre">&quot;method=q
 <li>Python 3.7 is now supported(!!)</li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.0.0/">v1.0.0</a><a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id9">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.0.0/">v1.0.0</a><a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><strong>Wheels will no longer be built for Python versions &lt; 3.5.</strong> You may still be able to build
 from source, but support for 2.x python versions will diminish in future versions.</li>
@@ -235,8 +265,8 @@ will be completely switched over in version 1.2.0:<ul>
 </li>
 </ul>
 </div>
-<div class="section" id="id8">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/0.9.0/">v0.9.0</a><a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id10">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/0.9.0/">v0.9.0</a><a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Explicitly catch case in <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> where a value of <code class="docutils literal notranslate"><span class="pre">m</span></code> that is too large may over-estimate
 <code class="docutils literal notranslate"><span class="pre">D</span></code>, causing the time series to be differenced down to an empty array. This is now handled by
@@ -332,7 +362,7 @@ Canova-Hansen test. This makes the test <em>much</em> faster.</li>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="contributors.html" class="btn btn-neutral" title="9. Contributors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="contributors.html" class="btn btn-neutral float-left" title="9. Contributors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -341,7 +371,7 @@ Canova-Hansen test. This makes the test <em>much</em> faster.</li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2018, Taylor G Smith
+        &copy; Copyright 2017-2019, Taylor G Smith
 
     </p>
   </div>
@@ -358,36 +388,16 @@ Canova-Hansen test. This makes the test <em>much</em> faster.</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'1.2.0.dev0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
