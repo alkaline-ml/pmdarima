@@ -375,6 +375,19 @@
 <span class="sd">    with_intercept : bool, optional (default=True)</span>
 <span class="sd">        Whether to include an intercept term. Default is True.</span>
 
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model_res_ : ModelResultsWrapper</span>
+<span class="sd">        The model results, per statsmodels</span>
+
+<span class="sd">    oob_ : float</span>
+<span class="sd">        The MAE or MSE of the out-of-sample records, if ``out_of_sample_size``</span>
+<span class="sd">        is &gt; 0, else np.nan</span>
+
+<span class="sd">    oob_preds_ : np.ndarray or None</span>
+<span class="sd">        The predictions for the out-of-sample records, if</span>
+<span class="sd">        ``out_of_sample_size`` is &gt; 0, else None</span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    * Since the ``ARIMA`` class currently wraps</span>
@@ -592,6 +605,7 @@
             <span class="c1"># from statsmodels internally)</span>
             <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">cv_exog</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">oob_</span> <span class="o">=</span> <span class="n">scoring</span><span class="p">(</span><span class="n">cv_samples</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">oob_preds_</span> <span class="o">=</span> <span class="n">pred</span>
 
             <span class="c1"># If we compute out of sample scores, we have to now update the</span>
             <span class="c1"># observed time points so future forecasts originate from the end</span>
@@ -599,6 +613,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cv_samples</span><span class="p">,</span> <span class="n">cv_exog</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">oob_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">oob_preds_</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
