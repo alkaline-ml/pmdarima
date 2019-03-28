@@ -238,7 +238,7 @@ def do_setup():
             from setuptools import setup
 
         # add the config to the metadata
-        # metadata['configuration'] = configuration
+        metadata['configuration'] = configuration
 
     # call setup on the dict
     setup(**metadata)
