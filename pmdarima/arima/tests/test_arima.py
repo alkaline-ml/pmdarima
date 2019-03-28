@@ -86,6 +86,9 @@ def test_basic_arima():
     arima = ARIMA(order=(0, 0, 0), suppress_warnings=True)
     preds = arima.fit_predict(y)  # fit/predict for coverage
 
+    # No OOB, so assert none
+    assert arima.oob_preds_ is None
+
     # test some of the attrs
     assert_almost_equal(arima.aic(), 11.201308403566909, decimal=5)
     assert_almost_equal(arima.aicc(), 11.74676, decimal=5)
@@ -123,8 +126,17 @@ def test_with_oob():
     # show we can fit with CV (kinda)
     arima = ARIMA(order=(2, 1, 2),
                   suppress_warnings=True,
+                  scoring='mse',
                   out_of_sample_size=10).fit(y=hr)
-    assert not np.isnan(arima.oob())  # show this works
+
+    oob = arima.oob()
+    assert not np.isnan(oob)  # show this works
+
+    # Assert the predictions give the expected MAE/MSE
+    oob_preds = arima.oob_preds_
+    assert oob_preds.shape[0] == 10
+    scoring = get_callable('mse', VALID_SCORING)
+    assert scoring(hr[-10:], oob_preds) == oob
 
     # show we can fit if ooss < 0 and oob will be nan
     arima = ARIMA(order=(2, 1, 2), suppress_warnings=True,

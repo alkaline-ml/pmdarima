@@ -424,6 +424,7 @@ class ARIMA(BaseEstimator):
             # from statsmodels internally)
             pred = self.predict(n_periods=cv, exogenous=cv_exog)
             self.oob_ = scoring(cv_samples, pred, **self.scoring_args)
+            self.oob_preds_ = pred
 
             # If we compute out of sample scores, we have to now update the
             # observed time points so future forecasts originate from the end
@@ -431,6 +432,7 @@ class ARIMA(BaseEstimator):
             self.update(cv_samples, cv_exog, **fit_args)
         else:
             self.oob_ = np.nan
+            self.oob_preds_ = None
 
         return self
 
