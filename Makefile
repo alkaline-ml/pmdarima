@@ -51,4 +51,5 @@ test: develop test-unit test-lint
 
 twine-check: bdist_wheel
 	# Check that twine will parse the README acceptably
+	$(PYTHON) -m pip install twine readme_renderer[md]
 	$(PYTHON) -m twine check dist/*
