@@ -207,6 +207,19 @@ class ARIMA(BaseEstimator):
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
 
+    Attributes
+    ----------
+    model_res_ : ModelResultsWrapper
+        The model results, per statsmodels
+
+    oob_ : float
+        The MAE or MSE of the out-of-sample records, if ``out_of_sample_size``
+        is > 0, else np.nan
+
+    oob_preds_ : np.ndarray or None
+        The predictions for the out-of-sample records, if
+        ``out_of_sample_size`` is > 0, else None
+
     Notes
     -----
     * Since the ``ARIMA`` class currently wraps
