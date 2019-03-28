@@ -11,4 +11,5 @@ pytest-mpl
 pytest-benchmark
 wheel
 twine>=1.13.0
+readme_renderer[md]
 matplotlib
