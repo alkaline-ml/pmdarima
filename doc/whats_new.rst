@@ -30,6 +30,9 @@ v0.8.1) will document the latest features.
 
 * Added two new datasets: ``airpassengers`` & ``austres``
 
+* When using ``out_of_sample``, the out-of-sample predictions are now stored
+  under the ``oob_preds_`` attribute.
+
 
 `v1.1.1 <http://alkaline-ml.com/pmdarima/1.1.1/>`_
 --------------------------------------------------
