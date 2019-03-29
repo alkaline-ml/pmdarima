@@ -102,15 +102,15 @@ install:
   - ps: "ls dist"
 
   # Check for README compatibility in case we deploy
-  # check returns a variable called `failure`. We want it to be False
-  - "%CMD_IN_ENV% python -c \"
-    from StringIO import StringIO
-    from twine.commands.check import check
+  # check output for `warning`
+  - "%CMD_IN_ENV% python <<EOP
+from StringIO import StringIO
+from twine.commands.check import check
 
-    out = StringIO()
-    check(['dist/*'], output_stream=out)
-    assert 'warning' not in out
-    \"
+out = StringIO()
+check(['dist/*'], output_stream=out)
+assert 'warning' not in out
+EOP
     "
 
   # Install the generated wheel file
