@@ -103,15 +103,7 @@ install:
 
   # Check for README compatibility in case we deploy
   # check output for `warning`
-  - "%CMD_IN_ENV% python -c \"
-from StringIO import StringIO
-from twine.commands.check import check
-
-out = StringIO()
-check(['dist/*'], output_stream=out)
-assert 'warning' not in out
-\"
-    "
+  - "%CMD_IN_ENV% python -c \"from io import StringIO; from twine.commands.check import check; test_out = StringIO(); check(['dist/*'], output_stream=test_out); assert 'warning' not in test_out;\""
 
   # Install the generated wheel file
   - "pip install --pre --no-index --find-links dist/ pmdarima"
