@@ -8,8 +8,8 @@
 # set -e
 set +e  # because TRAVIS SUCKS
 
-# make sure we have twine in case we deploy
-pip install "twine>=1.13.0"
+# make sure we have twine and readme_renderer in case we deploy
+pip install "twine>=1.13.0" readme_renderer[md]
 
 # remove the .egg-info dir so Mac won't bomb on bdist_wheel cmd (absolute path in SOURCES.txt)
 rm -r pmdarima.egg-info/ || echo "No local .egg cache to remove"

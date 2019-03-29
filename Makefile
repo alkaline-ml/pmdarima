@@ -12,6 +12,16 @@ clean:
 	rm -rf dist
 	rm -rf build
 
+deploy-requirements:
+	$(PYTHON) -m pip install twine readme_renderer[md]
+
+# Depends on an artifact existing in dist/, and two environment variables
+deploy-twine-test: bdist_wheel deploy-requirements
+	$(PYTHON) -m twine upload \
+		--repository-url https://test.pypi.org/legacy/ dist/* \
+		--username ${TWINE_USERNAME} \
+		--password ${TWINE_PASSWORD}
+
 doc-requirements:
 	$(PYTHON) -m pip install -r build_tools/doc/doc_requirements.txt
 
@@ -49,6 +59,6 @@ test: develop test-unit test-lint
 	# Coverage creates all these random little artifacts we don't want
 	rm .coverage.* || echo "No coverage artifacts to remove"
 
-twine-check: bdist_wheel
+twine-check: bdist_wheel deploy-requirements
 	# Check that twine will parse the README acceptably
 	$(PYTHON) -m twine check dist/*
