@@ -99,6 +99,7 @@ install:
   - "%CMD_IN_ENV% pip install --timeout=60 -r build_tools/appveyor/requirements.txt"
   # - "%CMD_IN_ENV% python setup.py bdist_wheel bdist_wininst"
   - "%CMD_IN_ENV% python setup.py bdist_wheel"
+  - "%CMD_IN_ENV% python -m twine check dist/*"
   - ps: "ls dist"
 
   # Install the generated wheel file
