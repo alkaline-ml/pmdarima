@@ -9,7 +9,7 @@ patsy
 pytest
 pytest-mpl
 pytest-benchmark
-setuptools>=38.6.0
+setuptools==28.0.0
 wheel
 twine>=1.13.0
 readme_renderer[md]
