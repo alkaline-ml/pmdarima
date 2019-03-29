@@ -103,7 +103,13 @@ install:
 
   # Check for README compatibility in case we deploy
   # check output for `warning`
-  - "%CMD_IN_ENV% python -c \"from io import StringIO; from twine.commands.check import check; test_out = StringIO(); check(['dist/*'], output_stream=test_out); assert 'warning' not in test_out;\""
+  - ps: |
+      if (python -c "from twine.commands.check import check; check(['dist/*'])" | Select-String -Pattern "warning") {
+        echo "README rendered appropriately"
+      } else {
+        echo "README will not display render properly on PyPI"
+        exit 1
+      }
 
   # Install the generated wheel file
   - "pip install --pre --no-index --find-links dist/ pmdarima"
