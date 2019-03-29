@@ -31,7 +31,7 @@ DESCRIPTION = "Python's forecast::auto.arima equivalent"
 
 # Get the long desc
 with open("README.md", "r") as fh:
-    LONG_DESCRIPTION = fh.read().replace(os.linesep, '\n')
+    LONG_DESCRIPTION = fh.read()
 
 MAINTAINER = 'Taylor G. Smith'
 MAINTAINER_GIT = 'tgsmith61591'
