@@ -101,14 +101,13 @@ install:
   - "%CMD_IN_ENV% python setup.py bdist_wheel"
   - ps: "ls dist"
 
-  # Check for README compatibility in case we deploy
-  # check output for `warning`
+  # Check for README compatibility in case we deploy (check output for `warning`)
   - ps: |
       if (python -c "from twine.commands.check import check; check(['dist/*'])" | Select-String -Pattern "warning") {
-        echo "README rendered appropriately"
-      } else {
         echo "README will not display render properly on PyPI"
         exit 1
+      } else {
+        echo "README rendered appropriately"
       }
 
   # Install the generated wheel file
