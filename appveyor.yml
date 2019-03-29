@@ -103,7 +103,7 @@ install:
 
   # Check for README compatibility in case we deploy
   # check returns a variable called `failure`. We want it to be False
-  - "%CMD_IN_ENV% python -c \"from twine.commands.check import check; assert check(['dist/*']) != True\""
+  - "%CMD_IN_ENV% python -c \"from twine.commands.check import check; assert check(['dist/*']) == False\""
 
   # Install the generated wheel file
   - "pip install --pre --no-index --find-links dist/ pmdarima"
