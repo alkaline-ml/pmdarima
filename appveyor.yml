@@ -104,7 +104,7 @@ install:
   # Check for README compatibility in case we deploy (check output for `warning`)
   - ps: |
       if (python -c "from twine.commands.check import check; check(['dist/*'])" | Select-String -Pattern "warning") {
-        echo "README will not display render properly on PyPI"
+        echo "README will not render properly on PyPI"
         exit 1
       } else {
         echo "README rendered appropriately"
