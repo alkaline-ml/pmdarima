@@ -8,6 +8,8 @@ import warnings
 
 from .base import BaseEndogTransformer
 
+__all__ = ['BoxCoxEndogTransformer']
+
 
 class BoxCoxEndogTransformer(BaseEndogTransformer):
     r"""Apply the Box-Cox transformation to an endogenous array
