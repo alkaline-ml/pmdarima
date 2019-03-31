@@ -32,6 +32,11 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('compat/tests')
     config.add_subpackage('datasets')
     config.add_subpackage('datasets/tests')
+    config.add_subpackage('preprocessing')
+    config.add_subpackage('preprocessing/endog')
+    config.add_subpackage('preprocessing/endog/tests')
+    config.add_subpackage('preprocessing/exog')
+    config.add_subpackage('preprocessing/exog/tests')
     config.add_subpackage('utils')
     config.add_subpackage('utils/tests')
 

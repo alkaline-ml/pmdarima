@@ -24,9 +24,10 @@ if not travis:
 
     @pytest.mark.parametrize(
         'model_type,model', [
-            pytest.param('arma', ARIMA(order=(1, 0, 0))),
-            pytest.param('arima', ARIMA(order=(1, 1, 0))),
+            pytest.param('arma', ARIMA(order=(1, 0, 0), maxiter=50)),
+            pytest.param('arima', ARIMA(order=(1, 1, 0), maxiter=50)),
             pytest.param('sarimax', ARIMA(order=(1, 1, 0),
+                                          maxiter=50,
                                           seasonal_order=(1, 0, 0, 12)))
         ])
     @pytest.mark.mpl_image_compare(tolerance=tolerance)
