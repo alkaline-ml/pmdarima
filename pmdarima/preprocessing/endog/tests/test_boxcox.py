@@ -39,7 +39,7 @@ def test_invertible_when_lambda_is_0():
     assert_array_almost_equal(y, y_prime)
 
 
-class TestNonInvertableBC:
+class TestNonInvertibleBC:
     y = [-1., 0., 1.]
 
     def test_expected_error(self):
