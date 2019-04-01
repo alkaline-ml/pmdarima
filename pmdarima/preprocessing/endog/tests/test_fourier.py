@@ -29,4 +29,17 @@ def test_invertible(exog):
         assert_array_almost_equal(exog, e_prime)
 
 
-# TODO: Aaron, fill this out
+def test_value_error_when_y_is_none():
+    y = None
+    exog = None
+    trans = FourierEndogTransformer()
+    with pytest.raises(ValueError):
+        trans.fit_transform(y, exog)
+
+
+def test_type_error_when_y_is_not_real():
+    y = [4. + 0.j, 8. + 12.j, 16. + 0.j, 8. - 12.j]
+    exog = None
+    trans = FourierEndogTransformer()
+    with pytest.raises(TypeError):
+        trans.fit_transform(y, exog)
