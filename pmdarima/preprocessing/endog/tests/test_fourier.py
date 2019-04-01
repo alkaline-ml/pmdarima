@@ -2,7 +2,6 @@
 
 import numpy as np
 from numpy.testing import assert_array_almost_equal
-from scipy import fftpack
 import pytest
 
 from pmdarima.preprocessing import FourierEndogTransformer
@@ -28,3 +27,6 @@ def test_invertible(exog):
     else:
         assert_array_almost_equal(exog, e_t)
         assert_array_almost_equal(exog, e_prime)
+
+
+# TODO: Aaron, fill this out
