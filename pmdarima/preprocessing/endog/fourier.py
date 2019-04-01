@@ -2,20 +2,34 @@
 #
 # Fourier transformations on endogenous arrays
 
+from scipy.fftpack import rfft, irfft
+
 from .base import BaseEndogTransformer
 
 __all__ = ['FourierEndogTransformer']
 
 
 class FourierEndogTransformer(BaseEndogTransformer):
-    r"""Apply the Fourier transformation to an endogenous array
+    """Apply a discrete Fourier transform of a real sequence to an endog array
+
+    The discrete Fourier transform is an invertible, linear equation that
+    converts a finite sequence of equally-spaced samples of a function into a
+    same-length sequence of equally-spaced samples of the discrete-time Fourier
+    transform (DTFT).
 
     Parameters
     ----------
-    TODO
+    n : int, optional
+        Length of the Fourier transform. If ``n < y.shape[axis]``, ``y`` is
+        truncated. If ``n > y.shape[axis]``, ``y`` is zero-padded. (Default
+        ``n = y.shape[axis]``).
+
+    References
+    ----------
+    .. [1] https://en.wikipedia.org/wiki/Discrete_Fourier_transform
     """
-    def __init__(self):
-        pass
+    def __init__(self, n=None):
+        self.n = n
 
     def fit(self, y, exog=None):
         """Fit the transformer
@@ -30,7 +44,8 @@ class FourierEndogTransformer(BaseEndogTransformer):
             endogenous transformers. Default is None, and non-None values will
             serve as pass-through arrays.
         """
-        # TODO:
+        # This is largely a pass-though, since the result of the Fourier
+        # transform is simply a linear function.
         return self
 
     def transform(self, y, exog=None):
@@ -56,7 +71,8 @@ class FourierEndogTransformer(BaseEndogTransformer):
         exog : array-like or None
             The exog array
         """
-        # TODO:
+        y, exog = self._check_y_exog(y, exog)
+        return rfft(y, self.n, axis=-1), exog
 
     def inverse_transform(self, y, exog=None):
         """Inverse transform a transformed array
@@ -81,4 +97,5 @@ class FourierEndogTransformer(BaseEndogTransformer):
         exog : array-like or None
             The inverse-transformed exogenous array
         """
-        # TODO:
+        y, exog = self._check_y_exog(y, exog)
+        return irfft(y, self.n, axis=-1), exog
