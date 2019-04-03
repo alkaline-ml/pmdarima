@@ -79,7 +79,7 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
         self.lam2_ = lam2
         return self
 
-    def transform(self, y, exog=None):
+    def transform(self, y, exog=None, **_):
         """Transform the new array
 
         Apply the Box-Cox transformation to the array after learning the

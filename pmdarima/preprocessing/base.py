@@ -3,7 +3,7 @@
 # Base ARIMA pre-processing classes. Don't import this in __init__, or we'll
 # potentially get circular imports in sub-classes
 
-from sklearn.base import TransformerMixin
+from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.externals import six
 from sklearn.utils.validation import check_array, column_or_1d
 
@@ -12,7 +12,9 @@ import abc
 from ..compat.numpy import DTYPE
 
 
-class BaseTransformer(six.with_metaclass(abc.ABCMeta, TransformerMixin)):
+class BaseTransformer(six.with_metaclass(abc.ABCMeta,
+                                         BaseEstimator,
+                                         TransformerMixin)):
     """A base pre-processing transformer
 
     A subclass of the scikit-learn ``TransformerMixin``, the purpose of the
@@ -39,7 +41,7 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta, TransformerMixin)):
                                copy=True, force_all_finite=False)
         return y, exog
 
-    def fit_transform(self, y, exog=None):
+    def fit_transform(self, y, exog=None, **transform_kwargs):
         """Fit and transform the arrays
 
         Parameters
@@ -49,9 +51,12 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta, TransformerMixin)):
 
         exog : array-like or None, shape=(n_samples, n_features), optional
             The exogenous array of additional covariates.
+
+        **transform_kwargs : keyword args
+            Keyword arguments required by the transform function.
         """
         self.fit(y, exog)
-        return self.transform(y, exog)
+        return self.transform(y, exog, **transform_kwargs)
 
     @abc.abstractmethod
     def fit(self, y, exog):
@@ -80,7 +85,7 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta, TransformerMixin)):
         """
 
     @abc.abstractmethod
-    def transform(self, y, exog):
+    def transform(self, y, exog, **kwargs):
         """Transform the new array
 
         Apply the transformation to the array after learning the training set's
@@ -94,6 +99,9 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta, TransformerMixin)):
         exog : array-like or None, shape=(n_samples, n_features)
             The exogenous array of additional covariates.
 
+        **kwargs : keyword args
+            Keyword arguments required by the transform function.
+
         Returns
         -------
         y : array-like or None
@@ -101,27 +109,4 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta, TransformerMixin)):
 
         exog : array-like or None
             The transformed exogenous array
-        """
-
-    @abc.abstractmethod
-    def inverse_transform(self, y, exog):
-        """Inverse transform a transformed array
-
-        Inverse the transformation on the transformed array.
-
-        Parameters
-        ----------
-        y : array-like or None, shape=(n_samples,)
-            The transformed endogenous (time-series) array.
-
-        exog : array-like or None, shape=(n_samples, n_features)
-            The transformed exogenous array of additional covariates.
-
-        Returns
-        -------
-        y : array-like or None
-            The inverse-transformed y array
-
-        exog : array-like or None
-            The inverse-transformed exogenous array
         """
