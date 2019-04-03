@@ -43,3 +43,9 @@ def test_type_error_when_y_is_not_real():
     trans = FourierEndogTransformer()
     with pytest.raises(TypeError):
         trans.fit_transform(y, exog)
+
+
+def test_hyndman_blog():
+    n = 2000
+    m = 200
+    y = np.random.RandomState(1).normal(size=n) + (np.arange(1, n + 1) % 100 / 30)

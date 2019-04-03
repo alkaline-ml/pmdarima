@@ -22,6 +22,7 @@ import numpy as np
 import warnings
 import os
 
+from .base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.python import long
 from ..compat import statsmodels as sm_compat
@@ -71,7 +72,7 @@ def _uses_legacy_pickling(arima):
     return hasattr(arima, "tmp_pkl_")
 
 
-class ARIMA(BaseEstimator):
+class ARIMA(BaseARIMA):
     """An ARIMA estimator.
 
     An ARIMA, or autoregressive integrated moving average, is a
@@ -572,36 +573,6 @@ class ARIMA(BaseEstimator):
             # new explicit requirements for the package
             return f, check_array(conf_int)  # duck type for pd.DataFrame
         return f
-
-    def fit_predict(self, y, exogenous=None, n_periods=10, **fit_args):
-        """Fit an ARIMA to a vector, ``y``, of observations with an
-        optional matrix of ``exogenous`` variables, and then generate
-        predictions.
-
-        Parameters
-        ----------
-        y : array-like or iterable, shape=(n_samples,)
-            The time-series to which to fit the ``ARIMA`` estimator. This may
-            either be a Pandas ``Series`` object (statsmodels can internally
-            use the dates in the index), or a numpy array. This should be a
-            one-dimensional array of floats, and should not contain any
-            ``np.nan`` or ``np.inf`` values.
-
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
-            An optional 2-d array of exogenous variables. If provided, these
-            variables are used as additional features in the regression
-            operation. This should not include a constant or trend. Note that
-            if an ``ARIMA`` is fit on exogenous features, it must be provided
-            exogenous features for making predictions.
-
-        n_periods : int, optional (default=10)
-            The number of periods in the future to forecast.
-
-        fit_args : dict or kwargs, optional (default=None)
-            Any keyword args to pass to the fit method.
-        """
-        self.fit(y, exogenous, **fit_args)
-        return self.predict(n_periods=n_periods, exogenous=exogenous)
 
     def __getstate__(self):
         """I am being pickled..."""
