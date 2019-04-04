@@ -16,10 +16,11 @@ import numpy as np
 import warnings
 import time
 
-from .base import BaseARIMA
+from ..base import BaseARIMA
 from . import _doc
 from .utils import ndiffs, is_constant, nsdiffs
 from ..utils import diff, is_iterable
+from ..utils.metaestimators import if_has_delegate
 from ._auto_solvers import _fit_arima, _StepwiseFitWrapper
 
 # for python 3 compat
@@ -148,118 +149,25 @@ class AutoARIMA(BaseARIMA):
 
         return self
 
-    # TODO: Create method to wrap these and use a delegate to call
+    @if_has_delegate("model_")
     def predict_in_sample(self, exogenous=None, start=None,
                           end=None, dynamic=False):
-        """Generate in-sample predictions from the fit ARIMA model. This can
-        be useful when wanting to visualize the fit, and qualitatively inspect
-        the efficacy of the model, or when wanting to compute the residuals
-        of the model.
+        return self.model_.predict_in_sample(
+            exogenous=exogenous, start=start, end=end, dynamic=dynamic)
 
-        Parameters
-        ----------
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
-            An optional 2-d array of exogenous variables. If provided, these
-            variables are used as additional features in the regression
-            operation. This should not include a constant or trend. Note that
-            if an ``ARIMA`` is fit on exogenous features, it must be provided
-            exogenous features for making predictions.
-
-        start : int, optional (default=None)
-            Zero-indexed observation number at which to start forecasting, ie.,
-            the first forecast is start.
-
-        end : int, optional (default=None)
-            Zero-indexed observation number at which to end forecasting, ie.,
-            the first forecast is start.
-
-        dynamic : bool, optional
-            The `dynamic` keyword affects in-sample prediction. If dynamic
-            is False, then the in-sample lagged values are used for
-            prediction. If `dynamic` is True, then in-sample forecasts are
-            used in place of lagged dependent variables. The first forecasted
-            value is `start`.
-
-        Returns
-        -------
-        predict : array
-            The predicted values.
-        """
-        check_is_fitted(self, 'model_')
-        return self.model_.predict_in_sample(exogenous, start, end, dynamic)
-
+    @if_has_delegate("model_")
     def predict(self, n_periods=10, exogenous=None,
                 return_conf_int=False, alpha=0.05):
-        """Generate predictions (forecasts) ``n_periods`` in the future.
-        Note that if ``exogenous`` variables were used in the model fit, they
-        will be expected for the predict procedure and will fail otherwise.
+        return self.model_.predict(
+            n_periods=n_periods, exogenous=exogenous,
+            return_conf_int=return_conf_int, alpha=alpha)
 
-        Parameters
-        ----------
-        n_periods : int, optional (default=10)
-            The number of periods in the future to forecast.
-
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
-            An optional 2-d array of exogenous variables. If provided, these
-            variables are used as additional features in the regression
-            operation. This should not include a constant or trend. Note that
-            if an ``ARIMA`` is fit on exogenous features, it must be provided
-            exogenous features for making predictions.
-
-        return_conf_int : bool, optional (default=False)
-            Whether to get the confidence intervals of the forecasts.
-
-        alpha : float, optional (default=0.05)
-            The confidence intervals for the forecasts are (1 - alpha) %
-
-        Returns
-        -------
-        forecasts : array-like, shape=(n_periods,)
-            The array of fore-casted values.
-
-        conf_int : array-like, shape=(n_periods, 2), optional
-            The confidence intervals for the forecasts. Only returned if
-            ``return_conf_int`` is True.
-        """
-        check_is_fitted(self, 'model_')
-        return self.model_.predict(n_periods, exogenous,
-                                   return_conf_int, alpha)
-
+    @if_has_delegate("model_")
     def update(self, y, exogenous=None, maxiter=None, **kwargs):
-        """Update the model fit with additional observed endog/exog values.
+        return self.model_.update(
+            y, exogenous=exogenous, maxiter=maxiter, **kwargs)
 
-        Updating an ARIMA adds new observations to the model, updating the
-        MLE of the parameters accordingly by performing several new iterations
-        (``maxiter``) from the existing model parameters.
-
-        Parameters
-        ----------
-        y : array-like or iterable, shape=(n_samples,)
-            The time-series data to add to the endogenous samples on which the
-            ``ARIMA`` estimator was previously fit. This may either be a Pandas
-            ``Series`` object or a numpy array. This should be a one-
-            dimensional array of finite floats.
-
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
-            An optional 2-d array of exogenous variables. If the model was
-            fit with an exogenous array of covariates, it will be required for
-            updating the observed values.
-
-        maxiter : int, optional (default=None)
-            The number of iterations to perform when updating the model. If
-            None, will perform ``max(5, n_samples // 10)`` iterations.
-
-        **kwargs : keyword args
-            Any keyword args that should be passed as ``**fit_kwargs`` in the
-            new model fit.
-
-        Notes
-        -----
-        * Internally, this calls ``fit`` again using the OLD model parameters
-          as the starting parameters for the new model's MLE computation.
-        """
-        check_is_fitted(self, 'model_')
-        return self.model_.update(y, exogenous, maxiter, **kwargs)
+    # TODO: decorator to automate all this composition + AIC, etc.
 
 
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,

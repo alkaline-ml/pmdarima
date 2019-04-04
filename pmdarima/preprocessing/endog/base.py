@@ -18,7 +18,7 @@ class BaseEndogTransformer(six.with_metaclass(abc.ABCMeta, BaseTransformer)):
         return y, exog
 
     @abc.abstractmethod
-    def inverse_transform(self, y, exog=None):
+    def inverse_transform(self, y, exogenous=None):
         """Inverse transform a transformed array
 
         Inverse the transformation on the transformed array.
@@ -28,7 +28,7 @@ class BaseEndogTransformer(six.with_metaclass(abc.ABCMeta, BaseTransformer)):
         y : array-like or None, shape=(n_samples,)
             The transformed endogenous (time-series) array.
 
-        exog : array-like or None, shape=(n_samples, n_features), optional
+        exogenous : array-like or None, shape=(n_samples, n_features), optional
             The exogenous array of additional covariates. Not used for
             endogenous transformers. Default is None, and non-None values will
             serve as pass-through arrays.
@@ -38,6 +38,6 @@ class BaseEndogTransformer(six.with_metaclass(abc.ABCMeta, BaseTransformer)):
         y : array-like or None
             The inverse-transformed y array
 
-        exog : array-like or None
+        exogenous : array-like or None
             The inverse-transformed exogenous array
         """

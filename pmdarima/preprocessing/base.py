@@ -41,7 +41,7 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta,
                                copy=True, force_all_finite=False)
         return y, exog
 
-    def fit_transform(self, y, exog=None, **transform_kwargs):
+    def fit_transform(self, y, exogenous=None, **transform_kwargs):
         """Fit and transform the arrays
 
         Parameters
@@ -49,17 +49,17 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta,
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exog : array-like or None, shape=(n_samples, n_features), optional
+        exogenous : array-like or None, shape=(n_samples, n_features), optional
             The exogenous array of additional covariates.
 
         **transform_kwargs : keyword args
             Keyword arguments required by the transform function.
         """
-        self.fit(y, exog)
-        return self.transform(y, exog, **transform_kwargs)
+        self.fit(y, exogenous)
+        return self.transform(y, exogenous, **transform_kwargs)
 
     @abc.abstractmethod
-    def fit(self, y, exog):
+    def fit(self, y, exogenous):
         """Fit the transformer
 
         The purpose of the ``fit`` method is to learn a set of statistics or
@@ -73,7 +73,7 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta,
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exog : array-like or None, shape=(n_samples, n_features)
+        exogenous : array-like or None, shape=(n_samples, n_features)
             The exogenous array of additional covariates.
 
         Returns
@@ -85,7 +85,7 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta,
         """
 
     @abc.abstractmethod
-    def transform(self, y, exog, **kwargs):
+    def transform(self, y, exogenous, **kwargs):
         """Transform the new array
 
         Apply the transformation to the array after learning the training set's
@@ -96,7 +96,7 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta,
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exog : array-like or None, shape=(n_samples, n_features)
+        exogenous : array-like or None, shape=(n_samples, n_features)
             The exogenous array of additional covariates.
 
         **kwargs : keyword args
@@ -107,6 +107,6 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta,
         y : array-like or None
             The transformed y array
 
-        exog : array-like or None
+        exogenous : array-like or None
             The transformed exogenous array
         """

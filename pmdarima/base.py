@@ -1,12 +1,23 @@
 # -*- coding: utf-8 -*-
+#
+# Base classes and interfaces
 
 import abc
+from abc import ABCMeta
 
 from sklearn.base import BaseEstimator
 from sklearn.externals import six
 
 
-class BaseARIMA(six.with_metaclass(abc.ABCMeta, BaseEstimator)):
+class UpdatableMixin(metaclass=ABCMeta):
+    """A class that can 'update' its params"""
+
+    @abc.abstractmethod
+    def update(self, y, exogenous, **kwargs):
+        """Update an ARIMA model"""
+
+
+class BaseARIMA(six.with_metaclass(ABCMeta, BaseEstimator, UpdatableMixin)):
     """A base ARIMA class"""
 
     @abc.abstractmethod
@@ -50,7 +61,3 @@ class BaseARIMA(six.with_metaclass(abc.ABCMeta, BaseEstimator)):
     @abc.abstractmethod
     def predict_in_sample(self, exogenous, start, end, dynamic):
         """Get in-sample forecasts"""
-
-    @abc.abstractmethod
-    def update(self, y, exogenous, maxiter, **kwargs):
-        """Update an ARIMA model"""

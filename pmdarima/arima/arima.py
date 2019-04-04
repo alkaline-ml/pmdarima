@@ -22,7 +22,7 @@ import numpy as np
 import warnings
 import os
 
-from .base import BaseARIMA
+from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.python import long
 from ..compat import statsmodels as sm_compat
@@ -507,7 +507,9 @@ class ARIMA(BaseARIMA):
 
     def predict(self, n_periods=10, exogenous=None,
                 return_conf_int=False, alpha=0.05):
-        """Generate predictions (forecasts) ``n_periods`` in the future.
+        """Forecast future values
+
+        Generate predictions (forecasts) ``n_periods`` in the future.
         Note that if ``exogenous`` variables were used in the model fit, they
         will be expected for the predict procedure and will fail otherwise.
 
