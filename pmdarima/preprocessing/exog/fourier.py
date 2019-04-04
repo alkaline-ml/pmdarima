@@ -14,7 +14,6 @@ cospi = (lambda x: np.cos(np.pi * x))
 
 # Candidate for cythonization?
 def _fourier_terms(p, times):
-    # TODO: first K columns are correct, but then they repeat..
     X_t = []
     for e in p:
         X_t.append(sinpi(2 * e * times))
@@ -41,6 +40,12 @@ class FourierFeaturizer(BaseExogTransformer):
 
     The disadvantage is that the seasonal periodicity of the time series is
     assumed to be fixed.
+
+    Functionally, this is a featurizer. This means that exogenous features are
+    *derived* from ``y``, as opposed to transforming an existing exog array.
+    It also behaves slightly differently in the :func:`transform` stage than
+    most other exogenous transformers in that ``exog`` is not a required arg,
+    and it takes ``**kwargs``. See the :func:`transform` docstr for more info.
 
     Parameters
     ----------
@@ -116,7 +121,12 @@ class FourierFeaturizer(BaseExogTransformer):
         When an ARIMA is fit with an exogenous array, it must be forecasted
         with one also. Since at ``predict`` time in a pipeline we won't have
         ``y`` (and we may not yet have an ``exog`` array), we have to know how
-        far into the future for which to compute Fourier terms.
+        far into the future for which to compute Fourier terms (hence
+        ``n_periods``).
+
+        This method will compute the Fourier features for a given frequency and
+        ``k`` term. Note that the ``y`` values are not used to compute these,
+        so this does not pose a risk of data leakage.
 
         Parameters
         ----------
