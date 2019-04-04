@@ -10,9 +10,19 @@ from .base import BaseARIMA
 from .preprocessing.base import BaseTransformer
 from .preprocessing.exog.base import BaseExogTransformer
 
+__all__ = ['Pipeline']
+
 
 class Pipeline(BaseEstimator):
     """A pipeline of transformers with an optional final estimator stage
+
+    The pipeline object chains together an arbitrary number of named, ordered
+    transformations, passing the output from one as the input to the next. As
+    an optional last stage, an ``ARIMA`` or ``AutoARIMA`` object can be fit.
+
+    This pipeline takes after the scikit-learn ``sklearn.Pipeline`` object,
+    which behaves similarly but does not share the same time-series interface
+    that ``pmdarima`` follows.
 
     Parameters
     ----------
@@ -49,22 +59,17 @@ class Pipeline(BaseEstimator):
         estimator = estimators[-1]
 
         for t in transformers:
-            if t is None or t == 'passthrough':
-                continue
             # Transformers must be endog/exog transformers
             if not isinstance(t, BaseTransformer):
                 raise TypeError("All intermediate steps should be "
-                                "transformers and implement fit and transform "
-                                "or be the string 'passthrough' "
-                                "'%s' (type %s) doesn't" % (t, type(t)))
+                                "instances of BaseTransformer, but "
+                                "'%s' (type %s) is not" % (t, type(t)))
 
-        # We allow last estimator to be None as an identity transformation
-        if (estimator is not None and estimator != 'passthrough' and
-                not isinstance(estimator, BaseARIMA)):
+        if estimator != 'passthrough' and not isinstance(estimator, BaseARIMA):
             raise TypeError(
                 "Last step of Pipeline should be of type BaseARIMA "
                 "or be the string 'passthrough'. "
-                "'%s' (type %s) doesn't" % (estimator, type(estimator)))
+                "'%s' (type %s) isn't" % (estimator, type(estimator)))
 
         # Shallow copy
         return list(self.steps)

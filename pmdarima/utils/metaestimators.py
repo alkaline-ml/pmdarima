@@ -85,10 +85,6 @@ def if_has_delegate(delegate):
     >>> a.d = None
     >>> assert hasattr(a, 'func') and a.func()
 
-    See Also
-    --------
-    :func:`pmdarima.arima.ARIMA`
-
     Parameters
     ----------
     delegate : string, list of strings or tuple of strings
