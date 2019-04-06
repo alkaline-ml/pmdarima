@@ -88,7 +88,8 @@ def test_hyndman_blog():
     trans = FourierFeaturizer(m=m, k=5).fit(y)
     _, xreg = trans.transform(y)
 
-    arima = pm.auto_arima(y, exogenous=xreg, seasonal=False)  # type: pm.ARIMA
+    arima = pm.auto_arima(y, exogenous=xreg, seasonal=False,
+                          maxiter=5)  # type: pm.ARIMA
 
     # Show we can forecast 10 in the future
     _, xreg_test = trans.transform(y, n_periods=10)

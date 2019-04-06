@@ -35,8 +35,6 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('preprocessing')
     config.add_subpackage('preprocessing/endog')
     config.add_subpackage('preprocessing/endog/tests')
-    config.add_subpackage('preprocessing/exog')
-    config.add_subpackage('preprocessing/exog/tests')
     config.add_subpackage('utils')
     config.add_subpackage('utils/tests')
 
@@ -44,6 +42,7 @@ def configuration(parent_package='', top_path=None):
     # after the above.
     config.add_subpackage('arima')
     config.add_subpackage('arima/tests')
+    config.add_subpackage('preprocessing/exog')
 
     # do cythonization
     maybe_cythonize_extensions(top_path, config)

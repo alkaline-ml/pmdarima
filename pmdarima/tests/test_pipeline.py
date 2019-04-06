@@ -103,7 +103,7 @@ def test_pipeline_behavior():
         ("fourier", FourierFeaturizer(m=12)),
         ("arima", AutoARIMA(seasonal=False, stepwise=True,
                             suppress_warnings=True,
-                            maxiter=5, error_action='ignore'))
+                            maxiter=3, error_action='ignore'))
     ])
 
     # Quick assertions on indexing
@@ -120,7 +120,7 @@ def test_pipeline_behavior():
     }
 
     with pytest.raises(ValueError) as ve:
-        pipeline.predict(5, **kwargs)
+        pipeline.predict(3, **kwargs)
     assert ("'n_periods'" in str(ve))
 
     # Assert that we can update the model
