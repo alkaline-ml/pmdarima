@@ -18,7 +18,12 @@ class Pipeline(BaseEstimator):
 
     The pipeline object chains together an arbitrary number of named, ordered
     transformations, passing the output from one as the input to the next. As
-    an optional last stage, an ``ARIMA`` or ``AutoARIMA`` object can be fit.
+    the last stage, an ``ARIMA`` or ``AutoARIMA`` object will be fit.
+
+    The purpose of the pipeline is to assemble several steps that can be
+    cross-validated together while setting different parameters.
+    For this, it enables setting parameters of the various steps using their
+    names and the parameter name separated by a '__', as in the example below.
 
     This pipeline takes after the scikit-learn ``sklearn.Pipeline`` object,
     which behaves similarly but does not share the same time-series interface
@@ -30,6 +35,22 @@ class Pipeline(BaseEstimator):
         List of (name, transform) tuples (implementing fit/transform) that are
         chained, in the order in which they are chained, with the last object
         an ARIMA or AutoARIMA estimator.
+
+    Examples
+    --------
+    >>> from pmdarima.datasets import load_wineind
+    >>> from pmdarima.arima import AutoARIMA
+    >>> from pmdarima.pipeline import Pipeline
+    >>> from pmdarima.preprocessing import FourierFeaturizer
+    >>>
+    >>> wineind = load_wineind()
+    >>> pipeline = Pipeline([
+    ...     ("fourier", FourierFeaturizer(m=12)),
+    ...     ("arima", AutoARIMA(seasonal=False, stepwise=True,
+    ...                         suppress_warnings=True,
+    ...                         error_action='ignore'))
+    ... ])
+    >>> pipeline.fit(wineind)
     """
     def __init__(self, steps):
         self.steps = steps
@@ -65,10 +86,9 @@ class Pipeline(BaseEstimator):
                                 "instances of BaseTransformer, but "
                                 "'%s' (type %s) is not" % (t, type(t)))
 
-        if estimator != 'passthrough' and not isinstance(estimator, BaseARIMA):
+        if not isinstance(estimator, BaseARIMA):
             raise TypeError(
-                "Last step of Pipeline should be of type BaseARIMA "
-                "or be the string 'passthrough'. "
+                "Last step of Pipeline should be of type BaseARIMA. "
                 "'%s' (type %s) isn't" % (estimator, type(estimator)))
 
         # Shallow copy
@@ -76,7 +96,7 @@ class Pipeline(BaseEstimator):
 
     def _iter(self, with_final=True):
         """
-        Generate (name, trans) tuples excluding 'passthrough' transformers
+        Generate (name, trans) tuples
         """
         # MUST have called fit first
         stop = len(self.steps_)
@@ -84,8 +104,7 @@ class Pipeline(BaseEstimator):
             stop -= 1
 
         for idx, (name, trans) in enumerate(islice(self.steps_, 0, stop)):
-            if trans is not None and trans != 'passthrough':
-                yield idx, name, trans
+            yield idx, name, trans
 
     def _get_kwargs(self, **params):
         params_steps = {name: {} for name, step in self.steps
@@ -129,9 +148,9 @@ class Pipeline(BaseEstimator):
     @property
     def _final_estimator(self):
         estimator = self.steps[-1][1]
-        return 'passthrough' if estimator is None else estimator
+        return estimator
 
-    def fit(self, y, exogenous, **fit_kwargs):
+    def fit(self, y, exogenous=None, **fit_kwargs):
         """Fit the pipeline of transformers and the ARIMA model
 
         Chain the time-series and exogenous arrays through a series of
@@ -155,7 +174,13 @@ class Pipeline(BaseEstimator):
             exogenous features for making predictions.
 
         **fit_kwargs : keyword args
-            todo
+            Extra keyword arguments used for each stage's ``fit`` stage.
+            Similar to scikit-learn pipeline keyword args, the keys are
+            compound, comprised of the stage name and the argument name
+            separated by a "__". For instance, if fitting an ARIMA in stage
+            "arima", your kwargs may resemble::
+
+                {"arima__maxiter": 10}
         """
         # Shallow copy
         steps = self.steps_ = self._validate_steps()
@@ -171,12 +196,11 @@ class Pipeline(BaseEstimator):
 
             # Replace the transformer of the step with the fitted
             # transformer.
-            steps[step_idx] = cloned_transformer
+            steps[step_idx] = (name, cloned_transformer)
 
-        # Now fit the final estimator, if it's not a passthrough
-        if self._final_estimator != "passthrough":
-            kwargs = named_kwargs[steps[-1][0]]
-            self._final_estimator.fit(yt, exogenous=Xt, **kwargs)
+        # Now fit the final estimator
+        kwargs = named_kwargs[steps[-1][0]]
+        self._final_estimator.fit(yt, exogenous=Xt, **kwargs)
         return self
 
     def predict(self, n_periods=10, exogenous=None,
@@ -206,7 +230,14 @@ class Pipeline(BaseEstimator):
             The confidence intervals for the forecasts are (1 - alpha) %
 
         **kwargs : keyword args
-            todo
+            Extra keyword arguments used for each stage's ``transform`` stage
+            and the estimator's ``predict`` stage. Similar to scikit-learn
+            pipeline keyword args, the keys are compound, comprised of the
+            stage name and the argument name separated by a "__". For instance,
+            if you have a FourierFeaturizer whose stage is named
+            "fourier", your transform kwargs could resemble::
+
+                {"fourier__h": 50}
 
         Returns
         -------
@@ -232,7 +263,8 @@ class Pipeline(BaseEstimator):
         # Now we should be able to run the prediction
         nm, est = self.steps_[-1]
         return est.predict(
-            n_periods=n_periods, exogenous=Xt, return_conf_int=return_conf_int,
+            n_periods=n_periods, exogenous=Xt,
+            return_conf_int=return_conf_int,
             alpha=alpha, **named_kwargs[nm])
 
     # todo: update

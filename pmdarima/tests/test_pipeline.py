@@ -3,6 +3,7 @@
 from pmdarima.pipeline import Pipeline
 from pmdarima.preprocessing import BoxCoxEndogTransformer, FourierFeaturizer
 from pmdarima.arima import ARIMA, AutoARIMA
+from pmdarima.datasets import load_wineind
 
 import pytest
 
@@ -92,3 +93,17 @@ def test_get_kwargs(pipe, kwargs, expected):
     # Test we get the kwargs we expect
     kw = pipe._get_kwargs(**kwargs)
     assert kw == expected
+
+
+def test_pipeline_fit_behavior():
+    wineind = load_wineind()
+    pipeline = Pipeline([
+        ("fourier", FourierFeaturizer(m=12)),
+        ("arima", AutoARIMA(seasonal=False, stepwise=True,
+                            suppress_warnings=True,
+                            error_action='ignore'))
+    ])
+
+    pipeline.fit(wineind)
+
+    # TODO: figure out predict...

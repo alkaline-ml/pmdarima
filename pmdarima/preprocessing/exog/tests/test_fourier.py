@@ -91,5 +91,5 @@ def test_hyndman_blog():
     arima = pm.auto_arima(y, exogenous=xreg, seasonal=False)  # type: pm.ARIMA
 
     # Show we can forecast 10 in the future
-    _, xreg_test = trans.transform(y, n_periods=10)
+    _, xreg_test = trans.transform(y, h=10)
     arima.predict(n_periods=10, exogenous=xreg_test)

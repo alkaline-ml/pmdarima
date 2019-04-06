@@ -98,7 +98,7 @@ class FourierFeaturizer(BaseExogTransformer):
         k = self.k
         if k is None:
             k = m // 2
-        if 2 * self.k > m or k < 1:
+        if 2 * k > m or k < 1:
             raise ValueError("k must be a positive integer not greater "
                              "than m//2")
 
@@ -115,7 +115,7 @@ class FourierFeaturizer(BaseExogTransformer):
 
         return self
 
-    def transform(self, y, exog=None, n_periods=0, **_):
+    def transform(self, y, exog=None, h=0, **_):
         """Create Fourier term features
 
         When an ARIMA is fit with an exogenous array, it must be forecasted
@@ -141,27 +141,26 @@ class FourierFeaturizer(BaseExogTransformer):
             Otherwise, the Fourier terms will be returned as the new exogenous
             array.
 
-        n_periods : int, optional (default=0)
-            The number of periods in the future to forecast. If ``n_periods``
+        h : int, optional (default=0)
+            The number of periods in the future to forecast. If ``h``
             is 0, will compute the Fourier features for the training set.
-            The ``n_periods`` corresponds to the number of samples that will
-            be returned.
+            ``h`` corresponds to the number of samples that will be returned.
         """
         check_is_fitted(self, "p_")
         _, exog = self._check_y_exog(y, exog, null_allowed=True)
 
-        if n_periods and exog is not None:
-            if n_periods != exog.shape[0]:
+        if h and exog is not None:
+            if h != exog.shape[0]:
                 raise ValueError("If n_periods and exog are specified, "
                                  "n_periods must match dims of exogenous")
 
-        times = np.arange(self.n_ + n_periods) + 1
+        times = np.arange(self.n_ + h) + 1
         X_fourier = _fourier_terms(self.p_, times)
 
         # Maybe trim if we're in predict mode... in that case, we only keep the
         # last n_periods rows in the matrix we've created
-        if n_periods:
-            X_fourier = X_fourier[-n_periods:, :]
+        if h:
+            X_fourier = X_fourier[-h:, :]
 
         if exog is None:
             exog = X_fourier
