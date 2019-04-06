@@ -95,15 +95,33 @@ def test_get_kwargs(pipe, kwargs, expected):
     assert kw == expected
 
 
-def test_pipeline_fit_behavior():
+def test_pipeline_behavior():
     wineind = load_wineind()
+    train, test = wineind[:125], wineind[125:]
+
     pipeline = Pipeline([
         ("fourier", FourierFeaturizer(m=12)),
         ("arima", AutoARIMA(seasonal=False, stepwise=True,
                             suppress_warnings=True,
-                            error_action='ignore'))
+                            maxiter=5, error_action='ignore'))
     ])
 
-    pipeline.fit(wineind)
+    # Quick assertions on indexing
+    assert len(pipeline) == 2
 
-    # TODO: figure out predict...
+    pipeline.fit(train)
+    preds = pipeline.predict(5)
+    assert preds.shape[0] == 5
+
+    # Assert that when the n_periods kwarg is set manually and incorrectly for
+    # the fourier transformer, we get a ValueError
+    kwargs = {
+        "fourier__n_periods": 10
+    }
+
+    with pytest.raises(ValueError) as ve:
+        pipeline.predict(5, **kwargs)
+    assert ("'n_periods'" in str(ve))
+
+    # Assert that we can update the model
+    pipeline.update(test, maxiter=5)

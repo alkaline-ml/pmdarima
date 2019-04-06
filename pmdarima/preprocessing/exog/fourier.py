@@ -4,7 +4,8 @@ import numpy as np
 
 from sklearn.utils.validation import check_is_fitted
 
-from .base import BaseExogTransformer
+from .base import BaseExogFeaturizer
+from ..base import UpdatableMixin
 
 __all__ = ['FourierFeaturizer']
 
@@ -22,7 +23,7 @@ def _fourier_terms(p, times):
     return np.array(X_t).T
 
 
-class FourierFeaturizer(BaseExogTransformer):
+class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
     """Fourier terms for modeling seasonality
 
     This transformer creates an exogenous matrix containing terms from a
@@ -73,7 +74,7 @@ class FourierFeaturizer(BaseExogTransformer):
         self.m = m
         self.k = k
 
-    def fit(self, y, exog=None):
+    def fit(self, y, exogenous=None):
         """Fit the transformer
 
         Computes the periods of all the Fourier terms. The values of ``y`` are
@@ -85,14 +86,14 @@ class FourierFeaturizer(BaseExogTransformer):
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exog : array-like or None, shape=(n_samples, n_features), optional
+        exogenous : array-like or None, shape=(n_samples, n_features), optional
             The exogenous array of additional covariates. If specified, the
             Fourier terms will be column-bound on the right side of the matrix.
             Otherwise, the Fourier terms will be returned as the new exogenous
             array.
         """
         # Since we don't fit any params here, we can just check the params
-        _, _ = self._check_y_exog(y, exog, null_allowed=True)
+        _, _ = self._check_y_exog(y, exogenous, null_allowed=True)
 
         m = self.m
         k = self.k
@@ -115,7 +116,7 @@ class FourierFeaturizer(BaseExogTransformer):
 
         return self
 
-    def transform(self, y, exog=None, h=0, **_):
+    def transform(self, y, exogenous=None, n_periods=0, **_):
         """Create Fourier term features
 
         When an ARIMA is fit with an exogenous array, it must be forecasted
@@ -135,32 +136,33 @@ class FourierFeaturizer(BaseExogTransformer):
             optional for the Fourier terms, since it uses the pre-computed
             ``n`` to calculate the seasonal Fourier terms.
 
-        exog : array-like or None, shape=(n_samples, n_features), optional
+        exogenous : array-like or None, shape=(n_samples, n_features), optional
             The exogenous array of additional covariates. If specified, the
             Fourier terms will be column-bound on the right side of the matrix.
             Otherwise, the Fourier terms will be returned as the new exogenous
             array.
 
-        h : int, optional (default=0)
-            The number of periods in the future to forecast. If ``h``
+        n_periods : int, optional (default=0)
+            The number of periods in the future to forecast. If ``n_periods``
             is 0, will compute the Fourier features for the training set.
-            ``h`` corresponds to the number of samples that will be returned.
+            ``n_periods`` corresponds to the number of samples that will be
+            returned.
         """
         check_is_fitted(self, "p_")
-        _, exog = self._check_y_exog(y, exog, null_allowed=True)
+        _, exog = self._check_y_exog(y, exogenous, null_allowed=True)
 
-        if h and exog is not None:
-            if h != exog.shape[0]:
+        if n_periods and exog is not None:
+            if n_periods != exog.shape[0]:
                 raise ValueError("If n_periods and exog are specified, "
                                  "n_periods must match dims of exogenous")
 
-        times = np.arange(self.n_ + h) + 1
+        times = np.arange(self.n_ + n_periods) + 1
         X_fourier = _fourier_terms(self.p_, times)
 
         # Maybe trim if we're in predict mode... in that case, we only keep the
         # last n_periods rows in the matrix we've created
-        if h:
-            X_fourier = X_fourier[-h:, :]
+        if n_periods:
+            X_fourier = X_fourier[-n_periods:, :]
 
         if exog is None:
             exog = X_fourier
@@ -168,3 +170,30 @@ class FourierFeaturizer(BaseExogTransformer):
             exog = np.hstack([exog, X_fourier])
 
         return y, exog
+
+    def update_and_transform(self, y, exogenous, **kwargs):
+        """Update the params and return the transformed arrays
+
+        Since no parameters really get updated in the Fourier featurizer, all
+        we do is compose forecasts for ``n_periods=len(y)`` and then update
+        ``n_``.
+
+        Parameters
+        ----------
+        y : array-like or None, shape=(n_samples,)
+            The endogenous (time-series) array.
+
+        exogenous : array-like or None, shape=(n_samples, n_features)
+            The exogenous array of additional covariates.
+
+        **kwargs : keyword args
+            Keyword arguments required by the transform function.
+        """
+        check_is_fitted(self, "p_")
+
+        self._check_endog(y)
+        _, Xt = self.transform(y, exogenous, n_periods=len(y), **kwargs)
+
+        # Update this *after* getting the exog features
+        self.n_ += len(y)
+        return y, Xt

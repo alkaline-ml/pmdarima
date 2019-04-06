@@ -28,10 +28,20 @@ v0.8.1) will document the latest features.
 * Deprecate the ``is_stationary`` method in tests of stationarity. This will be removed in
   v1.4.0. Use ``should_diff`` instead.
 
-* Added two new datasets: ``airpassengers`` & ``austres``
+* Add two new datasets: ``airpassengers`` & ``austres``
 
 * When using ``out_of_sample``, the out-of-sample predictions are now stored
   under the ``oob_preds_`` attribute.
+
+* Add a number of transformer classes including:
+    * ``BoxCoxEndogTransformer``
+    * ``FourierFeaturizer``
+
+* Add a ``Pipeline`` class resembling that of scikit-learn's, which allows the
+  stacking of transformers together.
+
+* Add a class wrapper for ``auto_arima``: ``AutoARIMA``. This is allows auto-ARIMA
+  to be used with pipelines.
 
 
 `v1.1.1 <http://alkaline-ml.com/pmdarima/1.1.1/>`_

@@ -8,7 +8,7 @@ from sklearn.utils.validation import check_is_fitted
 
 from .base import BaseARIMA
 from .preprocessing.base import BaseTransformer
-from .preprocessing.exog.base import BaseExogTransformer
+from .preprocessing.exog.base import BaseExogTransformer, BaseExogFeaturizer
 
 __all__ = ['Pipeline']
 
@@ -119,26 +119,6 @@ class Pipeline(BaseEstimator):
         Returns the length of the Pipeline
         """
         return len(self.steps)
-
-    def __getitem__(self, ind):
-        """Returns a sub-pipeline or a single esimtator in the pipeline
-
-        Indexing with an integer will return an estimator; using a slice
-        returns another Pipeline instance which copies a slice of this
-        Pipeline. This copy is shallow: modifying (or fitting) estimators in
-        the sub-pipeline will affect the larger pipeline and vice-versa.
-        However, replacing a value in `step` will not affect a copy.
-        """
-        if isinstance(ind, slice):
-            if ind.step not in (1, None):
-                raise ValueError('Pipeline slicing only supports a step of 1')
-            return self.__class__(self.steps[ind])
-        try:
-            name, est = self.steps[ind]
-        except TypeError:
-            # Not an int, try get step by name
-            return self.named_steps[ind]
-        return est
 
     @property
     def named_steps(self):
@@ -258,6 +238,17 @@ class Pipeline(BaseEstimator):
         for step_idx, name, transformer in self._iter(with_final=False):
             if isinstance(transformer, BaseExogTransformer):
                 kw = named_kwargs[name]
+
+                # If it's a featurizer, we may also need to add 'n_periods'
+                if isinstance(transformer, BaseExogFeaturizer):
+                    num_p = kw.get("n_periods", None)
+                    if num_p is not None and num_p != n_periods:
+                        raise ValueError("Manually set 'n_periods' kwarg for "
+                                         "step '%s' differs from forecasting "
+                                         "n_periods (%r != %r)"
+                                         % (name, num_p, n_periods))
+                    kw["n_periods"] = n_periods
+
                 _, Xt = transformer.transform(y=None, exogenous=Xt, **kw)
 
         # Now we should be able to run the prediction
@@ -267,4 +258,53 @@ class Pipeline(BaseEstimator):
             return_conf_int=return_conf_int,
             alpha=alpha, **named_kwargs[nm])
 
-    # todo: update
+    def update(self, y, exogenous=None, maxiter=None, **kwargs):
+        """Update an ARIMA or auto-ARIMA as well as any necessary transformers
+
+        Passes the newly observed values through the appropriate endog
+        transformations, and the exogenous array through the exog transformers
+        (updating where necessary) before finally updating the ARIMA model.
+
+        Parameters
+        ----------
+        y : array-like or iterable, shape=(n_samples,)
+            The time-series data to add to the endogenous samples on which the
+            ``ARIMA`` estimator was previously fit. This may either be a Pandas
+            ``Series`` object or a numpy array. This should be a one-
+            dimensional array of finite floats.
+
+        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+            An optional 2-d array of exogenous variables. If the model was
+            fit with an exogenous array of covariates, it will be required for
+            updating the observed values.
+
+        maxiter : int, optional (default=None)
+            The number of iterations to perform when updating the model. If
+            None, will perform ``max(5, n_samples // 10)`` iterations.
+
+        **kwargs : keyword args
+            Extra keyword arguments used for each stage's ``update`` stage.
+            Similar to scikit-learn pipeline keyword args, the keys are
+            compound, comprised of the stage name and the argument name
+            separated by a "__".
+        """
+        check_is_fitted(self, "steps_")
+
+        # Push the arrays through all of the transformer steps that have the
+        # appropriate update_and_transform method
+        yt = y
+        Xt = exogenous
+        named_kwargs = self._get_kwargs(**kwargs)
+
+        for step_idx, name, transformer in self._iter(with_final=False):
+            kw = named_kwargs[name]
+            if hasattr(transformer, "update_and_transform"):
+                yt, Xt = transformer.update_and_transform(
+                    y=yt, exogenous=Xt, **kw)
+            else:
+                yt, Xt = transformer.transform(yt, exogenous=Xt, **kw)
+
+        # Now we can update the arima
+        nm, est = self.steps_[-1]
+        return est.update(
+            yt, exogenous=Xt, maxiter=maxiter, **named_kwargs[nm])

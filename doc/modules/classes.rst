@@ -39,6 +39,7 @@ sections for further details.
 
     arima.ADFTest
     arima.ARIMA
+    arima.AutoARIMA
     arima.CHTest
     arima.KPSSTest
     arima.OCSBTest

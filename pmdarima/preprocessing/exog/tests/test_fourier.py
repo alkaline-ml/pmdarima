@@ -74,7 +74,7 @@ class TestFourierREquivalency:
 
             # Test a bad forecast (exog dim does not match n_periods dim)
             with pytest.raises(ValueError):
-                trans.transform(y, exog=np.random.rand(5, 3), n_periods=2)
+                trans.transform(y, exogenous=np.random.rand(5, 3), n_periods=2)
 
 
 def test_hyndman_blog():
@@ -91,5 +91,30 @@ def test_hyndman_blog():
     arima = pm.auto_arima(y, exogenous=xreg, seasonal=False)  # type: pm.ARIMA
 
     # Show we can forecast 10 in the future
-    _, xreg_test = trans.transform(y, h=10)
+    _, xreg_test = trans.transform(y, n_periods=10)
     arima.predict(n_periods=10, exogenous=xreg_test)
+
+
+def test_update_transform():
+    n = 150
+    m = 10
+    y = np.random.RandomState(1).normal(size=n) + \
+        (np.arange(1, n + 1) % 100 / 30)
+
+    train, test = y[:100], y[100:]
+
+    trans = FourierFeaturizer(m=m, k=5).fit(train)
+    _, xreg = trans.transform(train)
+
+    # Now update with the test set and show the xreg is diff
+    yt, Xt = trans.update_and_transform(test, exogenous=None)
+    assert yt is test
+    assert Xt.shape[0] == test.shape[0]
+    assert trans.n_ == y.shape[0]
+
+    # Now assert that if we do a vanilla transform with no n_periods, the last
+    # 50 are the same as the Xt we just got and the first 100 are the same as
+    # we got earlier
+    _, xreg2 = trans.transform(y)
+    assert_array_almost_equal(xreg2[:100], xreg)
+    assert_array_almost_equal(xreg2[100:], Xt)

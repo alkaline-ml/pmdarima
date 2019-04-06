@@ -9,15 +9,7 @@ from sklearn.base import BaseEstimator
 from sklearn.externals import six
 
 
-class UpdatableMixin(metaclass=ABCMeta):
-    """A class that can 'update' its params"""
-
-    @abc.abstractmethod
-    def update(self, y, exogenous, **kwargs):
-        """Update an ARIMA model"""
-
-
-class BaseARIMA(six.with_metaclass(ABCMeta, BaseEstimator, UpdatableMixin)):
+class BaseARIMA(six.with_metaclass(ABCMeta, BaseEstimator)):
     """A base ARIMA class"""
 
     @abc.abstractmethod
@@ -61,3 +53,7 @@ class BaseARIMA(six.with_metaclass(ABCMeta, BaseEstimator, UpdatableMixin)):
     @abc.abstractmethod
     def predict_in_sample(self, exogenous, start, end, dynamic):
         """Get in-sample forecasts"""
+
+    @abc.abstractmethod
+    def update(self, y, exogenous=None, maxiter=None, **kwargs):
+        """Update an ARIMA model"""
