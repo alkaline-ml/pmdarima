@@ -3,7 +3,6 @@
 from itertools import islice
 
 from sklearn.base import BaseEstimator, clone
-from sklearn.utils import Bunch
 from sklearn.utils.validation import check_is_fitted
 
 from .base import BaseARIMA
@@ -123,7 +122,7 @@ class Pipeline(BaseEstimator):
     @property
     def named_steps(self):
         # Use Bunch object to improve autocomplete
-        return Bunch(**dict(self.steps))
+        return dict(self.steps)
 
     @property
     def _final_estimator(self):
