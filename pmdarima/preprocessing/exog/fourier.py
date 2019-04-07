@@ -6,6 +6,7 @@ from sklearn.utils.validation import check_is_fitted
 
 from .base import BaseExogFeaturizer
 from ..base import UpdatableMixin
+from ._fourier import C_fourier_terms
 
 __all__ = ['FourierFeaturizer']
 
@@ -15,12 +16,12 @@ cospi = (lambda x: np.cos(np.pi * x))
 
 # Candidate for cythonization?
 def _fourier_terms(p, times):
-    X_t = []
-    for e in p:
-        X_t.append(sinpi(2 * e * times))
-        X_t.append(cospi(2 * e * times))
-
-    return np.array(X_t).T
+    # X = []
+    # for e in p:
+    #     X.append(sinpi(2 * e * times))
+    #     X.append(cospi(2 * e * times))
+    X = C_fourier_terms(p, times)
+    return np.asarray(X).T
 
 
 class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
@@ -105,7 +106,7 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
 
         # Compute the periods of all Fourier terms. Since R allows multiple
         # seasonality and we do not, we can do this much more simply.
-        p = (np.arange(k) + 1) / m  # 1:K / m
+        p = ((np.arange(k) + 1) / m).astype(np.float64)  # 1:K / m
 
         # If sinpi is 0... maybe blow up?
         # if abs(2 * p - round(2 * p)) < np.finfo(y.dtype).eps:  # min eps
@@ -156,7 +157,7 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
                 raise ValueError("If n_periods and exog are specified, "
                                  "n_periods must match dims of exogenous")
 
-        times = np.arange(self.n_ + n_periods) + 1
+        times = np.arange(self.n_ + n_periods, dtype=np.float64) + 1
         X_fourier = _fourier_terms(self.p_, times)
 
         # Maybe trim if we're in predict mode... in that case, we only keep the
