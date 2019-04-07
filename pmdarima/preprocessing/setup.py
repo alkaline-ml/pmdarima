@@ -20,7 +20,8 @@ def configuration(parent_package="", top_path=None):
     config = Configuration("preprocessing", parent_package, top_path)
 
     config.add_subpackage('endog')
-    config.add_subpackage('exog')
+    config.add_subpackage('endog/tests')
+    config.add_subpackage('exog')  # builds src and adds its own tests
 
     return config
 
