@@ -21,7 +21,7 @@ ctypedef np.npy_intp INTP
 np.import_array()
 
 
-def C_fourier_terms(double[:] p, double[:] times):
+cpdef double[:, :] C_fourier_terms(double[:] p, double[:] times):
     cdef INTP i, j, k = p.shape[0], n = times.shape[0], m
     cdef float v
 

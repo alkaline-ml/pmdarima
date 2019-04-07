@@ -121,7 +121,6 @@ class Pipeline(BaseEstimator):
 
     @property
     def named_steps(self):
-        # Use Bunch object to improve autocomplete
         return dict(self.steps)
 
     @property
