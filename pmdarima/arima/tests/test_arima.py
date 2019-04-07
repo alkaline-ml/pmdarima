@@ -2,9 +2,10 @@
 
 from __future__ import absolute_import
 
-from pmdarima.arima import ARIMA, auto_arima
+from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
 from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
-from pmdarima.arima.auto import _fmt_warning_str, _post_ppc_arima
+from pmdarima.arima._auto_solvers import _fmt_warning_str
+from pmdarima.arima.auto import _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.arima.warnings import ModelFitWarning
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate
@@ -313,8 +314,10 @@ def test_oob_for_issue_29():
 def test_issue_30():
     # From the issue:
     vec = np.array([33., 44., 58., 49., 46., 98., 97.])
-    auto_arima(vec, out_of_sample_size=1, seasonal=False,
-               suppress_warnings=True)
+
+    arm = AutoARIMA(out_of_sample_size=1, seasonal=False,
+                    suppress_warnings=True)
+    arm.fit(vec)
 
     # This is a way to force it:
     ARIMA(order=(0, 1, 0), out_of_sample_size=1).fit(vec)
@@ -1014,3 +1017,17 @@ def test_add_new_obs_deprecated():
 
     with pytest.warns(DeprecationWarning):
         model.add_new_observations(test)
+
+
+def test_AutoARIMA_class():
+    train, test = wineind[:125], wineind[125:]
+    mod = AutoARIMA(maxiter=5)
+    mod.fit(train)
+
+    endog = mod.model_.arima_res_.data.endog
+    assert_array_almost_equal(train, endog)
+
+    # update
+    mod.update(test, maxiter=2)
+    new_endog = mod.model_.arima_res_.data.endog
+    assert_array_almost_equal(wineind, new_endog)

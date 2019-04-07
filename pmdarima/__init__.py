@@ -26,7 +26,7 @@ else:
     from . import __check_build
 
     # Stuff we want at top-level
-    from .arima import auto_arima, ARIMA
+    from .arima import auto_arima, ARIMA, AutoARIMA
     from .utils import acf, autocorr_plot, c, pacf, plot_acf, plot_pacf
 
     # Need these namespaces at the top so they can be used like:

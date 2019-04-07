@@ -39,6 +39,7 @@ def configuration(parent_package='', top_path=None):
     # after the above.
     config.add_subpackage('arima')
     config.add_subpackage('arima/tests')
+    config.add_subpackage('preprocessing')
 
     # do cythonization
     maybe_cythonize_extensions(top_path, config)

@@ -39,6 +39,7 @@ sections for further details.
 
     arima.ADFTest
     arima.ARIMA
+    arima.AutoARIMA
     arima.CHTest
     arima.KPSSTest
     arima.OCSBTest
@@ -102,6 +103,43 @@ Dataset loading functions
     datasets.load_lynx
     datasets.load_wineind
     datasets.load_woolyrnq
+
+
+.. _preprocessing_ref:
+
+:mod:`pmdarima.preprocessing`: Preprocessing transformers
+=========================================================
+
+The ``pmdarima.preprocessing`` submodule provides a number of transformer
+classes for pre-processing time series or exogenous arrays.
+
+**User guide:** See the :ref:`preprocessing` section for further details.
+
+.. automodule:: pmdarima.preprocessing
+    :no-members:
+    :no-inherited-members:
+
+Endogenous transformers
+-----------------------
+
+.. currentmodule:: pmdarima
+
+.. autosummary::
+    :toctree: generated/
+    :template: class.rst
+
+    preprocessing.BoxCoxEndogTransformer
+
+Exogenous transformers
+----------------------
+
+.. currentmodule:: pmdarima
+
+.. autosummary::
+    :toctree: generated/
+    :template: class.rst
+
+    preprocessing.FourierFeaturizer
 
 
 .. _utils_ref:
