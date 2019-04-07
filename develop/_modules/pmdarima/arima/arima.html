@@ -190,6 +190,7 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
+<span class="kn">from</span> <span class="nn">..base</span> <span class="k">import</span> <span class="n">BaseARIMA</span>
 <span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="k">import</span> <span class="n">DTYPE</span>  <span class="c1"># DTYPE for arrays</span>
 <span class="kn">from</span> <span class="nn">..compat.python</span> <span class="k">import</span> <span class="n">long</span>
 <span class="kn">from</span> <span class="nn">..compat</span> <span class="k">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
@@ -239,7 +240,7 @@
     <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arima</span><span class="p">,</span> <span class="s2">&quot;tmp_pkl_&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ARIMA"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA">[docs]</a><span class="k">class</span> <span class="nc">ARIMA</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA">[docs]</a><span class="k">class</span> <span class="nc">ARIMA</span><span class="p">(</span><span class="n">BaseARIMA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An ARIMA estimator.</span>
 
 <span class="sd">    An ARIMA, or autoregressive integrated moving average, is a</span>
@@ -674,7 +675,9 @@
 
 <div class="viewcode-block" id="ARIMA.predict"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generate predictions (forecasts) ``n_periods`` in the future.</span>
+        <span class="sd">&quot;&quot;&quot;Forecast future values</span>
+
+<span class="sd">        Generate predictions (forecasts) ``n_periods`` in the future.</span>
 <span class="sd">        Note that if ``exogenous`` variables were used in the model fit, they</span>
 <span class="sd">        will be expected for the predict procedure and will fail otherwise.</span>
 
@@ -740,36 +743,6 @@
             <span class="c1"># new explicit requirements for the package</span>
             <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">check_array</span><span class="p">(</span><span class="n">conf_int</span><span class="p">)</span>  <span class="c1"># duck type for pd.DataFrame</span>
         <span class="k">return</span> <span class="n">f</span></div>
-
-<div class="viewcode-block" id="ARIMA.fit_predict"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.fit_predict">[docs]</a>    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Fit an ARIMA to a vector, ``y``, of observations with an</span>
-<span class="sd">        optional matrix of ``exogenous`` variables, and then generate</span>
-<span class="sd">        predictions.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        y : array-like or iterable, shape=(n_samples,)</span>
-<span class="sd">            The time-series to which to fit the ``ARIMA`` estimator. This may</span>
-<span class="sd">            either be a Pandas ``Series`` object (statsmodels can internally</span>
-<span class="sd">            use the dates in the index), or a numpy array. This should be a</span>
-<span class="sd">            one-dimensional array of floats, and should not contain any</span>
-<span class="sd">            ``np.nan`` or ``np.inf`` values.</span>
-
-<span class="sd">        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
-<span class="sd">            An optional 2-d array of exogenous variables. If provided, these</span>
-<span class="sd">            variables are used as additional features in the regression</span>
-<span class="sd">            operation. This should not include a constant or trend. Note that</span>
-<span class="sd">            if an ``ARIMA`` is fit on exogenous features, it must be provided</span>
-<span class="sd">            exogenous features for making predictions.</span>
-
-<span class="sd">        n_periods : int, optional (default=10)</span>
-<span class="sd">            The number of periods in the future to forecast.</span>
-
-<span class="sd">        fit_args : dict or kwargs, optional (default=None)</span>
-<span class="sd">            Any keyword args to pass to the fit method.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exogenous</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;I am being pickled...&quot;&quot;&quot;</span>

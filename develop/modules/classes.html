@@ -106,6 +106,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#arima-estimator-statistical-tests">ARIMA estimator &amp; statistical tests</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.arima.ADFTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.ADFTest</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.arima.ARIMA.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.ARIMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.arima.AutoARIMA.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.AutoARIMA</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.arima.CHTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.CHTest</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.arima.KPSSTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.KPSSTest</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.arima.OCSBTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.OCSBTest</a></li>
@@ -132,6 +133,17 @@
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_lynx.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_lynx</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_wineind.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_wineind</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_woolyrnq</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#endogenous-transformers">Endogenous transformers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>.BoxCoxEndogTransformer</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#exogenous-transformers">Exogenous transformers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.preprocessing.FourierFeaturizer.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>.FourierFeaturizer</a></li>
 </ul>
 </li>
 </ul>
@@ -274,16 +286,19 @@ sections for further details.</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA" title="pmdarima.arima.ARIMA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arima.ARIMA</span></code></a>(order[,&nbsp;seasonal_order,&nbsp;…])</td>
 <td>An ARIMA estimator.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.arima.CHTest.html#pmdarima.arima.CHTest" title="pmdarima.arima.CHTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arima.CHTest</span></code></a>(m)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.arima.AutoARIMA.html#pmdarima.arima.AutoARIMA" title="pmdarima.arima.AutoARIMA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arima.AutoARIMA</span></code></a>([start_p,&nbsp;d,&nbsp;start_q,&nbsp;…])</td>
+<td>Automatically discover the optimal order for an ARIMA model.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.arima.CHTest.html#pmdarima.arima.CHTest" title="pmdarima.arima.CHTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arima.CHTest</span></code></a>(m)</td>
 <td>Conduct a CH test for seasonality.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.arima.KPSSTest.html#pmdarima.arima.KPSSTest" title="pmdarima.arima.KPSSTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arima.KPSSTest</span></code></a>([alpha,&nbsp;null,&nbsp;lshort])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.arima.KPSSTest.html#pmdarima.arima.KPSSTest" title="pmdarima.arima.KPSSTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arima.KPSSTest</span></code></a>([alpha,&nbsp;null,&nbsp;lshort])</td>
 <td>Conduct a KPSS test for stationarity.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.arima.OCSBTest.html#pmdarima.arima.OCSBTest" title="pmdarima.arima.OCSBTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arima.OCSBTest</span></code></a>(m[,&nbsp;lag_method,&nbsp;max_lag])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.arima.OCSBTest.html#pmdarima.arima.OCSBTest" title="pmdarima.arima.OCSBTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arima.OCSBTest</span></code></a>(m[,&nbsp;lag_method,&nbsp;max_lag])</td>
 <td>Perform an OCSB test of seasonality.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.arima.PPTest.html#pmdarima.arima.PPTest" title="pmdarima.arima.PPTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arima.PPTest</span></code></a>([alpha,&nbsp;lshort])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.arima.PPTest.html#pmdarima.arima.PPTest" title="pmdarima.arima.PPTest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arima.PPTest</span></code></a>([alpha,&nbsp;lshort])</td>
 <td>Conduct a PP test for stationarity.</td>
 </tr>
 </tbody>
@@ -356,6 +371,40 @@ would like to prototype a model, this is a good place to find easy-to-access dat
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq" title="pmdarima.datasets.load_woolyrnq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_woolyrnq</span></code></a>([as_series])</td>
 <td>Quarterly production of woollen yarn in Australia.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="pmdarima-preprocessing-preprocessing-transformers">
+<span id="preprocessing-ref"></span><h2><a class="reference internal" href="#module-pmdarima.preprocessing" title="pmdarima.preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code></a>: Preprocessing transformers<a class="headerlink" href="#pmdarima-preprocessing-preprocessing-transformers" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code> submodule provides a number of transformer
+classes for pre-processing time series or exogenous arrays.</p>
+<p><strong>User guide:</strong> See the <span class="xref std std-ref">preprocessing</span> section for further details.</p>
+<span class="target" id="module-pmdarima.preprocessing"></span><div class="section" id="endogenous-transformers">
+<h3>Endogenous transformers<a class="headerlink" href="#endogenous-transformers" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer" title="pmdarima.preprocessing.BoxCoxEndogTransformer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">preprocessing.BoxCoxEndogTransformer</span></code></a>([…])</td>
+<td>Apply the Box-Cox transformation to an endogenous array</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="exogenous-transformers">
+<h3>Exogenous transformers<a class="headerlink" href="#exogenous-transformers" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer" title="pmdarima.preprocessing.FourierFeaturizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">preprocessing.FourierFeaturizer</span></code></a>(m[,&nbsp;k])</td>
+<td>Fourier terms for modeling seasonality</td>
 </tr>
 </tbody>
 </table>

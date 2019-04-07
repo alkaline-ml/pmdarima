@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.arima.auto_arima &mdash; pmdarima 1.2.0.dev0 documentation</title>
+  <title>pmdarima.arima.AutoARIMA &mdash; pmdarima 1.2.0.dev0 documentation</title>
   
 
   
@@ -51,8 +51,8 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pmdarima.arima.is_constant" href="pmdarima.arima.is_constant.html" />
-    <link rel="prev" title="pmdarima.arima.PPTest" href="pmdarima.arima.PPTest.html" /> 
+    <link rel="next" title="pmdarima.arima.CHTest" href="pmdarima.arima.CHTest.html" />
+    <link rel="prev" title="pmdarima.arima.ARIMA" href="pmdarima.arima.ARIMA.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -103,11 +103,17 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pmdarima-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>: ARIMA estimator &amp; differencing tests</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-estimator-statistical-tests">ARIMA estimator &amp; statistical tests</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="../classes.html#arima-auto-parameter-selection">ARIMA auto-parameter selection</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.auto_arima</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../classes.html#arima-estimator-statistical-tests">ARIMA estimator &amp; statistical tests</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.ADFTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.ADFTest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.ARIMA.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.ARIMA</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.AutoARIMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.CHTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.CHTest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.KPSSTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.KPSSTest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.OCSBTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.OCSBTest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.PPTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.PPTest</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-auto-parameter-selection">ARIMA auto-parameter selection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../classes.html#differencing-helpers">Differencing helpers</a></li>
 </ul>
 </li>
@@ -166,13 +172,13 @@
         
           <li><a href="../classes.html">API Reference</a> &raquo;</li>
         
-      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.auto_arima</li>
+      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.AutoARIMA</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/modules/generated/pmdarima.arima.auto_arima.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/modules/generated/pmdarima.arima.AutoARIMA.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -185,11 +191,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pmdarima-arima-auto-arima">
-<h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.auto_arima<a class="headerlink" href="#pmdarima-arima-auto-arima" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pmdarima.arima.auto_arima">
-<code class="descclassname">pmdarima.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=None</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/arima/auto.py#L173"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
+  <div class="section" id="pmdarima-arima-autoarima">
+<h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.AutoARIMA<a class="headerlink" href="#pmdarima-arima-autoarima" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pmdarima.arima.AutoARIMA">
+<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">AutoARIMA</code><span class="sig-paren">(</span><em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=None</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/arima/auto.py#L39"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#AutoARIMA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically discover the optimal order for an ARIMA model.</p>
 <p>The auto-ARIMA process seeks to identify the most optimal
 parameters for an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> model, settling on a single fitted ARIMA model.
@@ -220,23 +226,7 @@ Khandakar (2008).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>y</strong> : array-like or iterable, shape=(n_samples,)</p>
-<blockquote>
-<div><p>The time-series to which to fit the <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> estimator. This may
-either be a Pandas <code class="docutils literal notranslate"><span class="pre">Series</span></code> object (statsmodels can internally
-use the dates in the index), or a numpy array. This should be a
-one-dimensional array of floats, and should not contain any
-<code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">np.inf</span></code> values.</p>
-</div></blockquote>
-<p><strong>exogenous</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
-<blockquote>
-<div><p>An optional 2-d array of exogenous variables. If provided, these
-variables are used as additional features in the regression
-operation. This should not include a constant or trend. Note that
-if an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> is fit on exogenous features, it must be provided
-exogenous features for making predictions.</p>
-</div></blockquote>
-<p><strong>start_p</strong> : int, optional (default=2)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>start_p</strong> : int, optional (default=2)</p>
 <blockquote>
 <div><p>The starting value of <code class="docutils literal notranslate"><span class="pre">p</span></code>, the order (or number of time lags)
 of the auto-regressive (“AR”) model. Must be a positive integer.</p>
@@ -466,11 +456,6 @@ results.</p>
 <div><p>If <code class="docutils literal notranslate"><span class="pre">random</span></code> is True and a “random search” is going to be performed,
 <code class="docutils literal notranslate"><span class="pre">n_iter</span></code> is the number of ARIMA models to be fit.</p>
 </div></blockquote>
-<p><strong>return_valid_fits</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>If True, will return all valid ARIMA fits in a list. If False (by
-default), will only return the best fit.</p>
-</div></blockquote>
 <p><strong>out_of_sample_size</strong> : int, optional (default=0)</p>
 <blockquote>
 <div><p>The <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> class can fit only a portion of the data if specified,
@@ -501,13 +486,8 @@ metric to use for scoring the out-of-sample data. One of (‘mse’, ‘mae’)<
 metric.</p>
 </div></blockquote>
 <p><strong>with_intercept</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to include an intercept term. Default is True.</p>
-</div></blockquote>
-<p><strong>**fit_args</strong> : dict, optional (default=None)</p>
 <blockquote class="last">
-<div><p>A dictionary of keyword arguments to pass to the <a class="reference internal" href="pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.fit" title="pmdarima.arima.ARIMA.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">ARIMA.fit()</span></code></a>
-method.</p>
+<div><p>Whether to include an intercept term. Default is True.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -523,24 +503,179 @@ method.</p>
 <cite>seasonal=True</cite>.</li>
 </ul>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r52" rules="none">
+<table class="docutils citation" frame="void" id="r43" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R52]</a></td><td><a class="reference external" href="https://wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R43]</a></td><td><a class="reference external" href="https://wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r53" rules="none">
+<table class="docutils citation" frame="void" id="r44" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R53]</a></td><td>R’s auto-arima source code: <a class="reference external" href="http://bit.ly/2gOh5z2">http://bit.ly/2gOh5z2</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R44]</a></td><td>R’s auto-arima source code: <a class="reference external" href="http://bit.ly/2gOh5z2">http://bit.ly/2gOh5z2</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r54" rules="none">
+<table class="docutils citation" frame="void" id="r45" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R54]</a></td><td>R’s auto-arima documentation: <a class="reference external" href="http://bit.ly/2wbBvUN">http://bit.ly/2wbBvUN</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R45]</a></td><td>R’s auto-arima documentation: <a class="reference external" href="http://bit.ly/2wbBvUN">http://bit.ly/2wbBvUN</a></td></tr>
 </tbody>
 </table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.arima.AutoARIMA.fit" title="pmdarima.arima.AutoARIMA.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(y[,&nbsp;exogenous])</td>
+<td>Fit the auto-arima estimator</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pmdarima.arima.AutoARIMA.fit_predict" title="pmdarima.arima.AutoARIMA.fit_predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_predict</span></code></a>(y[,&nbsp;exogenous,&nbsp;n_periods])</td>
+<td>Fit an ARIMA to a vector, <code class="docutils literal notranslate"><span class="pre">y</span></code>, of observations with an optional matrix of <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> variables, and then generate predictions.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.arima.AutoARIMA.get_params" title="pmdarima.arima.AutoARIMA.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</td>
+<td>Get parameters for this estimator.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code>([n_periods,&nbsp;exogenous,&nbsp;…])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_in_sample</span></code>([exogenous,&nbsp;start,&nbsp;end,&nbsp;…])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pmdarima.arima.AutoARIMA.set_params" title="pmdarima.arima.AutoARIMA.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</td>
+<td>Set the parameters of this estimator.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(y[,&nbsp;exogenous,&nbsp;maxiter])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pmdarima.arima.AutoARIMA.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=None</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/arima/auto.py#L45"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#AutoARIMA.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmdarima.arima.AutoARIMA.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/arima/auto.py#L101"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#AutoARIMA.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the auto-arima estimator</p>
+<p>Fit an AutoARIMA to a vector, <code class="docutils literal notranslate"><span class="pre">y</span></code>, of observations with an
+optional matrix of <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> variables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>y</strong> : array-like or iterable, shape=(n_samples,)</p>
+<blockquote>
+<div><p>The time-series to which to fit the <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> estimator. This may
+either be a Pandas <code class="docutils literal notranslate"><span class="pre">Series</span></code> object (statsmodels can internally
+use the dates in the index), or a numpy array. This should be a
+one-dimensional array of floats, and should not contain any
+<code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">np.inf</span></code> values.</p>
+</div></blockquote>
+<p><strong>exogenous</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
+<blockquote>
+<div><p>An optional 2-d array of exogenous variables. If provided, these
+variables are used as additional features in the regression
+operation. This should not include a constant or trend. Note that
+if an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> is fit on exogenous features, it must be provided
+exogenous features for making predictions.</p>
+</div></blockquote>
+<p><strong>**fit_args</strong> : dict or kwargs</p>
+<blockquote class="last">
+<div><p>Any keyword arguments to pass to the auto-arima function.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmdarima.arima.AutoARIMA.fit_predict">
+<code class="descname">fit_predict</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>n_periods=10</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/base.py#L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.fit_predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit an ARIMA to a vector, <code class="docutils literal notranslate"><span class="pre">y</span></code>, of observations with an
+optional matrix of <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> variables, and then generate
+predictions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>y</strong> : array-like or iterable, shape=(n_samples,)</p>
+<blockquote>
+<div><p>The time-series to which to fit the <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> estimator. This may
+either be a Pandas <code class="docutils literal notranslate"><span class="pre">Series</span></code> object (statsmodels can internally
+use the dates in the index), or a numpy array. This should be a
+one-dimensional array of floats, and should not contain any
+<code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">np.inf</span></code> values.</p>
+</div></blockquote>
+<p><strong>exogenous</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
+<blockquote>
+<div><p>An optional 2-d array of exogenous variables. If provided, these
+variables are used as additional features in the regression
+operation. This should not include a constant or trend. Note that
+if an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> is fit on exogenous features, it must be provided
+exogenous features for making predictions.</p>
+</div></blockquote>
+<p><strong>n_periods</strong> : int, optional (default=10)</p>
+<blockquote>
+<div><p>The number of periods in the future to forecast.</p>
+</div></blockquote>
+<p><strong>fit_args</strong> : dict or kwargs, optional (default=None)</p>
+<blockquote class="last">
+<div><p>Any keyword args to pass to the fit method.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmdarima.arima.AutoARIMA.get_params">
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/../sklearn/base.py#L168"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>deep</strong> : boolean, optional</p>
+<blockquote>
+<div><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>params</strong> : mapping of string to any</p>
+<blockquote class="last">
+<div><p>Parameter names mapped to their values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmdarima.arima.AutoARIMA.set_params">
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/../sklearn/base.py#L191"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as pipelines). The latter have parameters of the form
+<code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s possible to update each
+component of a nested object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <div class="clearer"></div></div>
@@ -553,10 +688,10 @@ method.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pmdarima.arima.is_constant.html" class="btn btn-neutral float-right" title="pmdarima.arima.is_constant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pmdarima.arima.CHTest.html" class="btn btn-neutral float-right" title="pmdarima.arima.CHTest" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pmdarima.arima.PPTest.html" class="btn btn-neutral float-left" title="pmdarima.arima.PPTest" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pmdarima.arima.ARIMA.html" class="btn btn-neutral float-left" title="pmdarima.arima.ARIMA" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

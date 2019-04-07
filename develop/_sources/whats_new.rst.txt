@@ -11,27 +11,37 @@ v0.8.1) will document the latest features.
 `v1.2.0 <http://alkaline-ml.com/pmdarima/1.2.0/>`_
 --------------------------------------------------
 
-* Added the ``OCSBTest`` of seasonality, as discussed in `#88 <https://github.com/tgsmith61591/pmdarima/issues/88>`_
+* Adds the ``OCSBTest`` of seasonality, as discussed in `#88 <https://github.com/tgsmith61591/pmdarima/issues/88>`_
 
-* Default value of ``seasonal_test`` changed from "ch" to "ocsb" in ``auto_arima``
+* Default value of ``seasonal_test`` changes from "ch" to "ocsb" in ``auto_arima``
 
-* Default value of ``test`` changed from "ch" to "ocsb" in ``nsdiffs``
+* Default value of ``test`` changes from "ch" to "ocsb" in ``nsdiffs``
 
-* Add benchmarking notebook and capabilities in ``pytest`` plugins
+* Adds benchmarking notebook and capabilities in ``pytest`` plugins
 
-* Remove the following environment variables, which are now deprecated:
+* Removes the following environment variables, which are now deprecated:
     * ``'PMDARIMA_CACHE'`` and ``'PYRAMID_ARIMA_CACHE'``
     * ``'PMDARIMA_CACHE_WARN_SIZE'`` and ``PYRAMID_ARIMA_CACHE_WARN_SIZE``
     * ``PYRAMID_MPL_DEBUG``
     * ``PYRAMID_MPL_BACKEND``
 
-* Deprecate the ``is_stationary`` method in tests of stationarity. This will be removed in
+* Deprecates the ``is_stationary`` method in tests of stationarity. This will be removed in
   v1.4.0. Use ``should_diff`` instead.
 
-* Added two new datasets: ``airpassengers`` & ``austres``
+* Adds two new datasets: ``airpassengers`` & ``austres``
 
 * When using ``out_of_sample``, the out-of-sample predictions are now stored
   under the ``oob_preds_`` attribute.
+
+* Adds a number of transformer classes including:
+    * ``BoxCoxEndogTransformer``
+    * ``FourierFeaturizer``
+
+* Adds a ``Pipeline`` class resembling that of scikit-learn's, which allows the
+  stacking of transformers together.
+
+* Adds a class wrapper for ``auto_arima``: ``AutoARIMA``. This is allows auto-ARIMA
+  to be used with pipelines.
 
 
 `v1.1.1 <http://alkaline-ml.com/pmdarima/1.1.1/>`_
@@ -44,11 +54,11 @@ v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/
   but achieving this behavior for each of statsmodels' ``ARMA``, ``ARIMA`` and ``SARIMAX`` classes proved
   nearly impossible, given the extremely complex internals of statmodels estimators.
 
-* Replace ``ARIMA.add_new_observations`` with ``ARIMA.update``. This allows the user to update the model
+* Replaces ``ARIMA.add_new_observations`` with ``ARIMA.update``. This allows the user to update the model
   with new observations by taking ``maxiter`` new steps from the existing model coefficients and allowing the MLE to
   converge to an updated set of model parameters.
 
-* Change default ``maxiter`` to None, using 50 for seasonal models and 500 for non-seasonal models (as
+* Changes default ``maxiter`` to None, using 50 for seasonal models and 500 for non-seasonal models (as
   statsmodels does). The default value used to be 50 for all models.
 
 * New behavior in ``ARIMA.fit`` allows ``start_params`` and ``maxiter`` to be passed as ``**fit_args``,
@@ -58,13 +68,13 @@ v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/
 `v1.1.0 <http://alkaline-ml.com/pmdarima/1.1.0/>`_
 --------------------------------------------------
 
-* Added ``ARIMA.plot_diagnostics`` method, as requested in `#49 <https://github.com/tgsmith61591/pmdarima/issues/49>`_
+* Adds ``ARIMA.plot_diagnostics`` method, as requested in `#49 <https://github.com/tgsmith61591/pmdarima/issues/49>`_
 
-* Added new arg to ``ARIMA`` constructor and ``auto_arima``: ``with_intercept`` (default is True).
+* Adds new arg to ``ARIMA`` constructor and ``auto_arima``: ``with_intercept`` (default is True).
 
 * New default for ``trend`` is no longer ``'c'``, it is ``None``.
 
-* Added ``to_dict`` method to ``ARIMA`` class to address `Issue #54 <https://github.com/tgsmith61591/pmdarima/issues/54>`_
+* Adds ``to_dict`` method to ``ARIMA`` class to address `Issue #54 <https://github.com/tgsmith61591/pmdarima/issues/54>`_
 
 * ARIMA serialization no longer stores statsmodels results wrappers in the cache,
   but bundles them into the pickle file. This solves `Issue #48 <https://github.com/tgsmith61591/pmdarima/issues/48>`_
@@ -76,7 +86,7 @@ v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/
 * Added versioned documentation. All releases' doc (from 0.9.0 onward) is now available
   at ``alkaline-ml.com/pmdarima/<version>``
 
-* Fix bug in ``ADFTest`` where ``OLS`` was computed with ``method="pinv"`` rather
+* Fixes bug in ``ADFTest`` where ``OLS`` was computed with ``method="pinv"`` rather
   than ``"method=qr"``. This fix means better parity with R's results. See
   `#71 <https://github.com/tgsmith61591/pmdarima/pull/71>`_ for more context.
 
@@ -89,21 +99,21 @@ v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/
 `v1.0.0 <http://alkaline-ml.com/pmdarima/1.0.0/>`_
 --------------------------------------------------
 
-* **Wheels will no longer be built for Python versions < 3.5.** You may still be able to build
+* **Wheels are no longer built for Python versions < 3.5.** You may still be able to build
   from source, but support for 2.x python versions will diminish in future versions.
 
-* Migrate namespace from 'pyramid-arima' to 'pmdarima'. This is due to the fact that
+* Migrates namespace from 'pyramid-arima' to 'pmdarima'. This is due to the fact that
   a growing web-framework (also named Pyramid) is causing namespace collisions when
   both packages are installed on a machine. See `Issue #34 <https://github.com/tgsmith61591/pmdarima/issues/34>`_
   for more detail.
 
-* Remove redundant Travis tests
+* Removes redundant Travis tests
 
-* Automate documentation build on Circle CI
+* Automates documentation build on Circle CI
 
-* Move lots of the build/test functionality into the ``Makefile`` for ease.
+* Moves lots of the build/test functionality into the ``Makefile`` for ease.
 
-* Warn for impending deprecation of various environment variable name changes. The following
+* Warns for impending deprecation of various environment variable name changes. The following
   will be completely switched over in version 1.2.0:
 
   - ``'PYRAMID_MPL_DEBUG'`` will become ``'PMDARIMA_MPL_DEBUG'``
@@ -114,7 +124,7 @@ v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/
 `v0.9.0 <http://alkaline-ml.com/pmdarima/0.9.0/>`_
 --------------------------------------------------
 
-* Explicitly catch case in ``auto_arima`` where a value of ``m`` that is too large may over-estimate
+* Explicitly catches case in ``auto_arima`` where a value of ``m`` that is too large may over-estimate
   ``D``, causing the time series to be differenced down to an empty array. This is now handled by
   raising a separate error for this case that better explains what happened.
 
@@ -123,21 +133,21 @@ v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/
   reinstated and immediately fail due to an OSError since the cached state no longer existed. This
   means that a user must be very intentional about clearing out the pyramid cache over time.
 
-* Added pyramid cache check on initial import to warn user if the cache size has grown too large.
+* Adds pyramid cache check on initial import to warn user if the cache size has grown too large.
 
 * If ``d`` or ``D`` are explicitly defined for ``auto_arima`` (rather than ``None``), do not
   raise an error if they exceed ``max_d`` or ``max_D``, respectively.
 
-* Added Circle CI for validating PyPy builds (rather than CPython)
+* Adds Circle CI for validating PyPy builds (rather than CPython)
 
-* Deploy python wheel for version 3.6 on Linux and Windows
+* Deploys python wheel for version 3.6 on Linux and Windows
 
-* Include warning for upcoming package name change (``pmdarima``).
+* Includes warning for upcoming package name change (``pmdarima``).
 
 v0.8.1
 ------
 
-* ``ARIMA`` instance attributes
+* New ``ARIMA`` instance attributes
 
   - The ``pkg_version_`` attribute (assigned on model ``fit``) is new as of version 0.8.0.
     On unpickling, if the current Pyramid version does not match the version under which it
@@ -148,7 +158,7 @@ v0.8.1
   - Specifies the location of the ARIMA result pickles (see :ref:`serializing`)
   - Specifies the ARIMA result pickle name pattern
 
-* Fix bug (`Issue #30 <https://github.com/tgsmith61591/pmdarima/issues/30>`_) in ``ARIMA``
+* Fixes bug (`Issue #30 <https://github.com/tgsmith61591/pmdarima/issues/30>`_) in ``ARIMA``
   where using CV with differencing and no seasonality caused a dim mismatch in the model's
   exog array and its endog array
 
@@ -160,7 +170,7 @@ v0.8.1
     - ``plot_pacf``
     - ``autocorr_plot``
 
-* Updated documentation with significantly more examples and API references.
+* Updates documentation with significantly more examples and API references.
 
 
 v0.7.0
@@ -174,12 +184,12 @@ v0.7.0
     ARIMA models will be fit on :math:`n - OOSS` samples, scored on the last OOSS samples,
     and the held-out samples are then added to the model.
 
-* ``add_new_samples`` method added to :class:`pmdarima.arima.ARIMA`
+* Adds ``add_new_samples`` method to :class:`pmdarima.arima.ARIMA`
 
   - This method adds new samples to the model, effectively refreshing the point from
     which it creates new forecasts without impacting the model parameters.
 
-* Add confidence intervals on ``predict`` in :class:`pmdarima.arima.ARIMA`
+* Adds confidence intervals on ``predict`` in :class:`pmdarima.arima.ARIMA`
 
   - When ``return_conf_int`` is true, the confidence intervals will now be returned
     with the forecasts.
@@ -189,5 +199,5 @@ v0.6.5
 
 * :class:`pmdarima.arima.CHTest` of seasonality
 
-  - No longer compute the :math:`U` or :math:`V` matrix in the SVD computation in the
+  - No longer computes the :math:`U` or :math:`V` matrix in the SVD computation in the
     Canova-Hansen test. This makes the test *much* faster.

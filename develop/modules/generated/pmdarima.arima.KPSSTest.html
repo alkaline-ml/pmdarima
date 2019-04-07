@@ -106,6 +106,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#arima-estimator-statistical-tests">ARIMA estimator &amp; statistical tests</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.ADFTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.ADFTest</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.ARIMA.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.ARIMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.AutoARIMA.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.AutoARIMA</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.CHTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.CHTest</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.KPSSTest</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.OCSBTest.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.OCSBTest</a></li>
@@ -117,6 +118,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy univariate timeseries datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a></li>
 </ul>
 </li>
@@ -193,7 +195,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.KPSSTest<a class="headerlink" href="#pmdarima-arima-kpsstest" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.arima.KPSSTest">
-<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">KPSSTest</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>null='level'</em>, <em>lshort=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/b7e98b5/pmdarima/arima/stationarity.py#L111"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#KPSSTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">KPSSTest</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>null='level'</em>, <em>lshort=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/arima/stationarity.py#L111"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#KPSSTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conduct a KPSS test for stationarity.</p>
 <p>In econometrics, Kwiatkowski–Phillips–Schmidt–Shin (KPSS) tests are used
 for testing a null hypothesis that an observable time series is stationary
@@ -226,10 +228,10 @@ If <code class="docutils literal notranslate"><span class="pre">null</span></cod
 <a class="reference internal" href="pmdarima.arima.ndiffs.html#pmdarima.arima.ndiffs" title="pmdarima.arima.ndiffs"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.ndiffs()</span></code></a> function, which computes the
 differencing term, <code class="docutils literal notranslate"><span class="pre">d</span></code>.</p>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r40" rules="none">
+<table class="docutils citation" frame="void" id="r48" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R40]</a></td><td>R’s tseries KPSS test source code: <a class="reference external" href="http://bit.ly/2eJP1IU">http://bit.ly/2eJP1IU</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R48]</a></td><td>R’s tseries KPSS test source code: <a class="reference external" href="http://bit.ly/2eJP1IU">http://bit.ly/2eJP1IU</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
@@ -255,13 +257,13 @@ differencing term, <code class="docutils literal notranslate"><span class="pre">
 </table>
 <dl class="method">
 <dt id="pmdarima.arima.KPSSTest.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>null='level'</em>, <em>lshort=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/b7e98b5/pmdarima/arima/stationarity.py#L145"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#KPSSTest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>null='level'</em>, <em>lshort=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/arima/stationarity.py#L145"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#KPSSTest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.arima.KPSSTest.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/b7e98b5/pmdarima/../sklearn/base.py#L168"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/../sklearn/base.py#L168"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -286,7 +288,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.KPSSTest.is_stationary">
-<code class="descname">is_stationary</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/b7e98b5/pmdarima/decorators.py#L90"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest.is_stationary" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_stationary</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/decorators.py#L90"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest.is_stationary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test whether the time series is stationary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -315,7 +317,7 @@ More directly, whether to difference the time series.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.KPSSTest.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/b7e98b5/pmdarima/../sklearn/base.py#L191"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/../sklearn/base.py#L191"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -333,7 +335,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.KPSSTest.should_diff">
-<code class="descname">should_diff</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/b7e98b5/pmdarima/arima/stationarity.py#L151"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#KPSSTest.should_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest.should_diff" title="Permalink to this definition">¶</a></dt>
+<code class="descname">should_diff</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/arima/stationarity.py#L151"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#KPSSTest.should_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.KPSSTest.should_diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test whether the time series is stationary or needs differencing.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
