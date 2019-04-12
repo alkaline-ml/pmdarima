@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from .base import *
 from .endog import *
 from .exog import *
 

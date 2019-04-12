@@ -203,14 +203,15 @@ class ARIMA(BaseARIMA):
     trend : str or None, optional (default=None)
         The trend parameter. If ``with_intercept`` is True, ``trend`` will be
         used. If ``with_intercept`` is False, the trend will be set to a no-
-        intercept value.
+        intercept value. If None and ``with_intercept``, 'c' will be used as
+        a default.
 
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
 
     Attributes
     ----------
-    model_res_ : ModelResultsWrapper
+    arima_res_ : ModelResultsWrapper
         The model results, per statsmodels
 
     oob_ : float
