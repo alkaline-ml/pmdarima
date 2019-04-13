@@ -113,7 +113,7 @@ def test_pipeline_behavior():
     preds = pipeline.predict(5)
     assert preds.shape[0] == 5
 
-    assert pipeline._final_estimator.model_.arima_res_.fit_with_exog_
+    assert pipeline._final_estimator.model_.fit_with_exog_
 
     # Assert that when the n_periods kwarg is set manually and incorrectly for
     # the fourier transformer, we get a ValueError
@@ -127,3 +127,6 @@ def test_pipeline_behavior():
 
     # Assert that we can update the model
     pipeline.update(test, maxiter=5)
+
+    # And that the fourier transformer was updated properly...
+    assert pipeline.steps_[0][1].n_ == wineind.shape[0]
