@@ -113,6 +113,8 @@ def test_pipeline_behavior():
     preds = pipeline.predict(5)
     assert preds.shape[0] == 5
 
+    assert pipeline._final_estimator.model_.arima_res_.fit_with_exog_
+
     # Assert that when the n_periods kwarg is set manually and incorrectly for
     # the fourier transformer, we get a ValueError
     kwargs = {
