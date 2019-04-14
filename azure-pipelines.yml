@@ -1,0 +1,31 @@
+jobs:
+- job: Windows 32
+  pool:
+    vmImage: 'vs2017-win2016'
+  strategy:
+    maxParallel: 3
+    matrix:
+      Python35-x86:
+        python.version: '3.5'
+        architecture: 'x86'
+      Python35-x64:
+        python.version: '3.5'
+        architecture: 'x64'
+      Python36-x86:
+        python.version: '3.6'
+        architecture: 'x86'
+      Python36-x64:
+        python.version: '3.6'
+        architecture: 'x64'
+      Python37-x86:
+        python.version: '3.7'
+        architecture: 'x86'
+      Python37-x64:
+        python.version: '3.7'
+        architecture: 'x64'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: '$(architecture)'
