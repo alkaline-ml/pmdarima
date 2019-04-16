@@ -1,3 +1,23 @@
+trigger:
+  # Trigger for pushes on every branch
+  branches:
+    include:
+    - '*'
+
+  # Trigger for all tags
+  tags:
+    include:
+    - '*'
+
+pr:
+  # Cancel if new commits are pushed to the same PR
+  autoCancel: true
+
+  # Trigger for PRs on all branches
+  branches:
+    include:
+    - '*'
+
 jobs:
 - job: 'Windows'
 
