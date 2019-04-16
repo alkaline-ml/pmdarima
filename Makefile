@@ -11,6 +11,8 @@ clean:
 	$(PYTHON) setup.py clean
 	rm -rf dist
 	rm -rf build
+	rm -rf .pytest_cache
+	rm -rf pmdarima.egg-info
 
 deploy-requirements:
 	$(PYTHON) -m pip install twine readme_renderer[md]
