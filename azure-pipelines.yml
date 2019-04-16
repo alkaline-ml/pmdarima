@@ -1,25 +1,32 @@
 jobs:
-- job: Windows 32
+- job: 'Windows'
+
   pool:
     vmImage: 'vs2017-win2016'
+
   strategy:
     maxParallel: 3
     matrix:
       Python35-x86:
         python.version: '3.5'
         architecture: 'x86'
+
       Python35-x64:
         python.version: '3.5'
         architecture: 'x64'
+
       Python36-x86:
         python.version: '3.6'
         architecture: 'x86'
+
       Python36-x64:
         python.version: '3.6'
         architecture: 'x64'
+
       Python37-x86:
         python.version: '3.7'
         architecture: 'x86'
+
       Python37-x64:
         python.version: '3.7'
         architecture: 'x64'
@@ -29,3 +36,26 @@ jobs:
     inputs:
       versionSpec: '$(python.version)'
       architecture: '$(architecture)'
+
+    - script: python -m pip install --upgrade pip
+      displayName: 'Updating pip'
+
+    - script: |
+        pip install -r requirements.txt
+        pip install -r build_tools/azure/requirements.txt
+      displayName: 'Installing requirements'
+
+    - script: python setup.py bdist_wheel
+      displayName: 'Building artifact'
+
+    - powershell: |
+        if (python -c "from twine.commands.check import check; check(['dist/*'])" | Select-String -Pattern "warning") {
+          echo "README will not render properly on PyPI"
+          exit 1
+        } else {
+          echo "README rendered appropriately"
+        }
+      displayName: 'Checking README compatibility'
+
+    - script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
+      displayName: 'Running unit tests'
