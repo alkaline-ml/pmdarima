@@ -88,9 +88,7 @@ jobs:
     displayName: 'Running unit tests'
 
   - bash: echo $TWINE_USERNAME
-    displayName: 'Test variables with environment set'
+    displayName: 'Testing for tagged commit'
+    condition: contains(variables['Build.SourceBranch'], 'tags')
     env:
       TWINE_USERNAME: $(twineUsername)
-
-  - bash: echo $TWINEUSERNAME
-    displayName: 'Test variables without environment set'
