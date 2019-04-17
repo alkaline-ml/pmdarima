@@ -4,6 +4,7 @@
 [![Linux build status](https://travis-ci.org/tgsmith61591/pmdarima.svg?branch=master)](https://travis-ci.org/tgsmith61591/pmdarima)
 [![Build status](https://ci.appveyor.com/api/projects/status/0ntddrmtrdopt5rf/branch/master?svg=true)](https://ci.appveyor.com/project/tgsmith61591/pmdarima/branch/master)
 [![CircleCI](https://circleci.com/gh/tgsmith61591/pmdarima.svg?style=svg)](https://circleci.com/gh/tgsmith61591/pmdarima)
+[![Build Status](https://dev.azure.com/tgsmith61591gh/pmdarima/_apis/build/status/tgsmith61591.pmdarima?branchName=master)](https://dev.azure.com/tgsmith61591gh/pmdarima/_build/latest?definitionId=1&branchName=master)
 [![codecov](https://codecov.io/gh/tgsmith61591/pmdarima/branch/master/graph/badge.svg)](https://codecov.io/gh/tgsmith61591/pmdarima)
 ![Supported versions](https://img.shields.io/badge/python-3.5+-blue.svg)
 
