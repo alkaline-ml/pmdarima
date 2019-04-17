@@ -19,7 +19,8 @@ pr:
     - '*'
 
 variables:
-  TWINE_USERNAME: 'tgsmith61591.gh'
+  - group: deploy-vars
+
 
 jobs:
 - job: 'Windows'
@@ -94,3 +95,5 @@ jobs:
 
   - bash: echo $TWINE_USERNAME
     displayName: 'Test variables'
+    env:
+      TWINE_USERNAME: $(twineUsername)
