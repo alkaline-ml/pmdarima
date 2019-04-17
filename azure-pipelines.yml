@@ -80,5 +80,11 @@ jobs:
   - script: pip install --pre --no-index --find-links dist/ pmdarima
     displayName: 'Installing generated artifact'
 
-  - script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
+  - script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip --junitxml=junit/test-results.xml
     displayName: 'Running unit tests'
+
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFiles: '**/test-*.xml'
+      testRunTitle: 'Publish test results for Python $(python.version)'
