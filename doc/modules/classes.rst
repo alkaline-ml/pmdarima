@@ -137,8 +137,6 @@ Pipelines
 The ``pmdarima.preprocessing`` submodule provides a number of transformer
 classes for pre-processing time series or exogenous arrays.
 
-**User guide:** See the :ref:`preprocessing` section for further details.
-
 .. automodule:: pmdarima.preprocessing
     :no-members:
     :no-inherited-members:

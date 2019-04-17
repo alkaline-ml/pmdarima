@@ -17,16 +17,16 @@ class Pipeline(BaseEstimator):
 
     The pipeline object chains together an arbitrary number of named, ordered
     transformations, passing the output from one as the input to the next. As
-    the last stage, an ``ARIMA`` or ``AutoARIMA`` object will be fit.
+    the last stage, an ``ARIMA`` or ``AutoARIMA`` object will be fit. This
+    pipeline takes after the scikit-learn ``sklearn.Pipeline`` object, which
+    behaves similarly but does not share the same time-series interface
+    that ``pmdarima`` follows.
 
     The purpose of the pipeline is to assemble several steps that can be
     cross-validated together while setting different parameters.
     For this, it enables setting parameters of the various steps using their
-    names and the parameter name separated by a '__', as in the example below.
-
-    This pipeline takes after the scikit-learn ``sklearn.Pipeline`` object,
-    which behaves similarly but does not share the same time-series interface
-    that ``pmdarima`` follows.
+    names and the parameter name separated by a `'__'`, as in the example
+    below.
 
     Parameters
     ----------
@@ -44,12 +44,23 @@ class Pipeline(BaseEstimator):
     >>>
     >>> wineind = load_wineind()
     >>> pipeline = Pipeline([
-    ...     ("fourier", FourierFeaturizer(m=12)),
+    ...     ("fourier", FourierFeaturizer(m=12, k=3)),
     ...     ("arima", AutoARIMA(seasonal=False, stepwise=True,
     ...                         suppress_warnings=True,
     ...                         error_action='ignore'))
     ... ])
     >>> pipeline.fit(wineind)
+    Pipeline(steps=[('fourier', FourierFeaturizer(k=3, m=12)),
+                    ('arima', AutoARIMA(D=None, alpha=0.05, callback=None,
+                                        d=None, disp=0, error_action='ignore',
+                                        information_criterion='aic', m=1,
+                                        max_D=1, max_P=2, max_Q=2, max_d=2,
+                                        max_order=10, max_p=5, max_q=5,
+                                        maxiter=None, method=None,
+                                        n_fits=10, n...s_warnings=True,
+                                        test='kpss', trace=False,
+                                        transparams=True, trend=None,
+                                        with_intercept=True))])
     """
     def __init__(self, steps):
         self.steps = steps
@@ -121,6 +132,7 @@ class Pipeline(BaseEstimator):
 
     @property
     def named_steps(self):
+        """Map the steps to a dictionary"""
         return dict(self.steps)
 
     @property
@@ -183,11 +195,13 @@ class Pipeline(BaseEstimator):
 
     def predict(self, n_periods=10, exogenous=None,
                 return_conf_int=False, alpha=0.05, **kwargs):
-        """Forecast future values
+        """Forecast future (transformed) values
 
         Generate predictions (forecasts) ``n_periods`` in the future.
         Note that if ``exogenous`` variables were used in the model fit, they
         will be expected for the predict procedure and will fail otherwise.
+        Forecasts may be transformed by the endogenous steps along the way and
+        might be on a different scale than raw training/test data.
 
         Parameters
         ----------
@@ -220,7 +234,7 @@ class Pipeline(BaseEstimator):
         Returns
         -------
         forecasts : array-like, shape=(n_periods,)
-            The array of fore-casted values.
+            The array of transformed, forecasted values.
 
         conf_int : array-like, shape=(n_periods, 2), optional
             The confidence intervals for the forecasts. Only returned if
