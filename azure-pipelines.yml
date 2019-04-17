@@ -87,9 +87,10 @@ jobs:
   - script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
     displayName: 'Running unit tests'
 
-  - script: |
-      echo $TWINE_USERNAME
-      echo $TWINEUSERNAME
-    displayName: 'Test variables'
+  - bash: echo $TWINE_USERNAME
+    displayName: 'Test variables with environment set'
     env:
       TWINE_USERNAME: $(twineUsername)
+
+  - bash: echo $TWINEUSERNAME
+    displayName: 'Test variables without environment set'
