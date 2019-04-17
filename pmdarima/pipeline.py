@@ -215,7 +215,7 @@ class Pipeline(BaseEstimator):
             if you have a FourierFeaturizer whose stage is named
             "fourier", your transform kwargs could resemble::
 
-                {"fourier__h": 50}
+                {"fourier__n_periods": 50}
 
         Returns
         -------
