@@ -18,6 +18,9 @@ pr:
     include:
     - '*'
 
+variables:
+  TWINE_USERNAME: 'tgsmith61591.gh'
+
 jobs:
 - job: 'Windows'
 
@@ -88,3 +91,6 @@ jobs:
     inputs:
       testResultsFiles: '**/test-*.xml'
       testRunTitle: 'Publish test results for Python $(python.version)'
+
+  - bash: echo $TWINE_USERNAME
+    displayName: 'Test variables'
