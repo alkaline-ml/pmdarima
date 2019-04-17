@@ -93,7 +93,9 @@ jobs:
       testResultsFiles: '**/test-*.xml'
       testRunTitle: 'Publish test results for Python $(python.version)'
 
-  - bash: echo $TWINE_USERNAME
+  - script: |
+      echo $TWINE_USERNAME
+      echo $TWINEUSERNAME
     displayName: 'Test variables'
     env:
       TWINE_USERNAME: $(twineUsername)
