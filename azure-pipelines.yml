@@ -72,8 +72,8 @@ jobs:
   - script: python setup.py bdist_wheel
     displayName: 'Building artifact'
 
-  - bash: |
-      if (python -c "from twine.commands.check import check; check(['dist/*'])" | grep "warning") {
+  - powershell: |
+      if (python -c "from twine.commands.check import check; check(['dist/*'])" | Select-String -Pattern "warning") {
         echo "README will not render properly on PyPI"
         exit 1
       } else {
@@ -92,7 +92,7 @@ jobs:
     # Only deploy if this is a tagged commit on master
     condition: |
       and(
-        eq(variables['Build.SourceBranchName'], 'master')
+        eq(variables['Build.SourceBranchName'], 'master'),
         contains(variables['Build.SourceBranch'], 'tags')
       )
     env:
