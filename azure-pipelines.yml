@@ -64,8 +64,18 @@ jobs:
   - script: python -m pip install --upgrade pip
     displayName: 'Updating pip'
 
-  - script: python -c "import struct; print(struct.calcsize('P') * 8)"
+  - script: |
+    python -c <<EOP
+    import struct
+
+    interpreted_arch = struct.calcsize('P') * 8
+    defined_arch = 32 if $ARCHITECTURE = 'x86' else 64
+
+    assert interpreted_arch == defined_arch
+    EOP
     displayName: 'Confirming System Architecture'
+    env:
+      ARCHITECTURE: $(architecture)
 
   - script: |
       pip install -r requirements.txt
