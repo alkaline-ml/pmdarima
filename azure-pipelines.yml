@@ -60,6 +60,7 @@ jobs:
     inputs:
       versionSpec: '$(python.version)'
       architecture: '$(architecture)'
+    displayName: 'Building for $(python.version) on $(architecture)'
 
   - script: python -m pip install --upgrade pip
     displayName: 'Updating pip'
