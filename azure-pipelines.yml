@@ -64,6 +64,18 @@ jobs:
   - script: python -m pip install --upgrade pip
     displayName: 'Updating pip'
 
+  - bash: |
+      TEST_ARCH=$(python -c "import struct; print(struct.calcsize('P') * 8)")
+      SYS_ARCH=64 && [[ $ARCHITECTURE -eq 64 ]] && SYS_ARCH=32
+      if [ $TEST_ARCH -eq $SYS_ARCH ]; then
+          echo "Correct architecture"
+      else
+          echo "Architecture check failed"
+          exit 1
+      fi
+    env:
+      ARCHITECTURE: $(architecture)
+
   - script: |
       pip install -r requirements.txt
       pip install -r build_tools/azure/requirements.txt
