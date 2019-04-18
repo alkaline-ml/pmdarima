@@ -36,6 +36,26 @@ designed to introduce you to the package style and layout.
    :hidden:
 
    /auto_examples/example_simple_fit
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` can fit &quot;pipeline&quot; models. That is, a pipeline constitutes a l...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_example_pipeline_thumb.png
+
+        :ref:`sphx_glr_auto_examples_example_pipeline.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/example_pipeline
 .. raw:: html
 
     <div style='clear:both'></div>

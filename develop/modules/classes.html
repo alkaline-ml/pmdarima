@@ -137,6 +137,13 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pipelines">Pipelines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.pipeline.Pipeline.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>.Pipeline</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#endogenous-transformers">Endogenous transformers</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>.BoxCoxEndogTransformer</a></li>
@@ -376,11 +383,29 @@ would like to prototype a model, this is a good place to find easy-to-access dat
 </table>
 </div>
 </div>
+<div class="section" id="pmdarima-pipeline-pipelining-transformers-arimas">
+<span id="pipeline-ref"></span><h2><a class="reference internal" href="#module-pmdarima.pipeline" title="pmdarima.pipeline"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code></a>: Pipelining transformers &amp; ARIMAs<a class="headerlink" href="#pmdarima-pipeline-pipelining-transformers-arimas" title="Permalink to this headline">¶</a></h2>
+<p>With the <code class="docutils literal notranslate"><span class="pre">pipeline.Pipeline</span></code> class, we can pipeline transformers together and
+into a final ARIMA stage.</p>
+<span class="target" id="module-pmdarima.pipeline"></span><div class="section" id="pipelines">
+<h3>Pipelines<a class="headerlink" href="#pipelines" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline" title="pmdarima.pipeline.Pipeline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pipeline.Pipeline</span></code></a>(steps)</td>
+<td>A pipeline of transformers with an optional final estimator stage</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="section" id="pmdarima-preprocessing-preprocessing-transformers">
 <span id="preprocessing-ref"></span><h2><a class="reference internal" href="#module-pmdarima.preprocessing" title="pmdarima.preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code></a>: Preprocessing transformers<a class="headerlink" href="#pmdarima-preprocessing-preprocessing-transformers" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code> submodule provides a number of transformer
 classes for pre-processing time series or exogenous arrays.</p>
-<p><strong>User guide:</strong> See the <span class="xref std std-ref">preprocessing</span> section for further details.</p>
 <span class="target" id="module-pmdarima.preprocessing"></span><div class="section" id="endogenous-transformers">
 <h3>Endogenous transformers<a class="headerlink" href="#endogenous-transformers" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">

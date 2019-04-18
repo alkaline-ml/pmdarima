@@ -336,3 +336,34 @@ and the procedure is repeated until it cannot find a model close to the current 
 with a lower information criterion.
 
 When in doubt, ``stepwise=True`` is encouraged.
+
+
+Pipelining
+----------
+
+Sometimes, your data will require several transformations before it's ready to
+be modeled-on. Similar to the `scikit-learn Pipeline <https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html>`_,
+we provide our own modeling pipeline (see :ref:`pipeline_ref`). This will allow
+you to stack an arbitrary number of transformations together before being pushed
+into an ``ARIMA`` or ``AutoARIMA`` estimator:
+
+.. code-block:: python
+
+    from pmdarima.pipeline import Pipeline
+    from pmdarima.preprocessing import BoxCoxEndogTransformer
+    import pmdarima as pm
+
+    wineind = pm.datasets.load_wineind()
+    train, test = wineind[:150], wineind[150:]
+
+    pipeline = Pipeline([
+        ("boxcox", BoxCoxEndogTransformer()),
+        ("model", pm.AutoARIMA(seasonal=True, suppress_warnings=True))
+    ])
+
+    pipeline.fit(train)
+    pipeline.predict(5)
+    # array([13.47145799, 13.5052802 , 13.49207821, 13.48365086, 13.48874564])
+
+Note that in this case, what you'd get back are the boxcox-transformed predictions.
+A more extensive example of pipelines can be found in :ref:`general_examples`

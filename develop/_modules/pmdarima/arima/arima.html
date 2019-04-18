@@ -175,7 +175,6 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">BaseEstimator</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">mean_squared_error</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="k">import</span> <span class="n">if_delegate_has_method</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_is_fitted</span><span class="p">,</span> \
@@ -302,7 +301,7 @@
 <span class="sd">        by ``ARMA._fit_start_params``.</span>
 
 <span class="sd">    transparams : bool, optional (default=True)</span>
-<span class="sd">        Whehter or not to transform the parameters to ensure stationarity.</span>
+<span class="sd">        Whether or not to transform the parameters to ensure stationarity.</span>
 <span class="sd">        Uses the transformation suggested in Jones (1980).  If False,</span>
 <span class="sd">        no checking for stationarity or invertibility is done.</span>
 
@@ -371,14 +370,15 @@
 <span class="sd">    trend : str or None, optional (default=None)</span>
 <span class="sd">        The trend parameter. If ``with_intercept`` is True, ``trend`` will be</span>
 <span class="sd">        used. If ``with_intercept`` is False, the trend will be set to a no-</span>
-<span class="sd">        intercept value.</span>
+<span class="sd">        intercept value. If None and ``with_intercept``, &#39;c&#39; will be used as</span>
+<span class="sd">        a default.</span>
 
 <span class="sd">    with_intercept : bool, optional (default=True)</span>
 <span class="sd">        Whether to include an intercept term. Default is True.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    model_res_ : ModelResultsWrapper</span>
+<span class="sd">    arima_res_ : ModelResultsWrapper</span>
 <span class="sd">        The model results, per statsmodels</span>
 
 <span class="sd">    oob_ : float</span>
@@ -504,8 +504,8 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">_maxiter</span> <span class="o">=</span> <span class="n">sm_compat</span><span class="o">.</span><span class="n">DEFAULT_NON_SEASONAL_MAXITER</span>  <span class="c1"># 500</span>
 
-            <span class="c1"># If maxiter is provided in the fit_args by a savvy user, we should</span>
-            <span class="c1"># default to their preference</span>
+            <span class="c1"># If maxiter is provided in the fit_args by a savvy user or the</span>
+            <span class="c1"># update method, we should default to their preference</span>
             <span class="n">_maxiter</span> <span class="o">=</span> <span class="n">fit_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;maxiter&quot;</span><span class="p">,</span> <span class="n">_maxiter</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">arima</span><span class="p">,</span> <span class="n">arima</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span>
@@ -525,6 +525,13 @@
 
         <span class="c1"># Set df_model attribute for SARIMAXResults object</span>
         <span class="n">sm_compat</span><span class="o">.</span><span class="n">bind_df_model</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="p">)</span>
+
+        <span class="c1"># Non-seasonal ARIMA models may not capture sigma2. Statsmodels&#39; code</span>
+        <span class="c1"># is buggy and difficult to follow, so this checks whether it needs to</span>
+        <span class="c1"># be set or not...</span>
+        <span class="c1"># if (not self._is_seasonal()) and np.isnan(self.arima_res_.sigma2):</span>
+        <span class="c1">#     self.arima_res_.sigma2 = self.arima_res_.model.loglike(</span>
+        <span class="c1">#         self.params(), True)</span>
 
         <span class="c1"># if the model is fit with an exogenous array, it must</span>
         <span class="c1"># be predicted with one as well.</span>
@@ -718,7 +725,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Exogenous array dims (n_rows) != n_periods&#39;</span><span class="p">)</span>
 
         <span class="c1"># ARIMA/ARMA predict differently...</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_seasonal</span><span class="p">():</span>
             <span class="c1"># use the results wrapper to predict so it injects its own params</span>
             <span class="c1"># (also if I was 0, ARMA will not have a forecast method natively)</span>
             <span class="n">f</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">conf_int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span>
@@ -741,7 +748,7 @@
             <span class="c1"># The confidence intervals may be a Pandas frame if it comes from</span>
             <span class="c1"># SARIMAX &amp; we want Numpy. We will to duck type it so we don&#39;t add</span>
             <span class="c1"># new explicit requirements for the package</span>
-            <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">check_array</span><span class="p">(</span><span class="n">conf_int</span><span class="p">)</span>  <span class="c1"># duck type for pd.DataFrame</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">check_array</span><span class="p">(</span><span class="n">conf_int</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">f</span></div>
 
     <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -915,7 +922,7 @@
         <span class="c1"># Now create the new exogenous.</span>
         <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Concatenate</span>
-            <span class="n">exog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">model_res</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">exog</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">))</span>
+            <span class="n">exog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">model_res</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">exog</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Just so it&#39;s in the namespace</span>
             <span class="n">exog</span> <span class="o">=</span> <span class="kc">None</span>

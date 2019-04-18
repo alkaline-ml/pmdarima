@@ -121,6 +121,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#parallel-vs-stepwise">6.3. Parallel vs. stepwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pipelining">6.4. Pipelining</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="modules/datasets.html">7. Toy time-series datasets</a></li>
@@ -478,6 +479,33 @@ is selected. This is the “current best” model.</p>
 and the procedure is repeated until it cannot find a model close to the current best model
 with a lower information criterion.</p>
 <p>When in doubt, <code class="docutils literal notranslate"><span class="pre">stepwise=True</span></code> is encouraged.</p>
+</div>
+<div class="section" id="pipelining">
+<h2>6.4. Pipelining<a class="headerlink" href="#pipelining" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes, your data will require several transformations before it’s ready to
+be modeled-on. Similar to the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html">scikit-learn Pipeline</a>,
+we provide our own modeling pipeline (see <a class="reference internal" href="modules/classes.html#pipeline-ref"><span class="std std-ref">pmdarima.pipeline: Pipelining transformers &amp; ARIMAs</span></a>). This will allow
+you to stack an arbitrary number of transformations together before being pushed
+into an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> or <code class="docutils literal notranslate"><span class="pre">AutoARIMA</span></code> estimator:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">pmdarima.preprocessing</span> <span class="kn">import</span> <span class="n">BoxCoxEndogTransformer</span>
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
+
+<span class="n">wineind</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span><span class="p">()</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">wineind</span><span class="p">[:</span><span class="mi">150</span><span class="p">],</span> <span class="n">wineind</span><span class="p">[</span><span class="mi">150</span><span class="p">:]</span>
+
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">&quot;boxcox&quot;</span><span class="p">,</span> <span class="n">BoxCoxEndogTransformer</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">pm</span><span class="o">.</span><span class="n">AutoARIMA</span><span class="p">(</span><span class="n">seasonal</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<span class="p">])</span>
+
+<span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="c1"># array([13.47145799, 13.5052802 , 13.49207821, 13.48365086, 13.48874564])</span>
+</pre></div>
+</div>
+<p>Note that in this case, what you’d get back are the boxcox-transformed predictions.
+A more extensive example of pipelines can be found in <a class="reference internal" href="auto_examples/index.html#general-examples"><span class="std std-ref">Examples</span></a></p>
 </div>
 </div>
 

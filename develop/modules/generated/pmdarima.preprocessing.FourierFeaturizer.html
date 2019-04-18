@@ -104,6 +104,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy univariate timeseries datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../classes.html#endogenous-transformers">Endogenous transformers</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#exogenous-transformers">Exogenous transformers</a><ul class="current">
@@ -188,7 +189,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.preprocessing" title="pmdarima.preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code></a>.FourierFeaturizer<a class="headerlink" href="#pmdarima-preprocessing-fourierfeaturizer" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.preprocessing.FourierFeaturizer">
-<em class="property">class </em><code class="descclassname">pmdarima.preprocessing.</code><code class="descname">FourierFeaturizer</code><span class="sig-paren">(</span><em>m</em>, <em>k=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/preprocessing/exog/fourier.py#L27"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.preprocessing.</code><code class="descname">FourierFeaturizer</code><span class="sig-paren">(</span><em>m</em>, <em>k=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/c9df7b8/pmdarima/preprocessing/exog/fourier.py#L27"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fourier terms for modeling seasonality</p>
 <p>This transformer creates an exogenous matrix containing terms from a
 Fourier series, up to order <code class="docutils literal notranslate"><span class="pre">k</span></code>. It is based on <code class="docutils literal notranslate"><span class="pre">R::forecast</span> <span class="pre">code</span></code> [1].
@@ -277,13 +278,13 @@ seems to take a very long time to fit a model.</li>
 </table>
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>m</em>, <em>k=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/preprocessing/exog/fourier.py#L74"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>m</em>, <em>k=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/c9df7b8/pmdarima/preprocessing/exog/fourier.py#L74"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/preprocessing/exog/fourier.py#L78"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/c9df7b8/pmdarima/preprocessing/exog/fourier.py#L78"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the transformer</p>
 <p>Computes the periods of all the Fourier terms. The values of <code class="docutils literal notranslate"><span class="pre">y</span></code> are
 not actually used; only the periodicity is used when computing Fourier
@@ -311,7 +312,7 @@ array.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.fit_transform">
-<code class="descname">fit_transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**transform_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/preprocessing/base.py#L44"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.fit_transform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit_transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**transform_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/c9df7b8/pmdarima/preprocessing/base.py#L48"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit and transform the arrays</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -337,7 +338,7 @@ array.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/../sklearn/base.py#L168"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/c9df7b8/pmdarima/../sklearn/base.py#L168"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -362,7 +363,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/../sklearn/base.py#L191"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/c9df7b8/pmdarima/../sklearn/base.py#L191"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -380,7 +381,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>n_periods=0</em>, <em>**_</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/preprocessing/exog/fourier.py#L120"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.transform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>n_periods=0</em>, <em>**_</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/c9df7b8/pmdarima/preprocessing/exog/fourier.py#L120"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create Fourier term features</p>
 <p>When an ARIMA is fit with an exogenous array, it must be forecasted
 with one also. Since at <code class="docutils literal notranslate"><span class="pre">predict</span></code> time in a pipeline we won’t have
@@ -422,7 +423,7 @@ returned.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.update_and_transform">
-<code class="descname">update_and_transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/46573cf/pmdarima/preprocessing/exog/fourier.py#L175"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.update_and_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.update_and_transform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update_and_transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/c9df7b8/pmdarima/preprocessing/exog/fourier.py#L175"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.update_and_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.update_and_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the params and return the transformed arrays</p>
 <p>Since no parameters really get updated in the Fourier featurizer, all
 we do is compose forecasts for <code class="docutils literal notranslate"><span class="pre">n_periods=len(y)</span></code> and then update
@@ -451,7 +452,14 @@ we do is compose forecasts for <code class="docutils literal notranslate"><span 
 
 </dd></dl>
 
-<div class="clearer"></div></div>
+<div class="section" id="examples-using-pmdarima-preprocessing-fourierfeaturizer">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing.FourierFeaturizer</span></code><a class="headerlink" href="#examples-using-pmdarima-preprocessing-fourierfeaturizer" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` can fit &quot;pipeline&quot; models. That is, a pipeline constitutes a l..."><div class="figure" id="id3">
+<img alt="../../_images/sphx_glr_example_pipeline_thumb.png" src="../../_images/sphx_glr_example_pipeline_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/example_pipeline.html#sphx-glr-auto-examples-example-pipeline-py"><span class="std std-ref">Pipelines with auto_arima</span></a></span></p>
+</div>
+</div><div class="clearer"></div></div>
+</div>
 
 
            </div>
