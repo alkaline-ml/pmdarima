@@ -65,7 +65,7 @@ jobs:
     displayName: 'Updating pip'
 
   - script: |
-    python -c <<EOP
+    python <<EOP
     import struct
 
     interpreted_arch = struct.calcsize('P') * 8
