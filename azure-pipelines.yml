@@ -75,6 +75,7 @@ jobs:
       fi
     env:
       ARCHITECTURE: $(architecture)
+    displayName: 'Confirming System Architecture'
 
   - script: |
       pip install -r requirements.txt
