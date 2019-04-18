@@ -65,19 +65,6 @@ jobs:
     displayName: 'Updating pip'
 
   - script: |
-    python <<EOP
-    import struct
-
-    interpreted_arch = struct.calcsize('P') * 8
-    defined_arch = 32 if $ARCHITECTURE = 'x86' else 64
-
-    assert interpreted_arch == defined_arch
-    EOP
-    displayName: 'Confirming System Architecture'
-    env:
-      ARCHITECTURE: $(architecture)
-
-  - script: |
       pip install -r requirements.txt
       pip install -r build_tools/azure/requirements.txt
     displayName: 'Installing requirements'
