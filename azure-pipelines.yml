@@ -88,8 +88,9 @@ jobs:
   - script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
     displayName: 'Running unit tests'
 
-  - script: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
-    displayName: 'Deploying to PyPI Test'
+    # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
+  - script: python -m twine upload --skip-existing dist/pmdarima-*
+    displayName: 'Deploying to PyPI'
     # Only deploy if this is a tagged commit on master
     condition: |
       and(
