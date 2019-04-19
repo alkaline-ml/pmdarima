@@ -7,7 +7,6 @@
 
 from __future__ import print_function, absolute_import, division
 
-from sklearn.base import BaseEstimator
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
 from sklearn.utils.validation import check_array, check_is_fitted, \
@@ -134,7 +133,7 @@ class ARIMA(BaseARIMA):
         by ``ARMA._fit_start_params``.
 
     transparams : bool, optional (default=True)
-        Whehter or not to transform the parameters to ensure stationarity.
+        Whether or not to transform the parameters to ensure stationarity.
         Uses the transformation suggested in Jones (1980).  If False,
         no checking for stationarity or invertibility is done.
 
@@ -203,14 +202,15 @@ class ARIMA(BaseARIMA):
     trend : str or None, optional (default=None)
         The trend parameter. If ``with_intercept`` is True, ``trend`` will be
         used. If ``with_intercept`` is False, the trend will be set to a no-
-        intercept value.
+        intercept value. If None and ``with_intercept``, 'c' will be used as
+        a default.
 
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
 
     Attributes
     ----------
-    model_res_ : ModelResultsWrapper
+    arima_res_ : ModelResultsWrapper
         The model results, per statsmodels
 
     oob_ : float
@@ -336,8 +336,8 @@ class ARIMA(BaseARIMA):
                 else:
                     _maxiter = sm_compat.DEFAULT_NON_SEASONAL_MAXITER  # 500
 
-            # If maxiter is provided in the fit_args by a savvy user, we should
-            # default to their preference
+            # If maxiter is provided in the fit_args by a savvy user or the
+            # update method, we should default to their preference
             _maxiter = fit_args.pop("maxiter", _maxiter)
 
             return arima, arima.fit(start_params=start_params,
@@ -357,6 +357,13 @@ class ARIMA(BaseARIMA):
 
         # Set df_model attribute for SARIMAXResults object
         sm_compat.bind_df_model(fit, self.arima_res_)
+
+        # Non-seasonal ARIMA models may not capture sigma2. Statsmodels' code
+        # is buggy and difficult to follow, so this checks whether it needs to
+        # be set or not...
+        # if (not self._is_seasonal()) and np.isnan(self.arima_res_.sigma2):
+        #     self.arima_res_.sigma2 = self.arima_res_.model.loglike(
+        #         self.params(), True)
 
         # if the model is fit with an exogenous array, it must
         # be predicted with one as well.
@@ -550,7 +557,7 @@ class ARIMA(BaseARIMA):
             raise ValueError('Exogenous array dims (n_rows) != n_periods')
 
         # ARIMA/ARMA predict differently...
-        if self.seasonal_order is None:
+        if not self._is_seasonal():
             # use the results wrapper to predict so it injects its own params
             # (also if I was 0, ARMA will not have a forecast method natively)
             f, _, conf_int = self.arima_res_.forecast(
@@ -573,7 +580,7 @@ class ARIMA(BaseARIMA):
             # The confidence intervals may be a Pandas frame if it comes from
             # SARIMAX & we want Numpy. We will to duck type it so we don't add
             # new explicit requirements for the package
-            return f, check_array(conf_int)  # duck type for pd.DataFrame
+            return f, check_array(conf_int, force_all_finite=False)
         return f
 
     def __getstate__(self):
@@ -747,7 +754,7 @@ class ARIMA(BaseARIMA):
         # Now create the new exogenous.
         if exogenous is not None:
             # Concatenate
-            exog = np.concatenate((model_res.data.exog, exogenous))
+            exog = np.concatenate((model_res.data.exog, exogenous), axis=0)
         else:
             # Just so it's in the namespace
             exog = None

@@ -105,6 +105,30 @@ Dataset loading functions
     datasets.load_woolyrnq
 
 
+.. _pipeline_ref:
+
+:mod:`pmdarima.pipeline`: Pipelining transformers & ARIMAs
+==========================================================
+
+With the ``pipeline.Pipeline`` class, we can pipeline transformers together and
+into a final ARIMA stage.
+
+.. automodule:: pmdarima.pipeline
+    :no-members:
+    :no-inherited-members:
+
+Pipelines
+---------
+
+.. currentmodule:: pmdarima
+
+.. autosummary::
+    :toctree: generated/
+    :template: class.rst
+
+    pipeline.Pipeline
+
+
 .. _preprocessing_ref:
 
 :mod:`pmdarima.preprocessing`: Preprocessing transformers
@@ -112,8 +136,6 @@ Dataset loading functions
 
 The ``pmdarima.preprocessing`` submodule provides a number of transformer
 classes for pre-processing time series or exogenous arrays.
-
-**User guide:** See the :ref:`preprocessing` section for further details.
 
 .. automodule:: pmdarima.preprocessing
     :no-members:

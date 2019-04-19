@@ -11,6 +11,10 @@ import abc
 
 from ..compat.numpy import DTYPE
 
+__all__ = [
+    "BaseTransformer"
+]
+
 
 class BaseTransformer(six.with_metaclass(abc.ABCMeta,
                                          BaseEstimator,
