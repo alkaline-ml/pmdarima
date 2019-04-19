@@ -94,8 +94,9 @@ jobs:
     # Only deploy if this is a tagged commit on master
     condition: |
       and(
-        eq(variables['Build.SourceBranchName'], 'master'),
-        contains(variables['Build.SourceBranch'], 'tags')
+        contains(variables['Build.SourceBranch'], 'tags'),
+        eq(variables['Build.SourceBranchName'], 'master')
+
       )
     env:
       TWINE_USERNAME: $(twineUsername)
