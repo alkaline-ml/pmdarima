@@ -91,7 +91,7 @@ jobs:
   - script: |
       echo $TWINE_USERNAME
       echo $(twineUsername)
-      echo $TWINEUSERNAME)
+      echo $TWINEUSERNAME
     env:
       TWINE_USERNAME: $(twineUsername)
       TWINE_PASSWORD: $(twinePassword)
