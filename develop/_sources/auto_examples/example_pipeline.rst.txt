@@ -33,17 +33,17 @@ which greatly simplifies your life.
 
  Out::
 
-    Fit ARIMA: order=(2, 1, 2); AIC=2730.309, BIC=2784.380, Fit time=1.404 seconds
-    Fit ARIMA: order=(0, 1, 0); AIC=2844.584, BIC=2886.639, Fit time=0.040 seconds
-    Fit ARIMA: order=(1, 1, 0); AIC=2804.781, BIC=2849.840, Fit time=0.474 seconds
-    Fit ARIMA: order=(0, 1, 1); AIC=2746.782, BIC=2791.841, Fit time=0.582 seconds
-    Fit ARIMA: order=(1, 1, 2); AIC=2747.019, BIC=2798.086, Fit time=0.511 seconds
-    Fit ARIMA: order=(3, 1, 2); AIC=2735.854, BIC=2792.929, Fit time=0.643 seconds
-    Fit ARIMA: order=(2, 1, 1); AIC=2743.498, BIC=2794.565, Fit time=0.745 seconds
-    Fit ARIMA: order=(2, 1, 3); AIC=2731.638, BIC=2788.713, Fit time=1.941 seconds
-    Fit ARIMA: order=(1, 1, 1); AIC=2746.349, BIC=2794.412, Fit time=1.149 seconds
-    Fit ARIMA: order=(3, 1, 3); AIC=2735.997, BIC=2796.076, Fit time=0.682 seconds
-    Total fit time: 8.174 seconds
+    Fit ARIMA: order=(2, 1, 2); AIC=2730.309, BIC=2784.380, Fit time=1.835 seconds
+    Fit ARIMA: order=(0, 1, 0); AIC=2844.584, BIC=2886.639, Fit time=0.053 seconds
+    Fit ARIMA: order=(1, 1, 0); AIC=2804.781, BIC=2849.840, Fit time=0.618 seconds
+    Fit ARIMA: order=(0, 1, 1); AIC=2746.782, BIC=2791.841, Fit time=0.776 seconds
+    Fit ARIMA: order=(1, 1, 2); AIC=2747.019, BIC=2798.086, Fit time=0.683 seconds
+    Fit ARIMA: order=(3, 1, 2); AIC=2735.854, BIC=2792.929, Fit time=0.873 seconds
+    Fit ARIMA: order=(2, 1, 1); AIC=2743.498, BIC=2794.565, Fit time=0.933 seconds
+    Fit ARIMA: order=(2, 1, 3); AIC=2731.638, BIC=2788.713, Fit time=2.440 seconds
+    Fit ARIMA: order=(1, 1, 1); AIC=2746.349, BIC=2794.412, Fit time=1.542 seconds
+    Fit ARIMA: order=(3, 1, 3); AIC=2735.997, BIC=2796.076, Fit time=0.932 seconds
+    Total fit time: 10.689 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=None, m=12)), ('arima', AutoARIMA(D=None, alpha=0.05, callback=None, d=None, disp=0,
          error_action='ignore', information_criterion='aic', m=1, max_D=1,
@@ -134,7 +134,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  8.841 seconds)
+**Total running time of the script:** ( 0 minutes  11.455 seconds)
 
 
 
