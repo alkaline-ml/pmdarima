@@ -1,0 +1,102 @@
+trigger:
+  # Trigger for pushes on every branch
+  branches:
+    include:
+    - '*'
+
+  # Trigger for all tags
+  tags:
+    include:
+    - '*'
+
+pr:
+  # Cancel if new commits are pushed to the same PR
+  autoCancel: true
+
+  # Trigger for PRs on all branches
+  branches:
+    include:
+    - '*'
+
+variables:
+  # Read deployment variables from our secret group
+  - group: deploy-vars
+
+jobs:
+- job: 'Windows'
+
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  strategy:
+    maxParallel: 6
+    matrix:
+      Python35-x86:
+        python.version: '3.5'
+        architecture: 'x86'
+
+      Python35-x64:
+        python.version: '3.5'
+        architecture: 'x64'
+
+      Python36-x86:
+        python.version: '3.6'
+        architecture: 'x86'
+
+      Python36-x64:
+        python.version: '3.6'
+        architecture: 'x64'
+
+      Python37-x86:
+        python.version: '3.7'
+        architecture: 'x86'
+
+      Python37-x64:
+        python.version: '3.7'
+        architecture: 'x64'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: '$(architecture)'
+    displayName: 'Setting Python version and system architecture'
+
+  - script: python -m pip install --upgrade pip
+    displayName: 'Updating pip'
+
+  - script: |
+      pip install -r requirements.txt
+      pip install -r build_tools/azure/requirements.txt
+    displayName: 'Installing requirements'
+
+  - script: python setup.py bdist_wheel
+    displayName: 'Building artifact'
+
+  - powershell: |
+      if (python -c "from twine.commands.check import check; check(['dist/*'])" | Select-String -Pattern "warning") {
+        echo "README will not render properly on PyPI"
+        exit 1
+      } else {
+        echo "README rendered appropriately"
+      }
+    displayName: 'Checking README compatibility'
+
+  - script: pip install --pre --no-index --find-links dist/ pmdarima
+    displayName: 'Installing generated artifact'
+
+  - script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
+    displayName: 'Running unit tests'
+
+    # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
+  - script: python -m twine upload --skip-existing dist/pmdarima-*
+    displayName: 'Deploying to PyPI'
+    # Only deploy if this is a tagged commit on master
+    condition: |
+      and(
+        eq(variables['Build.SourceBranchName'], 'master'),
+        contains(variables['Build.SourceBranch'], 'tags')
+      )
+    env:
+      TWINE_USERNAME: $(twineUsername)
+      TWINE_PASSWORD: $(twinePassword)
