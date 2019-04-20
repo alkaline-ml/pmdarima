@@ -88,14 +88,14 @@ jobs:
   - script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
     displayName: 'Running unit tests'
 
-    - script: |
-      echo $TWINE_USERNAME
-      echo $(twineUsername)
-      echo $TWINEUSERNAME
-    env:
-      TWINE_USERNAME: $(twineUsername)
-      TWINE_PASSWORD: $(twinePassword)
-    displayName: 'Test echo'
+  - script: |
+    echo $TWINE_USERNAME
+    echo $(twineUsername)
+    echo $TWINEUSERNAME
+  env:
+    TWINE_USERNAME: $(twineUsername)
+    TWINE_PASSWORD: $(twinePassword)
+  displayName: 'Test echo'
 
     # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
   - script: python -m twine upload --skip-existing dist/pmdarima-*
