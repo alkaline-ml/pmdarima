@@ -23,7 +23,7 @@ Pmdarima is on pypi under the package name `pmdarima` and can be downloaded via 
 ```bash
 $ pip install pmdarima
 ```
-
+ 
 Note that legacy versions (<1.0.0) are available under the name
 "`pyramid-arima`" and can be pip installed via:
 
