@@ -1,4 +1,4 @@
-job:
+jobs:
 - job: 'Windows'
 
   pool:
