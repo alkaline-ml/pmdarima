@@ -11,7 +11,7 @@ steps:
     mkdir ~/.matplotlib
     echo "backend: TkAgg" >> ~/.matplotlib/matplotlibrc
   displayName: 'Setting matplotlib backend'
-  # Only need to do this for MacOS: https://stackoverflow.com/a/21789908
+  # Only need to do this for macOS: https://stackoverflow.com/a/21789908
   condition: eq(variables['Agent.OS'], 'Darwin')
 
 - script: python setup.py bdist_wheel
