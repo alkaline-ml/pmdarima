@@ -32,6 +32,13 @@ steps:
 - script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
   displayName: 'Running unit tests'
 
+- bash: |
+    echo $TWINE_USERNAME
+  displayName: 'Make sure ENV variables are still accessible'
+  env:
+    TWINE_USERNAME: $(twineUsername)
+    TWINE_PASSWORD: $(twinePassword)
+
   # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
 - script: python -m twine upload --skip-existing dist/pmdarima-*
   displayName: 'Deploying to PyPI'
