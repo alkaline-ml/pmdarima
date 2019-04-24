@@ -96,3 +96,27 @@ jobs:
     env:
       TWINE_USERNAME: $(twineUsername)
       TWINE_PASSWORD: $(twinePassword)
+
+- job: 'MacOS'
+
+  pool:
+    vmImage: 'macOS-10.13'  # Also have the option of 10.14, if we want that
+
+  strategy:
+    maxParallel: 3
+    matrix:
+      Python35:
+        python.version: '3.5'
+
+      Python36:
+        python.version: '3.6'
+
+      Python37:
+        python.version: '3.7'
+
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+    displayName: 'Setting Python version'
