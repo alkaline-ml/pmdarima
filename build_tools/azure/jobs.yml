@@ -38,7 +38,7 @@ jobs:
       architecture: '$(architecture)'
     displayName: 'Setting Python version and system architecture'
 
-  - template: 'build_tools/azure/build_and_deploy.yml'
+  - template: 'build_and_deploy.yml'
 
 - job: 'MacOS'
 
@@ -64,4 +64,4 @@ jobs:
       versionSpec: '$(python.version)'
     displayName: 'Setting Python version'
 
-  - template: 'build_tools/azure/build_and_deploy.yml'
+  - template: 'build_and_deploy.yml'
