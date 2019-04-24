@@ -57,7 +57,6 @@ jobs:
       Python37:
         python.version: '3.7'
 
-
   steps:
   - task: UsePythonVersion@0
     inputs:
