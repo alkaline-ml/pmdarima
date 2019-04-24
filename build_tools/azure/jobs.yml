@@ -1,5 +1,5 @@
 jobs:
-- job: 'Windows'
+- job: Windows
 
   pool:
     vmImage: 'vs2017-win2016'
@@ -38,9 +38,9 @@ jobs:
       architecture: '$(architecture)'
     displayName: 'Setting Python version and system architecture'
 
-  - template: 'build_and_deploy.yml'
+  - template: build_and_deploy.yml
 
-- job: 'macOS'
+- job: macOS
 
   pool:
     vmImage: 'macOS-10.13'  # Also have the option of 10.14, if we want that
@@ -64,4 +64,4 @@ jobs:
       versionSpec: '$(python.version)'
     displayName: 'Setting Python version'
 
-  - template: 'build_and_deploy.yml'
+  - template: build_and_deploy.yml
