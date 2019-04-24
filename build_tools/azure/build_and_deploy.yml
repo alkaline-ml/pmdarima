@@ -8,6 +8,7 @@ steps:
   displayName: 'Installing requirements'
 
 - bash: |
+    mkdir ~/.matplotlib
     echo "backend: TkAgg" >> ~/.matplotlib/matplotlibrc
   displayName: 'Setting matplotlib backend'
   condition: eq(variables['Agent.OS'], 'Darwin')
