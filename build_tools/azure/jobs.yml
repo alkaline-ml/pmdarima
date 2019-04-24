@@ -40,7 +40,7 @@ jobs:
 
   - template: 'build_and_deploy.yml'
 
-- job: 'MacOS'
+- job: 'macOS'
 
   pool:
     vmImage: 'macOS-10.13'  # Also have the option of 10.14, if we want that
