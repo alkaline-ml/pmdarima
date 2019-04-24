@@ -7,7 +7,8 @@ steps:
     pip install -r build_tools/azure/requirements.txt
   displayName: 'Installing requirements'
 
-- bash: echo "backend: TkAgg" >> ~/.matplotlib/matplotlibrc
+- bash: |
+    echo "backend: TkAgg" >> ~/.matplotlib/matplotlibrc
   displayName: 'Setting matplotlib backend'
   condition: eq(variables['Agent.OS'], 'Darwin')
 
