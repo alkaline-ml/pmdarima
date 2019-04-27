@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.preprocessing.exog.fourier &mdash; pmdarima 1.2.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../../',
+              VERSION:'1.2.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pmdarima.preprocessing.exog.fourier</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pmdarima.preprocessing.exog.fourier</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseExogFeaturizer</span>
+<span class="kn">from</span> <span class="nn">..base</span> <span class="k">import</span> <span class="n">UpdatableMixin</span>
+<span class="kn">from</span> <span class="nn">._fourier</span> <span class="k">import</span> <span class="n">C_fourier_terms</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FourierFeaturizer&#39;</span><span class="p">]</span>
+
+<span class="n">sinpi</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
+<span class="n">cospi</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
+
+
+<span class="c1"># Candidate for cythonization?</span>
+<span class="k">def</span> <span class="nf">_fourier_terms</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">times</span><span class="p">):</span>
+    <span class="c1"># X = []</span>
+    <span class="c1"># for e in p:</span>
+    <span class="c1">#     X.append(sinpi(2 * e * times))</span>
+    <span class="c1">#     X.append(cospi(2 * e * times))</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">C_fourier_terms</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+
+<div class="viewcode-block" id="FourierFeaturizer"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer">[docs]</a><span class="k">class</span> <span class="nc">FourierFeaturizer</span><span class="p">(</span><span class="n">BaseExogFeaturizer</span><span class="p">,</span> <span class="n">UpdatableMixin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Fourier terms for modeling seasonality</span>
+
+<span class="sd">    This transformer creates an exogenous matrix containing terms from a</span>
+<span class="sd">    Fourier series, up to order ``k``. It is based on ``R::forecast code`` [1].</span>
+<span class="sd">    In practice, it permits us to fit a seasonal time series *without* seasonal</span>
+<span class="sd">    order (i.e., ``seasonal=False``) by supplying decomposed seasonal Fourier</span>
+<span class="sd">    terms as an exogenous array.</span>
+
+<span class="sd">    The advantages of this technique, per Hyndman [2]:</span>
+
+<span class="sd">        * It allows any length seasonality</span>
+<span class="sd">        * The seasonal pattern is smooth for small values of K (but more wiggly</span>
+<span class="sd">          seasonality can be handled by increasing K)</span>
+<span class="sd">        * The short-term dynamics are easily handled with a simple ARMA error</span>
+
+<span class="sd">    The disadvantage is that the seasonal periodicity of the time series is</span>
+<span class="sd">    assumed to be fixed.</span>
+
+<span class="sd">    Functionally, this is a featurizer. This means that exogenous features are</span>
+<span class="sd">    *derived* from ``y``, as opposed to transforming an existing exog array.</span>
+<span class="sd">    It also behaves slightly differently in the :func:`transform` stage than</span>
+<span class="sd">    most other exogenous transformers in that ``exog`` is not a required arg,</span>
+<span class="sd">    and it takes ``**kwargs``. See the :func:`transform` docstr for more info.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    m : int</span>
+<span class="sd">        The seasonal periodicity of the endogenous vector, y.</span>
+
+<span class="sd">    k : int, optional (default=None)</span>
+<span class="sd">        The number of sine and cosine terms (each) to include. I.e., if ``k``</span>
+<span class="sd">        is 2, 4 new features will be generated. ``k`` must not exceed ``m/2``,</span>
+<span class="sd">        which is the default value if not set. The value of ``k`` can be</span>
+<span class="sd">        selected by minimizing the AIC.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    * Helpful for long seasonal periods (large ``m``) where ``seasonal=True``</span>
+<span class="sd">      seems to take a very long time to fit a model.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] https://github.com/robjhyndman/forecast/blob/master/R/season.R</span>
+<span class="sd">    .. [2] https://robjhyndman.com/hyndsight/longseasonality/</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FourierFeaturizer.__init__"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span></div>
+
+<div class="viewcode-block" id="FourierFeaturizer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit the transformer</span>
+
+<span class="sd">        Computes the periods of all the Fourier terms. The values of ``y`` are</span>
+<span class="sd">        not actually used; only the periodicity is used when computing Fourier</span>
+<span class="sd">        terms.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or None, shape=(n_samples,)</span>
+<span class="sd">            The endogenous (time-series) array.</span>
+
+<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">            The exogenous array of additional covariates. If specified, the</span>
+<span class="sd">            Fourier terms will be column-bound on the right side of the matrix.</span>
+<span class="sd">            Otherwise, the Fourier terms will be returned as the new exogenous</span>
+<span class="sd">            array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Since we don&#39;t fit any params here, we can just check the params</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="n">null_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">m</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">m</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;k must be a positive integer not greater &quot;</span>
+                             <span class="s2">&quot;than m//2&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Compute the periods of all Fourier terms. Since R allows multiple</span>
+        <span class="c1"># seasonality and we do not, we can do this much more simply.</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>  <span class="c1"># 1:K / m</span>
+
+        <span class="c1"># If sinpi is 0... maybe blow up?</span>
+        <span class="c1"># if abs(2 * p - round(2 * p)) &lt; np.finfo(y.dtype).eps:  # min eps</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="FourierFeaturizer.transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create Fourier term features</span>
+
+<span class="sd">        When an ARIMA is fit with an exogenous array, it must be forecasted</span>
+<span class="sd">        with one also. Since at ``predict`` time in a pipeline we won&#39;t have</span>
+<span class="sd">        ``y`` (and we may not yet have an ``exog`` array), we have to know how</span>
+<span class="sd">        far into the future for which to compute Fourier terms (hence</span>
+<span class="sd">        ``n_periods``).</span>
+
+<span class="sd">        This method will compute the Fourier features for a given frequency and</span>
+<span class="sd">        ``k`` term. Note that the ``y`` values are not used to compute these,</span>
+<span class="sd">        so this does not pose a risk of data leakage.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or None, shape=(n_samples,)</span>
+<span class="sd">            The endogenous (time-series) array. This is unused and technically</span>
+<span class="sd">            optional for the Fourier terms, since it uses the pre-computed</span>
+<span class="sd">            ``n`` to calculate the seasonal Fourier terms.</span>
+
+<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">            The exogenous array of additional covariates. If specified, the</span>
+<span class="sd">            Fourier terms will be column-bound on the right side of the matrix.</span>
+<span class="sd">            Otherwise, the Fourier terms will be returned as the new exogenous</span>
+<span class="sd">            array.</span>
+
+<span class="sd">        n_periods : int, optional (default=0)</span>
+<span class="sd">            The number of periods in the future to forecast. If ``n_periods``</span>
+<span class="sd">            is 0, will compute the Fourier features for the training set.</span>
+<span class="sd">            ``n_periods`` corresponds to the number of samples that will be</span>
+<span class="sd">            returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;p_&quot;</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="n">null_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">n_periods</span> <span class="ow">and</span> <span class="n">exog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n_periods</span> <span class="o">!=</span> <span class="n">exog</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;If n_periods and exog are specified, &quot;</span>
+                                 <span class="s2">&quot;n_periods must match dims of exogenous&quot;</span><span class="p">)</span>
+
+        <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_</span> <span class="o">+</span> <span class="n">n_periods</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">X_fourier</span> <span class="o">=</span> <span class="n">_fourier_terms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p_</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+
+        <span class="c1"># Maybe trim if we&#39;re in predict mode... in that case, we only keep the</span>
+        <span class="c1"># last n_periods rows in the matrix we&#39;ve created</span>
+        <span class="k">if</span> <span class="n">n_periods</span><span class="p">:</span>
+            <span class="n">X_fourier</span> <span class="o">=</span> <span class="n">X_fourier</span><span class="p">[</span><span class="o">-</span><span class="n">n_periods</span><span class="p">:,</span> <span class="p">:]</span>
+
+        <span class="k">if</span> <span class="n">exog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">exog</span> <span class="o">=</span> <span class="n">X_fourier</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">exog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">exog</span><span class="p">,</span> <span class="n">X_fourier</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">exog</span></div>
+
+<div class="viewcode-block" id="FourierFeaturizer.update_and_transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.update_and_transform">[docs]</a>    <span class="k">def</span> <span class="nf">update_and_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the params and return the transformed arrays</span>
+
+<span class="sd">        Since no parameters really get updated in the Fourier featurizer, all</span>
+<span class="sd">        we do is compose forecasts for ``n_periods=len(y)`` and then update</span>
+<span class="sd">        ``n_``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or None, shape=(n_samples,)</span>
+<span class="sd">            The endogenous (time-series) array.</span>
+
+<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features)</span>
+<span class="sd">            The exogenous array of additional covariates.</span>
+
+<span class="sd">        **kwargs : keyword args</span>
+<span class="sd">            Keyword arguments required by the transform function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;p_&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">Xt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Update this *after* getting the exog features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">Xt</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2019, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

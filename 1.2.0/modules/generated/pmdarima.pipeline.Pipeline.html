@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.pipeline.Pipeline &mdash; pmdarima 1.2.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'1.2.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pmdarima.preprocessing.BoxCoxEndogTransformer" href="pmdarima.preprocessing.BoxCoxEndogTransformer.html" />
+    <link rel="prev" title="pmdarima.datasets.load_woolyrnq" href="pmdarima.datasets.load_woolyrnq.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy univariate timeseries datasets</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../classes.html#pipelines">Pipelines</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>.Pipeline</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../classes.html">API Reference</a> &raquo;</li>
+        
+      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>.Pipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/generated/pmdarima.pipeline.Pipeline.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pmdarima-pipeline-pipeline">
+<h1><a class="reference internal" href="../classes.html#module-pmdarima.pipeline" title="pmdarima.pipeline"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code></a>.Pipeline<a class="headerlink" href="#pmdarima-pipeline-pipeline" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pmdarima.pipeline.Pipeline">
+<em class="property">class </em><code class="descclassname">pmdarima.pipeline.</code><code class="descname">Pipeline</code><span class="sig-paren">(</span><em>steps</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/27d8911/pmdarima/pipeline.py#L15"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pipeline of transformers with an optional final estimator stage</p>
+<p>The pipeline object chains together an arbitrary number of named, ordered
+transformations, passing the output from one as the input to the next. As
+the last stage, an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> or <code class="docutils literal notranslate"><span class="pre">AutoARIMA</span></code> object will be fit. This
+pipeline takes after the scikit-learn <code class="docutils literal notranslate"><span class="pre">sklearn.Pipeline</span></code> object, which
+behaves similarly but does not share the same time-series interface
+that <code class="docutils literal notranslate"><span class="pre">pmdarima</span></code> follows.</p>
+<p>The purpose of the pipeline is to assemble several steps that can be
+cross-validated together while setting different parameters.
+For this, it enables setting parameters of the various steps using their
+names and the parameter name separated by a <cite>‘__’</cite>, as in the example
+below.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>steps</strong> : list</p>
+<blockquote class="last">
+<div><p>List of (name, transform) tuples (implementing fit/transform) that are
+chained, in the order in which they are chained, with the last object
+an ARIMA or AutoARIMA estimator.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.named_steps" title="pmdarima.pipeline.Pipeline.named_steps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">named_steps</span></code></a></td>
+<td>Map the steps to a dictionary</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="k">import</span> <span class="n">load_wineind</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.arima</span> <span class="k">import</span> <span class="n">AutoARIMA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.pipeline</span> <span class="k">import</span> <span class="n">Pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.preprocessing</span> <span class="k">import</span> <span class="n">FourierFeaturizer</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wineind</span> <span class="o">=</span> <span class="n">load_wineind</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s2">&quot;fourier&quot;</span><span class="p">,</span> <span class="n">FourierFeaturizer</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s2">&quot;arima&quot;</span><span class="p">,</span> <span class="n">AutoARIMA</span><span class="p">(</span><span class="n">seasonal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">))</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">wineind</span><span class="p">)</span>
+<span class="go">Pipeline(steps=[(&#39;fourier&#39;, FourierFeaturizer(k=3, m=12)),</span>
+<span class="go">                (&#39;arima&#39;, AutoARIMA(D=None, alpha=0.05, callback=None,</span>
+<span class="go">                                    d=None, disp=0, error_action=&#39;ignore&#39;,</span>
+<span class="go">                                    information_criterion=&#39;aic&#39;, m=1,</span>
+<span class="go">                                    max_D=1, max_P=2, max_Q=2, max_d=2,</span>
+<span class="go">                                    max_order=10, max_p=5, max_q=5,</span>
+<span class="go">                                    maxiter=None, method=None,</span>
+<span class="go">                                    n_fits=10, n...s_warnings=True,</span>
+<span class="go">                                    test=&#39;kpss&#39;, trace=False,</span>
+<span class="go">                                    transparams=True, trend=None,</span>
+<span class="go">                                    with_intercept=True))])</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.fit" title="pmdarima.pipeline.Pipeline.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(y[,&nbsp;exogenous])</td>
+<td>Fit the pipeline of transformers and the ARIMA model</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.get_params" title="pmdarima.pipeline.Pipeline.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</td>
+<td>Get parameters for this estimator.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.predict" title="pmdarima.pipeline.Pipeline.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>([n_periods,&nbsp;exogenous,&nbsp;…])</td>
+<td>Forecast future (transformed) values</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.set_params" title="pmdarima.pipeline.Pipeline.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</td>
+<td>Set the parameters of this estimator.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.update" title="pmdarima.pipeline.Pipeline.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(y[,&nbsp;exogenous,&nbsp;maxiter])</td>
+<td>Update an ARIMA or auto-ARIMA as well as any necessary transformers</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pmdarima.pipeline.Pipeline.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>steps</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/27d8911/pmdarima/pipeline.py#L65"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmdarima.pipeline.Pipeline.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**fit_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/27d8911/pmdarima/pipeline.py#L143"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the pipeline of transformers and the ARIMA model</p>
+<p>Chain the time-series and exogenous arrays through a series of
+transformations, fitting each stage along the way, finally fitting an
+ARIMA or AutoARIMA model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>y</strong> : array-like or iterable, shape=(n_samples,)</p>
+<blockquote>
+<div><p>The time-series to which to fit the <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> estimator. This may
+either be a Pandas <code class="docutils literal notranslate"><span class="pre">Series</span></code> object (statsmodels can internally
+use the dates in the index), or a numpy array. This should be a
+one-dimensional array of floats, and should not contain any
+<code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">np.inf</span></code> values.</p>
+</div></blockquote>
+<p><strong>exogenous</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
+<blockquote>
+<div><p>An optional 2-d array of exogenous variables. If provided, these
+variables are used as additional features in the regression
+operation. This should not include a constant or trend. Note that
+if an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> is fit on exogenous features, it must be provided
+exogenous features for making predictions.</p>
+</div></blockquote>
+<p><strong>**fit_kwargs</strong> : keyword args</p>
+<blockquote class="last">
+<div><p>Extra keyword arguments used for each stage’s <code class="docutils literal notranslate"><span class="pre">fit</span></code> stage.
+Similar to scikit-learn pipeline keyword args, the keys are
+compound, comprised of the stage name and the argument name
+separated by a “__”. For instance, if fitting an ARIMA in stage
+“arima”, your kwargs may resemble:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;arima__maxiter&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmdarima.pipeline.Pipeline.get_params">
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/27d8911/pmdarima/../sklearn/base.py#L168"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>deep</strong> : boolean, optional</p>
+<blockquote>
+<div><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>params</strong> : mapping of string to any</p>
+<blockquote class="last">
+<div><p>Parameter names mapped to their values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pmdarima.pipeline.Pipeline.named_steps">
+<code class="descname">named_steps</code><a class="headerlink" href="#pmdarima.pipeline.Pipeline.named_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map the steps to a dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmdarima.pipeline.Pipeline.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>n_periods=10</em>, <em>exogenous=None</em>, <em>return_conf_int=False</em>, <em>alpha=0.05</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/27d8911/pmdarima/pipeline.py#L196"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forecast future (transformed) values</p>
+<p>Generate predictions (forecasts) <code class="docutils literal notranslate"><span class="pre">n_periods</span></code> in the future.
+Note that if <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> variables were used in the model fit, they
+will be expected for the predict procedure and will fail otherwise.
+Forecasts may be transformed by the endogenous steps along the way and
+might be on a different scale than raw training/test data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_periods</strong> : int, optional (default=10)</p>
+<blockquote>
+<div><p>The number of periods in the future to forecast.</p>
+</div></blockquote>
+<p><strong>exogenous</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
+<blockquote>
+<div><p>An optional 2-d array of exogenous variables. If provided, these
+variables are used as additional features in the regression
+operation. This should not include a constant or trend. Note that
+if an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> is fit on exogenous features, it must be provided
+exogenous features for making predictions.</p>
+</div></blockquote>
+<p><strong>return_conf_int</strong> : bool, optional (default=False)</p>
+<blockquote>
+<div><p>Whether to get the confidence intervals of the forecasts.</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float, optional (default=0.05)</p>
+<blockquote>
+<div><p>The confidence intervals for the forecasts are (1 - alpha) %</p>
+</div></blockquote>
+<p><strong>**kwargs</strong> : keyword args</p>
+<blockquote>
+<div><p>Extra keyword arguments used for each stage’s <code class="docutils literal notranslate"><span class="pre">transform</span></code> stage
+and the estimator’s <code class="docutils literal notranslate"><span class="pre">predict</span></code> stage. Similar to scikit-learn
+pipeline keyword args, the keys are compound, comprised of the
+stage name and the argument name separated by a “__”. For instance,
+if you have a FourierFeaturizer whose stage is named
+“fourier”, your transform kwargs could resemble:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;fourier__n_periods&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>forecasts</strong> : array-like, shape=(n_periods,)</p>
+<blockquote>
+<div><p>The array of transformed, forecasted values.</p>
+</div></blockquote>
+<p><strong>conf_int</strong> : array-like, shape=(n_periods, 2), optional</p>
+<blockquote class="last">
+<div><p>The confidence intervals for the forecasts. Only returned if
+<code class="docutils literal notranslate"><span class="pre">return_conf_int</span></code> is True.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmdarima.pipeline.Pipeline.set_params">
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/27d8911/pmdarima/../sklearn/base.py#L191"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as pipelines). The latter have parameters of the form
+<code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s possible to update each
+component of a nested object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pmdarima.pipeline.Pipeline.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>maxiter=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/27d8911/pmdarima/pipeline.py#L273"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update an ARIMA or auto-ARIMA as well as any necessary transformers</p>
+<p>Passes the newly observed values through the appropriate endog
+transformations, and the exogenous array through the exog transformers
+(updating where necessary) before finally updating the ARIMA model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>y</strong> : array-like or iterable, shape=(n_samples,)</p>
+<blockquote>
+<div><p>The time-series data to add to the endogenous samples on which the
+<code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> estimator was previously fit. This may either be a Pandas
+<code class="docutils literal notranslate"><span class="pre">Series</span></code> object or a numpy array. This should be a one-
+dimensional array of finite floats.</p>
+</div></blockquote>
+<p><strong>exogenous</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
+<blockquote>
+<div><p>An optional 2-d array of exogenous variables. If the model was
+fit with an exogenous array of covariates, it will be required for
+updating the observed values.</p>
+</div></blockquote>
+<p><strong>maxiter</strong> : int, optional (default=None)</p>
+<blockquote>
+<div><p>The number of iterations to perform when updating the model. If
+None, will perform <code class="docutils literal notranslate"><span class="pre">max(5,</span> <span class="pre">n_samples</span> <span class="pre">//</span> <span class="pre">10)</span></code> iterations.</p>
+</div></blockquote>
+<p><strong>**kwargs</strong> : keyword args</p>
+<blockquote class="last">
+<div><p>Extra keyword arguments used for each stage’s <code class="docutils literal notranslate"><span class="pre">update</span></code> stage.
+Similar to scikit-learn pipeline keyword args, the keys are
+compound, comprised of the stage name and the argument name
+separated by a “__”.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="examples-using-pmdarima-pipeline-pipeline">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline.Pipeline</span></code><a class="headerlink" href="#examples-using-pmdarima-pipeline-pipeline" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` can fit &quot;pipeline&quot; models. That is, a pipeline constitutes a l..."><div class="figure" id="id1">
+<img alt="../../_images/sphx_glr_example_pipeline_thumb.png" src="../../_images/sphx_glr_example_pipeline_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/example_pipeline.html#sphx-glr-auto-examples-example-pipeline-py"><span class="std std-ref">Pipelines with auto_arima</span></a></span></p>
+</div>
+</div><div class="clearer"></div></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pmdarima.preprocessing.BoxCoxEndogTransformer.html" class="btn btn-neutral float-right" title="pmdarima.preprocessing.BoxCoxEndogTransformer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pmdarima.datasets.load_woolyrnq.html" class="btn btn-neutral float-left" title="pmdarima.datasets.load_woolyrnq" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2019, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
