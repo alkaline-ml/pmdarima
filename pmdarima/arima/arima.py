@@ -7,7 +7,6 @@
 
 from __future__ import print_function, absolute_import, division
 
-from sklearn.base import BaseEstimator
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
 from sklearn.utils.validation import check_array, check_is_fitted, \
@@ -22,6 +21,7 @@ import numpy as np
 import warnings
 import os
 
+from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.python import long
 from ..compat import statsmodels as sm_compat
@@ -40,6 +40,13 @@ VALID_SCORING = {
     'mse': mean_squared_error,
     'mae': mean_absolute_error
 }
+
+
+def _aicc(model_results, nobs):
+    """Compute the corrected Akaike Information Criterion"""
+    aic = model_results.aic
+    df_model = model_results.df_model + 1  # add one for constant term
+    return aic + 2. * df_model * (nobs / (nobs - df_model - 1.) - 1.)
 
 
 def _append_to_endog(endog, new_y):
@@ -64,7 +71,7 @@ def _uses_legacy_pickling(arima):
     return hasattr(arima, "tmp_pkl_")
 
 
-class ARIMA(BaseEstimator):
+class ARIMA(BaseARIMA):
     """An ARIMA estimator.
 
     An ARIMA, or autoregressive integrated moving average, is a
@@ -126,7 +133,7 @@ class ARIMA(BaseEstimator):
         by ``ARMA._fit_start_params``.
 
     transparams : bool, optional (default=True)
-        Whehter or not to transform the parameters to ensure stationarity.
+        Whether or not to transform the parameters to ensure stationarity.
         Uses the transformation suggested in Jones (1980).  If False,
         no checking for stationarity or invertibility is done.
 
@@ -195,10 +202,24 @@ class ARIMA(BaseEstimator):
     trend : str or None, optional (default=None)
         The trend parameter. If ``with_intercept`` is True, ``trend`` will be
         used. If ``with_intercept`` is False, the trend will be set to a no-
-        intercept value.
+        intercept value. If None and ``with_intercept``, 'c' will be used as
+        a default.
 
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
+
+    Attributes
+    ----------
+    arima_res_ : ModelResultsWrapper
+        The model results, per statsmodels
+
+    oob_ : float
+        The MAE or MSE of the out-of-sample records, if ``out_of_sample_size``
+        is > 0, else np.nan
+
+    oob_preds_ : np.ndarray or None
+        The predictions for the out-of-sample records, if
+        ``out_of_sample_size`` is > 0, else None
 
     Notes
     -----
@@ -311,12 +332,12 @@ class ARIMA(BaseEstimator):
             _maxiter = self.maxiter
             if _maxiter is None:
                 if self._is_seasonal():
-                    _maxiter = 50  # SARIMAX (slower)
+                    _maxiter = sm_compat.DEFAULT_SEASONAL_MAXITER  # 50
                 else:
-                    _maxiter = 500  # ARMA, ARIMA
+                    _maxiter = sm_compat.DEFAULT_NON_SEASONAL_MAXITER  # 500
 
-            # If maxiter is provided in the fit_args by a savvy user, we should
-            # default to their preference
+            # If maxiter is provided in the fit_args by a savvy user or the
+            # update method, we should default to their preference
             _maxiter = fit_args.pop("maxiter", _maxiter)
 
             return arima, arima.fit(start_params=start_params,
@@ -336,6 +357,13 @@ class ARIMA(BaseEstimator):
 
         # Set df_model attribute for SARIMAXResults object
         sm_compat.bind_df_model(fit, self.arima_res_)
+
+        # Non-seasonal ARIMA models may not capture sigma2. Statsmodels' code
+        # is buggy and difficult to follow, so this checks whether it needs to
+        # be set or not...
+        # if (not self._is_seasonal()) and np.isnan(self.arima_res_.sigma2):
+        #     self.arima_res_.sigma2 = self.arima_res_.model.loglike(
+        #         self.params(), True)
 
         # if the model is fit with an exogenous array, it must
         # be predicted with one as well.
@@ -417,6 +445,7 @@ class ARIMA(BaseEstimator):
             # from statsmodels internally)
             pred = self.predict(n_periods=cv, exogenous=cv_exog)
             self.oob_ = scoring(cv_samples, pred, **self.scoring_args)
+            self.oob_preds_ = pred
 
             # If we compute out of sample scores, we have to now update the
             # observed time points so future forecasts originate from the end
@@ -424,6 +453,7 @@ class ARIMA(BaseEstimator):
             self.update(cv_samples, cv_exog, **fit_args)
         else:
             self.oob_ = np.nan
+            self.oob_preds_ = None
 
         return self
 
@@ -484,7 +514,9 @@ class ARIMA(BaseEstimator):
 
     def predict(self, n_periods=10, exogenous=None,
                 return_conf_int=False, alpha=0.05):
-        """Generate predictions (forecasts) ``n_periods`` in the future.
+        """Forecast future values
+
+        Generate predictions (forecasts) ``n_periods`` in the future.
         Note that if ``exogenous`` variables were used in the model fit, they
         will be expected for the predict procedure and will fail otherwise.
 
@@ -525,7 +557,7 @@ class ARIMA(BaseEstimator):
             raise ValueError('Exogenous array dims (n_rows) != n_periods')
 
         # ARIMA/ARMA predict differently...
-        if self.seasonal_order is None:
+        if not self._is_seasonal():
             # use the results wrapper to predict so it injects its own params
             # (also if I was 0, ARMA will not have a forecast method natively)
             f, _, conf_int = self.arima_res_.forecast(
@@ -548,38 +580,8 @@ class ARIMA(BaseEstimator):
             # The confidence intervals may be a Pandas frame if it comes from
             # SARIMAX & we want Numpy. We will to duck type it so we don't add
             # new explicit requirements for the package
-            return f, check_array(conf_int)  # duck type for pd.DataFrame
+            return f, check_array(conf_int, force_all_finite=False)
         return f
-
-    def fit_predict(self, y, exogenous=None, n_periods=10, **fit_args):
-        """Fit an ARIMA to a vector, ``y``, of observations with an
-        optional matrix of ``exogenous`` variables, and then generate
-        predictions.
-
-        Parameters
-        ----------
-        y : array-like or iterable, shape=(n_samples,)
-            The time-series to which to fit the ``ARIMA`` estimator. This may
-            either be a Pandas ``Series`` object (statsmodels can internally
-            use the dates in the index), or a numpy array. This should be a
-            one-dimensional array of floats, and should not contain any
-            ``np.nan`` or ``np.inf`` values.
-
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
-            An optional 2-d array of exogenous variables. If provided, these
-            variables are used as additional features in the regression
-            operation. This should not include a constant or trend. Note that
-            if an ``ARIMA`` is fit on exogenous features, it must be provided
-            exogenous features for making predictions.
-
-        n_periods : int, optional (default=10)
-            The number of periods in the future to forecast.
-
-        fit_args : dict or kwargs, optional (default=None)
-            Any keyword args to pass to the fit method.
-        """
-        self.fit(y, exogenous, **fit_args)
-        return self.predict(n_periods=n_periods, exogenous=exogenous)
 
     def __getstate__(self):
         """I am being pickled..."""
@@ -650,6 +652,7 @@ class ARIMA(BaseEstimator):
                           % (modl_version, this_version), UserWarning)
 
     def _clear_cached_state(self):
+        # THIS IS A LEGACY METHOD USED PRE-v0.8.0
         if _uses_legacy_pickling(self):
             # when fit in an auto-arima, a lot of cached .pmdpkl files
             # are generated if fit in parallel... this removes the tmp file
@@ -751,7 +754,7 @@ class ARIMA(BaseEstimator):
         # Now create the new exogenous.
         if exogenous is not None:
             # Concatenate
-            exog = np.concatenate((model_res.data.exog, exogenous))
+            exog = np.concatenate((model_res.data.exog, exogenous), axis=0)
         else:
             # Just so it's in the namespace
             exog = None
@@ -816,11 +819,7 @@ class ARIMA(BaseEstimator):
         # this code should really be added to statsmodels. Rewrite
         # this function to reflect other metric implementations if/when
         # statsmodels incorporates AICc
-
-        aic = self.arima_res_.aic
-        nobs = self.nobs_
-        df_model = self.arima_res_.df_model + 1  # add one for constant term
-        return aic + 2. * df_model * (nobs / (nobs - df_model - 1.) - 1.)
+        return _aicc(self.arima_res_, self.nobs_)
 
     @if_delegate_has_method('arima_res_')
     def arparams(self):

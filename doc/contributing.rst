@@ -87,8 +87,7 @@ rules may hinder the speed with which your contribution is merged:
    to: indicate you are working on something to avoid duplicated work,
    request broad review of functionality or API, or seek collaborators.
 
--  All other tests pass when everything is rebuilt from scratch. Note that this
-   will actually require a Spark distribution to work locally.
+-  All other tests pass when everything is rebuilt from scratch.
    On Unix-like systems, check with (from the toplevel source folder):
 
       .. code-block:: bash
@@ -103,7 +102,7 @@ rules may hinder the speed with which your contribution is merged:
           $ make test
 
    You may need to see the :ref:`setup` section for instructions on how
-   to build the package. For instructions on how to test (using nose or pytest)
+   to build the package. For instructions on how to test (using pytest)
    see `Numpy's testing instructions <https://github.com/numpy/numpy/blob/master/doc/TESTS.rst.txt>`_.
 
 .. _filing_bugs:

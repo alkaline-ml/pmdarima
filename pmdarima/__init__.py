@@ -6,7 +6,7 @@
 
 import os as _os
 
-__version__ = "1.1.1"
+__version__ = "1.2.0"
 
 try:
     # this var is injected in the setup build to enable
@@ -26,7 +26,7 @@ else:
     from . import __check_build
 
     # Stuff we want at top-level
-    from .arima import auto_arima, ARIMA
+    from .arima import auto_arima, ARIMA, AutoARIMA
     from .utils import acf, autocorr_plot, c, pacf, plot_acf, plot_pacf
 
     # Need these namespaces at the top so they can be used like:
@@ -53,16 +53,8 @@ else:
         'plot_pacf'
     ]
 
-    # On first import, check the cache, warn if needed
-    from ._config import _warn_for_cache_size
-
-    _warn_for_cache_size()
-
     # Delete unwanted variables from global
     del _os
-    # del _config  # don't delete in case user wants to amend it at top level
-    del _warn_for_cache_size
-    # del _config  # don't delete in case user wants to amend it at top level
     del __check_build
     del __PMDARIMA_SETUP__
 

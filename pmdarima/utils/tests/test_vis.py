@@ -2,15 +2,22 @@
 
 from __future__ import absolute_import
 
+from pmdarima.compat._internal import get_pytest_mpl_threshold
+
 import pmdarima as pm
 import os
+import pytest
 
 # Some as numpy, some as series
 datasets = [
-    pm.datasets.load_wineind(True),
-    pm.datasets.load_lynx(False),
-    pm.datasets.load_heartrate(True),
-    pm.datasets.load_woolyrnq(True)
+    ['wineind', pm.datasets.load_wineind(True)],
+    ['lynx', pm.datasets.load_lynx(False)],
+    ['heartrate', pm.datasets.load_heartrate(True)],
+    ['woolyrnq', pm.datasets.load_woolyrnq(True)],
+
+    # Might need to add these datasets in, but not sure if
+    # it's actually necessary...
+    # ['austres', pm.datasets.load_austres(False)]
 ]
 
 # We are ONLY going to run these tests if we are NOT on Travis,
@@ -18,22 +25,27 @@ datasets = [
 # backends we have flying around out there.
 travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
 
+if not travis:
 
-def do_plot(plotting_func, dataset):
-    if not travis:
-        plotting_func(dataset, show=False)
+    tolerance = get_pytest_mpl_threshold(
+        {'Windows': 15, 'Darwin': 10, 'Linux': 10}
+    )
 
+    params = []
+    for row in datasets:
+        params.append(pytest.param(row[0], row[1]))
 
-def test_plot_autocorrelations():
-    for ds in datasets:
-        do_plot(pm.autocorr_plot, ds)
+    @pytest.mark.parametrize('plot_type,dataset', params)
+    @pytest.mark.mpl_image_compare(tolerance=tolerance)
+    def test_plot_autocorrelations(plot_type, dataset):
+        return pm.autocorr_plot(dataset, show=False).get_figure()
 
+    @pytest.mark.parametrize('plot_type,dataset', params)
+    @pytest.mark.mpl_image_compare(tolerance=tolerance)
+    def test_plot_acf(plot_type, dataset):
+        return pm.plot_acf(dataset, show=False)
 
-def test_plot_acf():
-    for ds in datasets:
-        do_plot(pm.plot_acf, ds)
-
-
-def test_plot_pacf():
-    for ds in datasets:
-        do_plot(pm.plot_pacf, ds)
+    @pytest.mark.parametrize('plot_type,dataset', params)
+    @pytest.mark.mpl_image_compare(tolerance=tolerance)
+    def test_plot_pacf(plot_type, dataset):
+        return pm.plot_pacf(dataset, show=False)

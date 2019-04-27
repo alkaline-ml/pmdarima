@@ -39,8 +39,10 @@ sections for further details.
 
     arima.ADFTest
     arima.ARIMA
+    arima.AutoARIMA
     arima.CHTest
     arima.KPSSTest
+    arima.OCSBTest
     arima.PPTest
 
 ARIMA auto-parameter selection
@@ -95,9 +97,71 @@ Dataset loading functions
     :toctree: generated/
     :template: function.rst
 
+    datasets.load_airpassengers
+    datasets.load_austres
     datasets.load_heartrate
     datasets.load_lynx
     datasets.load_wineind
+    datasets.load_woolyrnq
+
+
+.. _pipeline_ref:
+
+:mod:`pmdarima.pipeline`: Pipelining transformers & ARIMAs
+==========================================================
+
+With the ``pipeline.Pipeline`` class, we can pipeline transformers together and
+into a final ARIMA stage.
+
+.. automodule:: pmdarima.pipeline
+    :no-members:
+    :no-inherited-members:
+
+Pipelines
+---------
+
+.. currentmodule:: pmdarima
+
+.. autosummary::
+    :toctree: generated/
+    :template: class.rst
+
+    pipeline.Pipeline
+
+
+.. _preprocessing_ref:
+
+:mod:`pmdarima.preprocessing`: Preprocessing transformers
+=========================================================
+
+The ``pmdarima.preprocessing`` submodule provides a number of transformer
+classes for pre-processing time series or exogenous arrays.
+
+.. automodule:: pmdarima.preprocessing
+    :no-members:
+    :no-inherited-members:
+
+Endogenous transformers
+-----------------------
+
+.. currentmodule:: pmdarima
+
+.. autosummary::
+    :toctree: generated/
+    :template: class.rst
+
+    preprocessing.BoxCoxEndogTransformer
+
+Exogenous transformers
+----------------------
+
+.. currentmodule:: pmdarima
+
+.. autosummary::
+    :toctree: generated/
+    :template: class.rst
+
+    preprocessing.FourierFeaturizer
 
 
 .. _utils_ref:

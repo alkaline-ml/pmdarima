@@ -31,6 +31,7 @@ matplotlib.use('agg')  # RISK: could be overridden via environment variables...
 import os
 import sys
 import pmdarima
+import datetime
 from pkg_resources import parse_version
 from sklearn.externals.six import u
 
@@ -84,7 +85,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pmdarima'
-copyright = '2017-2018, Taylor G Smith'
+year = datetime.datetime.now().year
+copyright = '2017-{0}, Taylor G Smith'.format(year)
 author = 'Taylor G Smith'
 
 # The version info for the project you're documenting, acts as replacement for

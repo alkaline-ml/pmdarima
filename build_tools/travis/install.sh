@@ -45,14 +45,14 @@ if [[ "$DISTRIB" == "conda" ]]; then
     # Configure the conda environment and put it in the path using the
     # provided versions
     if [[ "$INSTALL_MKL" == "true" ]]; then
-        conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
-            numpy=$NUMPY_VERSION scipy \
+        conda create -n testenv --yes python=$PYTHON_VERSION pip pytest \
+            pytest-benchmark numpy=$NUMPY_VERSION scipy \
             mkl cython scikit-learn=$SCIKIT_LEARN_VERSION \
             statsmodels=$STATSMODELS_VERSION
 
     else
-        conda create -n testenv --yes python=$PYTHON_VERSION pip nose pytest \
-            numpy=$NUMPY_VERSION scipy \
+        conda create -n testenv --yes python=$PYTHON_VERSION pip pytest \
+            pytest-benchmark numpy=$NUMPY_VERSION scipy \
             nomkl cython scikit-learn=$SCIKIT_LEARN_VERSION \
             statsmodels=$STATSMODELS_VERSION
     fi
@@ -61,9 +61,6 @@ if [[ "$DISTRIB" == "conda" ]]; then
     # determine what platform is running
     python -c 'from distutils.util import get_platform; print(get_platform())'
     python -c 'import cython; print("Cython version: %s" % cython.__version__)'
-
-    # Install nose-timer via pip
-    pip install nose-timer
 
     # Install the mpl version
     # pip install matplotlib==$MPL_VERSION

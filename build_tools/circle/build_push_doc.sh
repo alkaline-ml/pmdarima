@@ -15,9 +15,10 @@ fi
 branch=$(git symbolic-ref --short HEAD)
 
 # cd into docs, make them
-cd doc
-make clean html EXAMPLES_PATTERN=example_*
-cd ..
+# cd doc
+# make clean html EXAMPLES_PATTERN=example_*
+# cd ..
+make documentation
 
 # move the docs to the top-level directory, stash for checkout
 mv doc/_build/html ./
@@ -55,19 +56,23 @@ echo "Branch name: ${CIRCLE_BRANCH}"
 ls -la
 
 # On both of these, we'll need to remove the artifacts from the package
-# build itself
+# build itself. The _configtest files are added in the latest version of
+# numpy...
 declare -a leftover=("benchmarks"
                      "build"
                      "dist"
                      "doc"
                      "pmdarima"
-                     "pmdarima.egg-info")
+                     "pmdarima.egg-info"
+                     "_configtest"
+                     "_configtest.c"
+                     "_configtest.o")
 
 # check for each left over file/dir and remove it
 for left in "${leftover[@]}"
 do
   echo "Removing ${left}"
-  rm -rf ${left}
+  rm -rf ${left} || echo "${left} does not exist"
 done
 
 # If it's develop, we can simply rename the "html" directory as the

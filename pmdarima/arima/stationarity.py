@@ -16,8 +16,11 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 
 from ..compat.numpy import DTYPE
+from ..decorators import deprecated
 from ..utils.array import c, diff
 from .approx import approx
+
+import warnings
 
 # since the C import relies on the C code having been built with Cython,
 # and since the platform might name the .so file something funky (like
@@ -65,6 +68,26 @@ class _DifferencingStationarityTest(six.with_metaclass(ABCMeta,
         self.alpha = alpha
 
     @abstractmethod
+    def should_diff(self, x):
+        """Test whether the time series is stationary or it needs differencing.
+
+        Parameters
+        ----------
+        x : array-like, shape=(n_samples,)
+            The time series vector.
+
+        Returns
+        -------
+        pval : float
+            The computed P-value of the test.
+
+        sig : bool
+            Whether the P-value is significant at the ``alpha`` level.
+            More directly, whether to difference the time series.
+        """
+
+    # TODO: REMOVE ME in v1.4.0
+    @deprecated(use_instead="should_diff")
     def is_stationary(self, x):
         """Test whether the time series is stationary.
 
@@ -82,6 +105,7 @@ class _DifferencingStationarityTest(six.with_metaclass(ABCMeta,
             Whether the P-value is significant at the ``alpha`` level.
             More directly, whether to difference the time series.
         """
+        return self.should_diff(x)
 
 
 class KPSSTest(_DifferencingStationarityTest):
@@ -124,8 +148,8 @@ class KPSSTest(_DifferencingStationarityTest):
         self.null = null
         self.lshort = lshort
 
-    def is_stationary(self, x):
-        """Test whether the time series is stationary.
+    def should_diff(self, x):
+        """Test whether the time series is stationary or needs differencing.
 
         Parameters
         ----------
@@ -285,8 +309,8 @@ class ADFTest(_DifferencingStationarityTest):
         stderrs = res.bse  # this was a pain in the ARSE to locate
         return res.params[1] / stderrs[1]
 
-    def is_stationary(self, x):
-        """Test whether the time series is stationary.
+    def should_diff(self, x):
+        """Test whether the time series is stationary or needs differencing.
 
         Parameters
         ----------
@@ -402,8 +426,8 @@ class PPTest(_DifferencingStationarityTest):
 
         self.lshort = lshort
 
-    def is_stationary(self, x):
-        """Test whether the time series is stationary.
+    def should_diff(self, x):
+        """Test whether the time series is stationary or needs differencing.
 
         Parameters
         ----------

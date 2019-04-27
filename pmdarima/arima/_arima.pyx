@@ -12,8 +12,11 @@
 # Author: Taylor G Smith <taylor.smith@alkaline-ml.com>
 
 import numpy as np
+
 cimport numpy as np
 from libc.math cimport NAN
+from libc.stdlib cimport malloc, free
+cimport cython
 
 cdef extern from "_arima_fast_helpers.h":
     bint pyr_isfinite(double) nogil
@@ -158,9 +161,11 @@ cpdef double[:] C_Approx(floating1d x, floating1d y, floating1d xout,
     return yout
 
 
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def C_canova_hansen_sd_test(INTP ltrunc,
                             INTP Ne,
-                            floating_array_2d_t Fhataux,
+                            np.float64_t[:,:] Fhataux,
                             intp1d frec,
                             INTP s):
     """As of v0.9.0, this is used to compute the Omnw matrix iteratively.
@@ -182,59 +187,78 @@ def C_canova_hansen_sd_test(INTP ltrunc,
     n_features = Fhataux.shape[1]
 
     # Define vector wnw, Omnw matrix
-    cdef np.ndarray[double, ndim=1, mode='c'] wnw
     cdef np.ndarray[double, ndim=2, mode='c'] Omnw, Omfhat
+    cdef np.ndarray[int, ndim=2, mode='c'] A
+    cdef np.float64_t[:, :] FhatauxT = Fhataux.T
 
     # Omnw is a square matrix of n x n
     Omnw = np.zeros((n_features, n_features), dtype=np.float64, order='c')
 
     # R code: wnw <- 1 - seq(1, ltrunc, 1)/(ltrunc + 1)
-    wnw = 1. - (np.arange(ltrunc, dtype=np.float64) + 1.) / (ltrunc + 1.)
+    cdef double* wnw
+    cdef double wnw_denom = <double>(ltrunc + 1.)
+    cdef double wnw_elmt
 
-    # original R code:
-    # for (k in 1:ltrunc)
-    #     Omnw <- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%
-    #         Fhataux[1:(Ne - k), ]) * wnw[k]
-    # Old code was in python (not cython) but reads about the same
-    for k in range(ltrunc):
-        Omnw = Omnw + \
-               np.dot(Fhataux.T[:, k + 1:Ne],
-                      Fhataux[:(Ne - (k + 1)), :]) * \
-               wnw[k]
+    cdef int* sq
+    cdef int* frecob
+    try:
+        # Allocate memory
+        wnw = <double*>malloc(ltrunc * sizeof(double))
+        sq = <int*>malloc((s - 1) * sizeof(int))
+        frecob = <int*>malloc((s - 1) * sizeof(int))
 
-    # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
-    Omfhat = (np.dot(Fhataux.T, Fhataux) + Omnw + Omnw.T) / float(Ne)
+        # init wnw
+        for i in range(0, ltrunc):
+            wnw[i] = 1. - ((i + 1) / wnw_denom)
 
-    cdef np.ndarray[int, ndim=1, mode='c'] sq, frecob
-    cdef np.ndarray[int, ndim=2, mode='c'] A
+        # original R code:
+        # for (k in 1:ltrunc)
+        #     Omnw <- Omnw + (t(Fhataux)[, (k + 1):Ne] %*%
+        #         Fhataux[1:(Ne - k), ]) * wnw[k]
+        # This is a gigantic bottleneck, but I can't think of any better way
+        # to solve it, and even R's auto ARIMA chokes on big CH tests. See:
+        # https://stackoverflow.com/questions/53981660/efficiently-sum-complex-matrix-products-with-numpy
+        Omnw = sum(np.matmul(FhatauxT[:, k + 1:], 
+                             Fhataux[:Ne - (k + 1), :]) * wnw[k]
+                   for k in range(ltrunc))
 
-    sq = np.arange(0, s - 1, 2, dtype=np.int32)
-    frecob = np.zeros(s - 1, dtype=np.int32, order='c')
+        # Omfhat <- (crossprod(Fhataux) + Omnw + t(Omnw))/Ne
+        Omfhat = (np.dot(Fhataux.T, Fhataux) + Omnw + Omnw.T) / float(Ne)
 
-    with nogil:
-        for i in range(n):
-            v = frec[i]
+        with nogil:
+            # Init sq and frecob
+            for i in range(0, s - 1):
+                sq[i] = 2 * i
+                frecob[i] = 0
 
-            if v == 1 and i == half_s:
-                frecob[sq[i]] = 1
-            if v == 1 and i < half_s:
-                frecob[sq[i]] = frecob[sq[i] + 1] = 1
+            for i in range(n):
+                v = frec[i]
 
-        # sum of == 1
-        for i in range(s - 1):
-            if frecob[i] == 1:
-                a += 1
+                if v == 1 and i == half_s:
+                    frecob[sq[i]] = 1
+                if v == 1 and i < half_s:
+                    frecob[sq[i]] = frecob[sq[i] + 1] = 1
 
-    A = np.zeros((s - 1, a), dtype=np.int32, order='c')
+            # sum of == 1
+            for i in range(s - 1):
+                if frecob[i] == 1:
+                    a += 1
 
-    # C_pop_A
-    i = 0
-    j = 0
-    with nogil:
-        for i in range(s - 1):
-            if frecob[i] == 1:
-                A[i, j] = 1
-                j += 1
+        A = np.zeros((s - 1, a), dtype=np.int32, order='c')
 
-    # Now create the 'tmp' matrix pre-SVD
-    return A, np.dot(np.dot(A.T, Omfhat), A)
+        # C_pop_A
+        i = 0
+        j = 0
+        with nogil:
+            for i in range(s - 1):
+                if frecob[i] == 1:
+                    A[i, j] = 1
+                    j += 1
+
+        # Now create the 'tmp' matrix pre-SVD
+        return A, np.dot(np.dot(A.T, Omfhat), A)
+
+    finally:
+        free(wnw)
+        free(sq)
+        free(frecob)

@@ -52,6 +52,10 @@ def load_lynx(as_series=False):
     1825    1475
     dtype: int64
 
+    Notes
+    -----
+    This is annual data and not seasonal in nature (i.e., :math:`m=1`)
+
     References
     ----------
     .. [1] Brockwell, P. J. and Davis, R. A. (1991)

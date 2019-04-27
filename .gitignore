@@ -32,7 +32,8 @@ __pycache__/
 # C extensions
 *.so
 *.c
-pmdarima/arima/_arima.html
+pmdarima/arima/*.html
+pmdarima/preprocessing/exog/*.html
 
 # Distribution / packaging
 .Python
@@ -71,7 +72,6 @@ htmlcov/
 .coverage
 .coverage.*
 .cache
-nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/

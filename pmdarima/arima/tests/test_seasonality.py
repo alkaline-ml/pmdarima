@@ -3,30 +3,16 @@
 
 from __future__ import absolute_import
 
-from pmdarima.arima.seasonality import CHTest
+from pmdarima.arima.seasonality import CHTest, OCSBTest
 from pmdarima.arima.utils import nsdiffs
+from pmdarima.datasets import load_austres
 
 import numpy as np
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_almost_equal, assert_array_equal
 from sklearn.utils.validation import check_random_state
 import pytest
 
-# TODO: redundant code with test_stationarity. Fix this in separate feature
-austres = np.array([13067.3, 13130.5, 13198.4, 13254.2, 13303.7, 13353.9,
-                    13409.3, 13459.2, 13504.5, 13552.6, 13614.3, 13669.5,
-                    13722.6, 13772.1, 13832.0, 13862.6, 13893.0, 13926.8,
-                    13968.9, 14004.7, 14033.1, 14066.0, 14110.1, 14155.6,
-                    14192.2, 14231.7, 14281.5, 14330.3, 14359.3, 14396.6,
-                    14430.8, 14478.4, 14515.7, 14554.9, 14602.5, 14646.4,
-                    14695.4, 14746.6, 14807.4, 14874.4, 14923.3, 14988.7,
-                    15054.1, 15121.7, 15184.2, 15239.3, 15288.9, 15346.2,
-                    15393.5, 15439.0, 15483.5, 15531.5, 15579.4, 15628.5,
-                    15677.3, 15736.7, 15788.3, 15839.7, 15900.6, 15961.5,
-                    16018.3, 16076.9, 16139.0, 16203.0, 16263.3, 16327.9,
-                    16398.9, 16478.3, 16538.2, 16621.6, 16697.0, 16777.2,
-                    16833.1, 16891.6, 16956.8, 17026.3, 17085.4, 17106.9,
-                    17169.4, 17239.4, 17292.0, 17354.2, 17414.2, 17447.3,
-                    17482.6, 17526.0, 17568.7, 17627.1, 17661.5])
+austres = load_austres()
 
 #  change the length to be longer so we can actually test the large case
 aus_list = austres.tolist()  # type: list
@@ -65,21 +51,24 @@ def test_ch_base():
     CHTest(m=365).estimate_seasonal_differencing_term(random_state.rand(400))
 
 
-def test_nsdiffs_corner_cases():
+@pytest.mark.parametrize(
+    'tst', ('ocsb', 'ch')
+)
+def test_nsdiffs_corner_cases(tst):
     # max_D must be a positive int
     with pytest.raises(ValueError):
-        nsdiffs(austres, m=2, max_D=0)
+        nsdiffs(austres, m=2, max_D=0, test=tst)
 
     # assert 0 for constant
-    assert nsdiffs([1, 1, 1, 1], m=2) == 0
+    assert nsdiffs([1, 1, 1, 1], m=2, test=tst) == 0
 
     # show fails for m <= 1
     for m in (0, 1):
         with pytest.raises(ValueError):
-            nsdiffs(austres, m=m)
+            nsdiffs(austres, m=m, test=tst)
 
 
-def test_seas_dummy():
+def test_ch_seas_dummy():
     x = austres
 
     # Results from R. Don't try this in the console; it tends to
@@ -187,6 +176,124 @@ def test_seas_dummy():
         pytest.param(austres, 24, 4.134289)  # R res: 4.134289
     ]
 )
-def test_sd_test(x, m, expected):
+def test_ch_sd_test(x, m, expected):
     res = CHTest._sd_test(x, m)
     assert np.allclose(res, expected)
+
+
+def test_ocsb_do_lag():
+    q = np.arange(5)
+
+    assert_array_equal(OCSBTest._do_lag(q, 1, False),
+                       [[0.],
+                        [1.],
+                        [2.],
+                        [3.],
+                        [4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 1, True),
+                       [[0.],
+                        [1.],
+                        [2.],
+                        [3.],
+                        [4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 2, False),
+                       [[0., np.nan],
+                        [1., 0.],
+                        [2., 1.],
+                        [3., 2.],
+                        [4., 3.],
+                        [np.nan, 4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 2, True),
+                       [[1., 0.],
+                        [2., 1.],
+                        [3., 2.],
+                        [4., 3.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 3, False),
+                       [[0., np.nan, np.nan],
+                        [1., 0., np.nan],
+                        [2., 1., 0.],
+                        [3., 2., 1.],
+                        [4., 3., 2.],
+                        [np.nan, 4., 3.],
+                        [np.nan, np.nan, 4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 3, True),
+                       [[2., 1., 0.],
+                        [3., 2., 1.],
+                        [4., 3., 2.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 4, False),
+                       [[0., np.nan, np.nan, np.nan],
+                        [1., 0., np.nan, np.nan],
+                        [2., 1., 0., np.nan],
+                        [3., 2., 1., 0.],
+                        [4., 3., 2., 1.],
+                        [np.nan, 4., 3., 2.],
+                        [np.nan, np.nan, 4., 3.],
+                        [np.nan, np.nan, np.nan, 4.]])
+
+    assert_array_equal(OCSBTest._do_lag(q, 4, True),
+                       [[3., 2., 1., 0.],
+                        [4., 3., 2., 1.]])
+
+
+def test_ocsb_gen_lags():
+    z_res = OCSBTest._gen_lags(austres, 0)
+    assert z_res.shape == austres.shape
+    assert (z_res == 0).all()
+
+
+@pytest.mark.parametrize(
+    'lag_method,expected,max_lag', [
+        # ocsb.test(austres, lag.method='fixed', maxlag=2)$stat -> -5.673749
+        pytest.param('fixed', -5.6737, 2),
+
+        # ocsb.test(austres, lag.method='fixed', maxlag=3)$stat -> -5.632227
+        pytest.param('fixed', -5.6280, 3),
+
+        # ocsb.test(austres, lag.method='AIC', maxlag=2)$stat -> -6.834392
+        # We get a singular matrix error in Python that doesn't show up in R,
+        # but we found a way to recover. Unforunately, it means our results are
+        # different...
+        pytest.param('aic', -5.66870, 2),
+        pytest.param('aic', -6.03761, 3),
+        pytest.param('bic', -5.66870, 2),
+        pytest.param('bic', -6.03761, 3),
+        pytest.param('aicc', -5.66870, 2),
+        pytest.param('aicc', -6.03761, 3),
+    ]
+)
+def test_ocsb_test_statistic(lag_method, expected, max_lag):
+    test = OCSBTest(m=4, max_lag=max_lag, lag_method=lag_method)
+    test_stat = test._compute_test_statistic(austres)
+    assert np.allclose(test_stat, expected, rtol=0.01)
+
+
+def test_ocsb_regression():
+    # fitOCSB is a closure function inside of forecast::ocsb.test
+    # > fitOCSB(austres, 1, 1)
+    # Coefficients:
+    # xregmf.x    xregZ4    xregZ5
+    #   0.2169    0.2111   -0.8625
+
+    # We get different results here, but only marginally...
+    reg = OCSBTest._fit_ocsb(austres, m=4, lag=1, max_lag=1)
+    coef = reg.params
+    assert np.allclose(coef, [0.2169, 0.2111, -0.8625], rtol=0.01)
+
+
+def test_failing_ocsb():
+    # TODO: should this pass?
+    # This passes in R, but statsmodels can't compute the regression...
+    with pytest.raises(ValueError):
+        OCSBTest(m=4, max_lag=0).estimate_seasonal_differencing_term(austres)
+
+    # Fail for bad method
+    with pytest.raises(ValueError) as v:
+        OCSBTest(m=4, max_lag=3, lag_method="bad_method")\
+            .estimate_seasonal_differencing_term(austres)
+    assert "invalid method" in str(v)

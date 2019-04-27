@@ -2,12 +2,14 @@
 
 from __future__ import absolute_import
 
-from pmdarima.arima import ARIMA, auto_arima
+from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
 from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
-from pmdarima.arima.auto import _fmt_warning_str, _post_ppc_arima
+from pmdarima.arima._auto_solvers import _fmt_warning_str
+from pmdarima.arima.auto import _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
+from pmdarima.arima.warnings import ModelFitWarning
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate
-from pmdarima.utils import get_callable, assert_raises
+from pmdarima.utils import get_callable
 
 import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
@@ -18,7 +20,6 @@ from sklearn.externals import joblib
 from statsmodels import api as sm
 import pandas as pd
 
-import warnings
 import pickle
 import pytest
 import time
@@ -48,6 +49,23 @@ abc = np.array([4.439524, 4.769823, 6.558708, 5.070508,
                 6.207962, 3.876891, 4.597115, 4.533345,
                 5.779965, 4.916631])
 
+# TODO: redundant code with test_stationarity. Fix this in separate feature
+austres = np.array([13067.3, 13130.5, 13198.4, 13254.2, 13303.7, 13353.9,
+                    13409.3, 13459.2, 13504.5, 13552.6, 13614.3, 13669.5,
+                    13722.6, 13772.1, 13832.0, 13862.6, 13893.0, 13926.8,
+                    13968.9, 14004.7, 14033.1, 14066.0, 14110.1, 14155.6,
+                    14192.2, 14231.7, 14281.5, 14330.3, 14359.3, 14396.6,
+                    14430.8, 14478.4, 14515.7, 14554.9, 14602.5, 14646.4,
+                    14695.4, 14746.6, 14807.4, 14874.4, 14923.3, 14988.7,
+                    15054.1, 15121.7, 15184.2, 15239.3, 15288.9, 15346.2,
+                    15393.5, 15439.0, 15483.5, 15531.5, 15579.4, 15628.5,
+                    15677.3, 15736.7, 15788.3, 15839.7, 15900.6, 15961.5,
+                    16018.3, 16076.9, 16139.0, 16203.0, 16263.3, 16327.9,
+                    16398.9, 16478.3, 16538.2, 16621.6, 16697.0, 16777.2,
+                    16833.1, 16891.6, 16956.8, 17026.3, 17085.4, 17106.9,
+                    17169.4, 17239.4, 17292.0, 17354.2, 17414.2, 17447.3,
+                    17482.6, 17526.0, 17568.7, 17627.1, 17661.5])
+
 wineind = load_wineind()
 lynx = load_lynx()
 
@@ -68,6 +86,9 @@ def _unlink_if_exists(path):
 def test_basic_arima():
     arima = ARIMA(order=(0, 0, 0), suppress_warnings=True)
     preds = arima.fit_predict(y)  # fit/predict for coverage
+
+    # No OOB, so assert none
+    assert arima.oob_preds_ is None
 
     # test some of the attrs
     assert_almost_equal(arima.aic(), 11.201308403566909, decimal=5)
@@ -106,8 +127,17 @@ def test_with_oob():
     # show we can fit with CV (kinda)
     arima = ARIMA(order=(2, 1, 2),
                   suppress_warnings=True,
+                  scoring='mse',
                   out_of_sample_size=10).fit(y=hr)
-    assert not np.isnan(arima.oob())  # show this works
+
+    oob = arima.oob()
+    assert not np.isnan(oob)  # show this works
+
+    # Assert the predictions give the expected MAE/MSE
+    oob_preds = arima.oob_preds_
+    assert oob_preds.shape[0] == 10
+    scoring = get_callable('mse', VALID_SCORING)
+    assert scoring(hr[-10:], oob_preds) == oob
 
     # show we can fit if ooss < 0 and oob will be nan
     arima = ARIMA(order=(2, 1, 2), suppress_warnings=True,
@@ -115,14 +145,15 @@ def test_with_oob():
     assert np.isnan(arima.oob())
 
     # This will raise since n_steps is not an int
-    assert_raises(TypeError, arima.predict, n_periods="5")
+    with pytest.raises(TypeError):
+        arima.predict(n_periods="5")
 
     # But that we CAN forecast with an int...
     _ = arima.predict(n_periods=5)  # noqa: F841
 
     # Show we fail if cv > n_samples
-    assert_raises(ValueError,
-                  ARIMA(order=(2, 1, 2), out_of_sample_size=1000).fit, hr)
+    with pytest.raises(ValueError):
+        ARIMA(order=(2, 1, 2), out_of_sample_size=1000).fit(hr)
 
 
 # Test Issue #28 ----------------------------------------------------------
@@ -169,23 +200,23 @@ def test_oob_for_issue_28():
     no_oob_forecasts = arima_no_oob.predict(n_periods=5,
                                             exogenous=xreg_test)
 
-    assert_raises(AssertionError, assert_array_almost_equal,
-                  with_oob_forecasts, no_oob_forecasts)
+    with pytest.raises(AssertionError):
+        assert_array_almost_equal(with_oob_forecasts, no_oob_forecasts)
 
     # But after we update the no_oob model with the latest data, we should
     # be producing the same exact forecasts
 
     # First, show we'll fail if we try to add observations with no exogenous
-    assert_raises(ValueError, arima_no_oob.update,
-                  hr[-10:], None)
+    with pytest.raises(ValueError):
+        arima_no_oob.update(hr[-10:], None)
 
     # Also show we'll fail if we try to add mis-matched shapes of data
-    assert_raises(ValueError, arima_no_oob.update,
-                  hr[-10:], xreg_test)
+    with pytest.raises(ValueError):
+        arima_no_oob.update(hr[-10:], xreg_test)
 
     # Show we fail if we try to add observations with a different dim exog
-    assert_raises(ValueError, arima_no_oob.update,
-                  hr[-10:], xreg_test[:, :2])
+    with pytest.raises(ValueError):
+        arima_no_oob.update(hr[-10:], xreg_test[:, :2])
 
     # Actually add them now, and compare the forecasts (should be the same)
     arima_no_oob.update(hr[-10:], xreg[-10:, :])
@@ -200,11 +231,13 @@ def test_oob_sarimax():
     xreg = rs.rand(wineind.shape[0], 2)
     fit = ARIMA(order=(1, 1, 1),
                 seasonal_order=(0, 1, 1, 12),
+                maxiter=5,
                 out_of_sample_size=15).fit(y=wineind, exogenous=xreg)
 
     fit_no_oob = ARIMA(order=(1, 1, 1),
                        seasonal_order=(0, 1, 1, 12),
                        out_of_sample_size=0,
+                       maxiter=5,
                        suppress_warnings=True).fit(y=wineind[:-15],
                                                    exogenous=xreg[:-15, :])
 
@@ -225,6 +258,9 @@ def test_oob_sarimax():
     assert np.allclose(fit.predict(5, xreg_test),
                        fit_no_oob.predict(5, xreg_test),
                        rtol=1e-2)
+
+    # And also the params should be close now after updating
+    assert np.allclose(fit.params(), fit_no_oob.params())
 
     # Show we can get a confidence interval out here
     preds, conf = fit.predict(5, xreg_test, return_conf_int=True)
@@ -261,15 +297,14 @@ def test_oob_for_issue_29():
                     _, _ = model.predict(n_periods=3, return_conf_int=True,
                                          exogenous=xr)
 
+                # Statsmodels can be fragile with ARMA coefficient
+                # computation. If we encounter that, pass:
+                #   ValueError: The computed initial MA coefficients are
+                #       not invertible. You should induce invertibility,
+                #       choose a different model order, or ...
                 except Exception as ex:
-                    print("Failing combo: d=%i, cv=%i, exog=%r"
-                          % (d, cv, exog))
-
-                    # Statsmodels can be fragile with ARMA coefficient
-                    # computation. If we encounter that, pass:
-                    #   ValueError: The computed initial MA coefficients are
-                    #       not invertible. You should induce invertibility,
-                    #       choose a different model order, or ...
+                    # print("Failing combo: d=%i, cv=%i, exog=%r"
+                    #       % (d, cv, exog))
                     if "invertibility" in str(ex):
                         pass
                     else:
@@ -279,8 +314,10 @@ def test_oob_for_issue_29():
 def test_issue_30():
     # From the issue:
     vec = np.array([33., 44., 58., 49., 46., 98., 97.])
-    auto_arima(vec, out_of_sample_size=1, seasonal=False,
-               suppress_warnings=True)
+
+    arm = AutoARIMA(out_of_sample_size=1, seasonal=False,
+                    suppress_warnings=True)
+    arm.fit(vec)
 
     # This is a way to force it:
     ARIMA(order=(0, 1, 0), out_of_sample_size=1).fit(vec)
@@ -343,12 +380,13 @@ def test_more_elaborate():
 
     # now show that since we fit the ARIMA with an exogenous array,
     # we need to provide one for predictions otherwise it breaks.
-    assert_raises(ValueError, arima.predict, n_periods=5, exogenous=None)
+    with pytest.raises(ValueError):
+        arima.predict(n_periods=5, exogenous=None)
 
     # show that if we DO provide an exogenous and it's the wrong dims, we
     # also break things down.
-    assert_raises(ValueError, arima.predict, n_periods=5,
-                  exogenous=rs.rand(4, 4))
+    with pytest.raises(ValueError):
+        arima.predict(n_periods=5, exogenous=rs.rand(4, 4))
 
 
 def test_the_r_src():
@@ -391,16 +429,23 @@ def test_errors():
         #     return False
         # except ValueError:
         #     return True
-        assert_raises(ValueError, f, *args, **kwargs)
+        with pytest.raises(ValueError):
+            f(*args, **kwargs)
 
     # show we fail for bad start/max p, q values:
-    _assert_val_error(auto_arima, abc, start_p=-1)
-    _assert_val_error(auto_arima, abc, start_q=-1)
-    _assert_val_error(auto_arima, abc, max_p=-1)
-    _assert_val_error(auto_arima, abc, max_q=-1)
+    with pytest.raises(ValueError):
+        auto_arima(abc, start_p=-1)
+    with pytest.raises(ValueError):
+        auto_arima(abc, start_q=-1)
+    with pytest.raises(ValueError):
+        auto_arima(abc, max_p=-1)
+    with pytest.raises(ValueError):
+        auto_arima(abc, max_q=-1)
     # (where start < max)
-    _assert_val_error(auto_arima, abc, start_p=1, max_p=0)
-    _assert_val_error(auto_arima, abc, start_q=1, max_q=0)
+    with pytest.raises(ValueError):
+        auto_arima(abc, start_p=1, max_p=0)
+    with pytest.raises(ValueError):
+        auto_arima(abc, start_q=1, max_q=0)
 
     # show max order error
     _assert_val_error(auto_arima, abc, max_order=-1)
@@ -461,16 +506,6 @@ def test_with_seasonality1():
 
 
 def test_with_seasonality2():
-    # also test the warning, while we're at it...
-    def suppress_warnings(func):
-        def suppressor(*args, **kwargs):
-            with warnings.catch_warnings(record=True):
-                warnings.simplefilter("ignore")
-                return func(*args, **kwargs)
-        return suppressor
-
-    # Use smaller M to make this move faster.
-    @suppress_warnings
     def do_fit():
         return auto_arima(wineind, start_p=1, start_q=1, max_p=2,
                           max_q=2, m=2, start_P=0,
@@ -478,7 +513,10 @@ def test_with_seasonality2():
                           d=1, D=1, stepwise=False,
                           suppress_warnings=True,
                           error_action='ignore',
-                          n_fits=20, random_state=42)
+                          n_fits=20, random_state=42,
+
+                          # Set to super low iter to make test move quickly
+                          maxiter=2)
 
     # show that we can forecast even after the
     # pickling (this was fit in parallel)
@@ -498,7 +536,10 @@ def test_with_seasonality3():
                start_P=0, seasonal=True, d=1, D=None,
                error_action='ignore', suppress_warnings=True,
                trace=True,  # get the coverage on trace
-               random_state=42, stepwise=True)
+               random_state=42, stepwise=True,
+
+               # Set to super low iter to make test move quickly
+               maxiter=5)
 
 
 def test_with_seasonality4():
@@ -509,7 +550,10 @@ def test_with_seasonality4():
                start_P=0, seasonal=True, n_jobs=1, d=1, D=None, stepwise=False,
                error_action='ignore', suppress_warnings=True,
                random=True, random_state=42, return_valid_fits=True,
-               n_fits=3)  # only a few
+               n_fits=3,  # only a few
+
+               # Set to super low iter to make test move quickly
+               maxiter=5)
 
 
 def test_with_seasonality5():
@@ -522,7 +566,10 @@ def test_with_seasonality5():
                          suppress_warnings=True, stationary=True,
                          random_state=42, return_valid_fits=True,
                          stepwise=True,
-                         exogenous=rs.rand(wineind.shape[0], 4))  # only fit 2
+                         exogenous=rs.rand(wineind.shape[0], 4),  # only fit 2
+
+                         # Set to super low iter to make test move quickly
+                         maxiter=5)
 
     # show it is a list
     assert hasattr(all_res, '__iter__')
@@ -545,17 +592,18 @@ def test_with_seasonality7():
                suppress_warnings=True,
                error_action='raise',  # do raise so it fails fast
                random=True, random_state=42, n_fits=2,
-               stepwise=False)
+               stepwise=False,
+
+               # Set to super low iter to make test move quickly
+               maxiter=5)
 
 
 def test_corner_cases():
-    assert_raises(ValueError, auto_arima, wineind,
-                  error_action='some-bad-string')
+    with pytest.raises(ValueError):
+        auto_arima(wineind, error_action='some-bad-string')
 
     # things that produce warnings
-    with warnings.catch_warnings(record=False):
-        warnings.simplefilter('ignore')
-
+    with pytest.warns(UserWarning):
         # show a constant result will result in a quick fit
         auto_arima(np.ones(10), suppress_warnings=True)
 
@@ -565,10 +613,12 @@ def test_corner_cases():
         assert hasattr(fits, '__iter__')
 
     # show we fail for n_iter < 0
-    assert_raises(ValueError, auto_arima, np.ones(10), random=True, n_fits=-1)
+    with pytest.raises(ValueError):
+        auto_arima(np.ones(10), random=True, n_fits=-1)
 
     # show if max* < start* it breaks:
-    assert_raises(ValueError, auto_arima, np.ones(10), start_p=5, max_p=0)
+    with pytest.raises(ValueError):
+        auto_arima(np.ones(10), start_p=5, max_p=0)
 
 
 def test_warning_str_fmt():
@@ -578,8 +628,16 @@ def test_warning_str_fmt():
         _fmt_warning_str(order, ssnl)
 
 
-def test_nsdiffs_on_wine():
-    assert nsdiffs(wineind, m=52) == 2
+@pytest.mark.parametrize(
+    'data,test,m,expected', [
+        pytest.param(wineind, 'ch', 52, 2),
+        pytest.param(wineind, 'ch', 12, 0),
+        pytest.param(wineind, 'ocsb', 52, 0),
+        pytest.param(austres, 'ocsb', 4, 0)
+    ]
+)
+def test_nsdiffs_on_various(data, test, m, expected):
+    assert nsdiffs(data, m=m, test=test, max_D=3) == expected
 
 
 # Asserting where D grows too large as a product of an M that's too big.
@@ -648,28 +706,23 @@ def test_failing_model_fit():
 
 def test_warn_for_large_differences():
     # First: d is too large
-    with warnings.catch_warnings(record=True) as w:
-        _ = auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
-                       d=3, error_action='warn')
-
-        assert len(w) > 0
+    with pytest.warns(ModelFitWarning):
+        auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
+                   d=3, error_action='warn', maxiter=5)
 
     # Second: D is too large. M needs to be > 1 or D will be set to 0...
     # unfortunately, this takes a long time.
-    with warnings.catch_warnings(record=True) as w:
-        _ = auto_arima(wineind, seasonal=True, m=2,  # noqa: F841
-                       suppress_warnings=False,
-                       D=3, error_action='warn')
-
-        assert len(w) > 0
+    with pytest.warns(ModelFitWarning):
+        auto_arima(wineind, seasonal=True, m=2,  # noqa: F841
+                   suppress_warnings=False,
+                   D=3, error_action='warn',
+                   maxiter=5)
 
 
 def test_warn_for_stepwise_and_parallel():
-    with warnings.catch_warnings(record=True) as w:
-        _ = auto_arima(lynx, suppress_warnings=False, d=1,  # noqa: F841
+    with pytest.warns(UserWarning):
+        auto_arima(lynx, suppress_warnings=False, d=1,  # noqa: F841
                        error_action='ignore', stepwise=True, n_jobs=2)
-
-        assert len(w) > 0
 
 
 # Force case where data is simple polynomial after differencing
@@ -697,7 +750,10 @@ def test_seasonal_xreg_differencing():
         _ = auto_arima(wineind, d=1, D=1,  # noqa: F841
                        seasonal=True,
                        exogenous=wineind_xreg, error_action='ignore',
-                       suppress_warnings=True, m=m)
+                       suppress_warnings=True, m=m,
+
+                       # Set to super low iter to make test move quickly
+                       maxiter=5)
 
 
 # Show that we can complete when max order is None
@@ -742,17 +798,15 @@ def test_for_older_version():
             joblib.dump(arima, pickle_file)
 
             # Now unpickle it and show that we get a warning (if expected)
-            with warnings.catch_warnings(record=True) as w:
+            if expect_warning:
+                with pytest.warns(UserWarning):
+                    arm = joblib.load(pickle_file)  # type: ARIMA
+            else:
                 arm = joblib.load(pickle_file)  # type: ARIMA
 
-                if expect_warning:
-                    assert len(w) > 0
-                else:
-                    assert not len(w)
-
-                # we can still produce predictions (only if we fit)
-                if do_fit:
-                    arm.predict(n_periods=4)
+            # we can still produce predictions (only if we fit)
+            if do_fit:
+                arm.predict(n_periods=4)
 
         finally:
             os.unlink(pickle_file)
@@ -961,10 +1015,19 @@ def test_add_new_obs_deprecated():
 
     model.fit(train)
 
-    with warnings.catch_warnings(record=True) as w:
-        warnings.simplefilter("always")
+    with pytest.warns(DeprecationWarning):
         model.add_new_observations(test)
-        assert len(w)
-        # Might be more than one warning, so quick pass
-        assert any(issubclass(wrn.category, DeprecationWarning) and
-                   'pmdarima' in str(wrn.message) for wrn in w)
+
+
+def test_AutoARIMA_class():
+    train, test = wineind[:125], wineind[125:]
+    mod = AutoARIMA(maxiter=5)
+    mod.fit(train)
+
+    endog = mod.model_.arima_res_.data.endog
+    assert_array_almost_equal(train, endog)
+
+    # update
+    mod.update(test, maxiter=2)
+    new_endog = mod.model_.arima_res_.data.endog
+    assert_array_almost_equal(wineind, new_endog)
