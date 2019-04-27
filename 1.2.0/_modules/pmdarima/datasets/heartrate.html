@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.datasets.heartrate &mdash; pmdarima 1.2.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../',
+              VERSION:'1.2.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pmdarima.datasets.heartrate</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pmdarima.datasets.heartrate</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;load_heartrate&#39;</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="load_heartrate"><a class="viewcode-back" href="../../../modules/generated/pmdarima.datasets.load_heartrate.html#pmdarima.datasets.load_heartrate">[docs]</a><span class="k">def</span> <span class="nf">load_heartrate</span><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Uniform heart-rate data.</span>
+
+<span class="sd">    A sample of heartrate data borrowed from an</span>
+<span class="sd">    `MIT database &lt;http://ecg.mit.edu/time-series/&gt;`_. The sample consists</span>
+<span class="sd">    of 150 evenly spaced (0.5 seconds) heartrate measurements.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    as_series : bool, optional (default=False)</span>
+<span class="sd">        Whether to return a Pandas series. If False, will return a 1d</span>
+<span class="sd">        numpy array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rslt : array-like, shape=(n_samples,)</span>
+<span class="sd">        The heartrate vector.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from pmdarima.datasets import load_heartrate</span>
+<span class="sd">    &gt;&gt;&gt; load_heartrate()</span>
+<span class="sd">    array([84.2697, 84.2697, 84.0619, 85.6542, 87.2093, 87.1246, 86.8726,</span>
+<span class="sd">           86.7052, 87.5899, 89.1475, 89.8204, 89.8204, 90.4375, 91.7605,</span>
+<span class="sd">           93.1081, 94.3291, 95.8003, 97.5119, 98.7457, 98.904 , 98.3437,</span>
+<span class="sd">           98.3075, 98.8313, 99.0789, 98.8157, 98.2998, 97.7311, 97.6471,</span>
+<span class="sd">           97.7922, 97.2974, 96.2042, 95.2318, 94.9367, 95.0867, 95.389 ,</span>
+<span class="sd">           95.5414, 95.2439, 94.9415, 95.3557, 96.3423, 97.1563, 97.4026,</span>
+<span class="sd">           96.7028, 96.5516, 97.9837, 98.9879, 97.6312, 95.4064, 93.8603,</span>
+<span class="sd">           93.0552, 94.6012, 95.8476, 95.7692, 95.9236, 95.7692, 95.9211,</span>
+<span class="sd">           95.8501, 94.6703, 93.0993, 91.972 , 91.7821, 91.7911, 90.807 ,</span>
+<span class="sd">           89.3196, 88.1511, 88.7762, 90.2265, 90.8066, 91.2284, 92.4238,</span>
+<span class="sd">           93.243 , 92.8472, 92.5926, 91.7778, 91.2974, 91.6364, 91.2952,</span>
+<span class="sd">           91.771 , 93.2285, 93.3199, 91.8799, 91.2239, 92.4055, 93.8716,</span>
+<span class="sd">           94.5825, 94.5594, 94.9453, 96.2412, 96.6879, 95.8295, 94.7819,</span>
+<span class="sd">           93.4731, 92.7997, 92.963 , 92.6996, 91.9648, 91.2417, 91.9312,</span>
+<span class="sd">           93.9548, 95.3044, 95.2511, 94.5358, 93.8093, 93.2287, 92.2065,</span>
+<span class="sd">           92.1588, 93.6376, 94.899 , 95.1592, 95.2415, 95.5414, 95.0971,</span>
+<span class="sd">           94.528 , 95.5887, 96.4715, 96.6158, 97.0769, 96.8531, 96.3947,</span>
+<span class="sd">           97.4291, 98.1767, 97.0148, 96.044 , 95.9581, 96.4814, 96.5211,</span>
+<span class="sd">           95.3629, 93.5741, 92.077 , 90.4094, 90.1751, 91.3312, 91.2883,</span>
+<span class="sd">           89.0592, 87.052 , 86.6226, 85.7889, 85.6348, 85.3911, 83.8064,</span>
+<span class="sd">           82.8729, 82.6266, 82.645 , 82.645 , 82.645 , 82.645 , 82.645 ,</span>
+<span class="sd">           82.645 , 82.645 , 82.645 ])</span>
+
+<span class="sd">    &gt;&gt;&gt; load_heartrate(True).head()</span>
+<span class="sd">    0    84.2697</span>
+<span class="sd">    1    84.2697</span>
+<span class="sd">    2    84.0619</span>
+<span class="sd">    3    85.6542</span>
+<span class="sd">    4    87.2093</span>
+<span class="sd">    dtype: float64</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Goldberger AL, Rigney DR. Nonlinear dynamics at the bedside.</span>
+<span class="sd">           In: Glass L, Hunter P, McCulloch A, eds.</span>
+<span class="sd">           Theory of Heart: Biomechanics, Biophysics, and Nonlinear</span>
+<span class="sd">           Dynamics of Cardiac Function. New York: Springer-Verlag, 1991,</span>
+<span class="sd">           pp. 583-605.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rslt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">84.2697</span><span class="p">,</span> <span class="mf">84.2697</span><span class="p">,</span> <span class="mf">84.0619</span><span class="p">,</span> <span class="mf">85.6542</span><span class="p">,</span> <span class="mf">87.2093</span><span class="p">,</span> <span class="mf">87.1246</span><span class="p">,</span>
+                     <span class="mf">86.8726</span><span class="p">,</span> <span class="mf">86.7052</span><span class="p">,</span> <span class="mf">87.5899</span><span class="p">,</span> <span class="mf">89.1475</span><span class="p">,</span> <span class="mf">89.8204</span><span class="p">,</span> <span class="mf">89.8204</span><span class="p">,</span>
+                     <span class="mf">90.4375</span><span class="p">,</span> <span class="mf">91.7605</span><span class="p">,</span> <span class="mf">93.1081</span><span class="p">,</span> <span class="mf">94.3291</span><span class="p">,</span> <span class="mf">95.8003</span><span class="p">,</span> <span class="mf">97.5119</span><span class="p">,</span>
+                     <span class="mf">98.7457</span><span class="p">,</span> <span class="mf">98.904</span><span class="p">,</span> <span class="mf">98.3437</span><span class="p">,</span> <span class="mf">98.3075</span><span class="p">,</span> <span class="mf">98.8313</span><span class="p">,</span> <span class="mf">99.0789</span><span class="p">,</span>
+                     <span class="mf">98.8157</span><span class="p">,</span> <span class="mf">98.2998</span><span class="p">,</span> <span class="mf">97.7311</span><span class="p">,</span> <span class="mf">97.6471</span><span class="p">,</span> <span class="mf">97.7922</span><span class="p">,</span> <span class="mf">97.2974</span><span class="p">,</span>
+                     <span class="mf">96.2042</span><span class="p">,</span> <span class="mf">95.2318</span><span class="p">,</span> <span class="mf">94.9367</span><span class="p">,</span> <span class="mf">95.0867</span><span class="p">,</span> <span class="mf">95.389</span><span class="p">,</span> <span class="mf">95.5414</span><span class="p">,</span>
+                     <span class="mf">95.2439</span><span class="p">,</span> <span class="mf">94.9415</span><span class="p">,</span> <span class="mf">95.3557</span><span class="p">,</span> <span class="mf">96.3423</span><span class="p">,</span> <span class="mf">97.1563</span><span class="p">,</span> <span class="mf">97.4026</span><span class="p">,</span>
+                     <span class="mf">96.7028</span><span class="p">,</span> <span class="mf">96.5516</span><span class="p">,</span> <span class="mf">97.9837</span><span class="p">,</span> <span class="mf">98.9879</span><span class="p">,</span> <span class="mf">97.6312</span><span class="p">,</span> <span class="mf">95.4064</span><span class="p">,</span>
+                     <span class="mf">93.8603</span><span class="p">,</span> <span class="mf">93.0552</span><span class="p">,</span> <span class="mf">94.6012</span><span class="p">,</span> <span class="mf">95.8476</span><span class="p">,</span> <span class="mf">95.7692</span><span class="p">,</span> <span class="mf">95.9236</span><span class="p">,</span>
+                     <span class="mf">95.7692</span><span class="p">,</span> <span class="mf">95.9211</span><span class="p">,</span> <span class="mf">95.8501</span><span class="p">,</span> <span class="mf">94.6703</span><span class="p">,</span> <span class="mf">93.0993</span><span class="p">,</span> <span class="mf">91.972</span><span class="p">,</span>
+                     <span class="mf">91.7821</span><span class="p">,</span> <span class="mf">91.7911</span><span class="p">,</span> <span class="mf">90.807</span><span class="p">,</span> <span class="mf">89.3196</span><span class="p">,</span> <span class="mf">88.1511</span><span class="p">,</span> <span class="mf">88.7762</span><span class="p">,</span>
+                     <span class="mf">90.2265</span><span class="p">,</span> <span class="mf">90.8066</span><span class="p">,</span> <span class="mf">91.2284</span><span class="p">,</span> <span class="mf">92.4238</span><span class="p">,</span> <span class="mf">93.243</span><span class="p">,</span> <span class="mf">92.8472</span><span class="p">,</span>
+                     <span class="mf">92.5926</span><span class="p">,</span> <span class="mf">91.7778</span><span class="p">,</span> <span class="mf">91.2974</span><span class="p">,</span> <span class="mf">91.6364</span><span class="p">,</span> <span class="mf">91.2952</span><span class="p">,</span> <span class="mf">91.771</span><span class="p">,</span>
+                     <span class="mf">93.2285</span><span class="p">,</span> <span class="mf">93.3199</span><span class="p">,</span> <span class="mf">91.8799</span><span class="p">,</span> <span class="mf">91.2239</span><span class="p">,</span> <span class="mf">92.4055</span><span class="p">,</span> <span class="mf">93.8716</span><span class="p">,</span>
+                     <span class="mf">94.5825</span><span class="p">,</span> <span class="mf">94.5594</span><span class="p">,</span> <span class="mf">94.9453</span><span class="p">,</span> <span class="mf">96.2412</span><span class="p">,</span> <span class="mf">96.6879</span><span class="p">,</span> <span class="mf">95.8295</span><span class="p">,</span>
+                     <span class="mf">94.7819</span><span class="p">,</span> <span class="mf">93.4731</span><span class="p">,</span> <span class="mf">92.7997</span><span class="p">,</span> <span class="mf">92.963</span><span class="p">,</span> <span class="mf">92.6996</span><span class="p">,</span> <span class="mf">91.9648</span><span class="p">,</span>
+                     <span class="mf">91.2417</span><span class="p">,</span> <span class="mf">91.9312</span><span class="p">,</span> <span class="mf">93.9548</span><span class="p">,</span> <span class="mf">95.3044</span><span class="p">,</span> <span class="mf">95.2511</span><span class="p">,</span> <span class="mf">94.5358</span><span class="p">,</span>
+                     <span class="mf">93.8093</span><span class="p">,</span> <span class="mf">93.2287</span><span class="p">,</span> <span class="mf">92.2065</span><span class="p">,</span> <span class="mf">92.1588</span><span class="p">,</span> <span class="mf">93.6376</span><span class="p">,</span> <span class="mf">94.899</span><span class="p">,</span>
+                     <span class="mf">95.1592</span><span class="p">,</span> <span class="mf">95.2415</span><span class="p">,</span> <span class="mf">95.5414</span><span class="p">,</span> <span class="mf">95.0971</span><span class="p">,</span> <span class="mf">94.528</span><span class="p">,</span> <span class="mf">95.5887</span><span class="p">,</span>
+                     <span class="mf">96.4715</span><span class="p">,</span> <span class="mf">96.6158</span><span class="p">,</span> <span class="mf">97.0769</span><span class="p">,</span> <span class="mf">96.8531</span><span class="p">,</span> <span class="mf">96.3947</span><span class="p">,</span> <span class="mf">97.4291</span><span class="p">,</span>
+                     <span class="mf">98.1767</span><span class="p">,</span> <span class="mf">97.0148</span><span class="p">,</span> <span class="mf">96.044</span><span class="p">,</span> <span class="mf">95.9581</span><span class="p">,</span> <span class="mf">96.4814</span><span class="p">,</span> <span class="mf">96.5211</span><span class="p">,</span>
+                     <span class="mf">95.3629</span><span class="p">,</span> <span class="mf">93.5741</span><span class="p">,</span> <span class="mf">92.077</span><span class="p">,</span> <span class="mf">90.4094</span><span class="p">,</span> <span class="mf">90.1751</span><span class="p">,</span> <span class="mf">91.3312</span><span class="p">,</span>
+                     <span class="mf">91.2883</span><span class="p">,</span> <span class="mf">89.0592</span><span class="p">,</span> <span class="mf">87.052</span><span class="p">,</span> <span class="mf">86.6226</span><span class="p">,</span> <span class="mf">85.7889</span><span class="p">,</span> <span class="mf">85.6348</span><span class="p">,</span>
+                     <span class="mf">85.3911</span><span class="p">,</span> <span class="mf">83.8064</span><span class="p">,</span> <span class="mf">82.8729</span><span class="p">,</span> <span class="mf">82.6266</span><span class="p">,</span> <span class="mf">82.645</span><span class="p">,</span> <span class="mf">82.645</span><span class="p">,</span>
+                     <span class="mf">82.645</span><span class="p">,</span> <span class="mf">82.645</span><span class="p">,</span> <span class="mf">82.645</span><span class="p">,</span> <span class="mf">82.645</span><span class="p">,</span> <span class="mf">82.645</span><span class="p">,</span> <span class="mf">82.645</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">as_series</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rslt</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rslt</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2019, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

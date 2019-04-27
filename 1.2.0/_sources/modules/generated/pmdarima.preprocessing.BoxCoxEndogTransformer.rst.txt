@@ -1,0 +1,16 @@
+:mod:`pmdarima.preprocessing`.BoxCoxEndogTransformer
+===========================================================
+
+.. currentmodule:: pmdarima.preprocessing
+
+.. autoclass:: BoxCoxEndogTransformer
+
+   
+   .. automethod:: __init__
+   
+
+.. include:: pmdarima.preprocessing.BoxCoxEndogTransformer.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

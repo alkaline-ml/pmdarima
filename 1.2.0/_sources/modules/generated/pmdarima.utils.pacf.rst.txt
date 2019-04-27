@@ -1,0 +1,12 @@
+:mod:`pmdarima.utils`.pacf
+=======================================
+
+.. currentmodule:: pmdarima.utils
+
+.. autofunction:: pacf
+
+.. include:: pmdarima.utils.pacf.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
