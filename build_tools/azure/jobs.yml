@@ -45,6 +45,9 @@ jobs:
   pool:
     vmImage: 'macOS-10.13'  # Also have the option of 10.14, if we want that
 
+  variables:
+    mplBackend: TkAgg
+
   strategy:
     maxParallel: 3
     matrix:
