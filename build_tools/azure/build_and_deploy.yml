@@ -7,13 +7,6 @@ steps:
     pip install -r build_tools/azure/requirements.txt
   displayName: 'Installing requirements'
 
-#- bash: |
-#    mkdir ~/.matplotlib
-#    echo "backend: TkAgg" >> ~/.matplotlib/matplotlibrc
-#  displayName: 'Setting matplotlib backend'
-#  # Only need to do this for macOS: https://stackoverflow.com/a/21789908
-#  condition: eq(variables['Agent.OS'], 'Darwin')
-
 - script: python setup.py bdist_wheel
   displayName: 'Building artifact'
   env:

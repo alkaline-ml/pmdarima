@@ -45,6 +45,7 @@ jobs:
   pool:
     vmImage: 'macOS-10.13'  # Also have the option of 10.14, if we want that
 
+  # Only need to set this for macOS
   variables:
     mplBackend: TkAgg
 
