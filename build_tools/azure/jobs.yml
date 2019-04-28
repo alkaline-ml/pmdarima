@@ -47,7 +47,7 @@ jobs:
 
   # Only need to set this for macOS
   variables:
-    mplBackend: TkAgg
+    PMD_MPL_BACKEND: TkAgg
 
   strategy:
     maxParallel: 3
