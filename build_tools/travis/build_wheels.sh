@@ -55,6 +55,3 @@ elif [ "${TRAVIS_OS_NAME}" == "osx" ]; then
 else
     echo "Cannot build on ${TRAVIS_OS_NAME}."
 fi
-
-# build the tar for all dists, but it will only be uploaded on one because of --skip-existing
-#sudo python setup.py sdist
