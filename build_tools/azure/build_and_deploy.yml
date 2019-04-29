@@ -28,10 +28,6 @@ steps:
     fi
   displayName: 'Checking README compatibility'
 
-- bash: |
-    ls dist
-  displayName: 'Checking for artifacts'
-
   # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
 - script: python -m twine upload --skip-existing dist/pmdarima-*
   displayName: 'Deploying to PyPI'
