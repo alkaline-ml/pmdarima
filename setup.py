@@ -191,6 +191,7 @@ def do_setup():
                         'Operating System :: MacOS',
                         'Programming Language :: Python :: 3.5',
                         'Programming Language :: Python :: 3.6',
+                        'Programming Language :: Python :: 3.7',
                     ],
                     keywords='arima timeseries forecasting pyramid pmdarima '
                              'pyramid-arima scikit-learn statsmodels',
