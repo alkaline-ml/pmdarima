@@ -63,27 +63,6 @@ matrix:
            DOCKER_IMAGE="quay.io/pypa/manylinux1_x86_64"
            DOCKER_CONTAINER_NAME="pmdarimacontainer"
 
-    # This environment tests Python 3.5 support on MAC OS X
-    - os: osx
-      language: generic
-      env: DISTRIB="conda" PYTHON_VERSION="3.5"
-           NUMPY_VERSION="1.12.1" SCIKIT_LEARN_VERSION="0.18" STATSMODELS_VERSION="0.9.0"
-           CACHEC=false
-
-    # This environment tests Python 3.6 support on MAC OS X
-    - os: osx
-      language: generic
-      env: DISTRIB="conda" PYTHON_VERSION="3.6"
-           SCIKIT_LEARN_VERSION="0.20" STATSMODELS_VERSION="0.9.0"
-           CACHEC=false
-
-    # This environment tests Python 3.7 support on MAC OS X
-    - os: osx
-      language: generic
-      env: DISTRIB="conda" PYTHON_VERSION="3.7"
-           SCIKIT_LEARN_VERSION="0.20" STATSMODELS_VERSION="0.9.0"
-           CACHEC=false
-
 install: source build_tools/travis/install.sh
 before_script: bash build_tools/travis/before_script.sh
 script: bash build_tools/travis/test_script.sh
