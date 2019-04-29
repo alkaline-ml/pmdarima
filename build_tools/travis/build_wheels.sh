@@ -57,4 +57,4 @@ else
 fi
 
 # build the tar for all dists, but it will only be uploaded on one because of --skip-existing
-sudo python setup.py sdist
+#sudo python setup.py sdist
