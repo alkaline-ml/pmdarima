@@ -7,17 +7,14 @@ steps:
     pip install -r build_tools/azure/requirements.txt
   displayName: 'Installing requirements'
 
-- script: python setup.py bdist_wheel
-  displayName: 'Building wheel'
+- script: python setup.py bdist_wheel sdist
+  displayName: 'Building artifacts'
 
 - script: pip install --pre --no-index --find-links dist/ pmdarima
   displayName: 'Installing generated wheel'
 
 - script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
   displayName: 'Running unit tests'
-
-- script: python setup.py sdist
-  displayName: 'Building source archive'
 
 - bash: |
     if python -c "from twine.commands.check import check; check(['dist/*'])" | grep  "warning"; then
