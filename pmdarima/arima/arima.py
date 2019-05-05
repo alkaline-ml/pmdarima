@@ -65,6 +65,29 @@ def _append_to_endog(endog, new_y):
         np.concatenate((endog.ravel(), new_y))[:, np.newaxis]
 
 
+def _seasonal_prediction_with_confidence(arima_res, start, end, exog, alpha,
+                                         **kwargs):
+    """Compute the prediction for a SARIMAX and get a conf interval
+
+    Unfortunately, SARIMAX does not really provide a nice way to get the
+    confidence intervals out of the box, so we have to perform the
+    ``get_prediction`` code here and unpack the confidence intervals manually.
+
+    Notes
+    -----
+    For internal use only.
+    """
+    results = arima_res.get_prediction(
+        start=start,
+        end=end,
+        exog=exog,
+        **kwargs)
+
+    f = results.predicted_mean
+    conf_int = results.conf_int(alpha=alpha)
+    return f, conf_int
+
+
 def _uses_legacy_pickling(arima):
     # If the package version is < 1.1.0 it uses legacy pickling behavior, but
     # a later version of the package may actually try to load a legacy model..
@@ -240,7 +263,6 @@ class ARIMA(BaseARIMA):
     References
     ----------
     .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average
-
     .. [2] Statsmodels ARIMA documentation: http://bit.ly/2wc9Ra8
     """
     def __init__(self, order, seasonal_order=None, start_params=None,
@@ -470,8 +492,11 @@ class ARIMA(BaseARIMA):
         return None
 
     def predict_in_sample(self, exogenous=None, start=None,
-                          end=None, dynamic=False):
-        """Generate in-sample predictions from the fit ARIMA model. This can
+                          end=None, dynamic=False, return_conf_int=False,
+                          alpha=0.05):
+        """Generate in-sample predictions from the fit ARIMA model.
+
+        Predicts the original training (in-sample) time series values. This can
         be useful when wanting to visualize the fit, and qualitatively inspect
         the efficacy of the model, or when wanting to compute the residuals
         of the model.
@@ -500,17 +525,44 @@ class ARIMA(BaseARIMA):
             used in place of lagged dependent variables. The first forecasted
             value is `start`.
 
+        return_conf_int : bool, optional (default=False)
+            Whether to get the confidence intervals of the forecasts.
+
+        alpha : float, optional (default=0.05)
+            The confidence intervals for the forecasts are (1 - alpha) %
+
         Returns
         -------
         predict : array
             The predicted values.
+
+        conf_int : array-like, shape=(n_periods, 2), optional
+            The confidence intervals for the predictions. Only returned if
+            ``return_conf_int`` is True.
         """
         check_is_fitted(self, 'arima_res_')
 
         # if we fit with exog, make sure one was passed:
         exogenous = self._check_exog(exogenous)  # type: np.ndarray
-        return self.arima_res_.predict(exog=exogenous, start=start,
-                                       end=end, dynamic=dynamic)
+
+        # If not returning the confidence intervals, we have it really easy
+        if not return_conf_int:
+            return self.arima_res_.predict(exog=exogenous, start=start,
+                                           end=end, dynamic=dynamic)
+
+        # Otherwise confidence intervals are requested...
+        if self._is_seasonal():
+            predictions, conf_int = _seasonal_prediction_with_confidence(
+                arima_res=self.arima_res_,
+                start=start,
+                end=end,
+                exog=exogenous,
+                alpha=alpha,
+                dynamic=dynamic)
+        else:
+            pass  # TODO: less trivial...
+
+        return predictions, conf_int
 
     def predict(self, n_periods=10, exogenous=None,
                 return_conf_int=False, alpha=0.05):
@@ -559,22 +611,20 @@ class ARIMA(BaseARIMA):
         # ARIMA/ARMA predict differently...
         if not self._is_seasonal():
             # use the results wrapper to predict so it injects its own params
-            # (also if I was 0, ARMA will not have a forecast method natively)
+            # (also if `I` was 0 ARMA will not have a forecast method natively)
             f, _, conf_int = self.arima_res_.forecast(
                 steps=n_periods, exog=exogenous, alpha=alpha)
         else:  # SARIMAX
-            # Unfortunately, SARIMAX does not really provide a nice way to get
-            # the confidence intervals out of the box, so we have to perform
-            # the get_prediction code here and unpack the confidence intervals
-            # manually.
             # f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
             arima = self.arima_res_
             end = arima.nobs + n_periods - 1
-            results = arima.get_prediction(start=arima.nobs,
-                                           end=end,
-                                           exog=exogenous)
-            f = results.predicted_mean
-            conf_int = results.conf_int(alpha=alpha)
+
+            f, conf_int = _seasonal_prediction_with_confidence(
+                arima_res=arima,
+                start=arima.nobs,
+                end=end,
+                exog=exogenous,
+                alpha=alpha)
 
         if return_conf_int:
             # The confidence intervals may be a Pandas frame if it comes from
@@ -660,6 +710,7 @@ class ARIMA(BaseARIMA):
             if loc is not None:
                 os.unlink(loc)
 
+    # TODO: remove this in version 1.4.0
     @deprecated(use_instead="update", notes="See issue #104")
     def add_new_observations(self, y, exogenous=None, **kwargs):
         """Update the endog/exog samples after a model fit.

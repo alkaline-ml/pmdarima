@@ -83,17 +83,17 @@ def _unlink_if_exists(path):
         os.unlink(path)
 
 
-def test_basic_arima():
-    arima = ARIMA(order=(0, 0, 0), suppress_warnings=True)
-    preds = arima.fit_predict(y)  # fit/predict for coverage
+def test_basic_arma():
+    arma = ARIMA(order=(0, 0, 0), suppress_warnings=True)
+    preds = arma.fit_predict(y)  # fit/predict for coverage
 
     # No OOB, so assert none
-    assert arima.oob_preds_ is None
+    assert arma.oob_preds_ is None
 
     # test some of the attrs
-    assert_almost_equal(arima.aic(), 11.201308403566909, decimal=5)
-    assert_almost_equal(arima.aicc(), 11.74676, decimal=5)
-    assert_almost_equal(arima.bic(), 13.639060053303311, decimal=5)
+    assert_almost_equal(arma.aic(), 11.201308403566909, decimal=5)
+    assert_almost_equal(arma.aicc(), 11.74676, decimal=5)
+    assert_almost_equal(arma.bic(), 13.639060053303311, decimal=5)
 
     # get predictions
     expected_preds = np.array([0.44079876, 0.44079876, 0.44079876,
@@ -118,9 +118,20 @@ def test_basic_arima():
         [-0.10692387, 0.98852139]
     ])
 
-    _, intervals = arima.predict(n_periods=10, return_conf_int=True,
+    _, intervals = arma.predict(n_periods=10, return_conf_int=True,
                                  alpha=0.05)
     assert_array_almost_equal(intervals, expected_intervals)
+
+
+def test_sarimax_predict_in_sample_conf_int():
+    sarimax = ARIMA(order=(2, 1, 0), seasonal_order=(1, 0, 0, 12))
+    sarimax.fit(wineind)
+
+    preds, confints = sarimax.predict_in_sample(return_conf_int=True,
+                                                alpha=0.05)
+
+    assert preds.shape[0] == wineind.shape[0]
+    assert confints.shape == (wineind.shape[0], 2)
 
 
 def test_with_oob():
