@@ -8,7 +8,17 @@ steps:
   displayName: 'Installing requirements'
 
 - script: python setup.py bdist_wheel
-  displayName: 'Building artifact'
+  displayName: 'Building wheel'
+
+- script: pip install --pre --no-index --find-links dist/ pmdarima
+  displayName: 'Installing generated wheel'
+
+- script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
+  displayName: 'Running unit tests'
+
+  # We build the source archive separately because of this: https://github.com/tgsmith61591/pmdarima/pull/136#discussion_r279781731
+- script: python setup.py sdist
+  displayName: 'Building source archive'
 
 - bash: |
     if python -c "from twine.commands.check import check; check(['dist/*'])" | grep  "warning"; then
@@ -18,12 +28,6 @@ steps:
         echo "README rendered appropriately"
     fi
   displayName: 'Checking README compatibility'
-
-- script: pip install --pre --no-index --find-links dist/ pmdarima
-  displayName: 'Installing generated artifact'
-
-- script: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
-  displayName: 'Running unit tests'
 
   # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
 - script: python -m twine upload --skip-existing dist/pmdarima-*
