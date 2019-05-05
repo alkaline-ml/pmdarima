@@ -104,7 +104,7 @@ def test_basic_arma():
     ])
 
     _, intervals = arma.predict(n_periods=10, return_conf_int=True,
-                                 alpha=0.05)
+                                alpha=0.05)
     assert_array_almost_equal(intervals, expected_intervals)
 
 
