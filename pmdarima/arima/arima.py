@@ -14,6 +14,7 @@ from sklearn.utils.validation import check_array, check_is_fitted, \
 
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
+from statsmodels.tsa.tsatools import unintegrate, unintegrate_levels
 from statsmodels import api as sm
 
 from scipy.stats import gaussian_kde, norm
@@ -86,6 +87,13 @@ def _seasonal_prediction_with_confidence(arima_res, start, end, exog, alpha,
     f = results.predicted_mean
     conf_int = results.conf_int(alpha=alpha)
     return f, conf_int
+
+
+def _unintegrate_differenced_preds(preds, results_wrapper, d):
+    """If predictions were generated on un-integrate, fix it"""
+    endog = results_wrapper.model.data.endog[-d:]
+    preds = unintegrate(preds, unintegrate_levels(endog, d))[d:]
+    return preds
 
 
 def _uses_legacy_pickling(arima):
@@ -518,7 +526,7 @@ class ARIMA(BaseARIMA):
             Zero-indexed observation number at which to end forecasting, ie.,
             the first forecast is start.
 
-        dynamic : bool, optional
+        dynamic : bool, optional (default=False)
             The `dynamic` keyword affects in-sample prediction. If dynamic
             is False, then the in-sample lagged values are used for
             prediction. If `dynamic` is True, then in-sample forecasts are
@@ -533,7 +541,7 @@ class ARIMA(BaseARIMA):
 
         Returns
         -------
-        predict : array
+        preds : array
             The predicted values.
 
         conf_int : array-like, shape=(n_periods, 2), optional
@@ -544,25 +552,57 @@ class ARIMA(BaseARIMA):
 
         # if we fit with exog, make sure one was passed:
         exogenous = self._check_exog(exogenous)  # type: np.ndarray
+        d = self.order[1]
+        results_wrapper = self.arima_res_
 
         # If not returning the confidence intervals, we have it really easy
         if not return_conf_int:
-            return self.arima_res_.predict(exog=exogenous, start=start,
-                                           end=end, dynamic=dynamic)
+            preds = results_wrapper.predict(exog=exogenous, start=start,
+                                            end=end, dynamic=dynamic)
+
+            # Might need to un-integrate for ARIMA
+            if not self._is_seasonal() and d > 0:
+                preds = _unintegrate_differenced_preds(
+                    preds=preds,
+                    results_wrapper=results_wrapper,
+                    d=d)
+
+            return preds
+
+        # We cannot get confidence intervals if dynamic is true
+        if dynamic:
+            warnings.warn("Cannot produce in-sample confidence intervals for "
+                          "dynamic=True")
+            dynamic = False
 
         # Otherwise confidence intervals are requested...
         if self._is_seasonal():
-            predictions, conf_int = _seasonal_prediction_with_confidence(
-                arima_res=self.arima_res_,
+            preds, conf_int = _seasonal_prediction_with_confidence(
+                arima_res=results_wrapper,
                 start=start,
                 end=end,
                 exog=exogenous,
                 alpha=alpha,
                 dynamic=dynamic)
         else:
-            pass  # TODO: less trivial...
+            preds = results_wrapper.predict(
+                exog=exogenous, start=start,
+                end=end, dynamic=dynamic)
 
-        return predictions, conf_int
+            # We only have to un-integrate if there was any differencing
+            # (i.e., ARIMA vs. ARMA)
+            if d > 0:
+                preds = _unintegrate_differenced_preds(
+                    preds=preds,
+                    results_wrapper=results_wrapper,
+                    d=d)
+
+            # get prediction errors
+            pred_err = results_wrapper._forecast_error(len(preds))
+            conf_int = results_wrapper._forecast_conf_int(
+                preds, pred_err, alpha)
+
+        return preds, conf_int
 
     def predict(self, n_periods=10, exogenous=None,
                 return_conf_int=False, alpha=0.05):
