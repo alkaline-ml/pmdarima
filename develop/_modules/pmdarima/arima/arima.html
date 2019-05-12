@@ -182,6 +182,7 @@
 
 <span class="kn">from</span> <span class="nn">statsmodels.tsa.arima_model</span> <span class="k">import</span> <span class="n">ARIMA</span> <span class="k">as</span> <span class="n">_ARIMA</span>
 <span class="kn">from</span> <span class="nn">statsmodels.tsa.base.tsa_model</span> <span class="k">import</span> <span class="n">TimeSeriesModelResults</span>
+<span class="kn">from</span> <span class="nn">statsmodels.tsa.tsatools</span> <span class="k">import</span> <span class="n">unintegrate</span><span class="p">,</span> <span class="n">unintegrate_levels</span>
 <span class="kn">from</span> <span class="nn">statsmodels</span> <span class="k">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">sm</span>
 
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">gaussian_kde</span><span class="p">,</span> <span class="n">norm</span>
@@ -231,6 +232,36 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">endog</span><span class="p">,</span> <span class="n">new_y</span><span class="p">))</span> <span class="k">if</span> \
         <span class="n">endog</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> \
         <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">endog</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">new_y</span><span class="p">))[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_seasonal_prediction_with_confidence</span><span class="p">(</span><span class="n">arima_res</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">exog</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span>
+                                         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the prediction for a SARIMAX and get a conf interval</span>
+
+<span class="sd">    Unfortunately, SARIMAX does not really provide a nice way to get the</span>
+<span class="sd">    confidence intervals out of the box, so we have to perform the</span>
+<span class="sd">    ``get_prediction`` code here and unpack the confidence intervals manually.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    For internal use only.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">arima_res</span><span class="o">.</span><span class="n">get_prediction</span><span class="p">(</span>
+        <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+        <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+        <span class="n">exog</span><span class="o">=</span><span class="n">exog</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">predicted_mean</span>
+    <span class="n">conf_int</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">conf_int</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">conf_int</span>
+
+
+<span class="k">def</span> <span class="nf">_unintegrate_differenced_preds</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">results_wrapper</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;If predictions were generated on un-integrate, fix it&quot;&quot;&quot;</span>
+    <span class="n">endog</span> <span class="o">=</span> <span class="n">results_wrapper</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">endog</span><span class="p">[</span><span class="o">-</span><span class="n">d</span><span class="p">:]</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">unintegrate</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">unintegrate_levels</span><span class="p">(</span><span class="n">endog</span><span class="p">,</span> <span class="n">d</span><span class="p">))[</span><span class="n">d</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">preds</span>
 
 
 <span class="k">def</span> <span class="nf">_uses_legacy_pickling</span><span class="p">(</span><span class="n">arima</span><span class="p">):</span>
@@ -408,7 +439,6 @@
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</span>
-
 <span class="sd">    .. [2] Statsmodels ARIMA documentation: http://bit.ly/2wc9Ra8</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="ARIMA.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -638,8 +668,11 @@
         <span class="k">return</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="ARIMA.predict_in_sample"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.predict_in_sample">[docs]</a>    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                          <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generate in-sample predictions from the fit ARIMA model. This can</span>
+                          <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate in-sample predictions from the fit ARIMA model.</span>
+
+<span class="sd">        Predicts the original training (in-sample) time series values. This can</span>
 <span class="sd">        be useful when wanting to visualize the fit, and qualitatively inspect</span>
 <span class="sd">        the efficacy of the model, or when wanting to compute the residuals</span>
 <span class="sd">        of the model.</span>
@@ -661,24 +694,83 @@
 <span class="sd">            Zero-indexed observation number at which to end forecasting, ie.,</span>
 <span class="sd">            the first forecast is start.</span>
 
-<span class="sd">        dynamic : bool, optional</span>
+<span class="sd">        dynamic : bool, optional (default=False)</span>
 <span class="sd">            The `dynamic` keyword affects in-sample prediction. If dynamic</span>
 <span class="sd">            is False, then the in-sample lagged values are used for</span>
 <span class="sd">            prediction. If `dynamic` is True, then in-sample forecasts are</span>
 <span class="sd">            used in place of lagged dependent variables. The first forecasted</span>
 <span class="sd">            value is `start`.</span>
 
+<span class="sd">        return_conf_int : bool, optional (default=False)</span>
+<span class="sd">            Whether to get the confidence intervals of the forecasts.</span>
+
+<span class="sd">        alpha : float, optional (default=0.05)</span>
+<span class="sd">            The confidence intervals for the forecasts are (1 - alpha) %</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        predict : array</span>
+<span class="sd">        preds : array</span>
 <span class="sd">            The predicted values.</span>
+
+<span class="sd">        conf_int : array-like, shape=(n_periods, 2), optional</span>
+<span class="sd">            The confidence intervals for the predictions. Only returned if</span>
+<span class="sd">            ``return_conf_int`` is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
 
         <span class="c1"># if we fit with exog, make sure one was passed:</span>
         <span class="n">exogenous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_exog</span><span class="p">(</span><span class="n">exogenous</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
-                                       <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">)</span></div>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">results_wrapper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span>
+
+        <span class="c1"># If not returning the confidence intervals, we have it really easy</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">return_conf_int</span><span class="p">:</span>
+            <span class="n">preds</span> <span class="o">=</span> <span class="n">results_wrapper</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+                                            <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">)</span>
+
+            <span class="c1"># Might need to un-integrate for ARIMA</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_seasonal</span><span class="p">()</span> <span class="ow">and</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">preds</span> <span class="o">=</span> <span class="n">_unintegrate_differenced_preds</span><span class="p">(</span>
+                    <span class="n">preds</span><span class="o">=</span><span class="n">preds</span><span class="p">,</span>
+                    <span class="n">results_wrapper</span><span class="o">=</span><span class="n">results_wrapper</span><span class="p">,</span>
+                    <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">preds</span>
+
+        <span class="c1"># We cannot get confidence intervals if dynamic is true</span>
+        <span class="k">if</span> <span class="n">dynamic</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Cannot produce in-sample confidence intervals for &quot;</span>
+                          <span class="s2">&quot;dynamic=True&quot;</span><span class="p">)</span>
+            <span class="n">dynamic</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Otherwise confidence intervals are requested...</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_seasonal</span><span class="p">():</span>
+            <span class="n">preds</span><span class="p">,</span> <span class="n">conf_int</span> <span class="o">=</span> <span class="n">_seasonal_prediction_with_confidence</span><span class="p">(</span>
+                <span class="n">arima_res</span><span class="o">=</span><span class="n">results_wrapper</span><span class="p">,</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+                <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+                <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">preds</span> <span class="o">=</span> <span class="n">results_wrapper</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+                <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+                <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">)</span>
+
+            <span class="c1"># We only have to un-integrate if there was any differencing</span>
+            <span class="c1"># (i.e., ARIMA vs. ARMA)</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">preds</span> <span class="o">=</span> <span class="n">_unintegrate_differenced_preds</span><span class="p">(</span>
+                    <span class="n">preds</span><span class="o">=</span><span class="n">preds</span><span class="p">,</span>
+                    <span class="n">results_wrapper</span><span class="o">=</span><span class="n">results_wrapper</span><span class="p">,</span>
+                    <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+
+            <span class="c1"># get prediction errors</span>
+            <span class="n">pred_err</span> <span class="o">=</span> <span class="n">results_wrapper</span><span class="o">.</span><span class="n">_forecast_error</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">preds</span><span class="p">))</span>
+            <span class="n">conf_int</span> <span class="o">=</span> <span class="n">results_wrapper</span><span class="o">.</span><span class="n">_forecast_conf_int</span><span class="p">(</span>
+                <span class="n">preds</span><span class="p">,</span> <span class="n">pred_err</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">preds</span><span class="p">,</span> <span class="n">conf_int</span></div>
 
 <div class="viewcode-block" id="ARIMA.predict"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
@@ -727,22 +819,20 @@
         <span class="c1"># ARIMA/ARMA predict differently...</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_seasonal</span><span class="p">():</span>
             <span class="c1"># use the results wrapper to predict so it injects its own params</span>
-            <span class="c1"># (also if I was 0, ARMA will not have a forecast method natively)</span>
+            <span class="c1"># (also if `I` was 0 ARMA will not have a forecast method natively)</span>
             <span class="n">f</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">conf_int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span>
                 <span class="n">steps</span><span class="o">=</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># SARIMAX</span>
-            <span class="c1"># Unfortunately, SARIMAX does not really provide a nice way to get</span>
-            <span class="c1"># the confidence intervals out of the box, so we have to perform</span>
-            <span class="c1"># the get_prediction code here and unpack the confidence intervals</span>
-            <span class="c1"># manually.</span>
             <span class="c1"># f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)</span>
             <span class="n">arima</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span>
             <span class="n">end</span> <span class="o">=</span> <span class="n">arima</span><span class="o">.</span><span class="n">nobs</span> <span class="o">+</span> <span class="n">n_periods</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="n">arima</span><span class="o">.</span><span class="n">get_prediction</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">arima</span><span class="o">.</span><span class="n">nobs</span><span class="p">,</span>
-                                           <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
-                                           <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">)</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">predicted_mean</span>
-            <span class="n">conf_int</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">conf_int</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+            <span class="n">f</span><span class="p">,</span> <span class="n">conf_int</span> <span class="o">=</span> <span class="n">_seasonal_prediction_with_confidence</span><span class="p">(</span>
+                <span class="n">arima_res</span><span class="o">=</span><span class="n">arima</span><span class="p">,</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">arima</span><span class="o">.</span><span class="n">nobs</span><span class="p">,</span>
+                <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+                <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">return_conf_int</span><span class="p">:</span>
             <span class="c1"># The confidence intervals may be a Pandas frame if it comes from</span>
@@ -828,6 +918,7 @@
             <span class="k">if</span> <span class="n">loc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
 
+    <span class="c1"># TODO: remove this in version 1.4.0</span>
 <div class="viewcode-block" id="ARIMA.add_new_observations"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.add_new_observations">[docs]</a>    <span class="nd">@deprecated</span><span class="p">(</span><span class="n">use_instead</span><span class="o">=</span><span class="s2">&quot;update&quot;</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="s2">&quot;See issue #104&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">add_new_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the endog/exog samples after a model fit.</span>

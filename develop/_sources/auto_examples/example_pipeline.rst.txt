@@ -34,19 +34,26 @@ which greatly simplifies your life.
  Out::
 
     Fit ARIMA: order=(2, 1, 2); AIC=nan, BIC=nan, Fit time=nan seconds
-    Fit ARIMA: order=(0, 1, 0); AIC=2942.625, BIC=2972.664, Fit time=0.013 seconds
-    Fit ARIMA: order=(1, 1, 0); AIC=2844.833, BIC=2877.876, Fit time=0.252 seconds
-    Fit ARIMA: order=(0, 1, 1); AIC=2809.063, BIC=2842.107, Fit time=0.396 seconds
-    Fit ARIMA: order=(1, 1, 1); AIC=2783.182, BIC=2819.229, Fit time=0.422 seconds
-    Fit ARIMA: order=(1, 1, 2); AIC=2812.945, BIC=2851.996, Fit time=0.446 seconds
-    Fit ARIMA: order=(2, 1, 1); AIC=2784.436, BIC=2823.488, Fit time=0.282 seconds
-    Total fit time: 1.828 seconds
+    Fit ARIMA: order=(0, 1, 0); AIC=2942.625, BIC=2972.664, Fit time=0.022 seconds
+    Fit ARIMA: order=(1, 1, 0); AIC=2844.833, BIC=2877.876, Fit time=0.322 seconds
+    Fit ARIMA: order=(0, 1, 1); AIC=2809.063, BIC=2842.107, Fit time=0.446 seconds
+    Fit ARIMA: order=(1, 1, 1); AIC=2783.182, BIC=2819.229, Fit time=0.502 seconds
+    Fit ARIMA: order=(1, 1, 2); AIC=2812.945, BIC=2851.996, Fit time=0.461 seconds
+    Fit ARIMA: order=(2, 1, 1); AIC=2784.436, BIC=2823.488, Fit time=0.247 seconds
+    Total fit time: 2.025 seconds
     Model fit:
-    Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)), ('arima', AutoARIMA(D=None, alpha=0.05, callback=None, d=None, disp=0,
-         error_action='ignore', information_criterion='aic', m=1, max_D=1,
-         max_P=2, max_Q=2, max_d=2, max_order=10, max_p=5, max_q=5,
-         maxiter=None, method=None, n_fits=10, n...ress_warnings=True, test='kpss', trace=1,
-         transparams=False, trend=None, with_intercept=True))])
+    Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
+                    ('arima',
+                     AutoARIMA(D=None, alpha=0.05, callback=None, d=None, disp=0,
+                               error_action='ignore', information_criterion='aic',
+                               m=1, max_D=1, max_P=2, max_Q=2, max_d=2,
+                               max_order=10, max_p=5, max_q=5, maxiter=None,
+                               method=None, n_fits=10, n_jobs=1,
+                               offset_test_args=None, out_of_sample_size=0,
+                               random=False, random_state=None, scoring='mse',
+                               scoring_args=None, seasonal=False,
+                               seasonal_test='ocsb', seasonal_test_args=None,
+                               solver='lbfgs', start_P=1, ...))])
 
     Forecasts:
     [28520.36805404 29644.13280101 25802.35593918 24894.27891306
@@ -131,7 +138,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  2.033 seconds)
+**Total running time of the script:** ( 0 minutes  2.258 seconds)
 
 
 

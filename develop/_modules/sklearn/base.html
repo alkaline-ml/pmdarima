@@ -175,26 +175,26 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">re</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">sparse</span>
-<span class="kn">from</span> <span class="nn">.externals</span> <span class="k">import</span> <span class="n">six</span>
-<span class="kn">from</span> <span class="nn">.utils.fixes</span> <span class="k">import</span> <span class="n">signature</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">_IS_32BIT</span>
+
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">__version__</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">_IS_32BIT</span>
 
-
-<span class="c1">##############################################################################</span>
-<span class="k">def</span> <span class="nf">_first_and_last_element</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns first and last element of numpy array or sparse matrix.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">):</span>
-        <span class="c1"># numpy array or sparse matrix with .data attribute</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">data</span> <span class="k">if</span> <span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="k">else</span> <span class="n">arr</span>
-        <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Sparse matrices without .data attribute. Only dok_matrix at</span>
-        <span class="c1"># the time of writing, in this case indexing is fast</span>
-        <span class="k">return</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">_DEFAULT_TAGS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;non_deterministic&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;requires_positive_data&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;X_types&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;2darray&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;poor_score&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;no_validation&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;multioutput&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;allow_nan&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;stateless&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;multilabel&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;_skip_test&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;multioutput_only&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
 
 
 <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -218,7 +218,7 @@
     <span class="c1"># XXX: not handling dictionaries</span>
     <span class="k">if</span> <span class="n">estimator_type</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">estimator_type</span><span class="p">([</span><span class="n">clone</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="n">safe</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">estimator</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="s1">&#39;get_params&#39;</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="s1">&#39;get_params&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">safe</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -228,7 +228,7 @@
                             <span class="o">%</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">estimator</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">estimator</span><span class="p">)))</span>
     <span class="n">klass</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="vm">__class__</span>
     <span class="n">new_object_params</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">get_params</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">new_object_params</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">new_object_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">new_object_params</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">new_object</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">new_object_params</span><span class="p">)</span>
     <span class="n">params_set</span> <span class="o">=</span> <span class="n">new_object</span><span class="o">.</span><span class="n">get_params</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -244,7 +244,6 @@
     <span class="k">return</span> <span class="n">new_object</span>
 
 
-<span class="c1">###############################################################################</span>
 <span class="k">def</span> <span class="nf">_pprint</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">printer</span><span class="o">=</span><span class="nb">repr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Pretty print the dictionary &#39;params&#39;</span>
 
@@ -267,7 +266,7 @@
     <span class="n">params_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="n">this_line_length</span> <span class="o">=</span> <span class="n">offset</span>
     <span class="n">line_sep</span> <span class="o">=</span> <span class="s1">&#39;,</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="s1">&#39; &#39;</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">params</span><span class="p">))):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">())):</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
             <span class="c1"># use str for representing floating point numbers</span>
             <span class="c1"># this way we get consistent representation across</span>
@@ -295,8 +294,18 @@
     <span class="k">return</span> <span class="n">lines</span>
 
 
-<span class="c1">###############################################################################</span>
-<span class="k">class</span> <span class="nc">BaseEstimator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_update_if_consistent</span><span class="p">(</span><span class="n">dict1</span><span class="p">,</span> <span class="n">dict2</span><span class="p">):</span>
+    <span class="n">common_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dict1</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">dict2</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">common_keys</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dict1</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">dict2</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Inconsistent values for tag </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2"> != </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">key</span><span class="p">,</span> <span class="n">dict1</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">dict2</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="p">))</span>
+    <span class="n">dict1</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dict2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dict1</span>
+
+
+<span class="k">class</span> <span class="nc">BaseEstimator</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Base class for all estimators in scikit-learn</span>
 
 <span class="sd">    Notes</span>
@@ -318,7 +327,7 @@
 
         <span class="c1"># introspect the constructor arguments to find the model parameters</span>
         <span class="c1"># to represent</span>
-        <span class="n">init_signature</span> <span class="o">=</span> <span class="n">signature</span><span class="p">(</span><span class="n">init</span><span class="p">)</span>
+        <span class="n">init_signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">init</span><span class="p">)</span>
         <span class="c1"># Consider the constructor parameters excluding &#39;self&#39;</span>
         <span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">init_signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
                       <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;self&#39;</span> <span class="ow">and</span> <span class="n">p</span><span class="o">.</span><span class="n">kind</span> <span class="o">!=</span> <span class="n">p</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">]</span>
@@ -393,14 +402,58 @@
 
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">class_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">class_name</span><span class="p">,</span> <span class="n">_pprint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_params</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-                                               <span class="n">offset</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">class_name</span><span class="p">),),)</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N_CHAR_MAX</span><span class="o">=</span><span class="mi">700</span><span class="p">):</span>
+        <span class="c1"># N_CHAR_MAX is the (approximate) maximum number of non-blank</span>
+        <span class="c1"># characters to render. We pass it as an optional parameter to ease</span>
+        <span class="c1"># the tests.</span>
+
+        <span class="kn">from</span> <span class="nn">.utils._pprint</span> <span class="k">import</span> <span class="n">_EstimatorPrettyPrinter</span>
+
+        <span class="n">N_MAX_ELEMENTS_TO_SHOW</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># number of elements to show in sequences</span>
+
+        <span class="c1"># use ellipsis for sequences with a lot of elements</span>
+        <span class="n">pp</span> <span class="o">=</span> <span class="n">_EstimatorPrettyPrinter</span><span class="p">(</span>
+            <span class="n">compact</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">indent_at_name</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">n_max_elements_to_show</span><span class="o">=</span><span class="n">N_MAX_ELEMENTS_TO_SHOW</span><span class="p">)</span>
+
+        <span class="n">repr_</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Use bruteforce ellipsis when there are a lot of non-blank characters</span>
+        <span class="n">n_nonblank</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repr_</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="n">n_nonblank</span> <span class="o">&gt;</span> <span class="n">N_CHAR_MAX</span><span class="p">:</span>
+            <span class="n">lim</span> <span class="o">=</span> <span class="n">N_CHAR_MAX</span> <span class="o">//</span> <span class="mi">2</span>  <span class="c1"># apprx number of chars to keep on both ends</span>
+            <span class="n">regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^(\s*\S){</span><span class="si">%d</span><span class="s1">}&#39;</span> <span class="o">%</span> <span class="n">lim</span>
+            <span class="c1"># The regex &#39;^(\s*\S){%d}&#39; % n</span>
+            <span class="c1"># matches from the start of the string until the nth non-blank</span>
+            <span class="c1"># character:</span>
+            <span class="c1"># - ^ matches the start of string</span>
+            <span class="c1"># - (pattern){n} matches n repetitions of pattern</span>
+            <span class="c1"># - \s*\S matches a non-blank char following zero or more blanks</span>
+            <span class="n">left_lim</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">repr_</span><span class="p">)</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+            <span class="n">right_lim</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">repr_</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="ow">in</span> <span class="n">repr_</span><span class="p">[</span><span class="n">left_lim</span><span class="p">:</span><span class="o">-</span><span class="n">right_lim</span><span class="p">]:</span>
+                <span class="c1"># The left side and right side aren&#39;t on the same line.</span>
+                <span class="c1"># To avoid weird cuts, e.g.:</span>
+                <span class="c1"># categoric...ore&#39;,</span>
+                <span class="c1"># we need to start the right side with an appropriate newline</span>
+                <span class="c1"># character so that it renders properly as:</span>
+                <span class="c1"># categoric...</span>
+                <span class="c1"># handle_unknown=&#39;ignore&#39;,</span>
+                <span class="c1"># so we add [^\n]*\n which matches until the next \n</span>
+                <span class="n">regex</span> <span class="o">+=</span> <span class="sa">r</span><span class="s1">&#39;[^\n]*\n&#39;</span>
+                <span class="n">right_lim</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">repr_</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+
+            <span class="n">ellipsis</span> <span class="o">=</span> <span class="s1">&#39;...&#39;</span>
+            <span class="k">if</span> <span class="n">left_lim</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">ellipsis</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">repr_</span><span class="p">)</span> <span class="o">-</span> <span class="n">right_lim</span><span class="p">:</span>
+                <span class="c1"># Only add ellipsis if it results in a shorter repr</span>
+                <span class="n">repr_</span> <span class="o">=</span> <span class="n">repr_</span><span class="p">[:</span><span class="n">left_lim</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="n">repr_</span><span class="p">[</span><span class="o">-</span><span class="n">right_lim</span><span class="p">:]</span>
+
+        <span class="k">return</span> <span class="n">repr_</span>
 
     <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
@@ -420,13 +473,27 @@
                         <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">pickle_version</span><span class="p">,</span> <span class="n">__version__</span><span class="p">),</span>
                     <span class="ne">UserWarning</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">_get_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">collected_tags</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">base_class</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmro</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="s1">&#39;_more_tags&#39;</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">base_class</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+                <span class="n">more_tags</span> <span class="o">=</span> <span class="n">base_class</span><span class="o">.</span><span class="n">_more_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="n">collected_tags</span> <span class="o">=</span> <span class="n">_update_if_consistent</span><span class="p">(</span><span class="n">collected_tags</span><span class="p">,</span>
+                                                       <span class="n">more_tags</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_more_tags&#39;</span><span class="p">):</span>
+            <span class="n">more_tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_more_tags</span><span class="p">()</span>
+            <span class="n">collected_tags</span> <span class="o">=</span> <span class="n">_update_if_consistent</span><span class="p">(</span><span class="n">collected_tags</span><span class="p">,</span> <span class="n">more_tags</span><span class="p">)</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="n">_DEFAULT_TAGS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">collected_tags</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tags</span>
 
-<span class="c1">###############################################################################</span>
-<span class="k">class</span> <span class="nc">ClassifierMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">ClassifierMixin</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mixin class for all classifiers in scikit-learn.&quot;&quot;&quot;</span>
     <span class="n">_estimator_type</span> <span class="o">=</span> <span class="s2">&quot;classifier&quot;</span>
 
@@ -458,8 +525,7 @@
         <span class="k">return</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">sample_weight</span><span class="o">=</span><span class="n">sample_weight</span><span class="p">)</span>
 
 
-<span class="c1">###############################################################################</span>
-<span class="k">class</span> <span class="nc">RegressorMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">RegressorMixin</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mixin class for all regression estimators in scikit-learn.&quot;&quot;&quot;</span>
     <span class="n">_estimator_type</span> <span class="o">=</span> <span class="s2">&quot;regressor&quot;</span>
 
@@ -492,15 +558,39 @@
 <span class="sd">        -------</span>
 <span class="sd">        score : float</span>
 <span class="sd">            R^2 of self.predict(X) wrt. y.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The R2 score used when calling ``score`` on a regressor will use</span>
+<span class="sd">        ``multioutput=&#39;uniform_average&#39;`` from version 0.23 to keep consistent</span>
+<span class="sd">        with `metrics.r2_score`. This will influence the ``score`` method of</span>
+<span class="sd">        all the multioutput regressors (except for</span>
+<span class="sd">        `multioutput.MultiOutputRegressor`). To specify the default value</span>
+<span class="sd">        manually and avoid the warning, please either call `metrics.r2_score`</span>
+<span class="sd">        directly or make a custom scorer with `metrics.make_scorer` (the</span>
+<span class="sd">        built-in scorer ``&#39;r2&#39;`` uses ``multioutput=&#39;uniform_average&#39;``).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="kn">from</span> <span class="nn">.metrics</span> <span class="k">import</span> <span class="n">r2_score</span>
-        <span class="k">return</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">sample_weight</span><span class="o">=</span><span class="n">sample_weight</span><span class="p">,</span>
+        <span class="kn">from</span> <span class="nn">.metrics.regression</span> <span class="k">import</span> <span class="n">_check_reg_targets</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="c1"># XXX: Remove the check in 0.23</span>
+        <span class="n">y_type</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_check_reg_targets</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">y_type</span> <span class="o">==</span> <span class="s1">&#39;continuous-multioutput&#39;</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;The default value of multioutput (not exposed in &quot;</span>
+                          <span class="s2">&quot;score method) will change from &#39;variance_weighted&#39; &quot;</span>
+                          <span class="s2">&quot;to &#39;uniform_average&#39; in 0.23 to keep consistent &quot;</span>
+                          <span class="s2">&quot;with &#39;metrics.r2_score&#39;. To specify the default &quot;</span>
+                          <span class="s2">&quot;value manually and avoid the warning, please &quot;</span>
+                          <span class="s2">&quot;either call &#39;metrics.r2_score&#39; directly or make a &quot;</span>
+                          <span class="s2">&quot;custom scorer with &#39;metrics.make_scorer&#39; (the &quot;</span>
+                          <span class="s2">&quot;built-in scorer &#39;r2&#39; uses &quot;</span>
+                          <span class="s2">&quot;multioutput=&#39;uniform_average&#39;).&quot;</span><span class="p">,</span> <span class="ne">FutureWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">sample_weight</span><span class="o">=</span><span class="n">sample_weight</span><span class="p">,</span>
                         <span class="n">multioutput</span><span class="o">=</span><span class="s1">&#39;variance_weighted&#39;</span><span class="p">)</span>
 
 
-<span class="c1">###############################################################################</span>
-<span class="k">class</span> <span class="nc">ClusterMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">ClusterMixin</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mixin class for all cluster estimators in scikit-learn.&quot;&quot;&quot;</span>
     <span class="n">_estimator_type</span> <span class="o">=</span> <span class="s2">&quot;clusterer&quot;</span>
 
@@ -526,7 +616,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels_</span>
 
 
-<span class="k">class</span> <span class="nc">BiclusterMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">BiclusterMixin</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mixin class for all bicluster estimators in scikit-learn&quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
@@ -601,8 +691,7 @@
         <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">row_ind</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">col_ind</span><span class="p">]</span>
 
 
-<span class="c1">###############################################################################</span>
-<span class="k">class</span> <span class="nc">TransformerMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">TransformerMixin</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mixin class for all transformers in scikit-learn.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_params</span><span class="p">):</span>
@@ -635,7 +724,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_params</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">DensityMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">DensityMixin</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mixin class for all density estimators in scikit-learn.&quot;&quot;&quot;</span>
     <span class="n">_estimator_type</span> <span class="o">=</span> <span class="s2">&quot;DensityEstimator&quot;</span>
 
@@ -653,7 +742,7 @@
         <span class="k">pass</span>
 
 
-<span class="k">class</span> <span class="nc">OutlierMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">OutlierMixin</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Mixin class for all outlier detection estimators in scikit-learn.&quot;&quot;&quot;</span>
     <span class="n">_estimator_type</span> <span class="o">=</span> <span class="s2">&quot;outlier_detector&quot;</span>
 
@@ -679,10 +768,15 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 
-<span class="c1">###############################################################################</span>
-<span class="k">class</span> <span class="nc">MetaEstimatorMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MetaEstimatorMixin</span><span class="p">:</span>
+    <span class="n">_required_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;estimator&quot;</span><span class="p">]</span>
     <span class="sd">&quot;&quot;&quot;Mixin class for all meta estimators in scikit-learn.&quot;&quot;&quot;</span>
-    <span class="c1"># this is just a tag for the moment</span>
+
+
+<span class="k">class</span> <span class="nc">MultiOutputMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mixin to mark estimators that support multioutput.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_more_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;multioutput&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 
 
 <span class="k">class</span> <span class="nc">_UnstableArchMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
