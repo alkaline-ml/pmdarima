@@ -11,6 +11,7 @@ scratch/
 
 # Models
 *.pkl
+!pmdarima/datasets/data/*.pkl
 
 # Pypi pws
 .pypipws

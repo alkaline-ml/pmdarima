@@ -27,7 +27,7 @@ from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.python import long
 from ..compat import statsmodels as sm_compat
 from ..decorators import deprecated
-from ..utils import get_callable, if_has_delegate
+from ..utils import get_callable, if_has_delegate, is_iterable
 from ..utils.visualization import _get_plt
 
 # Get the version
@@ -814,6 +814,11 @@ class ARIMA(BaseARIMA):
         """
         check_is_fitted(self, 'arima_res_')
         model_res = self.arima_res_
+
+        # Allow updating with a scalar if the user is just adding a single
+        # sample.
+        if not is_iterable(y):
+            y = [y]
 
         # validate the new samples to add
         y = c1d(check_array(y, ensure_2d=False, force_all_finite=False,

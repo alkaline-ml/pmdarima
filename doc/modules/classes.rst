@@ -75,8 +75,8 @@ Differencing helpers
 
 .. _datasets_ref:
 
-:mod:`pmdarima.datasets`: Toy univariate timeseries datasets
-============================================================
+:mod:`pmdarima.datasets`: Toy timeseries datasets
+=================================================
 
 The ``pmdarima.datasets`` submodule provides several different univariate time-
 series datasets used in various examples and tests across the package. If you
@@ -101,8 +101,33 @@ Dataset loading functions
     datasets.load_austres
     datasets.load_heartrate
     datasets.load_lynx
+    datasets.load_msft
     datasets.load_wineind
     datasets.load_woolyrnq
+
+
+.. _metrics_ref:
+
+:mod:`pmdarima.metrics`: Time-series metrics
+============================================
+
+The ``metrics`` submodule implements time-series metrics that are not
+implemented in scikit-learn.
+
+.. automodule:: pmdarima.metrics
+    :no-members:
+    :no-inherited-members:
+
+Metrics
+-------
+
+.. currentmodule:: pmdarima
+
+.. autosummary::
+    :toctree: generated/
+    :template: function.rst
+
+    metrics.smape
 
 
 .. _pipeline_ref:
