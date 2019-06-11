@@ -6,7 +6,7 @@
 
 from __future__ import absolute_import, division
 
-from sklearn.externals import six
+import six
 from sklearn.linear_model import LinearRegression
 from sklearn.utils.validation import column_or_1d, check_array
 

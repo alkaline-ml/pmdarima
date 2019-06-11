@@ -4,7 +4,7 @@
 # potentially get circular imports in sub-classes
 
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.externals import six
+import six
 from sklearn.utils.validation import check_array, column_or_1d
 
 import abc

@@ -6,15 +6,13 @@
 
 from __future__ import absolute_import
 
+from joblib import Parallel, delayed
+import numpy as np
 from sklearn.utils.validation import check_array, column_or_1d, check_is_fitted
 from sklearn.utils import check_random_state
-from sklearn.externals.joblib import Parallel, delayed
 from sklearn.linear_model import LinearRegression
-
-import numpy as np
-
-import warnings
 import time
+import warnings
 
 from ..base import BaseARIMA
 from . import _doc
