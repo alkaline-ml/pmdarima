@@ -16,7 +16,7 @@ most other python objects:
     import numpy as np
 
     # For serialization:
-    from sklearn.externals import joblib
+    import joblib
     import pickle
 
     # Load data and fit a model

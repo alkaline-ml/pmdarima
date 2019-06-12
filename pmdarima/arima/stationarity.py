@@ -9,7 +9,7 @@ from __future__ import absolute_import, division
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import column_or_1d, check_array
 from sklearn.linear_model import LinearRegression
-from sklearn.externals import six
+import six
 
 from statsmodels import api as sm
 from abc import ABCMeta, abstractmethod

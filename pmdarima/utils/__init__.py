@@ -20,7 +20,7 @@ def get_callable(key, dct):
     dct : dict
         The dictionary of callables.
     """
-    from sklearn.externals import six
+    import six
     fun = dct.get(key, None)
 
     if not isinstance(key, six.string_types) or \
