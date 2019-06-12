@@ -34,13 +34,13 @@ which greatly simplifies your life.
  Out::
 
     Fit ARIMA: order=(2, 1, 2); AIC=nan, BIC=nan, Fit time=nan seconds
-    Fit ARIMA: order=(0, 1, 0); AIC=2942.625, BIC=2972.664, Fit time=0.022 seconds
-    Fit ARIMA: order=(1, 1, 0); AIC=2844.833, BIC=2877.876, Fit time=0.322 seconds
-    Fit ARIMA: order=(0, 1, 1); AIC=2809.063, BIC=2842.107, Fit time=0.446 seconds
-    Fit ARIMA: order=(1, 1, 1); AIC=2783.182, BIC=2819.229, Fit time=0.502 seconds
-    Fit ARIMA: order=(1, 1, 2); AIC=2812.945, BIC=2851.996, Fit time=0.461 seconds
-    Fit ARIMA: order=(2, 1, 1); AIC=2784.436, BIC=2823.488, Fit time=0.247 seconds
-    Total fit time: 2.025 seconds
+    Fit ARIMA: order=(0, 1, 0); AIC=2942.625, BIC=2972.664, Fit time=0.021 seconds
+    Fit ARIMA: order=(1, 1, 0); AIC=2844.833, BIC=2877.876, Fit time=0.343 seconds
+    Fit ARIMA: order=(0, 1, 1); AIC=2809.063, BIC=2842.107, Fit time=0.397 seconds
+    Fit ARIMA: order=(1, 1, 1); AIC=2783.182, BIC=2819.229, Fit time=0.471 seconds
+    Fit ARIMA: order=(1, 1, 2); AIC=2812.945, BIC=2851.996, Fit time=0.431 seconds
+    Fit ARIMA: order=(2, 1, 1); AIC=2784.436, BIC=2823.488, Fit time=0.261 seconds
+    Total fit time: 1.952 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
                     ('arima',
@@ -138,7 +138,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  2.258 seconds)
+**Total running time of the script:** ( 0 minutes  2.201 seconds)
 
 
 
