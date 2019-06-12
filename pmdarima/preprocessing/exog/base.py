@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sklearn.externals import six
+import six
 
 import abc
 

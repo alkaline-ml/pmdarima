@@ -7,7 +7,7 @@
 from __future__ import absolute_import, division
 
 from sklearn.utils.validation import check_array, column_or_1d
-from sklearn.externals import six
+import six
 
 import numpy as np
 import pandas as pd

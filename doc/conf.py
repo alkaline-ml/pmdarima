@@ -33,7 +33,7 @@ import sys
 import pmdarima
 import datetime
 from pkg_resources import parse_version
-from sklearn.externals.six import u
+from six import u
 
 sys.path.insert(0, os.path.abspath('..' + os.path.sep))
 sys.path.insert(0, os.path.abspath('sphinxext'))
