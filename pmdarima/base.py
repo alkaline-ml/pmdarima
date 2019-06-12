@@ -6,7 +6,7 @@ import abc
 from abc import ABCMeta
 
 from sklearn.base import BaseEstimator
-from sklearn.externals import six
+import six
 
 
 class BaseARIMA(six.with_metaclass(ABCMeta, BaseEstimator)):

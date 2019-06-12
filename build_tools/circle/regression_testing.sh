@@ -16,7 +16,7 @@ mkdir testing_dir && cd testing_dir
 
 # Fit an arima and pickle it somewhere
 python -c "\
-from sklearn.externals import joblib
+import joblib
 import pyramid as pm
 
 lynx = pm.datasets.load_lynx()
@@ -28,7 +28,7 @@ joblib.dump(arima, 'model.pkl')
 python -c "\
 print('Test loading old model with pmdarima:')
 import pmdarima as pm
-from sklearn.externals import joblib
+import joblib
 modl = joblib.load('model.pkl')
 print(modl.predict(n_periods=5))
 "

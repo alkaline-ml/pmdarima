@@ -16,7 +16,7 @@ print(__doc__)
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
 import pmdarima as pm
-from sklearn.externals import joblib  # for persistence
+import joblib  # for persistence
 import os
 
 # #############################################################################
