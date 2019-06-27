@@ -208,6 +208,9 @@ class ARIMA(BaseARIMA):
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
 
+    sarimax_kwargs : dictionary, optional (default={})
+        kwargs to pass to SARIMAX if used
+
     Attributes
     ----------
     arima_res_ : ModelResultsWrapper
