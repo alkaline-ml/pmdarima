@@ -247,7 +247,7 @@ class ARIMA(BaseARIMA):
                  method=None, transparams=True, solver='lbfgs',
                  maxiter=None, disp=0, callback=None, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None,
-                 trend=None, with_intercept=True, **arimakwargs):
+                 trend=None, with_intercept=True,sarimax_kwargs={}):
 
         # XXX: This isn't actually required--sklearn doesn't need a super call
         super(ARIMA, self).__init__()
@@ -267,7 +267,7 @@ class ARIMA(BaseARIMA):
         self.scoring_args = dict() if not scoring_args else scoring_args
         self.trend = trend
         self.with_intercept = with_intercept
-        self.arimakwargs = arimakwargs
+        self.sarimax_kwargs = sarimax_kwargs
 
     def _is_seasonal(self):
         return self.seasonal_order is not None
@@ -322,7 +322,7 @@ class ARIMA(BaseARIMA):
                 arima = sm.tsa.statespace.SARIMAX(
                     endog=y, exog=exogenous, order=self.order,
                     seasonal_order=self.seasonal_order, trend=trend,
-                    enforce_stationarity=self.transparams, **self.arimakwargs)
+                    enforce_stationarity=self.transparams, **self.sarimax_kwargs)
 
             # actually fit the model, now. If this was called from 'update',
             # give priority to start_params from the fit_args

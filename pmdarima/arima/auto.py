@@ -51,7 +51,7 @@ class AutoARIMA(BaseARIMA):
                  suppress_warnings=False, error_action='warn', trace=False,
                  random=False, random_state=None, n_fits=10,
                  out_of_sample_size=0, scoring='mse',
-                 scoring_args=None, with_intercept=True):
+                 scoring_args=None, with_intercept=True,sarimax_kwargs={}):
 
         self.start_p = start_p
         self.d = d
@@ -95,6 +95,7 @@ class AutoARIMA(BaseARIMA):
         self.scoring = scoring
         self.scoring_args = scoring_args
         self.with_intercept = with_intercept
+        self.sarimax_kwargs = sarimax_kwargs
 
     def fit(self, y, exogenous=None, **fit_args):
         """Fit the auto-arima estimator
@@ -143,6 +144,7 @@ class AutoARIMA(BaseARIMA):
             return_valid_fits=False,  # only return ONE
             out_of_sample_size=self.out_of_sample_size, scoring=self.scoring,
             scoring_args=self.scoring_args, with_intercept=self.with_intercept,
+            sarimax_kwargs=self.sarimax_kwargs,
             **fit_args)
 
         return self
@@ -179,11 +181,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                suppress_warnings=False, error_action='warn', trace=False,
                random=False, random_state=None, n_fits=10,
                return_valid_fits=False, out_of_sample_size=0, scoring='mse',
-               scoring_args=None, with_intercept=True, **fit_args):
+               scoring_args=None, with_intercept=True,sarimax_kwargs={}, **fit_args):
     # NOTE: Doc is assigned BELOW this function
 
     start = time.time()
-
+    print("arima args", sarimax_kwargs)
     # validate start/max points
     if any(_ < 0 for _ in (max_p, max_q, max_P, max_Q, start_p,
                            start_q, start_P, start_Q)):
@@ -259,7 +261,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                        error_action=error_action, scoring=scoring,
                        out_of_sample_size=out_of_sample_size,
                        scoring_args=scoring_args,
-                       with_intercept=with_intercept)),
+                       with_intercept=with_intercept,
+                       sarimax_kwargs=sarimax_kwargs)),
             return_valid_fits, start, trace)
 
     # test ic, and use AIC if n <= 3
@@ -400,7 +403,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                                        scoring=scoring,
                                        out_of_sample_size=out_of_sample_size,
                                        scoring_args=scoring_args,
-                                       with_intercept=with_intercept)),
+                                       with_intercept=with_intercept,
+                                       sarimax_kwargs=sarimax_kwargs)),
             return_valid_fits, start, trace)
 
     # seasonality issues
@@ -455,7 +459,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                                 trace=trace, error_action=error_action,
                                 out_of_sample_size=out_of_sample_size,
                                 scoring=scoring, scoring_args=scoring_args,
-                                with_intercept=with_intercept)
+                                with_intercept=with_intercept,
+                                sarimax_kwargs=sarimax_kwargs)
             for order, seasonal_order in gen)
 
     # otherwise, we're fitting the stepwise algorithm...
@@ -483,7 +488,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             start_P=start_P, start_Q=start_Q, max_p=max_p, max_q=max_q,
             max_P=max_P, max_Q=max_Q, seasonal=seasonal,
             information_criterion=information_criterion,
-            max_order=max_order, with_intercept=with_intercept)
+            max_order=max_order, with_intercept=with_intercept,
+            sarimax_kwargs=sarimax_kwargs)
 
         # fit a baseline p, d, q model and then a null model
         stepwise_wrapper.fit_increment_k_cache_set(True)  # p, d, q, P, D, Q
