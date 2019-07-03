@@ -1,4 +1,4 @@
-version: 2.1
+version: 2
 
 # This will trigger on tags AND branches
 test-filters: &test-filters
