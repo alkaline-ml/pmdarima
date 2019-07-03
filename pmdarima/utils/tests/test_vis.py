@@ -25,7 +25,7 @@ datasets = [
 # backends we have flying around out there.
 travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
 
-if not travis:
+if False:  # hack to prevent from running for now.
 
     tolerance = get_pytest_mpl_threshold(
         {'Windows': 15, 'Darwin': 10, 'Linux': 10}

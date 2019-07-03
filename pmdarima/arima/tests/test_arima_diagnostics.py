@@ -14,12 +14,14 @@ lynx = load_lynx()
 # test images directories
 travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
 
+# TODO: should we remove this test suite altogether? It seems a bit brittle
+
 # Do not test on travis because they hate MPL
 if not travis:
 
-    # base images are created on Mac/Darwin. Windows needs a higher tolerance
+    # Give tolerance of 10 to all for now. In the past, Windows needed more.
     tolerance = get_pytest_mpl_threshold(
-        {'Windows': 10, 'Darwin': 5, 'Linux': 5}
+        {'Windows': 10, 'Darwin': 10, 'Linux': 10}
     )
 
     @pytest.mark.parametrize(
