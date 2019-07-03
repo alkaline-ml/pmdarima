@@ -1,10 +1,44 @@
-version: 2
+version: 2.1
 
+# This will trigger on tags AND branches
 test-filters: &test-filters
     tags:
         only: /.*/
     branches:
         only: /.*/
+
+# This will ignore for ALL branches, and only trigger on tags
+deploy-filters: &deploy-filters
+    tags:
+        only: /.*/
+    branches:
+        ignore: /.*/
+
+
+# ############################################
+#
+# Set Circle CI Reusable Commands
+#
+# For more information, see the documentation:
+# https://circleci.com/docs/2.0/reusing-config
+#
+# ############################################
+commands:
+  make-unit-test:
+    description: "Build and run unit tests using the Makefile"
+    steps:
+      - checkout
+      - run: make develop
+      - run: make test-unit
+      - run: codecov || echo "codecov upload failed"
+
+  # TODO: versioning
+
+  deploy-to-pypi:
+    description: "Deploy the package to PyPi"
+    steps:
+      - checkout
+      # TODO: finish this.
 
 jobs:
   # For testing PyPy rather than CPython
@@ -28,25 +62,26 @@ jobs:
             - ~/.ccache
             - ~/.cache/pip
 
+  cpython35:
+    docker:
+      - image: python:3.5
+    working_directory: ~/pmdarima
+    steps:
+    - make-unit-test
+
   cpython36:
     docker:
       - image: python:3.6
     working_directory: ~/pmdarima
     steps:
-    - checkout
-    - run: make develop
-    - run: make test-unit
-    - run: codecov || echo "codecov upload failed"
+    - make-unit-test
 
   cpython37:
     docker:
       - image: python:3.7
     working_directory: ~/pmdarima
     steps:
-    - checkout
-    - run: make develop
-    - run: make test-unit
-    - run: codecov || echo "codecov upload failed"
+    - make-unit-test
 
   # For testing lint
   test-linting:
@@ -76,6 +111,27 @@ jobs:
             name: pmdarima Testing passed
             command: echo "All tests passed"
 
+  deploy-cpython35:
+    docker:
+      - image: python:3.5
+    working_directory: ~/pmdarima
+    steps:
+      - deploy-to-pypi
+
+  deploy-cpython36:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+      - deploy-to-pypi
+
+  deploy-cpython37:
+    docker:
+      - image: python:3.7
+    working_directory: ~/pmdarima
+    steps:
+      - deploy-to-pypi
+
   # For documentation deployment. You'll need the following environment vars
   # in your Circle CI settings, otherwise this will not work.
   #
@@ -100,6 +156,8 @@ workflows:
         # All testing jobs
         - pypy36:
             filters: *test-filters
+        - cpython35:
+            filters: *test-filters
         - cpython36:
             filters: *test-filters
         - cpython37:
@@ -111,6 +169,7 @@ workflows:
         - testing-passed:
             requires:
                 - pypy36
+                - cpython35
                 - cpython36
                 - cpython37
                 - test-linting
@@ -121,3 +180,16 @@ workflows:
         - deploy-doc:
             requires:
                 - testing-passed
+
+        - deploy-cpython35:
+            filters: *deploy-filters
+            requires: -testing-passed
+
+        - deploy-cpython36:
+            filters: *deploy-filters
+            requires: -testing-passed
+
+        - deploy-cpython37:
+            filters: *deploy-filters
+            requires: -testing-passed
+
