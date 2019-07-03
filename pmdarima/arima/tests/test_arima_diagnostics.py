@@ -11,9 +11,9 @@ import pytest
 lynx = load_lynx()
 
 # TODO: should we remove this test suite altogether? It seems a bit brittle
-# Give tolerance of 10 to all for now. In the past, Windows needed more.
+# Windows needs more.
 tolerance = get_pytest_mpl_threshold(
-    {'Windows': 10, 'Darwin': 10, 'Linux': 10}
+    {'Windows': 20, 'Darwin': 10, 'Linux': 10}
 )
 
 
