@@ -695,15 +695,6 @@ def test_value_error_on_failed_model_fits():
         _post_ppc_arima(None)
 
 
-# We fail when error action is raise and the model can't be fit
-def test_failing_model_fit():
-    with pytest.raises(ValueError):
-        # raise ValueError('non-invertible starting MA parameters found'
-        auto_arima(wineind, seasonal=True, suppress_warnings=True,
-                   error_action='raise', m=2, random=True, random_state=1,
-                   n_fits=2)
-
-
 def test_warn_for_large_differences():
     # First: d is too large
     with pytest.warns(ModelFitWarning):

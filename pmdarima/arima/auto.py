@@ -8,7 +8,7 @@ from __future__ import absolute_import
 
 from joblib import Parallel, delayed
 import numpy as np
-from sklearn.utils.validation import check_array, column_or_1d, check_is_fitted
+from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.utils import check_random_state
 from sklearn.linear_model import LinearRegression
 import time
@@ -20,6 +20,7 @@ from .utils import ndiffs, is_constant, nsdiffs
 from ..utils import diff, is_iterable
 from ..utils.metaestimators import if_has_delegate
 from ._auto_solvers import _fit_arima, _StepwiseFitWrapper
+from .warnings import ModelFitWarning
 
 # for python 3 compat
 from ..compat.python import xrange
@@ -368,12 +369,12 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         if D >= 2:
             warnings.warn("Having more than one seasonal differences is "
                           "not recommended. Please consider using only one "
-                          "seasonal difference.")
+                          "seasonal difference.", ModelFitWarning)
         # if D is -1, this will be off, so we include the OR
         elif D + d > 2 or d > 2:
             warnings.warn("Having 3 or more differencing operations is not "
                           "recommended. Please consider reducing the total "
-                          "number of differences.")
+                          "number of differences.", ModelFitWarning)
 
     if d > 0:
         dx = diff(dx, differences=d, lag=1)
