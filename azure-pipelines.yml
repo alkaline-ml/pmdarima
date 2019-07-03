@@ -24,4 +24,3 @@ variables:
 
 jobs:
 - template: build_tools/azure/jobs.yml
-
