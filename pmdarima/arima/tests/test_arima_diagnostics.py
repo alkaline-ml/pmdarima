@@ -16,6 +16,7 @@ tolerance = get_pytest_mpl_threshold(
     {'Windows': 10, 'Darwin': 10, 'Linux': 10}
 )
 
+
 @pytest.mark.parametrize(
     'model_type,model', [
         pytest.param('arma', ARIMA(order=(1, 0, 0), maxiter=50)),
