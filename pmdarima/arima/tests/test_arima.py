@@ -706,7 +706,7 @@ def test_failing_model_fit():
 
 def test_warn_for_large_differences():
     # First: d is too large
-    with pytest.warns(UserWarning):
+    with pytest.warns(ModelFitWarning):
         auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
                    d=3, error_action='warn', maxiter=5)
 
