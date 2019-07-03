@@ -33,12 +33,12 @@ commands:
       - run: codecov || echo "codecov upload failed"
 
   # TODO: versioning
-
   deploy-to-pypi:
     description: "Deploy the package to PyPi"
     steps:
       - checkout
       # TODO: finish this.
+      - run: echo "Passing"
 
 jobs:
   # For testing PyPy rather than CPython
@@ -183,13 +183,13 @@ workflows:
 
         - deploy-cpython35:
             filters: *deploy-filters
-            requires: -testing-passed
+            requires: testing-passed
 
         - deploy-cpython36:
             filters: *deploy-filters
-            requires: -testing-passed
+            requires: testing-passed
 
         - deploy-cpython37:
             filters: *deploy-filters
-            requires: -testing-passed
+            requires: testing-passed
 
