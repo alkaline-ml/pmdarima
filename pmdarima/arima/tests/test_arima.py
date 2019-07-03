@@ -305,7 +305,7 @@ def test_oob_for_issue_29():
                 except Exception as ex:
                     # print("Failing combo: d=%i, cv=%i, exog=%r"
                     #       % (d, cv, exog))
-                    if "invertibility" in str(ex):
+                    if "invertibility" in str(ex.value):
                         pass
                     else:
                         raise
@@ -650,7 +650,7 @@ def test_m_too_large():
                    stepwise=True, suppress_warnings=True, D=10, max_D=10,
                    error_action='ignore', m=20)
 
-    msg = str(v)
+    msg = str(v.value)
     assert 'The seasonal differencing order' in msg
 
 
@@ -706,7 +706,7 @@ def test_failing_model_fit():
 
 def test_warn_for_large_differences():
     # First: d is too large
-    with pytest.warns(ModelFitWarning):
+    with pytest.warns(UserWarning):
         auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
                    d=3, error_action='warn', maxiter=5)
 
@@ -733,7 +733,7 @@ def test_force_polynomial_error():
 
     with pytest.raises(ValueError) as ve:
         auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg)
-    assert 'simple polynomial' in str(ve), str(ve)
+    assert 'simple polynomial' in str(ve.value), str(ve.value)
 
     # but it should pass when xreg is not none
     xreg = rs.rand(x.shape[0], 2)
@@ -948,7 +948,7 @@ def test_new_serialization():
         # Show we get an OSError now
         with pytest.raises(OSError) as ose:
             joblib.load(pkl_file)
-        assert "Does it still" in str(ose), ose
+        assert "Does it still" in str(ose.value), ose
 
     finally:
         _unlink_if_exists(pkl_file)

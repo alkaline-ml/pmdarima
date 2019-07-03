@@ -296,4 +296,4 @@ def test_failing_ocsb():
     with pytest.raises(ValueError) as v:
         OCSBTest(m=4, max_lag=3, lag_method="bad_method")\
             .estimate_seasonal_differencing_term(austres)
-    assert "invalid method" in str(v)
+    assert "invalid method" in str(v.value)
