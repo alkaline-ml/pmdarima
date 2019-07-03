@@ -183,13 +183,16 @@ workflows:
 
         - deploy-cpython35:
             filters: *deploy-filters
-            requires: testing-passed
+            requires:
+                - deploy-doc
 
         - deploy-cpython36:
             filters: *deploy-filters
-            requires: testing-passed
+            requires:
+                - deploy-doc
 
         - deploy-cpython37:
             filters: *deploy-filters
-            requires: testing-passed
+            requires:
+                - deploy-doc
 
