@@ -13,7 +13,7 @@ function build_wheel {
         ucs_tag="${ucs_tag}u"
     fi
 
-    ML_PYTHON_VERSION=$(python3 -c \
+    ML_PYTHON_VERSION=$(python -c \
         "print('cp{maj}{min}-cp{maj}{min}{ucs}'.format( \
                maj='${pyver}'.split('.')[0], \
 	       min='${pyver}'.split('.')[1], \
@@ -28,7 +28,7 @@ function build_wheel {
         -v "${_root}":/io \
         -e "PYMODULE=pmdarima" \
         -e "PYTHON_VERSION=${ML_PYTHON_VERSION}" \
-        "${ML_IMAGE}" "~/pmdarima/build_tools/circle/build_manylinux_wheel.sh"
+        "${ML_IMAGE}" "/io/build_tools/circle/build_manylinux_wheel.sh"
     sudo docker cp "${DOCKER_CONTAINER_NAME}:/io/dist/." "${_root}/dist/"
     docker rm $(docker ps -a -f status=exited -q)
 }
