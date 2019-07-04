@@ -195,7 +195,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.pacf<a class="headerlink" href="#pmdarima-utils-pacf" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.utils.pacf">
-<code class="descclassname">pmdarima.utils.</code><code class="descname">pacf</code><span class="sig-paren">(</span><em>x</em>, <em>nlags=40</em>, <em>method='ywunbiased'</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/428f44c/pmdarima/utils/wrapped.py#L64"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#pacf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.pacf" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.utils.</code><code class="descname">pacf</code><span class="sig-paren">(</span><em>x</em>, <em>nlags=40</em>, <em>method='ywunbiased'</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/b210b73/pmdarima/utils/wrapped.py#L64"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#pacf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.pacf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partial autocorrelation estimated</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -207,18 +207,23 @@
 </div></blockquote>
 <p><strong>nlags</strong> : int</p>
 <blockquote>
-<div><p>largest lag for which pacf is returned</p>
+<div><p>largest lag for which the pacf is returned</p>
 </div></blockquote>
-<p><strong>method</strong> : {‘ywunbiased’, ‘ywmle’, ‘ols’}</p>
+<p><strong>method</strong> : str</p>
 <blockquote>
 <div><p>specifies which method for the calculations to use:</p>
 <ul class="simple">
-<li>yw or ywunbiased : yule walker with bias correction in denominator
-for acovf. Default.</li>
-<li>ywm or ywmle : yule walker without bias correction</li>
-<li>ols - regression of time series on lags of it and on constant</li>
-<li>ld or ldunbiased : Levinson-Durbin recursion with bias correction</li>
-<li>ldb or ldbiased : Levinson-Durbin recursion without bias correction</li>
+<li>‘yw’ or ‘ywunbiased’ : Yule-Walker with bias correction in
+denominator for acovf. Default.</li>
+<li>‘ywm’ or ‘ywmle’ : Yule-Walker without bias correction</li>
+<li>‘ols’ : regression of time series on lags of it and on constant</li>
+<li>‘ols-inefficient’ : regression of time series on lags using a single
+common sample to estimate all pacf coefficients</li>
+<li>‘ols-unbiased’ : regression of time series on lags with a bias
+adjustment</li>
+<li>‘ld’ or ‘ldunbiased’ : Levinson-Durbin recursion with bias correction</li>
+<li>‘ldb’ or ‘ldbiased’ : Levinson-Durbin recursion without bias
+correction</li>
 </ul>
 </div></blockquote>
 <p><strong>alpha</strong> : float, optional</p>
@@ -242,9 +247,17 @@ returned where the standard deviation is computed according to
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal notranslate"><span class="pre">statsmodels.tsa.stattools.acf</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">statsmodels.tsa.stattools.pacf_yw</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">statsmodels.tsa.stattools.pacf_burg</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">statsmodels.tsa.stattools.pacf_ols</span></code></p>
+</div>
 <p class="rubric">Notes</p>
-<p>This solves yule_walker equations or ols for each desired lag
-and contains currently duplicate calculations.</p>
+<p>Based on simulation evidence across a range of low-order ARMA models,
+the best methods based on root MSE are Yule-Walker (MLW), Levinson-Durbin
+(MLE) and Burg, respectively. The estimators with the lowest bias included
+included these three in addition to OLS and OLS-unbiased.</p>
+<p>Yule-Walker (unbiased) and Levinson-Durbin (unbiased) performed
+consistently worse than the other options.</p>
 </dd></dl>
 
 <div class="clearer"></div></div>

@@ -176,7 +176,7 @@
 
 <span class="kn">from</span> <span class="nn">joblib</span> <span class="k">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">column_or_1d</span><span class="p">,</span> <span class="n">check_is_fitted</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">column_or_1d</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LinearRegression</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -188,6 +188,7 @@
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">diff</span><span class="p">,</span> <span class="n">is_iterable</span>
 <span class="kn">from</span> <span class="nn">..utils.metaestimators</span> <span class="k">import</span> <span class="n">if_has_delegate</span>
 <span class="kn">from</span> <span class="nn">._auto_solvers</span> <span class="k">import</span> <span class="n">_fit_arima</span><span class="p">,</span> <span class="n">_StepwiseFitWrapper</span>
+<span class="kn">from</span> <span class="nn">.warnings</span> <span class="k">import</span> <span class="n">ModelFitWarning</span>
 
 <span class="c1"># for python 3 compat</span>
 <span class="kn">from</span> <span class="nn">..compat.python</span> <span class="k">import</span> <span class="n">xrange</span>
@@ -536,12 +537,12 @@
         <span class="k">if</span> <span class="n">D</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Having more than one seasonal differences is &quot;</span>
                           <span class="s2">&quot;not recommended. Please consider using only one &quot;</span>
-                          <span class="s2">&quot;seasonal difference.&quot;</span><span class="p">)</span>
+                          <span class="s2">&quot;seasonal difference.&quot;</span><span class="p">,</span> <span class="n">ModelFitWarning</span><span class="p">)</span>
         <span class="c1"># if D is -1, this will be off, so we include the OR</span>
         <span class="k">elif</span> <span class="n">D</span> <span class="o">+</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Having 3 or more differencing operations is not &quot;</span>
                           <span class="s2">&quot;recommended. Please consider reducing the total &quot;</span>
-                          <span class="s2">&quot;number of differences.&quot;</span><span class="p">)</span>
+                          <span class="s2">&quot;number of differences.&quot;</span><span class="p">,</span> <span class="n">ModelFitWarning</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>

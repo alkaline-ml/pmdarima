@@ -195,7 +195,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.acf<a class="headerlink" href="#pmdarima-utils-acf" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.utils.acf">
-<code class="descclassname">pmdarima.utils.</code><code class="descname">acf</code><span class="sig-paren">(</span><em>x</em>, <em>unbiased=False</em>, <em>nlags=40</em>, <em>qstat=False</em>, <em>fft=False</em>, <em>alpha=None</em>, <em>missing='none'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/428f44c/pmdarima/utils/wrapped.py#L56"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#acf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.acf" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.utils.</code><code class="descname">acf</code><span class="sig-paren">(</span><em>x</em>, <em>unbiased=False</em>, <em>nlags=40</em>, <em>qstat=False</em>, <em>fft=False</em>, <em>alpha=None</em>, <em>missing='none'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/b210b73/pmdarima/utils/wrapped.py#L56"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#acf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.acf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Autocorrelation function for 1d arrays.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -242,7 +242,7 @@ are to be treated.</p>
 </div></blockquote>
 <p><strong>confint</strong> : array, optional</p>
 <blockquote>
-<div><p>Confidence intervals for the ACF. Returned if confint is not None.</p>
+<div><p>Confidence intervals for the ACF. Returned if alpha is not None.</p>
 </div></blockquote>
 <p><strong>qstat</strong> : array, optional</p>
 <blockquote>
@@ -259,10 +259,13 @@ True.</p>
 </table>
 <p class="rubric">Notes</p>
 <p>The acf at lag 0 (ie., 1) is returned.</p>
-<p>This is based np.correlate which does full convolution. For very long time
-series it is recommended to use fft convolution instead.</p>
+<p>For very long time series it is recommended to use fft convolution instead.
+When fft is False uses a simple, direct estimator of the autocovariances
+that only computes the first nlag + 1 values. This can be much faster when
+the time series is long and only a small number of autocovariances are
+needed.</p>
 <p>If unbiased is true, the denominator for the autocovariance is adjusted
-but the autocorrelation is not an unbiased estimtor.</p>
+but the autocorrelation is not an unbiased estimator.</p>
 <p class="rubric">References</p>
 <table class="docutils footnote" frame="void" id="id1" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
