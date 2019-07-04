@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.pipeline import Pipeline
 from pmdarima.preprocessing import BoxCoxEndogTransformer, FourierFeaturizer
 from pmdarima.arima import ARIMA, AutoARIMA
@@ -18,7 +19,7 @@ class TestIllegal:
                 ("stage", ARIMA(order=(0, 0, 0)))
             ])
 
-        assert "not unique" in str(ve)
+        assert "not unique" in pytest_error_str(ve)
 
     def test_names_in_params(self):
         # Will fail because 'steps' is a param of Pipeline
@@ -28,7 +29,7 @@ class TestIllegal:
                 ("stage", ARIMA(order=(0, 0, 0)))
             ])
 
-        assert "names conflict" in str(ve)
+        assert "names conflict" in pytest_error_str(ve)
 
     def test_names_double_underscore(self):
         # Will fail since the "__" is reserved for parameter names
@@ -38,7 +39,7 @@ class TestIllegal:
                 ("stage", ARIMA(order=(0, 0, 0)))
             ])
 
-        assert "must not contain __" in str(ve)
+        assert "must not contain __" in pytest_error_str(ve)
 
     def test_non_transformer_in_steps(self):
         # Will fail since the first stage is not a transformer
@@ -48,7 +49,7 @@ class TestIllegal:
                 ("stage2", AutoARIMA())
             ])
 
-        assert "instances of BaseTransformer" in str(ve)
+        assert "instances of BaseTransformer" in pytest_error_str(ve)
 
     @pytest.mark.parametrize(
         'stages', [
@@ -65,7 +66,7 @@ class TestIllegal:
         with pytest.raises(TypeError) as ve:
             Pipeline(stages)
 
-        assert "Last step of Pipeline should be" in str(ve)
+        assert "Last step of Pipeline should be" in pytest_error_str(ve)
 
 
 @pytest.mark.parametrize(
@@ -123,7 +124,7 @@ def test_pipeline_behavior():
 
     with pytest.raises(ValueError) as ve:
         pipeline.predict(3, **kwargs)
-    assert ("'n_periods'" in str(ve))
+    assert "'n_periods'" in pytest_error_str(ve)
 
     # Assert that we can update the model
     pipeline.update(test, maxiter=5)
