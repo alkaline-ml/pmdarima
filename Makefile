@@ -36,6 +36,9 @@ requirements:
 bdist_wheel: requirements
 	$(PYTHON) setup.py bdist_wheel
 
+sdist: requirements
+	$(PYTHON) setup.py sdist
+
 develop: requirements
 	$(PYTHON) setup.py develop
 
