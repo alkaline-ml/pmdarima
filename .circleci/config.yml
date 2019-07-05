@@ -132,21 +132,6 @@ jobs:
   # capacity, so should be run on machines
   #
   # ############################################
-  deploy-sdist:
-    machine:
-      image: circleci/classic:latest
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - run: |
-          # Make the sdist with Docker so we can control python 3+
-          docker run --rm -it \
-            -v `pwd`:/app \
-            -w /app \
-            python:3.7 \
-            python setup.py sdist
-      - deploy-to-pypi
-
   deploy-cpython35-whl:
     machine:
       image: circleci/classic:latest
@@ -225,11 +210,6 @@ workflows:
         - deploy-doc:
             requires:
                 - testing-passed
-
-        - deploy-sdist:
-            filters: *deploy-filters
-            requires:
-                - deploy-doc
 
         - deploy-cpython35-whl:
             filters: *deploy-filters
