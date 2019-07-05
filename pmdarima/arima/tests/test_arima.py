@@ -8,6 +8,7 @@ from pmdarima.arima._auto_solvers import _fmt_warning_str
 from pmdarima.arima.auto import _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.arima.warnings import ModelFitWarning
+from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate, \
     load_austres
 from pmdarima.utils import get_callable
@@ -305,7 +306,7 @@ def test_oob_for_issue_29():
                 except Exception as ex:
                     # print("Failing combo: d=%i, cv=%i, exog=%r"
                     #       % (d, cv, exog))
-                    if "invertibility" in str(ex):
+                    if "invertibility" in pytest_error_str(ex):
                         pass
                     else:
                         raise
@@ -650,7 +651,7 @@ def test_m_too_large():
                    stepwise=True, suppress_warnings=True, D=10, max_D=10,
                    error_action='ignore', m=20)
 
-    msg = str(v)
+    msg = pytest_error_str(v)
     assert 'The seasonal differencing order' in msg
 
 
@@ -695,15 +696,6 @@ def test_value_error_on_failed_model_fits():
         _post_ppc_arima(None)
 
 
-# We fail when error action is raise and the model can't be fit
-def test_failing_model_fit():
-    with pytest.raises(ValueError):
-        # raise ValueError('non-invertible starting MA parameters found'
-        auto_arima(wineind, seasonal=True, suppress_warnings=True,
-                   error_action='raise', m=2, random=True, random_state=1,
-                   n_fits=2)
-
-
 def test_warn_for_large_differences():
     # First: d is too large
     with pytest.warns(ModelFitWarning):
@@ -733,7 +725,8 @@ def test_force_polynomial_error():
 
     with pytest.raises(ValueError) as ve:
         auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg)
-    assert 'simple polynomial' in str(ve), str(ve)
+    err_msg = pytest_error_str(ve)
+    assert 'simple polynomial' in err_msg, err_msg
 
     # but it should pass when xreg is not none
     xreg = rs.rand(x.shape[0], 2)
@@ -948,7 +941,7 @@ def test_new_serialization():
         # Show we get an OSError now
         with pytest.raises(OSError) as ose:
             joblib.load(pkl_file)
-        assert "Does it still" in str(ose), ose
+        assert "Does it still" in pytest_error_str(ose), ose
 
     finally:
         _unlink_if_exists(pkl_file)
