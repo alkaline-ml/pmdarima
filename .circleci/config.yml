@@ -226,25 +226,23 @@ workflows:
             requires:
                 - testing-passed
 
-        # TODO: REINSTATE DEPLOY FILTERS
-
         - deploy-sdist:
-            filters: *test-filters
+            filters: *deploy-filters
             requires:
                 - deploy-doc
 
         - deploy-cpython35-whl:
-            filters: *test-filters
+            filters: *deploy-filters
             requires:
                 - deploy-doc
 
         - deploy-cpython36-whl:
-            filters: *test-filters
+            filters: *deploy-filters
             requires:
                 - deploy-doc
 
         - deploy-cpython37-whl:
-            filters: *test-filters
+            filters: *deploy-filters
             requires:
                 - deploy-doc
 
