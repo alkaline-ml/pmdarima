@@ -23,3 +23,15 @@ If you would like to include ``pmdarima`` in your published work, please cite it
         </script>].
       </li>
     </ul>
+
+BibTeX Entry:
+
+.. code-block:: tex
+
+    @MISC {pmdarima,
+      author = {Taylor G. Smith and others},
+      title  = {{pmdarima}: ARIMA estimators for {Python}},
+      year   = {2017--},
+      url    = "http://www.alkaline-ml.com/pmdarima",
+      note   = {[Online; accessed <today>]}
+    }
