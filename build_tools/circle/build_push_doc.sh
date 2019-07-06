@@ -49,7 +49,8 @@ function deploy() {
 }
 
 
-# If we're on master or develop, we'll end up deploying
+# If we're on master, we'll deploy to /develop (bleeding edge). If from a tag,
+# we'll deploy to the version slug (e.g., /1.2.1)
 echo "Branch name: ${CIRCLE_BRANCH}"
 
 # Show the present files:
@@ -75,9 +76,9 @@ do
   rm -rf ${left} || echo "${left} does not exist"
 done
 
-# If it's develop, we can simply rename the "html" directory as the
+# If it's master, we can simply rename the "html" directory as the
 # "develop" directory
-if [[ ${CIRCLE_BRANCH} == "develop" ]]; then
+if [[ ${CIRCLE_BRANCH} == "master" ]]; then
 
   # Remove the existing 'dev' folder (if it's there. might not be the
   # first time we do this)
@@ -89,10 +90,10 @@ if [[ ${CIRCLE_BRANCH} == "develop" ]]; then
   mv html develop
   # That's it for dev
 
-# Otherwise it's master or another branch, which is a bit more involved.
+# Otherwise it's a tag or another branch, which is a bit more involved.
 # Remove the artifacts from the previous deployment, move the new ones into the
 # folder as well as into the versioned folder. This won't be deployed unless
-# it's master
+# it's a tag
 else
 
   # These are the web artifacts we want to remove from the base
@@ -144,14 +145,9 @@ ls -la
 # Finally, deploy the branch, but if it's a pull request or tag, don't!!
 if [[ ! -z ${CIRCLE_PULL_REQUEST} ]]; then
   echo "Will not deploy doc on pull request (${CIRCLE_PULL_REQUEST})"
-elif [[ ! -z ${CIRCLE_TAG} ]]; then
-  # We do this since we deploy the documentation on Master anyways, and if it
-  # encounters the already-existing versioned directory, it fails out (as coded
-  # above with exit 9)
-  echo "Will not re-deploy doc on tag (${CIRCLE_TAG})"
-elif [[ ${CIRCLE_BRANCH} == "master" || ${CIRCLE_BRANCH} == "develop" ]]; then
+elif [[ ${CIRCLE_BRANCH} == "master" || ! -z ${CIRCLE_TAG} ]]; then
   echo "Deploying documentation"
   deploy
 else
-  echo "Not on master or develop. Will not deploy doc"
+  echo "Not on master or tag. Will not deploy doc"
 fi
