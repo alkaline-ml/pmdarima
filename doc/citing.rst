@@ -26,7 +26,7 @@ If you would like to include ``pmdarima`` in your published work, please cite it
 
 BibTeX Entry:
 
-.. code-block:: tex
+.. code-block::
 
     @MISC {pmdarima,
       author = {Taylor G. Smith and others},
