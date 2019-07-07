@@ -1,10 +1,57 @@
-version: 2
+version: 2.1
 
+# This will trigger on tags AND branches
 test-filters: &test-filters
     tags:
         only: /.*/
     branches:
         only: /.*/
+
+# This will ignore for ALL branches, and only trigger on tags
+deploy-filters: &deploy-filters
+    tags:
+        only: /.*/
+    branches:
+        ignore: /.*/
+
+
+# ############################################
+#
+# Set Circle CI Reusable Commands
+#
+# For more information, see the documentation:
+# https://circleci.com/docs/2.0/reusing-config
+#
+# ############################################
+commands:
+  make-unit-test:
+    description: "Build and run unit tests using the Makefile"
+    steps:
+      - checkout
+      - run: make develop
+      - run: make test-unit
+      - run: codecov || echo "codecov upload failed"
+
+  # TODO: versioning
+  build-whl-file:
+    description: "Build a wheel file"
+    parameters:
+      pythonversion:
+        type: string
+    steps:
+      - run: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
+
+  deploy-to-pypi:
+    description: "Deploy the contents of dist/ to PyPi"
+    steps:
+      - run: |
+          docker run --rm -it \
+            -v `pwd`:/app \
+            -w /app \
+            --env TWINE_USERNAME=${TWINE_USERNAME} \
+            --env TWINE_PASSWORD=${TWINE_PASSWORD} \
+            python:3.7 \
+            ./build_tools/circle/deploy.sh
 
 jobs:
   # For testing PyPy rather than CPython
@@ -28,25 +75,26 @@ jobs:
             - ~/.ccache
             - ~/.cache/pip
 
+  cpython35:
+    docker:
+      - image: python:3.5
+    working_directory: ~/pmdarima
+    steps:
+    - make-unit-test
+
   cpython36:
     docker:
       - image: python:3.6
     working_directory: ~/pmdarima
     steps:
-    - checkout
-    - run: make develop
-    - run: make test-unit
-    - run: codecov || echo "codecov upload failed"
+    - make-unit-test
 
   cpython37:
     docker:
       - image: python:3.7
     working_directory: ~/pmdarima
     steps:
-    - checkout
-    - run: make develop
-    - run: make test-unit
-    - run: codecov || echo "codecov upload failed"
+    - make-unit-test
 
   # For testing lint
   test-linting:
@@ -69,12 +117,50 @@ jobs:
 
   # Simple job that passes when all other tests have passed
   testing-passed:
-      docker:
-        - image: bash:latest
-      steps:
-        - run:
-            name: pmdarima Testing passed
-            command: echo "All tests passed"
+    docker:
+      - image: bash:latest
+    steps:
+      - run:
+          name: pmdarima Testing passed
+          command: echo "All tests passed"
+
+  # ############################################
+  #
+  # Deploy commands
+  #
+  # All deploy commands need Docker in some
+  # capacity, so should be run on machines
+  #
+  # ############################################
+  deploy-cpython35-whl:
+    machine:
+      image: circleci/classic:latest
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - build-whl-file:
+          pythonversion: "3.5"
+      - deploy-to-pypi
+
+  deploy-cpython36-whl:
+    machine:
+      image: circleci/classic:latest
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - build-whl-file:
+          pythonversion: "3.6"
+      - deploy-to-pypi
+
+  deploy-cpython37-whl:
+    machine:
+      image: circleci/classic:latest
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - build-whl-file:
+          pythonversion: "3.7"
+      - deploy-to-pypi
 
   # For documentation deployment. You'll need the following environment vars
   # in your Circle CI settings, otherwise this will not work.
@@ -100,6 +186,8 @@ workflows:
         # All testing jobs
         - pypy36:
             filters: *test-filters
+        - cpython35:
+            filters: *test-filters
         - cpython36:
             filters: *test-filters
         - cpython37:
@@ -111,6 +199,7 @@ workflows:
         - testing-passed:
             requires:
                 - pypy36
+                - cpython35
                 - cpython36
                 - cpython37
                 - test-linting
@@ -121,3 +210,19 @@ workflows:
         - deploy-doc:
             requires:
                 - testing-passed
+
+        - deploy-cpython35-whl:
+            filters: *deploy-filters
+            requires:
+                - deploy-doc
+
+        - deploy-cpython36-whl:
+            filters: *deploy-filters
+            requires:
+                - deploy-doc
+
+        - deploy-cpython37-whl:
+            filters: *deploy-filters
+            requires:
+                - deploy-doc
+

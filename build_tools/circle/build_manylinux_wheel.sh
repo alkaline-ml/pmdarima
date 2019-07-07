@@ -12,9 +12,6 @@ PIP="/opt/python/${PYTHON_VERSION}/bin/pip"
 ${PIP} install --upgrade pip wheel==0.31.1
 ${PIP} install --upgrade setuptools
 ${PIP} install --upgrade cython
-
-# One of our envs is not building correctly anymore. Need Numpy up front since
-# statsmodels 0.9.0 now requires numpy to install from pip
 ${PIP} install --upgrade numpy
 
 # NOW we can install requirements

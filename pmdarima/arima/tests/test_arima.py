@@ -8,7 +8,9 @@ from pmdarima.arima._auto_solvers import _fmt_warning_str
 from pmdarima.arima.auto import _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.arima.warnings import ModelFitWarning
-from pmdarima.datasets import load_lynx, load_wineind, load_heartrate
+from pmdarima.compat.pytest import pytest_error_str
+from pmdarima.datasets import load_lynx, load_wineind, load_heartrate, \
+    load_austres
 from pmdarima.utils import get_callable
 
 import numpy as np
@@ -48,23 +50,7 @@ abc = np.array([4.439524, 4.769823, 6.558708, 5.070508,
                 6.207962, 3.876891, 4.597115, 4.533345,
                 5.779965, 4.916631])
 
-# TODO: redundant code with test_stationarity. Fix this in separate feature
-austres = np.array([13067.3, 13130.5, 13198.4, 13254.2, 13303.7, 13353.9,
-                    13409.3, 13459.2, 13504.5, 13552.6, 13614.3, 13669.5,
-                    13722.6, 13772.1, 13832.0, 13862.6, 13893.0, 13926.8,
-                    13968.9, 14004.7, 14033.1, 14066.0, 14110.1, 14155.6,
-                    14192.2, 14231.7, 14281.5, 14330.3, 14359.3, 14396.6,
-                    14430.8, 14478.4, 14515.7, 14554.9, 14602.5, 14646.4,
-                    14695.4, 14746.6, 14807.4, 14874.4, 14923.3, 14988.7,
-                    15054.1, 15121.7, 15184.2, 15239.3, 15288.9, 15346.2,
-                    15393.5, 15439.0, 15483.5, 15531.5, 15579.4, 15628.5,
-                    15677.3, 15736.7, 15788.3, 15839.7, 15900.6, 15961.5,
-                    16018.3, 16076.9, 16139.0, 16203.0, 16263.3, 16327.9,
-                    16398.9, 16478.3, 16538.2, 16621.6, 16697.0, 16777.2,
-                    16833.1, 16891.6, 16956.8, 17026.3, 17085.4, 17106.9,
-                    17169.4, 17239.4, 17292.0, 17354.2, 17414.2, 17447.3,
-                    17482.6, 17526.0, 17568.7, 17627.1, 17661.5])
-
+austres = load_austres()
 wineind = load_wineind()
 lynx = load_lynx()
 
@@ -82,17 +68,17 @@ def _unlink_if_exists(path):
         os.unlink(path)
 
 
-def test_basic_arima():
-    arima = ARIMA(order=(0, 0, 0), suppress_warnings=True)
-    preds = arima.fit_predict(y)  # fit/predict for coverage
+def test_basic_arma():
+    arma = ARIMA(order=(0, 0, 0), suppress_warnings=True)
+    preds = arma.fit_predict(y)  # fit/predict for coverage
 
     # No OOB, so assert none
-    assert arima.oob_preds_ is None
+    assert arma.oob_preds_ is None
 
     # test some of the attrs
-    assert_almost_equal(arima.aic(), 11.201308403566909, decimal=5)
-    assert_almost_equal(arima.aicc(), 11.74676, decimal=5)
-    assert_almost_equal(arima.bic(), 13.639060053303311, decimal=5)
+    assert_almost_equal(arma.aic(), 11.201308403566909, decimal=5)
+    assert_almost_equal(arma.aicc(), 11.74676, decimal=5)
+    assert_almost_equal(arma.bic(), 13.639060053303311, decimal=5)
 
     # get predictions
     expected_preds = np.array([0.44079876, 0.44079876, 0.44079876,
@@ -117,9 +103,25 @@ def test_basic_arima():
         [-0.10692387, 0.98852139]
     ])
 
-    _, intervals = arima.predict(n_periods=10, return_conf_int=True,
-                                 alpha=0.05)
+    _, intervals = arma.predict(n_periods=10, return_conf_int=True,
+                                alpha=0.05)
     assert_array_almost_equal(intervals, expected_intervals)
+
+
+@pytest.mark.parametrize(
+    # will be m - d
+    'model, expected_m_dim', [
+        pytest.param(ARIMA(order=(2, 0, 0)), wineind.shape[0]),  # arma
+        pytest.param(ARIMA(order=(2, 1, 0)), wineind.shape[0] - 1),  # arima
+        pytest.param(ARIMA(order=(2, 1, 0), seasonal_order=(1, 0, 0, 12)),
+                     wineind.shape[0]),  # sarimax
+    ]
+)
+def test_predict_in_sample_conf_int(model, expected_m_dim):
+    model.fit(wineind)
+    preds, confints = model.predict_in_sample(return_conf_int=True, alpha=0.05)
+    assert preds.shape[0] == expected_m_dim
+    assert confints.shape == (expected_m_dim, 2)
 
 
 def test_with_oob():
@@ -304,7 +306,7 @@ def test_oob_for_issue_29():
                 except Exception as ex:
                     # print("Failing combo: d=%i, cv=%i, exog=%r"
                     #       % (d, cv, exog))
-                    if "invertibility" in str(ex):
+                    if "invertibility" in pytest_error_str(ex):
                         pass
                     else:
                         raise
@@ -649,7 +651,7 @@ def test_m_too_large():
                    stepwise=True, suppress_warnings=True, D=10, max_D=10,
                    error_action='ignore', m=20)
 
-    msg = str(v)
+    msg = pytest_error_str(v)
     assert 'The seasonal differencing order' in msg
 
 
@@ -694,15 +696,6 @@ def test_value_error_on_failed_model_fits():
         _post_ppc_arima(None)
 
 
-# We fail when error action is raise and the model can't be fit
-def test_failing_model_fit():
-    with pytest.raises(ValueError):
-        # raise ValueError('non-invertible starting MA parameters found'
-        auto_arima(wineind, seasonal=True, suppress_warnings=True,
-                   error_action='raise', m=2, random=True, random_state=1,
-                   n_fits=2)
-
-
 def test_warn_for_large_differences():
     # First: d is too large
     with pytest.warns(ModelFitWarning):
@@ -732,7 +725,8 @@ def test_force_polynomial_error():
 
     with pytest.raises(ValueError) as ve:
         auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg)
-    assert 'simple polynomial' in str(ve), str(ve)
+    err_msg = pytest_error_str(ve)
+    assert 'simple polynomial' in err_msg, err_msg
 
     # but it should pass when xreg is not none
     xreg = rs.rand(x.shape[0], 2)
@@ -947,7 +941,7 @@ def test_new_serialization():
         # Show we get an OSError now
         with pytest.raises(OSError) as ose:
             joblib.load(pkl_file)
-        assert "Does it still" in str(ose), ose
+        assert "Does it still" in pytest_error_str(ose), ose
 
     finally:
         _unlink_if_exists(pkl_file)
