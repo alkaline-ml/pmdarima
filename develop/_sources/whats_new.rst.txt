@@ -8,6 +8,12 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
+`v1.3.0 <http://alkaline-ml.com/pmdarima/1.3.0/>`_
+--------------------------------------------------
+
+* Adds a new dataset for stock prediction, along with an associated example (``load_msft``)
+
+
 `v1.2.0 <http://alkaline-ml.com/pmdarima/1.2.0/>`_
 --------------------------------------------------
 

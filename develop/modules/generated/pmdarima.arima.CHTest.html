@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.arima.CHTest &mdash; pmdarima 1.3.0.dev0 documentation</title>
+  <title>pmdarima.arima.CHTest &mdash; pmdarima 1.3.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../',
-              VERSION:'1.3.0.dev0',
+              VERSION:'1.3.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.3.0.dev0
+                1.3.dev0
               </div>
             
           
@@ -117,7 +117,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../classes.html#differencing-helpers">Differencing helpers</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy univariate timeseries datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-metrics-time-series-metrics"><code class="docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>: Time-series metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a></li>
@@ -196,7 +197,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.CHTest<a class="headerlink" href="#pmdarima-arima-chtest" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.arima.CHTest">
-<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">CHTest</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/7ffce49/pmdarima/arima/seasonality.py#L56"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">CHTest</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fc21e65/pmdarima/arima/seasonality.py#L56"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conduct a CH test for seasonality.</p>
 <p>The Canova-Hansen test for seasonal differences. Canova and Hansen
 (1995) proposed a test statistic for the null hypothesis that the seasonal
@@ -224,17 +225,17 @@ quarters in quarterly data). [1]</p>
 <a class="reference internal" href="pmdarima.arima.nsdiffs.html#pmdarima.arima.nsdiffs" title="pmdarima.arima.nsdiffs"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.nsdiffs()</span></code></a>, which directly estimates the number
 of seasonal differences.</p>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r46" rules="none">
+<table class="docutils citation" frame="void" id="r48" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R46]</a></td><td>Testing for seasonal stability using the Canova
+<tr><td class="label"><a class="fn-backref" href="#id1">[R48]</a></td><td>Testing for seasonal stability using the Canova
 and Hansen test statisic: <a class="reference external" href="http://bit.ly/2wKkrZo">http://bit.ly/2wKkrZo</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r47" rules="none">
+<table class="docutils citation" frame="void" id="r49" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R47]</a></td><td>R source code for CH test:
+<tr><td class="label"><a class="fn-backref" href="#id2">[R49]</a></td><td>R source code for CH test:
 <a class="reference external" href="https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L148">https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L148</a></td></tr>
 </tbody>
 </table>
@@ -258,13 +259,13 @@ and Hansen test statisic: <a class="reference external" href="http://bit.ly/2wKk
 </table>
 <dl class="method">
 <dt id="pmdarima.arima.CHTest.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/7ffce49/pmdarima/arima/seasonality.py#L93"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fc21e65/pmdarima/arima/seasonality.py#L93"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.arima.CHTest.estimate_seasonal_differencing_term">
-<code class="descname">estimate_seasonal_differencing_term</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/7ffce49/pmdarima/arima/seasonality.py#L202"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest.estimate_seasonal_differencing_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.estimate_seasonal_differencing_term" title="Permalink to this definition">¶</a></dt>
+<code class="descname">estimate_seasonal_differencing_term</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fc21e65/pmdarima/arima/seasonality.py#L202"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest.estimate_seasonal_differencing_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.estimate_seasonal_differencing_term" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate the seasonal differencing term.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -298,7 +299,7 @@ statistic is greater than the critical value, or 0 if not.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.CHTest.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/7ffce49/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fc21e65/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -323,7 +324,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.CHTest.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/7ffce49/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fc21e65/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form

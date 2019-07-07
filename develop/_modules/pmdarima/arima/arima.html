@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.arima.arima &mdash; pmdarima 1.3.0.dev0 documentation</title>
+  <title>pmdarima.arima.arima &mdash; pmdarima 1.3.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../../',
-              VERSION:'1.3.0.dev0',
+              VERSION:'1.3.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                1.3.0.dev0
+                1.3.dev0
               </div>
             
           
@@ -195,7 +195,7 @@
 <span class="kn">from</span> <span class="nn">..compat.python</span> <span class="k">import</span> <span class="n">long</span>
 <span class="kn">from</span> <span class="nn">..compat</span> <span class="k">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
 <span class="kn">from</span> <span class="nn">..decorators</span> <span class="k">import</span> <span class="n">deprecated</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">get_callable</span><span class="p">,</span> <span class="n">if_has_delegate</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">get_callable</span><span class="p">,</span> <span class="n">if_has_delegate</span><span class="p">,</span> <span class="n">is_iterable</span>
 <span class="kn">from</span> <span class="nn">..utils.visualization</span> <span class="k">import</span> <span class="n">_get_plt</span>
 
 <span class="c1"># Get the version</span>
@@ -982,6 +982,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
         <span class="n">model_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span>
+
+        <span class="c1"># Allow updating with a scalar if the user is just adding a single</span>
+        <span class="c1"># sample.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_iterable</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
 
         <span class="c1"># validate the new samples to add</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">c1d</span><span class="p">(</span><span class="n">check_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>

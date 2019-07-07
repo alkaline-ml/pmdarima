@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>8. Contributing to pmdarima &mdash; pmdarima 1.3.0.dev0 documentation</title>
+  <title>9. Contributing to pmdarima &mdash; pmdarima 1.3.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'./',
-              VERSION:'1.3.0.dev0',
+              VERSION:'1.3.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -51,8 +51,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="9. Contributors" href="contributors.html" />
-    <link rel="prev" title="7. Toy time-series datasets" href="modules/datasets.html" /> 
+    <link rel="next" title="10. Contributors" href="contributors.html" />
+    <link rel="prev" title="8.1. Stock Market Prediction" href="usecases/stocks.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.3.0.dev0
+                1.3.dev0
               </div>
             
           
@@ -111,13 +111,14 @@
 <li class="toctree-l2"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="modules/datasets.html">7. Toy time-series datasets</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">8. Contributing to pmdarima</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#how-to-contribute">8.1. How to contribute</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pull-request-checklist">8.2. Pull Request Checklist</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#filing-bugs">8.3. Filing bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usecases.html">8. Use cases</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">9. Contributing to pmdarima</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-contribute">9.1. How to contribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pull-request-checklist">9.2. Pull Request Checklist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filing-bugs">9.3. Filing bugs</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="contributors.html">9. Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributors.html">10. Contributors</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New?</a></li>
@@ -168,7 +169,7 @@
         
           <li><a href="user_guide.html">User Guide</a> &raquo;</li>
         
-      <li>8. Contributing to pmdarima</li>
+      <li>9. Contributing to pmdarima</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -188,13 +189,13 @@
            <div itemprop="articleBody">
             
   <div class="section" id="contributing-to-pmdarima">
-<span id="contrib"></span><h1>8. Contributing to pmdarima<a class="headerlink" href="#contributing-to-pmdarima" title="Permalink to this headline">¶</a></h1>
+<span id="contrib"></span><h1>9. Contributing to pmdarima<a class="headerlink" href="#contributing-to-pmdarima" title="Permalink to this headline">¶</a></h1>
 <p><strong>Note: This document is a ‘getting started’ summary for contributing code,
 documentation, testing, and filing issues.</strong> Please read it carefully to help
 make the code review process go as smoothly as possible and maximize the
 likelihood of your contribution being merged.</p>
 <div class="section" id="how-to-contribute">
-<h2>8.1. How to contribute<a class="headerlink" href="#how-to-contribute" title="Permalink to this headline">¶</a></h2>
+<h2>9.1. How to contribute<a class="headerlink" href="#how-to-contribute" title="Permalink to this headline">¶</a></h2>
 <p>The preferred workflow for contributing to pmdarima is to fork the
 <a class="reference external" href="https://github.com/tgsmith61591/pmdarima">main repository</a> on
 Github, clone, and develop on a branch. Steps:</p>
@@ -231,15 +232,11 @@ $ git commit
 to create a pull request from your fork. This will send an email to the committers.</p>
 </div>
 <div class="section" id="pull-request-checklist">
-<h2>8.2. Pull Request Checklist<a class="headerlink" href="#pull-request-checklist" title="Permalink to this headline">¶</a></h2>
+<h2>9.2. Pull Request Checklist<a class="headerlink" href="#pull-request-checklist" title="Permalink to this headline">¶</a></h2>
 <p>We recommended (and prefer that) that your contribution complies with the
 following rules before you submit a pull request. Failure to adhere to the
 rules may hinder the speed with which your contribution is merged:</p>
 <ul>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">pmdarima</span></code> uses the <a class="reference external" href="http://nvie.com/posts/a-successful-git-branching-model/">gitflow branching model</a>.
-That means all of your feature branches should be merged back to the <cite>develop</cite>
-branch, and <em>not</em> <cite>master</cite>!</p>
-</li>
 <li><p class="first">Write detailed docstrings for all of your public functions. The preferred
 format for docstrings is the <a class="reference external" href="https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt#docstring-standard">numpy standard</a>.
 Also include usage examples where appropriate. See also the
@@ -285,7 +282,7 @@ see <a class="reference external" href="https://github.com/numpy/numpy/blob/mast
 </ul>
 </div>
 <div class="section" id="filing-bugs">
-<span id="id1"></span><h2>8.3. Filing bugs<a class="headerlink" href="#filing-bugs" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>9.3. Filing bugs<a class="headerlink" href="#filing-bugs" title="Permalink to this headline">¶</a></h2>
 <p>We use Github issues to track all bugs and feature requests; feel free to
 open an issue if you have found a bug or wish to see a feature implemented.</p>
 <p>It is recommended to check that your issue complies with the
@@ -331,10 +328,10 @@ in a code-block so maintainers can easily try to replicate. What not to do:</li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="contributors.html" class="btn btn-neutral float-right" title="9. Contributors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="contributors.html" class="btn btn-neutral float-right" title="10. Contributors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="modules/datasets.html" class="btn btn-neutral float-left" title="7. Toy time-series datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="usecases/stocks.html" class="btn btn-neutral float-left" title="8.1. Stock Market Prediction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

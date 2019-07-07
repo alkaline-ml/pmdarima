@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; pmdarima 1.3.0.dev0 documentation</title>
+  <title>API Reference &mdash; pmdarima 1.3.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../',
-              VERSION:'1.3.0.dev0',
+              VERSION:'1.3.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.3.0.dev0
+                1.3.dev0
               </div>
             
           
@@ -125,14 +125,22 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#pmdarima-datasets-toy-univariate-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy univariate timeseries datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pmdarima-datasets-toy-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#dataset-loading-functions">Dataset loading functions</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_airpassengers.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_airpassengers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_austres.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_austres</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_heartrate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_heartrate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_lynx.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_lynx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_msft.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_msft</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_wineind.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_wineind</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_woolyrnq</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pmdarima-metrics-time-series-metrics"><code class="docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>: Time-series metrics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#metrics">Metrics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.metrics.smape.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>.smape</a></li>
 </ul>
 </li>
 </ul>
@@ -347,8 +355,8 @@ sections for further details.</p>
 </table>
 </div>
 </div>
-<div class="section" id="pmdarima-datasets-toy-univariate-timeseries-datasets">
-<span id="datasets-ref"></span><h2><a class="reference internal" href="#module-pmdarima.datasets" title="pmdarima.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code></a>: Toy univariate timeseries datasets<a class="headerlink" href="#pmdarima-datasets-toy-univariate-timeseries-datasets" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pmdarima-datasets-toy-timeseries-datasets">
+<span id="datasets-ref"></span><h2><a class="reference internal" href="#module-pmdarima.datasets" title="pmdarima.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code></a>: Toy timeseries datasets<a class="headerlink" href="#pmdarima-datasets-toy-timeseries-datasets" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code> submodule provides several different univariate time-
 series datasets used in various examples and tests across the package. If you
 would like to prototype a model, this is a good place to find easy-to-access data.</p>
@@ -373,11 +381,33 @@ would like to prototype a model, this is a good place to find easy-to-access dat
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="pmdarima.datasets.load_lynx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_lynx</span></code></a>([as_series])</td>
 <td>Annual numbers of lynx trappings for 1821–1934 in Canada.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_wineind</span></code></a>([as_series])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_msft.html#pmdarima.datasets.load_msft" title="pmdarima.datasets.load_msft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_msft</span></code></a>()</td>
+<td>Load the microsoft stock data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_wineind</span></code></a>([as_series])</td>
 <td>Australian total wine sales by wine makers in bottles &lt;= 1 litre.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq" title="pmdarima.datasets.load_woolyrnq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_woolyrnq</span></code></a>([as_series])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq" title="pmdarima.datasets.load_woolyrnq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_woolyrnq</span></code></a>([as_series])</td>
 <td>Quarterly production of woollen yarn in Australia.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="pmdarima-metrics-time-series-metrics">
+<span id="metrics-ref"></span><h2><a class="reference internal" href="#module-pmdarima.metrics" title="pmdarima.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code></a>: Time-series metrics<a class="headerlink" href="#pmdarima-metrics-time-series-metrics" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">metrics</span></code> submodule implements time-series metrics that are not
+implemented in scikit-learn.</p>
+<span class="target" id="module-pmdarima.metrics"></span><div class="section" id="metrics">
+<h3>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.metrics.smape.html#pmdarima.metrics.smape" title="pmdarima.metrics.smape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metrics.smape</span></code></a>(y_true,&nbsp;y_pred)</td>
+<td>Compute the Symmetric Mean Absolute Percentage Error.</td>
 </tr>
 </tbody>
 </table>
