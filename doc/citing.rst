@@ -12,6 +12,8 @@ If you would like to include ``pmdarima`` in your published work, please cite it
       <li>Smith, Taylor G., <i>et al.</i> pmdarima: ARIMA estimators for Python, 2017-,
       <a href=http://www.alkaline-ml.com/pmdarima target="_blank">http://www.alkaline-ml.com/pmdarima</a>
       [Online; accessed
+
+      <!-- So we can have the current date in the pre-written citation -->
         <script type="text/javascript">
           var today = new Date();
           var formattedDate = [
@@ -20,13 +22,15 @@ If you would like to include ``pmdarima`` in your published work, please cite it
             ('0' + today.getDate()).slice(-2),
           ].join('-');
           document.write(formattedDate);
-        </script>].
+          document.write('].'); // Easier to just put this in the script tag
+        </script>
+
       </li>
     </ul>
 
 BibTeX Entry:
 
-.. code-block::
+.. code-block:: tex
 
     @MISC {pmdarima,
       author = {Taylor G. Smith and others},
