@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 from pmdarima.datasets import load_heartrate, load_lynx, \
-    load_wineind, load_woolyrnq, load_austres, load_airpassengers
+    load_wineind, load_woolyrnq, load_austres, load_airpassengers, load_msft
 
 import numpy as np
 import pandas as pd
@@ -27,3 +27,10 @@ def test_load(f):
             assert isinstance(x, pd.Series)
         else:
             assert isinstance(x, np.ndarray)
+
+
+@pytest.mark.parametrize(
+    'f', [load_msft])
+def test_df_loads(f):
+    df = f()
+    assert isinstance(df, pd.DataFrame)

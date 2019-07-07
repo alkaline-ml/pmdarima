@@ -103,7 +103,8 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     extra_setuptools_args = dict(
         zip_safe=False,  # the package can run out of an .egg file
         include_package_data=True,
-        package_data={'pmdarima': ['*']},
+        package_data={'pmdarima': ['*'],
+                      'pmdarima.datasets': ['*', 'data/*']},
         distclass=BinaryDistribution,
         install_requires=REQUIREMENTS,
     )

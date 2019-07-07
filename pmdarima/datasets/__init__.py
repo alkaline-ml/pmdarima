@@ -3,6 +3,7 @@ from .airpassengers import *
 from .austres import *
 from .heartrate import *
 from .lynx import *
+from .stocks import *
 from .wineind import *
 from .woolyrnq import *
 

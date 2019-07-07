@@ -16,6 +16,7 @@ contribute you'll need to be able to build from source.
 
 .. toctree::
    :numbered:
+   :maxdepth: 2
 
    about.rst
    setup.rst
@@ -24,6 +25,7 @@ contribute you'll need to be able to build from source.
    refreshing.rst
    tips_and_tricks.rst
    modules/datasets.rst
+   usecases.rst
    contributing.rst
    contributors.rst
 
