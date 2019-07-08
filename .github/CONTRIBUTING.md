@@ -1,5 +1,5 @@
 <!-- Adapted from Atom's CONTRIBUTING.md file: https://github.com/atom/atom/blob/master/CONTRIBUTING.md -->
-# Contributing to pmdarima
+# Contributing to `pmdarima`
 
 First off, thanks for taking the time to contribute!
 
@@ -14,10 +14,10 @@ The following is a set of guidelines for contributing to pmdarima. These are mos
     * [Filing A Bug](#filing-a-bug)  
     * [Filing A Feature Request](#filing-a-feature-request)  
 
-[Contributing Code](#contributing-code)  
-  * [First Time Contributor?](#first-time-contributor)  
-  * [Developing Locally](#developing-locally)  
-  * [Pull Requests](#pull-requests)
+  * [Contributing Code](#contributing-code)  
+    * [First Time Contributor?](#first-time-contributor)  
+    * [Developing Locally](#developing-locally)  
+    * [Pull Requests](#pull-requests)
 
 ## Resources
 
