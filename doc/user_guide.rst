@@ -28,6 +28,7 @@ contribute you'll need to be able to build from source.
    usecases.rst
    contributing.rst
    contributors.rst
+   citing.rst
 
 .. raw:: html
 
