@@ -79,7 +79,7 @@ the existing model parameters.
     axes[1].set_title("Added new observed values with new forecasts")
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.420 seconds)
+**Total running time of the script:** ( 0 minutes  0.450 seconds)
 
 
 
