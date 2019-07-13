@@ -16,8 +16,9 @@ source pypy-env/bin/activate
 python --version
 which python
 
-pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy Cython pytest scipy scikit-learn
-
+pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy Cython pytest
+pip install scipy
+pip install scikit-learn
 # Pandas has starting throwing issues in Pypy now...
 pip install "pandas==0.23.*" statsmodels matplotlib
 pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu pytest-mpl pytest-benchmark
