@@ -23,7 +23,7 @@ v0.8.1) will document the latest features.
 `v1.2.1 <http://alkaline-ml.com/pmdarima/1.2.1/>`_
 --------------------------------------------------
 
-* Pins scipy at 1.12 to avoid a statsmodels bug.
+* Pins scipy at 1.2.0 to avoid a statsmodels bug.
 
 
 `v1.2.0 <http://alkaline-ml.com/pmdarima/1.2.0/>`_

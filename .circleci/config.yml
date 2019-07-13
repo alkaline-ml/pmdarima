@@ -57,7 +57,7 @@ jobs:
   # For testing PyPy rather than CPython
   pypy:
     docker:
-      - image: pypy:latest
+      - image: pypy:3.6-7.1.1
     steps:
       # Download and cache dependencies
       - restore_cache:
