@@ -16,13 +16,8 @@ source pypy-env/bin/activate
 python --version
 which python
 
-# This is a temporary fix for #93:
-# XXX: numpy version pinning can be reverted once PyPy
-#      compatibility is resolved for numpy v1.6.x. For instance,
-#      when PyPy3 >6.0 is released (see numpy/numpy#12740)
-pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy=="1.15.*" Cython pytest
-pip install "scipy>=1.1.0"
-pip install "scikit-learn==0.19.*"
+pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy Cython pytest scipy scikit-learn
+
 # Pandas has starting throwing issues in Pypy now...
 pip install "pandas==0.23.*" statsmodels matplotlib
 pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu pytest-mpl pytest-benchmark
