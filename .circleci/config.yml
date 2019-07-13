@@ -55,9 +55,9 @@ commands:
 
 jobs:
   # For testing PyPy rather than CPython
-  pypy36:
+  pypy:
     docker:
-      - image: pypy:3-6.0.0
+      - image: pypy:latest
     steps:
       # Download and cache dependencies
       - restore_cache:
@@ -184,7 +184,7 @@ workflows:
   pmdarima-pipeline:
     jobs:
         # All testing jobs
-        - pypy36:
+        - pypy:
             filters: *test-filters
         - cpython35:
             filters: *test-filters
@@ -198,7 +198,7 @@ workflows:
             filters: *test-filters
         - testing-passed:
             requires:
-                - pypy36
+                - pypy
                 - cpython35
                 - cpython36
                 - cpython37
