@@ -13,6 +13,18 @@ v0.8.1) will document the latest features.
 
 * Adds a new dataset for stock prediction, along with an associated example (``load_msft``)
 
+* Fixes a bug in ``predict_in_sample``, as addressed in `#140 <https://github.com/tgsmith61591/pmdarima/issues/140>`_.
+
+* Numpy 1.16+ is now required
+
+* Statsmodels 0.10.0+ is now required
+
+
+`v1.2.1 <http://alkaline-ml.com/pmdarima/1.2.1/>`_
+--------------------------------------------------
+
+* Pins scipy at 1.12 to avoid a statsmodels bug.
+
 
 `v1.2.0 <http://alkaline-ml.com/pmdarima/1.2.0/>`_
 --------------------------------------------------

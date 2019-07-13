@@ -531,6 +531,11 @@ class ARIMA(BaseARIMA):
         alpha : float, optional (default=0.05)
             The confidence intervals for the forecasts are (1 - alpha) %
 
+        typ : str, optional (default='linear')
+            The type of prediction to make. Options are ('linear', 'levels').
+            This is only used when the underlying model is ARIMA (not ARMA or
+            SARIMAX).
+
         Returns
         -------
         preds : array
