@@ -16,12 +16,15 @@ source pypy-env/bin/activate
 python --version
 which python
 
-pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu numpy Cython pytest
-pip install scipy
-pip install scikit-learn
+extra_index_url="https://antocuni.github.io/pypy-wheels/ubuntu"
+
+pip install --extra-index ${extra_index_url} numpy Cython pytest
+pip install --extra-index ${extra_index_url} scipy
+pip install --extra-index ${extra_index_url} scikit-learn
+
 # Pandas has starting throwing issues in Pypy now...
 pip install "pandas==0.23.*" statsmodels matplotlib
-pip install --extra-index https://antocuni.github.io/pypy-wheels/ubuntu pytest-mpl pytest-benchmark
+pip install --extra-index ${extra_index_url} pytest-mpl pytest-benchmark
 
 ccache -M 512M
 export CCACHE_COMPRESS=1
