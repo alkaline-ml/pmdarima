@@ -14,7 +14,6 @@ from sklearn.utils.validation import check_array, check_is_fitted, \
 
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
-from statsmodels.tsa.tsatools import unintegrate, unintegrate_levels
 from statsmodels import api as sm
 
 from scipy.stats import gaussian_kde, norm
@@ -87,13 +86,6 @@ def _seasonal_prediction_with_confidence(arima_res, start, end, exog, alpha,
     f = results.predicted_mean
     conf_int = results.conf_int(alpha=alpha)
     return f, conf_int
-
-
-def _unintegrate_differenced_preds(preds, results_wrapper, d):
-    """If predictions were generated on un-integrate, fix it"""
-    endog = results_wrapper.model.data.endog[-d:]
-    preds = unintegrate(preds, unintegrate_levels(endog, d))[d:]
-    return preds
 
 
 def _uses_legacy_pickling(arima):
@@ -501,7 +493,7 @@ class ARIMA(BaseARIMA):
 
     def predict_in_sample(self, exogenous=None, start=None,
                           end=None, dynamic=False, return_conf_int=False,
-                          alpha=0.05):
+                          alpha=0.05, typ='linear'):
         """Generate in-sample predictions from the fit ARIMA model.
 
         Predicts the original training (in-sample) time series values. This can
@@ -539,6 +531,11 @@ class ARIMA(BaseARIMA):
         alpha : float, optional (default=0.05)
             The confidence intervals for the forecasts are (1 - alpha) %
 
+        typ : str, optional (default='linear')
+            The type of prediction to make. Options are ('linear', 'levels').
+            This is only used when the underlying model is ARIMA (not ARMA or
+            SARIMAX).
+
         Returns
         -------
         preds : array
@@ -555,17 +552,17 @@ class ARIMA(BaseARIMA):
         d = self.order[1]
         results_wrapper = self.arima_res_
 
+        # The only func that has 'typ' is for ARIMAs, not ARMAs or SARIMAX
+        kwargs = {}
+        if d > 0:
+            kwargs['typ'] = typ
+
         # If not returning the confidence intervals, we have it really easy
         if not return_conf_int:
-            preds = results_wrapper.predict(exog=exogenous, start=start,
-                                            end=end, dynamic=dynamic)
-
-            # Might need to un-integrate for ARIMA
-            if not self._is_seasonal() and d > 0:
-                preds = _unintegrate_differenced_preds(
-                    preds=preds,
-                    results_wrapper=results_wrapper,
-                    d=d)
+            preds = results_wrapper.predict(
+                exog=exogenous, start=start,
+                end=end, dynamic=dynamic,
+                **kwargs)
 
             return preds
 
@@ -587,15 +584,16 @@ class ARIMA(BaseARIMA):
         else:
             preds = results_wrapper.predict(
                 exog=exogenous, start=start,
-                end=end, dynamic=dynamic)
+                end=end, dynamic=dynamic, **kwargs)
 
             # We only have to un-integrate if there was any differencing
+            # TODO: prob don't need to since this occurs in the predict code
             # (i.e., ARIMA vs. ARMA)
-            if d > 0:
-                preds = _unintegrate_differenced_preds(
-                    preds=preds,
-                    results_wrapper=results_wrapper,
-                    d=d)
+            # if d > 0:
+            #     preds = _unintegrate_differenced_preds(
+            #         preds=preds,
+            #         results_wrapper=results_wrapper,
+            #         d=d)
 
             # get prediction errors
             pred_err = results_wrapper._forecast_error(len(preds))

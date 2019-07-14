@@ -55,9 +55,9 @@ commands:
 
 jobs:
   # For testing PyPy rather than CPython
-  pypy36:
+  pypy:
     docker:
-      - image: pypy:3-6.0.0
+      - image: pypy:3.6-7.1.1
     steps:
       # Download and cache dependencies
       - restore_cache:
@@ -112,7 +112,7 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
-    - run: ./build_tools/circle/before_install.sh
+    # - run: ./build_tools/circle/before_install.sh
     - run: ./build_tools/circle/regression_testing.sh
 
   # Simple job that passes when all other tests have passed
@@ -174,7 +174,7 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
-    - run: ./build_tools/circle/before_install.sh
+    # - run: ./build_tools/circle/before_install.sh
     - run: make doc-requirements
     - run: make install
     - run: ./build_tools/circle/build_push_doc.sh
@@ -184,7 +184,7 @@ workflows:
   pmdarima-pipeline:
     jobs:
         # All testing jobs
-        - pypy36:
+        - pypy:
             filters: *test-filters
         - cpython35:
             filters: *test-filters
@@ -198,7 +198,7 @@ workflows:
             filters: *test-filters
         - testing-passed:
             requires:
-                - pypy36
+                - pypy
                 - cpython35
                 - cpython36
                 - cpython37
