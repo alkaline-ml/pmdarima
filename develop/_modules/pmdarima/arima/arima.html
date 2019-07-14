@@ -182,7 +182,6 @@
 
 <span class="kn">from</span> <span class="nn">statsmodels.tsa.arima_model</span> <span class="k">import</span> <span class="n">ARIMA</span> <span class="k">as</span> <span class="n">_ARIMA</span>
 <span class="kn">from</span> <span class="nn">statsmodels.tsa.base.tsa_model</span> <span class="k">import</span> <span class="n">TimeSeriesModelResults</span>
-<span class="kn">from</span> <span class="nn">statsmodels.tsa.tsatools</span> <span class="k">import</span> <span class="n">unintegrate</span><span class="p">,</span> <span class="n">unintegrate_levels</span>
 <span class="kn">from</span> <span class="nn">statsmodels</span> <span class="k">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">sm</span>
 
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">gaussian_kde</span><span class="p">,</span> <span class="n">norm</span>
@@ -255,13 +254,6 @@
     <span class="n">f</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">predicted_mean</span>
     <span class="n">conf_int</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">conf_int</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">conf_int</span>
-
-
-<span class="k">def</span> <span class="nf">_unintegrate_differenced_preds</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">results_wrapper</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;If predictions were generated on un-integrate, fix it&quot;&quot;&quot;</span>
-    <span class="n">endog</span> <span class="o">=</span> <span class="n">results_wrapper</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">endog</span><span class="p">[</span><span class="o">-</span><span class="n">d</span><span class="p">:]</span>
-    <span class="n">preds</span> <span class="o">=</span> <span class="n">unintegrate</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">unintegrate_levels</span><span class="p">(</span><span class="n">endog</span><span class="p">,</span> <span class="n">d</span><span class="p">))[</span><span class="n">d</span><span class="p">:]</span>
-    <span class="k">return</span> <span class="n">preds</span>
 
 
 <span class="k">def</span> <span class="nf">_uses_legacy_pickling</span><span class="p">(</span><span class="n">arima</span><span class="p">):</span>
@@ -669,7 +661,7 @@
 
 <div class="viewcode-block" id="ARIMA.predict_in_sample"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.predict_in_sample">[docs]</a>    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                           <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+                          <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate in-sample predictions from the fit ARIMA model.</span>
 
 <span class="sd">        Predicts the original training (in-sample) time series values. This can</span>
@@ -707,6 +699,11 @@
 <span class="sd">        alpha : float, optional (default=0.05)</span>
 <span class="sd">            The confidence intervals for the forecasts are (1 - alpha) %</span>
 
+<span class="sd">        typ : str, optional (default=&#39;linear&#39;)</span>
+<span class="sd">            The type of prediction to make. Options are (&#39;linear&#39;, &#39;levels&#39;).</span>
+<span class="sd">            This is only used when the underlying model is ARIMA (not ARMA or</span>
+<span class="sd">            SARIMAX).</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        preds : array</span>
@@ -723,17 +720,17 @@
         <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">results_wrapper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span>
 
+        <span class="c1"># The only func that has &#39;typ&#39; is for ARIMAs, not ARMAs or SARIMAX</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;typ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">typ</span>
+
         <span class="c1"># If not returning the confidence intervals, we have it really easy</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">return_conf_int</span><span class="p">:</span>
-            <span class="n">preds</span> <span class="o">=</span> <span class="n">results_wrapper</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
-                                            <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">)</span>
-
-            <span class="c1"># Might need to un-integrate for ARIMA</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_seasonal</span><span class="p">()</span> <span class="ow">and</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">preds</span> <span class="o">=</span> <span class="n">_unintegrate_differenced_preds</span><span class="p">(</span>
-                    <span class="n">preds</span><span class="o">=</span><span class="n">preds</span><span class="p">,</span>
-                    <span class="n">results_wrapper</span><span class="o">=</span><span class="n">results_wrapper</span><span class="p">,</span>
-                    <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">preds</span> <span class="o">=</span> <span class="n">results_wrapper</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+                <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+                <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">preds</span>
 
@@ -755,15 +752,16 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">preds</span> <span class="o">=</span> <span class="n">results_wrapper</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
                 <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
-                <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">)</span>
+                <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
             <span class="c1"># We only have to un-integrate if there was any differencing</span>
+            <span class="c1"># TODO: prob don&#39;t need to since this occurs in the predict code</span>
             <span class="c1"># (i.e., ARIMA vs. ARMA)</span>
-            <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">preds</span> <span class="o">=</span> <span class="n">_unintegrate_differenced_preds</span><span class="p">(</span>
-                    <span class="n">preds</span><span class="o">=</span><span class="n">preds</span><span class="p">,</span>
-                    <span class="n">results_wrapper</span><span class="o">=</span><span class="n">results_wrapper</span><span class="p">,</span>
-                    <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+            <span class="c1"># if d &gt; 0:</span>
+            <span class="c1">#     preds = _unintegrate_differenced_preds(</span>
+            <span class="c1">#         preds=preds,</span>
+            <span class="c1">#         results_wrapper=results_wrapper,</span>
+            <span class="c1">#         d=d)</span>
 
             <span class="c1"># get prediction errors</span>
             <span class="n">pred_err</span> <span class="o">=</span> <span class="n">results_wrapper</span><span class="o">.</span><span class="n">_forecast_error</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">preds</span><span class="p">))</span>
