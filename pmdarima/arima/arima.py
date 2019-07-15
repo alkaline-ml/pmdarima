@@ -493,7 +493,7 @@ class ARIMA(BaseARIMA):
 
     def predict_in_sample(self, exogenous=None, start=None,
                           end=None, dynamic=False, return_conf_int=False,
-                          alpha=0.05, typ='linear'):
+                          alpha=0.05, typ='levels'):
         """Generate in-sample predictions from the fit ARIMA model.
 
         Predicts the original training (in-sample) time series values. This can
@@ -531,10 +531,15 @@ class ARIMA(BaseARIMA):
         alpha : float, optional (default=0.05)
             The confidence intervals for the forecasts are (1 - alpha) %
 
-        typ : str, optional (default='linear')
+        typ : str, optional (default='levels')
             The type of prediction to make. Options are ('linear', 'levels').
             This is only used when the underlying model is ARIMA (not ARMA or
             SARIMAX).
+
+              - 'linear': makes linear predictions in terms of the differenced
+                endogenous variables.
+              - 'levels': predicts the levels of the original endogenous
+                variables.
 
         Returns
         -------
