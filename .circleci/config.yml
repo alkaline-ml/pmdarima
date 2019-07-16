@@ -57,6 +57,7 @@ jobs:
   pypy:
     docker:
       - image: tgsmith61591/pmdarima-circle-pypy-base:latest
+    working_directory: ~/pmdarima
     steps:
       - checkout
       - run: ./build_tools/circle/build_test_pypy.sh
