@@ -56,23 +56,10 @@ jobs:
   # For testing PyPy rather than CPython
   pypy:
     docker:
-      - image: pypy:3.6-7.1.1
+      - image: tgsmith61591/pmdarima-circle-pypy-base:latest
     steps:
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - pypy3-ccache-{{ .Branch }}
-          # fallback to using the latest cache if no exact match is found
-          - pypy3-ccache
-
       - checkout
-      - run: ./build_tools/circle/before_install.sh
       - run: ./build_tools/circle/build_test_pypy.sh
-      - save_cache:
-          key: pypy3-ccache-{{ .Branch }}-{{ .BuildNum }}
-          paths:
-            - ~/.ccache
-            - ~/.cache/pip
 
   cpython35:
     docker:
