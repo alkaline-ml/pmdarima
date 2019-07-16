@@ -45,13 +45,12 @@ commands:
     description: "Deploy the contents of dist/ to PyPi"
     steps:
       - run: |
+          env > vars.env
           docker run --rm -it \
             -v `pwd`:/app \
             -w /app \
-            --env TWINE_USERNAME=${TWINE_USERNAME} \
-            --env TWINE_PASSWORD=${TWINE_PASSWORD} \
             python:3.7 \
-            ./build_tools/circle/deploy.sh
+            source /app/vars.env && ./build_tools/circle/deploy.sh
 
 jobs:
   # For testing PyPy rather than CPython
