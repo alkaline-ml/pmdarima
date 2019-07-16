@@ -98,7 +98,6 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
-    # - run: ./build_tools/circle/before_install.sh
     - run: ./build_tools/circle/regression_testing.sh
 
   # Simple job that passes when all other tests have passed
@@ -160,7 +159,6 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
-    # - run: ./build_tools/circle/before_install.sh
     - run: make doc-requirements
     - run: make install
     - run: ./build_tools/circle/build_push_doc.sh
