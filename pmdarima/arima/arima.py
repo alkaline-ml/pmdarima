@@ -231,6 +231,15 @@ class ARIMA(BaseARIMA):
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
 
+    simple_differencing : boolean, optional (default=False)
+        Whether or not to use partially conditional maximum likelihood
+        estimation for seasonal ARIMA models. If True, differencing is
+        performed prior to estimation, which discards the first
+        :math:`s D + d` initial rows but results in a smaller state-space
+        formulation. If False, the full SARIMAX model is put in state-space
+        form so that all datapoints can be used in estimation. Default is
+        False.
+
     Attributes
     ----------
     arima_res_ : ModelResultsWrapper
@@ -269,7 +278,7 @@ class ARIMA(BaseARIMA):
                  method=None, transparams=True, solver='lbfgs',
                  maxiter=None, disp=0, callback=None, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None,
-                 trend=None, with_intercept=True):
+                 trend=None, with_intercept=True, simple_differencing=False):
 
         # XXX: This isn't actually required--sklearn doesn't need a super call
         super(ARIMA, self).__init__()
@@ -289,6 +298,7 @@ class ARIMA(BaseARIMA):
         self.scoring_args = dict() if not scoring_args else scoring_args
         self.trend = trend
         self.with_intercept = with_intercept
+        self.simple_differencing = simple_differencing
 
     def _is_seasonal(self):
         return self.seasonal_order is not None
@@ -343,7 +353,8 @@ class ARIMA(BaseARIMA):
                 arima = sm.tsa.statespace.SARIMAX(
                     endog=y, exog=exogenous, order=self.order,
                     seasonal_order=self.seasonal_order, trend=trend,
-                    enforce_stationarity=self.transparams)
+                    enforce_stationarity=self.transparams,
+                    simple_differencing=self.simple_differencing)
 
             # actually fit the model, now. If this was called from 'update',
             # give priority to start_params from the fit_args

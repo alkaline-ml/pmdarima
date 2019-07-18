@@ -255,6 +255,15 @@ _AUTO_ARIMA_DOCSTR = \
 
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
+    
+    simple_differencing : boolean, optional (default=False)
+        Whether or not to use partially conditional maximum likelihood
+        estimation for seasonal ARIMA models. If True, differencing is
+        performed prior to estimation, which discards the first
+        :math:`s D + d` initial rows but results in a smaller state-space
+        formulation. If False, the full SARIMAX model is put in state-space
+        form so that all datapoints can be used in estimation. Default is
+        False.
     {fit_args}
     See Also
     --------
