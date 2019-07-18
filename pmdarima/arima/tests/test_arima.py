@@ -515,7 +515,8 @@ def test_with_seasonality2():
                           suppress_warnings=True,
                           error_action='ignore',
                           n_fits=20, random_state=42,
-                          simple_differencing=simple_differencing,
+                          sarimax_kwargs={
+                              'simple_differencing': simple_differencing},
 
                           # Set to super low iter to make test move quickly
                           maxiter=2)

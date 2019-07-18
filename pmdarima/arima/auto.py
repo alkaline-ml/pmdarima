@@ -53,7 +53,7 @@ class AutoARIMA(BaseARIMA):
                  random=False, random_state=None, n_fits=10,
                  out_of_sample_size=0, scoring='mse',
                  scoring_args=None, with_intercept=True,
-                 simple_differencing=False):
+                 sarimax_kwargs=None):
 
         self.start_p = start_p
         self.d = d
@@ -97,7 +97,7 @@ class AutoARIMA(BaseARIMA):
         self.scoring = scoring
         self.scoring_args = scoring_args
         self.with_intercept = with_intercept
-        self.simple_differencing = simple_differencing
+        self.sarimax_kwargs = dict() if not sarimax_kwargs else sarimax_kwargs
 
     def fit(self, y, exogenous=None, **fit_args):
         """Fit the auto-arima estimator
@@ -146,7 +146,7 @@ class AutoARIMA(BaseARIMA):
             return_valid_fits=False,  # only return ONE
             out_of_sample_size=self.out_of_sample_size, scoring=self.scoring,
             scoring_args=self.scoring_args, with_intercept=self.with_intercept,
-            simple_differencing=self.simple_differencing, **fit_args)
+            sarimax_kwargs=self.sarimax_kwargs, **fit_args)
 
         return self
 
@@ -183,7 +183,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                random=False, random_state=None, n_fits=10,
                return_valid_fits=False, out_of_sample_size=0, scoring='mse',
                scoring_args=None, with_intercept=True,
-               simple_differencing=False, **fit_args):
+               sarimax_kwargs=None, **fit_args):
 
     # NOTE: Doc is assigned BELOW this function
 
@@ -251,6 +251,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                                  force_all_finite=True))  # type: np.ndarray
     n_samples = y.shape[0]
 
+    sarimax_kwargs = dict() if not sarimax_kwargs else sarimax_kwargs
+
     # check for constant data
     if is_constant(y):
         warnings.warn('Input time-series is completely constant; '
@@ -265,7 +267,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                        out_of_sample_size=out_of_sample_size,
                        scoring_args=scoring_args,
                        with_intercept=with_intercept,
-                       simple_differencing=simple_differencing)),
+                       **sarimax_kwargs)),
             return_valid_fits, start, trace)
 
     # test ic, and use AIC if n <= 3
@@ -408,7 +410,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                            out_of_sample_size=out_of_sample_size,
                            scoring_args=scoring_args,
                            with_intercept=with_intercept,
-                           simple_differencing=simple_differencing)),
+                           **sarimax_kwargs)),
             return_valid_fits, start, trace)
 
     # seasonality issues
@@ -464,7 +466,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                                 out_of_sample_size=out_of_sample_size,
                                 scoring=scoring, scoring_args=scoring_args,
                                 with_intercept=with_intercept,
-                                simple_differencing=simple_differencing)
+                                **sarimax_kwargs)
             for order, seasonal_order in gen)
 
     # otherwise, we're fitting the stepwise algorithm...
@@ -493,7 +495,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             max_P=max_P, max_Q=max_Q, seasonal=seasonal,
             information_criterion=information_criterion,
             max_order=max_order, with_intercept=with_intercept,
-            simple_differencing=simple_differencing)
+            **sarimax_kwargs)
 
         # fit a baseline p, d, q model and then a null model
         stepwise_wrapper.fit_increment_k_cache_set(True)  # p, d, q, P, D, Q

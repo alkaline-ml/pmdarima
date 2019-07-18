@@ -31,7 +31,7 @@ class _StepwiseFitWrapper(object):
                  scoring, scoring_args, p, d, q, P, D, Q, m, start_p, start_q,
                  start_P, start_Q, max_p, max_q, max_P, max_Q, seasonal,
                  information_criterion, max_order, with_intercept,
-                 simple_differencing):
+                 **kwargs):
         # todo: I really hate how congested this block is, and just for the
         #       sake of a stateful __init__... Could we just pass **kwargs
         #       (MUCH less expressive...) in here? It would be much more
@@ -57,7 +57,7 @@ class _StepwiseFitWrapper(object):
         self.scoring_args = scoring_args
         self.information_criterion = information_criterion
         self.with_intercept = with_intercept
-        self.simple_differencing = simple_differencing
+        self.kwargs = dict() if not kwargs else kwargs
 
         # order stuff
         self.p = p
@@ -133,7 +133,7 @@ class _StepwiseFitWrapper(object):
                              scoring=self.scoring,
                              scoring_args=self.scoring_args,
                              with_intercept=self.with_intercept,
-                             simple_differencing=self.simple_differencing)
+                             **self.kwargs)
 
             # use the orders as a key to be hashed for
             # the dictionary (pointing to fit)
@@ -191,7 +191,7 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
                method, transparams, solver, maxiter, disp, callback,
                fit_params, suppress_warnings, trace, error_action,
                out_of_sample_size, scoring, scoring_args, with_intercept,
-               simple_differencing):
+               **kwargs):
     start = time.time()
     try:
         fit = ARIMA(order=order, seasonal_order=seasonal_order,
@@ -201,8 +201,7 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
                     suppress_warnings=suppress_warnings,
                     out_of_sample_size=out_of_sample_size, scoring=scoring,
                     scoring_args=scoring_args,
-                    simple_differencing=simple_differencing,
-                    with_intercept=with_intercept)\
+                    with_intercept=with_intercept, **kwargs)\
             .fit(x, exogenous=xreg, **fit_params)
 
     # for non-stationarity errors or singular matrices, return None

@@ -231,14 +231,29 @@ class ARIMA(BaseARIMA):
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
 
-    simple_differencing : boolean, optional (default=False)
-        Whether or not to use partially conditional maximum likelihood
-        estimation for seasonal ARIMA models. If True, differencing is
-        performed prior to estimation, which discards the first
-        :math:`s D + d` initial rows but results in a smaller state-space
-        formulation. If False, the full SARIMAX model is put in state-space
-        form so that all datapoints can be used in estimation. Default is
-        False.
+    **kwargs : keyword args, optional
+        Optional arguments to pass to the constructor. Examples of potentially
+        valuable kwargs:
+
+            - time_varying_regression : boolean
+                Whether or not coefficients on the exogenous
+                regressors are allowed to vary over time.
+            - enforce_stationarity : boolean
+                Whether or not to transform the AR parameters
+                to enforce stationarity in the autoregressive
+                component of the model.
+            - enforce_invertibility : boolean
+                Whether or not to transform the MA parameters
+                to enforce invertibility in the moving average
+                component of the model.
+            - simple_differencing : boolean
+                Whether or not to use partially conditional maximum likelihood
+                estimation for seasonal ARIMA models. If True, differencing is
+                performed prior to estimation, which discards the first
+                :math:`s D + d` initial rows but results in a smaller
+                state-space formulation. If False, the full SARIMAX model is
+                put in state-space form so that all datapoints can be used in
+                estimation. Default is False.
 
     Attributes
     ----------
@@ -278,7 +293,7 @@ class ARIMA(BaseARIMA):
                  method=None, transparams=True, solver='lbfgs',
                  maxiter=None, disp=0, callback=None, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None,
-                 trend=None, with_intercept=True, simple_differencing=False):
+                 trend=None, with_intercept=True, **kwargs):
 
         # XXX: This isn't actually required--sklearn doesn't need a super call
         super(ARIMA, self).__init__()
@@ -298,7 +313,7 @@ class ARIMA(BaseARIMA):
         self.scoring_args = dict() if not scoring_args else scoring_args
         self.trend = trend
         self.with_intercept = with_intercept
-        self.simple_differencing = simple_differencing
+        self.kwargs = dict() if not kwargs else kwargs
 
     def _is_seasonal(self):
         return self.seasonal_order is not None
@@ -353,8 +368,7 @@ class ARIMA(BaseARIMA):
                 arima = sm.tsa.statespace.SARIMAX(
                     endog=y, exog=exogenous, order=self.order,
                     seasonal_order=self.seasonal_order, trend=trend,
-                    enforce_stationarity=self.transparams,
-                    simple_differencing=self.simple_differencing)
+                    **self.kwargs)
 
             # actually fit the model, now. If this was called from 'update',
             # give priority to start_params from the fit_args
