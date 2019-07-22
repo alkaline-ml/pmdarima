@@ -1228,8 +1228,8 @@ class ARIMA(BaseARIMA):
         # We originally delegated down to SARIMAX model wrapper, but
         # statsmodels makes it difficult to trust their API, so we just re-
         # implemented a common method for all results wrappers.
-        from statsmodels.graphics.utils import create_mpl_fig
-        fig = create_mpl_fig(fig, figsize)
+        from statsmodels.graphics import utils as sm_graphics
+        fig = sm_graphics.create_mpl_fig(fig, figsize)
 
         res_wpr = self.arima_res_
         data = res_wpr.data
@@ -1291,14 +1291,14 @@ class ARIMA(BaseARIMA):
 
         # Bottom-left: QQ plot
         ax = fig.add_subplot(223)
-        from statsmodels.graphics.gofplots import qqplot
-        qqplot(resid_nonmissing, line='s', ax=ax)
+        from statsmodels.graphics import gofplots
+        gofplots.qqplot(resid_nonmissing, line='s', ax=ax)
         ax.set_title('Normal Q-Q')
 
         # Bottom-right: Correlogram
         ax = fig.add_subplot(224)
-        from statsmodels.graphics.tsaplots import plot_acf
-        plot_acf(resid, ax=ax, lags=lags)
+        from statsmodels.graphics import tsaplots
+        tsaplots.plot_acf(resid, ax=ax, lags=lags)
         ax.set_title('Correlogram')
 
         ax.set_ylim(-1, 1)
