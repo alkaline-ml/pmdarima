@@ -45,35 +45,22 @@ commands:
     description: "Deploy the contents of dist/ to PyPi"
     steps:
       - run: |
+          env > vars.env
           docker run --rm -it \
             -v `pwd`:/app \
             -w /app \
-            --env TWINE_USERNAME=${TWINE_USERNAME} \
-            --env TWINE_PASSWORD=${TWINE_PASSWORD} \
             python:3.7 \
-            ./build_tools/circle/deploy.sh
+            source /app/vars.env && ./build_tools/circle/deploy.sh
 
 jobs:
   # For testing PyPy rather than CPython
   pypy:
     docker:
-      - image: pypy:3.6-7.1.1
+      - image: tgsmith61591/pmdarima-circle-pypy-base:latest
+    working_directory: ~/pmdarima
     steps:
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - pypy3-ccache-{{ .Branch }}
-          # fallback to using the latest cache if no exact match is found
-          - pypy3-ccache
-
       - checkout
-      - run: ./build_tools/circle/before_install.sh
       - run: ./build_tools/circle/build_test_pypy.sh
-      - save_cache:
-          key: pypy3-ccache-{{ .Branch }}-{{ .BuildNum }}
-          paths:
-            - ~/.ccache
-            - ~/.cache/pip
 
   cpython35:
     docker:
@@ -112,7 +99,6 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
-    # - run: ./build_tools/circle/before_install.sh
     - run: ./build_tools/circle/regression_testing.sh
 
   # Simple job that passes when all other tests have passed
@@ -174,7 +160,6 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
-    # - run: ./build_tools/circle/before_install.sh
     - run: make doc-requirements
     - run: make install
     - run: ./build_tools/circle/build_push_doc.sh
