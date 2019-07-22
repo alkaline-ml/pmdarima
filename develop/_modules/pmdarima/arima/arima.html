@@ -661,7 +661,7 @@
 
 <div class="viewcode-block" id="ARIMA.predict_in_sample"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.predict_in_sample">[docs]</a>    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                           <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">):</span>
+                          <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;levels&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate in-sample predictions from the fit ARIMA model.</span>
 
 <span class="sd">        Predicts the original training (in-sample) time series values. This can</span>
@@ -699,10 +699,15 @@
 <span class="sd">        alpha : float, optional (default=0.05)</span>
 <span class="sd">            The confidence intervals for the forecasts are (1 - alpha) %</span>
 
-<span class="sd">        typ : str, optional (default=&#39;linear&#39;)</span>
+<span class="sd">        typ : str, optional (default=&#39;levels&#39;)</span>
 <span class="sd">            The type of prediction to make. Options are (&#39;linear&#39;, &#39;levels&#39;).</span>
 <span class="sd">            This is only used when the underlying model is ARIMA (not ARMA or</span>
 <span class="sd">            SARIMAX).</span>
+
+<span class="sd">              - &#39;linear&#39;: makes linear predictions in terms of the differenced</span>
+<span class="sd">                endogenous variables.</span>
+<span class="sd">              - &#39;levels&#39;: predicts the levels of the original endogenous</span>
+<span class="sd">                variables.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
