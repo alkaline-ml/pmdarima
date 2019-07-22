@@ -30,6 +30,7 @@ class MockPlottable:
 class MockTSAPlots:
     plot_acf = plot_pacf = (lambda **kwargs: MockPlottable())
 
+
 # TODO: can we get this to work eventually?
 if False:
     @pytest.mark.parametrize('show', [True, False])
@@ -37,7 +38,8 @@ if False:
         with patch('statsmodels.graphics.tsaplots', MockTSAPlots):
 
             # Have to import AFTER tha patch, since the pm.__init__ will
-            # promply import the visualization suite, which overwrites the patch
+            # promptly import the visualization suite, which overwrites the
+            # patch
             from pmdarima.utils import visualization
             dataset = np.random.RandomState(42).rand(150)
 
