@@ -19,6 +19,9 @@ v0.8.1) will document the latest features.
 
 * Statsmodels 0.10.0+ is now required
 
+* Added ``sarimax_kwargs`` to ``ARIMA`` constructor and ``auto_arima`` function.
+  This fixes `#146 <https://github.com/tgsmith61591/pmdarima/issues/146>`_
+
 
 `v1.2.1 <http://alkaline-ml.com/pmdarima/1.2.1/>`_
 --------------------------------------------------

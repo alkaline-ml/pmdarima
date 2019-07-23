@@ -35,12 +35,12 @@ which greatly simplifies your life.
 
     Fit ARIMA: order=(2, 1, 2); AIC=nan, BIC=nan, Fit time=nan seconds
     Fit ARIMA: order=(0, 1, 0); AIC=2942.625, BIC=2972.664, Fit time=0.012 seconds
-    Fit ARIMA: order=(1, 1, 0); AIC=2844.833, BIC=2877.876, Fit time=0.299 seconds
-    Fit ARIMA: order=(0, 1, 1); AIC=2809.063, BIC=2842.107, Fit time=0.432 seconds
-    Fit ARIMA: order=(1, 1, 1); AIC=2783.182, BIC=2819.229, Fit time=0.467 seconds
-    Fit ARIMA: order=(1, 1, 2); AIC=2812.945, BIC=2851.996, Fit time=0.378 seconds
-    Fit ARIMA: order=(2, 1, 1); AIC=2784.436, BIC=2823.488, Fit time=0.250 seconds
-    Total fit time: 1.852 seconds
+    Fit ARIMA: order=(1, 1, 0); AIC=2844.833, BIC=2877.876, Fit time=0.269 seconds
+    Fit ARIMA: order=(0, 1, 1); AIC=2809.063, BIC=2842.107, Fit time=0.392 seconds
+    Fit ARIMA: order=(1, 1, 1); AIC=2783.182, BIC=2819.229, Fit time=0.443 seconds
+    Fit ARIMA: order=(1, 1, 2); AIC=2812.945, BIC=2851.996, Fit time=0.370 seconds
+    Fit ARIMA: order=(2, 1, 1); AIC=2784.436, BIC=2823.488, Fit time=0.226 seconds
+    Total fit time: 1.725 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
                     ('arima',
@@ -50,10 +50,10 @@ which greatly simplifies your life.
                                max_order=10, max_p=5, max_q=5, maxiter=None,
                                method=None, n_fits=10, n_jobs=1,
                                offset_test_args=None, out_of_sample_size=0,
-                               random=False, random_state=None, scoring='mse',
-                               scoring_args=None, seasonal=False,
+                               random=False, random_state=None, sarimax_kwargs={},
+                               scoring='mse', scoring_args=None, seasonal=False,
                                seasonal_test='ocsb', seasonal_test_args=None,
-                               solver='lbfgs', start_P=1, ...))])
+                               solver='lbfgs', ...))])
 
     Forecasts:
     [28520.36805404 29644.13280101 25802.35593918 24894.27891306
@@ -138,7 +138,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  2.072 seconds)
+**Total running time of the script:** ( 0 minutes  1.955 seconds)
 
 
 

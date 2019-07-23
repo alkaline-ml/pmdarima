@@ -399,6 +399,31 @@
 <span class="sd">    with_intercept : bool, optional (default=True)</span>
 <span class="sd">        Whether to include an intercept term. Default is True.</span>
 
+<span class="sd">    **sarimax_kwargs : keyword args, optional</span>
+<span class="sd">        Optional arguments to pass to the constructor for seasonal ARIMA fits.</span>
+<span class="sd">        Examples of potentially valuable kwargs:</span>
+
+<span class="sd">          - time_varying_regression : boolean</span>
+<span class="sd">            Whether or not coefficients on the exogenous regressors are allowed</span>
+<span class="sd">            to vary over time.</span>
+
+<span class="sd">          - enforce_stationarity : boolean</span>
+<span class="sd">            Whether or not to transform the AR parameters to enforce</span>
+<span class="sd">            stationarity in the auto-regressive component of the model.</span>
+
+<span class="sd">          - enforce_invertibility : boolean</span>
+<span class="sd">            Whether or not to transform the MA parameters to enforce</span>
+<span class="sd">            invertibility in the moving average component of the model.</span>
+
+<span class="sd">          - simple_differencing : boolean</span>
+<span class="sd">            Whether or not to use partially conditional maximum likelihood</span>
+<span class="sd">            estimation for seasonal ARIMA models. If True, differencing is</span>
+<span class="sd">            performed prior to estimation, which discards the first</span>
+<span class="sd">            :math:`s D + d` initial rows but results in a smaller</span>
+<span class="sd">            state-space formulation. If False, the full SARIMAX model is</span>
+<span class="sd">            put in state-space form so that all datapoints can be used in</span>
+<span class="sd">            estimation. Default is False.</span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    arima_res_ : ModelResultsWrapper</span>
@@ -437,7 +462,7 @@
                  <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transparams</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span>
                  <span class="n">maxiter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">out_of_sample_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span> <span class="n">scoring_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">trend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">with_intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                 <span class="n">trend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">with_intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">):</span>
 
         <span class="c1"># XXX: This isn&#39;t actually required--sklearn doesn&#39;t need a super call</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ARIMA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -454,9 +479,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">suppress_warnings</span> <span class="o">=</span> <span class="n">suppress_warnings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_of_sample_size</span> <span class="o">=</span> <span class="n">out_of_sample_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scoring</span> <span class="o">=</span> <span class="n">scoring</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">scoring_args</span> <span class="k">else</span> <span class="n">scoring_args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">scoring_args</span> <span class="k">else</span> <span class="n">scoring_args</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trend</span> <span class="o">=</span> <span class="n">trend</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">with_intercept</span> <span class="o">=</span> <span class="n">with_intercept</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_intercept</span> <span class="o">=</span> <span class="n">with_intercept</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">sarimax_kwargs</span> <span class="k">else</span> <span class="n">sarimax_kwargs</span></div>
 
     <span class="k">def</span> <span class="nf">_is_seasonal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
@@ -511,7 +537,7 @@
                 <span class="n">arima</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">statespace</span><span class="o">.</span><span class="n">SARIMAX</span><span class="p">(</span>
                     <span class="n">endog</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
                     <span class="n">seasonal_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
-                    <span class="n">enforce_stationarity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transparams</span><span class="p">)</span>
+                    <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
 
             <span class="c1"># actually fit the model, now. If this was called from &#39;update&#39;,</span>
             <span class="c1"># give priority to start_params from the fit_args</span>
@@ -1370,8 +1396,8 @@
         <span class="c1"># We originally delegated down to SARIMAX model wrapper, but</span>
         <span class="c1"># statsmodels makes it difficult to trust their API, so we just re-</span>
         <span class="c1"># implemented a common method for all results wrappers.</span>
-        <span class="kn">from</span> <span class="nn">statsmodels.graphics.utils</span> <span class="k">import</span> <span class="n">create_mpl_fig</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">create_mpl_fig</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">figsize</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">statsmodels.graphics</span> <span class="k">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">sm_graphics</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">sm_graphics</span><span class="o">.</span><span class="n">create_mpl_fig</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">figsize</span><span class="p">)</span>
 
         <span class="n">res_wpr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">res_wpr</span><span class="o">.</span><span class="n">data</span>
@@ -1433,14 +1459,14 @@
 
         <span class="c1"># Bottom-left: QQ plot</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
-        <span class="kn">from</span> <span class="nn">statsmodels.graphics.gofplots</span> <span class="k">import</span> <span class="n">qqplot</span>
-        <span class="n">qqplot</span><span class="p">(</span><span class="n">resid_nonmissing</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">statsmodels.graphics</span> <span class="k">import</span> <span class="n">gofplots</span>
+        <span class="n">gofplots</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">resid_nonmissing</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Normal Q-Q&#39;</span><span class="p">)</span>
 
         <span class="c1"># Bottom-right: Correlogram</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
-        <span class="kn">from</span> <span class="nn">statsmodels.graphics.tsaplots</span> <span class="k">import</span> <span class="n">plot_acf</span>
-        <span class="n">plot_acf</span><span class="p">(</span><span class="n">resid</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">lags</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">statsmodels.graphics</span> <span class="k">import</span> <span class="n">tsaplots</span>
+        <span class="n">tsaplots</span><span class="o">.</span><span class="n">plot_acf</span><span class="p">(</span><span class="n">resid</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">lags</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Correlogram&#39;</span><span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
