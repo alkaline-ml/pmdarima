@@ -57,7 +57,7 @@ class _StepwiseFitWrapper(object):
         self.scoring_args = scoring_args
         self.information_criterion = information_criterion
         self.with_intercept = with_intercept
-        self.kwargs = dict() if not kwargs else kwargs
+        self.kwargs = {} if not kwargs else kwargs
 
         # order stuff
         self.p = p
