@@ -507,7 +507,7 @@ def test_with_seasonality1():
 
 
 def test_with_seasonality2():
-    def do_fit():
+    def do_fit(simple_differencing=False):
         return auto_arima(wineind, start_p=1, start_q=1, max_p=2,
                           max_q=2, m=2, start_P=0,
                           seasonal=True, n_jobs=2,
@@ -515,6 +515,8 @@ def test_with_seasonality2():
                           suppress_warnings=True,
                           error_action='ignore',
                           n_fits=20, random_state=42,
+                          sarimax_kwargs={
+                              'simple_differencing': simple_differencing},
 
                           # Set to super low iter to make test move quickly
                           maxiter=2)
@@ -529,6 +531,11 @@ def test_with_seasonality2():
 
     # Show we can predict on seasonal where conf_int is true
     seasonal_fit.predict(n_periods=10, return_conf_int=True)
+
+    # We should get the same order when simple_differencing
+    simple = do_fit(True)
+    assert simple.order == seasonal_fit.order
+    assert simple.seasonal_order == seasonal_fit.seasonal_order
 
 
 def test_with_seasonality3():

@@ -2,50 +2,51 @@
 
 from __future__ import absolute_import
 
-from pmdarima.compat._internal import get_pytest_mpl_threshold
-
-import pmdarima as pm
-import os
+from unittest.mock import patch
+import numpy as np
 import pytest
 
-# Some as numpy, some as series
-datasets = [
-    ['wineind', pm.datasets.load_wineind(True)],
-    ['lynx', pm.datasets.load_lynx(False)],
-    ['heartrate', pm.datasets.load_heartrate(True)],
-    ['woolyrnq', pm.datasets.load_woolyrnq(True)],
 
-    # Might need to add these datasets in, but not sure if
-    # it's actually necessary...
-    # ['austres', pm.datasets.load_austres(False)]
-]
+class MockACPlot:
+    def __init__(self, series):
+        self.series = series
+        self.showed = False
 
-# We are ONLY going to run these tests if we are NOT on Travis,
-# since Travis really doesn't play too nice with the different
-# backends we have flying around out there.
-travis = os.environ.get("TESTING_ON_TRAVIS", "false").lower() == "true"
+    def show(self):
+        self.showed = True
+        return self
 
-if False:  # hack to prevent from running for now.
 
-    tolerance = get_pytest_mpl_threshold(
-        {'Windows': 15, 'Darwin': 10, 'Linux': 10}
-    )
+class MockPlottable:
+    def __init__(self):
+        self.showed = False
 
-    params = []
-    for row in datasets:
-        params.append(pytest.param(row[0], row[1]))
+    def show(self):
+        self.showed = True
+        return self
 
-    @pytest.mark.parametrize('plot_type,dataset', params)
-    @pytest.mark.mpl_image_compare(tolerance=tolerance)
-    def test_plot_autocorrelations(plot_type, dataset):
-        return pm.autocorr_plot(dataset, show=False).get_figure()
 
-    @pytest.mark.parametrize('plot_type,dataset', params)
-    @pytest.mark.mpl_image_compare(tolerance=tolerance)
-    def test_plot_acf(plot_type, dataset):
-        return pm.plot_acf(dataset, show=False)
+# ACF/PACF
+class MockTSAPlots:
+    plot_acf = plot_pacf = (lambda **kwargs: MockPlottable())
 
-    @pytest.mark.parametrize('plot_type,dataset', params)
-    @pytest.mark.mpl_image_compare(tolerance=tolerance)
-    def test_plot_pacf(plot_type, dataset):
-        return pm.plot_pacf(dataset, show=False)
+
+# TODO: can we get this to work eventually?
+if False:
+    @pytest.mark.parametrize('show', [True, False])
+    def test_visualizations(show):
+        with patch('statsmodels.graphics.tsaplots', MockTSAPlots):
+
+            # Have to import AFTER tha patch, since the pm.__init__ will
+            # promptly import the visualization suite, which overwrites the
+            # patch
+            from pmdarima.utils import visualization
+            dataset = np.random.RandomState(42).rand(150)
+
+            # ac_plot = pm.autocorr_plot(dataset, show=show)
+            acf_plot = visualization.plot_acf(dataset, show=show)
+            pacf_plot = visualization.plot_pacf(dataset, show=show)
+
+            # assert ac_plot.showed is show
+            assert acf_plot.showed is show
+            assert pacf_plot.showed is show

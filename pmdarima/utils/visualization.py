@@ -6,10 +6,10 @@
 
 from __future__ import absolute_import
 
-from ..compat.pandas import autocorrelation_plot as ap
+from ..compat.pandas import plotting as pd_plotting
 from ..compat.matplotlib import get_compatible_pyplot
 
-from statsmodels.graphics.tsaplots import plot_acf as pacf, plot_pacf as ppacf
+from statsmodels.graphics import tsaplots
 
 import os
 
@@ -90,7 +90,7 @@ def autocorr_plot(series, show=True):
         the Axis object.
     """
     _err_for_no_mpl()
-    res = ap(series)
+    res = pd_plotting.autocorrelation_plot(series)
     return _show_or_return(res, show)
 
 
@@ -168,9 +168,10 @@ def plot_acf(series, ax=None, lags=None, alpha=None, use_vlines=True,
         the Axis object.
     """
     _err_for_no_mpl()
-    res = pacf(x=series, ax=ax, lags=lags, alpha=alpha, use_vlines=use_vlines,
-               unbiased=unbiased, fft=fft, title=title, zero=zero,
-               vlines_kwargs=vlines_kwargs, **kwargs)
+    res = tsaplots.plot_acf(
+        x=series, ax=ax, lags=lags, alpha=alpha, use_vlines=use_vlines,
+        unbiased=unbiased, fft=fft, title=title, zero=zero,
+        vlines_kwargs=vlines_kwargs, **kwargs)
 
     return _show_or_return(res, show)
 
@@ -254,8 +255,9 @@ def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
         the Axis object.
     """
     _err_for_no_mpl()
-    res = ppacf(x=series, ax=ax, lags=lags, alpha=alpha, method=method,
-                use_vlines=use_vlines, title=title, zero=zero,
-                vlines_kwargs=vlines_kwargs, **kwargs)
+    res = tsaplots.plot_pacf(
+        x=series, ax=ax, lags=lags, alpha=alpha, method=method,
+        use_vlines=use_vlines, title=title, zero=zero,
+        vlines_kwargs=vlines_kwargs, **kwargs)
 
     return _show_or_return(res, show)

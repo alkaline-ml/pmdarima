@@ -231,6 +231,31 @@ class ARIMA(BaseARIMA):
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
 
+    **sarimax_kwargs : keyword args, optional
+        Optional arguments to pass to the constructor for seasonal ARIMA fits.
+        Examples of potentially valuable kwargs:
+
+          - time_varying_regression : boolean
+            Whether or not coefficients on the exogenous regressors are allowed
+            to vary over time.
+
+          - enforce_stationarity : boolean
+            Whether or not to transform the AR parameters to enforce
+            stationarity in the auto-regressive component of the model.
+
+          - enforce_invertibility : boolean
+            Whether or not to transform the MA parameters to enforce
+            invertibility in the moving average component of the model.
+
+          - simple_differencing : boolean
+            Whether or not to use partially conditional maximum likelihood
+            estimation for seasonal ARIMA models. If True, differencing is
+            performed prior to estimation, which discards the first
+            :math:`s D + d` initial rows but results in a smaller
+            state-space formulation. If False, the full SARIMAX model is
+            put in state-space form so that all datapoints can be used in
+            estimation. Default is False.
+
     Attributes
     ----------
     arima_res_ : ModelResultsWrapper
@@ -269,7 +294,7 @@ class ARIMA(BaseARIMA):
                  method=None, transparams=True, solver='lbfgs',
                  maxiter=None, disp=0, callback=None, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None,
-                 trend=None, with_intercept=True):
+                 trend=None, with_intercept=True, **sarimax_kwargs):
 
         # XXX: This isn't actually required--sklearn doesn't need a super call
         super(ARIMA, self).__init__()
@@ -286,9 +311,10 @@ class ARIMA(BaseARIMA):
         self.suppress_warnings = suppress_warnings
         self.out_of_sample_size = out_of_sample_size
         self.scoring = scoring
-        self.scoring_args = dict() if not scoring_args else scoring_args
+        self.scoring_args = {} if not scoring_args else scoring_args
         self.trend = trend
         self.with_intercept = with_intercept
+        self.sarimax_kwargs = {} if not sarimax_kwargs else sarimax_kwargs
 
     def _is_seasonal(self):
         return self.seasonal_order is not None
@@ -343,7 +369,7 @@ class ARIMA(BaseARIMA):
                 arima = sm.tsa.statespace.SARIMAX(
                     endog=y, exog=exogenous, order=self.order,
                     seasonal_order=self.seasonal_order, trend=trend,
-                    enforce_stationarity=self.transparams)
+                    **self.sarimax_kwargs)
 
             # actually fit the model, now. If this was called from 'update',
             # give priority to start_params from the fit_args
@@ -1202,8 +1228,8 @@ class ARIMA(BaseARIMA):
         # We originally delegated down to SARIMAX model wrapper, but
         # statsmodels makes it difficult to trust their API, so we just re-
         # implemented a common method for all results wrappers.
-        from statsmodels.graphics.utils import create_mpl_fig
-        fig = create_mpl_fig(fig, figsize)
+        from statsmodels.graphics import utils as sm_graphics
+        fig = sm_graphics.create_mpl_fig(fig, figsize)
 
         res_wpr = self.arima_res_
         data = res_wpr.data
@@ -1265,14 +1291,14 @@ class ARIMA(BaseARIMA):
 
         # Bottom-left: QQ plot
         ax = fig.add_subplot(223)
-        from statsmodels.graphics.gofplots import qqplot
-        qqplot(resid_nonmissing, line='s', ax=ax)
+        from statsmodels.graphics import gofplots
+        gofplots.qqplot(resid_nonmissing, line='s', ax=ax)
         ax.set_title('Normal Q-Q')
 
         # Bottom-right: Correlogram
         ax = fig.add_subplot(224)
-        from statsmodels.graphics.tsaplots import plot_acf
-        plot_acf(resid, ax=ax, lags=lags)
+        from statsmodels.graphics import tsaplots
+        tsaplots.plot_acf(resid, ax=ax, lags=lags)
         ax.set_title('Correlogram')
 
         ax.set_ylim(-1, 1)

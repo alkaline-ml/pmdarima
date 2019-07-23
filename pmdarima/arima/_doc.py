@@ -255,6 +255,9 @@ _AUTO_ARIMA_DOCSTR = \
 
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
+    
+    sarimax_kwargs : dict or None, optional (default=None)
+        Keyword arguments to pass to the SARIMAX constructor, if seasonal.
     {fit_args}
     See Also
     --------
