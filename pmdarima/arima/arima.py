@@ -311,10 +311,10 @@ class ARIMA(BaseARIMA):
         self.suppress_warnings = suppress_warnings
         self.out_of_sample_size = out_of_sample_size
         self.scoring = scoring
-        self.scoring_args = dict() if not scoring_args else scoring_args
+        self.scoring_args = {} if not scoring_args else scoring_args
         self.trend = trend
         self.with_intercept = with_intercept
-        self.sarimax_kwargs = dict() if not sarimax_kwargs else sarimax_kwargs
+        self.sarimax_kwargs = {} if not sarimax_kwargs else sarimax_kwargs
 
     def _is_seasonal(self):
         return self.seasonal_order is not None

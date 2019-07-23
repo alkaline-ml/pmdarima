@@ -97,7 +97,7 @@ class AutoARIMA(BaseARIMA):
         self.scoring = scoring
         self.scoring_args = scoring_args
         self.with_intercept = with_intercept
-        self.sarimax_kwargs = dict() if not sarimax_kwargs else sarimax_kwargs
+        self.sarimax_kwargs = {} if not sarimax_kwargs else sarimax_kwargs
 
     def fit(self, y, exogenous=None, **fit_args):
         """Fit the auto-arima estimator
@@ -251,7 +251,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                                  force_all_finite=True))  # type: np.ndarray
     n_samples = y.shape[0]
 
-    sarimax_kwargs = dict() if not sarimax_kwargs else sarimax_kwargs
+    sarimax_kwargs = {} if not sarimax_kwargs else sarimax_kwargs
 
     # check for constant data
     if is_constant(y):
