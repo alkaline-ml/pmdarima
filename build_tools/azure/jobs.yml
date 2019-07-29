@@ -38,7 +38,7 @@ jobs:
       architecture: '$(architecture)'
     displayName: 'Setting Python version and system architecture'
 
-  - template: build_and_deploy.yml
+  - template: pypi_build_and_deploy.yml
 
 - job: macOS
 
@@ -67,4 +67,12 @@ jobs:
       versionSpec: '$(python.version)'
     displayName: 'Setting Python version'
 
-  - template: build_and_deploy.yml
+  - template: pypi_build_and_deploy.yml
+
+- job: Conda
+  dependsOn:
+    - Windows
+    - macOS
+  condition: and(succeeded('Windows'), succeeded('macOS'))
+  steps:
+    - bash: echo 'Here'
