@@ -18,11 +18,15 @@ requirements:
     - {{ compiler('c') }}
 
   host:
+    - pip
+    - python
     {% for package in resolved_packages('host') %}
     - {{ package }}
     {% endfor %}
 
   run:
+    - pip
+    - python
     {% for package in resolved_packages('host') %}
     - {{ package }}
     {% endfor %}
