@@ -27,7 +27,6 @@ requirements:
     {% endfor %}
 
   run:
-    - pip
     - python
     {% for package in requirements %}
     - {{ package }}
