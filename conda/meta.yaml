@@ -5,10 +5,10 @@ package:
   version: {{ data.get('version') }}
 
 source:
-  path_url: ../
+  path: ../
 
 build:
-  script: python setup.py sdist
+  script: python setup.py bdist_wheel
 
 requirements:
   build:
