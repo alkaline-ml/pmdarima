@@ -1,8 +1,10 @@
+{% raw %}
 {% set data = load_setup_py_data() %}
 
 package:
   name: 'pmdarima'
   version: {{ data.get('version') }}
+{% endraw %}
 
 source:
   path: ../
@@ -12,15 +14,16 @@ build:
 
 requirements:
   build:
-    {% for package in resolved_packages('build') %}
-    - {{ package }}
-    {% endfor %}
+    - {{ numpy_version }}
+    {% raw %}
     - {{ compiler('c') }}
+    {% endraw %}
+
 
   run:
     - pip
     - python
-    {% for package in resolved_packages('host') %}
+    {% for package in requirements %}
     - {{ package }}
     {% endfor %}
 

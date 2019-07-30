@@ -75,6 +75,15 @@ jobs:
     vmImage: 'ubuntu-latest'
 
   steps:
+    - script: pip install jinja2
+      displayName: 'Installing Jinja'
+
+    - script: |
+        cd build_tools/azure/scripts
+        python render_meta.py
+        cd ~
+      displayName: 'Rendering meta.yml file'
+
     - bash: echo "##vso[task.prependpath]$CONDA/bin"
       displayName: 'Add conda to PATH'
 
