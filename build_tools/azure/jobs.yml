@@ -80,7 +80,7 @@ jobs:
 
     - script: |
         mkdir conda
-        cd build_tools/azure/scripts
+        cd build_tools/azure/conda_scripts
         python render_meta.py
         cd -
       displayName: 'Rendering meta.yml file'
