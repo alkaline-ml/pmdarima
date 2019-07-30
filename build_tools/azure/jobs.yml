@@ -75,6 +75,4 @@ jobs:
     vmImage: 'ubuntu-latest'
 
   steps:
-  - bash: echo 'This is a test'
-    displayName: 'Echo test'
   - template: conda_build_and_deploy.yml
