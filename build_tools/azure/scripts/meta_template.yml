@@ -21,14 +21,14 @@ requirements:
 
   host:
     - pip
-    - {{ PYTHON }}
+    - {% raw %}{{ PYTHON }}{% endraw %}
     {% for package in requirements %}
     - {{ package }}
     {% endfor %}
 
   run:
     - pip
-    - {{ PYTHON }}
+    - {% raw %}{{ PYTHON }}{% endraw %}
     {% for package in requirements %}
     - {{ package }}
     {% endfor %}
