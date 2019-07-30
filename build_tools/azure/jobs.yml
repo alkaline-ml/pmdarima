@@ -74,5 +74,4 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
 
-  steps:
-  - template: conda_build_and_deploy.yml
+  template: conda_build_and_deploy.yml
