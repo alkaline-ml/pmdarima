@@ -119,3 +119,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# File created during testing/distribution that is subject to change
+conda/meta.yaml
