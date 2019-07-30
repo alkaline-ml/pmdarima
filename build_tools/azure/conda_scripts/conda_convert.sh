@@ -7,7 +7,7 @@
 find $CONDA/conda-bld/linux-64/ -name *.tar.bz2 | while read file
 do
     echo $file
-    conda convert --platform all $file -o $CONDA/conda-bld/
+    conda convert -f --platform all $file -o $CONDA/conda-bld/
 #    for platform in "${platforms[@]}"
 #    do
 #       conda convert --platform $platform $file  -o $HOME/conda-bld/
