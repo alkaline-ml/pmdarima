@@ -91,5 +91,10 @@ jobs:
     - script: conda install conda-build --yes
       displayName: 'Installing conda-build'
 
-    - script: conda-build conda
+    - script: conda-build conda/
       displayName: 'Building and testing conda distribution'
+
+    - script: |
+        conda-convert --platform all conda-bld/
+        ls conda-bld/
+      displayName: 'Converting to other OSes'
