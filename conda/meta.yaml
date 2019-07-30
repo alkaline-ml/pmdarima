@@ -8,3 +8,35 @@ source:
   path: ..
 
 build:
+  script: {{ PYTHON }} setup.py sdist
+
+requirements:
+  build:
+    {% for package in resolved_packages('build') %}
+    - {{ package }}
+    {% endfor %}
+    - {{ compiler('c') }}
+    -
+  host:
+    {% for package in resolved_packages('host') %}
+    - {{ package }}
+    {% endfor %}
+
+  run:
+    {% for package in resolved_packages('host') %}
+    - {{ package }}
+    {% endfor %}
+
+test:
+  imports:
+    - pmdarima
+
+about:
+  home: https://github.com/tgsmith61591/pmdarima
+  license: MIT
+  license_file: ../LICENSE
+  summary: Python's forecast::auto.arima equivalent
+
+extra:
+  maintainers:
+    - Taylor G. Smith
