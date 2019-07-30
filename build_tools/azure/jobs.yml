@@ -81,5 +81,5 @@ jobs:
     - script: conda install conda-build --yes
       displayName: 'Installing conda-build'
 
-    - script: conda-build conda --output conda_build
+    - script: conda-build conda
       displayName: 'Building and testing conda distribution'
