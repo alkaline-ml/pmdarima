@@ -17,8 +17,3 @@ steps:
 
 - script: conda-build conda/
   displayName: 'Building and testing conda distribution'
-
-- script: |
-    chmod +x build_tools/azure/conda_scripts/conda_convert.sh
-    ./build_tools/azure/conda_scripts/conda_convert.sh
-  displayName: 'Converting to other OSes'
