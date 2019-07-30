@@ -46,8 +46,10 @@ requirements:
     {% endfor %}
 
 test:
-  imports:
-    - pmdarima
+  requires:
+    - pytest
+  commands:
+    - pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
 
 about:
   home: https://github.com/tgsmith61591/pmdarima
