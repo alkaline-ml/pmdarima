@@ -16,7 +16,7 @@ requirements:
     - {{ package }}
     {% endfor %}
     - {{ compiler('c') }}
-    -
+
   host:
     {% for package in resolved_packages('host') %}
     - {{ package }}
