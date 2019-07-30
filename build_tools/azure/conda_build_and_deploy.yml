@@ -12,7 +12,7 @@ steps:
 - bash: echo "##vso[task.prependpath]$CONDA/bin"
   displayName: 'Add conda to PATH'
 
-- script: conda install conda-build --yes
+- script: sudo conda install conda-build --yes
   displayName: 'Installing conda-build'
 
 - script: conda-build conda/
