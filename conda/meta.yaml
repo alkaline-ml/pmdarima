@@ -8,7 +8,7 @@ source:
   path: ..
 
 build:
-  script: {{ PYTHON }} setup.py sdist
+  script: python setup.py sdist
 
 requirements:
   build:
