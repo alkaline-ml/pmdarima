@@ -82,4 +82,4 @@ jobs:
       displayName: 'Installing conda-build'
 
     - script: conda-build conda
-      displayName: 'Building conda distribution'
+      displayName: 'Building and testing conda distribution'
