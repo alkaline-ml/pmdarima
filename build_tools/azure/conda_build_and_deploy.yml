@@ -16,8 +16,7 @@ steps:
   displayName: 'Installing conda-build'
 
 - script: |
-    mkdir conda-bld
-    conda-build --output-folder conda-build conda/
+    conda-build conda/
   displayName: 'Building and testing conda distribution'
 
 - script: |
