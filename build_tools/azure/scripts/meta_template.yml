@@ -19,6 +19,12 @@ requirements:
     - {{ compiler('c') }}
     {% endraw %}
 
+  host:
+    - pip
+    - python
+    {% for package in requirements %}
+    - {{ package }}
+    {% endfor %}
 
   run:
     - pip
