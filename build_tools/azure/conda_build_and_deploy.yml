@@ -16,7 +16,7 @@ steps:
   displayName: 'Installing conda-build'
 
 - script: |
-    conda-build conda/
+    conda-build -c conda-forge conda/
   displayName: 'Building and testing conda distribution'
 
 - script: |
