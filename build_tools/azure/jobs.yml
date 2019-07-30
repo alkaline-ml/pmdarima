@@ -78,5 +78,5 @@ jobs:
     - bash: echo "##vso[task.prependpath]$CONDA/bin"
       displayName: 'Add conda to PATH'
 
-    - script: conda install conda-build
+    - script: conda install conda-build --yes
       displayName: 'Installing conda-build'
