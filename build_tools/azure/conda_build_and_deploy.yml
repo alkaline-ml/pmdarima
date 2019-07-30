@@ -1,0 +1,23 @@
+- script: pip install jinja2
+      displayName: 'Installing Jinja'
+
+    - script: |
+        mkdir conda
+        cd build_tools/azure/conda_scripts
+        python render_meta.py
+        cd -
+      displayName: 'Rendering meta.yml file'
+
+    - bash: echo "##vso[task.prependpath]$CONDA/bin"
+      displayName: 'Add conda to PATH'
+
+    - script: conda install conda-build --yes
+      displayName: 'Installing conda-build'
+
+    - script: conda-build conda/
+      displayName: 'Building and testing conda distribution'
+
+    - script: |
+        conda-convert --platform all conda-bld/
+        ls conda-bld/
+      displayName: 'Converting to other OSes'
