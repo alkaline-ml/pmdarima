@@ -1,73 +1,73 @@
-jobs:
-- job: Windows
-
-  pool:
-    vmImage: 'vs2017-win2016'
-
-  strategy:
-    maxParallel: 6
-    matrix:
-      Python35-x86:
-        python.version: '3.5'
-        architecture: 'x86'
-
-      Python35-x64:
-        python.version: '3.5'
-        architecture: 'x64'
-
-      Python36-x86:
-        python.version: '3.6'
-        architecture: 'x86'
-
-      Python36-x64:
-        python.version: '3.6'
-        architecture: 'x64'
-
-      Python37-x86:
-        python.version: '3.7'
-        architecture: 'x86'
-
-      Python37-x64:
-        python.version: '3.7'
-        architecture: 'x64'
-
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-      architecture: '$(architecture)'
-    displayName: 'Setting Python version and system architecture'
-
-  - template: pypi_build_and_deploy.yml
-
-- job: macOS
-
-  pool:
-    vmImage: 'macOS-10.13'  # Also have the option of 10.14, if we want that
-
-  # Only need to set this for macOS
-  variables:
-    PMD_MPL_BACKEND: TkAgg
-
-  strategy:
-    maxParallel: 3
-    matrix:
-      Python35:
-        python.version: '3.5'
-
-      Python36:
-        python.version: '3.6'
-
-      Python37:
-        python.version: '3.7'
-
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-    displayName: 'Setting Python version'
-
-  - template: pypi_build_and_deploy.yml
+#jobs:
+#- job: Windows
+#
+#  pool:
+#    vmImage: 'vs2017-win2016'
+#
+#  strategy:
+#    maxParallel: 6
+#    matrix:
+#      Python35-x86:
+#        python.version: '3.5'
+#        architecture: 'x86'
+#
+#      Python35-x64:
+#        python.version: '3.5'
+#        architecture: 'x64'
+#
+#      Python36-x86:
+#        python.version: '3.6'
+#        architecture: 'x86'
+#
+#      Python36-x64:
+#        python.version: '3.6'
+#        architecture: 'x64'
+#
+#      Python37-x86:
+#        python.version: '3.7'
+#        architecture: 'x86'
+#
+#      Python37-x64:
+#        python.version: '3.7'
+#        architecture: 'x64'
+#
+#  steps:
+#  - task: UsePythonVersion@0
+#    inputs:
+#      versionSpec: '$(python.version)'
+#      architecture: '$(architecture)'
+#    displayName: 'Setting Python version and system architecture'
+#
+#  - template: pypi_build_and_deploy.yml
+#
+#- job: macOS
+#
+#  pool:
+#    vmImage: 'macOS-10.13'  # Also have the option of 10.14, if we want that
+#
+#  # Only need to set this for macOS
+#  variables:
+#    PMD_MPL_BACKEND: TkAgg
+#
+#  strategy:
+#    maxParallel: 3
+#    matrix:
+#      Python35:
+#        python.version: '3.5'
+#
+#      Python36:
+#        python.version: '3.6'
+#
+#      Python37:
+#        python.version: '3.7'
+#
+#  steps:
+#  - task: UsePythonVersion@0
+#    inputs:
+#      versionSpec: '$(python.version)'
+#    displayName: 'Setting Python version'
+#
+#  - template: pypi_build_and_deploy.yml
 
 - job: Conda
 
