@@ -70,9 +70,13 @@ jobs:
   - template: pypi_build_and_deploy.yml
 
 - job: Conda
-  dependsOn:
-    - Windows
-    - macOS
-  condition: and(succeeded('Windows'), succeeded('macOS'))
+
+  pool:
+    vmImage: 'ubuntu-latest'
+
   steps:
-    - bash: echo 'Here'
+    - bash: echo "##vso[task.prependpath]$CONDA/bin"
+      displayName: 'Add conda to PATH'
+
+    - script: conda install conda-build
+      displayName: 'Installing conda-build'
