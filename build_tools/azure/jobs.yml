@@ -80,3 +80,6 @@ jobs:
 
     - script: conda install conda-build --yes
       displayName: 'Installing conda-build'
+
+    - script: conda-build conda
+      displayName: 'Building conda distribution'
