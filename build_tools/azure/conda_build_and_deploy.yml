@@ -23,6 +23,3 @@ steps:
     chmod +x build_tools/azure/conda_scripts/conda_convert.sh
     ./build_tools/azure/conda_scripts/conda_convert.sh
   displayName: 'Converting to other OSes'
-
-- script: ls $CONDA/conda-bld/
-  displayName: 'Checking for other OSes'
