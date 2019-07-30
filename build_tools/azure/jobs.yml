@@ -1,4 +1,4 @@
-#jobs:
+jobs:
 #- job: Windows
 #
 #  pool:
