@@ -1,6 +1,6 @@
 steps:
 - script: pip install jinja2
-      displayName: 'Installing Jinja'
+  displayName: 'Installing Jinja'
 
 - script: |
     mkdir conda
