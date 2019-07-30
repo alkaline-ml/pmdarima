@@ -48,6 +48,8 @@ requirements:
 test:
   requires:
     - pytest
+    - pytest-mpl
+    - pytest-benchmark
   commands:
     - pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
 
