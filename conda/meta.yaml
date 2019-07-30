@@ -1,0 +1,10 @@
+{% set data = load_setup_py_data() %}
+
+package:
+  name: 'pmdarima'
+  version: {{ data.get('version') }}
+
+source:
+  path: ..
+
+build:
