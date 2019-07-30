@@ -9,8 +9,8 @@ package:
 source:
   path: ../
 
-build:
-  script: python setup.py bdist_wheel
+#build:
+#  script: python setup.py bdist_wheel
 
 requirements:
   build:
