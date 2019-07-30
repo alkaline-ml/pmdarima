@@ -2,7 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 
 
 REQUIREMENTS_FILE = '../../../requirements.txt'
-OUTPUT_FILE = '../../../conda/meta.yml'
+OUTPUT_FILE = '../../../conda/meta.yaml'
 TEMPLATE_PATH = '.'
 TEMPLATE_ENVIRONMENT = Environment(
     autoescape=False,
