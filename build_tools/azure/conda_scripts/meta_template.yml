@@ -24,9 +24,6 @@ build:
 
 requirements:
   build:
-    - posix                [win]
-    - m2w64-toolchain      [win]
-    - clang_osx-64         [osx]
     - {{ numpy_version }}
     {% raw %}
     - {{ compiler('c') }}
