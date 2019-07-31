@@ -1,13 +1,18 @@
 steps:
-- script: pip install jinja2
-  displayName: 'Installing Jinja'
-
 - bash: |
     mkdir conda
     cd build_tools/azure/conda_scripts
     python render_meta.py
     cd -
   displayName: 'Rendering meta.yml file'
+
+- script: |
+    conda create -n buildenv python=$(python.version)
+    source activate buildenv
+  displayName: 'Creating conda environment'
+
+- script: pip install jinja2
+  displayName: 'Installing Jinja'
 
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'

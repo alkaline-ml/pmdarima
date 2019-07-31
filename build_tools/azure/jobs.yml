@@ -42,7 +42,6 @@ jobs:
 
   - powershell: |
       Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
-      Write-Host "##vso[task.prependpath]$env:CONDA\bin"
     displayName: 'Add conda to PATH'
 
   - template: conda_build_and_deploy.yml
