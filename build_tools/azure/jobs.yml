@@ -38,10 +38,11 @@ jobs:
       architecture: '$(architecture)'
     displayName: 'Setting Python version and system architecture'
 
+  - template: pypi_build_and_deploy.yml
+
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     displayName: 'Add conda to PATH'
 
-  - template: pypi_build_and_deploy.yml
   - template: conda_build_and_deploy.yml
 
 - job: macOS
@@ -71,12 +72,13 @@ jobs:
       versionSpec: '$(python.version)'
     displayName: 'Setting Python version'
 
+  - template: pypi_build_and_deploy.yml
+
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
       sudo chown -R $USER $CONDA
     displayName: 'Add conda to PATH'
 
-  - template: pypi_build_and_deploy.yml
   - template: conda_build_and_deploy.yml
 
 #- job: Conda
