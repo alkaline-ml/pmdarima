@@ -12,7 +12,11 @@ steps:
 - bash: echo "##vso[task.prependpath]$CONDA/bin"
   displayName: 'Add conda to PATH'
 
-- script: sudo conda install conda-build --yes
+- script: sudo chmod -R 777 /usr/local/miniconda/envs
+  displayName: 'Fix for conda error on macOS'
+  condition: equals($(Agent.OS), 'Darwin')
+
+- bash: sudo conda install conda-build --yes
   displayName: 'Installing conda-build'
 
 - script: conda-build conda/
