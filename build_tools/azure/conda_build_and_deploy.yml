@@ -9,7 +9,7 @@ steps:
     cd -
   displayName: 'Rendering meta.yml file'
 
-- bash: conda install conda-build --yes
+- script: conda install conda-build --yes
   displayName: 'Installing conda-build'
 
 - script: conda-build conda/
