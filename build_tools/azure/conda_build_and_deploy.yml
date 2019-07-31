@@ -14,7 +14,7 @@ steps:
 
 - script: sudo chmod -R 777 /usr/local/miniconda/envs
   displayName: 'Fix for conda error on macOS'
-  condition: equals($(Agent.OS), 'Darwin')
+  condition: eq($(Agent.OS), 'Darwin')
 
 - bash: sudo conda install conda-build --yes
   displayName: 'Installing conda-build'
