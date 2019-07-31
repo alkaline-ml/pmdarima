@@ -2,7 +2,7 @@ steps:
 - script: pip install jinja2
   displayName: 'Installing Jinja'
 
-- script: |
+- bash: |
     mkdir conda
     cd build_tools/azure/conda_scripts
     python render_meta.py
