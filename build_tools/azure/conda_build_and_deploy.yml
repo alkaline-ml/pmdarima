@@ -9,13 +9,6 @@ steps:
     cd -
   displayName: 'Rendering meta.yml file'
 
-- bash: echo "##vso[task.prependpath]$CONDA/bin"
-  displayName: 'Add conda to PATH'
-
-- script: sudo chmod -R 777 /usr/local/miniconda
-  displayName: 'Fix for conda error on macOS'
-  condition: eq(variables['Agent.OS'], 'Darwin')
-
 - bash: conda install conda-build --yes
   displayName: 'Installing conda-build'
 
