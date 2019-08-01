@@ -11,7 +11,7 @@ steps:
 
 - script: |
     conda create -n buildenv python=$(python.version) --yes
-    source activate buildenv
+    conda activate buildenv
   displayName: 'Creating conda environment'
 
 - script: pip install jinja2
