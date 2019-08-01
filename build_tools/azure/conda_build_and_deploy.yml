@@ -12,7 +12,8 @@ steps:
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
 
-- script: |
+- bach: |
+    source ~/anaconda3/etc/profile.d/conda.sh
     conda create -n buildenv python=$(python.version) --yes
     conda activate buildenv
   displayName: 'Creating conda environment'
