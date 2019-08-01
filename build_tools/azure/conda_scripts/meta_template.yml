@@ -4,12 +4,13 @@
 package:
   name: 'pmdarima'
   version: "{{ data.get('version') }}"
+{% endraw %}
 
 source:
   path: ../
 
 build:
-  script: '{{ PYTHON }} -m pip install dist/ --no-deps -vv'
+  script: '{% raw %}{{ PYTHON }}{% endraw %} -m pip install dist/{{ WHEEL }} --no-deps -vv'
   ignore_run_exports:
     - pip
     - statsmodels
@@ -20,7 +21,7 @@ build:
     - scikit-learn
     - pandas
     - python
-{% endraw %}
+
 
 requirements:
   build:
