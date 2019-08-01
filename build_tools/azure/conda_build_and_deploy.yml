@@ -12,10 +12,5 @@ steps:
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
 
-- bash: |
-    conda create -n buildenv python=$(python.version) --yes
-    source $CONDA/bin/activate buildenv
-  displayName: 'Creating conda environment'
-
 - script: conda-build conda/
   displayName: 'Building and testing conda distribution'

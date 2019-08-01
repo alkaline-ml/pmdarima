@@ -9,7 +9,7 @@ source:
   path: ../
 
 build:
-  script: '{{ PYTHON }} -m pip install . --no-deps -vv'
+  script: '{{ PYTHON }} -m pip install dist/ --no-deps -vv'
   ignore_run_exports:
     - pip
     - statsmodels
