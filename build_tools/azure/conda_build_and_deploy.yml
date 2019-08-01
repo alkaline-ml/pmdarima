@@ -17,5 +17,5 @@ steps:
 - script: pip install jinja2
   displayName: 'Installing Jinja'
 
-- script: conda-build $(Agent.HomeDirectory)/conda/
+- script: conda-build $(Agent.BuildDirectory)/conda/
   displayName: 'Building and testing conda distribution'
