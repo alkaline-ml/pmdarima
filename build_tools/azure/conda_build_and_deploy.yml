@@ -1,4 +1,7 @@
 steps:
+- script: pip install jinja2
+  displayName: 'Installing Jinja'
+
 - bash: |
     mkdir conda
     cd build_tools/azure/conda_scripts
@@ -14,8 +17,5 @@ steps:
     conda activate buildenv
   displayName: 'Creating conda environment'
 
-- script: pip install jinja2
-  displayName: 'Installing Jinja'
-
-- script: conda-build $(Agent.BuildDirectory)/conda/
+- script: conda-build conda/
   displayName: 'Building and testing conda distribution'
