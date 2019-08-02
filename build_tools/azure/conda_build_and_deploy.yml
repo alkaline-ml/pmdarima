@@ -21,9 +21,7 @@ steps:
   condition: eq(variables['Agent.OS'], 'Windows_NT')
   displayName: 'Activating conda environment (Windows)'
 
-- bash: |
-    conda init bash
-    conda activate buildenv
+- bash: source $CONDA/bin/activate buildenv
   condition: eq(variables['Agent.OS'], 'Darwin')
   displayName: 'Activating conda environment (macOS)'
 
