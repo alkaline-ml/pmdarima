@@ -13,7 +13,7 @@ steps:
   displayName: 'Installing conda-build'
 
 - bash: |
-    conda create -n buildenv python=$(python.version)
+    conda create -n buildenv python=$(python.version) --yes
     conda activate buildenv
   displayName: 'Creating conda environment'
 
