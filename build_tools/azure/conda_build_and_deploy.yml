@@ -1,4 +1,3 @@
-condition: always()
 steps:
 - bash: |
     pip install jinja2
