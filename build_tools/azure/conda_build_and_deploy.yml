@@ -12,8 +12,8 @@ steps:
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
 
-- script: conda create -n buildenv python=$(python.version) --yes
-  displayName: 'Creating conda environment'
+#- script: conda create -n buildenv python=$(python.version) --yes
+#  displayName: 'Creating conda environment'
 
 #- powershell: |
 #    conda init powershell
@@ -25,5 +25,5 @@ steps:
 #  condition: eq(variables['Agent.OS'], 'Darwin')
 #  displayName: 'Activating conda environment (macOS)'
 
-- script: conda-build conda/
+- script: conda-build --python=$(python.version) conda/
   displayName: 'Building and testing conda distribution'
