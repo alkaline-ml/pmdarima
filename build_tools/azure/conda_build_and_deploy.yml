@@ -7,15 +7,16 @@ steps:
     cd -
   displayName: 'Rendering meta.yml file'
 
-- script: conda activate base
-
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
 
 - script: conda create -n buildenv python=$(python.version) --yes
   displayName: 'Creating conda environment'
 
-- script: call activate buildenv
+- script: |
+    conda init cmd.exe
+    call activate base
+    call activate buildenv
   condition: eq(variables['Agent.OS'], 'Windows_NT')
   displayName: 'Activating conda environment (Windows)'
 
