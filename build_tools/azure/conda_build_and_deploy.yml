@@ -7,17 +7,6 @@ steps:
     cd -
   displayName: 'Rendering meta.yml file'
 
-- task: CondaEnvironment@1
-  inputs:
-#    createCustomEnvironment: true # Optional
-    environmentName: 'buildenv'
-    packageSpecs: 'python=$(python.version)'
-    updateConda: true
-#    installOptions: 'conda-build' # Optional
-    #createOptions: # Optional
-    #cleanEnvironment: # Optional
-  displayName: 'Creating conda environment'
-
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
 
