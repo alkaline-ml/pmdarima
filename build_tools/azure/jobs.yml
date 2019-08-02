@@ -41,7 +41,8 @@ jobs:
   - template: pypi_build_and_deploy.yml
 
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
-    condition: succeeded()  # Conda build cannot happen if whl did not get built
+    # Only do this if previous step succeeded and we are using 3.6+
+    condition: and(succeeded(), in(variables['python.version'], '3.6', '3.7'))
     displayName: 'Add conda to PATH'
 
   - template: conda_build_and_deploy.yml
@@ -74,10 +75,12 @@ jobs:
     displayName: 'Setting Python version'
 
   - template: pypi_build_and_deploy.yml
+
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
       sudo chown -R $USER $CONDA
-    condition: succeeded()  # Conda build cannot happen if whl did not get built
+    # Only do this if previous step succeeded and we are using 3.6+
+    condition: and(succeeded(), in(variables['python.version'], '3.6', '3.7'))
     displayName: 'Add conda to PATH'
 
   - template: conda_build_and_deploy.yml

@@ -9,7 +9,7 @@ steps:
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Rendering meta.yml file'
 
-- script: conda install conda-build=4.6.14 --yes
+- script: conda install conda-build --yes
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Installing conda-build'
 
