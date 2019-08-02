@@ -7,12 +7,19 @@ steps:
     cd -
   displayName: 'Rendering meta.yml file'
 
-- powershell: CALL $env:CONDA\Scripts\activate.bat
-  condition: eq(variables['Agent.OS'], 'Windows_NT')
-  displayName: 'Activating env (Windows)'
-
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
+
+- script: conda create -n buildenv python=$(python.version) --yes
+  displayName: 'Creating conda environment'
+
+- script: call activate buildenv
+  condition: eq(variables['Agent.OS'], 'Windows_NT')
+  displayName: 'Activating conda environment (Windows)'
+
+- bash: source activate buildenv
+  condition: eq(variables['Agent.OS'], 'Darwin')
+  displayName: 'Activating conda environment (macOS)'
 
 - script: conda-build --python=$(python.version) conda/
   displayName: 'Building and testing conda distribution'
