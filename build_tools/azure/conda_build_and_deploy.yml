@@ -1,3 +1,4 @@
+# Have to put the version condition on every step in here, because we can't set conditions on a template
 steps:
 - bash: |
     pip install jinja2
@@ -5,9 +6,11 @@ steps:
     cd build_tools/azure/conda_scripts
     python render_meta.py
     cd -
+  condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Rendering meta.yml file'
 
-- script: conda install conda-build --yes
+- script: conda install conda-build=4.6.14 --yes
+  condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Installing conda-build'
 
 #- script: conda create -n buildenv python=$(python.version) --yes
@@ -22,4 +25,5 @@ steps:
 #  displayName: 'Activating conda environment (macOS)'
 
 - script: conda-build --python=$(python.version) conda/
+  condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Building and testing conda distribution'
