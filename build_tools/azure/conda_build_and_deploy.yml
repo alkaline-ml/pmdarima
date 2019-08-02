@@ -1,4 +1,5 @@
 steps:
+condition: always()
 - bash: |
     pip install jinja2
     mkdir conda
