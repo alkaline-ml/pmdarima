@@ -18,13 +18,13 @@ steps:
 - powershell: |
     conda init powershell
     CALL $CONDA/conda.bat activate buildenv
-  condition: eq(variables['Agent.OS', 'Windows_NT')
+  condition: eq(variables['Agent.OS'], 'Windows_NT')
   displayName: 'Activating conda environment (Windows)'
 
 - bash: |
     conda init bash
     conda activate buildenv
-  condition: eq(variables['Agent.OS', 'Darwin')
+  condition: eq(variables['Agent.OS'], 'Darwin')
   displayName: 'Activating conda environment (macOS)'
 
 - script: conda-build conda/
