@@ -77,7 +77,6 @@ jobs:
     displayName: 'Setting Python version'
 
   - template: pypi_build_and_deploy.yml
-    -
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
       sudo chown -R $USER $CONDA
