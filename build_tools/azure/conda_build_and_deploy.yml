@@ -12,6 +12,12 @@ steps:
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
 
+- script: |
+    conda skeleton pypi scipy
+    conda-build scipy
+  condition: eq(variables['python.version'], 3.5)
+  displayName: 'Building scipy distribution'
+
 #- script: conda create -n buildenv python=$(python.version) --yes
 #  displayName: 'Creating conda environment'
 
