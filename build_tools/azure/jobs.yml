@@ -2,7 +2,7 @@ jobs:
 - job: Windows
 
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-latest'
 
   strategy:
     maxParallel: 6
@@ -52,7 +52,7 @@ jobs:
 - job: macOS
 
   pool:
-    vmImage: 'macOS-10.13'  # Also have the option of 10.14, if we want that
+    vmImage: 'macOS-latest'
 
   # Only need to set this for macOS
   variables:
