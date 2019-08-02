@@ -10,16 +10,25 @@ steps:
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
 
-- script: conda create -n buildenv python=$(python.version) --yes
-  displayName: 'Creating conda environment'
+- task: CondaEnvironment@1
+  inputs:
+    environmentName: 'buildenv'
+    packageSpecs: 'python=$(python.version)'
+    updateConda: true
+    #installOptions: # Optional
+    #createOptions: # Optional
+    #cleanEnvironment: # Optional
 
-- script: call activate buildenv
-  condition: eq(variables['Agent.OS'], 'Windows_NT')
-  displayName: 'Activating conda environment (Windows)'
-
-- bash: source activate buildenv
-  condition: eq(variables['Agent.OS'], 'Darwin')
-  displayName: 'Activating conda environment (macOS)'
+#- script: conda create -n buildenv python=$(python.version) --yes
+#  displayName: 'Creating conda environment'
+#
+#- script: call activate buildenv
+#  condition: eq(variables['Agent.OS'], 'Windows_NT')
+#  displayName: 'Activating conda environment (Windows)'
+#
+#- bash: source activate buildenv
+#  condition: eq(variables['Agent.OS'], 'Darwin')
+#  displayName: 'Activating conda environment (macOS)'
 
 - script: conda-build --python=$(python.version) conda/
   displayName: 'Building and testing conda distribution'
