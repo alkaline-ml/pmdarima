@@ -7,10 +7,6 @@ steps:
     cd -
   displayName: 'Rendering meta.yml file'
 
-- script: conda init cmd.exe
-  condition: eq(variables['Agent.OS'], 'Windows_NT')
-  displayName: 'Initialize conda'
-
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
 
