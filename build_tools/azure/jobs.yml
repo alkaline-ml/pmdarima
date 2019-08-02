@@ -44,7 +44,7 @@ jobs:
     condition: succeeded()  # Conda build cannot happen if whl did not get built
     displayName: 'Add conda to PATH'
 
-  - script: call activate
+  - script: conda install conda=4.6.14
     displayName: 'Conda fix for Windows'
 
   - template: conda_build_and_deploy.yml
