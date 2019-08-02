@@ -1,16 +1,16 @@
 steps:
-#- script: pip install jinja2
-#  displayName: 'Installing Jinja'
-#
-#- bash: |
-#    mkdir conda
-#    cd build_tools/azure/conda_scripts
-#    python render_meta.py
-#    cd -
-#  displayName: 'Rendering meta.yml file'
-#
-#- script: conda install conda-build --yes
-#  displayName: 'Installing conda-build'
+- script: pip install jinja2
+  displayName: 'Installing Jinja'
+
+- bash: |
+    mkdir conda
+    cd build_tools/azure/conda_scripts
+    python render_meta.py
+    cd -
+  displayName: 'Rendering meta.yml file'
+
+- script: conda install conda-build --yes
+  displayName: 'Installing conda-build'
 
 #- script: conda create -n buildenv python=$(python.version) --yes
 #  displayName: 'Creating conda environment'
@@ -25,10 +25,5 @@ steps:
 #  condition: eq(variables['Agent.OS'], 'Darwin')
 #  displayName: 'Activating conda environment (macOS)'
 
-#- script: conda-build --python=$(python.version) conda/
-#  displayName: 'Building and testing conda distribution'
-
-- script: |
-    python setup.py bdist_conda
-    ls dist/
-  displayName: 'Building conda distribution'
+- script: conda-build --python=$(python.version) conda/
+  displayName: 'Building and testing conda distribution'
