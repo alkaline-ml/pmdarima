@@ -1,8 +1,6 @@
 steps:
-- script: pip install jinja2
-  displayName: 'Installing Jinja'
-
 - bash: |
+    pip install jinja2
     mkdir conda
     cd build_tools/azure/conda_scripts
     python render_meta.py
@@ -11,25 +9,6 @@ steps:
 
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
-
-- script: |
-    conda skeleton pypi scipy
-    conda-build scipy
-  condition: eq(variables['python.version'], 3.5)
-  displayName: 'Building scipy distribution'
-
-#- script: conda create -n buildenv python=$(python.version) --yes
-#  displayName: 'Creating conda environment'
-
-#- powershell: |
-#    conda init powershell
-#    CALL conda.bat activate buildenv
-#  condition: eq(variables['Agent.OS'], 'Windows_NT')
-#  displayName: 'Activating conda environment (Windows)'
-#
-#- bash: source $CONDA/bin/activate buildenv
-#  condition: eq(variables['Agent.OS'], 'Darwin')
-#  displayName: 'Activating conda environment (macOS)'
 
 - script: conda-build --python=$(python.version) conda/
   displayName: 'Building and testing conda distribution'
