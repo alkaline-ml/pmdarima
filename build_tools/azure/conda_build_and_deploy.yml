@@ -13,9 +13,7 @@ steps:
 - script: conda create -n buildenv python=$(python.version) --yes
   displayName: 'Creating conda environment'
 
-- script: |
-    call activate base
-    call activate buildenv
+- script: call activate buildenv
   condition: eq(variables['Agent.OS'], 'Windows_NT')
   displayName: 'Activating conda environment (Windows)'
 
