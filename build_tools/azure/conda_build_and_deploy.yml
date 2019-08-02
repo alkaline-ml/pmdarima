@@ -31,4 +31,4 @@ steps:
 - script: |
     python setup.py bdist_conda
     ls dist/
-  display: 'Building conda distribution'
+  displayName: 'Building conda distribution'
