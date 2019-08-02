@@ -10,9 +10,17 @@ source:
   path: ../
 
 build:
-  script: |
-    {% raw %}{{ PYTHON }} -m pip install -r requirements.txt
-    {{ PYTHON }}{% endraw %} -m pip install dist/{{ wheel }} --no-deps -vv
+  script: '{% raw %}{{ PYTHON }}{% endraw %} -m pip install dist/{{ wheel }} --no-deps -vv'
+  ignore_run_exports:
+    - pip
+    - statsmodels
+    - numpy
+    - numpy-base
+    - scipy
+    - cython
+    - scikit-learn
+    - pandas
+    - python
 
 requirements:
   build:
@@ -24,10 +32,15 @@ requirements:
   host:
     - pip
     - python
+    {% for package in requirements %}
+    - {{ package }}
+    {% endfor %}
 
   run:
-    - pip
     - python
+    {% for package in requirements %}
+    - {{ package }}
+    {% endfor %}
 
 test:
   commands:
