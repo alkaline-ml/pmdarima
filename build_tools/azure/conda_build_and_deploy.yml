@@ -7,9 +7,9 @@ steps:
     cd -
   displayName: 'Rendering meta.yml file'
 
-- powershell: ls $CONDA\Scripts
+- powershell: CALL $env:CONDA\Scripts\activate.bat
   condition: eq(variables['Agent.OS'], 'Windows_NT')
-  displayName: 'Test'
+  displayName: 'Activating env (Windows)'
 
 - script: conda install conda-build --yes
   displayName: 'Installing conda-build'
