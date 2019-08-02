@@ -10,7 +10,7 @@ source:
   path: ../
 
 build:
-  script: '{% raw %}{{ PYTHON }} --version && {{ PYTHON }}{% endraw %} -m pip install dist/{{ wheel }} --no-deps -vv'
+  script: '{% raw %}{{ PYTHON }}{% endraw %} -m pip install dist/{{ wheel }} --no-deps -vv'
   ignore_run_exports:
     - pip
     - statsmodels
