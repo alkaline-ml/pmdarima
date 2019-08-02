@@ -42,6 +42,7 @@ jobs:
 
   - powershell: |
       Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
+    condition: succeeded()  # Conda build cannot happen if whl did not get built
     displayName: 'Add conda to PATH'
 
   - template: conda_build_and_deploy.yml
@@ -78,6 +79,7 @@ jobs:
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
       sudo chown -R $USER $CONDA
+    condition: succeeded()  # Conda build cannot happen if whl did not get built
     displayName: 'Add conda to PATH'
 
   - template: conda_build_and_deploy.yml
