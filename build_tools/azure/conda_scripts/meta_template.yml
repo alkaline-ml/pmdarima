@@ -11,8 +11,8 @@ source:
 
 build:
   script: |
-    {% raw %}{{ PIP }} install -r requirements.txt
-    {{ PYTHON }}{% endraw %} -m pip install dist/{{ wheel }} --no-deps -vv
+    pip install -r requirements.txt
+    {% raw %}{{ PYTHON }}{% endraw %} -m pip install dist/{{ wheel }} --no-deps -vv
 
 requirements:
   build:
