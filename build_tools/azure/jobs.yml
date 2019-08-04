@@ -10,6 +10,7 @@ jobs:
       Python35-x86:
         python.version: '3.5'
         architecture: 'x86'
+        build_conda: false
 
       Python35-x64:
         python.version: '3.5'
@@ -41,8 +42,9 @@ jobs:
   # Windows gets its own template because we apparently have to activate our conda environment before _every_ step:
   # https://github.com/MicrosoftDocs/pipelines-anaconda/blob/3cf8252785ea2c873cc9c20e676b14f7b48f35ce/azure-pipelines.yml#L79-L86
   - template: pypi/build.yml
-  - template: conda/preprocess.yml
-  - template: conda/build_windows.yml
+  - ${{ if eq(variables['conda_build'], 'true') }}
+    - template: conda/preprocess.yml
+    - template: conda/build_windows.yml
   - template: deploy.yml
 
 - job: macOS
