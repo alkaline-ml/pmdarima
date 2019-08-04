@@ -1,77 +1,25 @@
+parameters:
+  architecture: 'x64'  # default
+
 jobs:
-- job: Windows
+- job: ${{ parameters.name }}
 
   pool:
-    vmImage: 'vs2017-win2016'  # windows-latest does not have the Microsoft Visual C++ 14.0 dependency we need
-
-  strategy:
-    maxParallel: 6
-    matrix:
-      Python35-x86:
-        python.version: '3.5'
-        architecture: 'x86'
-
-      Python35-x64:
-        python.version: '3.5'
-        architecture: 'x64'
-
-      Python36-x86:
-        python.version: '3.6'
-        architecture: 'x86'
-
-      Python36-x64:
-        python.version: '3.6'
-        architecture: 'x64'
-
-      Python37-x86:
-        python.version: '3.7'
-        architecture: 'x86'
-
-      Python37-x64:
-        python.version: '3.7'
-        architecture: 'x64'
+    vmImage: ${{ parameters.vmImage }}  # windows-latest does not have the Microsoft Visual C++ 14.0 dependency we need
 
   steps:
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '$(python.version)'
-      architecture: '$(architecture)'
+      versionSpec: ${{ paremeters.python.version }}
+      architecture: ${{ parameters.architecture }}
     displayName: 'Setting Python version and system architecture'
 
   - template: pypi/build_and_deploy.yml
   - template: conda/preprocess.yml
   # Windows gets its own template because we apparently have to activate our conda environment before _every_ step:
   # https://github.com/MicrosoftDocs/pipelines-anaconda/blob/3cf8252785ea2c873cc9c20e676b14f7b48f35ce/azure-pipelines.yml#L79-L86
-  - template: conda/build_and_deploy_windows.yml
+  - ${{ if contains(parameters.name, 'Windows') }}
+    - template: conda/build_and_deploy_windows.yml
 
-- job: macOS
-
-  pool:
-    vmImage: 'macOS-latest'
-
-  # Only need to set this for macOS
-  variables:
-    PMD_MPL_BACKEND: TkAgg
-
-  strategy:
-    maxParallel: 3
-    matrix:
-      Python35:
-        python.version: '3.5'
-
-      Python36:
-        python.version: '3.6'
-
-      Python37:
-        python.version: '3.7'
-
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-    displayName: 'Setting Python version'
-
-  - template: pypi/build_and_deploy.yml
-  - template: conda/preprocess.yml
-  - template: conda/build_and_deploy_mac.yml
-
+  - ${{ if contains(parameters.name, 'mac') }}
+    - template: conda/build_and_deploy_mac.yml
