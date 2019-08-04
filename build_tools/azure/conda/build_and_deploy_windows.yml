@@ -15,7 +15,6 @@ steps:
 #  displayName: 'Creating build environment'
 
 - script: |
-#    conda activate buildenv
     call activate base
     conda-build --python=$(python.version) conda/
   condition: in(variables['python.version'], '3.6', '3.7')
