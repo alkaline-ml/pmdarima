@@ -24,6 +24,8 @@ variables:
 
 jobs:
 - template: build_tools/azure/jobs.yml
+  variables:
+    os: 'Windows'
   parameters:
     name: 'Windows-32 3.5'
     vmImage: 'vs2017-win2016'
@@ -31,6 +33,8 @@ jobs:
     archtitecture: 'x86'
 
 - template: build_tools/azure/jobs.yml
+    variables:
+      os: 'Windows'
   parameters:
     name: 'Windows-64 3.5'
     vmImage: 'vs2017-win2016'
@@ -38,6 +42,8 @@ jobs:
     archtitecture: 'x64'
 
 - template: build_tools/azure/jobs.yml
+    variables:
+      os: 'Windows'
   parameters:
     name: 'Windows-32 3.6'
     vmImage: 'vs2017-win2016'
@@ -45,6 +51,8 @@ jobs:
     archtitecture: 'x86'
 
 - template: build_tools/azure/jobs.yml
+    variables:
+      os: 'Windows'
   parameters:
     name: 'Windows-64 3.6'
     vmImage: 'vs2017-win2016'
@@ -52,6 +60,8 @@ jobs:
     archtitecture: 'x64'
 
 - template: build_tools/azure/jobs.yml
+    variables:
+      os: 'Windows'
   parameters:
     name: 'Windows-32 3.7'
     vmImage: 'vs2017-win2016'
@@ -59,6 +69,8 @@ jobs:
     archtitecture: 'x86'
 
 - template: build_tools/azure/jobs.yml
+    variables:
+      os: 'Windows'
   parameters:
     name: 'Windows-64 3.7'
     vmImage: 'vs2017-win2016'
@@ -66,18 +78,24 @@ jobs:
     archtitecture: 'x64'
 
 - template: build_tools/azure/jobs.yml
+    variables:
+      os: 'macOS'
   parameters:
     name: 'macOS 3.5'
     vmImage: 'macOS-latest'
     python.version: '3.5'
 
 - template: build_tools/azure/jobs.yml
+    variables:
+      os: 'macOS'
   parameters:
     name: 'macOS 3.6'
     vmImage: 'macOS-latest'
     python.version: '3.6'
 
 - template: build_tools/azure/jobs.yml
+    variables:
+      os: 'macOS'
   parameters:
     name: 'macOS 3.7'
     vmImage: 'macOS-latest'
