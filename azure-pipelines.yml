@@ -25,32 +25,32 @@ variables:
 jobs:
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows-32 3.5'
+    name: 'Windows_32 3.5'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows-64 3.5'
+    name: 'Windows_64 3.5'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows-32 3.6'
+    name: 'Windows_32 3.6'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows-64 3.6'
+    name: 'Windows_64 3.6'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows-32 3.7'
+    name: 'Windows_32 3.7'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows-64 3.7'
+    name: 'Windows_64 3.7'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
