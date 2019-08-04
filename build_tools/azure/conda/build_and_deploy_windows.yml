@@ -2,12 +2,6 @@
 steps:
 - script: |
     call activate base
-    conda install conda-build --yes
-  condition: in(variables['python.version'], '3.6', '3.7')
-  displayName: 'Installing conda-build'
-
-- script: |
-    call activate base
     conda info
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Debug info'
