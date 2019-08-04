@@ -40,7 +40,9 @@ jobs:
 
   - template: pypi_build_and_deploy.yml
 
-  - powershell: Write-Host "##vso[task.prependpath]$env:CONDA;CONDA\Scripts"
+  - powershell: |
+      Write-Host "##vso[task.prependpath]$env:CONDA"
+      Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     # Only do this if previous step succeeded and we are using 3.6+
     condition: and(succeeded(), in(variables['python.version'], '3.6', '3.7'))
     displayName: 'Add conda to PATH'
