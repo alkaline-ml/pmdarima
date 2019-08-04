@@ -3,7 +3,7 @@ steps:
 - script: python -m twine upload --skip-existing dist/pmdarima-*
   displayName: 'Deploying to PyPI'
   # Only deploy if this is a tagged commit and everything succeeded
-  condition: and(succeeded(), contains(variables['Build.SourceBranch'], 'tags')_
+  condition: and(succeeded(), contains(variables['Build.SourceBranch'], 'tags'))
   env:
     TWINE_USERNAME: $(twineUsername)
     TWINE_PASSWORD: $(twinePassword)

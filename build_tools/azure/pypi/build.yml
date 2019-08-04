@@ -28,4 +28,3 @@ steps:
         echo "README rendered appropriately"
     fi
   displayName: 'Checking README compatibility'
-
