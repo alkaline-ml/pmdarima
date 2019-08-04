@@ -27,24 +27,27 @@ jobs:
   parameters:
     name: 'Windows_x86_Python35'
     vmImage: 'vs2017-win2016'
-    python_version: '3.5'
-    architecture: 'x86'
+    variables:
+      python.version: '3.5'
+      architecture: 'x86'
     build_conda: false
 
 - template: build_tools/azure/main.yml
   parameters:
     name: 'Windows_x64_Python35'
     vmImage: 'vs2017-win2016'
-    python_version: '3.5'
-    architecture: 'x64'
+    variables:
+      python.version: '3.5'
+      architecture: 'x64'
     build_conda: false
 
 - template: build_tools/azure/main.yml
   parameters:
     name: 'Windows_x86_Python36'
     vmImage: 'vs2017-win2016'
-    python_version: '3.6'
-    architecture: 'x86'
+    variables:
+      python.version: '3.6'
+      architecture: 'x86'
     build_conda: false
 
 - template: build_tools/azure/main.yml
@@ -59,35 +62,43 @@ jobs:
   parameters:
     name: 'Windows_x86_Python37'
     vmImage: 'vs2017-win2016'
-    python_version: '3.7'
-    architecture: 'x86'
+    variables:
+      python.version: '3.7'
+      architecture: 'x86'
     build_conda: false
 
 - template: build_tools/azure/main.yml
   parameters:
     name: 'Windows_x64_Python37'
     vmImage: 'vs2017-win2016'
-    python_version: '3.7'
-    architecture: 'x64'
+    variables:
+      python.version: '3.7'
+      architecture: 'x64'
     build_conda: true
 
 - template: build_tools/azure/main.yml
   parameters:
     name: 'macOS_Python35'
     vmImage: 'macOS-latest'
-    python_version: '3.5'
+    variables:
+      python.version: '3.5'
+      PMD_MPL_BACKEND: 'TkAgg'
     build_conda: false
 
 - template: build_tools/azure/main.yml
   parameters:
     name: 'macOS_Python36'
     vmImage: 'macOS-latest'
-    python_version: '3.6'
+    variables:
+      python.version: '3.6'
+      PMD_MPL_BACKEND: 'TkAgg'
     build_conda: true
 
 - template: build_tools/azure/main.yml
   parameters:
     name: 'macOS_Python37'
     vmImage: 'macOS-latest'
-    python_version: '3.7'
+    variables:
+      python.version: '3.7'
+      PMD_MPL_BACKEND: 'TkAgg'
     build_conda: true
