@@ -48,12 +48,5 @@ jobs:
     displayName: 'Setting Python version'
 
   - template: pypi/build_and_deploy.yml
-
-  - bash: |
-      echo "##vso[task.prependpath]$CONDA/bin"
-      sudo chown -R $USER $CONDA
-    # Only do this if previous step succeeded and we are using 3.6+
-    condition: and(succeeded(), in(variables['python.version'], '3.6', '3.7'))
-    displayName: 'Add conda to PATH'
-
+  - template: conda/preprocess.yml
   - template: conda/build_and_deploy_mac.yml
