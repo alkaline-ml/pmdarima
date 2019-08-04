@@ -23,4 +23,4 @@ jobs:
       - template: conda/build_windows.yml
 
     # Always run the deploy step (it will check for tags)
-    - template: deploy.yml
+    - template: pypi/deploy.yml
