@@ -18,8 +18,42 @@ jobs:
   - template: conda/preprocess.yml
   # Windows gets its own template because we apparently have to activate our conda environment before _every_ step:
   # https://github.com/MicrosoftDocs/pipelines-anaconda/blob/3cf8252785ea2c873cc9c20e676b14f7b48f35ce/azure-pipelines.yml#L79-L86
-  - ${{ if eq(variables['os'], 'Windows') }}
-    - template: conda/build_and_deploy_windows.yml
+  - template: conda/build_and_deploy_windows.yml
 
-  - ${{ if eq(variables['os'], 'macOS') }}
-    - template: conda/build_and_deploy_mac.yml
+- job: macOS
+
+  pool:
+    vmImage: 'macOS-latest'
+
+  # Only need to set this for macOS
+  variables:
+    PMD_MPL_BACKEND: TkAgg
+
+  strategy:
+    maxParallel: 3
+    matrix:
+      Python35:
+        python.version: '3.5'
+
+      Python36:
+        python.version: '3.6'
+
+      Python37:
+        python.version: '3.7'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+    displayName: 'Setting Python version'
+
+  - template: pypi/build_and_deploy.yml
+
+  - bash: |
+      echo "##vso[task.prependpath]$CONDA/bin"
+      sudo chown -R $USER $CONDA
+    # Only do this if previous step succeeded and we are using 3.6+
+    condition: and(succeeded(), in(variables['python.version'], '3.6', '3.7'))
+    displayName: 'Add conda to PATH'
+
+  - template: conda/build_and_deploy_mac.yml
