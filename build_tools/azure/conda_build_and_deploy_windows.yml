@@ -9,14 +9,20 @@ steps:
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Rendering meta.yml file'
 
-- script: conda install conda-build --yes
+- script: |
+    call activate base
+    conda install conda-build --yes
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Installing conda-build'
 
-- script: conda info
+- script: |
+    call activate base
+    conda info
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Debug info'
 
-- script: conda-build --python=$(python.version) conda/
+- script: |
+    call activate base
+    conda-build --python=$(python.version) conda/
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Building and testing conda distribution'
