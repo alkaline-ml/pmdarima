@@ -1,5 +1,23 @@
 jobs:
-  - job:
+  - job: ${{ parameters.name }}
+
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+
     steps:
-    - ${{ if eq(parameters.name, 'test') }}:
-      - script: echo "passed"
+    - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(python.version)'
+          architecture: '$(architecture)'
+        displayName: 'Setting Python version and system architecture'
+
+    # Always build for PyPI
+    - template: pypi/build.yml
+
+    # Build for conda if necessary
+    - ${{ if eq(parameters.build_conda, 'true') }}:
+      - template: conda/preprocess.yml
+      - template: conda/build_windows.yml
+
+    # Always run the deploy step (it will check for tags)
+    - template: deploy.yml

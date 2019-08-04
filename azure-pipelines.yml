@@ -25,4 +25,54 @@ variables:
 jobs:
 - template: build_tools/azure/main.yml # build_tools/azure/jobs.yml
   parameters:
-    name: 'test'
+    name: 'Windows_x86_Python35'
+    vmImage: 'vs2017-win2016'
+    conda_build: false
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows_x64_Python35'
+    vmImage: 'vs2017-win2016'
+    conda_build: false
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows_x86_Python36'
+    vmImage: 'vs2017-win2016'
+    conda_build: false
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows_x64_Python36'
+    vmImage: 'vs2017-win2016'
+    conda_build: true
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows_x86_Python37'
+    vmImage: 'vs2017-win2016'
+    conda_build: false
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows_x64_Python37'
+    vmImage: 'vs2017-win2016'
+    conda_build: true
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'macOS_Python35'
+    vmImage: 'macOS-latest'
+    conda_build: false
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'macOS_Python36'
+    vmImage: 'macOS-latest'
+    conda_build: true
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'macOS_Python37'
+    vmImage: 'macOS-latest'
+    conda_build: true
