@@ -1,5 +1,6 @@
 parameters:
-  architecture: 'x64'  # Default (for macOS builds)
+  variables:
+    architecture: 'x64'  # Default (for macOS builds)
 
 jobs:
   - job: ${{ parameters.name }}
