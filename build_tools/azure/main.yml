@@ -8,7 +8,7 @@ jobs:
       vmImage: ${{ parameters.vmImage }}
 
     variables:
-      python.version: ${{ parameters.python_version }}
+      python.version: ${{ parameters.python.version }}
       architecture: ${{ parameters.architecture }}
 
     steps:
