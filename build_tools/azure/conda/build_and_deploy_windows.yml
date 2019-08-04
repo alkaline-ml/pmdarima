@@ -12,7 +12,7 @@ steps:
 
 - script: |
     call activate base
-    conda create python=$(python.version) buildenv
+    conda env create python=$(python.version) buildenv
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Creating build environment'
 
