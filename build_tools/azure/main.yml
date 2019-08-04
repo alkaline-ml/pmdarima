@@ -1,5 +1,5 @@
 jobs:
   - job:
     steps:
-      - ${{ if eq(parameters.name, 'test') }}
-        - script: echo "passed"
+    - ${{ if eq(parameters.name, 'test') }}:
+      - script: echo "passed"
