@@ -2,12 +2,6 @@
 steps:
 - script: |
     call activate base
-    conda info
-  condition: in(variables['python.version'], '3.6', '3.7')
-  displayName: 'Debug info'
-
-- script: |
-    call activate base
     conda-build --python=$(python.version) conda/
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Building and testing conda distribution'
