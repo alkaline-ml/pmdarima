@@ -10,7 +10,7 @@ steps:
   condition: eq(variables['architecture'], 'x86')
   displayName: 'Setting conda architecture'
 
-- script: conda create --python=$(python.version) buildenv
+- script: conda create python=$(python.version) buildenv
   displayName: 'Creating build environment'
 
 - script: |
