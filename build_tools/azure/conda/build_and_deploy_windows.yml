@@ -7,10 +7,13 @@ steps:
   displayName: 'Debug info'
 
 - script: set CONDA_FORCE_32BIT=1
-  condition: eq(variables['architecture'], 'x86')
+  condition: and(in(variables['python.version'], '3.6', '3.7'), eq(variables['architecture'], 'x86'))
   displayName: 'Setting conda architecture'
 
-- script: conda create python=$(python.version) buildenv
+- script: |
+    call activate base
+    conda create python=$(python.version) buildenv
+  condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Creating build environment'
 
 - script: |
