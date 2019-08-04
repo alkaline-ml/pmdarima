@@ -44,6 +44,7 @@ jobs:
   - template: conda/preprocess.yml
   - template: conda/build_windows.yml
   - template: deploy.yml
+  - template:
 
 - job: macOS
 
