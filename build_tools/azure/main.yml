@@ -7,10 +7,14 @@ jobs:
     pool:
       vmImage: ${{ parameters.vmImage }}
 
+    variables:
+      python.version: ${{ parameters.python_version }}
+      architecture: ${{ parameters.architecture }}
+
     steps:
     - task: UsePythonVersion@0
         inputs:
-          versionSpec: '$(parameters.python.version)'
+          versionSpec: '$(python.version)'
           architecture: '$(parameters.architecture)'
         displayName: 'Setting Python version and system architecture'
 
