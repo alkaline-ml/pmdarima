@@ -9,7 +9,7 @@ steps:
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Rendering meta.yml file'
 
-- script: call "%CONDA%\Scripts\activate.bat"
+- script: conda activate base
   condition: and(eq(variables['Agent.OS'], 'Windows_NT'), in(variables['python.version'], '3.6', '3.7'))
   displayName: 'Windows fix'
 
