@@ -23,83 +23,71 @@ variables:
   - group: deploy-vars
 
 jobs:
-- job: 'Windows_x86_Python35'
-  pool:
-    vmImage: 'vs2017-win2016'
-  variables:
-    python.version: '3.5'
-    architecture: 'x86'
+- template: build_tools/azure/main.yml # build_tools/azure/jobs.yml
   parameters:
+    name: 'Windows_x86_Python35'
+    vmImage: 'vs2017-win2016'
+    python_version: '3.5'
+    architecture: 'x86'
     conda_build: false
 
-  steps:
-  - template: build_tools/azure/main.yml
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows_x64_Python35'
+    vmImage: 'vs2017-win2016'
+    python_version: '3.5'
+    architecture: 'x64'
+    conda_build: false
 
-#- template: build_tools/azure/main.yml # build_tools/azure/jobs.yml
-#  parameters:
-#    name: 'Windows_x86_Python35'
-#    vmImage: 'vs2017-win2016'
-#    python_version: '3.5'
-#    architecture: 'x86'
-#    conda_build: false
-#
-#- template: build_tools/azure/main.yml
-#  parameters:
-#    name: 'Windows_x64_Python35'
-#    vmImage: 'vs2017-win2016'
-#    python_version: '3.5'
-#    architecture: 'x64'
-#    conda_build: false
-#
-#- template: build_tools/azure/main.yml
-#  parameters:
-#    name: 'Windows_x86_Python36'
-#    vmImage: 'vs2017-win2016'
-#    python_version: '3.6'
-#    architecture: 'x86'
-#    conda_build: false
-#
-#- template: build_tools/azure/main.yml
-#  parameters:
-#    name: 'Windows_x64_Python36'
-#    vmImage: 'vs2017-win2016'
-#    python_version: '3.6'
-#    architecture: 'x64'
-#    conda_build: true
-#
-#- template: build_tools/azure/main.yml
-#  parameters:
-#    name: 'Windows_x86_Python37'
-#    vmImage: 'vs2017-win2016'
-#    python_version: '3.7'
-#    architecture: 'x86'
-#    conda_build: false
-#
-#- template: build_tools/azure/main.yml
-#  parameters:
-#    name: 'Windows_x64_Python37'
-#    vmImage: 'vs2017-win2016'
-#    python_version: '3.7'
-#    architecture: 'x64'
-#    conda_build: true
-#
-#- template: build_tools/azure/main.yml
-#  parameters:
-#    name: 'macOS_Python35'
-#    vmImage: 'macOS-latest'
-#    python_version: '3.5'
-#    conda_build: false
-#
-#- template: build_tools/azure/main.yml
-#  parameters:
-#    name: 'macOS_Python36'
-#    vmImage: 'macOS-latest'
-#    python_version: '3.6'
-#    conda_build: true
-#
-#- template: build_tools/azure/main.yml
-#  parameters:
-#    name: 'macOS_Python37'
-#    vmImage: 'macOS-latest'
-#    python_version: '3.7'
-#    conda_build: true
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows_x86_Python36'
+    vmImage: 'vs2017-win2016'
+    python_version: '3.6'
+    architecture: 'x86'
+    conda_build: false
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows_x64_Python36'
+    vmImage: 'vs2017-win2016'
+    python_version: '3.6'
+    architecture: 'x64'
+    conda_build: true
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows_x86_Python37'
+    vmImage: 'vs2017-win2016'
+    python_version: '3.7'
+    architecture: 'x86'
+    conda_build: false
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows_x64_Python37'
+    vmImage: 'vs2017-win2016'
+    python_version: '3.7'
+    architecture: 'x64'
+    conda_build: true
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'macOS_Python35'
+    vmImage: 'macOS-latest'
+    python_version: '3.5'
+    conda_build: false
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'macOS_Python36'
+    vmImage: 'macOS-latest'
+    python_version: '3.6'
+    conda_build: true
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'macOS_Python37'
+    vmImage: 'macOS-latest'
+    python_version: '3.7'
+    conda_build: true
