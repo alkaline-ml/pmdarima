@@ -54,8 +54,9 @@ jobs:
   parameters:
     name: 'Windows_x64_Python36'
     vmImage: 'vs2017-win2016'
-    python_version: '3.6'
-    architecture: 'x64'
+    variables:
+      python.version: '3.6'
+      architecture: 'x64'
     build_conda: true
 
 - template: build_tools/azure/main.yml
