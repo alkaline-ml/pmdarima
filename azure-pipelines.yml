@@ -65,5 +65,5 @@ jobs:
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'macOS Python35'
+    name: 'macOS Python37'
     vmImage: 'macOS-latest'
