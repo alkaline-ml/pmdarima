@@ -23,4 +23,6 @@ variables:
   - group: deploy-vars
 
 jobs:
-- template: build_tools/azure/jobs.yml
+- template: build_tools/azure/main.yml # build_tools/azure/jobs.yml
+  parameters:
+    name: 'test'

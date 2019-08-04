@@ -1,0 +1,3 @@
+steps:
+  - ${{ if eq(parameters.name, 'test') }}
+    - script: echo "passed"
