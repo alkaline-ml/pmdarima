@@ -24,11 +24,10 @@ variables:
 
 jobs:
 - template: build_tools/azure/main.yml
-  variables:
-    build_conda: true
   parameters:
     name: 'Windows_x86_Python35'
     vmImage: 'vs2017-win2016'
+    build_conda: true
 
 - template: build_tools/azure/main.yml
   parameters:
