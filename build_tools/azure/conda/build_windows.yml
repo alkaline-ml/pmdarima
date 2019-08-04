@@ -3,5 +3,4 @@ steps:
 - script: |
     call activate base
     conda-build --python=$(python.version) conda/
-  condition: eq(variables['build_conda'], 'true')
   displayName: 'Building and testing conda distribution'
