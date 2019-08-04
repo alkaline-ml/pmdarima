@@ -12,6 +12,10 @@ steps:
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Debug info'
 
+- script: set CONDA_FORCE_32BIT=1
+  condition: eq(variables['architecture'], 'x86')
+  displayName: 'Setting conda architecture'
+
 - script: |
     call activate base
     conda-build --python=$(python.version) conda/
