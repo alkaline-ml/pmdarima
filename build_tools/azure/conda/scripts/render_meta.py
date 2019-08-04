@@ -13,7 +13,7 @@ TEMPLATE_ENVIRONMENT = Environment(
     trim_blocks=False
 )
 
-with open('../../../requirements.txt') as file:
+with open(REQUIREMENTS_FILE) as file:
     requirements = [line.strip() for line in file.readlines()]
 
 numpy_version = next(package for package in requirements if 'numpy' in package)
