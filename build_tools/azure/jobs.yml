@@ -83,5 +83,5 @@ jobs:
     condition: and(succeeded(), in(variables['python.version'], '3.6', '3.7'))
     displayName: 'Add conda to PATH'
 
-  - template: conda_build_and_deploy.yml
+  - template: conda_build_and_deploy_mac.yml
 
