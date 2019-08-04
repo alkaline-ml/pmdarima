@@ -83,6 +83,7 @@ jobs:
     vmImage: 'macOS-latest'
     variables:
       python.version: '3.5'
+      architecture: 'x64'
       PMD_MPL_BACKEND: 'TkAgg'
     build_conda: false
 
@@ -92,6 +93,7 @@ jobs:
     vmImage: 'macOS-latest'
     variables:
       python.version: '3.6'
+      architecture: 'x64'
       PMD_MPL_BACKEND: 'TkAgg'
     build_conda: true
 
@@ -101,5 +103,6 @@ jobs:
     vmImage: 'macOS-latest'
     variables:
       python.version: '3.7'
+      architecture: 'x64'
       PMD_MPL_BACKEND: 'TkAgg'
     build_conda: true
