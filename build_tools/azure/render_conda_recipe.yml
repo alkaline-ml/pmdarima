@@ -1,0 +1,9 @@
+# Have to put the version condition on every step in here, because we can't set conditions on a template
+steps:
+- bash: |
+    mkdir conda
+    cd build_tools/azure/conda_scripts
+    python render_meta.py
+    cd -
+  condition: in(variables['python.version'], '3.6', '3.7')
+  displayName: 'Rendering meta.yml file'

@@ -39,6 +39,7 @@ jobs:
     displayName: 'Setting Python version and system architecture'
 
   - template: pypi_build_and_deploy.yml
+  - template: render_conda_recipe.yml
 
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     # Only do this if previous step succeeded and we are using 3.6+
@@ -77,6 +78,7 @@ jobs:
     displayName: 'Setting Python version'
 
   - template: pypi_build_and_deploy.yml
+  - template: render_conda_recipe.yml
 
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
