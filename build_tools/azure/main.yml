@@ -8,7 +8,8 @@ jobs:
       vmImage: ${{ parameters.vmImage }}
 
     variables:
-      ${{ insert }}: ${{ parameters.variables }}
+      python.version: ${{ parameters.python_version }}
+      architecture: ${{ parameters.architecture }}
 
     steps:
     - task: UsePythonVersion@0
