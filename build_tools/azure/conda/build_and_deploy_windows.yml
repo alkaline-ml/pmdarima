@@ -10,12 +10,13 @@ steps:
   condition: and(in(variables['python.version'], '3.6', '3.7'), eq(variables['architecture'], 'x86'))
   displayName: 'Setting conda architecture'
 
-- script: conda create --name buildenv python=$(python.version)
-  condition: in(variables['python.version'], '3.6', '3.7')
-  displayName: 'Creating build environment'
+#- script: conda create --name buildenv python=$(python.version)
+#  condition: in(variables['python.version'], '3.6', '3.7')
+#  displayName: 'Creating build environment'
 
 - script: |
-    conda activate buildenv
+#    conda activate buildenv
+    call activate base
     conda-build --python=$(python.version) conda/
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Building and testing conda distribution'
