@@ -3,6 +3,7 @@ jobs:
 
   pool:
     vmImage: 'vs2017-win2016'  # windows-latest does not have the Microsoft Visual C++ 14.0 dependency we need
+    demands: 'Agent.OSArchitecture -equals X86'
 
   strategy:
     maxParallel: 6
@@ -32,6 +33,9 @@ jobs:
         architecture: 'x64'
 
   steps:
+  - script: echo %PROCESSOR_ARCHITECTURE%
+    displayName: 'get sys architecture'
+
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '$(python.version)'
