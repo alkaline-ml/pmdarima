@@ -1,0 +1,20 @@
+# Have to put the version condition on every step in here, because we can't set conditions on a template
+steps:
+- script: |
+    call activate base
+    conda info
+  condition: in(variables['python.version'], '3.6', '3.7')
+  displayName: 'Debug info'
+
+- script: set CONDA_FORCE_32BIT=1
+  condition: eq(variables['architecture'], 'x86')
+  displayName: 'Setting conda architecture'
+
+- script: conda create python=$(python.version) buildenv
+  displayName: 'Creating build environment'
+
+- script: |
+    call activate buildenv
+    conda-build conda/
+  condition: in(variables['python.version'], '3.6', '3.7')
+  displayName: 'Building and testing conda distribution'

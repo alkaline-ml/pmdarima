@@ -1,0 +1,59 @@
+{% raw %}
+{% set data = load_setup_py_data() %}
+
+package:
+  name: 'pmdarima'
+  version: "{{ data.get('version') }}"
+{% endraw %}
+
+source:
+  path: ../
+
+build:
+  script: '{% raw %}{{ PYTHON }}{% endraw %} -m pip install dist/{{ wheel }} --no-deps -vv'
+  ignore_run_exports:
+    - pip
+    - statsmodels
+    - numpy
+    - numpy-base
+    - scipy
+    - cython
+    - scikit-learn
+    - pandas
+    - python
+
+requirements:
+  build:
+    - {{ numpy_version }}
+    {% raw %}
+    - {{ compiler('c') }}
+    {% endraw %}
+
+  host:
+    - pip
+    - python
+    {% for package in requirements %}
+    - {{ package }}
+    {% endfor %}
+
+  run:
+    - python
+    {% for package in requirements %}
+    - {{ package }}
+    {% endfor %}
+
+test:
+  commands:
+    # conda-forge has the wrong versions pinned, so we have to pip install these
+    - pip install pytest pytest-mpl pytest-benchmark
+    - pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
+
+about:
+  home: https://github.com/tgsmith61591/pmdarima
+  license: MIT
+  license_file: LICENSE
+  summary: Python's forecast::auto.arima equivalent
+
+extra:
+  maintainers:
+    - Taylor G. Smith

@@ -1,0 +1,24 @@
+# This file contains any OS-agnostic conda-related processes
+# Have to put the version condition on every step in here, because we can't set conditions on a template
+steps:
+- bash: |
+    mkdir conda
+    cd build_tools/azure/conda/scripts
+    python render_meta.py
+    cd -
+  condition: in(variables['python.version'], '3.6', '3.7')
+  displayName: 'Rendering meta.yml file'
+
+- powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
+  condition: and(eq(variables['Agent.OS'], 'Windows_NT'), in(variables['python.version'], '3.6', '3.7'))
+  displayName: 'Add conda to PATH (Windows)'
+
+- bash: |
+    echo "##vso[task.prependpath]$CONDA/bin"
+    sudo chown -R $USER $CONDA
+  condition: and(eq(variables['Agent.OS'], 'Darwin'), in(variables['python.version'], '3.6', '3.7'))
+  displayName: 'Add conda to PATH (macOS)'
+
+- script: conda install conda-build --yes
+  condition: in(variables['python.version'], '3.6', '3.7')
+  displayName: 'Installing conda-build'
