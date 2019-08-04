@@ -9,6 +9,10 @@ steps:
   condition: in(variables['python.version'], '3.6', '3.7')
   displayName: 'Rendering meta.yml file'
 
+- script: set CONDA_FORCE_32BIT=1
+  condition: and(in(variables['python.version'], '3.6', '3.7'), eq(variables['architecture'], 'x86'))
+  displayName: 'Setting conda architecture'
+
 - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
   condition: and(eq(variables['Agent.OS'], 'Windows_NT'), in(variables['python.version'], '3.6', '3.7'))
   displayName: 'Add conda to PATH (Windows)'
