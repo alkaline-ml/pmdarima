@@ -1,30 +1,17 @@
-parameters:
-  architecture: 'x64'  # Default (for macOS builds)
+steps:
+- task: UsePythonVersion@0
+    inputs:
+      versionSpec: '${{ parameters.python_version }}'
+      architecture: '${{ parameters.architecture }}'
+    displayName: 'Setting Python version and system architecture'
 
-jobs:
-  - job: ${{ parameters.name }}
+# Always build for PyPI
+- template: pypi/build.yml
 
-    pool:
-      vmImage: ${{ parameters.vmImage }}
+# Build for conda if necessary
+- ${{ if eq(parameters.build_conda, 'true') }}:
+  - template: conda/preprocess.yml
+  - template: conda/build_windows.yml
 
-    variables:
-      python.version: ${{ parameters.python_version }}
-      architecture: ${{ parameters.architecture }}
-
-    steps:
-    - task: UsePythonVersion@0
-        inputs:
-          versionSpec: '${{ parameters.python_version }}'
-          architecture: '${{ parameters.architecture }}'
-        displayName: 'Setting Python version and system architecture'
-
-    # Always build for PyPI
-    - template: pypi/build.yml
-
-    # Build for conda if necessary
-    - ${{ if eq(parameters.build_conda, 'true') }}:
-      - template: conda/preprocess.yml
-      - template: conda/build_windows.yml
-
-    # Always run the deploy step (it will check for tags)
-    - template: deploy.yml
+# Always run the deploy step (it will check for tags)
+- template: deploy.yml
