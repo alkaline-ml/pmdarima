@@ -6,19 +6,19 @@ steps:
     cd build_tools/azure/conda/scripts
     python render_meta.py
     cd -
-  condition: in(variables['python.version'], '3.6', '3.7')
+  condition: eq(variables['build_conda'], 'true')
   displayName: 'Rendering meta.yml file'
 
 - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
-  condition: and(eq(variables['Agent.OS'], 'Windows_NT'), in(variables['python.version'], '3.6', '3.7'))
+  condition: and(eq(variables['Agent.OS'], 'Windows_NT'), eq(variables['build_conda'], 'true'))
   displayName: 'Add conda to PATH (Windows)'
 
 - bash: |
     echo "##vso[task.prependpath]$CONDA/bin"
     sudo chown -R $USER $CONDA
-  condition: and(eq(variables['Agent.OS'], 'Darwin'), in(variables['python.version'], '3.6', '3.7'))
+  condition: and(eq(variables['Agent.OS'], 'Darwin'), eq(variables['build_conda'], 'true'))
   displayName: 'Add conda to PATH (macOS)'
 
 - script: conda install conda-build --yes
-  condition: in(variables['python.version'], '3.6', '3.7')
+  condition: eq(variables['build_conda'], 'true')
   displayName: 'Installing conda-build'

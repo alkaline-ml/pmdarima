@@ -10,26 +10,32 @@ jobs:
       Python35-x86:
         python.version: '3.5'
         architecture: 'x86'
+        build_conda: false
 
       Python35-x64:
         python.version: '3.5'
         architecture: 'x64'
+        build_conda: false
 
       Python36-x86:
         python.version: '3.6'
         architecture: 'x86'
+        build_conda: false
 
       Python36-x64:
         python.version: '3.6'
         architecture: 'x64'
+        build_conda: true
 
       Python37-x86:
         python.version: '3.7'
         architecture: 'x86'
+        build_conda: false
 
       Python37-x64:
         python.version: '3.7'
         architecture: 'x64'
+        build_conda: true
 
   steps:
   - task: UsePythonVersion@0
@@ -59,12 +65,15 @@ jobs:
     matrix:
       Python35:
         python.version: '3.5'
+        build_conda: false
 
       Python36:
         python.version: '3.6'
+        build_conda: true
 
       Python37:
         python.version: '3.7'
+        build_conda: true
 
   steps:
   - task: UsePythonVersion@0
