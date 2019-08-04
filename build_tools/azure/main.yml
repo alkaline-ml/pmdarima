@@ -11,5 +11,5 @@ jobs:
     build_conda: ${{ parameters.build_conda }}
 
   steps:
-  - ${{ if eq(parameters.build_conda, 'true') }}
+  - ${{ if eq(parameters['build_conda'], 'true') }}
     - script: echo "We would build conda"
