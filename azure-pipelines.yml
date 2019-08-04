@@ -23,4 +23,47 @@ variables:
   - group: deploy-vars
 
 jobs:
-- template: build_tools/azure/jobs.yml
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows-32 3.5'
+    vmImage: 'vs2017-win2016'
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows-64 3.5'
+    vmImage: 'vs2017-win2016'
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows-32 3.6'
+    vmImage: 'vs2017-win2016'
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows-64 3.6'
+    vmImage: 'vs2017-win2016'
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows-32 3.7'
+    vmImage: 'vs2017-win2016'
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'Windows-64 3.7'
+    vmImage: 'vs2017-win2016'
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'macOS 3.5'
+    vmImage: 'macOS-latest'
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'macOS 3.6'
+    vmImage: 'macOS-latest'
+
+- template: build_tools/azure/main.yml
+  parameters:
+    name: 'macOS 3.7'
+    vmImage: 'macOS-latest'
