@@ -8,14 +8,13 @@ jobs:
       vmImage: ${{ parameters.vmImage }}
 
     variables:
-      python.version: ${{ parameters.python_version }}
-      architecture: ${{ parameters.architecture }}
+      ${{ insert }}: ${{ parameters.variables }}
 
     steps:
     - task: UsePythonVersion@0
         inputs:
-          versionSpec: '${{ parameters.python_version }}'
-          architecture: '${{ parameters.architecture }}'
+          versionSpec: '$(python.version)'
+          architecture: '$(architecture)'
         displayName: 'Setting Python version and system architecture'
 
     # Always build for PyPI
