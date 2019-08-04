@@ -1,7 +1,3 @@
-parameters:
-  variables:
-    architecture: 'x64'  # Default (for macOS builds)
-
 jobs:
   - job: ${{ parameters.name }}
 
