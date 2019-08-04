@@ -1,3 +1,6 @@
+parameters:
+  architecture: 'x64'  # Default (for macOS builds)
+
 jobs:
   - job: ${{ parameters.name }}
 
@@ -7,8 +10,8 @@ jobs:
     steps:
     - task: UsePythonVersion@0
         inputs:
-          versionSpec: '$(python.version)'
-          architecture: '$(architecture)'
+          versionSpec: '$(parameters.python.version)'
+          architecture: '$(parameters.architecture)'
         displayName: 'Setting Python version and system architecture'
 
     # Always build for PyPI
