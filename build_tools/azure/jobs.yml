@@ -81,6 +81,8 @@ jobs:
       versionSpec: '$(python.version)'
     displayName: 'Setting Python version'
 
+  - ${{ if eq(variables['build_conda'], 'true') }}
+    - script: echo "build conda"
   - template: pypi/build.yml
   - template: conda/preprocess.yml
   - template: conda/build_mac.yml
