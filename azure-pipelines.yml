@@ -25,45 +25,45 @@ variables:
 jobs:
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows_32 3.5'
+    name: 'Windows x86 Python35'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows_64 3.5'
+    name: 'Windows x64 Python35'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows_32 3.6'
+    name: 'Windows x86 Python36'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows_64 3.6'
+    name: 'Windows x64 Python36'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows_32 3.7'
+    name: 'Windows x86 Python37'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'Windows_64 3.7'
+    name: 'Windows x64 Python37'
     vmImage: 'vs2017-win2016'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'macOS 3.5'
+    name: 'macOS Python35'
     vmImage: 'macOS-latest'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'macOS 3.6'
+    name: 'macOS Python36'
     vmImage: 'macOS-latest'
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'macOS 3.7'
+    name: 'macOS Python35'
     vmImage: 'macOS-latest'
