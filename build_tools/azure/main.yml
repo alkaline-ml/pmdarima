@@ -5,7 +5,5 @@ jobs:
     vmImage: ${{ parameters.vmImage }}
 
   steps:
-  - ${{ if eq(parameters.vmImage, 'vs2017-win2016') }}
-    - script: echo "Hello from windows"
-  - ${{ if eq(parameters.vmImage, 'macOS-latest') }}
-    - script: echo "Hello from mac"
+  - ${{ if eq(variables['build_conda'], 'true') }}
+    - script: echo "We would build conda"
