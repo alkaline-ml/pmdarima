@@ -7,7 +7,7 @@ steps:
   displayName: 'Rendering meta.yml file'
 
 - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
-  condition: eq(variables['Agent.OS'], 'Windows_NT'))
+  condition: eq(variables['Agent.OS'], 'Windows_NT')
   displayName: 'Add conda to PATH (Windows)'
 
 - bash: |
