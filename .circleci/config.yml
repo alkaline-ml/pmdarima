@@ -203,6 +203,10 @@ workflows:
             filters: *test-filters
         - cpython37:
             filters: *test-filters
+        - conda36:
+            filters: *test-filters
+        - conda37:
+            filters: *test-filters
         - test-linting:
             filters: *test-filters
         - regression-testing:
