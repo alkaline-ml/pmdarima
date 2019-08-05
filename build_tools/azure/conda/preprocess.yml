@@ -1,7 +1,7 @@
 steps:
 - bash: |
     mkdir conda
-    cd build_tools/azure/conda/scripts
+    cd build_tools/common
     python render_meta.py
     cd -
   displayName: 'Rendering meta.yml file'
