@@ -83,6 +83,30 @@ jobs:
     steps:
     - make-unit-test
 
+  conda36:
+    docker:
+      - image: continuumio/miniconda3
+    working_directory: ~/pmdarima
+    steps:
+      - run: |
+          mkdir conda
+          cd build_tools/common
+          python render_meta.py
+          cd -
+          conda-build --python=3.6 conda/
+
+  conda37:
+    docker:
+      - image: continuumio/miniconda3
+    working_directory: ~/pmdarima
+    steps:
+      - run: |
+          mkdir conda
+          cd build_tools/common
+          python render_meta.py
+          cd -
+          conda-build --python=3.7 conda/
+
   # For testing lint
   test-linting:
     docker:
