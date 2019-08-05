@@ -93,6 +93,7 @@ jobs:
           cd build_tools/common
           python render_meta.py
           cd -
+          conda install conda-build
           conda-build --python=3.6 conda/
 
   conda37:
@@ -105,6 +106,7 @@ jobs:
           cd build_tools/common
           python render_meta.py
           cd -
+          conda install conda-build
           conda-build --python=3.7 conda/
 
   # For testing lint
