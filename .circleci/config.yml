@@ -41,6 +41,14 @@ commands:
     steps:
       - run: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
 
+  build-conda-file:
+    description: "Build a conda tar.gz file"
+    parameters:
+      pythonversion:
+        type: string
+    steps:
+      - run: ./build_tools/circle/build_conda.sh << parameters.pythonversion >>
+
   deploy-to-pypi:
     description: "Deploy the contents of dist/ to PyPi"
     steps:
@@ -88,26 +96,18 @@ jobs:
       - image: continuumio/miniconda3
     working_directory: ~/pmdarima
     steps:
-      - run: |
-          mkdir conda
-          cd build_tools/common
-          python render_meta.py
-          cd -
-          conda install conda-build
-          conda-build --python=3.6 conda/
+      - checkout
+      - build-conda-file:
+          pythonversion: "3.6"
 
   conda37:
     docker:
       - image: continuumio/miniconda3
     working_directory: ~/pmdarima
     steps:
-      - run: |
-          mkdir conda
-          cd build_tools/common
-          python render_meta.py
-          cd -
-          conda install conda-build
-          conda-build --python=3.7 conda/
+      - checkout
+      - build-conda-file:
+          pythonversion: "3.7"
 
   # For testing lint
   test-linting:
