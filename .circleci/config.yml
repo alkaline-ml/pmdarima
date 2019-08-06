@@ -92,22 +92,18 @@ jobs:
     - make-unit-test
 
   conda36:
-    machine:
-      image: circleci/classic:latest
+    docker:
+      - image: continuumio/miniconda3:latest
     steps:
       - checkout
-      - build-whl-file:
-          pythonversion: "3.6"
       - build-conda-file:
           pythonversion: "3.6"
 
   conda37:
-    machine:
-      image: circleci/classic:latest
+    docker:
+      - image: continuumio/miniconda3:latest
     steps:
       - checkout
-      - build-whl-file:
-          pythonversion: "3.7"
       - build-conda-file:
           pythonversion: "3.7"
 
