@@ -107,7 +107,7 @@ jobs:
     steps:
       - checkout
       - build-wheel-file:
-          pythonversion: "3.6"
+          pythonversion: "3.7"
       - build-conda-file:
           pythonversion: "3.7"
 
