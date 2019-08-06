@@ -19,10 +19,16 @@ with open(REQUIREMENTS_FILE) as file:
 numpy_version = next(package for package in requirements if 'numpy' in package)
 wheel = next(file for file in os.listdir(DIST_PATH) if file.endswith('.whl'))
 
+if os.environ['CIRCLECI']:
+    build_script = '{{ PYTHON }} -m pip install --no-deps --ignore-installed .'
+else:
+    # We need 4 braces here to render 2 braces (due to f-string)
+    build_script = f'{{{{ PYTHON }}}} -m pip install dist/{wheel} --no-deps -vv'
+
 context = {
     'requirements': requirements,
     'numpy_version': numpy_version,
-    'wheel': wheel
+    'build_script': build_script
 }
 
 with open(OUTPUT_FILE, 'w') as out:
