@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pip install jinja2
+pip install conda jinja2
 mkdir conda
 ls
 cd build_tools/common
