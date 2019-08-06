@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Build the wheel first
-pip install -r requirements.txt
-python setup.py bdist_wheel
-
 # Render the meta file
 pip install jinja2
 mkdir conda

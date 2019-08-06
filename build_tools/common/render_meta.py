@@ -17,11 +17,11 @@ with open(REQUIREMENTS_FILE) as file:
     requirements = [line.strip() for line in file.readlines()]
 
 numpy_version = next(package for package in requirements if 'numpy' in package)
-wheel = next(file for file in os.listdir(DIST_PATH) if file.endswith('.whl'))
 
 if os.environ['CIRCLECI']:
     build_script = '{{ PYTHON }} -m pip install --no-deps --ignore-installed .'
 else:
+    wheel = next(file for file in os.listdir(DIST_PATH) if file.endswith('.whl'))
     # We need 4 braces here to render 2 braces (due to f-string)
     build_script = f'{{{{ PYTHON }}}} -m pip install dist/{wheel} --no-deps -vv'
 
