@@ -42,7 +42,7 @@ commands:
       - run: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
 
   build-conda-file:
-    description: "Build a conda tar.gz file"
+    description: "Build a conda tar.bz2 file"
     parameters:
       pythonversion:
         type: string
