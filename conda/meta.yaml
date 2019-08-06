@@ -1,0 +1,88 @@
+
+{% set data = load_setup_py_data() %}
+
+package:
+  name: 'pmdarima'
+  version: "{{ data.get('version') }}"
+
+
+source:
+  path: ../
+
+build:
+  script: '{{ PYTHON }} -m pip install dist/pmdarima-1.3.dev0-cp36-cp36m-macosx_10_7_x86_64.whl --no-deps -vv'
+  ignore_run_exports:
+    - pip
+    - statsmodels
+    - numpy
+    - numpy-base
+    - scipy
+    - cython
+    - scikit-learn
+    - pandas
+    - python
+
+
+requirements:
+  build:
+    - numpy>=1.16
+    
+    - {{ compiler('c') }}
+    
+
+  host:
+    - pip
+    - python
+    
+    - Cython>=0.29
+    
+    - joblib>=0.11
+    
+    - numpy>=1.16
+    
+    - pandas>=0.19
+    
+    - scikit-learn>=0.19
+    
+    - scipy>=1.3
+    
+    - six>=1.5
+    
+    - statsmodels>=0.10.0
+    
+
+  run:
+    - python
+    
+    - Cython>=0.29
+    
+    - joblib>=0.11
+    
+    - numpy>=1.16
+    
+    - pandas>=0.19
+    
+    - scikit-learn>=0.19
+    
+    - scipy>=1.3
+    
+    - six>=1.5
+    
+    - statsmodels>=0.10.0
+    
+
+test:
+  commands:
+    # conda-forge has the wrong versions pinned, so we have to pip install these
+    - pip install pytest pytest-mpl pytest-benchmark
+    - pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
+
+about:
+  home: https://github.com/tgsmith61591/pmdarima
+  license: MIT
+  license_file: LICENSE
+  summary: Python's forecast::auto.arima equivalent
+
+extra:
+  maintainers:
+    - Taylor G. Smith
