@@ -93,7 +93,7 @@ jobs:
 
   conda36:
     docker:
-      - image: continuumio/miniconda3
+      - image: continuumio/miniconda3:latest
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -102,7 +102,7 @@ jobs:
 
   conda37:
     docker:
-      - image: continuumio/miniconda3
+      - image: continuumio/miniconda3:latest
     working_directory: ~/pmdarima
     steps:
       - checkout
