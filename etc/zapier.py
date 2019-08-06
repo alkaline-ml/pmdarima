@@ -5,6 +5,7 @@ It is used to add the `total downloads` badge to our README
 """
 import json
 import math
+import os
 import requests
 
 
@@ -51,5 +52,5 @@ data = {
 
 # Write to our storage area
 # StoreClient is Zapier-specific and automatically imported (hence no import)
-store = StoreClient('3673941c25334a23867e7250777b1295')
+store = StoreClient(os.environ.get('ZAPIER_SHA'))
 store.set('data', data)
