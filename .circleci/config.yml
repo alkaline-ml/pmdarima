@@ -96,7 +96,7 @@ jobs:
       - image: continuumio/miniconda3:latest
     steps:
       - checkout
-      - build-wheel-file:
+      - build-whl-file:
           pythonversion: "3.6"
       - build-conda-file:
           pythonversion: "3.6"
@@ -106,7 +106,7 @@ jobs:
       - image: continuumio/miniconda3:latest
     steps:
       - checkout
-      - build-wheel-file:
+      - build-whl-file:
           pythonversion: "3.7"
       - build-conda-file:
           pythonversion: "3.7"
