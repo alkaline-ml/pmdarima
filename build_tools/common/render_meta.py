@@ -3,7 +3,7 @@ import os
 from jinja2 import Environment, FileSystemLoader
 
 
-DIST_PATH = '../../dist'
+DIST_PATH = '../../dist'  # Only used on Azure DevOps
 REQUIREMENTS_FILE = '../../requirements.txt'
 OUTPUT_FILE = '../../conda/meta.yaml'  # conda is weird about yml vs yaml, so we have to use yaml
 TEMPLATE_PATH = '.'
@@ -18,6 +18,7 @@ with open(REQUIREMENTS_FILE) as file:
 
 numpy_version = next(package for package in requirements if 'numpy' in package)
 
+# If we are on Circle, we install from source. If we are on ADO, we install from a wheel
 if os.environ['CIRCLECI']:
     build_script = '{{ PYTHON }} -m pip install --no-deps --ignore-installed .'
 else:
