@@ -1,4 +1,5 @@
 import os
+import sys
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -19,7 +20,7 @@ with open(REQUIREMENTS_FILE) as file:
 numpy_version = next(package for package in requirements if 'numpy' in package)
 
 # If we are on Circle, we install from source. If we are on ADO, we install from a wheel
-if os.environ.get('CIRCLECI', True):
+if os.environ.get('CIRCLECI', True) or sys.platform == 'win32':
     build_script = '{{ PYTHON }} -m pip install --no-deps --ignore-installed .'
 else:
     wheel = next(file for file in os.listdir(DIST_PATH) if file.endswith('.whl'))
