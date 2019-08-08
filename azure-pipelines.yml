@@ -87,7 +87,7 @@ jobs:
 - template: build_tools/azure/main.yml
   parameters:
     name: 'macOS_Python35'
-    vmImage: 'macOS-10.13'
+    vmImage: 'macOS-latest'
     variables:
       python.version: '3.5'
       architecture: 'x64'
@@ -98,7 +98,7 @@ jobs:
 - template: build_tools/azure/main.yml
   parameters:
     name: 'macOS_Python36_and_conda'
-    vmImage: 'macOS-10.13'
+    vmImage: 'macOS-latest'
     variables:
       python.version: '3.6'
       architecture: 'x64'
@@ -109,7 +109,7 @@ jobs:
 - template: build_tools/azure/main.yml
   parameters:
     name: 'macOS_Python37_and_conda'
-    vmImage: 'macOS-10.13'
+    vmImage: 'macOS-latest'
     variables:
       python.version: '3.7'
       architecture: 'x64'
