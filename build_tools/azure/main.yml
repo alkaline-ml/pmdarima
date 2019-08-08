@@ -14,8 +14,9 @@ jobs:
         architecture: '$(architecture)'
       displayName: 'Setting Python version and system architecture'
 
-    # Always build for PyPI
-    - template: pypi/build.yml
+    # Build for PyPI if necessary
+    - ${{ if eq(parameters.build_pypi, 'true') }}:
+      - template: pypi/build.yml
 
     # Build for conda if necessary
     - ${{ if eq(parameters.build_conda, 'true') }}:
