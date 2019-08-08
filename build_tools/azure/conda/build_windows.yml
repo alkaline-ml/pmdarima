@@ -2,7 +2,7 @@
 steps:
 - script: |
     conda create --prefix D:\conda\buildenv  python=$(python.version)
-  displayName: 'Building and testing conda distribution'
+  displayName: 'Creating build environment'
 
 - script: |
     call activate D:\conda\buildenv
