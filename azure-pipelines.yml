@@ -31,7 +31,6 @@ jobs:
     variables:
       python.version: '3.5'
       architecture: 'x86'
-    build_pypi: true
     build_conda: false
 
 - template: build_tools/azure/main.yml
@@ -41,7 +40,6 @@ jobs:
     variables:
       python.version: '3.5'
       architecture: 'x64'
-    build_pypi: true
     build_conda: false
 
 - template: build_tools/azure/main.yml
@@ -51,7 +49,6 @@ jobs:
     variables:
       python.version: '3.6'
       architecture: 'x86'
-    build_pypi: true
     build_conda: false
 
 - template: build_tools/azure/main.yml
@@ -61,8 +58,7 @@ jobs:
     variables:
       python.version: '3.6'
       architecture: 'x64'
-    build_pypi: true
-    build_conda: false
+    build_conda: true
 
 - template: build_tools/azure/main.yml
   parameters:
@@ -71,7 +67,6 @@ jobs:
     variables:
       python.version: '3.7'
       architecture: 'x86'
-    build_pypi: true
     build_conda: false
 
 - template: build_tools/azure/main.yml
@@ -81,8 +76,7 @@ jobs:
     variables:
       python.version: '3.7'
       architecture: 'x64'
-    build_pypi: true
-    build_conda: false
+    build_conda: true
 
 - template: build_tools/azure/main.yml
   parameters:
@@ -92,47 +86,24 @@ jobs:
       python.version: '3.5'
       architecture: 'x64'
       PMD_MPL_BACKEND: 'TkAgg'
-    build_pypi: true
     build_conda: false
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'macOS_Python36_and_conda'
+    name: 'macOS_Python36'
     vmImage: 'macOS-latest'
     variables:
       python.version: '3.6'
       architecture: 'x64'
       PMD_MPL_BACKEND: 'TkAgg'
-    build_pypi: true
     build_conda: true
 
 - template: build_tools/azure/main.yml
   parameters:
-    name: 'macOS_Python37_and_conda'
+    name: 'macOS_Python37'
     vmImage: 'macOS-latest'
     variables:
       python.version: '3.7'
       architecture: 'x64'
       PMD_MPL_BACKEND: 'TkAgg'
-    build_pypi: true
-    build_conda: true
-
-- template: build_tools/azure/main.yml
-  parameters:
-    name: 'Windows_x64_Python36_just_conda'
-    vmImage: 'vs2017-win2016'
-    variables:
-      python.version: '3.6'
-      architecture: 'x64'
-    build_pypi: false
-    build_conda: true
-
-- template: build_tools/azure/main.yml
-  parameters:
-    name: 'Windows_x64_Python37_just_conda'
-    vmImage: 'vs2017-win2016'
-    variables:
-      python.version: '3.7'
-      architecture: 'x64'
-    build_pypi: false
     build_conda: true
