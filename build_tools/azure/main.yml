@@ -26,7 +26,7 @@ jobs:
         - template: conda/build_windows.yml
 
       - ${{ if contains(parameters.vmImage, 'mac') }}:
-          - template: conda/build_mac.yml
+        - template: conda/build_mac.yml
 
     # Always run the deploy step (it will check for tags)
     - template: pypi/deploy.yml
