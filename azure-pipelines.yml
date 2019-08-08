@@ -24,7 +24,7 @@ variables:
   - group: deploy-vars
 
 jobs:
-- template: build_tools/azure/main.yml
+- template: build_tools/azure/main.yml # build_tools/azure/jobs.yml
   parameters:
     name: 'Windows_x86_Python35'
     vmImage: 'vs2017-win2016'
