@@ -2,3 +2,5 @@
 steps:
 - script: conda-build --python=$(python.version) conda/
   displayName: 'Building and testing conda distribution'
+  env:
+    CONDA_MAC: true
