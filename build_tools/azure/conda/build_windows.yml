@@ -1,10 +1,10 @@
 # Have to put the version condition on every step in here, because we can't set conditions on a template
 steps:
 - script: |
-    conda create --prefix D:\conda --name buildenv python=$(python.version)
+    conda create --prefix D:\conda\buildenv  python=$(python.version)
   displayName: 'Building and testing conda distribution'
 
 - script: |
-    call activate buildenv
+    call activate D:\conda\buildenv
     conda-build --python=$(python.version) conda/
   displayName: 'Building and testing conda distribution'
