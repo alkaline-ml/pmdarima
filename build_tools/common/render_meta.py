@@ -19,14 +19,12 @@ with open(REQUIREMENTS_FILE) as file:
 numpy_version = next(package for package in requirements if 'numpy' in package)
 
 # If we are on Circle, we install from source. If we are on ADO, we install from a wheel
-if os.environ.get('CIRCLECI', None):
+if os.environ.get('CIRCLECI', True):
     build_script = '{{ PYTHON }} -m pip install --no-deps --ignore-installed .'
-elif os.environ.get('CONDA_MAC', None):
+else:
     wheel = next(file for file in os.listdir(DIST_PATH) if file.endswith('.whl'))
     # We need 4 braces here to render 2 braces (due to f-string)
     build_script = f'{{{{ PYTHON }}}} -m pip install dist/{wheel} --no-deps -vv'
-else:
-    raise RuntimeError('Unexpected build environment')
 
 context = {
     'requirements': requirements,
