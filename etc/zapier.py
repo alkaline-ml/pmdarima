@@ -41,9 +41,9 @@ def millify(n):
     #  - 967123  -> 967k
     #  - 1000123 -> 1M
     #  - 1100123 -> 1.1M
-    final_string = one_decimal if n > 1e6 and not one_decimal.is_integer() else int(final_num)
+    final_output = one_decimal if n > 1e6 and not one_decimal.is_integer() else int(final_num)
 
-    return f'{final_string}{millnames[millidx]}'
+    return f'{final_output}{millnames[millidx]}'
 
 
 # Open a session to save time (only allowed 1 second on Zapier)
