@@ -33,8 +33,17 @@ def millify(n):
             int(math.floor(0 if n == 0 else math.log10(abs(n)) / 3))
         )
     )
+    final_num = float(n / 10 ** (3 * millidx))
+    one_decimal = round(final_num, 1)
 
-    return '{:.0f}{}'.format(n / 10 ** (3 * millidx), millnames[millidx])
+    # If the number is in the millions, and has a decimal, we want to show one
+    # decimal. I.e.:
+    #  - 967123  -> 967k
+    #  - 1000123 -> 1M
+    #  - 1100123 -> 1.1M
+    final_output = one_decimal if n > 1e6 and not one_decimal.is_integer() else int(final_num)
+
+    return f'{final_output}{millnames[millidx]}'
 
 
 # Open a session to save time (only allowed 1 second on Zapier)
