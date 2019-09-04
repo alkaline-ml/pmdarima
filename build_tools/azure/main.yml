@@ -27,5 +27,6 @@ jobs:
       - ${{ if contains(parameters.vmImage, 'mac') }}:
           - template: conda/build_mac.yml
 
-    # Always run the deploy step (it will check for tags)
-    - template: pypi/deploy.yml
+    # Only deploy for tags
+    - ${{ if contains(variables['Build.SourceBranch'], 'tags') }}:
+      - template: pypi/deploy.yml
