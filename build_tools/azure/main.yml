@@ -17,8 +17,8 @@ jobs:
     # Always build for PyPI
     - template: pypi/build.yml
 
-    # Build for conda if necessary
-    - ${{ if eq(parameters.build_conda, 'true') }}:
+    # Build for conda if specified, AND only if this is a deploy or a PR (to save time)
+    - ${{ if and(eq(parameters.build_conda, 'true'), or(eq(variables['Build.Reason'], 'PullRequest'), contains(variables['Build.SourceBranch'], 'tags'))) }}:
       - template: conda/preprocess.yml
 
       - ${{ if contains(parameters.vmImage, 'win') }}:
