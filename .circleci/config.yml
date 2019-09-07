@@ -196,6 +196,7 @@ workflows:
         - deploy-doc:
             requires:
                 - testing-passed
+            filters: *test-filters
 
         - deploy-cpython35-whl:
             filters: *deploy-filters
