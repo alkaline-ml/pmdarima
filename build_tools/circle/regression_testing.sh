@@ -22,7 +22,7 @@ python -c "\
 import joblib
 import pyramid as pm
 
-print('fitting and serialing model with old package')
+print('fitting and serializing model with old package')
 lynx = pm.datasets.load_lynx()
 arima = pm.auto_arima(lynx)
 joblib.dump(arima, 'model.pkl')
