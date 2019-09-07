@@ -49,8 +49,9 @@ commands:
           docker run --rm -it \
             -v `pwd`:/app \
             -w /app \
+            --env-file vars.env \
             python:3.7 \
-            source /app/vars.env && ./build_tools/circle/deploy.sh
+            ./build_tools/circle/deploy.sh
 
 jobs:
   # For testing PyPy rather than CPython

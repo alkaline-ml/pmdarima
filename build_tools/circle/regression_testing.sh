@@ -5,12 +5,15 @@ pip install numpy
 pip install scipy scikit-learn pandas statsmodels
 
 # Any other requirements
+echo "installing requirements"
 pip install -r requirements.txt
 
 # Install the old version of the package
+echo "installing old, deprecated version of the package"
 pip install pyramid-arima
 
 # Setup the new package
+echo "setting up new package"
 python setup.py install
 mkdir testing_dir && cd testing_dir
 
@@ -19,6 +22,7 @@ python -c "\
 import joblib
 import pyramid as pm
 
+print('fitting and serializing model with old package')
 lynx = pm.datasets.load_lynx()
 arima = pm.auto_arima(lynx)
 joblib.dump(arima, 'model.pkl')
