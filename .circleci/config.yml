@@ -12,7 +12,8 @@ deploy-filters: &deploy-filters
     tags:
         only: /.*/
     branches:
-        ignore: /.*/
+        only: /.*/
+        # ignore: /.*/
 
 
 # ############################################
@@ -50,7 +51,8 @@ commands:
             -v `pwd`:/app \
             -w /app \
             python:3.7 \
-            source /app/vars.env && ./build_tools/circle/deploy.sh
+            ./build_tools/circle/deploy.sh
+            # source /app/vars.env && ./build_tools/circle/deploy.sh
 
 jobs:
   # For testing PyPy rather than CPython
