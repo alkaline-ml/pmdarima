@@ -12,7 +12,7 @@ if [[ ! -d pmdarima/__check_build ]]; then
 fi
 
 # get the running branch
-branch=$(git symbolic-ref --short HEAD)
+# branch=$(git symbolic-ref --short HEAD)
 
 # cd into docs, make them
 # cd doc
