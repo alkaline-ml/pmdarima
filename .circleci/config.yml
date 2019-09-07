@@ -12,8 +12,7 @@ deploy-filters: &deploy-filters
     tags:
         only: /.*/
     branches:
-        only: /.*/
-        # ignore: /.*/
+        ignore: /.*/
 
 
 # ############################################
@@ -50,9 +49,9 @@ commands:
           docker run --rm -it \
             -v `pwd`:/app \
             -w /app \
+            --env-file vars.env \
             python:3.7 \
             ./build_tools/circle/deploy.sh
-            # source /app/vars.env && ./build_tools/circle/deploy.sh
 
 jobs:
   # For testing PyPy rather than CPython
