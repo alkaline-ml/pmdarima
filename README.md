@@ -6,6 +6,7 @@
 [![codecov](https://codecov.io/gh/tgsmith61591/pmdarima/branch/master/graph/badge.svg)](https://codecov.io/gh/tgsmith61591/pmdarima)
 ![Supported versions](https://img.shields.io/badge/python-3.5+-blue.svg)
 ![Downloads](https://img.shields.io/badge/dynamic/json?color=blue&label=downloads&query=%24.data.total&url=https%3A%2F%2Fstore.zapier.com%2Fapi%2Frecords%3Fsecret%3D3673941c25334a23867e7250777b1295%26key%3Ddata)
+![Downloads/Week](https://img.shields.io/badge/dynamic/json?color=blue&label=downloads%2Fweek&query=%24.data.total&url=https%3A%2F%2Fstore.zapier.com%2Fapi%2Frecords%3Fsecret%3D72d38f03d1b94d46b7e72f40cd79db5c%26key%3Ddata)
 
 Pmdarima (originally `pyramid-arima`, for the anagram of 'py' + 'arima') is a no-nonsense statistical
 Python library with a solitary objective: bring R's
