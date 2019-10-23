@@ -30,6 +30,7 @@ def configuration(parent_package="", top_path=None):
                          **blas_info)
 
     config.add_subpackage('tests')
+    config.add_data_dir('tests/data')
 
     return config
 

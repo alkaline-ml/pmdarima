@@ -329,7 +329,7 @@ class OCSBTest(_SeasonalStationarityTest):
     @staticmethod
     def _gen_lags(y, max_lag, omit_na=True):
         """Create the lagged exogenous array used to fit the linear model"""
-        if max_lag == 0:
+        if max_lag <= 0:
             return np.zeros(y.shape[0])
 
         # delegate down
@@ -342,7 +342,7 @@ class OCSBTest(_SeasonalStationarityTest):
         y = diff(y_first_order_diff)
         ylag = OCSBTest._gen_lags(y, lag)
 
-        if max_lag > 0:
+        if max_lag > -1:
             # y = tail(y, -maxlag)
             y = y[max_lag:]
 

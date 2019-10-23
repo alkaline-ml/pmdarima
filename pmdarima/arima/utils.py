@@ -16,7 +16,6 @@ from .stationarity import KPSSTest, ADFTest, PPTest
 from .seasonality import CHTest, OCSBTest
 
 __all__ = [
-    'get_callable',
     'is_constant',
     'ndiffs',
     'nsdiffs'
