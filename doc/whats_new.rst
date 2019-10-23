@@ -8,6 +8,13 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
+`v1.3.1 <http://alkaline-ml.com/pmdarima/1.3.1/>`_
+--------------------------------------------------
+
+* Fixes `#191 <https://github.com/tgsmith61591/pmdarima/issues/191>`_, an issue where
+  the OCSB test could raise ``ValueError: negative dimensions are not allowed" in OCSB test``
+
+
 `v1.3.0 <http://alkaline-ml.com/pmdarima/1.3.0/>`_
 --------------------------------------------------
 
