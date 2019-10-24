@@ -22,7 +22,7 @@ import os as _os
 # Dev branch marker is: 'X.Y.dev' or 'X.Y.devN' where N is an integer.
 # 'X.Y.dev0' is the canonical version of 'X.Y.dev'
 #
-__version__ = "1.3.0"
+__version__ = "1.3.1.dev0"
 
 try:
     # this var is injected in the setup build to enable
