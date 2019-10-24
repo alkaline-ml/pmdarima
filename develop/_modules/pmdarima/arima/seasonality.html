@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.arima.seasonality &mdash; pmdarima 1.3.0 documentation</title>
+  <title>pmdarima.arima.seasonality &mdash; pmdarima 1.3.1.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../../',
-              VERSION:'1.3.0',
+              VERSION:'1.3.1.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                1.3.0
+                1.3.1.dev0
               </div>
             
           
@@ -497,7 +497,7 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_gen_lags</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">max_lag</span><span class="p">,</span> <span class="n">omit_na</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create the lagged exogenous array used to fit the linear model&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">max_lag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">max_lag</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="c1"># delegate down</span>
@@ -510,7 +510,7 @@
         <span class="n">y</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">y_first_order_diff</span><span class="p">)</span>
         <span class="n">ylag</span> <span class="o">=</span> <span class="n">OCSBTest</span><span class="o">.</span><span class="n">_gen_lags</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lag</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">max_lag</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">max_lag</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="c1"># y = tail(y, -maxlag)</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">max_lag</span><span class="p">:]</span>
 

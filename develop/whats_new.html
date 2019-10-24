@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>What’s new in pmdarima &mdash; pmdarima 1.3.0 documentation</title>
+  <title>What’s new in pmdarima &mdash; pmdarima 1.3.1.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'./',
-              VERSION:'1.3.0',
+              VERSION:'1.3.1.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -75,7 +75,7 @@
             
             
               <div class="version">
-                1.3.0
+                1.3.1.dev0
               </div>
             
           
@@ -104,13 +104,14 @@
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">What's New?</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">v1.3.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">v1.2.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">v1.2.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id7">v1.1.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id9">v1.1.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id13">v1.0.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id14">v0.9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">v1.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">v1.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">v1.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">v1.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">v1.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">v1.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">v1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id16">v0.9.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-8-1">v0.8.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-7-0">v0.7.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-6-5">v0.6.5</a></li>
@@ -185,7 +186,14 @@
 <p>As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.</p>
 <div class="section" id="id1">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.3.0/">v1.3.0</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.3.1/">v1.3.1</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixes <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/191">#191</a>, an issue where
+the OCSB test could raise <code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">negative</span> <span class="pre">dimensions</span> <span class="pre">are</span> <span class="pre">not</span> <span class="pre">allowed&quot;</span> <span class="pre">in</span> <span class="pre">OCSB</span> <span class="pre">test</span></code></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.3.0/">v1.3.0</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Adds a new dataset for stock prediction, along with an associated example (<code class="docutils literal notranslate"><span class="pre">load_msft</span></code>)</li>
 <li>Fixes a bug in <code class="docutils literal notranslate"><span class="pre">predict_in_sample</span></code>, as addressed in <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/140">#140</a>.</li>
@@ -195,14 +203,14 @@ v0.8.1) will document the latest features.</p>
 This fixes <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/146">#146</a></li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.2.1/">v1.2.1</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.2.1/">v1.2.1</a><a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Pins scipy at 1.2.0 to avoid a statsmodels bug.</li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.2.0/">v1.2.0</a><a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id7">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.2.0/">v1.2.0</a><a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Adds the <code class="docutils literal notranslate"><span class="pre">OCSBTest</span></code> of seasonality, as discussed in <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/88">#88</a></li>
 <li>Default value of <code class="docutils literal notranslate"><span class="pre">seasonal_test</span></code> changes from “ch” to “ocsb” in <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></li>
@@ -239,8 +247,8 @@ stacking of transformers together.</li>
 to be used with pipelines.</li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.1.1/">v1.1.1</a><a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id9">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.1.1/">v1.1.1</a><a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
 <p>v1.1.1 is a patch release in response to <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/104">#104</a></p>
 <ul class="simple">
 <li>Deprecates the <code class="docutils literal notranslate"><span class="pre">ARIMA.add_new_observations</span></code> method. This method originally was designed to support
@@ -256,8 +264,8 @@ statsmodels does). The default value used to be 50 for all models.</li>
 overriding the use of their corresponding instance attributes.</li>
 </ul>
 </div>
-<div class="section" id="id9">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.1.0/">v1.1.0</a><a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id11">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.1.0/">v1.1.0</a><a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Adds <code class="docutils literal notranslate"><span class="pre">ARIMA.plot_diagnostics</span></code> method, as requested in <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/49">#49</a></li>
 <li>Adds new arg to <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> constructor and <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code>: <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> (default is True).</li>
@@ -278,8 +286,8 @@ than <code class="docutils literal notranslate"><span class="pre">&quot;method=q
 <li>Python 3.7 is now supported(!!)</li>
 </ul>
 </div>
-<div class="section" id="id13">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.0.0/">v1.0.0</a><a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id15">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.0.0/">v1.0.0</a><a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><strong>Wheels are no longer built for Python versions &lt; 3.5.</strong> You may still be able to build
 from source, but support for 2.x python versions will diminish in future versions.</li>
@@ -299,8 +307,8 @@ will be completely switched over in version 1.2.0:<ul>
 </li>
 </ul>
 </div>
-<div class="section" id="id14">
-<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/0.9.0/">v0.9.0</a><a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id16">
+<h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/0.9.0/">v0.9.0</a><a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Explicitly catches case in <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> where a value of <code class="docutils literal notranslate"><span class="pre">m</span></code> that is too large may over-estimate
 <code class="docutils literal notranslate"><span class="pre">D</span></code>, causing the time series to be differenced down to an empty array. This is now handled by
