@@ -25,6 +25,7 @@ import pickle
 import pytest
 import time
 import os
+from os.path import abspath, dirname
 
 
 # initialize the random state
@@ -1031,3 +1032,18 @@ def test_AutoARIMA_class():
     mod.update(test, maxiter=2)
     new_endog = mod.model_.arima_res_.data.endog
     assert_array_almost_equal(wineind, new_endog)
+
+
+# "ValueError: negative dimensions are not allowed" in OCSB test
+def test_issue_191():
+    X = pd.read_csv(
+        os.path.join(abspath(dirname(__file__)), 'data', 'issue_191.csv'))
+    y = X[X.columns[1]].values
+    auto_arima(
+        y,
+        error_action="warn",
+        seasonal=True,
+        m=12,
+        alpha=0.05,
+        suppress_warnings=True,
+        trace=True)
