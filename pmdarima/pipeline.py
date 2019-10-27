@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from itertools import islice
+import warnings
 
 from sklearn.base import BaseEstimator, clone
 from sklearn.utils.validation import check_is_fitted
 
 from .base import BaseARIMA
 from .preprocessing.base import BaseTransformer
+from .preprocessing.endog.base import BaseEndogTransformer
 from .preprocessing.exog.base import BaseExogTransformer, BaseExogFeaturizer
 
 __all__ = ['Pipeline']
@@ -194,7 +196,8 @@ class Pipeline(BaseEstimator):
         return self
 
     def predict(self, n_periods=10, exogenous=None,
-                return_conf_int=False, alpha=0.05, **kwargs):
+                return_conf_int=False, alpha=0.05, inverse_transform=True,
+                **kwargs):
         """Forecast future (transformed) values
 
         Generate predictions (forecasts) ``n_periods`` in the future.
@@ -221,6 +224,9 @@ class Pipeline(BaseEstimator):
         alpha : float, optional (default=0.05)
             The confidence intervals for the forecasts are (1 - alpha) %
 
+        inverse_transform : bool, optional (default=True)
+            Whether to inverse transform predictions, if they are in
+
         **kwargs : keyword args
             Extra keyword arguments used for each stage's ``transform`` stage
             and the estimator's ``predict`` stage. Similar to scikit-learn
@@ -241,6 +247,13 @@ class Pipeline(BaseEstimator):
             ``return_conf_int`` is True.
         """
         check_is_fitted(self, "steps_")
+
+        # we don't currently support this... it will require an API change
+        # TODO: fix this ^
+        if inverse_transform and return_conf_int:
+            warnings.warn("Inverse transformation on confidence intervals not "
+                          "currently supported, will not inverse transform")
+            inverse_transform = False
 
         # Push the arrays through the transformer stages, but ONLY the exog
         # transformer stages since we don't have a Y...
@@ -265,10 +278,28 @@ class Pipeline(BaseEstimator):
 
         # Now we should be able to run the prediction
         nm, est = self.steps_[-1]
-        return est.predict(
+        return_vals = est.predict(
             n_periods=n_periods, exogenous=Xt,
             return_conf_int=return_conf_int,
             alpha=alpha, **named_kwargs[nm])
+
+        if not inverse_transform:
+            return return_vals
+
+        # TODO: support inverse transform on confidence intervals
+        y_pred = return_vals
+        conf_ints = None
+        if return_conf_int:
+            y_pred, conf_ints = y_pred
+
+        # step through transformers in the reverse order
+        for name, transformer in self.steps_[::-1]:
+            if isinstance(transformer, BaseEndogTransformer):
+                y_pred, Xt = transformer.inverse_transform(y_pred, Xt)
+
+        if return_conf_int:
+            return y_pred, conf_ints
+        return y_pred
 
     def update(self, y, exogenous=None, maxiter=None, **kwargs):
         """Update an ARIMA or auto-ARIMA as well as any necessary transformers
