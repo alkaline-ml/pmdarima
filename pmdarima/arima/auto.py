@@ -151,9 +151,11 @@ class AutoARIMA(BaseARIMA):
 
     @if_has_delegate("model_")
     def predict_in_sample(self, exogenous=None, start=None,
-                          end=None, dynamic=False):
+                          end=None, dynamic=False, return_conf_int=False,
+                          alpha=0.05, typ='levels'):
         return self.model_.predict_in_sample(
-            exogenous=exogenous, start=start, end=end, dynamic=dynamic)
+            exogenous=exogenous, start=start, end=end, dynamic=dynamic,
+            return_conf_int=return_conf_int, alpha=alpha, typ=typ)
 
     @if_has_delegate("model_")
     def predict(self, n_periods=10, exogenous=None,

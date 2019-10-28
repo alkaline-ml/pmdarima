@@ -108,7 +108,8 @@ def test_pipeline_behavior():
     pipeline = Pipeline([
         ("fourier", FourierFeaturizer(m=12)),
         ("arima", AutoARIMA(seasonal=False, stepwise=True,
-                            suppress_warnings=True,
+                            suppress_warnings=True, d=1, max_p=2, max_q=0,
+                            start_q=0, start_p=1,
                             maxiter=3, error_action='ignore'))
     ])
 
@@ -165,7 +166,10 @@ def test_pipeline_behavior():
     Pipeline([
         ("boxcox", BoxCoxEndogTransformer()),
         ("fourier", FourierFeaturizer(m=12)),
-        ("arima", ARIMA(order=(2, 1, 0)))
+        ("arima", AutoARIMA(seasonal=False, stepwise=True,
+                            suppress_warnings=True, d=1, max_p=2, max_q=0,
+                            start_q=0, start_p=1,
+                            maxiter=3, error_action='ignore'))
     ]),
 ])
 @pytest.mark.parametrize('exog', [(None, None), (x_train, x_test)])
