@@ -160,6 +160,13 @@ def test_pipeline_behavior():
         ("fourier", FourierFeaturizer(m=12)),
         ("arima", ARIMA(order=(2, 1, 0)))
     ]),
+
+    # one with a boxcox transformer
+    Pipeline([
+        ("boxcox", BoxCoxEndogTransformer()),
+        ("fourier", FourierFeaturizer(m=12)),
+        ("arima", ARIMA(order=(2, 1, 0)))
+    ]),
 ])
 @pytest.mark.parametrize('exog', [(None, None), (x_train, x_test)])
 @pytest.mark.parametrize('inverse_transform', [True, False])
