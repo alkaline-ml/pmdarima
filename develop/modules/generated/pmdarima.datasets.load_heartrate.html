@@ -195,7 +195,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.datasets" title="pmdarima.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code></a>.load_heartrate<a class="headerlink" href="#pmdarima-datasets-load-heartrate" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.datasets.load_heartrate">
-<code class="descclassname">pmdarima.datasets.</code><code class="descname">load_heartrate</code><span class="sig-paren">(</span><em>as_series=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/ff51d25/pmdarima/datasets/heartrate.py#L13"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/heartrate.html#load_heartrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.datasets.load_heartrate" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.datasets.</code><code class="descname">load_heartrate</code><span class="sig-paren">(</span><em>as_series=False</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/datasets/heartrate.py#L13"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/heartrate.html#load_heartrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.datasets.load_heartrate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uniform heart-rate data.</p>
 <p>A sample of heartrate data borrowed from an
 <a class="reference external" href="http://ecg.mit.edu/time-series/">MIT database</a>. The sample consists
@@ -208,6 +208,11 @@ of 150 evenly spaced (0.5 seconds) heartrate measurements.</p>
 <blockquote>
 <div><p>Whether to return a Pandas series. If False, will return a 1d
 numpy array.</p>
+</div></blockquote>
+<p><strong>dtype</strong> : type, optional (default=np.float64)</p>
+<blockquote>
+<div><p>The type to return for the array. Default is np.float64, which is used
+throughout the package as the default type.</p>
 </div></blockquote>
 </td>
 </tr>

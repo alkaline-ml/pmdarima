@@ -168,17 +168,17 @@
   <h1>Source code for pmdarima.datasets.airpassengers</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">..compat</span> <span class="k">import</span> <span class="n">DTYPE</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;load_airpassengers&#39;</span>
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="load_airpassengers"><a class="viewcode-back" href="../../../modules/generated/pmdarima.datasets.load_airpassengers.html#pmdarima.datasets.load_airpassengers">[docs]</a><span class="k">def</span> <span class="nf">load_airpassengers</span><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="load_airpassengers"><a class="viewcode-back" href="../../../modules/generated/pmdarima.datasets.load_airpassengers.html#pmdarima.datasets.load_airpassengers">[docs]</a><span class="k">def</span> <span class="nf">load_airpassengers</span><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Monthly airline passengers.</span>
 
 <span class="sd">    The classic Box &amp; Jenkins airline data. Monthly totals of international</span>
@@ -189,6 +189,10 @@
 <span class="sd">    as_series : bool, optional (default=False)</span>
 <span class="sd">        Whether to return a Pandas series. If False, will return a 1d</span>
 <span class="sd">        numpy array.</span>
+
+<span class="sd">    dtype : type, optional (default=np.float64)</span>
+<span class="sd">        The type to return for the array. Default is np.float64, which is used</span>
+<span class="sd">        throughout the package as the default type.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -245,7 +249,7 @@
         <span class="mi">340</span><span class="p">,</span> <span class="mi">318</span><span class="p">,</span> <span class="mi">362</span><span class="p">,</span> <span class="mi">348</span><span class="p">,</span> <span class="mi">363</span><span class="p">,</span> <span class="mi">435</span><span class="p">,</span> <span class="mi">491</span><span class="p">,</span> <span class="mi">505</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="mi">359</span><span class="p">,</span> <span class="mi">310</span><span class="p">,</span> <span class="mi">337</span><span class="p">,</span>
         <span class="mi">360</span><span class="p">,</span> <span class="mi">342</span><span class="p">,</span> <span class="mi">406</span><span class="p">,</span> <span class="mi">396</span><span class="p">,</span> <span class="mi">420</span><span class="p">,</span> <span class="mi">472</span><span class="p">,</span> <span class="mi">548</span><span class="p">,</span> <span class="mi">559</span><span class="p">,</span> <span class="mi">463</span><span class="p">,</span> <span class="mi">407</span><span class="p">,</span> <span class="mi">362</span><span class="p">,</span> <span class="mi">405</span><span class="p">,</span>
         <span class="mi">417</span><span class="p">,</span> <span class="mi">391</span><span class="p">,</span> <span class="mi">419</span><span class="p">,</span> <span class="mi">461</span><span class="p">,</span> <span class="mi">472</span><span class="p">,</span> <span class="mi">535</span><span class="p">,</span> <span class="mi">622</span><span class="p">,</span> <span class="mi">606</span><span class="p">,</span> <span class="mi">508</span><span class="p">,</span> <span class="mi">461</span><span class="p">,</span> <span class="mi">390</span><span class="p">,</span> <span class="mi">432</span>
-    <span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">as_series</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">rslt</span><span class="p">)</span>

@@ -169,13 +169,17 @@
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">islice</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">clone</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseARIMA</span>
 <span class="kn">from</span> <span class="nn">.preprocessing.base</span> <span class="k">import</span> <span class="n">BaseTransformer</span>
+<span class="kn">from</span> <span class="nn">.preprocessing.endog.base</span> <span class="k">import</span> <span class="n">BaseEndogTransformer</span>
 <span class="kn">from</span> <span class="nn">.preprocessing.exog.base</span> <span class="k">import</span> <span class="n">BaseExogTransformer</span><span class="p">,</span> <span class="n">BaseExogFeaturizer</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">check_endog</span>
+<span class="kn">from</span> <span class="nn">.compat</span> <span class="k">import</span> <span class="n">DTYPE</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Pipeline&#39;</span><span class="p">]</span>
 
@@ -343,9 +347,12 @@
         <span class="c1"># Shallow copy</span>
         <span class="n">steps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_steps</span><span class="p">()</span>
 
-        <span class="n">yt</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">yt</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">Xt</span> <span class="o">=</span> <span class="n">exogenous</span>
         <span class="n">named_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">fit_kwargs</span><span class="p">)</span>
+
+        <span class="c1"># store original shape for later in-sample preds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples_</span> <span class="o">=</span> <span class="n">yt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">step_idx</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">transformer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span><span class="p">(</span><span class="n">with_final</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="n">cloned_transformer</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">transformer</span><span class="p">)</span>
@@ -361,8 +368,123 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_final_estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
+    <span class="k">def</span> <span class="nf">_pre_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Runs transformation steps before predicting on data&quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;steps_&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Push the arrays through the transformer stages, but ONLY the exog</span>
+        <span class="c1"># transformer stages since we don&#39;t have a Y...</span>
+        <span class="n">Xt</span> <span class="o">=</span> <span class="n">exogenous</span>
+        <span class="n">named_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">step_idx</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">transformer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span><span class="p">(</span><span class="n">with_final</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">BaseExogTransformer</span><span class="p">):</span>
+                <span class="n">kw</span> <span class="o">=</span> <span class="n">named_kwargs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+                <span class="c1"># If it&#39;s a featurizer, we may also need to add &#39;n_periods&#39;</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">BaseExogFeaturizer</span><span class="p">):</span>
+                    <span class="n">num_p</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_periods&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">num_p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">num_p</span> <span class="o">!=</span> <span class="n">n_periods</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Manually set &#39;n_periods&#39; kwarg for &quot;</span>
+                                         <span class="s2">&quot;step &#39;</span><span class="si">%s</span><span class="s2">&#39; differs from forecasting &quot;</span>
+                                         <span class="s2">&quot;n_periods (</span><span class="si">%r</span><span class="s2"> != </span><span class="si">%r</span><span class="s2">)&quot;</span>
+                                         <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">num_p</span><span class="p">,</span> <span class="n">n_periods</span><span class="p">))</span>
+                    <span class="n">kw</span><span class="p">[</span><span class="s2">&quot;n_periods&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_periods</span>
+
+                <span class="n">_</span><span class="p">,</span> <span class="n">Xt</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+        <span class="c1"># Now we should be able to run the prediction</span>
+        <span class="n">nm</span><span class="p">,</span> <span class="n">est</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Xt</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">named_kwargs</span><span class="p">[</span><span class="n">nm</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Pipeline.predict_in_sample"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline.predict_in_sample">[docs]</a>    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;levels&#39;</span><span class="p">,</span> <span class="n">inverse_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate in-sample predictions from the fit pipeline.</span>
+
+<span class="sd">        Predicts the original training (in-sample) time series values. This can</span>
+<span class="sd">        be useful when wanting to visualize the fit, and qualitatively inspect</span>
+<span class="sd">        the efficacy of the model, or when wanting to compute the residuals</span>
+<span class="sd">        of the model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">            An optional 2-d array of exogenous variables. If provided, these</span>
+<span class="sd">            variables are used as additional features in the regression</span>
+<span class="sd">            operation. This should not include a constant or trend. Note that</span>
+<span class="sd">            if an ``ARIMA`` is fit on exogenous features, it must be provided</span>
+<span class="sd">            exogenous features for making predictions.</span>
+
+<span class="sd">        start : int, optional (default=None)</span>
+<span class="sd">            Zero-indexed observation number at which to start forecasting, ie.,</span>
+<span class="sd">            the first forecast is start.</span>
+
+<span class="sd">        end : int, optional (default=None)</span>
+<span class="sd">            Zero-indexed observation number at which to end forecasting, ie.,</span>
+<span class="sd">            the first forecast is start.</span>
+
+<span class="sd">        dynamic : bool, optional (default=False)</span>
+<span class="sd">            The `dynamic` keyword affects in-sample prediction. If dynamic</span>
+<span class="sd">            is False, then the in-sample lagged values are used for</span>
+<span class="sd">            prediction. If `dynamic` is True, then in-sample forecasts are</span>
+<span class="sd">            used in place of lagged dependent variables. The first forecasted</span>
+<span class="sd">            value is `start`.</span>
+
+<span class="sd">        return_conf_int : bool, optional (default=False)</span>
+<span class="sd">            Whether to get the confidence intervals of the forecasts.</span>
+
+<span class="sd">        alpha : float, optional (default=0.05)</span>
+<span class="sd">            The confidence intervals for the forecasts are (1 - alpha) %</span>
+
+<span class="sd">        typ : str, optional (default=&#39;levels&#39;)</span>
+<span class="sd">            The type of prediction to make. Options are (&#39;linear&#39;, &#39;levels&#39;).</span>
+<span class="sd">            This is only used when the underlying model is ARIMA (not ARMA or</span>
+<span class="sd">            SARIMAX).</span>
+
+<span class="sd">              - &#39;linear&#39;: makes linear predictions in terms of the differenced</span>
+<span class="sd">                endogenous variables.</span>
+<span class="sd">              - &#39;levels&#39;: predicts the levels of the original endogenous</span>
+<span class="sd">                variables.</span>
+
+<span class="sd">        inverse_transform : bool, optional (default=True)</span>
+<span class="sd">            Whether to inverse transform predictions, if they are in log or</span>
+<span class="sd">            BoxCox scale. Any endog transformer will be inverse-transformed.</span>
+
+<span class="sd">        **kwargs : keyword args</span>
+<span class="sd">            Extra keyword arguments used for each stage&#39;s ``transform`` stage.</span>
+<span class="sd">            Similar to scikit-learn pipeline keyword args, the keys are</span>
+<span class="sd">            compound, comprised of the stage name and the argument name</span>
+<span class="sd">            separated by a &quot;__&quot;. For instance, if you have a FourierFeaturizer</span>
+<span class="sd">            whose stage is named &quot;fourier&quot;, your transform kwargs could</span>
+<span class="sd">            resemble::</span>
+
+<span class="sd">                {&quot;fourier__n_periods&quot;: 50}</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        preds : array</span>
+<span class="sd">            The predicted values.</span>
+
+<span class="sd">        conf_int : array-like, shape=(n_periods, 2), optional</span>
+<span class="sd">            The confidence intervals for the predictions. Only returned if</span>
+<span class="sd">            ``return_conf_int`` is True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Xt</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">predict_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_predict</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">return_vals</span> <span class="o">=</span> <span class="n">est</span><span class="o">.</span><span class="n">predict_in_sample</span><span class="p">(</span>
+            <span class="n">exogenous</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+            <span class="n">return_conf_int</span><span class="o">=</span><span class="n">return_conf_int</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">predict_kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post_predict</span><span class="p">(</span>
+            <span class="n">Xt</span><span class="p">,</span> <span class="n">return_vals</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="p">,</span> <span class="n">inverse_transform</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Pipeline.predict"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">inverse_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Forecast future (transformed) values</span>
 
 <span class="sd">        Generate predictions (forecasts) ``n_periods`` in the future.</span>
@@ -389,6 +511,10 @@
 <span class="sd">        alpha : float, optional (default=0.05)</span>
 <span class="sd">            The confidence intervals for the forecasts are (1 - alpha) %</span>
 
+<span class="sd">        inverse_transform : bool, optional (default=True)</span>
+<span class="sd">            Whether to inverse transform predictions, if they are in log or</span>
+<span class="sd">            BoxCox scale. Any endog transformer will be inverse-transformed.</span>
+
 <span class="sd">        **kwargs : keyword args</span>
 <span class="sd">            Extra keyword arguments used for each stage&#39;s ``transform`` stage</span>
 <span class="sd">            and the estimator&#39;s ``predict`` stage. Similar to scikit-learn</span>
@@ -408,35 +534,47 @@
 <span class="sd">            The confidence intervals for the forecasts. Only returned if</span>
 <span class="sd">            ``return_conf_int`` is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;steps_&quot;</span><span class="p">)</span>
+        <span class="n">Xt</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">predict_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_predict</span><span class="p">(</span>
+            <span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="c1"># Push the arrays through the transformer stages, but ONLY the exog</span>
-        <span class="c1"># transformer stages since we don&#39;t have a Y...</span>
-        <span class="n">Xt</span> <span class="o">=</span> <span class="n">exogenous</span>
-        <span class="n">named_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">step_idx</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">transformer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span><span class="p">(</span><span class="n">with_final</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">BaseExogTransformer</span><span class="p">):</span>
-                <span class="n">kw</span> <span class="o">=</span> <span class="n">named_kwargs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-
-                <span class="c1"># If it&#39;s a featurizer, we may also need to add &#39;n_periods&#39;</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">BaseExogFeaturizer</span><span class="p">):</span>
-                    <span class="n">num_p</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_periods&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">num_p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">num_p</span> <span class="o">!=</span> <span class="n">n_periods</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Manually set &#39;n_periods&#39; kwarg for &quot;</span>
-                                         <span class="s2">&quot;step &#39;</span><span class="si">%s</span><span class="s2">&#39; differs from forecasting &quot;</span>
-                                         <span class="s2">&quot;n_periods (</span><span class="si">%r</span><span class="s2"> != </span><span class="si">%r</span><span class="s2">)&quot;</span>
-                                         <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">num_p</span><span class="p">,</span> <span class="n">n_periods</span><span class="p">))</span>
-                    <span class="n">kw</span><span class="p">[</span><span class="s2">&quot;n_periods&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_periods</span>
-
-                <span class="n">_</span><span class="p">,</span> <span class="n">Xt</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-
-        <span class="c1"># Now we should be able to run the prediction</span>
-        <span class="n">nm</span><span class="p">,</span> <span class="n">est</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">est</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+        <span class="n">return_vals</span> <span class="o">=</span> <span class="n">est</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
             <span class="n">n_periods</span><span class="o">=</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span>
             <span class="n">return_conf_int</span><span class="o">=</span><span class="n">return_conf_int</span><span class="p">,</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="o">**</span><span class="n">named_kwargs</span><span class="p">[</span><span class="n">nm</span><span class="p">])</span></div>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="o">**</span><span class="n">predict_kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post_predict</span><span class="p">(</span>
+            <span class="n">Xt</span><span class="p">,</span> <span class="n">return_vals</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="p">,</span> <span class="n">inverse_transform</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_post_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Xt</span><span class="p">,</span> <span class="n">return_vals</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="p">,</span>
+                      <span class="n">inverse_transform</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inverse-transform predictions to original data scale&quot;&quot;&quot;</span>
+
+        <span class="c1"># we don&#39;t currently support this... it will require an API change</span>
+        <span class="c1"># to also inverse-transform the 2-d confidence intervals</span>
+        <span class="c1"># TODO: fix this ^</span>
+        <span class="k">if</span> <span class="n">inverse_transform</span> <span class="ow">and</span> <span class="n">return_conf_int</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Inverse transformation on confidence intervals not &quot;</span>
+                          <span class="s2">&quot;currently supported, will not inverse transform&quot;</span><span class="p">,</span>
+                          <span class="ne">UserWarning</span><span class="p">)</span>
+            <span class="n">inverse_transform</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inverse_transform</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">return_vals</span>
+
+        <span class="c1"># TODO: support inverse transform on confidence intervals</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">return_vals</span>
+        <span class="n">conf_ints</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">return_conf_int</span><span class="p">:</span>
+            <span class="n">y_pred</span><span class="p">,</span> <span class="n">conf_ints</span> <span class="o">=</span> <span class="n">y_pred</span>
+
+        <span class="c1"># step through transformers in the reverse order</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">transformer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps_</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">BaseEndogTransformer</span><span class="p">):</span>
+                <span class="n">y_pred</span><span class="p">,</span> <span class="n">Xt</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">Xt</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">return_conf_int</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">conf_ints</span>
+        <span class="k">return</span> <span class="n">y_pred</span>
 
 <div class="viewcode-block" id="Pipeline.update"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update an ARIMA or auto-ARIMA as well as any necessary transformers</span>

@@ -189,7 +189,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.pipeline" title="pmdarima.pipeline"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code></a>.Pipeline<a class="headerlink" href="#pmdarima-pipeline-pipeline" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.pipeline.Pipeline">
-<em class="property">class </em><code class="descclassname">pmdarima.pipeline.</code><code class="descname">Pipeline</code><span class="sig-paren">(</span><em>steps</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/ff51d25/pmdarima/pipeline.py#L15"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.pipeline.</code><code class="descname">Pipeline</code><span class="sig-paren">(</span><em>steps</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/pipeline.py#L19"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline" title="Permalink to this definition">¶</a></dt>
 <dd><p>A pipeline of transformers with an optional final estimator stage</p>
 <p>The pipeline object chains together an arbitrary number of named, ordered
 transformations, passing the output from one as the input to the next. As
@@ -271,23 +271,26 @@ an ARIMA or AutoARIMA estimator.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.predict" title="pmdarima.pipeline.Pipeline.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>([n_periods,&nbsp;exogenous,&nbsp;…])</td>
 <td>Forecast future (transformed) values</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.set_params" title="pmdarima.pipeline.Pipeline.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.predict_in_sample" title="pmdarima.pipeline.Pipeline.predict_in_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict_in_sample</span></code></a>([exogenous,&nbsp;start,&nbsp;end,&nbsp;…])</td>
+<td>Generate in-sample predictions from the fit pipeline.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.set_params" title="pmdarima.pipeline.Pipeline.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</td>
 <td>Set the parameters of this estimator.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.update" title="pmdarima.pipeline.Pipeline.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(y[,&nbsp;exogenous,&nbsp;maxiter])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pmdarima.pipeline.Pipeline.update" title="pmdarima.pipeline.Pipeline.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(y[,&nbsp;exogenous,&nbsp;maxiter])</td>
 <td>Update an ARIMA or auto-ARIMA as well as any necessary transformers</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="pmdarima.pipeline.Pipeline.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>steps</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/ff51d25/pmdarima/pipeline.py#L65"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>steps</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/pipeline.py#L69"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.pipeline.Pipeline.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**fit_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/ff51d25/pmdarima/pipeline.py#L143"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**fit_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/pipeline.py#L147"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the pipeline of transformers and the ARIMA model</p>
 <p>Chain the time-series and exogenous arrays through a series of
 transformations, fitting each stage along the way, finally fitting an
@@ -331,7 +334,7 @@ separated by a “__”. For instance, if fitting an ARIMA in stage
 
 <dl class="method">
 <dt id="pmdarima.pipeline.Pipeline.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/ff51d25/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -362,7 +365,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.pipeline.Pipeline.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>n_periods=10</em>, <em>exogenous=None</em>, <em>return_conf_int=False</em>, <em>alpha=0.05</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/ff51d25/pmdarima/pipeline.py#L196"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.predict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict</code><span class="sig-paren">(</span><em>n_periods=10</em>, <em>exogenous=None</em>, <em>return_conf_int=False</em>, <em>alpha=0.05</em>, <em>inverse_transform=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/pipeline.py#L317"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Forecast future (transformed) values</p>
 <p>Generate predictions (forecasts) <code class="docutils literal notranslate"><span class="pre">n_periods</span></code> in the future.
 Note that if <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> variables were used in the model fit, they
@@ -392,6 +395,11 @@ exogenous features for making predictions.</p>
 <p><strong>alpha</strong> : float, optional (default=0.05)</p>
 <blockquote>
 <div><p>The confidence intervals for the forecasts are (1 - alpha) %</p>
+</div></blockquote>
+<p><strong>inverse_transform</strong> : bool, optional (default=True)</p>
+<blockquote>
+<div><p>Whether to inverse transform predictions, if they are in log or
+BoxCox scale. Any endog transformer will be inverse-transformed.</p>
 </div></blockquote>
 <p><strong>**kwargs</strong> : keyword args</p>
 <blockquote>
@@ -423,8 +431,102 @@ if you have a FourierFeaturizer whose stage is named
 </dd></dl>
 
 <dl class="method">
+<dt id="pmdarima.pipeline.Pipeline.predict_in_sample">
+<code class="descname">predict_in_sample</code><span class="sig-paren">(</span><em>exogenous=None</em>, <em>start=None</em>, <em>end=None</em>, <em>dynamic=False</em>, <em>return_conf_int=False</em>, <em>alpha=0.05</em>, <em>typ='levels'</em>, <em>inverse_transform=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/pipeline.py#L232"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.predict_in_sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.predict_in_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate in-sample predictions from the fit pipeline.</p>
+<p>Predicts the original training (in-sample) time series values. This can
+be useful when wanting to visualize the fit, and qualitatively inspect
+the efficacy of the model, or when wanting to compute the residuals
+of the model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>exogenous</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
+<blockquote>
+<div><p>An optional 2-d array of exogenous variables. If provided, these
+variables are used as additional features in the regression
+operation. This should not include a constant or trend. Note that
+if an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> is fit on exogenous features, it must be provided
+exogenous features for making predictions.</p>
+</div></blockquote>
+<p><strong>start</strong> : int, optional (default=None)</p>
+<blockquote>
+<div><p>Zero-indexed observation number at which to start forecasting, ie.,
+the first forecast is start.</p>
+</div></blockquote>
+<p><strong>end</strong> : int, optional (default=None)</p>
+<blockquote>
+<div><p>Zero-indexed observation number at which to end forecasting, ie.,
+the first forecast is start.</p>
+</div></blockquote>
+<p><strong>dynamic</strong> : bool, optional (default=False)</p>
+<blockquote>
+<div><p>The <cite>dynamic</cite> keyword affects in-sample prediction. If dynamic
+is False, then the in-sample lagged values are used for
+prediction. If <cite>dynamic</cite> is True, then in-sample forecasts are
+used in place of lagged dependent variables. The first forecasted
+value is <cite>start</cite>.</p>
+</div></blockquote>
+<p><strong>return_conf_int</strong> : bool, optional (default=False)</p>
+<blockquote>
+<div><p>Whether to get the confidence intervals of the forecasts.</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float, optional (default=0.05)</p>
+<blockquote>
+<div><p>The confidence intervals for the forecasts are (1 - alpha) %</p>
+</div></blockquote>
+<p><strong>typ</strong> : str, optional (default=’levels’)</p>
+<blockquote>
+<div><p>The type of prediction to make. Options are (‘linear’, ‘levels’).
+This is only used when the underlying model is ARIMA (not ARMA or
+SARIMAX).</p>
+<blockquote>
+<div><ul class="simple">
+<li>‘linear’: makes linear predictions in terms of the differenced
+endogenous variables.</li>
+<li>‘levels’: predicts the levels of the original endogenous
+variables.</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p><strong>inverse_transform</strong> : bool, optional (default=True)</p>
+<blockquote>
+<div><p>Whether to inverse transform predictions, if they are in log or
+BoxCox scale. Any endog transformer will be inverse-transformed.</p>
+</div></blockquote>
+<p><strong>**kwargs</strong> : keyword args</p>
+<blockquote>
+<div><p>Extra keyword arguments used for each stage’s <code class="docutils literal notranslate"><span class="pre">transform</span></code> stage.
+Similar to scikit-learn pipeline keyword args, the keys are
+compound, comprised of the stage name and the argument name
+separated by a “__”. For instance, if you have a FourierFeaturizer
+whose stage is named “fourier”, your transform kwargs could
+resemble:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;fourier__n_periods&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>preds</strong> : array</p>
+<blockquote>
+<div><p>The predicted values.</p>
+</div></blockquote>
+<p><strong>conf_int</strong> : array-like, shape=(n_periods, 2), optional</p>
+<blockquote class="last">
+<div><p>The confidence intervals for the predictions. Only returned if
+<code class="docutils literal notranslate"><span class="pre">return_conf_int</span></code> is True.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pmdarima.pipeline.Pipeline.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/ff51d25/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -442,7 +544,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.pipeline.Pipeline.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>maxiter=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/ff51d25/pmdarima/pipeline.py#L273"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>maxiter=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/pipeline.py#L411"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update an ARIMA or auto-ARIMA as well as any necessary transformers</p>
 <p>Passes the newly observed values through the appropriate endog
 transformations, and the exogenous array through the exog transformers

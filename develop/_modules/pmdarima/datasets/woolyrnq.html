@@ -172,17 +172,17 @@
 <span class="c1">#</span>
 <span class="c1"># This is the woolyrnq dataset found in the R forecast package.</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">..compat</span> <span class="k">import</span> <span class="n">DTYPE</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;load_woolyrnq&#39;</span>
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="load_woolyrnq"><a class="viewcode-back" href="../../../modules/generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq">[docs]</a><span class="k">def</span> <span class="nf">load_woolyrnq</span><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="load_woolyrnq"><a class="viewcode-back" href="../../../modules/generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq">[docs]</a><span class="k">def</span> <span class="nf">load_woolyrnq</span><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Quarterly production of woollen yarn in Australia.</span>
 
 <span class="sd">    This time-series records the quarterly production (in tonnes) of woollen</span>
@@ -193,6 +193,10 @@
 <span class="sd">    as_series : bool, optional (default=False)</span>
 <span class="sd">        Whether to return a Pandas series. If True, the index will be set to</span>
 <span class="sd">        the observed years/quarters. If False, will return a 1d numpy array.</span>
+
+<span class="sd">    dtype : type, optional (default=np.float64)</span>
+<span class="sd">        The type to return for the array. Default is np.float64, which is used</span>
+<span class="sd">        throughout the package as the default type.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -262,7 +266,7 @@
         <span class="mi">3827</span><span class="p">,</span> <span class="mi">4987</span><span class="p">,</span> <span class="mi">5222</span><span class="p">,</span> <span class="mi">4928</span><span class="p">,</span>
         <span class="mi">3930</span><span class="p">,</span> <span class="mi">4469</span><span class="p">,</span> <span class="mi">4954</span><span class="p">,</span> <span class="mi">4752</span><span class="p">,</span>
         <span class="mi">3888</span><span class="p">,</span> <span class="mi">4588</span><span class="p">,</span> <span class="mi">5309</span><span class="p">,</span> <span class="mi">4732</span><span class="p">,</span>
-        <span class="mi">4837</span><span class="p">,</span> <span class="mi">6135</span><span class="p">,</span> <span class="mi">6396</span><span class="p">])</span>
+        <span class="mi">4837</span><span class="p">,</span> <span class="mi">6135</span><span class="p">,</span> <span class="mi">6396</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">as_series</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">rslt</span>
