@@ -6,11 +6,11 @@
 
 from __future__ import absolute_import
 
-from sklearn.utils.validation import check_array, column_or_1d
+from sklearn.utils.validation import column_or_1d
 import numpy as np
 
 from ..utils import get_callable
-from ..utils.array import diff
+from ..utils.array import diff, check_endog
 from ..compat.numpy import DTYPE
 from .stationarity import KPSSTest, ADFTest, PPTest
 from .seasonality import CHTest, OCSBTest
@@ -96,8 +96,7 @@ def nsdiffs(x, m, max_D=2, test='ocsb', **kwargs):
     # get the test - this validates m internally
     testfunc = get_callable(test, VALID_STESTS)(m, **kwargs)\
         .estimate_seasonal_differencing_term
-    x = column_or_1d(check_array(x, ensure_2d=False,
-                                 force_all_finite=True, dtype=DTYPE))
+    x = check_endog(x, dtype=DTYPE, copy=False)
 
     if is_constant(x):
         return 0
@@ -157,8 +156,7 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
 
     # get the test
     testfunc = get_callable(test, VALID_TESTS)(alpha, **kwargs).should_diff
-    x = column_or_1d(check_array(x, ensure_2d=False,
-                                 force_all_finite=True, dtype=DTYPE))
+    x = check_endog(x, dtype=DTYPE, copy=False)
 
     # base case, if constant return 0
     d = 0

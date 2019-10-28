@@ -6,10 +6,9 @@
 
 from __future__ import absolute_import
 
-from sklearn.utils.validation import check_array, column_or_1d
 import numpy as np
 
-from ..utils.array import c
+from ..utils.array import c, check_endog
 from ..utils import get_callable
 from ..compat.numpy import DTYPE
 
@@ -56,9 +55,7 @@ def _regularize(x, y, ties):
         One of {'ordered', 'mean'}, handles the ties.
     """
     x, y = [
-        column_or_1d(check_array(arr, ensure_2d=False,
-                                 force_all_finite=False,
-                                 dtype=DTYPE))
+        check_endog(arr, dtype=DTYPE)
         for arr in (x, y)
     ]
 

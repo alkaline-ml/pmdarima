@@ -8,7 +8,6 @@ from __future__ import absolute_import
 
 from joblib import Parallel, delayed
 import numpy as np
-from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.utils import check_random_state
 from sklearn.linear_model import LinearRegression
 import time
@@ -17,7 +16,7 @@ import warnings
 from ..base import BaseARIMA
 from . import _doc
 from .utils import ndiffs, is_constant, nsdiffs
-from ..utils import diff, is_iterable
+from ..utils import diff, is_iterable, check_endog
 from ..utils.metaestimators import if_has_delegate
 from ._auto_solvers import _fit_arima, _StepwiseFitWrapper
 from .warnings import ModelFitWarning
@@ -152,9 +151,11 @@ class AutoARIMA(BaseARIMA):
 
     @if_has_delegate("model_")
     def predict_in_sample(self, exogenous=None, start=None,
-                          end=None, dynamic=False):
+                          end=None, dynamic=False, return_conf_int=False,
+                          alpha=0.05, typ='levels'):
         return self.model_.predict_in_sample(
-            exogenous=exogenous, start=start, end=end, dynamic=dynamic)
+            exogenous=exogenous, start=start, end=end, dynamic=dynamic,
+            return_conf_int=return_conf_int, alpha=alpha, typ=typ)
 
     @if_has_delegate("model_")
     def predict(self, n_periods=10, exogenous=None,
@@ -247,8 +248,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                          % (actions, error_action))
 
     # copy array
-    y = column_or_1d(check_array(y, ensure_2d=False, dtype=DTYPE, copy=True,
-                                 force_all_finite=True))  # type: np.ndarray
+    y = check_endog(y, dtype=DTYPE)
     n_samples = y.shape[0]
 
     sarimax_kwargs = {} if not sarimax_kwargs else sarimax_kwargs

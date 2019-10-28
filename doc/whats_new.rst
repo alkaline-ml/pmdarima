@@ -14,6 +14,13 @@ v0.8.1) will document the latest features.
 * Fixes `#191 <https://github.com/tgsmith61591/pmdarima/issues/191>`_, an issue where
   the OCSB test could raise ``ValueError: negative dimensions are not allowed" in OCSB test``
 
+* Add option to automatically inverse-transform endogenous transformations when predicting
+  from pipelines (`#197 <https://github.com/tgsmith61591/pmdarima/issues/197>`_)
+
+* Add ``predict_in_sample`` to pipeline (`#196 <https://github.com/tgsmith61591/pmdarima/issues/196>`_)
+
+* Parameterize ``dtype`` option in datasets module
+
 
 `v1.3.0 <http://alkaline-ml.com/pmdarima/1.3.0/>`_
 --------------------------------------------------

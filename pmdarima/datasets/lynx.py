@@ -4,17 +4,17 @@
 #
 # This is the lynx dataset found in R.
 
-from __future__ import absolute_import
-
 import numpy as np
 import pandas as pd
+
+from ..compat import DTYPE
 
 __all__ = [
     'load_lynx'
 ]
 
 
-def load_lynx(as_series=False):
+def load_lynx(as_series=False, dtype=DTYPE):
     """Annual numbers of lynx trappings for 1821–1934 in Canada.
 
     This time-series records the number of skins of predators (lynx) that were
@@ -27,6 +27,10 @@ def load_lynx(as_series=False):
     as_series : bool, optional (default=False)
         Whether to return a Pandas series. If True, the index will be set to
         the observed years. If False, will return a 1d numpy array.
+
+    dtype : type, optional (default=np.float64)
+        The type to return for the array. Default is np.float64, which is used
+        throughout the package as the default type.
 
     Examples
     --------
@@ -81,7 +85,7 @@ def load_lynx(as_series=False):
                      1307, 3465, 6991, 6313, 3794, 1836, 345, 382, 808,
                      1388, 2713, 3800, 3091, 2985, 3790, 674, 81, 80,
                      108, 229, 399, 1132, 2432, 3574, 2935, 1537, 529,
-                     485, 662, 1000, 1590, 2657, 3396])
+                     485, 662, 1000, 1590, 2657, 3396]).astype(dtype)
 
     # Set the index if necessary
     if as_series:

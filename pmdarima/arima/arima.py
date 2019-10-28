@@ -9,8 +9,7 @@ from __future__ import print_function, absolute_import, division
 
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
-from sklearn.utils.validation import check_array, check_is_fitted, \
-    column_or_1d as c1d
+from sklearn.utils.validation import check_is_fitted, check_array
 
 from statsmodels.tsa.arima_model import ARIMA as _ARIMA
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
@@ -26,7 +25,7 @@ from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.python import long
 from ..compat import statsmodels as sm_compat
 from ..decorators import deprecated
-from ..utils import get_callable, if_has_delegate, is_iterable
+from ..utils import get_callable, if_has_delegate, is_iterable, check_endog
 from ..utils.visualization import _get_plt
 
 # Get the version
@@ -448,8 +447,7 @@ class ARIMA(BaseARIMA):
         **fit_args : dict or kwargs
             Any keyword arguments to pass to the statsmodels ARIMA fit.
         """
-        y = c1d(check_array(y, ensure_2d=False, force_all_finite=False,
-                            copy=True, dtype=DTYPE))  # type: np.ndarray
+        y = check_endog(y, dtype=DTYPE)
         n_samples = y.shape[0]
 
         # if exog was included, check the array...
@@ -850,8 +848,7 @@ class ARIMA(BaseARIMA):
             y = [y]
 
         # validate the new samples to add
-        y = c1d(check_array(y, ensure_2d=False, force_all_finite=False,
-                            copy=True, dtype=DTYPE))  # type: np.ndarray
+        y = check_endog(y, dtype=DTYPE)
         n_samples = y.shape[0]
 
         # if exogenous is None and new exog provided, or vice versa, raise

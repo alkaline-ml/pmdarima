@@ -7,7 +7,6 @@
 from __future__ import absolute_import, division
 
 from sklearn.base import BaseEstimator
-from sklearn.utils.validation import column_or_1d, check_array
 from sklearn.linear_model import LinearRegression
 import six
 
@@ -17,7 +16,7 @@ import numpy as np
 
 from ..compat.numpy import DTYPE
 from ..decorators import deprecated
-from ..utils.array import c, diff
+from ..utils.array import c, diff, check_endog
 from .approx import approx
 
 import warnings
@@ -169,9 +168,7 @@ class KPSSTest(_DifferencingStationarityTest):
             return np.nan, False
 
         # ensure vector
-        x = column_or_1d(check_array(
-            x, ensure_2d=False, dtype=DTYPE,
-            force_all_finite=True))  # type: np.ndarray
+        x = check_endog(x, dtype=DTYPE)
         n = x.shape[0]
 
         # check on status of null
@@ -330,9 +327,7 @@ class ADFTest(_DifferencingStationarityTest):
             return np.nan, False
 
         # ensure vector
-        x = column_or_1d(check_array(
-            x, ensure_2d=False, dtype=DTYPE,
-            force_all_finite=True))  # type: np.ndarray
+        x = check_endog(x, dtype=DTYPE)
 
         # if k is none...
         k = self.k
@@ -447,9 +442,7 @@ class PPTest(_DifferencingStationarityTest):
             return np.nan, False
 
         # ensure vector
-        x = column_or_1d(check_array(
-            x, ensure_2d=False, dtype=DTYPE,
-            force_all_finite=True))  # type: np.ndarray
+        x = check_endog(x, dtype=DTYPE)
 
         # embed the vector. This is some funkiness that goes on in the R
         # code... basically, make a matrix where the column (rows if not T)
