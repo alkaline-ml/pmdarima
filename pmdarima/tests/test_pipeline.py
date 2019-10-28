@@ -5,8 +5,16 @@ from pmdarima.pipeline import Pipeline
 from pmdarima.preprocessing import BoxCoxEndogTransformer, FourierFeaturizer
 from pmdarima.arima import ARIMA, AutoARIMA
 from pmdarima.datasets import load_wineind
+import numpy as np
 
 import pytest
+
+rs = np.random.RandomState(42)
+wineind = load_wineind()
+xreg = rs.rand(wineind.shape[0], 2)
+
+train, test = wineind[:125], wineind[125:]
+x_train, x_test = xreg[:125], xreg[125:]
 
 
 class TestIllegal:
@@ -97,9 +105,6 @@ def test_get_kwargs(pipe, kwargs, expected):
 
 
 def test_pipeline_behavior():
-    wineind = load_wineind()
-    train, test = wineind[:125], wineind[125:]
-
     pipeline = Pipeline([
         ("fourier", FourierFeaturizer(m=12)),
         ("arima", AutoARIMA(seasonal=False, stepwise=True,
@@ -131,3 +136,55 @@ def test_pipeline_behavior():
 
     # And that the fourier transformer was updated properly...
     assert pipeline.steps_[0][1].n_ == wineind.shape[0]
+
+
+@pytest.mark.parametrize('pipeline', [
+    Pipeline([
+        ("arma", ARIMA(order=(2, 0, 0)))
+    ]),
+
+    Pipeline([
+        ("arima", ARIMA(order=(2, 1, 0)))
+    ]),
+
+    Pipeline([
+        ("sarimax", ARIMA(order=(2, 1, 0), seasonal_order=(1, 0, 0, 12)))
+    ]),
+
+    Pipeline([
+        ("fourier", FourierFeaturizer(m=12)),
+        ("arma", ARIMA(order=(2, 0, 0)))
+    ]),
+
+    Pipeline([
+        ("fourier", FourierFeaturizer(m=12)),
+        ("arima", ARIMA(order=(2, 1, 0)))
+    ]),
+])
+@pytest.mark.parametrize('exog', [(None, None), (x_train, x_test)])
+@pytest.mark.parametrize('inverse_transform', [True, False])
+@pytest.mark.parametrize('return_conf_ints', [True, False])
+def test_pipeline_predict_inverse_transform(pipeline, exog, inverse_transform,
+                                            return_conf_ints):
+    exog_train, exog_test = exog
+
+    pipeline.fit(train, exogenous=exog_train)
+
+    # first predict
+    predictions = pipeline.predict(
+        n_periods=test.shape[0],
+        exogenous=exog_test,
+        inverse_transform=inverse_transform,
+        return_conf_int=return_conf_ints)
+
+    if return_conf_ints:
+        assert isinstance(predictions, tuple) and len(predictions) == 2
+
+    # now in sample
+    in_sample = pipeline.predict_in_sample(
+        exogenous=exog_train,
+        inverse_transform=inverse_transform,
+        return_conf_int=return_conf_ints)
+
+    if return_conf_ints:
+        assert isinstance(in_sample, tuple) and len(in_sample) == 2

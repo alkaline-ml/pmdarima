@@ -10,6 +10,8 @@ from .base import BaseARIMA
 from .preprocessing.base import BaseTransformer
 from .preprocessing.endog.base import BaseEndogTransformer
 from .preprocessing.exog.base import BaseExogTransformer, BaseExogFeaturizer
+from .utils import check_endog
+from .compat import DTYPE
 
 __all__ = ['Pipeline']
 
@@ -177,9 +179,12 @@ class Pipeline(BaseEstimator):
         # Shallow copy
         steps = self.steps_ = self._validate_steps()
 
-        yt = y
+        yt = check_endog(y, dtype=DTYPE, copy=False)
         Xt = exogenous
         named_kwargs = self._get_kwargs(**fit_kwargs)
+
+        # store original shape for later in-sample preds
+        self.n_samples_ = yt.shape[0]
 
         for step_idx, name, transformer in self._iter(with_final=False):
             cloned_transformer = clone(transformer)
@@ -194,6 +199,120 @@ class Pipeline(BaseEstimator):
         kwargs = named_kwargs[steps[-1][0]]
         self._final_estimator.fit(yt, exogenous=Xt, **kwargs)
         return self
+
+    def _pre_predict(self, n_periods, exogenous, **kwargs):
+        """Runs transformation steps before predicting on data"""
+        check_is_fitted(self, "steps_")
+
+        # Push the arrays through the transformer stages, but ONLY the exog
+        # transformer stages since we don't have a Y...
+        Xt = exogenous
+        named_kwargs = self._get_kwargs(**kwargs)
+
+        for step_idx, name, transformer in self._iter(with_final=False):
+            if isinstance(transformer, BaseExogTransformer):
+                kw = named_kwargs[name]
+
+                # If it's a featurizer, we may also need to add 'n_periods'
+                if isinstance(transformer, BaseExogFeaturizer):
+                    num_p = kw.get("n_periods", None)
+                    if num_p is not None and num_p != n_periods:
+                        raise ValueError("Manually set 'n_periods' kwarg for "
+                                         "step '%s' differs from forecasting "
+                                         "n_periods (%r != %r)"
+                                         % (name, num_p, n_periods))
+                    kw["n_periods"] = n_periods
+
+                _, Xt = transformer.transform(y=None, exogenous=Xt, **kw)
+
+        # Now we should be able to run the prediction
+        nm, est = self.steps_[-1]
+        return Xt, est, named_kwargs[nm]
+
+    def predict_in_sample(self, exogenous=None, start=None,
+                          end=None, dynamic=False, return_conf_int=False,
+                          alpha=0.05, typ='levels', inverse_transform=True,
+                          **kwargs):
+        """Generate in-sample predictions from the fit pipeline.
+
+        Predicts the original training (in-sample) time series values. This can
+        be useful when wanting to visualize the fit, and qualitatively inspect
+        the efficacy of the model, or when wanting to compute the residuals
+        of the model.
+
+        Parameters
+        ----------
+        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+            An optional 2-d array of exogenous variables. If provided, these
+            variables are used as additional features in the regression
+            operation. This should not include a constant or trend. Note that
+            if an ``ARIMA`` is fit on exogenous features, it must be provided
+            exogenous features for making predictions.
+
+        start : int, optional (default=None)
+            Zero-indexed observation number at which to start forecasting, ie.,
+            the first forecast is start.
+
+        end : int, optional (default=None)
+            Zero-indexed observation number at which to end forecasting, ie.,
+            the first forecast is start.
+
+        dynamic : bool, optional (default=False)
+            The `dynamic` keyword affects in-sample prediction. If dynamic
+            is False, then the in-sample lagged values are used for
+            prediction. If `dynamic` is True, then in-sample forecasts are
+            used in place of lagged dependent variables. The first forecasted
+            value is `start`.
+
+        return_conf_int : bool, optional (default=False)
+            Whether to get the confidence intervals of the forecasts.
+
+        alpha : float, optional (default=0.05)
+            The confidence intervals for the forecasts are (1 - alpha) %
+
+        typ : str, optional (default='levels')
+            The type of prediction to make. Options are ('linear', 'levels').
+            This is only used when the underlying model is ARIMA (not ARMA or
+            SARIMAX).
+
+              - 'linear': makes linear predictions in terms of the differenced
+                endogenous variables.
+              - 'levels': predicts the levels of the original endogenous
+                variables.
+
+        inverse_transform : bool, optional (default=True)
+            Whether to inverse transform predictions, if they are in log or
+            BoxCox scale. Any endog transformer will be inverse-transformed.
+
+        **kwargs : keyword args
+            Extra keyword arguments used for each stage's ``transform`` stage.
+            Similar to scikit-learn pipeline keyword args, the keys are
+            compound, comprised of the stage name and the argument name
+            separated by a "__". For instance, if you have a FourierFeaturizer
+            whose stage is named "fourier", your transform kwargs could
+            resemble::
+
+                {"fourier__n_periods": 50}
+
+        Returns
+        -------
+        preds : array
+            The predicted values.
+
+        conf_int : array-like, shape=(n_periods, 2), optional
+            The confidence intervals for the predictions. Only returned if
+            ``return_conf_int`` is True.
+        """
+        Xt, est, predict_kwargs = self._pre_predict(0, exogenous, **kwargs)
+
+        return_vals = est.predict_in_sample(
+            exogenous=Xt, start=start, end=end,
+            return_conf_int=return_conf_int,
+            alpha=alpha, typ=typ, dynamic=dynamic,
+            **predict_kwargs)
+
+        return self._post_predict(
+            Xt, return_vals, return_conf_int, inverse_transform)
 
     def predict(self, n_periods=10, exogenous=None,
                 return_conf_int=False, alpha=0.05, inverse_transform=True,
@@ -225,7 +344,8 @@ class Pipeline(BaseEstimator):
             The confidence intervals for the forecasts are (1 - alpha) %
 
         inverse_transform : bool, optional (default=True)
-            Whether to inverse transform predictions, if they are in
+            Whether to inverse transform predictions, if they are in log or
+            BoxCox scale. Any endog transformer will be inverse-transformed.
 
         **kwargs : keyword args
             Extra keyword arguments used for each stage's ``transform`` stage
@@ -246,42 +366,29 @@ class Pipeline(BaseEstimator):
             The confidence intervals for the forecasts. Only returned if
             ``return_conf_int`` is True.
         """
-        check_is_fitted(self, "steps_")
+        Xt, est, predict_kwargs = self._pre_predict(
+            n_periods, exogenous, **kwargs)
 
-        # we don't currently support this... it will require an API change
-        # TODO: fix this ^
-        if inverse_transform and return_conf_int:
-            warnings.warn("Inverse transformation on confidence intervals not "
-                          "currently supported, will not inverse transform")
-            inverse_transform = False
-
-        # Push the arrays through the transformer stages, but ONLY the exog
-        # transformer stages since we don't have a Y...
-        Xt = exogenous
-        named_kwargs = self._get_kwargs(**kwargs)
-
-        for step_idx, name, transformer in self._iter(with_final=False):
-            if isinstance(transformer, BaseExogTransformer):
-                kw = named_kwargs[name]
-
-                # If it's a featurizer, we may also need to add 'n_periods'
-                if isinstance(transformer, BaseExogFeaturizer):
-                    num_p = kw.get("n_periods", None)
-                    if num_p is not None and num_p != n_periods:
-                        raise ValueError("Manually set 'n_periods' kwarg for "
-                                         "step '%s' differs from forecasting "
-                                         "n_periods (%r != %r)"
-                                         % (name, num_p, n_periods))
-                    kw["n_periods"] = n_periods
-
-                _, Xt = transformer.transform(y=None, exogenous=Xt, **kw)
-
-        # Now we should be able to run the prediction
-        nm, est = self.steps_[-1]
         return_vals = est.predict(
             n_periods=n_periods, exogenous=Xt,
             return_conf_int=return_conf_int,
-            alpha=alpha, **named_kwargs[nm])
+            alpha=alpha, **predict_kwargs)
+
+        return self._post_predict(
+            Xt, return_vals, return_conf_int, inverse_transform)
+
+    def _post_predict(self, Xt, return_vals, return_conf_int,
+                      inverse_transform):
+        """Inverse-transform predictions to original data scale"""
+
+        # we don't currently support this... it will require an API change
+        # to also inverse-transform the 2-d confidence intervals
+        # TODO: fix this ^
+        if inverse_transform and return_conf_int:
+            warnings.warn("Inverse transformation on confidence intervals not "
+                          "currently supported, will not inverse transform",
+                          UserWarning)
+            inverse_transform = False
 
         if not inverse_transform:
             return return_vals

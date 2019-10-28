@@ -125,6 +125,24 @@ def test_predict_in_sample_conf_int(model, expected_m_dim):
     assert confints.shape == (expected_m_dim, 2)
 
 
+@pytest.mark.parametrize(
+    'model', [
+        ARIMA(order=(2, 0, 0)),  # arma
+        ARIMA(order=(2, 1, 0)),  # arima
+        ARIMA(order=(2, 1, 0), seasonal_order=(1, 0, 0, 12)),  # sarimax
+    ]
+)
+@pytest.mark.parametrize('exog', [None, rs.rand(wineind.shape[0], 2)])
+@pytest.mark.parametrize('confints', [True, False])
+def test_predict_in_sample_exog(model, exog, confints):
+    model.fit(wineind, exogenous=exog)
+    res = model.predict_in_sample(exog, return_conf_int=confints)
+    if confints:
+        assert isinstance(res, tuple) and len(res) == 2
+    else:
+        assert isinstance(res, np.ndarray)
+
+
 def test_with_oob():
     # show we can fit with CV (kinda)
     arima = ARIMA(order=(2, 1, 2),

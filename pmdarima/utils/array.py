@@ -12,9 +12,12 @@ import six
 import numpy as np
 import pandas as pd
 
+from ..compat import DTYPE
+
 __all__ = [
     'as_series',
     'c',
+    'check_endog',
     'diff',
     'is_iterable'
 ]
@@ -135,6 +138,19 @@ def c(*args):
     return np.concatenate([a if is_iterable(a) else [a] for a in args])
 
 
+def check_endog(y, dtype=DTYPE, copy=True):
+    """Wrapper for ``check_array`` and ``column_or_1d`` from sklearn
+
+    Returns
+    -------
+    y : np.ndarray, shape=(n_samples,)
+        A 1d numpy ndarray
+    """
+    return column_or_1d(
+        check_array(y, ensure_2d=False, force_all_finite=False,
+                    copy=copy, dtype=dtype))  # type: np.ndarray
+
+
 def _diff_vector(x, lag):
     # compute the lag for a vector (not a matrix)
     n = x.shape[0]
@@ -217,7 +233,7 @@ def diff(x, lag=1, differences=1):
     if any(v < 1 for v in (lag, differences)):
         raise ValueError('lag and differences must be positive (> 0) integers')
 
-    x = check_array(x, ensure_2d=False, dtype=np.float32)  # type: np.ndarray
+    x = check_array(x, ensure_2d=False, dtype=DTYPE, copy=False)
     fun = _diff_vector if x.ndim == 1 else _diff_matrix
     res = x
 

@@ -8,7 +8,6 @@ from __future__ import absolute_import
 
 from joblib import Parallel, delayed
 import numpy as np
-from sklearn.utils.validation import check_array, column_or_1d
 from sklearn.utils import check_random_state
 from sklearn.linear_model import LinearRegression
 import time
@@ -17,7 +16,7 @@ import warnings
 from ..base import BaseARIMA
 from . import _doc
 from .utils import ndiffs, is_constant, nsdiffs
-from ..utils import diff, is_iterable
+from ..utils import diff, is_iterable, check_endog
 from ..utils.metaestimators import if_has_delegate
 from ._auto_solvers import _fit_arima, _StepwiseFitWrapper
 from .warnings import ModelFitWarning
@@ -247,8 +246,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                          % (actions, error_action))
 
     # copy array
-    y = column_or_1d(check_array(y, ensure_2d=False, dtype=DTYPE, copy=True,
-                                 force_all_finite=True))  # type: np.ndarray
+    y = check_endog(y, dtype=DTYPE)
     n_samples = y.shape[0]
 
     sarimax_kwargs = {} if not sarimax_kwargs else sarimax_kwargs
