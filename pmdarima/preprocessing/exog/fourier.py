@@ -154,9 +154,10 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
 
         if n_periods and exog is not None:
             if n_periods != exog.shape[0]:
-                raise ValueError(f"If n_periods and exog are specified, "
-                                 f"n_periods must match dims of exogenous "
-                                 f"({n_periods} != {exog.shape[0]})")
+                raise ValueError("If n_periods and exog are specified, "
+                                 "n_periods must match dims of exogenous "
+                                 "({0} != {1})"
+                                 .format(n_periods, exog.shape[0]))
 
         times = np.arange(self.n_ + n_periods, dtype=np.float64) + 1
         X_fourier = _fourier_terms(self.p_, times)
