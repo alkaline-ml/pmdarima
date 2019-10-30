@@ -25,6 +25,7 @@ import pickle
 import pytest
 import time
 import os
+from os.path import abspath, dirname
 
 
 # initialize the random state
@@ -122,6 +123,24 @@ def test_predict_in_sample_conf_int(model, expected_m_dim):
     preds, confints = model.predict_in_sample(return_conf_int=True, alpha=0.05)
     assert preds.shape[0] == expected_m_dim
     assert confints.shape == (expected_m_dim, 2)
+
+
+@pytest.mark.parametrize(
+    'model', [
+        ARIMA(order=(2, 0, 0)),  # arma
+        ARIMA(order=(2, 1, 0)),  # arima
+        ARIMA(order=(2, 1, 0), seasonal_order=(1, 0, 0, 12)),  # sarimax
+    ]
+)
+@pytest.mark.parametrize('exog', [None, rs.rand(wineind.shape[0], 2)])
+@pytest.mark.parametrize('confints', [True, False])
+def test_predict_in_sample_exog(model, exog, confints):
+    model.fit(wineind, exogenous=exog)
+    res = model.predict_in_sample(exog, return_conf_int=confints)
+    if confints:
+        assert isinstance(res, tuple) and len(res) == 2
+    else:
+        assert isinstance(res, np.ndarray)
 
 
 def test_with_oob():
@@ -1031,3 +1050,18 @@ def test_AutoARIMA_class():
     mod.update(test, maxiter=2)
     new_endog = mod.model_.arima_res_.data.endog
     assert_array_almost_equal(wineind, new_endog)
+
+
+# "ValueError: negative dimensions are not allowed" in OCSB test
+def test_issue_191():
+    X = pd.read_csv(
+        os.path.join(abspath(dirname(__file__)), 'data', 'issue_191.csv'))
+    y = X[X.columns[1]].values
+    auto_arima(
+        y,
+        error_action="warn",
+        seasonal=True,
+        m=12,
+        alpha=0.05,
+        suppress_warnings=True,
+        trace=True)

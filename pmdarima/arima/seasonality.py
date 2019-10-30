@@ -8,7 +8,6 @@ from __future__ import absolute_import, division
 
 import six
 from sklearn.linear_model import LinearRegression
-from sklearn.utils.validation import column_or_1d, check_array
 
 from scipy.linalg import svd
 from statsmodels import api as sm
@@ -21,7 +20,7 @@ import numpy as np
 from .arima import _aicc
 from ..compat.numpy import DTYPE
 from .stationarity import _BaseStationarityTest
-from ..utils.array import c, diff
+from ..utils.array import c, diff, check_endog
 
 from ._arima import C_canova_hansen_sd_test
 
@@ -226,9 +225,7 @@ class CHTest(_SeasonalStationarityTest):
             return 0
 
         # ensure vector
-        x = column_or_1d(check_array(
-            x, ensure_2d=False, dtype=DTYPE,
-            force_all_finite=True))  # type: np.ndarray
+        x = check_endog(x, dtype=DTYPE)
 
         n = x.shape[0]
         m = int(self.m)
@@ -329,7 +326,7 @@ class OCSBTest(_SeasonalStationarityTest):
     @staticmethod
     def _gen_lags(y, max_lag, omit_na=True):
         """Create the lagged exogenous array used to fit the linear model"""
-        if max_lag == 0:
+        if max_lag <= 0:
             return np.zeros(y.shape[0])
 
         # delegate down
@@ -342,7 +339,7 @@ class OCSBTest(_SeasonalStationarityTest):
         y = diff(y_first_order_diff)
         ylag = OCSBTest._gen_lags(y, lag)
 
-        if max_lag > 0:
+        if max_lag > -1:
             # y = tail(y, -maxlag)
             y = y[max_lag:]
 
@@ -450,9 +447,7 @@ class OCSBTest(_SeasonalStationarityTest):
             return 0
 
         # ensure vector
-        x = column_or_1d(
-            check_array(x, ensure_2d=False, dtype=np.float64,
-                        force_all_finite=True))  # type: np.ndarray
+        x = check_endog(x, dtype=DTYPE)
 
         # Get the critical value for m
         stat = self._compute_test_statistic(x)

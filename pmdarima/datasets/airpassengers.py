@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-
 import numpy as np
 import pandas as pd
+
+from ..compat import DTYPE
 
 __all__ = [
     'load_airpassengers'
 ]
 
 
-def load_airpassengers(as_series=False):
+def load_airpassengers(as_series=False, dtype=DTYPE):
     """Monthly airline passengers.
 
     The classic Box & Jenkins airline data. Monthly totals of international
@@ -21,6 +21,10 @@ def load_airpassengers(as_series=False):
     as_series : bool, optional (default=False)
         Whether to return a Pandas series. If False, will return a 1d
         numpy array.
+
+    dtype : type, optional (default=np.float64)
+        The type to return for the array. Default is np.float64, which is used
+        throughout the package as the default type.
 
     Returns
     -------
@@ -77,7 +81,7 @@ def load_airpassengers(as_series=False):
         340, 318, 362, 348, 363, 435, 491, 505, 404, 359, 310, 337,
         360, 342, 406, 396, 420, 472, 548, 559, 463, 407, 362, 405,
         417, 391, 419, 461, 472, 535, 622, 606, 508, 461, 390, 432
-    ]).astype(np.float64)
+    ]).astype(dtype)
 
     if as_series:
         return pd.Series(rslt)

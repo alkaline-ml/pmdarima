@@ -104,7 +104,8 @@ else
                         "_static"
                         "auto_examples"
                         "includes"
-                        "modules")
+                        "modules"
+                        "usecases")
 
   for artifact in "${artifacts[@]}"
   do

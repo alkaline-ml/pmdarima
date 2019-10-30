@@ -4,17 +4,17 @@
 #
 # This is the woolyrnq dataset found in the R forecast package.
 
-from __future__ import absolute_import
-
 import numpy as np
 import pandas as pd
+
+from ..compat import DTYPE
 
 __all__ = [
     'load_woolyrnq'
 ]
 
 
-def load_woolyrnq(as_series=False):
+def load_woolyrnq(as_series=False, dtype=DTYPE):
     """Quarterly production of woollen yarn in Australia.
 
     This time-series records the quarterly production (in tonnes) of woollen
@@ -25,6 +25,10 @@ def load_woolyrnq(as_series=False):
     as_series : bool, optional (default=False)
         Whether to return a Pandas series. If True, the index will be set to
         the observed years/quarters. If False, will return a 1d numpy array.
+
+    dtype : type, optional (default=np.float64)
+        The type to return for the array. Default is np.float64, which is used
+        throughout the package as the default type.
 
     Examples
     --------
@@ -94,7 +98,7 @@ def load_woolyrnq(as_series=False):
         3827, 4987, 5222, 4928,
         3930, 4469, 4954, 4752,
         3888, 4588, 5309, 4732,
-        4837, 6135, 6396])
+        4837, 6135, 6396]).astype(dtype)
 
     if not as_series:
         return rslt
