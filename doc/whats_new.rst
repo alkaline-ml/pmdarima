@@ -8,7 +8,7 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
-`v1.3.1 <http://alkaline-ml.com/pmdarima/1.3.1/>`_
+`v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
 --------------------------------------------------
 
 * Fixes `#191 <https://github.com/tgsmith61591/pmdarima/issues/191>`_, an issue where
@@ -20,6 +20,12 @@ v0.8.1) will document the latest features.
 * Add ``predict_in_sample`` to pipeline (`#196 <https://github.com/tgsmith61591/pmdarima/issues/196>`_)
 
 * Parameterize ``dtype`` option in datasets module
+
+* Adds the ``model_selection`` submodule, which defines several different cross-validation
+  techniques:
+
+  - :class:`pmdarima.model_selection.RollingForecastCV`
+  - :class:`pmdarima.model_selection.SlidingWindowForecastCV`
 
 
 `v1.3.0 <http://alkaline-ml.com/pmdarima/1.3.0/>`_

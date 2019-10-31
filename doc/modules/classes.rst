@@ -130,6 +130,31 @@ Metrics
     metrics.smape
 
 
+.. _model_selection_ref:
+
+:mod:`pmdarima.model_selection`: Cross-validation classes
+=========================================================
+
+The ``pmdarima.model_selection`` submodule defines several different strategies
+for cross-validating time series models
+
+.. automodule:: pmdarima.model_selection
+    :no-members:
+    :no-inherited-members:
+
+Cross validators
+----------------
+
+.. currentmodule:: pmdarima
+
+.. autosummary::
+    :toctree: generated/
+    :template: class.rst
+
+    model_selection.RollingForecastCV
+    model_selection.SlidingWindowForecastCV
+
+
 .. _pipeline_ref:
 
 :mod:`pmdarima.pipeline`: Pipelining transformers & ARIMAs
