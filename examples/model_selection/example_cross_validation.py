@@ -36,10 +36,13 @@ model2 = pm.ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12))
 cv = model_selection.SlidingWindowForecastCV(window_size=100, step=24, h=1)
 
 model1_cv_scores = model_selection.cross_val_score(
-    model1, train, scoring='mean_squared_error', cv=cv, verbose=2)
+    model1, train, scoring='smape', cv=cv, verbose=2)
 
 model2_cv_scores = model_selection.cross_val_score(
-    model2, train, scoring='mean_squared_error', cv=cv, verbose=2)
+    model2, train, scoring='smape', cv=cv, verbose=2)
+
+print("Model 1 CV scores: {}".format(model1_cv_scores.tolist()))
+print("Model 2 CV scores: {}".format(model2_cv_scores.tolist()))
 
 # Pick based on which has a lower mean error rate
 m1_average_error = np.average(model1_cv_scores)
@@ -49,6 +52,6 @@ models = [model1, model2]
 
 # print out the answer
 better_index = np.argmin(errors)  # type: int
-print("Lowest average MSE: {} (model{})".format(
+print("Lowest average SMAPE: {} (model{})".format(
     errors[better_index], better_index + 1))
 print("Best model: {}".format(models[better_index]))

@@ -10,7 +10,7 @@ import warnings
 import time
 from traceback import format_exception_only
 
-from sklearn.base import clone
+from sklearn import base
 from sklearn.metrics import regression as reg
 from sklearn.utils import indexable, safe_indexing
 
@@ -150,7 +150,7 @@ def cross_validate(estimator, y, exogenous=None, scoring=None, cv=None,
     #   . could cause cross threads in parallelism..
 
     results = [
-        _fit_and_score(fold, clone(estimator), y, exog,
+        _fit_and_score(fold, base.clone(estimator), y, exog,
                        scorer=scoring,
                        train=train,
                        test=test,
