@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.datasets.load_msft &mdash; pmdarima 1.3.1.dev0 documentation</title>
+  <title>pmdarima.datasets.load_msft &mdash; pmdarima 1.4.0.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../',
-              VERSION:'1.3.1.dev0',
+              VERSION:'1.4.0.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -51,7 +51,7 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pmdarima.datasets.load_wineind" href="pmdarima.datasets.load_wineind.html" />
+    <link rel="next" title="pmdarima.datasets.load_taylor" href="pmdarima.datasets.load_taylor.html" />
     <link rel="prev" title="pmdarima.datasets.load_lynx" href="pmdarima.datasets.load_lynx.html" /> 
 </head>
 
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.3.1.dev0
+                1.4.0.dev0
               </div>
             
           
@@ -110,6 +110,7 @@
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_heartrate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_heartrate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_lynx.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_lynx</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_msft</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_taylor.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_taylor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_wineind.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_wineind</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_woolyrnq.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_woolyrnq</a></li>
 </ul>
@@ -117,6 +118,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-metrics-time-series-metrics"><code class="docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>: Time-series metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-model-selection-cross-validation-classes"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>: Cross-validation classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a></li>
@@ -195,7 +197,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.datasets" title="pmdarima.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code></a>.load_msft<a class="headerlink" href="#pmdarima-datasets-load-msft" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.datasets.load_msft">
-<code class="descclassname">pmdarima.datasets.</code><code class="descname">load_msft</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/datasets/stocks.py#L20"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/stocks.html#load_msft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.datasets.load_msft" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.datasets.</code><code class="descname">load_msft</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/0d41985/pmdarima/datasets/stocks.py#L20"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/stocks.html#load_msft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.datasets.load_msft" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the microsoft stock data</p>
 <p>Financial data for the MSFT stock between the dates of Mar 13, 1986 and
 Nov 10, 2017. This data is part of the Kaggle stock dataset [1]. Features
@@ -224,10 +226,10 @@ are as follows:</p>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r63" rules="none">
+<table class="docutils citation" frame="void" id="r67" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R63]</a></td><td><a class="reference external" href="https://www.kaggle.com/borismarjanovic/price-volume-data-for-all-us-stocks-etfs">https://www.kaggle.com/borismarjanovic/price-volume-data-for-all-us-stocks-etfs</a>  # noqa:E501</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R67]</a></td><td><a class="reference external" href="https://www.kaggle.com/borismarjanovic/price-volume-data-for-all-us-stocks-etfs">https://www.kaggle.com/borismarjanovic/price-volume-data-for-all-us-stocks-etfs</a>  # noqa:E501</td></tr>
 </tbody>
 </table>
 </dd></dl>
@@ -242,7 +244,7 @@ are as follows:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pmdarima.datasets.load_wineind.html" class="btn btn-neutral float-right" title="pmdarima.datasets.load_wineind" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pmdarima.datasets.load_taylor.html" class="btn btn-neutral float-right" title="pmdarima.datasets.load_taylor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="pmdarima.datasets.load_lynx.html" class="btn btn-neutral float-left" title="pmdarima.datasets.load_lynx" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

@@ -33,15 +33,15 @@ which greatly simplifies your life.
 
  Out::
 
-    pmdarima version: 1.3.1.dev0
+    pmdarima version: 1.4.0.dev0
     Fit ARIMA: order=(2, 1, 2); AIC=nan, BIC=nan, Fit time=nan seconds
-    Fit ARIMA: order=(0, 1, 0); AIC=2942.625, BIC=2972.664, Fit time=0.031 seconds
-    Fit ARIMA: order=(1, 1, 0); AIC=2844.833, BIC=2877.876, Fit time=0.493 seconds
-    Fit ARIMA: order=(0, 1, 1); AIC=2809.063, BIC=2842.107, Fit time=0.684 seconds
-    Fit ARIMA: order=(1, 1, 1); AIC=2783.182, BIC=2819.229, Fit time=0.779 seconds
-    Fit ARIMA: order=(1, 1, 2); AIC=2812.945, BIC=2851.996, Fit time=0.712 seconds
-    Fit ARIMA: order=(2, 1, 1); AIC=2784.436, BIC=2823.488, Fit time=0.451 seconds
-    Total fit time: 3.174 seconds
+    Fit ARIMA: order=(0, 1, 0); AIC=2942.625, BIC=2972.664, Fit time=0.015 seconds
+    Fit ARIMA: order=(1, 1, 0); AIC=2844.833, BIC=2877.876, Fit time=0.276 seconds
+    Fit ARIMA: order=(0, 1, 1); AIC=2809.063, BIC=2842.107, Fit time=0.393 seconds
+    Fit ARIMA: order=(1, 1, 1); AIC=2783.182, BIC=2819.229, Fit time=0.418 seconds
+    Fit ARIMA: order=(1, 1, 2); AIC=2812.945, BIC=2851.996, Fit time=0.449 seconds
+    Fit ARIMA: order=(2, 1, 1); AIC=2784.436, BIC=2823.488, Fit time=0.237 seconds
+    Total fit time: 1.802 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
                     ('arima',
@@ -51,7 +51,7 @@ which greatly simplifies your life.
                                max_order=10, max_p=5, max_q=5, maxiter=None,
                                method=None, n_fits=10, n_jobs=1,
                                offset_test_args=None, out_of_sample_size=0,
-                               random=False, random_state=None, sarimax_kwargs={},
+                               random=False, random_state=None, sarimax_kwargs=None,
                                scoring='mse', scoring_args=None, seasonal=False,
                                seasonal_test='ocsb', seasonal_test_args=None,
                                solver='lbfgs', ...))])
@@ -157,7 +157,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  3.626 seconds)
+**Total running time of the script:** ( 0 minutes  1.999 seconds)
 
 
 

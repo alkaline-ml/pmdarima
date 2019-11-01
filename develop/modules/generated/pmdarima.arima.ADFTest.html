@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.arima.ADFTest &mdash; pmdarima 1.3.1.dev0 documentation</title>
+  <title>pmdarima.arima.ADFTest &mdash; pmdarima 1.4.0.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../',
-              VERSION:'1.3.1.dev0',
+              VERSION:'1.4.0.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.3.1.dev0
+                1.4.0.dev0
               </div>
             
           
@@ -119,6 +119,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-metrics-time-series-metrics"><code class="docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>: Time-series metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-model-selection-cross-validation-classes"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>: Cross-validation classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a></li>
@@ -197,7 +198,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.ADFTest<a class="headerlink" href="#pmdarima-arima-adftest" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.arima.ADFTest">
-<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">ADFTest</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>k=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/arima/stationarity.py#L221"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#ADFTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">ADFTest</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>k=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/0d41985/pmdarima/arima/stationarity.py#L221"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#ADFTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conduct an ADF test for stationarity.</p>
 <p>In statistics and econometrics, an augmented Dickey–Fuller test (ADF)
 tests the null hypothesis of a unit root is present in a time series
@@ -231,16 +232,16 @@ tests. This is due to the fact that is has to use statsmodels OLS
 regression for std err estimates rather than the more robust sklearn
 LinearRegression.</p>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r31" rules="none">
+<table class="docutils citation" frame="void" id="r35" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R31]</a></td><td><a class="reference external" href="https://wikipedia.org/wiki/Augmented_Dickey">https://wikipedia.org/wiki/Augmented_Dickey</a>–Fuller_test</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R35]</a></td><td><a class="reference external" href="https://wikipedia.org/wiki/Augmented_Dickey">https://wikipedia.org/wiki/Augmented_Dickey</a>–Fuller_test</td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r32" rules="none">
+<table class="docutils citation" frame="void" id="r36" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R32]</a></td><td>R’s tseries ADF source code: <a class="reference external" href="https://bit.ly/2EnvM5V">https://bit.ly/2EnvM5V</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R36]</a></td><td>R’s tseries ADF source code: <a class="reference external" href="https://bit.ly/2EnvM5V">https://bit.ly/2EnvM5V</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
@@ -266,13 +267,13 @@ LinearRegression.</p>
 </table>
 <dl class="method">
 <dt id="pmdarima.arima.ADFTest.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>k=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/arima/stationarity.py#L269"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#ADFTest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>k=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/0d41985/pmdarima/arima/stationarity.py#L269"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#ADFTest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.arima.ADFTest.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/0d41985/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -297,7 +298,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ADFTest.is_stationary">
-<code class="descname">is_stationary</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/decorators.py#L89"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.is_stationary" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_stationary</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/0d41985/pmdarima/decorators.py#L89"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.is_stationary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test whether the time series is stationary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -326,7 +327,7 @@ More directly, whether to difference the time series.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ADFTest.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/0d41985/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -344,7 +345,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ADFTest.should_diff">
-<code class="descname">should_diff</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/arima/stationarity.py#L309"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#ADFTest.should_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.should_diff" title="Permalink to this definition">¶</a></dt>
+<code class="descname">should_diff</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/0d41985/pmdarima/arima/stationarity.py#L309"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#ADFTest.should_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.should_diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test whether the time series is stationary or needs differencing.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

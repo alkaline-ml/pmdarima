@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.arima.arima &mdash; pmdarima 1.3.1.dev0 documentation</title>
+  <title>pmdarima.arima.arima &mdash; pmdarima 1.4.0.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../../',
-              VERSION:'1.3.1.dev0',
+              VERSION:'1.4.0.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                1.3.1.dev0
+                1.4.0.dev0
               </div>
             
           
@@ -478,10 +478,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">suppress_warnings</span> <span class="o">=</span> <span class="n">suppress_warnings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_of_sample_size</span> <span class="o">=</span> <span class="n">out_of_sample_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scoring</span> <span class="o">=</span> <span class="n">scoring</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">scoring_args</span> <span class="k">else</span> <span class="n">scoring_args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span> <span class="o">=</span> <span class="n">scoring_args</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trend</span> <span class="o">=</span> <span class="n">trend</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">with_intercept</span> <span class="o">=</span> <span class="n">with_intercept</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">sarimax_kwargs</span> <span class="k">else</span> <span class="n">sarimax_kwargs</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span> <span class="o">=</span> <span class="n">sarimax_kwargs</span></div>
 
     <span class="k">def</span> <span class="nf">_is_seasonal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
@@ -533,10 +533,12 @@
                         <span class="n">trend</span> <span class="o">=</span> <span class="kc">None</span>
 
                 <span class="c1"># create the SARIMAX</span>
+                <span class="n">sarimax_kwargs</span> <span class="o">=</span> \
+                    <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span>
                 <span class="n">arima</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">statespace</span><span class="o">.</span><span class="n">SARIMAX</span><span class="p">(</span>
                     <span class="n">endog</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
                     <span class="n">seasonal_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
-                    <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
+                    <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
 
             <span class="c1"># actually fit the model, now. If this was called from &#39;update&#39;,</span>
             <span class="c1"># give priority to start_params from the fit_args</span>
@@ -658,7 +660,8 @@
             <span class="c1"># get the predictions (use self.predict, which calls forecast</span>
             <span class="c1"># from statsmodels internally)</span>
             <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">cv_exog</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">oob_</span> <span class="o">=</span> <span class="n">scoring</span><span class="p">(</span><span class="n">cv_samples</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span><span class="p">)</span>
+            <span class="n">scoring_args</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">oob_</span> <span class="o">=</span> <span class="n">scoring</span><span class="p">(</span><span class="n">cv_samples</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="o">**</span><span class="n">scoring_args</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">oob_preds_</span> <span class="o">=</span> <span class="n">pred</span>
 
             <span class="c1"># If we compute out of sample scores, we have to now update the</span>

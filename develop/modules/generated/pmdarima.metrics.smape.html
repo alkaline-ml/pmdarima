@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.metrics.smape &mdash; pmdarima 1.3.1.dev0 documentation</title>
+  <title>pmdarima.metrics.smape &mdash; pmdarima 1.4.0.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../',
-              VERSION:'1.3.1.dev0',
+              VERSION:'1.4.0.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -51,7 +51,7 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pmdarima.pipeline.Pipeline" href="pmdarima.pipeline.Pipeline.html" />
+    <link rel="next" title="pmdarima.model_selection.RollingForecastCV" href="pmdarima.model_selection.RollingForecastCV.html" />
     <link rel="prev" title="pmdarima.datasets.load_woolyrnq" href="pmdarima.datasets.load_woolyrnq.html" /> 
 </head>
 
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.3.1.dev0
+                1.4.0.dev0
               </div>
             
           
@@ -111,6 +111,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-model-selection-cross-validation-classes"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>: Cross-validation classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a></li>
@@ -189,7 +190,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.metrics" title="pmdarima.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code></a>.smape<a class="headerlink" href="#pmdarima-metrics-smape" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.metrics.smape">
-<code class="descclassname">pmdarima.metrics.</code><code class="descname">smape</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/metrics.py#L17"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/metrics.html#smape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.metrics.smape" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.metrics.</code><code class="descname">smape</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/0d41985/pmdarima/metrics.py#L9"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/metrics.html#smape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.metrics.smape" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Symmetric Mean Absolute Percentage Error.</p>
 <p>The symmetric mean absolute percentage error (SMAPE) is an accuracy measure
 based on percentage (or relative) errors. Defined as follows:</p>
@@ -215,10 +216,10 @@ error rate.</p>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r66" rules="none">
+<table class="docutils citation" frame="void" id="r72" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R66]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error">https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error</a>  # noqa: E501</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R72]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error">https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error</a>  # noqa: E501</td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -245,7 +246,7 @@ error rate.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pmdarima.pipeline.Pipeline.html" class="btn btn-neutral float-right" title="pmdarima.pipeline.Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pmdarima.model_selection.RollingForecastCV.html" class="btn btn-neutral float-right" title="pmdarima.model_selection.RollingForecastCV" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="pmdarima.datasets.load_woolyrnq.html" class="btn btn-neutral float-left" title="pmdarima.datasets.load_woolyrnq" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

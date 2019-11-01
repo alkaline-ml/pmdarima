@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.utils.diff &mdash; pmdarima 1.3.1.dev0 documentation</title>
+  <title>pmdarima.utils.diff &mdash; pmdarima 1.4.0.dev0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../',
-              VERSION:'1.3.1.dev0',
+              VERSION:'1.4.0.dev0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.3.1.dev0
+                1.4.0.dev0
               </div>
             
           
@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-metrics-time-series-metrics"><code class="docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>: Time-series metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-model-selection-cross-validation-classes"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>: Cross-validation classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a><ul class="current">
@@ -196,7 +197,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.diff<a class="headerlink" href="#pmdarima-utils-diff" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.utils.diff">
-<code class="descclassname">pmdarima.utils.</code><code class="descname">diff</code><span class="sig-paren">(</span><em>x</em>, <em>lag=1</em>, <em>differences=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/8225e6c/pmdarima/utils/array.py#L168"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.diff" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.utils.</code><code class="descname">diff</code><span class="sig-paren">(</span><em>x</em>, <em>lag=1</em>, <em>differences=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/0d41985/pmdarima/utils/array.py#L168"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Difference an array.</p>
 <p>A python implementation of the R <code class="docutils literal notranslate"><span class="pre">diff</span></code> function [1]. This computes lag
 differences from an array given a <code class="docutils literal notranslate"><span class="pre">lag</span></code> and <code class="docutils literal notranslate"><span class="pre">differencing</span></code> term.</p>
@@ -230,10 +231,10 @@ then the computed result is equal to the successive differences
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r70" rules="none">
+<table class="docutils citation" frame="void" id="r78" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R70]</a></td><td><a class="reference external" href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html">https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R78]</a></td><td><a class="reference external" href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html">https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>

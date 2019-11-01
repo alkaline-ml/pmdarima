@@ -102,6 +102,7 @@ Dataset loading functions
     datasets.load_heartrate
     datasets.load_lynx
     datasets.load_msft
+    datasets.load_taylor
     datasets.load_wineind
     datasets.load_woolyrnq
 
@@ -128,6 +129,39 @@ Metrics
     :template: function.rst
 
     metrics.smape
+
+
+.. _model_selection_ref:
+
+:mod:`pmdarima.model_selection`: Cross-validation classes
+=========================================================
+
+The ``pmdarima.model_selection`` submodule defines several different strategies
+for cross-validating time series models
+
+.. automodule:: pmdarima.model_selection
+    :no-members:
+    :no-inherited-members:
+
+Cross validators
+----------------
+
+.. currentmodule:: pmdarima
+
+.. autosummary::
+    :toctree: generated/
+    :template: class.rst
+
+    model_selection.RollingForecastCV
+    model_selection.SlidingWindowForecastCV
+
+.. autosummary::
+    :toctree: generated/
+    :template: function.rst
+
+    model_selection.check_cv
+    model_selection.cross_validate
+    model_selection.cross_val_scores
 
 
 .. _pipeline_ref:

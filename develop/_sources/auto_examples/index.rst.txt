@@ -174,6 +174,43 @@ toy time series data for model benchmarking and experimentation.
 
     <div style='clear:both'></div>
 
+.. _model_selection_examples:
+
+Cross-validation examples
+-------------------------
+
+Examples of how to use the :mod:`pmdarima.model_selection` module to fit
+timeseries models in a cross-validated fashion.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` provides several different strategies for cross-validating you...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/model_selection/images/thumb/sphx_glr_example_cross_validation_thumb.png
+
+        :ref:`sphx_glr_auto_examples_model_selection_example_cross_validation.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/model_selection/example_cross_validation
+.. raw:: html
+
+    <div style='clear:both'></div>
+
 .. _utils_examples:
 
 Utils examples
