@@ -25,9 +25,9 @@ y = load_wineind()
         ARIMA(order=(2, 1, 1), seasonal_order=(0, 0, 0, 1)),
         ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12)),
         Pipeline([
-                ("fourier", FourierFeaturizer(m=12)),
-                ("arima", ARIMA(order=(2, 1, 0), maxiter=3))
-            ])
+            ("fourier", FourierFeaturizer(m=12)),
+            ("arima", ARIMA(order=(2, 1, 0), maxiter=3))
+        ])
     ]
 )
 @pytest.mark.parametrize('verbose', [0, 2, 4])
