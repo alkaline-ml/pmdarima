@@ -102,6 +102,7 @@ Dataset loading functions
     datasets.load_heartrate
     datasets.load_lynx
     datasets.load_msft
+    datasets.load_taylor
     datasets.load_wineind
     datasets.load_woolyrnq
 
@@ -153,6 +154,14 @@ Cross validators
 
     model_selection.RollingForecastCV
     model_selection.SlidingWindowForecastCV
+
+.. autosummary::
+    :toctree: generated/
+    :template: function.rst
+
+    model_selection.check_cv
+    model_selection.cross_validate
+    model_selection.cross_val_scores
 
 
 .. _pipeline_ref:

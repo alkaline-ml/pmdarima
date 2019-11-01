@@ -1,17 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from sklearn.utils.validation import check_array, column_or_1d as c1d
+from .utils import check_endog
 import numpy as np
 
-from .compat.numpy import DTYPE
-
 __all__ = ['smape']
-
-
-def _check_array(y):
-    return c1d(
-        check_array(y, ensure_2d=False, force_all_finite=False,
-                    copy=True, dtype=DTYPE))
 
 
 def smape(y_true, y_pred):
@@ -53,7 +45,7 @@ def smape(y_true, y_pred):
     ----------
     .. [1] https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error  # noqa: E501
     """
-    y_true = _check_array(y_true)  # type: np.ndarray
-    y_pred = _check_array(y_pred)  # type: np.ndarray
+    y_true = check_endog(y_true)  # type: np.ndarray
+    y_pred = check_endog(y_pred)  # type: np.ndarray
     abs_diff = np.abs(y_pred - y_true)
     return np.mean((abs_diff * 200 / (np.abs(y_pred) + np.abs(y_true))))

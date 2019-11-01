@@ -3,15 +3,17 @@
 import abc
 import numpy as np
 
+from sklearn.base import BaseEstimator
 from sklearn.utils.validation import indexable
 
 __all__ = [
+    'check_cv',
     'RollingForecastCV',
     'SlidingWindowForecastCV'
 ]
 
 
-class BaseTSCrossValidator(metaclass=abc.ABCMeta):
+class BaseTSCrossValidator(BaseEstimator, metaclass=abc.ABCMeta):
     """Base class for time series cross validators
 
     Based on the scikit-learn base cross-validator with alterations to fit the
@@ -83,15 +85,15 @@ class RollingForecastCV(BaseTSCrossValidator):
     With h == 2::
 
         array([15136., 16733., 20016., 17708., 18019., 19227., 22893., 23739.])
-        1st: ~~~~ tr ~~~~ tr ~~~~~~~~~~~~ te
-        2nd: ~~~~ tr ~~~~ tr ~~~~ tr ~~~~~~~~~~~~ te
-        3rd: ~~~~ tr ~~~~ tr ~~~~ tr ~~~~ tr ~~~~~~~~~~~~ te
+        1st: ~~~~ tr ~~~~ tr ~~~~ te ~~~~ te
+        2nd: ~~~~ tr ~~~~ tr ~~~~ tr ~~~~ te ~~~~ te
+        3rd: ~~~~ tr ~~~~ tr ~~~~ tr ~~~~ tr ~~~~ te ~~~~ te
 
     Parameters
     ----------
     h : int, optional (default=1)
         The forecasting horizon, or the number of steps into the future after
-        the last training sample.
+        the last training sample for the test set.
 
     step : int, optional (default=1)
         The size of step taken to increase the training sample size.
@@ -130,14 +132,14 @@ class RollingForecastCV(BaseTSCrossValidator):
     >>> cv_generator = cv.split(wineind)
     >>> next(cv_generator)
     (array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
-            17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-            34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-            51, 52, 53, 54, 55, 56, 57]), array([61]))
+           17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+           34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+           51, 52, 53, 54, 55, 56, 57]), array([58, 59, 60, 61]))
     >>> next(cv_generator)
     (array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
-            17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-            34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-            51, 52, 53, 54, 55, 56, 57, 58, 59]), array([63]))
+           17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+           34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+           51, 52, 53, 54, 55, 56, 57, 58, 59]), array([60, 61, 62, 63]))
 
     See Also
     --------
@@ -172,19 +174,20 @@ class RollingForecastCV(BaseTSCrossValidator):
 
         # Determine the number of iterations that will take place. Must
         # guarantee that the forecasting horizon will not over-index the series
+        all_indices = np.arange(n_samples)
         for train_step_size in range(0, n_samples - h - initial, step):
             train_size = initial + train_step_size
-            train_indices = np.arange(train_size)
-            test_index = train_indices[-1] + h
+            train_indices = all_indices[:train_size]
+            test_indices = all_indices[train_size: train_size + h]
 
-            yield train_indices, test_index
+            yield train_indices, test_indices
 
 
 class SlidingWindowForecastCV(BaseTSCrossValidator):
     """Use a sliding window to perform cross validation
 
-    This approach to CV slides a window over the training samples will using
-    a future sample as a test sample. While similar to the
+    This approach to CV slides a window over the training samples while using
+    several future samples as a test set. While similar to the
     :class:`RollingForecastCV`, it differs in that the train set does not grow,
     but rather shifts.
 
@@ -192,7 +195,7 @@ class SlidingWindowForecastCV(BaseTSCrossValidator):
     ----------
     h : int, optional (default=1)
         The forecasting horizon, or the number of steps into the future after
-        the last training sample.
+        the last training sample for the test set.
 
     step : int, optional (default=1)
         The size of step taken to increase the training sample size when not
@@ -230,9 +233,11 @@ class SlidingWindowForecastCV(BaseTSCrossValidator):
     >>> cv = SlidingWindowForecastCV(step=4, h=6, window_size=12)
     >>> cv_generator = cv.split(wineind)
     >>> next(cv_generator)
-    (array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11]), array([17]))
+    (array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11]),
+     array([12, 13, 14, 15, 16, 17]))
     >>> next(cv_generator)
-    (array([ 4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15]), array([21]))
+    (array([ 4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15]),
+     array([16, 17, 18, 19, 20, 21]))
 
     See Also
     --------
@@ -266,5 +271,23 @@ class SlidingWindowForecastCV(BaseTSCrossValidator):
         for window_start in range(0, n_samples - h - window_size, step):
             window_end = window_start + window_size
             train_indices = indices[window_start: window_end]
-            test_index = train_indices[-1] + h
-            yield train_indices, test_index
+            test_indices = indices[window_end: window_end + h]
+            yield train_indices, test_indices
+
+
+def check_cv(cv=None):
+    """Input checker utility for building a cross-validator
+
+    Parameters
+    ----------
+    cv : BaseTSCrossValidator or None, optional (default=None)
+        An instance of CV or None. Possible inputs:
+
+        - None, to use a default RollingForecastCV
+        - A BaseTSCrossValidator as a passthrough
+    """
+    cv = RollingForecastCV() if cv is None else cv
+    if not isinstance(cv, BaseTSCrossValidator):
+        raise TypeError("cv should be an instance of BaseTSCrossValidator or "
+                        "None, but got %r (type=%s)" % (cv, type(cv)))
+    return cv

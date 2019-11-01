@@ -92,6 +92,25 @@ built into R. The dataset exhibits a clear 10-year cycle.
     1825    1475
     dtype: int64
 
+.. _taylor:
+
+Taylor
+~~~~~~
+
+Half-hourly electricity demand in England and Wales from Monday, 5 June,
+2000 to Sunday, 27 August, 2000. Discussed in Taylor (2003), and kindly
+provided by James W Taylor. Units: Megawatts
+
+.. code-block:: python
+
+    >>> load_taylor(True).head()
+    0    22262.0
+    1    21756.0
+    2    22247.0
+    3    22759.0
+    4    22549.0
+    dtype: float64
+
 .. _wineind:
 
 Wineind

@@ -20,7 +20,6 @@ print(__doc__)
 import numpy as np
 import pmdarima as pm
 from pmdarima import model_selection
-from pmdarima import utils
 
 print("pmdarima version: %s" % pm.__version__)
 
@@ -36,24 +35,20 @@ model1 = pm.ARIMA(order=(2, 1, 1), seasonal_order=(0, 0, 0, 1))
 model2 = pm.ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12))
 cv = model_selection.SlidingWindowForecastCV(window_size=100, step=24, h=1)
 
-# store the residuals for each model
-m1_residuals = []
-m2_residuals = []
+model1_cv_scores = model_selection.cross_val_score(
+    model1, train, scoring='mean_squared_error', cv=cv, verbose=2)
 
-for train_window_indices, val_index in cv.split(train):
-    tr_fold = train[train_window_indices]
-    model1.fit(tr_fold)
-    model2.fit(tr_fold)
+model2_cv_scores = model_selection.cross_val_score(
+    model2, train, scoring='mean_squared_error', cv=cv, verbose=2)
 
-    m1_residuals.append(train[val_index] - model1.predict(n_periods=1))
-    m2_residuals.append(train[val_index] - model2.predict(n_periods=1))
-
-# make sure residuals are flat and compute RMSE
-rmse = lambda arr: np.sqrt(np.average(utils.check_endog(arr) ** 2))
-errors = [rmse(m1_residuals), rmse(m2_residuals)]
+# Pick based on which has a lower mean error rate
+m1_average_error = np.average(model1_cv_scores)
+m2_average_error = np.average(model2_cv_scores)
+errors = [m1_average_error, m2_average_error]
 models = [model1, model2]
 
 # print out the answer
 better_index = np.argmin(errors)  # type: int
-print("Lowest RMSE: {}".format(errors[better_index]))
+print("Lowest average MSE: {} (model{})".format(
+    errors[better_index], better_index + 1))
 print("Best model: {}".format(models[better_index]))

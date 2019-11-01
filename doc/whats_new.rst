@@ -22,10 +22,14 @@ v0.8.1) will document the latest features.
 * Parameterize ``dtype`` option in datasets module
 
 * Adds the ``model_selection`` submodule, which defines several different cross-validation
-  techniques:
+  classes as well as CV functions:
 
   - :class:`pmdarima.model_selection.RollingForecastCV`
   - :class:`pmdarima.model_selection.SlidingWindowForecastCV`
+  - :func:`pmdarima.model_selection.cross_validate`
+  - :func:`pmdarima.model_selection.cross_val_score`
+
+* Adds the :func:`pmdarima.datasets.load_taylor` dataset
 
 
 `v1.3.0 <http://alkaline-ml.com/pmdarima/1.3.0/>`_

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pmdarima.model_selection import RollingForecastCV, SlidingWindowForecastCV
+from pmdarima.model_selection import RollingForecastCV, \
+    SlidingWindowForecastCV, check_cv
 from pmdarima.datasets import load_wineind
 import pytest
 
@@ -20,7 +21,8 @@ def test_rolling_forecast_cv_passing(cv):
     splits = list(cv.split(y))
     last_train_step = None
     for train, test in splits:
-        assert test[0] == train[-1] + cv.h
+        assert test.shape[0] == cv.h
+        assert test[-1] == train[-1] + cv.h
 
         if last_train_step is not None:
             assert train[-1] == last_train_step + cv.step
@@ -41,7 +43,8 @@ def test_sliding_forecast_cv_passing(cv):
     last_train_step = None
     last_window_size = None
     for train, test in splits:
-        assert test[0] == train[-1] + cv.h
+        assert test.shape[0] == cv.h
+        assert test[-1] == train[-1] + cv.h
 
         if last_train_step is not None:
             assert train[-1] == last_train_step + cv.step
@@ -74,3 +77,12 @@ def test_cv_constructor_value_errors():
 
     with pytest.raises(ValueError):
         RollingForecastCV(step=-1),  # too low step
+
+
+def test_check_cv():
+    cv = SlidingWindowForecastCV(h=12)
+    assert check_cv(cv) is cv
+    assert isinstance(check_cv(None), RollingForecastCV)
+
+    with pytest.raises(TypeError):
+        check_cv('something else')
