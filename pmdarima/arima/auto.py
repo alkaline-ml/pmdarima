@@ -96,7 +96,7 @@ class AutoARIMA(BaseARIMA):
         self.scoring = scoring
         self.scoring_args = scoring_args
         self.with_intercept = with_intercept
-        self.sarimax_kwargs = {} if not sarimax_kwargs else sarimax_kwargs
+        self.sarimax_kwargs = sarimax_kwargs
 
     def fit(self, y, exogenous=None, **fit_args):
         """Fit the auto-arima estimator
@@ -123,6 +123,7 @@ class AutoARIMA(BaseARIMA):
         **fit_args : dict or kwargs
             Any keyword arguments to pass to the auto-arima function.
         """
+        sarimax_kwargs = {} if not self.sarimax_kwargs else self.sarimax_kwargs
         self.model_ = auto_arima(
             y, exogenous=exogenous, start_p=self.start_p, d=self.d,
             start_q=self.start_q, max_p=self.max_p, max_d=self.max_d,
@@ -145,7 +146,7 @@ class AutoARIMA(BaseARIMA):
             return_valid_fits=False,  # only return ONE
             out_of_sample_size=self.out_of_sample_size, scoring=self.scoring,
             scoring_args=self.scoring_args, with_intercept=self.with_intercept,
-            sarimax_kwargs=self.sarimax_kwargs, **fit_args)
+            sarimax_kwargs=sarimax_kwargs, **fit_args)
 
         return self
 

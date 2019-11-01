@@ -310,10 +310,10 @@ class ARIMA(BaseARIMA):
         self.suppress_warnings = suppress_warnings
         self.out_of_sample_size = out_of_sample_size
         self.scoring = scoring
-        self.scoring_args = {} if not scoring_args else scoring_args
+        self.scoring_args = scoring_args
         self.trend = trend
         self.with_intercept = with_intercept
-        self.sarimax_kwargs = {} if not sarimax_kwargs else sarimax_kwargs
+        self.sarimax_kwargs = sarimax_kwargs
 
     def _is_seasonal(self):
         return self.seasonal_order is not None
@@ -365,10 +365,12 @@ class ARIMA(BaseARIMA):
                         trend = None
 
                 # create the SARIMAX
+                sarimax_kwargs = \
+                    {} if not self.sarimax_kwargs else self.sarimax_kwargs
                 arima = sm.tsa.statespace.SARIMAX(
                     endog=y, exog=exogenous, order=self.order,
                     seasonal_order=self.seasonal_order, trend=trend,
-                    **self.sarimax_kwargs)
+                    **sarimax_kwargs)
 
             # actually fit the model, now. If this was called from 'update',
             # give priority to start_params from the fit_args
@@ -490,7 +492,8 @@ class ARIMA(BaseARIMA):
             # get the predictions (use self.predict, which calls forecast
             # from statsmodels internally)
             pred = self.predict(n_periods=cv, exogenous=cv_exog)
-            self.oob_ = scoring(cv_samples, pred, **self.scoring_args)
+            scoring_args = {} if not self.scoring_args else self.scoring_args
+            self.oob_ = scoring(cv_samples, pred, **scoring_args)
             self.oob_preds_ = pred
 
             # If we compute out of sample scores, we have to now update the
