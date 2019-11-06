@@ -47,6 +47,7 @@ Other versions
 
 Documentation for other release versions of ``pmdarima``:
 
+* `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0>`_
 * `v1.3.0 <http://alkaline-ml.com/pmdarima/1.3.0>`_
 * `v1.2.0 <http://alkaline-ml.com/pmdarima/1.2.0>`_
 * `v1.1.1 <http://alkaline-ml.com/pmdarima/1.1.1>`_
