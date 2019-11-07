@@ -32,14 +32,19 @@ commands:
       - run: make test-unit
       - run: codecov || echo "codecov upload failed"
 
-  # TODO: versioning
   build-whl-file:
     description: "Build a wheel file"
     parameters:
       pythonversion:
         type: string
     steps:
-      - run: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
+      # Currently handled in Makefile, but if ever removed, need this:
+      # - run:
+      #     name: Create VERSION file
+      #     command: make version
+      - run:
+          name: Build wheel file
+          command: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
 
   deploy-to-pypi:
     description: "Deploy the contents of dist/ to PyPi"

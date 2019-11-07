@@ -33,6 +33,13 @@ function build_wheel {
     docker rm $(docker ps -a -f status=exited -q)
 }
 
+# Guarantee we have the VERSION file before continuing
+if [[ ! -f pmdarima/VERSION ]]; then
+    echo "VERSION file was not created as expected"
+    ls -la
+    exit 2
+fi
+
 # Create base directory
 pushd $(dirname $0) > /dev/null
 _root=$(dirname $(dirname $(pwd -P))) # get one directory up from parent to get to root dir
