@@ -12,7 +12,7 @@ if os.getenv('CIRCLECI', False) and os.getenv('GIT_TAG', False):
     with open(OUT_FILE, 'w') as file:
         file.write(os.getenv('GIT_TAG')[1:])
 
-else:
+elif os.getenv('BUILD_SOURCEBRANCH', False):
     # This is for debugging on ADO right now
     for param in os.environ.keys():
         print("%20s %s" % (param, os.environ[param]))
