@@ -68,6 +68,5 @@ twine-check: bdist_wheel deploy-requirements
 	# Check that twine will parse the README acceptably
 	$(PYTHON) -m twine check dist/*
 
-version:
-	@$(PYTHON) -m pip install pathlib
+version: requirements
 	@$(PYTHON) build_tools/get_tag.py
