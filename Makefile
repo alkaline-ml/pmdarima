@@ -33,16 +33,16 @@ documentation: doc-requirements
 requirements:
 	$(PYTHON) -m pip install -r requirements.txt
 
-bdist_wheel: requirements
+bdist_wheel: requirements version
 	$(PYTHON) setup.py bdist_wheel
 
-sdist: requirements
+sdist: requirements version
 	$(PYTHON) setup.py sdist
 
-develop: requirements
+develop: requirements version
 	$(PYTHON) setup.py develop
 
-install: requirements
+install: requirements version
 	$(PYTHON) setup.py install
 
 test-requirements:
