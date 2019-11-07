@@ -7,6 +7,9 @@ steps:
     pip install -r build_tools/azure/requirements.txt
   displayName: 'Installing requirements'
 
+- script: make version
+  displayName: 'Making VERSION file'
+
 - script: python setup.py bdist_wheel
   displayName: 'Building wheel'
 
