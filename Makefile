@@ -3,9 +3,9 @@
 
 # caution: testing won't work on windows
 
-PYTHON ?= python
+PYTHON ?= python3
 
-.PHONY: clean develop test install bdist_wheel
+.PHONY: clean develop test install bdist_wheel version
 
 clean:
 	$(PYTHON) setup.py clean
@@ -67,3 +67,7 @@ test: develop test-unit test-lint
 twine-check: bdist_wheel deploy-requirements
 	# Check that twine will parse the README acceptably
 	$(PYTHON) -m twine check dist/*
+
+version:
+	@$(PYTHON) -m pip install pathlib
+	@$(PYTHON) build_tools/get_tag.py
