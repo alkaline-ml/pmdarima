@@ -198,7 +198,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.ARIMA<a class="headerlink" href="#pmdarima-arima-arima" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.arima.ARIMA">
-<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">ARIMA</code><span class="sig-paren">(</span><em>order</em>, <em>seasonal_order=None</em>, <em>start_params=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=None</em>, <em>disp=0</em>, <em>callback=None</em>, <em>suppress_warnings=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>trend=None</em>, <em>with_intercept=True</em>, <em>**sarimax_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/arima/arima.py#L96"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">ARIMA</code><span class="sig-paren">(</span><em>order</em>, <em>seasonal_order=None</em>, <em>start_params=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=None</em>, <em>disp=0</em>, <em>callback=None</em>, <em>suppress_warnings=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>trend=None</em>, <em>with_intercept=True</em>, <em>**sarimax_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/arima/arima.py#L96"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA" title="Permalink to this definition">¶</a></dt>
 <dd><p>An ARIMA estimator.</p>
 <p>An ARIMA, or autoregressive integrated moving average, is a
 generalization of an autoregressive moving average (ARMA) and is fitted to
@@ -514,13 +514,13 @@ delegate methods which wrap the internal ARIMA results instance.</li>
 </table>
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>order</em>, <em>seasonal_order=None</em>, <em>start_params=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=None</em>, <em>disp=0</em>, <em>callback=None</em>, <em>suppress_warnings=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>trend=None</em>, <em>with_intercept=True</em>, <em>**sarimax_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/arima/arima.py#L292"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>order</em>, <em>seasonal_order=None</em>, <em>start_params=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=None</em>, <em>disp=0</em>, <em>callback=None</em>, <em>suppress_warnings=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>trend=None</em>, <em>with_intercept=True</em>, <em>**sarimax_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/arima/arima.py#L292"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.add_new_observations">
-<code class="descname">add_new_observations</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/decorators.py#L784"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.add_new_observations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.add_new_observations" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_new_observations</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/decorators.py#L784"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.add_new_observations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.add_new_observations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the endog/exog samples after a model fit.</p>
 <p>After fitting your model and creating forecasts, you’re going
 to need to attach new samples to the data you fit on. These are
@@ -556,7 +556,7 @@ new model fit.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.aic">
-<code class="descname">aic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L903"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.aic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.aic" title="Permalink to this definition">¶</a></dt>
+<code class="descname">aic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L903"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.aic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.aic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the AIC, the Akaike Information Criterion:</p>
 <blockquote>
 <div><code class="code docutils literal notranslate"><span class="pre">-2</span> <span class="pre">*</span> <span class="pre">llf</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">df_model</span></code></div></blockquote>
@@ -586,7 +586,7 @@ on constant terms and the variance.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.aicc">
-<code class="descname">aicc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/utils/metaestimators.py#L924"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.aicc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.aicc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">aicc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/utils/metaestimators.py#L924"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.aicc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.aicc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the AICc, the corrected Akaike Information Criterion:</p>
 <blockquote>
 <div><code class="code docutils literal notranslate"><span class="pre">AIC</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">df_model</span> <span class="pre">*</span> <span class="pre">(df_model</span> <span class="pre">+</span> <span class="pre">1)</span> <span class="pre">/</span> <span class="pre">(nobs</span> <span class="pre">-</span> <span class="pre">df_model</span> <span class="pre">-</span> <span class="pre">1)</span></code></div></blockquote>
@@ -616,7 +616,7 @@ on constant terms and the variance. And <code class="docutils literal notranslat
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.arparams">
-<code class="descname">arparams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L949"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.arparams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.arparams" title="Permalink to this definition">¶</a></dt>
+<code class="descname">arparams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L949"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.arparams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.arparams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the parameters associated with the AR coefficients in the model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -634,7 +634,7 @@ on constant terms and the variance. And <code class="docutils literal notranslat
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.arroots">
-<code class="descname">arroots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L960"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.arroots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.arroots" title="Permalink to this definition">¶</a></dt>
+<code class="descname">arroots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L960"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.arroots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.arroots" title="Permalink to this definition">¶</a></dt>
 <dd><p>The roots of the AR coefficients are the solution to:</p>
 <blockquote>
 <div><code class="code docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">arparams[0]</span> <span class="pre">*</span> <span class="pre">z</span> <span class="pre">-</span> <span class="pre">arparams[1]</span> <span class="pre">*</span> <span class="pre">z^2</span> <span class="pre">-</span> <span class="pre">...</span> <span class="pre">-</span> <span class="pre">arparams[</span>
@@ -657,7 +657,7 @@ circle.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.bic">
-<code class="descname">bic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L977"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.bic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.bic" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L977"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.bic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.bic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the BIC, the Bayes Information Criterion:</p>
 <blockquote>
 <div><code class="code docutils literal notranslate"><span class="pre">-2</span> <span class="pre">*</span> <span class="pre">llf</span> <span class="pre">+</span> <span class="pre">log(nobs)</span> <span class="pre">*</span> <span class="pre">df_model</span></code></div></blockquote>
@@ -687,7 +687,7 @@ observations.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.bse">
-<code class="descname">bse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L998"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.bse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.bse" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L998"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.bse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.bse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the standard errors of the parameters. These are
 computed using the numerical Hessian.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -706,7 +706,7 @@ computed using the numerical Hessian.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.conf_int">
-<code class="descname">conf_int</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L1010"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.conf_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.conf_int" title="Permalink to this definition">¶</a></dt>
+<code class="descname">conf_int</code><span class="sig-paren">(</span><em>alpha=0.05</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L1010"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.conf_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.conf_int" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the confidence interval of the fitted parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -730,7 +730,7 @@ Could include ‘cols’ or ‘method’</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.df_model">
-<code class="descname">df_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L1026"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.df_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.df_model" title="Permalink to this definition">¶</a></dt>
+<code class="descname">df_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L1026"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.df_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.df_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>The model degrees of freedom: <code class="docutils literal notranslate"><span class="pre">k_exog</span></code> + <code class="docutils literal notranslate"><span class="pre">k_trend</span></code> +
 <code class="docutils literal notranslate"><span class="pre">k_ar</span></code> + <code class="docutils literal notranslate"><span class="pre">k_ma</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -749,7 +749,7 @@ Could include ‘cols’ or ‘method’</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.df_resid">
-<code class="descname">df_resid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L1038"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.df_resid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.df_resid" title="Permalink to this definition">¶</a></dt>
+<code class="descname">df_resid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L1038"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.df_resid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.df_resid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the residual degrees of freedom:</p>
 <blockquote>
 <div><code class="code docutils literal notranslate"><span class="pre">nobs</span> <span class="pre">-</span> <span class="pre">df_model</span></code></div></blockquote>
@@ -769,7 +769,7 @@ Could include ‘cols’ or ‘method’</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/arima/arima.py#L429"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/arima/arima.py#L429"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit an ARIMA to a vector, <code class="docutils literal notranslate"><span class="pre">y</span></code>, of observations with an
 optional matrix of <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> variables.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -804,7 +804,7 @@ exogenous features for making predictions.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.fit_predict">
-<code class="descname">fit_predict</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>n_periods=10</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/base.py#L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.fit_predict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit_predict</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>n_periods=10</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/base.py#L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.fit_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit an ARIMA to a vector, <code class="docutils literal notranslate"><span class="pre">y</span></code>, of observations with an
 optional matrix of <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> variables, and then generate
 predictions.</p>
@@ -844,7 +844,7 @@ exogenous features for making predictions.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -869,7 +869,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.hqic">
-<code class="descname">hqic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L1051"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.hqic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.hqic" title="Permalink to this definition">¶</a></dt>
+<code class="descname">hqic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L1051"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.hqic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.hqic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the Hannan-Quinn Information Criterion:</p>
 <blockquote>
 <div><code class="code docutils literal notranslate"><span class="pre">-2</span> <span class="pre">*</span> <span class="pre">llf</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">(`df_model</span></code>) * log(log(nobs))`</div></blockquote>
@@ -898,7 +898,7 @@ then the <code class="docutils literal notranslate"><span class="pre">k_ar</span
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.maparams">
-<code class="descname">maparams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L1071"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.maparams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.maparams" title="Permalink to this definition">¶</a></dt>
+<code class="descname">maparams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L1071"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.maparams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.maparams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value of the moving average coefficients.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -916,7 +916,7 @@ then the <code class="docutils literal notranslate"><span class="pre">k_ar</span
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.maroots">
-<code class="descname">maroots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L1082"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.maroots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.maroots" title="Permalink to this definition">¶</a></dt>
+<code class="descname">maroots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L1082"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.maroots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.maroots" title="Permalink to this definition">¶</a></dt>
 <dd><p>The roots of the MA coefficients are the solution to:</p>
 <blockquote>
 <div><code class="code docutils literal notranslate"><span class="pre">(1</span> <span class="pre">+</span> <span class="pre">maparams[0]</span> <span class="pre">*</span> <span class="pre">z</span> <span class="pre">+</span> <span class="pre">maparams[1]</span> <span class="pre">*</span> <span class="pre">z^2</span> <span class="pre">+</span> <span class="pre">...</span> <span class="pre">+</span> <span class="pre">maparams[</span>
@@ -939,7 +939,7 @@ circle.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.oob">
-<code class="descname">oob</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/arima/arima.py#L1099"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.oob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.oob" title="Permalink to this definition">¶</a></dt>
+<code class="descname">oob</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/arima/arima.py#L1099"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.oob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.oob" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the model was built with <code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> &gt; 0, a validation
 score will have been computed. Otherwise it will be np.nan.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -958,7 +958,7 @@ score will have been computed. Otherwise it will be np.nan.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.params">
-<code class="descname">params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L1110"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L1110"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the parameters of the model. The order of variables is the trend
 coefficients and the <code class="xref py py-func docutils literal notranslate"><span class="pre">k_exog()</span></code> exogenous coefficients, then the
 <code class="xref py py-func docutils literal notranslate"><span class="pre">k_ar()</span></code> AR coefficients, and finally the <code class="xref py py-func docutils literal notranslate"><span class="pre">k_ma()</span></code> MA
@@ -979,7 +979,7 @@ coefficients.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.plot_diagnostics">
-<code class="descname">plot_diagnostics</code><span class="sig-paren">(</span><em>variable=0</em>, <em>lags=10</em>, <em>fig=None</em>, <em>figsize=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/utils/metaestimators.py#L1181"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.plot_diagnostics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.plot_diagnostics" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot_diagnostics</code><span class="sig-paren">(</span><em>variable=0</em>, <em>lags=10</em>, <em>fig=None</em>, <em>figsize=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/utils/metaestimators.py#L1181"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.plot_diagnostics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.plot_diagnostics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot an ARIMA’s diagnostics.</p>
 <p>Diagnostic plots for standardized residuals of one endogenous variable</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1035,7 +1035,7 @@ with a Normal(0,1) density plotted for reference.</li>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>n_periods=10</em>, <em>exogenous=None</em>, <em>return_conf_int=False</em>, <em>alpha=0.05</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/arima/arima.py#L637"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.predict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict</code><span class="sig-paren">(</span><em>n_periods=10</em>, <em>exogenous=None</em>, <em>return_conf_int=False</em>, <em>alpha=0.05</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/arima/arima.py#L637"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Forecast future values</p>
 <p>Generate predictions (forecasts) <code class="docutils literal notranslate"><span class="pre">n_periods</span></code> in the future.
 Note that if <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> variables were used in the model fit, they
@@ -1083,7 +1083,7 @@ exogenous features for making predictions.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.predict_in_sample">
-<code class="descname">predict_in_sample</code><span class="sig-paren">(</span><em>exogenous=None</em>, <em>start=None</em>, <em>end=None</em>, <em>dynamic=False</em>, <em>return_conf_int=False</em>, <em>alpha=0.05</em>, <em>typ='levels'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/arima/arima.py#L521"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.predict_in_sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.predict_in_sample" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict_in_sample</code><span class="sig-paren">(</span><em>exogenous=None</em>, <em>start=None</em>, <em>end=None</em>, <em>dynamic=False</em>, <em>return_conf_int=False</em>, <em>alpha=0.05</em>, <em>typ='levels'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/arima/arima.py#L521"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.predict_in_sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.predict_in_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate in-sample predictions from the fit ARIMA model.</p>
 <p>Predicts the original training (in-sample) time series values. This can
 be useful when wanting to visualize the fit, and qualitatively inspect
@@ -1160,7 +1160,7 @@ variables.</li>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.pvalues">
-<code class="descname">pvalues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L1124"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.pvalues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.pvalues" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pvalues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L1124"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.pvalues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.pvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the p-values associated with the t-values of the coefficients.
 Note that the coefficients are assumed to have a Student’s T
 distribution.</p>
@@ -1180,7 +1180,7 @@ distribution.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.resid">
-<code class="descname">resid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L1137"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.resid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.resid" title="Permalink to this definition">¶</a></dt>
+<code class="descname">resid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L1137"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.resid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.resid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the model residuals. If the model is fit using ‘mle’, then the
 residuals are created via the Kalman Filter. If the model is fit
 using ‘css’ then the residuals are obtained via
@@ -1202,7 +1202,7 @@ residuals are zero. These zero residuals are not returned.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -1220,13 +1220,13 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.summary">
-<code class="descname">summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/../sklearn/utils/metaestimators.py#L1152"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.summary" title="Permalink to this definition">¶</a></dt>
+<code class="descname">summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/../sklearn/utils/metaestimators.py#L1152"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.summary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a summary of the ARIMA model</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.to_dict">
-<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/utils/metaestimators.py#L1157"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.to_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/utils/metaestimators.py#L1157"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the ARIMA model as a dictionary</p>
 <p>Return the dictionary representation of the ARIMA model</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1245,7 +1245,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.ARIMA.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>maxiter=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/fb61816/pmdarima/arima/arima.py#L812"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>maxiter=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/969e1b5/pmdarima/arima/arima.py#L812"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the model fit with additional observed endog/exog values.</p>
 <p>Updating an ARIMA adds new observations to the model, updating the
 MLE of the parameters accordingly by performing several new iterations
