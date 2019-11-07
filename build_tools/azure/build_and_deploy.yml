@@ -8,6 +8,7 @@ steps:
   displayName: 'Installing requirements'
 
 - script: make version
+  condition: contains(variables['Build.SourceBranch'], 'tags')
   displayName: 'Making VERSION file'
 
 - script: python setup.py bdist_wheel
