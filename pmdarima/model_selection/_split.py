@@ -198,8 +198,7 @@ class SlidingWindowForecastCV(BaseTSCrossValidator):
         the last training sample for the test set.
 
     step : int, optional (default=1)
-        The size of step taken to increase the training sample size when not
-        performing using a window.
+        The size of step taken between training folds.
 
     window_size : int or None, optional (default=None)
         The size of the rolling window to use. If None, a rolling window of
