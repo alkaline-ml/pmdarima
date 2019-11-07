@@ -3,7 +3,7 @@
 
 # caution: testing won't work on windows
 
-PYTHON ?= python3
+PYTHON ?= python
 
 .PHONY: clean develop test install bdist_wheel version
 
