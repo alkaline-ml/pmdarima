@@ -12,9 +12,14 @@ if os.getenv('CIRCLECI', False) and os.getenv('GIT_TAG', False):
     with open(OUT_FILE, 'w') as file:
         file.write(os.getenv('GIT_TAG')[1:])
 
-elif os.getenv('BUILD_SOURCEBRANCH', False):
-    # This is for debugging on ADO right now
-    for param in os.environ.keys():
-        print("%20s %s" % (param, os.environ[param]))
+# on Azure Pipelines, we have to look at the build branch, and apply this logic:
+# refs/tags/vX.X.X -> ['refs', 'tags', 'vX.X.X'] -> 'vX.X.X'
+elif os.getenv('BUILD_SOURCEBRANCH', False) and os.getenv('BUILD_SOURCEBRANCH').startswith('refs/tags/'):
+    print('Tagged commit on Azure Pipelines. Writing to {0}'.format(OUT_FILE))
+    tag = os.getenv('BUILD_SOURCEBRANCH').split('/')[-1]
+    with open(OUT_FILE, 'w') as file:
+        file.write(tag[1:])
 
-    # print('Not a tagged commit, or not on a CI/CD platform. Not writing VERSION file')
+# Local or non-tagged commit, so we don't generate a VERSION file
+else:
+    print('Not a tagged commit, or not on a CI/CD platform. Not writing VERSION file')
