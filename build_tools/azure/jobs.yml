@@ -76,4 +76,6 @@ jobs:
 
   steps:
   - bash: build_tools/azure/test_version_tagging.sh
+    # Only want to run this on branches/PRs. NOT tags
+    condition: not(contains(variables['Build.SourceBranch'], 'tags'))
     displayName: 'Testing git tag logic'
