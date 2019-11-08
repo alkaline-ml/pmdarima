@@ -24,8 +24,8 @@ if os.getenv('CIRCLECI', False) and os.getenv('GIT_TAG', False):
 # refs/tags/vX.X.X -> ['refs', 'tags', 'vX.X.X'] -> 'vX.X.X'
 elif os.getenv('BUILD_SOURCEBRANCH', False) and os.getenv('BUILD_SOURCEBRANCH').startswith('refs/tags/'):
     print('Tagged commit on Azure Pipelines. Writing to {0}'.format(OUT_FILE))
-    tag = os.getenv('BUILD_SOURCEBRANCH').split('/')[-1]
     with open(OUT_FILE, 'w') as f:
+        tag = os.getenv('BUILD_SOURCEBRANCH').split('/')[-1]
         f.write(get_version_from_tag(tag))
 
 # Local or non-tagged commit, so we don't generate a VERSION file
