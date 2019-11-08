@@ -34,7 +34,7 @@ function build_wheel {
 }
 
 # Guarantee we have the VERSION file before continuing
-if [[ ! -f pmdarima/VERSION ]]; then
+if [[ ! -f ~/pmdarima/pmdarima/VERSION ]]; then
     echo "VERSION file was not created as expected"
     ls -la
     exit 2
