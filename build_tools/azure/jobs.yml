@@ -75,8 +75,5 @@ jobs:
     vmImage: 'vs2017-win2016'
 
   steps:
-  - task: Bash@3
-    inputs:
-      targetType: filePath
-      filePath: test_version_tagging.sh
+  - bash: build_tools/azure/test_version_tagging.sh
     displayName: 'Testing git tag logic'
