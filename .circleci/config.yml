@@ -112,7 +112,7 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
-    - ./build_tools/circle/test_version_tagging.sh
+    - run: ./build_tools/circle/test_version_tagging.sh
 
   # Regression testing for switch-over to new pmdarima namespace
   regression-testing:
