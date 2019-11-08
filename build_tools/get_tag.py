@@ -4,7 +4,7 @@ import os
 # This file assumes that our tags are always in this format: vX.X.X.
 # In that case, we would only want to write X.X.X
 
-OUT_FILE = Path(__file__).parent / 'pmdarima' / 'VERSION'
+OUT_FILE = os.path.join('..', 'pmdarima', 'VERSION')
 
 
 def get_version_from_tag(tag):
