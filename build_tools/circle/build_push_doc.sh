@@ -128,8 +128,10 @@ else
     # it. If not, we use 0.0.0. There are two cases we ever deploy:
     #   1. Master (where version is not used, as we use 'develop'
     #   2. Tags (where version IS defined)
+    echo "On tag, expecting VERSION file to have been created"
     version=`cat pmdarima/VERSION`
   else
+    echo "Not on tag, will use 0.0.0"
     version="0.0.0"
   fi
 
