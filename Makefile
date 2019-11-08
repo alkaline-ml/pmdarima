@@ -29,7 +29,7 @@ deploy-twine-test: bdist_wheel deploy-requirements
 doc-requirements:
 	$(PYTHON) -m pip install -r build_tools/doc/doc_requirements.txt
 
-documentation: doc-requirements
+documentation: doc-requirements version
 	@make -C doc clean html EXAMPLES_PATTERN=example_*
 
 requirements:

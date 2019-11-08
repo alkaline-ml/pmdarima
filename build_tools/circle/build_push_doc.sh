@@ -121,13 +121,24 @@ else
   mv html/* ./
   rm -r html/
 
-  # Get the new version. This overwrites the old one.
-  python -c "import pmdarima; print(pmdarima.__version__)" > VERSION
+  # The version is retrieved from the GIT_TAG. If there is no version, we just
+  # call it 0.0.0, since we won't be pushing anyways (not master and no tag)
+  if [[ ! -z ${GIT_TAG} ]]; then
+    # We should have the VERSION file on tags now since 'make documentation' gets
+    # it. If not, we use 0.0.0. There are two cases we ever deploy:
+    #   1. Master (where version is not used, as we use 'develop'
+    #   2. Tags (where version IS defined)
+    version=`cat pmdarima/VERSION`
+  else
+    version="0.0.0"
+  fi
+
+  echo ${version} > VERSION
+  echo "New version: ${version}"
 
   # If the version already has a folder, we have to fail out. We don't
-  # want to overwrite an existing version's documentation
-  version=`cat VERSION`
-  echo "New version: ${version}"
+  # want to overwrite an existing version's documentation. This should no
+  # longer happen on PRs since we don't push the 0.0.0 version
   if [[ -d ${version} ]]; then
     echo "Version ${version} already exists!! Will not overwrite. Failing job."
     exit 9
