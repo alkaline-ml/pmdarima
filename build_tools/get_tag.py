@@ -1,10 +1,12 @@
 from pathlib import Path
 import os
+from os.path import abspath, dirname
 
 # This file assumes that our tags are always in this format: vX.X.X.
 # In that case, we would only want to write X.X.X
 
-OUT_FILE = os.path.join('..', 'pmdarima', 'VERSION')
+TOP_LEVEL = abspath(dirname(dirname(__file__)))
+OUT_FILE = os.path.join(TOP_LEVEL, 'pmdarima', 'VERSION')
 
 
 def get_version_from_tag(tag):
@@ -15,17 +17,17 @@ def get_version_from_tag(tag):
 # Circle is easy, since they give us the git tag
 if os.getenv('CIRCLECI', False) and os.getenv('GIT_TAG', False):
     print('Tagged commit on Circle CI. Writing to {0}'.format(OUT_FILE))
-    with open(OUT_FILE, 'w') as file:
+    with open(OUT_FILE, 'w') as f:
         tag = get_version_from_tag(os.getenv('GIT_TAG'))
-        file.write(tag)
+        f.write(tag)
 
 # on Azure Pipelines, we have to look at the build branch, and apply this logic:
 # refs/tags/vX.X.X -> ['refs', 'tags', 'vX.X.X'] -> 'vX.X.X'
 elif os.getenv('BUILD_SOURCEBRANCH', False) and os.getenv('BUILD_SOURCEBRANCH').startswith('refs/tags/'):
     print('Tagged commit on Azure Pipelines. Writing to {0}'.format(OUT_FILE))
     tag = os.getenv('BUILD_SOURCEBRANCH').split('/')[-1]
-    with open(OUT_FILE, 'w') as file:
-        file.write(get_version_from_tag(tag))
+    with open(OUT_FILE, 'w') as f:
+        f.write(get_version_from_tag(tag))
 
 # Local or non-tagged commit, so we don't generate a VERSION file
 else:

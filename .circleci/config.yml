@@ -7,6 +7,13 @@ test-filters: &test-filters
     branches:
         only: /.*/
 
+# This will trigger ONLY on branches
+test-only-filters: &test-only-filters
+    tags:
+        ignore: /.*/
+    branches:
+        only: /.*/
+
 # This will ignore for ALL branches, and only trigger on tags
 deploy-filters: &deploy-filters
     tags:
@@ -98,6 +105,15 @@ jobs:
     - checkout
     - run: make test-lint
 
+  # Test env vars from tags produce VERSION file
+  test-version-tagging:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - ./build_tools/circle/test_version_tagging.sh
+
   # Regression testing for switch-over to new pmdarima namespace
   regression-testing:
     docker:
@@ -187,6 +203,8 @@ workflows:
             filters: *test-filters
         - regression-testing:
             filters: *test-filters
+        - test-version-tagging:
+            filters: *test-only-filters
         - testing-passed:
             requires:
                 - pypy

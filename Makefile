@@ -13,6 +13,8 @@ clean:
 	rm -rf build
 	rm -rf .pytest_cache
 	rm -rf pmdarima.egg-info
+	rm -f pmdarima/VERSION
+	rm -rf .coverage.*
 
 deploy-requirements:
 	$(PYTHON) -m pip install twine readme_renderer[md]
