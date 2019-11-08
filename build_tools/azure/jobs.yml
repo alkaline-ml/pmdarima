@@ -69,7 +69,7 @@ jobs:
 
   - template: build_and_deploy.yml
 
-- job: Test-Tagging
+- job: test_tagging
 
   pool:
     vmImage: 'vs2017-win2016'
