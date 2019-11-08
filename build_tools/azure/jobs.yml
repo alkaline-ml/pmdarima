@@ -68,3 +68,11 @@ jobs:
     displayName: 'Setting Python version'
 
   - template: build_and_deploy.yml
+
+- job: Test-Tagging
+
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  steps:
+  - bash: ~/build_tools/azure/test_version_tagging.sh
