@@ -96,6 +96,13 @@ jobs:
     steps:
     - make-unit-test
 
+  cpython38:
+    docker:
+      - image: python:3.8
+    working_directory: ~/pmdarima
+    steps:
+      - make-unit-test
+
   # For testing lint
   test-linting:
     docker:
@@ -168,6 +175,16 @@ jobs:
       - checkout
       - build-whl-file:
           pythonversion: "3.7"
+      - deploy-to-pypi
+
+  deploy-cpython38-whl:
+    machine:
+      image: circleci/classic:latest
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - build-whl-file:
+          pythonversion: "3.8"
       - deploy-to-pypi
 
   # For documentation deployment. You'll need the following environment vars
