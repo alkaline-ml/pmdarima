@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Cross-validating your time series models &mdash; pmdarima 1.4.1.dev0 documentation</title>
+  <title>Cross-validating your time series models &mdash; pmdarima 0.0.0 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../',
-              VERSION:'1.4.1.dev0',
+              VERSION:'0.0.0',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.4.1.dev0
+                0.0.0
               </div>
             
           
@@ -188,7 +188,7 @@ cross-validating your time series models. The interface was designed to behave
 as similarly as possible to that of scikit to make its usage as simple as
 possible.</p>
 <br/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pmdarima</span> <span class="n">version</span><span class="p">:</span> <span class="mf">1.4</span><span class="o">.</span><span class="mf">1.</span><span class="n">dev0</span>
+<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pmdarima</span> <span class="n">version</span><span class="p">:</span> <span class="mf">0.0</span><span class="o">.</span><span class="mi">0</span>
 <span class="p">[</span><span class="n">CV</span><span class="p">]</span> <span class="n">fold</span><span class="o">=</span><span class="mi">0</span> <span class="o">..........................................................</span>
 <span class="p">[</span><span class="n">CV</span><span class="p">]</span> <span class="n">fold</span><span class="o">=</span><span class="mi">1</span> <span class="o">..........................................................</span>
 <span class="p">[</span><span class="n">CV</span><span class="p">]</span> <span class="n">fold</span><span class="o">=</span><span class="mi">2</span> <span class="o">..........................................................</span>
@@ -230,10 +230,10 @@ possible.</p>
 <span class="n">model2</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">ARIMA</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
 <span class="n">cv</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.SlidingWindowForecastCV.html#pmdarima.model_selection.SlidingWindowForecastCV" title="View documentation for pmdarima.model_selection.SlidingWindowForecastCV"><span class="n">model_selection</span><span class="o">.</span><span class="n">SlidingWindowForecastCV</span></a><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">model1_cv_scores</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_score</span><span class="p">(</span>
+<span class="n">model1_cv_scores</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score" title="View documentation for pmdarima.model_selection.cross_val_score"><span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_score</span></a><span class="p">(</span>
     <span class="n">model1</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;smape&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="n">model2_cv_scores</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_score</span><span class="p">(</span>
+<span class="n">model2_cv_scores</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score" title="View documentation for pmdarima.model_selection.cross_val_score"><span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_score</span></a><span class="p">(</span>
     <span class="n">model2</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;smape&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Model 1 CV scores: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model1_cv_scores</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
@@ -252,7 +252,7 @@ possible.</p>
 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Best model: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">models</span><span class="p">[</span><span class="n">better_index</span><span class="p">]))</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  4.091 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  2.775 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../../_downloads/example_cross_validation.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_cross_validation.py</span></code></a></div>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.model_selection.check_cv &mdash; pmdarima 0.0.0 documentation</title>
+  <title>pmdarima.model_selection.cross_val_score &mdash; pmdarima 0.0.0 documentation</title>
   
 
   
@@ -51,8 +51,8 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pmdarima.model_selection.cross_validate" href="pmdarima.model_selection.cross_validate.html" />
-    <link rel="prev" title="pmdarima.model_selection.SlidingWindowForecastCV" href="pmdarima.model_selection.SlidingWindowForecastCV.html" /> 
+    <link rel="next" title="pmdarima.pipeline.Pipeline" href="pmdarima.pipeline.Pipeline.html" />
+    <link rel="prev" title="pmdarima.model_selection.cross_validate" href="pmdarima.model_selection.cross_validate.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -109,9 +109,9 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#cross-validators">Cross validators</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.RollingForecastCV.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.RollingForecastCV</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.SlidingWindowForecastCV.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.SlidingWindowForecastCV</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.check_cv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_validate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_validate</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_val_score.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_score</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_score</a></li>
 </ul>
 </li>
 </ul>
@@ -171,13 +171,13 @@
         
           <li><a href="../classes.html">API Reference</a> &raquo;</li>
         
-      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</li>
+      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_score</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/modules/generated/pmdarima.model_selection.check_cv.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/modules/generated/pmdarima.model_selection.cross_val_score.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -190,23 +190,52 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pmdarima-model-selection-check-cv">
-<h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.check_cv<a class="headerlink" href="#pmdarima-model-selection-check-cv" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pmdarima-model-selection-cross-val-score">
+<h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.cross_val_score<a class="headerlink" href="#pmdarima-model-selection-cross-val-score" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pmdarima.model_selection.check_cv">
-<code class="descclassname">pmdarima.model_selection.</code><code class="descname">check_cv</code><span class="sig-paren">(</span><em>cv=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/90fca7b/pmdarima/model_selection/_split.py#L277"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#check_cv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.check_cv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Input checker utility for building a cross-validator</p>
+<dt id="pmdarima.model_selection.cross_val_score">
+<code class="descclassname">pmdarima.model_selection.</code><code class="descname">cross_val_score</code><span class="sig-paren">(</span><em>estimator</em>, <em>y</em>, <em>exogenous=None</em>, <em>scoring=None</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>error_score=nan</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/90fca7b/pmdarima/model_selection/_validation.py#L170"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_val_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.cross_val_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a score by cross-validation</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cv</strong> : BaseTSCrossValidator or None, optional (default=None)</p>
-<blockquote class="last">
-<div><p>An instance of CV or None. Possible inputs:</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>estimator</strong> : estimator</p>
+<blockquote>
+<div><p>An estimator object that implements the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method</p>
+</div></blockquote>
+<p><strong>y</strong> : array-like or iterable, shape=(n_samples,)</p>
+<blockquote>
+<div><p>The time-series array.</p>
+</div></blockquote>
+<p><strong>exogenous</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
+<blockquote>
+<div><p>An optional 2-d array of exogenous variables.</p>
+</div></blockquote>
+<p><strong>scoring</strong> : str or callable, optional (default=None)</p>
+<blockquote>
+<div><p>The scoring metric to use. If a callable, must adhere to the signature
+<code class="docutils literal notranslate"><span class="pre">metric(true,</span> <span class="pre">predicted)</span></code>. Valid string scoring metrics include:</p>
 <ul class="simple">
-<li>None, to use a default RollingForecastCV</li>
-<li>A BaseTSCrossValidator as a passthrough</li>
+<li>‘smape’</li>
+<li>‘mean_absolute_error’</li>
+<li>‘mean_squared_error’</li>
 </ul>
+</div></blockquote>
+<p><strong>cv</strong> : BaseTSCrossValidator or None, optional (default=None)</p>
+<blockquote>
+<div><p>An instance of cross-validation. If None, will use a RollingForecastCV</p>
+</div></blockquote>
+<p><strong>verbose</strong> : integer, optional</p>
+<blockquote>
+<div><p>The verbosity level.</p>
+</div></blockquote>
+<p><strong>error_score</strong> : ‘raise’ or numeric</p>
+<blockquote class="last">
+<div><p>Value to assign to the score if an error occurs in estimator fitting.
+If set to ‘raise’, the error is raised.
+If a numeric value is given, ModelFitWarning is raised. This parameter
+does not affect the refit step, which will always raise the error.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -214,7 +243,14 @@
 </table>
 </dd></dl>
 
-<div class="clearer"></div></div>
+<div class="section" id="examples-using-pmdarima-model-selection-cross-val-score">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection.cross_val_score</span></code><a class="headerlink" href="#examples-using-pmdarima-model-selection-cross-val-score" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` provides several different strategies for cross-validating you..."><div class="figure" id="id1">
+<img alt="../../_images/sphx_glr_example_cross_validation_thumb.png" src="../../_images/sphx_glr_example_cross_validation_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/model_selection/example_cross_validation.html#sphx-glr-auto-examples-model-selection-example-cross-validation-py"><span class="std std-ref">Cross-validating your time series models</span></a></span></p>
+</div>
+</div><div class="clearer"></div></div>
+</div>
 
 
            </div>
@@ -224,10 +260,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pmdarima.model_selection.cross_validate.html" class="btn btn-neutral float-right" title="pmdarima.model_selection.cross_validate" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pmdarima.pipeline.Pipeline.html" class="btn btn-neutral float-right" title="pmdarima.pipeline.Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pmdarima.model_selection.SlidingWindowForecastCV.html" class="btn btn-neutral float-left" title="pmdarima.model_selection.SlidingWindowForecastCV" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pmdarima.model_selection.cross_validate.html" class="btn btn-neutral float-left" title="pmdarima.model_selection.cross_validate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
