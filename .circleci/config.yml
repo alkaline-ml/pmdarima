@@ -7,6 +7,13 @@ test-filters: &test-filters
     branches:
         only: /.*/
 
+# This will trigger ONLY on branches
+test-only-filters: &test-only-filters
+    tags:
+        ignore: /.*/
+    branches:
+        only: /.*/
+
 # This will ignore for ALL branches, and only trigger on tags
 deploy-filters: &deploy-filters
     tags:
@@ -32,14 +39,19 @@ commands:
       - run: make test-unit
       - run: codecov || echo "codecov upload failed"
 
-  # TODO: versioning
   build-whl-file:
     description: "Build a wheel file"
     parameters:
       pythonversion:
         type: string
     steps:
-      - run: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
+      # Currently handled in Makefile, but if ever removed, need this:
+      # - run:
+      #     name: Create VERSION file
+      #     command: make version
+      - run:
+          name: Build wheel file
+          command: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
 
   deploy-to-pypi:
     description: "Deploy the contents of dist/ to PyPi"
@@ -92,6 +104,15 @@ jobs:
     steps:
     - checkout
     - run: make test-lint
+
+  # Test env vars from tags produce VERSION file
+  test-version-tagging:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: ./build_tools/circle/test_version_tagging.sh
 
   # Regression testing for switch-over to new pmdarima namespace
   regression-testing:
@@ -182,6 +203,8 @@ workflows:
             filters: *test-filters
         - regression-testing:
             filters: *test-filters
+        - test-version-tagging:
+            filters: *test-only-filters
         - testing-passed:
             requires:
                 - pypy

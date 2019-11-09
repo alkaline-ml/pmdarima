@@ -5,7 +5,7 @@
 
 PYTHON ?= python
 
-.PHONY: clean develop test install bdist_wheel
+.PHONY: clean develop test install bdist_wheel version
 
 clean:
 	$(PYTHON) setup.py clean
@@ -13,6 +13,8 @@ clean:
 	rm -rf build
 	rm -rf .pytest_cache
 	rm -rf pmdarima.egg-info
+	rm -f pmdarima/VERSION
+	rm -rf .coverage.*
 
 deploy-requirements:
 	$(PYTHON) -m pip install twine readme_renderer[md]
@@ -27,22 +29,22 @@ deploy-twine-test: bdist_wheel deploy-requirements
 doc-requirements:
 	$(PYTHON) -m pip install -r build_tools/doc/doc_requirements.txt
 
-documentation: doc-requirements
+documentation: doc-requirements version
 	@make -C doc clean html EXAMPLES_PATTERN=example_*
 
 requirements:
 	$(PYTHON) -m pip install -r requirements.txt
 
-bdist_wheel: requirements
+bdist_wheel: version
 	$(PYTHON) setup.py bdist_wheel
 
-sdist: requirements
+sdist: version
 	$(PYTHON) setup.py sdist
 
-develop: requirements
+develop: version
 	$(PYTHON) setup.py develop
 
-install: requirements
+install: version
 	$(PYTHON) setup.py install
 
 test-requirements:
@@ -67,3 +69,6 @@ test: develop test-unit test-lint
 twine-check: bdist_wheel deploy-requirements
 	# Check that twine will parse the README acceptably
 	$(PYTHON) -m twine check dist/*
+
+version: requirements
+	@$(PYTHON) build_tools/get_tag.py
