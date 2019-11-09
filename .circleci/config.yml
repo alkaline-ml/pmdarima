@@ -216,6 +216,8 @@ workflows:
             filters: *test-filters
         - cpython37:
             filters: *test-filters
+        - cpython38:
+            filters: *test-filters
         - test-linting:
             filters: *test-filters
         - regression-testing:
@@ -253,3 +255,7 @@ workflows:
             requires:
                 - deploy-doc
 
+        - deploy-cpython38-whl:
+            filters: *deploy-filters
+            requires:
+              - deploy-doc
