@@ -117,7 +117,7 @@ class _StepwiseFitWrapper(object):
         Q = self.Q if Q is None else Q
 
         order = (p, self.d, q)
-        ssnl = (P, self.D, Q, self.m) if self.seasonal else None
+        ssnl = (P, self.D, Q, self.m) if self.seasonal else (0, 0, 0, 0)
 
         # if the sum of the orders > max_order we do not build this model...
         order_sum = p + q + (P + Q if self.seasonal else 0)
@@ -252,8 +252,7 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
 def _fmt_order_info(order, seasonal_order):
     return 'order=(%i, %i, %i)%s' \
            % (order[0], order[1], order[2],
-              '' if seasonal_order is None
-              else ' seasonal_order=(%i, %i, %i, %i)'
+              ' seasonal_order=(%i, %i, %i, %i)'
               % (seasonal_order[0], seasonal_order[1],
                  seasonal_order[2], seasonal_order[3]))
 

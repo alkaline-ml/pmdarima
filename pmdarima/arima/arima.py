@@ -11,7 +11,6 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
 from sklearn.utils.validation import check_is_fitted, check_array
 
-from statsmodels.tsa.arima_model import ARIMA as _ARIMA
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 from statsmodels import api as sm
 
@@ -24,7 +23,6 @@ from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.python import long
 from ..compat import statsmodels as sm_compat
-from ..decorators import deprecated
 from ..utils import get_callable, if_has_delegate, is_iterable, check_endog
 from ..utils.visualization import _get_plt
 
@@ -139,7 +137,7 @@ class ARIMA(BaseARIMA):
         had past values subtracted), and is a non-negative integer. ``q`` is
         the order of the moving-average model, and is a non-negative integer.
 
-    seasonal_order : array-like, shape=(4,), optional (default=None)
+    seasonal_order : array-like, shape=(4,), optional (default=(0, 0, 0, 0))
         The (P,D,Q,s) order of the seasonal component of the model for the
         AR parameters, differences, MA parameters, and periodicity. ``D`` must
         be an integer indicating the integration order of the process, while
@@ -159,15 +157,11 @@ class ARIMA(BaseARIMA):
         Uses the transformation suggested in Jones (1980).  If False,
         no checking for stationarity or invertibility is done.
 
-    method : str, one of {'css-mle','mle','css'}, optional (default=None)
-        This is the loglikelihood to maximize.  If "css-mle", the
-        conditional sum of squares likelihood is maximized and its values
-        are used as starting values for the computation of the exact
-        likelihood via the Kalman filter.  If "mle", the exact likelihood
-        is maximized via the Kalman Filter.  If "css" the conditional sum
-        of squares likelihood is maximized.  All three methods use
-        `start_params` as starting parameters.  See above for more
-        information. If fitting a seasonal ARIMA, the default is 'lbfgs'
+    method : str, optional (default='lbfgs')
+        One of {'newton', 'bfgs', 'lbfgs', 'powell', 'cg', 'ncg',
+        'basinhopping'}. Determines a solver method for maximizing the
+        loglikelihood. Default is 'lbfgs' (limited-memory BFGS with optional
+        box constraints).
 
     solver : str or None, optional (default='lbfgs')
         Solver to be used.  The default is 'lbfgs' (limited memory
@@ -178,11 +172,8 @@ class ARIMA(BaseARIMA):
         approximate the Hessian, projected gradient tolerance of 1e-8 and
         factr = 1e2. You can change these by using kwargs.
 
-    maxiter : int, optional (default=None)
-        The maximum number of function evaluations. Statsmodels defaults this
-        value to 50 for SARIMAX models and 500 for ARIMA and ARMA models. If
-        passed as None, will use the seasonal order to determine which to use
-        (50 for seasonal, 500 otherwise).
+    maxiter : int, optional (default=50)
+        The maximum number of function evaluations. Default is 50
 
     disp : int, optional (default=0)
         If True, convergence information is printed.  For the default
@@ -289,8 +280,8 @@ class ARIMA(BaseARIMA):
     .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average
     .. [2] Statsmodels ARIMA documentation: http://bit.ly/2wc9Ra8
     """
-    def __init__(self, order, seasonal_order=None, start_params=None,
-                 method=None, transparams=True, solver='lbfgs',
+    def __init__(self, order, seasonal_order=(0, 0, 0, 0), start_params=None,
+                 method='lbfgs', transparams=True, solver='lbfgs',
                  maxiter=None, disp=0, callback=None, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None,
                  trend=None, with_intercept=True, **sarimax_kwargs):
@@ -315,9 +306,6 @@ class ARIMA(BaseARIMA):
         self.with_intercept = with_intercept
         self.sarimax_kwargs = sarimax_kwargs
 
-    def _is_seasonal(self):
-        return self.seasonal_order is not None
-
     def _fit(self, y, exogenous=None, **fit_args):
         """Internal fit"""
 
@@ -329,48 +317,24 @@ class ARIMA(BaseARIMA):
             # If it's in kwargs, we'll use it
             trend = self.trend
 
-            # if not seasonal:
-            if not self._is_seasonal():
-                if method is None:
-                    method = "css-mle"
+            # TODO: remove this check. this is a compat warning for when we
+            #   . moved to sarimax only
+            if method is None:
+                warnings.warn("As of version 1.5.0, the default value of "
+                              "'method' is 'lbfgs'. Explicitly setting None "
+                              "will raise in future versions", UserWarning)
+                method = 'lbfgs'
 
-                if trend is None:
-                    if self.with_intercept:
-                        trend = 'c'
-                    else:
-                        trend = 'nc'
+            if trend is None and self.with_intercept:
+                trend = 'c'
 
-                # create the statsmodels ARIMA
-                arima = _ARIMA(endog=y, order=self.order, missing='none',
-                               exog=exogenous, dates=None, freq=None)
-
-                # there's currently a bug in the ARIMA model where on pickling
-                # it tries to acquire an attribute called
-                # 'self.{dates|freq|missing}', but they do not exist as class
-                # attrs! They're passed up to TimeSeriesModel in base, but
-                # are never set. So we inject them here so as not to get an
-                # AttributeError later. (see http://bit.ly/2f7SkKH)
-                for attr, val in (('dates', None), ('freq', None),
-                                  ('missing', 'none')):
-                    if not hasattr(arima, attr):
-                        setattr(arima, attr, val)
-            else:
-                if method is None:
-                    method = 'lbfgs'
-
-                if trend is None:
-                    if self.with_intercept:
-                        trend = 'c'
-                    else:
-                        trend = None
-
-                # create the SARIMAX
-                sarimax_kwargs = \
-                    {} if not self.sarimax_kwargs else self.sarimax_kwargs
-                arima = sm.tsa.statespace.SARIMAX(
-                    endog=y, exog=exogenous, order=self.order,
-                    seasonal_order=self.seasonal_order, trend=trend,
-                    **sarimax_kwargs)
+            # create the SARIMAX
+            sarimax_kwargs = \
+                {} if not self.sarimax_kwargs else self.sarimax_kwargs
+            arima = sm.tsa.statespace.SARIMAX(
+                endog=y, exog=exogenous, order=self.order,
+                seasonal_order=self.seasonal_order, trend=trend,
+                **sarimax_kwargs)
 
             # actually fit the model, now. If this was called from 'update',
             # give priority to start_params from the fit_args
@@ -380,10 +344,12 @@ class ARIMA(BaseARIMA):
             # passed as a fit arg, if a user does it explicitly.
             _maxiter = self.maxiter
             if _maxiter is None:
-                if self._is_seasonal():
-                    _maxiter = sm_compat.DEFAULT_SEASONAL_MAXITER  # 50
-                else:
-                    _maxiter = sm_compat.DEFAULT_NON_SEASONAL_MAXITER  # 500
+                # TODO: remove this check. this is a compat warning for when we
+                #   . moved to sarimax only
+                warnings.warn("As of version 1.5.0, the default value of "
+                              "'maxiter' is 50. Explicitly setting None "
+                              "will raise in future versions", UserWarning)
+                _maxiter = 50
 
             # If maxiter is provided in the fit_args by a savvy user or the
             # update method, we should default to their preference
@@ -406,13 +372,6 @@ class ARIMA(BaseARIMA):
 
         # Set df_model attribute for SARIMAXResults object
         sm_compat.bind_df_model(fit, self.arima_res_)
-
-        # Non-seasonal ARIMA models may not capture sigma2. Statsmodels' code
-        # is buggy and difficult to follow, so this checks whether it needs to
-        # be set or not...
-        # if (not self._is_seasonal()) and np.isnan(self.arima_res_.sigma2):
-        #     self.arima_res_.sigma2 = self.arima_res_.model.loglike(
-        #         self.params(), True)
 
         # if the model is fit with an exogenous array, it must
         # be predicted with one as well.
@@ -520,7 +479,7 @@ class ARIMA(BaseARIMA):
 
     def predict_in_sample(self, exogenous=None, start=None,
                           end=None, dynamic=False, return_conf_int=False,
-                          alpha=0.05, typ='levels'):
+                          alpha=0.05, **kwargs):
         """Generate in-sample predictions from the fit ARIMA model.
 
         Predicts the original training (in-sample) time series values. This can
@@ -558,16 +517,6 @@ class ARIMA(BaseARIMA):
         alpha : float, optional (default=0.05)
             The confidence intervals for the forecasts are (1 - alpha) %
 
-        typ : str, optional (default='levels')
-            The type of prediction to make. Options are ('linear', 'levels').
-            This is only used when the underlying model is ARIMA (not ARMA or
-            SARIMAX).
-
-              - 'linear': makes linear predictions in terms of the differenced
-                endogenous variables.
-              - 'levels': predicts the levels of the original endogenous
-                variables.
-
         Returns
         -------
         preds : array
@@ -579,58 +528,37 @@ class ARIMA(BaseARIMA):
         """
         check_is_fitted(self, 'arima_res_')
 
+        # TODO: remove this, it's a compat check
+        if kwargs.pop("typ", None):
+            warnings.warn("As of version 1.5.0 'typ' is no longer a valid "
+                          "arg for predict")
+
         # if we fit with exog, make sure one was passed:
         exogenous = self._check_exog(exogenous)  # type: np.ndarray
-        d = self.order[1]
         results_wrapper = self.arima_res_
-
-        # The only func that has 'typ' is for ARIMAs, not ARMAs or SARIMAX
-        kwargs = {}
-        if d > 0:
-            kwargs['typ'] = typ
 
         # If not returning the confidence intervals, we have it really easy
         if not return_conf_int:
             preds = results_wrapper.predict(
                 exog=exogenous, start=start,
-                end=end, dynamic=dynamic,
-                **kwargs)
+                end=end, dynamic=dynamic)
 
             return preds
 
         # We cannot get confidence intervals if dynamic is true
         if dynamic:
             warnings.warn("Cannot produce in-sample confidence intervals for "
-                          "dynamic=True")
+                          "dynamic=True. Setting dynamic=False")
             dynamic = False
 
         # Otherwise confidence intervals are requested...
-        if self._is_seasonal():
-            preds, conf_int = _seasonal_prediction_with_confidence(
-                arima_res=results_wrapper,
-                start=start,
-                end=end,
-                exog=exogenous,
-                alpha=alpha,
-                dynamic=dynamic)
-        else:
-            preds = results_wrapper.predict(
-                exog=exogenous, start=start,
-                end=end, dynamic=dynamic, **kwargs)
-
-            # We only have to un-integrate if there was any differencing
-            # TODO: prob don't need to since this occurs in the predict code
-            # (i.e., ARIMA vs. ARMA)
-            # if d > 0:
-            #     preds = _unintegrate_differenced_preds(
-            #         preds=preds,
-            #         results_wrapper=results_wrapper,
-            #         d=d)
-
-            # get prediction errors
-            pred_err = results_wrapper._forecast_error(len(preds))
-            conf_int = results_wrapper._forecast_conf_int(
-                preds, pred_err, alpha)
+        preds, conf_int = _seasonal_prediction_with_confidence(
+            arima_res=results_wrapper,
+            start=start,
+            end=end,
+            exog=exogenous,
+            alpha=alpha,
+            dynamic=dynamic)
 
         return preds, conf_int
 
@@ -678,23 +606,16 @@ class ARIMA(BaseARIMA):
         if exogenous is not None and exogenous.shape[0] != n_periods:
             raise ValueError('Exogenous array dims (n_rows) != n_periods')
 
-        # ARIMA/ARMA predict differently...
-        if not self._is_seasonal():
-            # use the results wrapper to predict so it injects its own params
-            # (also if `I` was 0 ARMA will not have a forecast method natively)
-            f, _, conf_int = self.arima_res_.forecast(
-                steps=n_periods, exog=exogenous, alpha=alpha)
-        else:  # SARIMAX
-            # f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
-            arima = self.arima_res_
-            end = arima.nobs + n_periods - 1
+        # f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
+        arima = self.arima_res_
+        end = arima.nobs + n_periods - 1
 
-            f, conf_int = _seasonal_prediction_with_confidence(
-                arima_res=arima,
-                start=arima.nobs,
-                end=end,
-                exog=exogenous,
-                alpha=alpha)
+        f, conf_int = _seasonal_prediction_with_confidence(
+            arima_res=arima,
+            start=arima.nobs,
+            end=end,
+            exog=exogenous,
+            alpha=alpha)
 
         if return_conf_int:
             # The confidence intervals may be a Pandas frame if it comes from
@@ -779,35 +700,6 @@ class ARIMA(BaseARIMA):
             loc = self.__dict__.get('tmp_pkl_', None)
             if loc is not None:
                 os.unlink(loc)
-
-    # TODO: remove this in version 1.4.0
-    @deprecated(use_instead="update", notes="See issue #104")
-    def add_new_observations(self, y, exogenous=None, **kwargs):
-        """Update the endog/exog samples after a model fit.
-
-        After fitting your model and creating forecasts, you're going
-        to need to attach new samples to the data you fit on. These are
-        used to compute new forecasts (but using the same estimated
-        parameters).
-
-        Parameters
-        ----------
-        y : array-like or iterable, shape=(n_samples,)
-            The time-series data to add to the endogenous samples on which the
-            ``ARIMA`` estimator was previously fit. This may either be a Pandas
-            ``Series`` object or a numpy array. This should be a one-
-            dimensional array of finite floats.
-
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
-            An optional 2-d array of exogenous variables. If the model was
-            fit with an exogenous array of covariates, it will be required for
-            updating the observed values.
-
-        **kwargs : keyword args
-            Any keyword args that should be passed as ``**fit_kwargs`` in the
-            new model fit.
-        """
-        return self.update(y, exogenous, **kwargs)
 
     def update(self, y, exogenous=None, maxiter=None, **kwargs):
         """Update the model fit with additional observed endog/exog values.

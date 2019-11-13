@@ -112,15 +112,15 @@ def test_basic_arma():
 
 @pytest.mark.parametrize(
     # will be m - d
-    'model, expected_m_dim', [
-        pytest.param(ARIMA(order=(2, 0, 0)), wineind.shape[0]),  # arma
-        pytest.param(ARIMA(order=(2, 1, 0)), wineind.shape[0] - 1),  # arima
-        pytest.param(ARIMA(order=(2, 1, 0), seasonal_order=(1, 0, 0, 12)),
-                     wineind.shape[0]),  # sarimax
+    'model', [
+        ARIMA(order=(2, 0, 0)),  # arma
+        ARIMA(order=(2, 1, 0)),  # arima
+        ARIMA(order=(2, 1, 0), seasonal_order=(1, 0, 0, 12)),  # sarimax
     ]
 )
-def test_predict_in_sample_conf_int(model, expected_m_dim):
+def test_predict_in_sample_conf_int(model):
     model.fit(wineind)
+    expected_m_dim = wineind.shape[0]
     preds, confints = model.predict_in_sample(return_conf_int=True, alpha=0.05)
     assert preds.shape[0] == expected_m_dim
     assert confints.shape == (expected_m_dim, 2)
@@ -190,13 +190,13 @@ def test_oob_for_issue_28():
     assert not np.isnan(oob)
 
     # Assert that the endog shapes match. First is equal to the original,
-    # and the second is the differenced array, with original shape - d.
+    # and the second is the differenced array
     assert np.allclose(arima.arima_res_.data.endog, hr, rtol=1e-2)
-    assert arima.arima_res_.model.endog.shape[0] == hr.shape[0] - 1
+    assert arima.arima_res_.model.endog.shape[0] == hr.shape[0]
 
     # Now assert the same for exog
     assert np.allclose(arima.arima_res_.data.exog, xreg, rtol=1e-2)
-    assert arima.arima_res_.model.exog.shape[0] == xreg.shape[0] - 1
+    assert arima.arima_res_.model.exog.shape[0] == xreg.shape[0]
 
     # Compare the OOB score to an equivalent fit on data - 10 obs, but
     # without any OOB scoring, and we'll show that the OOB scoring in the
@@ -652,8 +652,7 @@ def test_corner_cases():
 def test_warning_str_fmt():
     order = (1, 1, 1)
     seasonal = (1, 1, 1, 1)
-    for ssnl in (seasonal, None):
-        _fmt_warning_str(order, ssnl)
+    _fmt_warning_str(order, seasonal)
 
 
 @pytest.mark.parametrize(
@@ -835,10 +834,10 @@ def test_for_older_version():
 @pytest.mark.parametrize(
     'order,seasonal', [
         # ARMA
-        pytest.param((1, 0, 0), None),
+        pytest.param((1, 0, 0), (0, 0, 0, 0)),
 
         # ARIMA
-        pytest.param((1, 1, 0), None),
+        pytest.param((1, 1, 0), (0, 0, 0, 0)),
 
         # SARIMAX
         pytest.param((1, 1, 0), (1, 0, 0, 12))
@@ -1026,17 +1025,6 @@ def test_update_1_iter(model):
 
     # They should be close
     assert np.allclose(params1, params2, atol=0.05)
-
-
-def test_add_new_obs_deprecated():
-    endog = wineind
-    train, test = endog[:125], endog[125:]
-    model = ARIMA(order=(1, 0, 0))
-
-    model.fit(train)
-
-    with pytest.warns(DeprecationWarning):
-        model.add_new_observations(test)
 
 
 def test_AutoARIMA_class():

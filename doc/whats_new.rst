@@ -8,6 +8,16 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
+`v1.5.0 <http://alkaline-ml.com/pmdarima/1.5.0/>`_
+--------------------------------------------------
+
+* Defaults that have changed:
+
+  - ``maxiter`` is now 50 (was ``None``)
+  - ``method`` is now 'lbfgs' (was ``None``)
+  - ``seasonal_order`` is now ``(0, 0, 0, 0)`` (was ``None``)
+
+
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
 --------------------------------------------------
 

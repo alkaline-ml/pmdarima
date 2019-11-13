@@ -46,9 +46,9 @@ class AutoARIMA(BaseARIMA):
                  max_D=1, max_Q=2, max_order=10, m=1, seasonal=True,
                  stationary=False, information_criterion='aic', alpha=0.05,
                  test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
-                 start_params=None, trend=None, method=None, transparams=True,
-                 solver='lbfgs', maxiter=None, disp=0, callback=None,
-                 offset_test_args=None, seasonal_test_args=None,
+                 start_params=None, trend=None, method='lbfgs',
+                 transparams=True, solver='lbfgs', maxiter=50, disp=0,
+                 callback=None, offset_test_args=None, seasonal_test_args=None,
                  suppress_warnings=False, error_action='warn', trace=False,
                  random=False, random_state=None, n_fits=10,
                  out_of_sample_size=0, scoring='mse',
@@ -236,8 +236,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                max_D=1, max_Q=2, max_order=10, m=1, seasonal=True,
                stationary=False, information_criterion='aic', alpha=0.05,
                test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
-               start_params=None, trend=None, method=None, transparams=True,
-               solver='lbfgs', maxiter=None, disp=0, callback=None,
+               start_params=None, trend=None, method='lbfgs', transparams=True,
+               solver='lbfgs', maxiter=50, disp=0, callback=None,
                offset_test_args=None, seasonal_test_args=None,
                suppress_warnings=False, error_action='warn', trace=False,
                random=False, random_state=None, n_fits=10,
@@ -317,7 +317,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         warnings.warn('Input time-series is completely constant; '
                       'returning a (0, 0, 0) ARMA.')
         return _return_wrapper(_post_ppc_arima(
-            _fit_arima(y, xreg=exogenous, order=(0, 0, 0), seasonal_order=None,
+            _fit_arima(y, xreg=exogenous, order=(0, 0, 0),
+                       seasonal_order=(0, 0, 0, 0),
                        start_params=start_params, trend=trend, method=method,
                        transparams=transparams, solver=solver, maxiter=maxiter,
                        disp=disp, callback=callback, fit_params=fit_args,
@@ -452,7 +453,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                              'suitable for ARIMA modeling')
 
         # perfect regression
-        ssn = None if not seasonal else (0, D, 0, m)
+        ssn = (0, 0, 0, 0) if not seasonal else (0, D, 0, m)
         return _return_wrapper(
             _post_ppc_arima(
                 _fit_arima(y, xreg=exogenous, order=(0, d, 0),
@@ -496,7 +497,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
     else:
         # otherwise it's not seasonal, and we don't need the seasonal pieces
         gen = (
-            ((p, d, q), None)
+            ((p, d, q), (0, 0, 0, 0))
             for p in xrange(start_p, max_p + 1)
             for q in xrange(start_q, max_q + 1)
             if p + q <= max_order
