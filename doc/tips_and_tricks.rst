@@ -52,7 +52,7 @@ Understanding differencing (``d``)
 An integrative term, ``d``, is typically only used in the case of non-stationary
 data. Stationarity in a time series indicates that a series' statistical attributes,
 such as mean, variance, etc., are constant over time (i.e., it exhibits low
-`heteroskedasticity <http://www.statsmakemecry.com/smmctheblog/confusing-stats-terms-explained-heteroscedasticity-heteroske.html>`_.
+`heteroskedasticity <http://www.statsmakemecry.com/smmctheblog/confusing-stats-terms-explained-heteroscedasticity-heteroske.html>`_).
 
 A stationary time series is far more easy to learn and forecast from. With the
 ``d`` parameter, you can force the ARIMA model to adjust for non-stationarity on
