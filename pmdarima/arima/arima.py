@@ -39,10 +39,15 @@ VALID_SCORING = {
 }
 
 
-def _aicc(model_results, nobs):
+def _aicc(model_results, nobs, add_constant):
     """Compute the corrected Akaike Information Criterion"""
     aic = model_results.aic
-    df_model = model_results.df_model + 1  # add one for constant term
+
+    # SARIMAX counts the constant in df_model if there was an intercept, so
+    # only add one if no constant was included in the model
+    df_model = model_results.df_model
+    if add_constant:
+        add_constant += 1  # add one for constant term
     return aic + 2. * df_model * (nobs / (nobs - df_model - 1.) - 1.)
 
 
@@ -261,12 +266,7 @@ class ARIMA(BaseARIMA):
 
     Notes
     -----
-    * Since the ``ARIMA`` class currently wraps
-      ``statsmodels.tsa.arima_model.ARIMA``, which does not provide support
-      for seasonality, the only way to fit seasonal ARIMAs is to manually
-      lag/pre-process your data appropriately. This might change in
-      the future. [2]
-
+    * The model internally wraps the statsmodels `SARIMAX class <https://www.statsmodels.org/stable/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html>`_  #noqa: E501
     * After the model fit, many more methods will become available to the
       fitted model (i.e., :func:`pvalues`, :func:`params`, etc.). These are
       delegate methods which wrap the internal ARIMA results instance.
@@ -278,7 +278,6 @@ class ARIMA(BaseARIMA):
     References
     ----------
     .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average
-    .. [2] Statsmodels ARIMA documentation: http://bit.ly/2wc9Ra8
     """
     def __init__(self, order, seasonal_order=(0, 0, 0, 0), start_params=None,
                  method='lbfgs', transparams=True, solver='lbfgs',
@@ -836,7 +835,9 @@ class ARIMA(BaseARIMA):
         # this code should really be added to statsmodels. Rewrite
         # this function to reflect other metric implementations if/when
         # statsmodels incorporates AICc
-        return _aicc(self.arima_res_, self.nobs_)
+        return _aicc(self.arima_res_,
+                     self.nobs_,
+                     not self.with_intercept)
 
     @if_delegate_has_method('arima_res_')
     def arparams(self):

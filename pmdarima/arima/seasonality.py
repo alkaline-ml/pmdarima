@@ -286,7 +286,10 @@ class OCSBTest(_SeasonalStationarityTest):
     _ic_method_map = {
         "aic": lambda fit: fit.aic,
         "bic": lambda fit: fit.bic,
-        "aicc": lambda fit: _aicc(fit, fit.nobs)
+
+        # TODO: confirm False for add_constant, since the model fit contains
+        #   . a constant term
+        "aicc": lambda fit: _aicc(fit, fit.nobs, False)
     }
 
     def __init__(self, m, lag_method="aic", max_lag=3):

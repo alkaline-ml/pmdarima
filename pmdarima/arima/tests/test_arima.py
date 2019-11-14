@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-
-from pmdarima.arima import ARIMA, auto_arima, AutoARIMA, StepwiseContext
+from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
 from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
 from pmdarima.arima._auto_solvers import _fmt_warning_str
 from pmdarima.arima.auto import _post_ppc_arima
@@ -78,7 +76,11 @@ def test_basic_arma():
     assert arma.oob_preds_ is None
 
     # test some of the attrs
-    assert_almost_equal(arma.aic(), 11.201308403566909, decimal=5)
+    assert_almost_equal(arma.aic(), 11.201, decimal=3)  # equivalent in R
+
+    # intercept is param 0
+    intercept = arma.params()[0]
+    assert_almost_equal(intercept, 0.441, decimal=3)  # equivalent in R
     assert_almost_equal(arma.aicc(), 11.74676, decimal=5)
     assert_almost_equal(arma.bic(), 13.639060053303311, decimal=5)
 
@@ -414,8 +416,8 @@ def test_the_r_src():
     # this is the test the R code provides
     fit = ARIMA(order=(2, 0, 1), trend='c', suppress_warnings=True).fit(abc)
 
-    # the R code's AIC = ~135
-    assert abs(135 - fit.aic()) < 1.0
+    # the R code's AIC = 135.4
+    assert abs(135.4 - fit.aic()) < 1.0
 
     # the R code's AICc = ~ 137
     assert abs(137 - fit.aicc()) < 1.0
@@ -871,6 +873,7 @@ def test_to_dict_raises_attribute_error_on_unfit_model():
         modl.to_dict()
 
 
+# tgsmith61591: I really hate this test. But it ensures no drift, at least..
 def test_to_dict_is_accurate():
     train = lynx[:90]
     modl = auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
@@ -908,7 +911,7 @@ def test_to_dict_is_accurate():
         'seasonal_order': (0, 0, 0, 1),
         'oob': np.nan,
         'aic': 1487.8850037609368,
-        'aicc': 1488.5992894752226,
+        'aicc': 1488.3555919962284,
         'bic': 1497.8842424422578,
         'bse': np.array([2.26237893e+02, 6.97744631e-02,
                          9.58556537e-02, 1.03225425e+05]),
