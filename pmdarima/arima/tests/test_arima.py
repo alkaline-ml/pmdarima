@@ -429,10 +429,11 @@ def test_the_r_src():
     #     ar1      ar2     ma1    mean
     # -0.6515  -0.2449  0.8012  5.0370
 
-    # note that statsmodels' mean is on the front, not the end.
-    params = fit.params()
-    assert_almost_equal(params, np.array([5.0370, -0.6515, -0.2449, 0.8012]),
-                        decimal=2)
+    arparams = fit.arparams()
+    assert_almost_equal(arparams, [-0.6515, -0.2449], decimal=3)
+
+    maparams = fit.maparams()
+    assert_almost_equal(maparams, [0.8012], decimal=3)
 
     # > fit = forecast::auto.arima(abc, max.p=5, max.d=5,
     #             max.q=5, max.order=100, stepwise=F)
@@ -440,56 +441,46 @@ def test_the_r_src():
                      seasonal=False, trend='c', suppress_warnings=True,
                      error_action='ignore')
 
-    # this differs from the R fit with a slightly higher AIC...
-    assert abs(137 - fit.aic()) < 1.0  # R's is 135.28
+    assert abs(135.28 - fit.aic()) < 1.0  # R's is 135.28
 
 
-def test_errors():
-    def _assert_val_error(f, *args, **kwargs):
-        # Legacy, didn't really assert anything. Bad news!
-        # try:
-        #     f(*args, **kwargs)
-        #     return False
-        # except ValueError:
-        #     return True
-        with pytest.raises(ValueError):
-            f(*args, **kwargs)
+@pytest.mark.parametrize(
+    'endog, kwargs', [
+        # show we fail for bad start/max p, q values:
+        pytest.param(abc, {'start_p': -1}),
+        pytest.param(abc, {'start_q': -1}),
+        pytest.param(abc, {'max_p': -1}),
+        pytest.param(abc, {'max_q': -1}),
 
-    # show we fail for bad start/max p, q values:
+        # show we fail when start < max:
+        pytest.param(abc, {'start_p': 1, 'max_p': 0}),
+        pytest.param(abc, {'start_q': 1, 'max_q': 0}),
+
+        # other assertions
+        pytest.param(abc, {'max_order': -1}),
+        pytest.param(abc, {'max_d': -1}),
+        pytest.param(abc, {'d': -1}),
+        pytest.param(abc, {'max_D': -1}),
+        pytest.param(abc, {'D': -1}),
+        pytest.param(abc, {'information_criterion': 'bad-value'}),
+        pytest.param(abc, {'m': 0}),
+
+        # show that for starting values > max_order, we'll get an error
+        pytest.param(abc, {'start_p': 5,
+                           'start_q': 5,
+                           'seasonal': False,
+                           'max_order': 3}),
+        pytest.param(abc, {'start_p': 5,
+                           'start_q': 5,
+                           'start_P': 4,
+                           'start_Q': 3,
+                           'seasonal': True,
+                           'max_order': 3}),
+    ]
+)
+def test_value_errors(endog, kwargs):
     with pytest.raises(ValueError):
-        auto_arima(abc, start_p=-1)
-    with pytest.raises(ValueError):
-        auto_arima(abc, start_q=-1)
-    with pytest.raises(ValueError):
-        auto_arima(abc, max_p=-1)
-    with pytest.raises(ValueError):
-        auto_arima(abc, max_q=-1)
-    # (where start < max)
-    with pytest.raises(ValueError):
-        auto_arima(abc, start_p=1, max_p=0)
-    with pytest.raises(ValueError):
-        auto_arima(abc, start_q=1, max_q=0)
-
-    # show max order error
-    _assert_val_error(auto_arima, abc, max_order=-1)
-
-    # show errors for d
-    _assert_val_error(auto_arima, abc, max_d=-1)
-    _assert_val_error(auto_arima, abc, d=-1)
-    _assert_val_error(auto_arima, abc, max_D=-1)
-    _assert_val_error(auto_arima, abc, D=-1)
-
-    # show error for bad IC
-    _assert_val_error(auto_arima, abc, information_criterion='bad-value')
-
-    # show bad m value
-    _assert_val_error(auto_arima, abc, m=0)
-
-    # show that for starting values > max_order, we'll get an error
-    _assert_val_error(auto_arima, abc, start_p=5, start_q=5,
-                      seasonal=False, max_order=3)
-    _assert_val_error(auto_arima, abc, start_p=5, start_q=5, start_P=4,
-                      start_Q=3, seasonal=True, max_order=3)
+        auto_arima(endog, **kwargs)
 
 
 def test_many_orders():

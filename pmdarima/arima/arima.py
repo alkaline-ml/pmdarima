@@ -266,7 +266,7 @@ class ARIMA(BaseARIMA):
 
     Notes
     -----
-    * The model internally wraps the statsmodels `SARIMAX class <https://www.statsmodels.org/stable/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html>`_  #noqa: E501
+    * The model internally wraps the statsmodels `SARIMAX class <https://www.statsmodels.org/stable/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html>`_  # noqa: E501
     * After the model fit, many more methods will become available to the
       fitted model (i.e., :func:`pvalues`, :func:`params`, etc.). These are
       delegate methods which wrap the internal ARIMA results instance.
@@ -812,6 +812,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.aic
 
+    # TODO: this looks like it's implemented on statsmodels' master
     @if_has_delegate('arima_res_')
     def aicc(self):
         """Get the AICc, the corrected Akaike Information Criterion:

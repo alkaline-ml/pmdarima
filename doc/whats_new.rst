@@ -11,11 +11,18 @@ v0.8.1) will document the latest features.
 `v1.5.0 <http://alkaline-ml.com/pmdarima/1.5.0/>`_
 --------------------------------------------------
 
-* Defaults that have changed:
+* No longer use statsmodels' ``ARIMA`` or ``ARMA`` class under the hood; only use
+  the ``SARIMAX`` model, which cuts back on a lot of errors/warnings we saw in the past.
+  (`#211 <https://github.com/tgsmith61591/pmdarima/issues/211>`_)
+
+* Defaults in the ``ARIMA`` class that have changed as a result:
 
   - ``maxiter`` is now 50 (was ``None``)
   - ``method`` is now 'lbfgs' (was ``None``)
   - ``seasonal_order`` is now ``(0, 0, 0, 0)`` (was ``None``)
+
+* Correct bug where ``aicc`` always added 1 (for constant) to degrees of freedom,
+  even when ``df_model`` accounted for the constant term.
 
 
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
