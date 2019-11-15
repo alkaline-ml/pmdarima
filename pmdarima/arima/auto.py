@@ -202,7 +202,7 @@ class StepwiseContext(_context):
         if max_steps is None or not 0 < max_steps <= 100:
             raise ValueError('max_steps should be between 1 and 100')
 
-        if max_dur is  not None and max_dur <= 0:
+        if max_dur is not None and max_dur <= 0:
             raise ValueError('max_dur should be greater than zero')
 
         kwargs = {

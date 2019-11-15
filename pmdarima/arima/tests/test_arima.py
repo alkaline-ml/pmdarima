@@ -1066,6 +1066,7 @@ def test_issue_191():
         suppress_warnings=True,
         trace=True)
 
+
 # test StepwiseContext parameter validation
 @pytest.mark.parametrize(
     'max_steps,max_dur', [
@@ -1079,6 +1080,7 @@ def test_issue_191():
 def test_stepwise_context_args(max_steps, max_dur):
     with pytest.raises(ValueError):
         StepwiseContext(max_steps=max_steps, max_dur=max_dur)
+
 
 # test auto_arima stepwise run with  StepwiseContext
 def test_auto_arima_with_stepwise_context():

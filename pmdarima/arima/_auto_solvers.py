@@ -13,6 +13,7 @@ from .warnings import ModelFitWarning
 from ._context import _context as execution_context
 from datetime import datetime
 
+
 class _StepwiseFitWrapper(object):
     """The stepwise algorithm fluctuates the more sensitive pieces of the ARIMA
     (the seasonal components) first, adjusting towards the direction of the
@@ -85,7 +86,8 @@ class _StepwiseFitWrapper(object):
         # other internal start vars
         self.bestfit = None
         self.k = self.start_k = 0
-        self.max_k = 100 if self.exec_context.max_steps is None else self.exec_context.max_steps
+        self.max_k = 100 if self.exec_context.max_steps is None \
+            else self.exec_context.max_steps
         self.max_dur = self.exec_context.max_dur
 
         # results list to store intermittent hashes of orders to determine if
@@ -190,8 +192,9 @@ class _StepwiseFitWrapper(object):
                                            self.p < self.max_p, q=self.q + 1,
                                            p=self.p + 1)
 
-            # break loop if cumulative execution time exceeds the timeout threshold
-            if self.max_dur and (datetime.now() - start_time).total_seconds() > self.max_dur:
+            # break loop if execution time exceeds the timeout threshold
+            dur = (datetime.now() - start_time).total_seconds()
+            if self.max_dur and dur > self.max_dur:
                 break
 
         # return the values
