@@ -143,7 +143,7 @@ the proper lag term for us.
 Estimating the differencing term
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The TDS article selecting :math:`d=1` as the differencing term. But how did they
+The TDS article selected :math:`d=1` as the differencing term. But how did they
 make that choice? With pmdarima, we can run several differencing tests against the
 time series to select the best number of differences such that the time series will
 be stationary.
