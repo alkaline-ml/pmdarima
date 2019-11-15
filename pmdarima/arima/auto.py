@@ -20,14 +20,15 @@ from ..utils import diff, is_iterable, check_endog
 from ..utils.metaestimators import if_has_delegate
 from ._auto_solvers import _fit_arima, _StepwiseFitWrapper
 from .warnings import ModelFitWarning
-
+from ._context import _context
 # for python 3 compat
 from ..compat.python import xrange
 from ..compat.numpy import DTYPE
 
 __all__ = [
     'auto_arima',
-    'AutoARIMA'
+    'AutoARIMA',
+    'StepwiseContext'
 ]
 
 # The valid information criteria
@@ -171,6 +172,44 @@ class AutoARIMA(BaseARIMA):
             y, exogenous=exogenous, maxiter=maxiter, **kwargs)
 
     # TODO: decorator to automate all this composition + AIC, etc.
+
+
+class StepwiseContext(_context):
+    """Context Manager to capture runtime context for Stepwise mode.
+
+    ``StepwiseContext`` allows to call ``auto_arima`` in the context
+    of a runtime configuration that offers additional level of
+    control required in certain scenarios. Use cases that are either
+    sensitive to duration and/or the number of attempts to
+    find the best fit can use ``StepwiseContext`` to control them.
+    .
+
+    Parameters
+    ----------
+    max_steps : int, optional (default=100)
+        The maximum number of steps to try to find a best fit. When
+        the number of tries exceed this number, the stepwiese process
+        will stop the best fit model at that time will be returned.
+
+    max_dur : int, optional (default=None)
+        The maximum duration in seconds to try to find a best fit.
+        When the cumulative fit duration exceeds this number, the
+        stepwiese process will stop and the best fit model at that
+        time will be returned. Please note that this is a soft limit.
+    """
+
+    def __init__(self, max_steps=100, max_dur=None):
+        if max_steps is None or not 0 < max_steps <= 100:
+            raise ValueError('max_steps should be between 1 and 100')
+
+        if max_dur is  not None and max_dur <= 0:
+            raise ValueError('max_dur should be greater than zero')
+
+        kwargs = {
+            'max_steps': max_steps,
+            'max_dur': max_dur
+        }
+        super(StepwiseContext, self).__init__(**kwargs)
 
 
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,

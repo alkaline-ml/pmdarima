@@ -44,6 +44,7 @@ sections for further details.
     arima.KPSSTest
     arima.OCSBTest
     arima.PPTest
+    arima.StepwiseContext
 
 ARIMA auto-parameter selection
 ------------------------------

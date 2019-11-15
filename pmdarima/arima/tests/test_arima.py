@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
+from pmdarima.arima import ARIMA, auto_arima, AutoARIMA, StepwiseContext
 from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
 from pmdarima.arima._auto_solvers import _fmt_warning_str
 from pmdarima.arima.auto import _post_ppc_arima
@@ -1065,3 +1065,24 @@ def test_issue_191():
         alpha=0.05,
         suppress_warnings=True,
         trace=True)
+
+# test StepwiseContext parameter validation
+@pytest.mark.parametrize(
+    'max_steps,max_dur', [
+        pytest.param(-1, None),
+        pytest.param(0, None),
+        pytest.param(101, None),
+        pytest.param(110, None),
+        pytest.param(None, -1),
+        pytest.param(None, 0),
+    ])
+def test_stepwise_context_args(max_steps, max_dur):
+    with pytest.raises(ValueError):
+        StepwiseContext(max_steps=max_steps, max_dur=max_dur)
+
+# test auto_arima stepwise run with  StepwiseContext
+def test_auto_arima_with_stepwise_context():
+    samp = lynx[:8]
+    with StepwiseContext(max_steps=5, max_dur=30):
+        auto_arima(samp, suppress_warnings=True, stepwise=True,
+                   error_action='ignore')
