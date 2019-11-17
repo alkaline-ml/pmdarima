@@ -1072,8 +1072,8 @@ def test_issue_191():
     'max_steps,max_dur', [
         pytest.param(-1, None),
         pytest.param(0, None),
-        pytest.param(101, None),
-        pytest.param(110, None),
+        pytest.param(1001, None),
+        pytest.param(1100, None),
         pytest.param(None, -1),
         pytest.param(None, 0),
     ])
@@ -1086,5 +1086,11 @@ def test_stepwise_context_args(max_steps, max_dur):
 def test_auto_arima_with_stepwise_context():
     samp = lynx[:8]
     with StepwiseContext(max_steps=5, max_dur=30):
-        auto_arima(samp, suppress_warnings=True, stepwise=True,
-                   error_action='ignore')
+        with pytest.warns(UserWarning) as uw:
+            auto_arima(samp, suppress_warnings=False, stepwise=True,
+                       error_action='ignore')
+
+            # assert that max_steps were taken
+            assert any(str(w.message)
+                       .startswith('stepwise search has reached the '
+                                   'maximum number of tries') for w in uw)

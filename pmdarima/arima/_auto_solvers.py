@@ -10,7 +10,7 @@ import warnings
 
 from .arima import ARIMA
 from .warnings import ModelFitWarning
-from ._context import _context as execution_context
+from ._context import ContextType, ContextStore
 from datetime import datetime
 
 
@@ -81,7 +81,7 @@ class _StepwiseFitWrapper(object):
         self.max_order = max_order
 
         # execution context passed through the context manager
-        self.exec_context = execution_context()
+        self.exec_context = ContextStore.get_or_empty(ContextType.STEPWISE)
 
         # other internal start vars
         self.bestfit = None
@@ -195,7 +195,14 @@ class _StepwiseFitWrapper(object):
             # break loop if execution time exceeds the timeout threshold
             dur = (datetime.now() - start_time).total_seconds()
             if self.max_dur and dur > self.max_dur:
+                warnings.warn('early termination of stepwise search due to '
+                              'max_dur threshold')
                 break
+
+        # check if the search has ended after max_k tries
+        if self.k > self.max_k:
+            warnings.warn('stepwise search has reached the maximum number '
+                          'of tries to find the best fit model')
 
         # return the values
         return self.results_dict.values()

@@ -20,7 +20,7 @@ from ..utils import diff, is_iterable, check_endog
 from ..utils.metaestimators import if_has_delegate
 from ._auto_solvers import _fit_arima, _StepwiseFitWrapper
 from .warnings import ModelFitWarning
-from ._context import _context
+from ._context import AbstractContext, ContextType
 # for python 3 compat
 from ..compat.python import xrange
 from ..compat.numpy import DTYPE
@@ -174,7 +174,7 @@ class AutoARIMA(BaseARIMA):
     # TODO: decorator to automate all this composition + AIC, etc.
 
 
-class StepwiseContext(_context):
+class StepwiseContext(AbstractContext):
     """Context Manager to capture runtime context for Stepwise mode.
 
     ``StepwiseContext`` allows to call ``auto_arima`` in the context
@@ -189,7 +189,7 @@ class StepwiseContext(_context):
     max_steps : int, optional (default=100)
         The maximum number of steps to try to find a best fit. When
         the number of tries exceed this number, the stepwiese process
-        will stop the best fit model at that time will be returned.
+        will stop and the best fit model at that time will be returned.
 
     max_dur : int, optional (default=None)
         The maximum duration in seconds to try to find a best fit.
@@ -199,8 +199,8 @@ class StepwiseContext(_context):
     """
 
     def __init__(self, max_steps=100, max_dur=None):
-        if max_steps is None or not 0 < max_steps <= 100:
-            raise ValueError('max_steps should be between 1 and 100')
+        if max_steps is None or not 0 < max_steps <= 1000:
+            raise ValueError('max_steps should be between 1 and 1000')
 
         if max_dur is not None and max_dur <= 0:
             raise ValueError('max_dur should be greater than zero')
@@ -210,6 +210,10 @@ class StepwiseContext(_context):
             'max_dur': max_dur
         }
         super(StepwiseContext, self).__init__(**kwargs)
+
+    # override base class member
+    def get_type(self):
+        return ContextType.STEPWISE
 
 
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
