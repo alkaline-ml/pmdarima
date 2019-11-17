@@ -12,6 +12,7 @@ from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate, \
     load_austres
 from pmdarima.utils import get_callable
+from pmdarima.arima._context import ContextStore, ContextType
 
 import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
@@ -1094,3 +1095,35 @@ def test_auto_arima_with_stepwise_context():
             assert any(str(w.message)
                        .startswith('stepwise search has reached the '
                                    'maximum number of tries') for w in uw)
+
+
+# test effective context info in nested context scenario
+def test_nested_context():
+    ctx1_data = {'max_dur': 30}
+    ctx2_data = {'max_steps': 5}
+    ctx1 = StepwiseContext(**ctx1_data)
+    ctx2 = StepwiseContext(**ctx2_data)
+
+    with(ctx1):
+        with(ctx2):
+            effective_ctx_data = ContextStore.get_or_empty(ContextType.STEPWISE)
+            expected_ctx_data = ctx1_data.copy()
+            expected_ctx_data.update(ctx2_data)
+
+            assert all(effective_ctx_data[key] == expected_ctx_data[key]
+                       for key in expected_ctx_data.keys())
+
+            assert all(effective_ctx_data[key] == expected_ctx_data[key]
+                       for key in effective_ctx_data.keys())
+
+
+# test param validation of ContextStore's add, get and remove members
+def test_add_get_remove_context_args():
+    with(pytest.raises(ValueError)):
+        ContextStore._add_context(None)
+
+    with(pytest.raises(ValueError)):
+        ContextStore._remove_context(None)
+
+    with(pytest.raises(ValueError)):
+        ContextStore.get_context(None)
