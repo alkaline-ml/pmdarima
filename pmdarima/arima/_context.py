@@ -37,7 +37,7 @@ class AbstractContext(ABC):
     def __init__(self, **kwargs):
         # remove None valued entries,
         # since __getattr__ returns None if an attr is not present
-        self.props = {k: v for k,v in kwargs.items() if v is not None} \
+        self.props = {k: v for k, v in kwargs.items() if v is not None} \
             if kwargs else {}
 
     def __enter__(self):
@@ -90,6 +90,7 @@ class _emptyContext(AbstractContext):
 
     def get_type(self):
         return ContextType.EMPTY
+
 
 class ContextStore:
     """A class to wrap access to threading.local() context store
@@ -197,7 +198,8 @@ class ContextStore:
 
         context_type = ctx.get_type()
 
-        if context_type not in _ctx.store or len(_ctx.store[context_type]) == 0:
+        if context_type not in _ctx.store or \
+                len(_ctx.store[context_type]) == 0:
             return
 
         _ctx.store[context_type].pop()
