@@ -10,7 +10,6 @@ from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate, \
     load_austres
 from pmdarima.utils import get_callable
-from pmdarima.arima._context import ContextStore, ContextType
 
 import numpy as np
 from numpy.testing import assert_array_almost_equal, assert_almost_equal
@@ -1048,64 +1047,3 @@ def test_issue_191():
         alpha=0.05,
         suppress_warnings=True,
         trace=True)
-
-
-# test StepwiseContext parameter validation
-@pytest.mark.parametrize(
-    'max_steps,max_dur', [
-        pytest.param(-1, None),
-        pytest.param(0, None),
-        pytest.param(1001, None),
-        pytest.param(1100, None),
-        pytest.param(None, -1),
-        pytest.param(None, 0),
-    ])
-def test_stepwise_context_args(max_steps, max_dur):
-    with pytest.raises(ValueError):
-        StepwiseContext(max_steps=max_steps, max_dur=max_dur)
-
-
-# test auto_arima stepwise run with  StepwiseContext
-def test_auto_arima_with_stepwise_context():
-    samp = lynx[:8]
-    with StepwiseContext(max_steps=5, max_dur=30):
-        with pytest.warns(UserWarning) as uw:
-            auto_arima(samp, suppress_warnings=False, stepwise=True,
-                       error_action='ignore')
-
-            # assert that max_steps were taken
-            assert any(str(w.message)
-                       .startswith('stepwise search has reached the '
-                                   'maximum number of tries') for w in uw)
-
-
-# test effective context info in nested context scenario
-def test_nested_context():
-    ctx1_data = {'max_dur': 30}
-    ctx2_data = {'max_steps': 5}
-    ctx1 = StepwiseContext(**ctx1_data)
-    ctx2 = StepwiseContext(**ctx2_data)
-
-    with ctx1, ctx2:
-        effective_ctx_data = ContextStore.get_or_empty(
-            ContextType.STEPWISE)
-        expected_ctx_data = ctx1_data.copy()
-        expected_ctx_data.update(ctx2_data)
-
-        assert all(effective_ctx_data[key] == expected_ctx_data[key]
-                   for key in expected_ctx_data.keys())
-
-        assert all(effective_ctx_data[key] == expected_ctx_data[key]
-                   for key in effective_ctx_data.keys())
-
-
-# test param validation of ContextStore's add, get and remove members
-def test_add_get_remove_context_args():
-    with pytest.raises(ValueError):
-        ContextStore._add_context(None)
-
-    with pytest.raises(ValueError):
-        ContextStore._remove_context(None)
-
-    with pytest.raises(ValueError):
-        ContextStore.get_context(None)

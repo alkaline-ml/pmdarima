@@ -158,6 +158,17 @@ class _StepwiseFitWrapper(object):
         while self.start_k < self.k < self.max_k:
             self.start_k = self.k
 
+            # break loop if execution time exceeds the timeout threshold. needs
+            # to be at front of loop, since a single pass may reach termination
+            # criteria by end and we only want to warn and break if the loop is
+            # continuing again
+            dur = (datetime.now() - start_time).total_seconds()
+            if self.max_dur and dur > self.max_dur:
+                warnings.warn('early termination of stepwise search due to '
+                              'max_dur threshold (%.3f > %.3f)'
+                              % (dur, self.max_dur))
+                break
+
             # Each of these fit the models for an expression, a new p,
             # q, P or Q, and then reset best models
             # This takes the place of a lot of copy/pasted code....
@@ -192,13 +203,7 @@ class _StepwiseFitWrapper(object):
                                            self.p < self.max_p, q=self.q + 1,
                                            p=self.p + 1)
 
-            # break loop if execution time exceeds the timeout threshold
-            dur = (datetime.now() - start_time).total_seconds()
-            if self.max_dur and dur > self.max_dur:
-                warnings.warn('early termination of stepwise search due to '
-                              'max_dur threshold')
-                break
-
+        # TODO: @kpsunkara, should we return here?
         # check if the search has been ended after max_steps
         if self.exec_context.max_steps is not None \
                 and self.k > self.exec_context.max_steps:

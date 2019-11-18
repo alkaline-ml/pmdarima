@@ -4,8 +4,6 @@
 #
 # Automatically find optimal parameters for an ARIMA
 
-from __future__ import absolute_import
-
 from joblib import Parallel, delayed
 import numpy as np
 from sklearn.utils import check_random_state
@@ -18,9 +16,10 @@ from . import _doc
 from .utils import ndiffs, is_constant, nsdiffs
 from ..utils import diff, is_iterable, check_endog
 from ..utils.metaestimators import if_has_delegate
-from ._auto_solvers import _fit_arima, _StepwiseFitWrapper
 from .warnings import ModelFitWarning
 from ._context import AbstractContext, ContextType
+# Import as a namespace so we can mock
+from . import _auto_solvers as solvers
 # for python 3 compat
 from ..compat.python import xrange
 from ..compat.numpy import DTYPE
@@ -175,20 +174,19 @@ class AutoARIMA(BaseARIMA):
 
 
 class StepwiseContext(AbstractContext):
-    """Context Manager to capture runtime context for Stepwise mode.
+    """Context manager to capture runtime context for stepwise mode.
 
-    ``StepwiseContext`` allows to call ``auto_arima`` in the context
+    ``StepwiseContext`` allows one to call :func:`auto_arima` in the context
     of a runtime configuration that offers additional level of
     control required in certain scenarios. Use cases that are either
     sensitive to duration and/or the number of attempts to
     find the best fit can use ``StepwiseContext`` to control them.
-    .
 
     Parameters
     ----------
     max_steps : int, optional (default=100)
         The maximum number of steps to try to find a best fit. When
-        the number of tries exceed this number, the stepwiese process
+        the number of tries exceed this number, the stepwise process
         will stop and the best fit model at that time will be returned.
 
     max_dur : int, optional (default=None)
@@ -197,16 +195,16 @@ class StepwiseContext(AbstractContext):
         stepwiese process will stop and the best fit model at that
         time will be returned. Please note that this is a soft limit.
 
-    notes
+    Notes
     -----
-    Although the max_steps parameter is set to a default value of None here,
-    the stepwise search is limited to 100 tries to find a best fit model.
-    Defaulting the parameter to None here, preserves the intention of the
+    Although the ``max_steps`` parameter is set to a default value of None
+    here, the stepwise search is limited to 100 tries to find a best fit model.
+    Defaulting the parameter to None here preserves the intention of the
     caller and properly handles the nested contexts, like:
 
     >>> with StepwiseContext(max_steps=10):
     ...     with StepwiseContext(max_dur=30):
-    ...         auto_arima(sample, stepwise=True, ..)
+    ...         auto_arima(sample, stepwise=True, ...)
 
     In the above example, the stepwise search will be limited to either
     a maximum of 10 steps or a maximum duration of 30 seconds, whichever
@@ -214,6 +212,7 @@ class StepwiseContext(AbstractContext):
     """
 
     def __init__(self, max_steps=None, max_dur=None):
+        # TODO: do we want an upper limit on this?
         if max_steps is not None and not 0 < max_steps <= 1000:
             raise ValueError('max_steps should be between 1 and 1000')
 
@@ -317,17 +316,18 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         warnings.warn('Input time-series is completely constant; '
                       'returning a (0, 0, 0) ARMA.')
         return _return_wrapper(_post_ppc_arima(
-            _fit_arima(y, xreg=exogenous, order=(0, 0, 0),
-                       seasonal_order=(0, 0, 0, 0),
-                       start_params=start_params, trend=trend, method=method,
-                       transparams=transparams, solver=solver, maxiter=maxiter,
-                       disp=disp, callback=callback, fit_params=fit_args,
-                       suppress_warnings=suppress_warnings, trace=trace,
-                       error_action=error_action, scoring=scoring,
-                       out_of_sample_size=out_of_sample_size,
-                       scoring_args=scoring_args,
-                       with_intercept=with_intercept,
-                       **sarimax_kwargs)),
+            solvers._fit_arima(
+                y, xreg=exogenous, order=(0, 0, 0),
+                seasonal_order=(0, 0, 0, 0),
+                start_params=start_params, trend=trend, method=method,
+                transparams=transparams, solver=solver, maxiter=maxiter,
+                disp=disp, callback=callback, fit_params=fit_args,
+                suppress_warnings=suppress_warnings, trace=trace,
+                error_action=error_action, scoring=scoring,
+                out_of_sample_size=out_of_sample_size,
+                scoring_args=scoring_args,
+                with_intercept=with_intercept,
+                **sarimax_kwargs)),
             return_valid_fits, start, trace)
 
     # test ic, and use AIC if n <= 3
@@ -456,21 +456,22 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         ssn = (0, 0, 0, 0) if not seasonal else (0, D, 0, m)
         return _return_wrapper(
             _post_ppc_arima(
-                _fit_arima(y, xreg=exogenous, order=(0, d, 0),
-                           seasonal_order=ssn,
-                           start_params=start_params, trend=trend,
-                           method=method, transparams=transparams,
-                           solver=solver, maxiter=maxiter,
-                           disp=disp, callback=callback,
-                           fit_params=fit_args,
-                           suppress_warnings=suppress_warnings,
-                           trace=trace,
-                           error_action=error_action,
-                           scoring=scoring,
-                           out_of_sample_size=out_of_sample_size,
-                           scoring_args=scoring_args,
-                           with_intercept=with_intercept,
-                           **sarimax_kwargs)),
+                solvers._fit_arima(
+                    y, xreg=exogenous, order=(0, d, 0),
+                    seasonal_order=ssn,
+                    start_params=start_params, trend=trend,
+                    method=method, transparams=transparams,
+                    solver=solver, maxiter=maxiter,
+                    disp=disp, callback=callback,
+                    fit_params=fit_args,
+                    suppress_warnings=suppress_warnings,
+                    trace=trace,
+                    error_action=error_action,
+                    scoring=scoring,
+                    out_of_sample_size=out_of_sample_size,
+                    scoring_args=scoring_args,
+                    with_intercept=with_intercept,
+                    **sarimax_kwargs)),
             return_valid_fits, start, trace)
 
     # seasonality issues
@@ -514,19 +515,20 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
 
         # get results in parallel
         all_res = Parallel(n_jobs=n_jobs)(
-            delayed(_fit_arima)(y, xreg=exogenous, order=order,
-                                seasonal_order=seasonal_order,
-                                start_params=start_params, trend=trend,
-                                method=method, transparams=transparams,
-                                solver=solver, maxiter=maxiter, disp=disp,
-                                callback=callback,
-                                fit_params=fit_args,
-                                suppress_warnings=suppress_warnings,
-                                trace=trace, error_action=error_action,
-                                out_of_sample_size=out_of_sample_size,
-                                scoring=scoring, scoring_args=scoring_args,
-                                with_intercept=with_intercept,
-                                **sarimax_kwargs)
+            delayed(solvers._fit_arima)(
+                y, xreg=exogenous, order=order,
+                seasonal_order=seasonal_order,
+                start_params=start_params, trend=trend,
+                method=method, transparams=transparams,
+                solver=solver, maxiter=maxiter, disp=disp,
+                callback=callback,
+                fit_params=fit_args,
+                suppress_warnings=suppress_warnings,
+                trace=trace, error_action=error_action,
+                out_of_sample_size=out_of_sample_size,
+                scoring=scoring, scoring_args=scoring_args,
+                with_intercept=with_intercept,
+                **sarimax_kwargs)
             for order, seasonal_order in gen)
 
     # otherwise, we're fitting the stepwise algorithm...
@@ -543,7 +545,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         Q = start_Q = min(start_Q, max_Q)
 
         # init the stepwise model wrapper
-        stepwise_wrapper = _StepwiseFitWrapper(
+        stepwise_wrapper = solvers._StepwiseFitWrapper(
             y, xreg=exogenous, start_params=start_params, trend=trend,
             method=method, transparams=transparams, solver=solver,
             maxiter=maxiter, disp=disp, callback=callback, fit_params=fit_args,

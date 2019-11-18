@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 #
-# re-entrant, reusable context manager to store execution context
+# Author: Krishna Sunkara (kpsunkara)
 #
+# Re-entrant, reusable context manager to store execution context. Introduced
+# in pmdarima 1.5.0 (see #221)
 
 import threading
 from abc import ABC, abstractmethod
@@ -18,8 +20,7 @@ __all__ = ['AbstractContext', 'ContextStore', 'ContextType']
 class ContextType(Enum):
     """Context Type Enumeration
 
-    An enumeration of Context Types known to ``ContextStore``
-
+    An enumeration of Context Types known to :class:`ContextStore`
     """
     EMPTY = 0
     STEPWISE = 1
@@ -32,7 +33,6 @@ class AbstractContext(ABC):
     execution context in a threading.local instance. Has helper
     methods to iterate over the context info and provide a
     string representation of the context info.
-
     """
     def __init__(self, **kwargs):
         # remove None valued entries,
@@ -81,9 +81,7 @@ class AbstractContext(ABC):
 
 
 class _emptyContext(AbstractContext):
-    """An empty context for convenience use
-
-    """
+    """An empty context for convenience use"""
 
     def __init__(self):
         super(_emptyContext, self).__init__()
@@ -102,8 +100,15 @@ class ContextStore:
     def get_context(context_type):
         """Returns most recently added instance of given Context Type
 
-        :param context_type: Context Type to retrieve from the store
-        :return: an instance of AbstractContext subclass or None
+        Parameters
+        ----------
+        context_type : ContextType
+            Context type to retrieve from the store
+
+        Returns
+        -------
+        res: AbstractContext
+            An instance of AbstractContext subclass or None
         """
         if not isinstance(context_type, ContextType):
             raise ValueError('context_type must be an instance of ContextType')
@@ -165,10 +170,6 @@ class ContextStore:
         ...         auto_arima(samp,...)
         ...
         ...     auto_arima(samp,...)
-
-
-        :param ctx:
-        :return: None
         """
         if not isinstance(ctx, AbstractContext):
             raise ValueError('ctx must be be an instance of AbstractContext')
