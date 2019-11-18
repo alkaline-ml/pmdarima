@@ -188,14 +188,15 @@
 <span class="kn">from</span> <span class="nn">..utils.metaestimators</span> <span class="k">import</span> <span class="n">if_has_delegate</span>
 <span class="kn">from</span> <span class="nn">._auto_solvers</span> <span class="k">import</span> <span class="n">_fit_arima</span><span class="p">,</span> <span class="n">_StepwiseFitWrapper</span>
 <span class="kn">from</span> <span class="nn">.warnings</span> <span class="k">import</span> <span class="n">ModelFitWarning</span>
-
+<span class="kn">from</span> <span class="nn">._context</span> <span class="k">import</span> <span class="n">AbstractContext</span><span class="p">,</span> <span class="n">ContextType</span>
 <span class="c1"># for python 3 compat</span>
 <span class="kn">from</span> <span class="nn">..compat.python</span> <span class="k">import</span> <span class="n">xrange</span>
 <span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="k">import</span> <span class="n">DTYPE</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;auto_arima&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;AutoARIMA&#39;</span>
+    <span class="s1">&#39;AutoARIMA&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;StepwiseContext&#39;</span>
 <span class="p">]</span>
 
 <span class="c1"># The valid information criteria</span>
@@ -339,6 +340,63 @@
             <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="c1"># TODO: decorator to automate all this composition + AIC, etc.</span>
+
+
+<div class="viewcode-block" id="StepwiseContext"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.StepwiseContext.html#pmdarima.arima.StepwiseContext">[docs]</a><span class="k">class</span> <span class="nc">StepwiseContext</span><span class="p">(</span><span class="n">AbstractContext</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Context Manager to capture runtime context for Stepwise mode.</span>
+
+<span class="sd">    ``StepwiseContext`` allows to call ``auto_arima`` in the context</span>
+<span class="sd">    of a runtime configuration that offers additional level of</span>
+<span class="sd">    control required in certain scenarios. Use cases that are either</span>
+<span class="sd">    sensitive to duration and/or the number of attempts to</span>
+<span class="sd">    find the best fit can use ``StepwiseContext`` to control them.</span>
+<span class="sd">    .</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    max_steps : int, optional (default=100)</span>
+<span class="sd">        The maximum number of steps to try to find a best fit. When</span>
+<span class="sd">        the number of tries exceed this number, the stepwiese process</span>
+<span class="sd">        will stop and the best fit model at that time will be returned.</span>
+
+<span class="sd">    max_dur : int, optional (default=None)</span>
+<span class="sd">        The maximum duration in seconds to try to find a best fit.</span>
+<span class="sd">        When the cumulative fit duration exceeds this number, the</span>
+<span class="sd">        stepwiese process will stop and the best fit model at that</span>
+<span class="sd">        time will be returned. Please note that this is a soft limit.</span>
+
+<span class="sd">    notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Although the max_steps parameter is set to a default value of None here,</span>
+<span class="sd">    the stepwise search is limited to 100 tries to find a best fit model.</span>
+<span class="sd">    Defaulting the parameter to None here, preserves the intention of the</span>
+<span class="sd">    caller and properly handles the nested contexts, like:</span>
+
+<span class="sd">    &gt;&gt;&gt; with StepwiseContext(max_steps=10):</span>
+<span class="sd">    ...     with StepwiseContext(max_dur=30):</span>
+<span class="sd">    ...         auto_arima(sample, stepwise=True, ..)</span>
+
+<span class="sd">    In the above example, the stepwise search will be limited to either</span>
+<span class="sd">    a maximum of 10 steps or a maximum duration of 30 seconds, whichever</span>
+<span class="sd">    occurs first and the best fit model at that time will be returned</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StepwiseContext.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.StepwiseContext.html#pmdarima.arima.StepwiseContext.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_dur</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">max_steps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">max_steps</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_steps should be between 1 and 1000&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">max_dur</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">max_dur</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_dur should be greater than zero&#39;</span><span class="p">)</span>
+
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;max_steps&#39;</span><span class="p">:</span> <span class="n">max_steps</span><span class="p">,</span>
+            <span class="s1">&#39;max_dur&#39;</span><span class="p">:</span> <span class="n">max_dur</span>
+        <span class="p">}</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">StepwiseContext</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="c1"># override base class member</span>
+    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ContextType</span><span class="o">.</span><span class="n">STEPWISE</span></div>
 
 
 <div class="viewcode-block" id="auto_arima"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima">[docs]</a><span class="k">def</span> <span class="nf">auto_arima</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>

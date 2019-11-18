@@ -120,7 +120,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#setting-m">6.2.2. Setting <code class="docutils literal notranslate"><span class="pre">m</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#parallel-vs-stepwise">6.3. Parallel vs. stepwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parallel-vs-stepwise">6.3. Parallel vs. stepwise</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-stepwisecontext">6.3.1. Using <code class="docutils literal notranslate"><span class="pre">StepwiseContext</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#pipelining">6.4. Pipelining</a></li>
 </ul>
 </li>
@@ -479,8 +482,24 @@ is selected. This is the “current best” model.</p>
 </div></blockquote>
 <p>Whenever a model with a lower information criteria is found, it becomes the new current best model,
 and the procedure is repeated until it cannot find a model close to the current best model
-with a lower information criterion.</p>
+with a lower information criterion or the process exceeds one of the execution thresholds set via <code class="docutils literal notranslate"><span class="pre">arima.StepwiseContext</span></code>.</p>
 <p>When in doubt, <code class="docutils literal notranslate"><span class="pre">stepwise=True</span></code> is encouraged.</p>
+<div class="section" id="using-stepwisecontext">
+<h3>6.3.1. Using <code class="docutils literal notranslate"><span class="pre">StepwiseContext</span></code><a class="headerlink" href="#using-stepwisecontext" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">StepwiseContext</span></code> can be used to set the maximum number of steps and/or duration for the <cite>stepwise</cite> approach.
+Please note that these are soft limits that are checked periodically during the stepwise search. The search will be
+stopped as soon as one of the thresholds are hit, and the best fit model at that time is returned. This may be helpful
+in scenarios that need to balance between best fit model and time constraints.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span><span class="p">()</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="mi">150</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">150</span><span class="p">:]</span>
+
+<span class="k">with</span> <span class="n">StepwiseContext</span><span class="p">(</span><span class="n">max_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="n">max_dur</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">stepwise</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="pipelining">
 <h2>6.4. Pipelining<a class="headerlink" href="#pipelining" title="Permalink to this headline">¶</a></h2>
