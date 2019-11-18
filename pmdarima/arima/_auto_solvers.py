@@ -10,6 +10,8 @@ import warnings
 
 from .arima import ARIMA
 from .warnings import ModelFitWarning
+from ._context import ContextType, ContextStore
+from datetime import datetime
 
 
 class _StepwiseFitWrapper(object):
@@ -78,10 +80,15 @@ class _StepwiseFitWrapper(object):
         self.seasonal = seasonal
         self.max_order = max_order
 
+        # execution context passed through the context manager
+        self.exec_context = ContextStore.get_or_empty(ContextType.STEPWISE)
+
         # other internal start vars
         self.bestfit = None
         self.k = self.start_k = 0
-        self.max_k = 100
+        self.max_k = 100 if self.exec_context.max_steps is None \
+            else self.exec_context.max_steps
+        self.max_dur = self.exec_context.max_dur
 
         # results list to store intermittent hashes of orders to determine if
         # we've seen this order before...
@@ -146,6 +153,8 @@ class _StepwiseFitWrapper(object):
                 self.p, self.q, self.P, self.Q = p, q, P, Q
 
     def step_through(self):
+        start_time = datetime.now()
+
         while self.start_k < self.k < self.max_k:
             self.start_k = self.k
 
@@ -182,6 +191,19 @@ class _StepwiseFitWrapper(object):
             self.fit_increment_k_cache_set(self.q < self.max_q and
                                            self.p < self.max_p, q=self.q + 1,
                                            p=self.p + 1)
+
+            # break loop if execution time exceeds the timeout threshold
+            dur = (datetime.now() - start_time).total_seconds()
+            if self.max_dur and dur > self.max_dur:
+                warnings.warn('early termination of stepwise search due to '
+                              'max_dur threshold')
+                break
+
+        # check if the search has been ended after max_steps
+        if self.exec_context.max_steps is not None \
+                and self.k > self.exec_context.max_steps:
+            warnings.warn('stepwise search has reached the maximum number '
+                          'of tries to find the best fit model')
 
         # return the values
         return self.results_dict.values()
