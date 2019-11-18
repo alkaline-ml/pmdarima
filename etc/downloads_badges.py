@@ -1,8 +1,3 @@
-"""
-This code is meant to be run on Zapier
-
-It is used to add the `downloads/week` badge to our README
-"""
 from datetime import date, timedelta
 import json
 import math
@@ -10,10 +5,8 @@ import os
 import requests
 
 
-# This function is duplicated from `zapier_total_downloads`. This is intentional,
-# because Zapier only has access to one script at a time, so we cannot import
 def millify(n):
-    """Abreviate a number to nearest thousand, million, etc.
+    """Abbreviate a number to nearest thousand, million, etc.
 
     Adapted from: https://stackoverflow.com/a/3155023/10696164
 
@@ -54,7 +47,7 @@ today = date.today()
 last_week = today - timedelta(days=7)
 DATE_FORMAT = '%Y-%m-%d'
 
-# Open a session to save time (only allowed 1 second on Zapier)
+# Open a session to save time
 session = requests.Session()
 
 # Get the data for both the legacy namespace and our current one
@@ -70,13 +63,20 @@ pyramid_arima_downloads = 0
 for i in range(7):
     pyramid_arima_downloads += pyramid_arima['downloads'][(last_week + timedelta(days=i)).strftime(DATE_FORMAT)]
 
-# Millify the total and save in a dict
-total = millify(pmdarima_downloads + pyramid_arima_downloads)
+# Millify the totals
+total_downloads = millify(pyramid_arima['total_downloads'] + pmdarima['total_downloads'])
+weekly_downloads = millify(pmdarima_downloads + pyramid_arima_downloads)
+
 data = {
-    'total': total
+    'total': total_downloads,
+    'weekly': weekly_downloads
 }
 
-# Write to our storage area
-# StoreClient is Zapier-specific and automatically imported (hence no import)
-store = StoreClient(os.environ.get('ZAPIER_SHA'))
-store.set('data', data)
+request = session.post(
+    url='https://store.zapier.com/api/records',
+    headers={
+        'X-Secret':  os.getenv('ZAPIER_SHA')
+    },
+    data=json.dumps(data)
+)
+request.raise_for_status()
