@@ -1,0 +1,15 @@
+name: Update Downloads Badges
+
+on:
+  schedule:
+    - cron: '15 13 * * *'  # Every day at 1:15pm
+
+jobs:
+  update:
+    name: Update Downloads Badges
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Python Script
+        run: python etc/downloads_badges.py
+        env:
+          ZAPIER_SHA: ${{ secrets.ZAPIER_SHA }}
