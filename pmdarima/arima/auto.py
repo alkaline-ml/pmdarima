@@ -196,10 +196,25 @@ class StepwiseContext(AbstractContext):
         When the cumulative fit duration exceeds this number, the
         stepwiese process will stop and the best fit model at that
         time will be returned. Please note that this is a soft limit.
+
+    notes
+    -----
+    Although the max_steps parameter is set to a default value of None here,
+    the stepwise search is limited to 100 tries to find a best fit model.
+    Defaulting the parameter to None here, preserves the intention of the
+    caller and properly handles the nested contexts, like:
+
+    >>> with StepwiseContext(max_steps=10):
+    ...     with StepwiseContext(max_dur=30):
+    ...         auto_arima(sample, stepwise=True, ..)
+
+    In the above example, the stepwise search will be limited to either
+    a maximum of 10 steps or a maximum duration of 30 seconds, whichever
+    occurs first and the best fit model at that time will be returned
     """
 
-    def __init__(self, max_steps=100, max_dur=None):
-        if max_steps is None or not 0 < max_steps <= 1000:
+    def __init__(self, max_steps=None, max_dur=None):
+        if max_steps is not None and not 0 < max_steps <= 1000:
             raise ValueError('max_steps should be between 1 and 1000')
 
         if max_dur is not None and max_dur <= 0:

@@ -1104,17 +1104,17 @@ def test_nested_context():
     ctx1 = StepwiseContext(**ctx1_data)
     ctx2 = StepwiseContext(**ctx2_data)
 
-    with(ctx1):
-        with(ctx2):
-            effective_ctx_data = ContextStore.get_or_empty(ContextType.STEPWISE)
-            expected_ctx_data = ctx1_data.copy()
-            expected_ctx_data.update(ctx2_data)
+    with ctx1, ctx2:
+        effective_ctx_data = ContextStore.get_or_empty(
+            ContextType.STEPWISE)
+        expected_ctx_data = ctx1_data.copy()
+        expected_ctx_data.update(ctx2_data)
 
-            assert all(effective_ctx_data[key] == expected_ctx_data[key]
-                       for key in expected_ctx_data.keys())
+        assert all(effective_ctx_data[key] == expected_ctx_data[key]
+                   for key in expected_ctx_data.keys())
 
-            assert all(effective_ctx_data[key] == expected_ctx_data[key]
-                       for key in effective_ctx_data.keys())
+        assert all(effective_ctx_data[key] == expected_ctx_data[key]
+                   for key in effective_ctx_data.keys())
 
 
 # test param validation of ContextStore's add, get and remove members

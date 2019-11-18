@@ -140,8 +140,8 @@ class ContextStore:
         if the given ctx is nested, merge parent context, to support
         following usage:
 
-        >>> with(StepwiseContext(max_steps=10)):
-        ...     with(StepwiseContext(max_dur=30)):
+        >>> with StepwiseContext(max_steps=10):
+        ...     with StepwiseContext(max_dur=30):
         ...         auto_arima(samp,...)
 
         This is identical to:
@@ -160,8 +160,8 @@ class ContextStore:
         ``auto_arima(...)`` is: ``max_steps=15, max_dur=30``. The effective
         context for the second call to ``auto_arima(..)`` is: ``max_steps=10``
 
-        >>> with(StepwiseContext(max_steps=10)):
-        ...     with(StepwiseContext(max_steps=15, max_dur=30)):
+        >>> with StepwiseContext(max_steps=10):
+        ...     with StepwiseContext(max_steps=15, max_dur=30):
         ...         auto_arima(samp,...)
         ...
         ...     auto_arima(samp,...)

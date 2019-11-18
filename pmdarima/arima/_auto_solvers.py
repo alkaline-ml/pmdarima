@@ -199,8 +199,9 @@ class _StepwiseFitWrapper(object):
                               'max_dur threshold')
                 break
 
-        # check if the search has ended after max_k tries
-        if self.k > self.max_k:
+        # check if the search has been ended after max_steps
+        if self.exec_context.max_steps is not None \
+                and self.k > self.exec_context.max_steps:
             warnings.warn('stepwise search has reached the maximum number '
                           'of tries to find the best fit model')
 
