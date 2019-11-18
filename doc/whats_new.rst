@@ -24,6 +24,9 @@ v0.8.1) will document the latest features.
 * Correct bug where ``aicc`` always added 1 (for constant) to degrees of freedom,
   even when ``df_model`` accounted for the constant term.
 
+* New :class:`pmdarima.arima.auto.StepwiseContext` feature for more control over
+  fit duration (introduced by `@kpsunkara <https://github.com/kpsunkara>`_ in `#221 <https://github.com/tgsmith61591/pmdarima/pull/221>`_).
+
 
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
 --------------------------------------------------
