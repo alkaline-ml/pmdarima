@@ -26,6 +26,7 @@ train, test = data[:150], data[150:]
 
 # Fit a simple auto_arima model
 arima = pm.auto_arima(train, error_action='ignore', trace=1,
+                      suppress_warnings=True,
                       seasonal=True, m=12)
 
 # #############################################################################

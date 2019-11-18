@@ -46,7 +46,7 @@ else:
     from . import __check_build
 
     # Stuff we want at top-level
-    from .arima import auto_arima, ARIMA, AutoARIMA
+    from .arima import auto_arima, ARIMA, AutoARIMA, StepwiseContext
     from .utils import acf, autocorr_plot, c, pacf, plot_acf, plot_pacf
 
     # Need these namespaces at the top so they can be used like:
@@ -72,7 +72,8 @@ else:
         'c',
         'pacf',
         'plot_acf',
-        'plot_pacf'
+        'plot_pacf',
+        'StepwiseContext',
     ]
 
     # Delete unwanted variables from global
