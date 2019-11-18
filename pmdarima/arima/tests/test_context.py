@@ -79,7 +79,7 @@ def test_subsequent_contexts():
 
     # Out of scope, should be EMPTY
     assert ContextStore.get_or_empty(ContextType.STEPWISE).get_type() \
-           is ContextType.EMPTY
+        is ContextType.EMPTY
 
     # Now show that we DON'T hit early termination by time here
     with StepwiseContext(max_steps=100), \
