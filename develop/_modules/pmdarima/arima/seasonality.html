@@ -454,7 +454,10 @@
     <span class="n">_ic_method_map</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;aic&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">fit</span><span class="p">:</span> <span class="n">fit</span><span class="o">.</span><span class="n">aic</span><span class="p">,</span>
         <span class="s2">&quot;bic&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">fit</span><span class="p">:</span> <span class="n">fit</span><span class="o">.</span><span class="n">bic</span><span class="p">,</span>
-        <span class="s2">&quot;aicc&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">fit</span><span class="p">:</span> <span class="n">_aicc</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">nobs</span><span class="p">)</span>
+
+        <span class="c1"># TODO: confirm False for add_constant, since the model fit contains</span>
+        <span class="c1">#   . a constant term</span>
+        <span class="s2">&quot;aicc&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">fit</span><span class="p">:</span> <span class="n">_aicc</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">nobs</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="p">}</span>
 
 <div class="viewcode-block" id="OCSBTest.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.OCSBTest.html#pmdarima.arima.OCSBTest.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lag_method</span><span class="o">=</span><span class="s2">&quot;aic&quot;</span><span class="p">,</span> <span class="n">max_lag</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>

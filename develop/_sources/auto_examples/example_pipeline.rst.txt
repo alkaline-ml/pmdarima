@@ -34,22 +34,22 @@ which greatly simplifies your life.
  Out::
 
     pmdarima version: 0.0.0
-    Fit ARIMA: order=(2, 1, 2); AIC=nan, BIC=nan, Fit time=nan seconds
-    Fit ARIMA: order=(0, 1, 0); AIC=2942.625, BIC=2972.664, Fit time=0.014 seconds
-    Fit ARIMA: order=(1, 1, 0); AIC=2844.833, BIC=2877.876, Fit time=0.276 seconds
-    Fit ARIMA: order=(0, 1, 1); AIC=2809.063, BIC=2842.107, Fit time=0.431 seconds
-    Fit ARIMA: order=(1, 1, 1); AIC=2783.182, BIC=2819.229, Fit time=0.460 seconds
-    Fit ARIMA: order=(1, 1, 2); AIC=2812.945, BIC=2851.996, Fit time=0.398 seconds
-    Fit ARIMA: order=(2, 1, 1); AIC=2784.436, BIC=2823.488, Fit time=0.264 seconds
-    Total fit time: 1.858 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2819.938, BIC=2861.993, Fit time=0.476 seconds
+    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2942.625, BIC=2972.664, Fit time=0.015 seconds
+    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2867.514, BIC=2900.557, Fit time=0.059 seconds
+    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2830.585, BIC=2863.628, Fit time=0.252 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2817.535, BIC=2856.586, Fit time=0.340 seconds
+    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2817.377, BIC=2853.424, Fit time=0.307 seconds
+    Fit ARIMA: order=(2, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2818.535, BIC=2857.586, Fit time=0.252 seconds
+    Total fit time: 1.704 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
                     ('arima',
                      AutoARIMA(D=None, alpha=0.05, callback=None, d=None, disp=0,
                                error_action='ignore', information_criterion='aic',
                                m=1, max_D=1, max_P=2, max_Q=2, max_d=2,
-                               max_order=10, max_p=5, max_q=5, maxiter=None,
-                               method=None, n_fits=10, n_jobs=1,
+                               max_order=10, max_p=5, max_q=5, maxiter=50,
+                               method='lbfgs', n_fits=10, n_jobs=1,
                                offset_test_args=None, out_of_sample_size=0,
                                random=False, random_state=None, sarimax_kwargs=None,
                                scoring='mse', scoring_args=None, seasonal=False,
@@ -57,12 +57,12 @@ which greatly simplifies your life.
                                solver='lbfgs', ...))])
 
     Forecasts:
-    [28520.36805404 29644.13280101 25802.35593918 24894.27891306
-     34017.43347142 33378.74778033 21172.88537042 19636.23888839
-     25495.03838042 25064.57274529]
-    [26527.07334287 33561.31009372 33848.84956322 21232.2898864
-     19877.75380116 25655.80545853 25261.14297738 24066.66252954
-     25770.04805098 28605.9437696  30456.95520294]
+    [28472.60860252 29849.14229831 25860.86322375 25000.85835469
+     34301.62948876 33410.13286261 20846.04214353 19773.92818766
+     25996.18597343 25369.6337283 ]
+    [26286.33165213 34004.40365989 33678.23794418 20911.09396051
+     19910.80644604 26106.5517778  25488.66453812 24293.32930229
+     26007.19571442 28752.40848033 30711.7221858 ]
 
 
 
@@ -116,12 +116,11 @@ which greatly simplifies your life.
         pipe.predict_in_sample(exogenous=None, return_conf_int=True)
 
     n_train = train.shape[0]
-    d = pipe._final_estimator.model_.order[1]
 
     x0 = np.arange(n_train)
     axes[0].plot(x0, train, alpha=0.75)
-    axes[0].scatter(x0[d:], in_sample_preds, alpha=0.4, marker='x')
-    axes[0].fill_between(x0[d:], in_sample_confint[:, 0], in_sample_confint[:, 1],
+    axes[0].scatter(x0, in_sample_preds, alpha=0.4, marker='x')
+    axes[0].fill_between(x0, in_sample_confint[:, 0], in_sample_confint[:, 1],
                          alpha=0.1, color='b')
     axes[0].set_title('Actual train samples vs. in-sample predictions')
     axes[0].set_xlim((0, x0.shape[0]))
@@ -157,7 +156,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  2.078 seconds)
+**Total running time of the script:** ( 0 minutes  1.870 seconds)
 
 
 

@@ -199,7 +199,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.AutoARIMA<a class="headerlink" href="#pmdarima-arima-autoarima" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.arima.AutoARIMA">
-<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">AutoARIMA</code><span class="sig-paren">(</span><em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=None</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>sarimax_kwargs=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/a5d82c2/pmdarima/arima/auto.py#L38"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#AutoARIMA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">AutoARIMA</code><span class="sig-paren">(</span><em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method='lbfgs'</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=50</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>sarimax_kwargs=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/659a227/pmdarima/arima/auto.py#L37"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#AutoARIMA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically discover the optimal order for an ARIMA model.</p>
 <p>The auto-ARIMA process seeks to identify the most optimal
 parameters for an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> model, settling on a single fitted ARIMA model.
@@ -366,16 +366,12 @@ by <code class="docutils literal notranslate"><span class="pre">ARMA._fit_start_
 Uses the transformation suggested in Jones (1980).  If False,
 no checking for stationarity or invertibility is done.</p>
 </div></blockquote>
-<p><strong>method</strong> : str, one of (‘css-mle’,’mle’,’css’), optional (default=None)</p>
+<p><strong>method</strong> : str, optional (default=’lbfgs’)</p>
 <blockquote>
-<div><p>This is the loglikelihood to maximize.  If “css-mle”, the
-conditional sum of squares likelihood is maximized and its values
-are used as starting values for the computation of the exact
-likelihood via the Kalman filter.  If “mle”, the exact likelihood
-is maximized via the Kalman Filter.  If “css” the conditional sum
-of squares likelihood is maximized.  All three methods use
-<cite>start_params</cite> as starting parameters.  See above for more
-information. If fitting a seasonal ARIMA, the default is ‘lbfgs’</p>
+<div><p>One of (‘newton’, ‘bfgs’, ‘lbfgs’, ‘powell’, ‘cg’, ‘ncg’,
+‘basinhopping’). Determines a solver method for maximizing the
+loglikelihood. Default is ‘lbfgs’ (limited-memory BFGS with optional
+box constraints).</p>
 </div></blockquote>
 <p><strong>trend</strong> : str or None, optional (default=None)</p>
 <blockquote>
@@ -393,12 +389,9 @@ Broyden-Fletcher-Goldfarb-Shanno).  Other choices are ‘bfgs’,
 approximate the Hessian, projected gradient tolerance of 1e-8 and
 factr = 1e2. You can change these by using kwargs.</p>
 </div></blockquote>
-<p><strong>maxiter</strong> : int, optional (default=None)</p>
+<p><strong>maxiter</strong> : int, optional (default=50)</p>
 <blockquote>
-<div><p>The maximum number of function evaluations. Statsmodels defaults this
-value to 50 for SARIMAX models and 500 for ARIMA and ARMA models. If
-passed as None, will use the seasonal order to determine which to use
-(50 for seasonal, 500 otherwise).</p>
+<div><p>The maximum number of function evaluations. Default is 50.</p>
 </div></blockquote>
 <p><strong>disp</strong> : int, optional (default=0)</p>
 <blockquote>
@@ -511,22 +504,22 @@ metric.</p>
 <cite>seasonal=True</cite>.</li>
 </ul>
 <p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r47" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R47]</a></td><td><a class="reference external" href="https://wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r48" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R48]</a></td><td>R’s auto-arima source code: <a class="reference external" href="http://bit.ly/2gOh5z2">http://bit.ly/2gOh5z2</a></td></tr>
+</tbody>
+</table>
 <table class="docutils citation" frame="void" id="r49" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R49]</a></td><td><a class="reference external" href="https://wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="r50" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R50]</a></td><td>R’s auto-arima source code: <a class="reference external" href="http://bit.ly/2gOh5z2">http://bit.ly/2gOh5z2</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="r51" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R51]</a></td><td>R’s auto-arima documentation: <a class="reference external" href="http://bit.ly/2wbBvUN">http://bit.ly/2wbBvUN</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R49]</a></td><td>R’s auto-arima documentation: <a class="reference external" href="http://bit.ly/2wbBvUN">http://bit.ly/2wbBvUN</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
@@ -561,13 +554,13 @@ metric.</p>
 </table>
 <dl class="method">
 <dt id="pmdarima.arima.AutoARIMA.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method=None</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=None</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>sarimax_kwargs=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/a5d82c2/pmdarima/arima/auto.py#L44"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#AutoARIMA.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=10</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method='lbfgs'</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=50</em>, <em>disp=0</em>, <em>callback=None</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>sarimax_kwargs=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/659a227/pmdarima/arima/auto.py#L43"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#AutoARIMA.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.arima.AutoARIMA.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/a5d82c2/pmdarima/arima/auto.py#L102"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#AutoARIMA.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/659a227/pmdarima/arima/auto.py#L101"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#AutoARIMA.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the auto-arima estimator</p>
 <p>Fit an AutoARIMA to a vector, <code class="docutils literal notranslate"><span class="pre">y</span></code>, of observations with an
 optional matrix of <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> variables.</p>
@@ -603,7 +596,7 @@ exogenous features for making predictions.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.AutoARIMA.fit_predict">
-<code class="descname">fit_predict</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>n_periods=10</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/a5d82c2/pmdarima/base.py#L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.fit_predict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit_predict</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>n_periods=10</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/659a227/pmdarima/base.py#L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.fit_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit an ARIMA to a vector, <code class="docutils literal notranslate"><span class="pre">y</span></code>, of observations with an
 optional matrix of <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> variables, and then generate
 predictions.</p>
@@ -643,7 +636,7 @@ exogenous features for making predictions.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.AutoARIMA.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/a5d82c2/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/659a227/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -668,7 +661,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.AutoARIMA.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/a5d82c2/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/659a227/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.AutoARIMA.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form

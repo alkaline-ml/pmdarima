@@ -199,14 +199,13 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.StepwiseContext<a class="headerlink" href="#pmdarima-arima-stepwisecontext" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.arima.StepwiseContext">
-<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">StepwiseContext</code><span class="sig-paren">(</span><em>max_steps=None</em>, <em>max_dur=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/a5d82c2/pmdarima/arima/auto.py#L177"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Context Manager to capture runtime context for Stepwise mode.</p>
-<p><code class="docutils literal notranslate"><span class="pre">StepwiseContext</span></code> allows to call <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> in the context
+<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">StepwiseContext</code><span class="sig-paren">(</span><em>max_steps=None</em>, <em>max_dur=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/659a227/pmdarima/arima/auto.py#L176"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager to capture runtime context for stepwise mode.</p>
+<p><code class="docutils literal notranslate"><span class="pre">StepwiseContext</span></code> allows one to call <a class="reference internal" href="pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">auto_arima()</span></code></a> in the context
 of a runtime configuration that offers additional level of
 control required in certain scenarios. Use cases that are either
 sensitive to duration and/or the number of attempts to
-find the best fit can use <code class="docutils literal notranslate"><span class="pre">StepwiseContext</span></code> to control them.
-.</p>
+find the best fit can use <code class="docutils literal notranslate"><span class="pre">StepwiseContext</span></code> to control them.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -214,7 +213,7 @@ find the best fit can use <code class="docutils literal notranslate"><span class
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>max_steps</strong> : int, optional (default=100)</p>
 <blockquote>
 <div><p>The maximum number of steps to try to find a best fit. When
-the number of tries exceed this number, the stepwiese process
+the number of tries exceed this number, the stepwise process
 will stop and the best fit model at that time will be returned.</p>
 </div></blockquote>
 <p><strong>max_dur</strong> : int, optional (default=None)</p>
@@ -229,13 +228,13 @@ time will be returned. Please note that this is a soft limit.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>Although the max_steps parameter is set to a default value of None here,
-the stepwise search is limited to 100 tries to find a best fit model.
-Defaulting the parameter to None here, preserves the intention of the
+<p>Although the <code class="docutils literal notranslate"><span class="pre">max_steps</span></code> parameter is set to a default value of None
+here, the stepwise search is limited to 100 tries to find a best fit model.
+Defaulting the parameter to None here preserves the intention of the
 caller and properly handles the nested contexts, like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">StepwiseContext</span><span class="p">(</span><span class="n">max_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">with</span> <span class="n">StepwiseContext</span><span class="p">(</span><span class="n">max_dur</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="n">auto_arima</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">..</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">auto_arima</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In the above example, the stepwise search will be limited to either
@@ -267,7 +266,7 @@ occurs first and the best fit model at that time will be returned</p>
 </table>
 <dl class="method">
 <dt id="pmdarima.arima.StepwiseContext.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>max_steps=None</em>, <em>max_dur=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/a5d82c2/pmdarima/arima/auto.py#L216"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>max_steps=None</em>, <em>max_dur=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/659a227/pmdarima/arima/auto.py#L214"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
