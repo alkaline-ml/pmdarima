@@ -1119,11 +1119,11 @@ def test_nested_context():
 
 # test param validation of ContextStore's add, get and remove members
 def test_add_get_remove_context_args():
-    with(pytest.raises(ValueError)):
+    with pytest.raises(ValueError):
         ContextStore._add_context(None)
 
-    with(pytest.raises(ValueError)):
+    with pytest.raises(ValueError):
         ContextStore._remove_context(None)
 
-    with(pytest.raises(ValueError)):
+    with pytest.raises(ValueError):
         ContextStore.get_context(None)
