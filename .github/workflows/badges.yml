@@ -2,7 +2,7 @@ name: Update Downloads Badges
 
 on:
   schedule:
-    - cron: '15 19 * * *'  # Every day at 7:15pm UTC -> 1:15pm CST or 2:15pm CDT
+    - cron: '15 17 * * *'  # Every day at 5:15pm UTC
 
 jobs:
   update:
