@@ -5,8 +5,8 @@
 [![Build Status](https://dev.azure.com/tgsmith61591gh/pmdarima/_apis/build/status/tgsmith61591.pmdarima?branchName=master)](https://dev.azure.com/tgsmith61591gh/pmdarima/_build/latest?definitionId=1&branchName=master)
 [![codecov](https://codecov.io/gh/tgsmith61591/pmdarima/branch/master/graph/badge.svg)](https://codecov.io/gh/tgsmith61591/pmdarima)
 ![Supported versions](https://img.shields.io/badge/python-3.5+-blue.svg)
-![Downloads](https://img.shields.io/badge/dynamic/json?color=blue&label=downloads&query=%24.data.total&url=https%3A%2F%2Fstore.zapier.com%2Fapi%2Frecords%3Fsecret%1e061b29db6c4f15af01103d403b0237%26key%3Dtotal)
-![Downloads/Week](https://img.shields.io/badge/dynamic/json?color=blue&label=downloads%2Fweek&query=%24.data.total&url=https%3A%2F%2Fstore.zapier.com%2Fapi%2Frecords%3Fsecret%1e061b29db6c4f15af01103d403b0237%26key%3Dweekly)
+![Downloads](https://img.shields.io/badge/dynamic/json?color=blue&label=downloads&query=%24.total&url=https%3A%2F%2Fstore.zapier.com%2Fapi%2Frecords%3Fsecret%3D1e061b29db6c4f15af01103d403b0237)
+![Downloads/Week](https://img.shields.io/badge/dynamic/json?color=blue&label=downloads%2Fweek&query=%24.weekly&url=https%3A%2F%2Fstore.zapier.com%2Fapi%2Frecords%3Fsecret%3D1e061b29db6c4f15af01103d403b0237)
 
 Pmdarima (originally `pyramid-arima`, for the anagram of 'py' + 'arima') is a no-nonsense statistical
 Python library with a solitary objective: bring R's
