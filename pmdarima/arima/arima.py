@@ -23,7 +23,8 @@ from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.python import long
 from ..compat import statsmodels as sm_compat
-from ..utils import get_callable, if_has_delegate, is_iterable, check_endog
+from ..utils import get_callable, if_has_delegate, is_iterable, check_endog, \
+    check_exog
 from ..utils.visualization import _get_plt
 
 # Get the version
@@ -412,9 +413,8 @@ class ARIMA(BaseARIMA):
 
         # if exog was included, check the array...
         if exogenous is not None:
-            exogenous = check_array(exogenous, ensure_2d=True,
-                                    force_all_finite=False,
-                                    copy=False, dtype=DTYPE)
+            exogenous = check_exog(exogenous, force_all_finite=False,
+                                   copy=False, dtype=DTYPE)
 
         # determine the CV args, if any
         cv = self.out_of_sample_size
@@ -472,8 +472,8 @@ class ARIMA(BaseARIMA):
                                  'array, it must also be provided one for '
                                  'predicting or updating observations.')
             else:
-                return check_array(exogenous, ensure_2d=True,
-                                   force_all_finite=True, dtype=DTYPE)
+                return check_exog(
+                    exogenous, force_all_finite=True, dtype=DTYPE)
         return None
 
     def predict_in_sample(self, exogenous=None, start=None,

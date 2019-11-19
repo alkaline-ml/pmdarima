@@ -66,6 +66,8 @@ class TestFourierREquivalency:
         _, xreg = trans.transform(y, exog)
 
         # maybe subset
+        if hasattr(xreg, 'iloc'):
+            xreg = xreg.values
         assert_array_almost_equal(expected, xreg[:, -4:])
 
         # maybe assert on exog

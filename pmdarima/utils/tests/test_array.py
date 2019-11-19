@@ -1,10 +1,10 @@
 
 from __future__ import absolute_import
 
-from pmdarima.utils.array import diff, c, is_iterable, as_series
+from pmdarima.utils.array import diff, c, is_iterable, as_series, check_exog
 from pmdarima.utils import get_callable
 
-from numpy.testing import assert_array_equal
+from numpy.testing import assert_array_equal, assert_array_almost_equal
 
 import pytest
 import pandas as pd
@@ -12,6 +12,17 @@ import numpy as np
 
 x = np.arange(5)
 m = np.array([10, 5, 12, 23, 18, 3, 2, 0, 12]).reshape(3, 3).T
+X = pd.DataFrame.from_records(
+    np.random.RandomState(2).rand(4, 4),
+    columns=['a', 'b', 'c', 'd']
+)
+
+# need some infinite values in X for testing check_exog
+X_nan = X.copy()
+X_nan.loc[0, 'a'] = np.nan
+
+X_inf = X.copy()
+X_inf.loc[0, 'a'] = np.inf
 
 
 def test_diff():
@@ -61,3 +72,40 @@ def test_as_series():
     assert isinstance(as_series([1, 2, 3]), pd.Series)
     assert isinstance(as_series(np.arange(5)), pd.Series)
     assert isinstance(as_series(pd.Series([1, 2, 3])), pd.Series)
+
+
+@pytest.mark.parametrize(
+    'arr', [
+        np.random.rand(5),
+        pd.Series(np.random.rand(5)),
+    ]
+)
+def test_check_exog_ndim_value_err(arr):
+    with pytest.raises(ValueError):
+        check_exog(arr)
+
+
+@pytest.mark.parametrize('arr', [X_nan, X_inf])
+def test_check_exog_infinite_value_err(arr):
+    with pytest.raises(ValueError):
+        check_exog(arr, force_all_finite=True)
+
+    # show it passes when False
+    assert check_exog(
+        arr, force_all_finite=False, dtype=None, copy=False) is arr
+
+
+def test_exog_pd_dataframes():
+    # test with copy
+    assert check_exog(X, force_all_finite=True, copy=True).equals(X)
+
+    # test without copy
+    assert check_exog(X, force_all_finite=True, copy=False) is X
+
+
+def test_exog_np_array():
+    X_np = np.random.RandomState(1).rand(5, 5)
+
+    # show works on a list
+    assert_array_almost_equal(X_np, check_exog(X_np.tolist()))
+    assert_array_almost_equal(X_np, check_exog(X_np))

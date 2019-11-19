@@ -103,6 +103,9 @@ def test_get_kwargs(pipe, kwargs, expected):
     kw = pipe._get_kwargs(**kwargs)
     assert kw == expected
 
+    # show we can convert steps to dict
+    assert pipe.named_steps
+
 
 def test_pipeline_behavior():
     pipeline = Pipeline([
