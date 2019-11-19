@@ -72,12 +72,12 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
     >>> trans = FourierFeaturizer(12, 4)
     >>> y_prime, exog = trans.fit_transform(y)
     >>> exog.head()
-       FOURIER_0     FOURIER_1    ...     FOURIER_6  FOURIER_7
-    0   0.500000  8.660254e-01    ...  8.660254e-01       -0.5
-    1   0.866025  5.000000e-01    ... -8.660255e-01       -0.5
-    2   1.000000 -4.371139e-08    ...  1.748456e-07        1.0
-    3   0.866025 -5.000001e-01    ...  8.660253e-01       -0.5
-    4   0.500000 -8.660254e-01    ... -8.660255e-01       -0.5
+       FOURIER_S12-0     FOURIER_C12-0    ...     FOURIER_S12-3  FOURIER_C12-3
+    0       0.500000      8.660254e-01    ...      8.660254e-01           -0.5
+    1       0.866025      5.000000e-01    ...     -8.660255e-01           -0.5
+    2       1.000000     -4.371139e-08    ...      1.748456e-07            1.0
+    3       0.866025     -5.000001e-01    ...      8.660253e-01           -0.5
+    4       0.500000     -8.660254e-01    ...     -8.660255e-01           -0.5
 
     Notes
     -----
@@ -101,6 +101,17 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
         if pfx is None:
             pfx = "FOURIER"
         return pfx
+
+    def _get_feature_names(self, X):
+        pfx = self._get_prefix()
+        # E.g., ['FOURIER_S12-0', 'FOURIER_C12-0', ...]
+        return [
+            '%s_%s%i-%i' % (
+                pfx,
+                "S" if i % 2 == 0 else "C",
+                self.m,
+                i // 2)
+            for i in range(X.shape[1])]
 
     def fit(self, y, exogenous=None):
         """Fit the transformer
