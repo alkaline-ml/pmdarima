@@ -66,28 +66,18 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
     Examples
     --------
     >>> import pandas as pd
-    >>> pd.options.display.max_columns = 6  # for display...
     >>> from pmdarima.preprocessing import FourierFeaturizer
     >>> from pmdarima.datasets import load_wineind
     >>> y = load_wineind()
     >>> trans = FourierFeaturizer(12, 4)
     >>> y_prime, exog = trans.fit_transform(y)
     >>> exog.head()
-       FOURIER_0     FOURIER_1    ...      \
-    0   0.500000  8.660254e-01    ...
-    1   0.866025  5.000000e-01    ...
-    2   1.000000 -4.371139e-08    ...
-    3   0.866025 -5.000001e-01    ...
-    4   0.500000 -8.660254e-01    ...
-
-          FOURIER_6  FOURIER_7
-    0  8.660254e-01       -0.5
-    1 -8.660255e-01       -0.5
-    2  1.748456e-07        1.0
-    3  8.660253e-01       -0.5
-    4 -8.660255e-01       -0.5
-
-    [5 rows x 8 columns]
+       FOURIER_0     FOURIER_1    ...     FOURIER_6  FOURIER_7
+    0   0.500000  8.660254e-01    ...  8.660254e-01       -0.5
+    1   0.866025  5.000000e-01    ... -8.660255e-01       -0.5
+    2   1.000000 -4.371139e-08    ...  1.748456e-07        1.0
+    3   0.866025 -5.000001e-01    ...  8.660253e-01       -0.5
+    4   0.500000 -8.660254e-01    ... -8.660255e-01       -0.5
 
     Notes
     -----

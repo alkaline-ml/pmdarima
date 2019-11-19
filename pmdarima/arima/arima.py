@@ -88,7 +88,8 @@ def _seasonal_prediction_with_confidence(arima_res, start, end, exog, alpha,
 
     f = results.predicted_mean
     conf_int = results.conf_int(alpha=alpha)
-    return f, conf_int
+    return check_endog(f, dtype=None, copy=False), \
+        check_array(conf_int, copy=False, dtype=None)
 
 
 def _uses_legacy_pickling(arima):
@@ -282,7 +283,7 @@ class ARIMA(BaseARIMA):
     """
     def __init__(self, order, seasonal_order=(0, 0, 0, 0), start_params=None,
                  method='lbfgs', transparams=True, solver='lbfgs',
-                 maxiter=None, disp=0, callback=None, suppress_warnings=False,
+                 maxiter=50, disp=0, callback=None, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None,
                  trend=None, with_intercept=True, **sarimax_kwargs):
 
