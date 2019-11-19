@@ -7,7 +7,7 @@ steps:
     pip install -r build_tools/azure/requirements.txt
   displayName: 'Installing requirements'
 
-- script: python setup.py bdist_wheel
+- script: make bdist_wheel
   displayName: 'Building wheel'
 
 - script: pip install --pre --no-index --find-links dist/ pmdarima
@@ -17,7 +17,7 @@ steps:
   displayName: 'Running unit tests'
 
   # We build the source archive separately because of this: https://github.com/tgsmith61591/pmdarima/pull/136#discussion_r279781731
-- script: python setup.py sdist
+- script: make sdist
   displayName: 'Building source archive'
 
 - bash: |

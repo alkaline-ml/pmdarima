@@ -1,4 +1,5 @@
 # recursive-include doc *
+include pmdarima/VERSION
 recursive-include examples *
 recursive-include pmdarima/__check_build *.c *.pyx *.pyd *.so *.dylib *.dll
 recursive-include pmdarima/arima *.c *.pyx *.pyd *.so *.dylib *.dll

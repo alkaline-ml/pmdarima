@@ -68,3 +68,14 @@ jobs:
     displayName: 'Setting Python version'
 
   - template: build_and_deploy.yml
+
+- job: test_tagging
+
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  steps:
+  - bash: build_tools/azure/test_version_tagging.sh
+    # Only want to run this on branches/PRs. NOT tags
+    condition: not(contains(variables['Build.SourceBranch'], 'tags'))
+    displayName: 'Testing git tag logic'

@@ -15,6 +15,8 @@ __all__ = [
     'pacf'
 ]
 
+# TODO: remove all explicit args/kwargs, making them *args, **kwargs
+
 
 def inheritdoc(parent):
     """Inherit documentation from a parent

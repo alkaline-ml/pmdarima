@@ -52,7 +52,7 @@ Understanding differencing (``d``)
 An integrative term, ``d``, is typically only used in the case of non-stationary
 data. Stationarity in a time series indicates that a series' statistical attributes,
 such as mean, variance, etc., are constant over time (i.e., it exhibits low
-`heteroskedasticity <http://www.statsmakemecry.com/smmctheblog/confusing-stats-terms-explained-heteroscedasticity-heteroske.html>`_.
+`heteroskedasticity <http://www.statsmakemecry.com/smmctheblog/confusing-stats-terms-explained-heteroscedasticity-heteroske.html>`_).
 
 A stationary time series is far more easy to learn and forecast from. With the
 ``d`` parameter, you can force the ARIMA model to adjust for non-stationarity on
@@ -333,9 +333,26 @@ is selected. This is the "current best" model.
 
 Whenever a model with a lower information criteria is found, it becomes the new current best model,
 and the procedure is repeated until it cannot find a model close to the current best model
-with a lower information criterion.
+with a lower information criterion or the process exceeds one of the execution thresholds set via ``arima.StepwiseContext``.
 
 When in doubt, ``stepwise=True`` is encouraged.
+
+Using ``StepwiseContext``
+~~~~~~~~~~~~~~~~~~~~~~~~~
+The ``StepwiseContext`` can be used to set the maximum number of steps and/or duration for the `stepwise` approach.
+Please note that these are soft limits that are checked periodically during the stepwise search. The search will be
+stopped as soon as one of the thresholds are hit, and the best fit model at that time is returned. This may be helpful
+in scenarios that need to balance between best fit model and time constraints.
+
+.. code-block:: python
+
+    import pmdarima as pm
+
+    data = pm.datasets.load_wineind()
+    train, test = data[:150], data[150:]
+
+    with StepwiseContext(max_steps=10,  max_dur=30):
+        model = pm.auto_arima(train, stepwise = True, error_action='ignore', seasonal=True, m=12)
 
 
 Pipelining
