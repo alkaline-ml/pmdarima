@@ -16,11 +16,11 @@ class LogEndogTransformer(BoxCoxEndogTransformer):
 
     lmbda : float, optional (default=0.)
         The value to add to ``y`` to make it non-negative. If, after adding
-        ``lmbda2``, there are still negative values, a ValueError will be
+        ``lmbda``, there are still negative values, a ValueError will be
         raised.
 
     neg_action : str, optional (default="raise")
-        How to respond if any values in ``y <= 0`` after adding ``lmbda2``.
+        How to respond if any values in ``y <= 0`` after adding ``lmbda``.
         One of ('raise', 'warn', 'ignore'). If anything other than 'raise',
         values <= 0 will be truncated to the value of ``floor``.
 
