@@ -228,6 +228,25 @@
 <span class="sd">        which is the default value if not set. The value of ``k`` can be</span>
 <span class="sd">        selected by minimizing the AIC.</span>
 
+<span class="sd">    prefix : str or None, optional (default=None)</span>
+<span class="sd">        The feature prefix</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt; from pmdarima.preprocessing import FourierFeaturizer</span>
+<span class="sd">    &gt;&gt;&gt; from pmdarima.datasets import load_wineind</span>
+<span class="sd">    &gt;&gt;&gt; y = load_wineind()</span>
+<span class="sd">    &gt;&gt;&gt; trans = FourierFeaturizer(12, 4)</span>
+<span class="sd">    &gt;&gt;&gt; y_prime, exog = trans.fit_transform(y)</span>
+<span class="sd">    &gt;&gt;&gt; exog.head()</span>
+<span class="sd">       FOURIER_0     FOURIER_1    ...     FOURIER_6  FOURIER_7</span>
+<span class="sd">    0   0.500000  8.660254e-01    ...  8.660254e-01       -0.5</span>
+<span class="sd">    1   0.866025  5.000000e-01    ... -8.660255e-01       -0.5</span>
+<span class="sd">    2   1.000000 -4.371139e-08    ...  1.748456e-07        1.0</span>
+<span class="sd">    3   0.866025 -5.000001e-01    ...  8.660253e-01       -0.5</span>
+<span class="sd">    4   0.500000 -8.660254e-01    ... -8.660255e-01       -0.5</span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    * Helpful for long seasonal periods (large ``m``) where ``seasonal=True``</span>
@@ -239,9 +258,17 @@
 <span class="sd">    .. [2] https://robjhyndman.com/hyndsight/longseasonality/</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="FourierFeaturizer.__init__"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="FourierFeaturizer.__init__"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pfx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span>
+        <span class="k">if</span> <span class="n">pfx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pfx</span> <span class="o">=</span> <span class="s2">&quot;FOURIER&quot;</span>
+        <span class="k">return</span> <span class="n">pfx</span>
 
 <div class="viewcode-block" id="FourierFeaturizer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fit the transformer</span>
@@ -328,18 +355,14 @@
                                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exog</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_</span> <span class="o">+</span> <span class="n">n_periods</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">X_fourier</span> <span class="o">=</span> <span class="n">_fourier_terms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p_</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+        <span class="n">X_fourier</span> <span class="o">=</span> <span class="n">_fourier_terms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p_</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
 
         <span class="c1"># Maybe trim if we&#39;re in predict mode... in that case, we only keep the</span>
         <span class="c1"># last n_periods rows in the matrix we&#39;ve created</span>
         <span class="k">if</span> <span class="n">n_periods</span><span class="p">:</span>
             <span class="n">X_fourier</span> <span class="o">=</span> <span class="n">X_fourier</span><span class="p">[</span><span class="o">-</span><span class="n">n_periods</span><span class="p">:,</span> <span class="p">:]</span>
 
-        <span class="k">if</span> <span class="n">exog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">exog</span> <span class="o">=</span> <span class="n">X_fourier</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">exog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">exog</span><span class="p">,</span> <span class="n">X_fourier</span><span class="p">])</span>
-
+        <span class="n">exog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_safe_hstack</span><span class="p">(</span><span class="n">exog</span><span class="p">,</span> <span class="n">X_fourier</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">exog</span></div>
 
 <div class="viewcode-block" id="FourierFeaturizer.update_and_transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.update_and_transform">[docs]</a>    <span class="k">def</span> <span class="nf">update_and_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

@@ -186,6 +186,7 @@
     <span class="s1">&#39;as_series&#39;</span><span class="p">,</span>
     <span class="s1">&#39;c&#39;</span><span class="p">,</span>
     <span class="s1">&#39;check_endog&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;check_exog&#39;</span><span class="p">,</span>
     <span class="s1">&#39;diff&#39;</span><span class="p">,</span>
     <span class="s1">&#39;is_iterable&#39;</span>
 <span class="p">]</span>
@@ -306,8 +307,28 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">a</span> <span class="k">if</span> <span class="n">is_iterable</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">])</span></div>
 
 
-<span class="k">def</span> <span class="nf">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="check_endog"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.check_endog.html#pmdarima.utils.check_endog">[docs]</a><span class="k">def</span> <span class="nf">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wrapper for ``check_array`` and ``column_or_1d`` from sklearn</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : array-like, shape=(n_samples,)</span>
+<span class="sd">        The 1d endogenous array.</span>
+
+<span class="sd">    dtype : string, type or None (default=np.float64)</span>
+<span class="sd">        Data type of result. If None, the dtype of the input is preserved.</span>
+<span class="sd">        If &quot;numeric&quot;, dtype is preserved unless array.dtype is object.</span>
+
+<span class="sd">    copy : bool, optional (default=False)</span>
+<span class="sd">        Whether a forced copy will be triggered. If copy=False, a copy might</span>
+<span class="sd">        still be triggered by a conversion.</span>
+
+<span class="sd">    force_all_finite : bool, optional (default=False)</span>
+<span class="sd">        Whether to raise an error on np.inf and np.nan in an array. The</span>
+<span class="sd">        possibilities are:</span>
+
+<span class="sd">        - True: Force all values of array to be finite.</span>
+<span class="sd">        - False: accept both np.inf and np.nan in array.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -315,8 +336,53 @@
 <span class="sd">        A 1d numpy ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">column_or_1d</span><span class="p">(</span>
-        <span class="n">check_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>  <span class="c1"># type: np.ndarray</span>
+        <span class="n">check_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="n">force_all_finite</span><span class="p">,</span>
+                    <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>  <span class="c1"># type: np.ndarray</span></div>
+
+
+<div class="viewcode-block" id="check_exog"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.check_exog.html#pmdarima.utils.check_exog">[docs]</a><span class="k">def</span> <span class="nf">check_exog</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A wrapper for ``check_array`` for 2D arrays</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : array-like, shape=(n_samples, n_features)</span>
+<span class="sd">        The exogenous array. If a Pandas frame, a Pandas frame will be returned</span>
+<span class="sd">        as well. Otherwise, a numpy array will be returned.</span>
+
+<span class="sd">    dtype : string, type or None (default=np.float64)</span>
+<span class="sd">        Data type of result. If None, the dtype of the input is preserved.</span>
+<span class="sd">        If &quot;numeric&quot;, dtype is preserved unless array.dtype is object.</span>
+
+<span class="sd">    copy : bool, optional (default=True)</span>
+<span class="sd">        Whether a forced copy will be triggered. If copy=False, a copy might</span>
+<span class="sd">        still be triggered by a conversion.</span>
+
+<span class="sd">    force_all_finite : bool, optional (default=True)</span>
+<span class="sd">        Whether to raise an error on np.inf and np.nan in an array. The</span>
+<span class="sd">        possibilities are:</span>
+
+<span class="sd">        - True: Force all values of array to be finite.</span>
+<span class="sd">        - False: accept both np.inf and np.nan in array.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    X : pd.DataFrame or np.ndarray, shape=(n_samples, n_features)</span>
+<span class="sd">        Either a 2-d numpy array or pd.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s1">&#39;ndim&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must be a 2-d array or dataframe&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="c1"># if not copy, go straight to asserting finite</span>
+        <span class="k">if</span> <span class="n">copy</span> <span class="ow">and</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>  <span class="c1"># tantamount to copy</span>
+        <span class="k">if</span> <span class="n">force_all_finite</span> <span class="ow">and</span> <span class="p">(</span><span class="o">~</span><span class="n">X</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">))</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Found non-finite values in dataframe&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">X</span>
+
+    <span class="c1"># otherwise just a pass-through to the scikit-learn method</span>
+    <span class="k">return</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
+                       <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="n">force_all_finite</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_diff_vector</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="p">):</span>

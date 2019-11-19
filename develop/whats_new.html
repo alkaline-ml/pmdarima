@@ -202,6 +202,10 @@ the <code class="docutils literal notranslate"><span class="pre">SARIMAX</span><
 even when <code class="docutils literal notranslate"><span class="pre">df_model</span></code> accounted for the constant term.</li>
 <li>New <code class="xref py py-class docutils literal notranslate"><span class="pre">pmdarima.arima.auto.StepwiseContext</span></code> feature for more control over
 fit duration (introduced by <a class="reference external" href="https://github.com/kpsunkara">&#64;kpsunkara</a> in <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/pull/221">#221</a>).</li>
+<li>Exogenous arrays are no longer cast to numpy array by default, and will pass pandas
+frames through to the model. This keeps variable names intact in the summary</li>
+<li>Added the <code class="docutils literal notranslate"><span class="pre">prefix</span></code> param to exogenous featurizers to allow the addition of meaningful
+names to engineered features.</li>
 </ul>
 </div>
 <div class="section" id="id4">

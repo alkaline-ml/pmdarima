@@ -181,6 +181,8 @@
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.acf.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.acf</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.as_series.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.as_series</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.c.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.c</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.check_endog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_endog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.check_exog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_exog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.diff.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.if_has_delegate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.if_has_delegate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.is_iterable.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.is_iterable</a></li>
@@ -516,7 +518,7 @@ classes for pre-processing time series or exogenous arrays.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer" title="pmdarima.preprocessing.FourierFeaturizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">preprocessing.FourierFeaturizer</span></code></a>(m[,&nbsp;k])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer" title="pmdarima.preprocessing.FourierFeaturizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">preprocessing.FourierFeaturizer</span></code></a>(m[,&nbsp;k,&nbsp;prefix])</td>
 <td>Fourier terms for modeling seasonality</td>
 </tr>
 </tbody>
@@ -542,6 +544,12 @@ classes for pre-processing time series or exogenous arrays.</p>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.c.html#pmdarima.utils.c" title="pmdarima.utils.c"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.c</span></code></a>(*args)</td>
 <td>Imitates the <code class="docutils literal notranslate"><span class="pre">c</span></code> function from R.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.check_endog.html#pmdarima.utils.check_endog" title="pmdarima.utils.check_endog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.check_endog</span></code></a>(y[,&nbsp;dtype,&nbsp;copy,&nbsp;…])</td>
+<td>Wrapper for <code class="docutils literal notranslate"><span class="pre">check_array</span></code> and <code class="docutils literal notranslate"><span class="pre">column_or_1d</span></code> from sklearn</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.check_exog.html#pmdarima.utils.check_exog" title="pmdarima.utils.check_exog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.check_exog</span></code></a>(X[,&nbsp;dtype,&nbsp;copy,&nbsp;…])</td>
+<td>A wrapper for <code class="docutils literal notranslate"><span class="pre">check_array</span></code> for 2D arrays</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="pmdarima.utils.diff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.diff</span></code></a>(x[,&nbsp;lag,&nbsp;differences])</td>
 <td>Difference an array.</td>

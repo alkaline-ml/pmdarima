@@ -34,16 +34,16 @@ which greatly simplifies your life.
  Out::
 
     pmdarima version: 0.0.0
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2819.938, BIC=2861.993, Fit time=0.439 seconds
-    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2942.625, BIC=2972.664, Fit time=0.015 seconds
-    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2867.514, BIC=2900.557, Fit time=0.058 seconds
-    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2830.585, BIC=2863.628, Fit time=0.248 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2817.535, BIC=2856.586, Fit time=0.335 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2817.377, BIC=2853.424, Fit time=0.289 seconds
-    Fit ARIMA: order=(2, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2818.535, BIC=2857.586, Fit time=0.246 seconds
-    Total fit time: 1.632 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2819.938, BIC=2861.993, Fit time=0.518 seconds
+    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2942.625, BIC=2972.664, Fit time=0.022 seconds
+    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2867.514, BIC=2900.557, Fit time=0.079 seconds
+    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2830.585, BIC=2863.628, Fit time=0.266 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2817.535, BIC=2856.586, Fit time=0.417 seconds
+    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2817.377, BIC=2853.424, Fit time=0.404 seconds
+    Fit ARIMA: order=(2, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2818.535, BIC=2857.586, Fit time=0.355 seconds
+    Total fit time: 2.068 seconds
     Model fit:
-    Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
+    Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12, prefix=None)),
                     ('arima',
                      AutoARIMA(D=None, alpha=0.05, callback=None, d=None, disp=0,
                                error_action='ignore', information_criterion='aic',
@@ -156,7 +156,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  1.790 seconds)
+**Total running time of the script:** ( 0 minutes  2.342 seconds)
 
 
 
