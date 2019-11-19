@@ -23,7 +23,8 @@ from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.python import long
 from ..compat import statsmodels as sm_compat
-from ..utils import get_callable, if_has_delegate, is_iterable, check_endog
+from ..utils import get_callable, if_has_delegate, is_iterable, check_endog, \
+    check_exog
 from ..utils.visualization import _get_plt
 
 # Get the version
@@ -87,7 +88,8 @@ def _seasonal_prediction_with_confidence(arima_res, start, end, exog, alpha,
 
     f = results.predicted_mean
     conf_int = results.conf_int(alpha=alpha)
-    return f, conf_int
+    return check_endog(f, dtype=None, copy=False), \
+        check_array(conf_int, copy=False, dtype=None)
 
 
 def _uses_legacy_pickling(arima):
@@ -281,7 +283,7 @@ class ARIMA(BaseARIMA):
     """
     def __init__(self, order, seasonal_order=(0, 0, 0, 0), start_params=None,
                  method='lbfgs', transparams=True, solver='lbfgs',
-                 maxiter=None, disp=0, callback=None, suppress_warnings=False,
+                 maxiter=50, disp=0, callback=None, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None,
                  trend=None, with_intercept=True, **sarimax_kwargs):
 
@@ -412,9 +414,8 @@ class ARIMA(BaseARIMA):
 
         # if exog was included, check the array...
         if exogenous is not None:
-            exogenous = check_array(exogenous, ensure_2d=True,
-                                    force_all_finite=False,
-                                    copy=False, dtype=DTYPE)
+            exogenous = check_exog(exogenous, force_all_finite=False,
+                                   copy=False, dtype=DTYPE)
 
         # determine the CV args, if any
         cv = self.out_of_sample_size
@@ -472,8 +473,8 @@ class ARIMA(BaseARIMA):
                                  'array, it must also be provided one for '
                                  'predicting or updating observations.')
             else:
-                return check_array(exogenous, ensure_2d=True,
-                                   force_all_finite=True, dtype=DTYPE)
+                return check_exog(
+                    exogenous, force_all_finite=True, dtype=DTYPE)
         return None
 
     def predict_in_sample(self, exogenous=None, start=None,

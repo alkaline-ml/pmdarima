@@ -18,6 +18,7 @@ __all__ = [
     'as_series',
     'c',
     'check_endog',
+    'check_exog',
     'diff',
     'is_iterable'
 ]
@@ -138,8 +139,28 @@ def c(*args):
     return np.concatenate([a if is_iterable(a) else [a] for a in args])
 
 
-def check_endog(y, dtype=DTYPE, copy=True):
+def check_endog(y, dtype=DTYPE, copy=True, force_all_finite=False):
     """Wrapper for ``check_array`` and ``column_or_1d`` from sklearn
+
+    Parameters
+    ----------
+    y : array-like, shape=(n_samples,)
+        The 1d endogenous array.
+
+    dtype : string, type or None (default=np.float64)
+        Data type of result. If None, the dtype of the input is preserved.
+        If "numeric", dtype is preserved unless array.dtype is object.
+
+    copy : bool, optional (default=False)
+        Whether a forced copy will be triggered. If copy=False, a copy might
+        still be triggered by a conversion.
+
+    force_all_finite : bool, optional (default=False)
+        Whether to raise an error on np.inf and np.nan in an array. The
+        possibilities are:
+
+        - True: Force all values of array to be finite.
+        - False: accept both np.inf and np.nan in array.
 
     Returns
     -------
@@ -147,8 +168,53 @@ def check_endog(y, dtype=DTYPE, copy=True):
         A 1d numpy ndarray
     """
     return column_or_1d(
-        check_array(y, ensure_2d=False, force_all_finite=False,
+        check_array(y, ensure_2d=False, force_all_finite=force_all_finite,
                     copy=copy, dtype=dtype))  # type: np.ndarray
+
+
+def check_exog(X, dtype=DTYPE, copy=True, force_all_finite=True):
+    """A wrapper for ``check_array`` for 2D arrays
+
+    Parameters
+    ----------
+    X : array-like, shape=(n_samples, n_features)
+        The exogenous array. If a Pandas frame, a Pandas frame will be returned
+        as well. Otherwise, a numpy array will be returned.
+
+    dtype : string, type or None (default=np.float64)
+        Data type of result. If None, the dtype of the input is preserved.
+        If "numeric", dtype is preserved unless array.dtype is object.
+
+    copy : bool, optional (default=True)
+        Whether a forced copy will be triggered. If copy=False, a copy might
+        still be triggered by a conversion.
+
+    force_all_finite : bool, optional (default=True)
+        Whether to raise an error on np.inf and np.nan in an array. The
+        possibilities are:
+
+        - True: Force all values of array to be finite.
+        - False: accept both np.inf and np.nan in array.
+
+    Returns
+    -------
+    X : pd.DataFrame or np.ndarray, shape=(n_samples, n_features)
+        Either a 2-d numpy array or pd.DataFrame
+    """
+    if hasattr(X, 'ndim') and X.ndim != 2:
+        raise ValueError("Must be a 2-d array or dataframe")
+
+    if isinstance(X, pd.DataFrame):
+        # if not copy, go straight to asserting finite
+        if copy and dtype is not None:
+            X = X.astype(dtype)  # tantamount to copy
+        if force_all_finite and (~X.apply(np.isfinite)).any().any():
+            raise ValueError("Found non-finite values in dataframe")
+        return X
+
+    # otherwise just a pass-through to the scikit-learn method
+    return check_array(X, ensure_2d=True, dtype=DTYPE,
+                       copy=copy, force_all_finite=force_all_finite)
 
 
 def _diff_vector(x, lag):

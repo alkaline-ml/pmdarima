@@ -27,6 +27,12 @@ v0.8.1) will document the latest features.
 * New :class:`pmdarima.arima.auto.StepwiseContext` feature for more control over
   fit duration (introduced by `@kpsunkara <https://github.com/kpsunkara>`_ in `#221 <https://github.com/tgsmith61591/pmdarima/pull/221>`_).
 
+* Exogenous arrays are no longer cast to numpy array by default, and will pass pandas
+  frames through to the model. This keeps variable names intact in the summary
+
+* Added the ``prefix`` param to exogenous featurizers to allow the addition of meaningful
+  names to engineered features.
+
 
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
 --------------------------------------------------

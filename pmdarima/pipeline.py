@@ -5,6 +5,7 @@ import warnings
 
 from sklearn.base import BaseEstimator, clone
 from sklearn.utils.validation import check_is_fitted
+from sklearn.utils.metaestimators import if_delegate_has_method
 
 from .base import BaseARIMA
 from .preprocessing.base import BaseTransformer
@@ -407,6 +408,11 @@ class Pipeline(BaseEstimator):
         if return_conf_int:
             return y_pred, conf_ints
         return y_pred
+
+    @if_delegate_has_method('_final_estimator')
+    def summary(self):
+        """Get a summary of the ARIMA model"""
+        return self._final_estimator.summary()
 
     def update(self, y, exogenous=None, maxiter=None, **kwargs):
         """Update an ARIMA or auto-ARIMA as well as any necessary transformers
