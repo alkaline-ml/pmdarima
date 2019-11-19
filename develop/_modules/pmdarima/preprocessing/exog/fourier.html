@@ -240,12 +240,12 @@
 <span class="sd">    &gt;&gt;&gt; trans = FourierFeaturizer(12, 4)</span>
 <span class="sd">    &gt;&gt;&gt; y_prime, exog = trans.fit_transform(y)</span>
 <span class="sd">    &gt;&gt;&gt; exog.head()</span>
-<span class="sd">       FOURIER_0     FOURIER_1    ...     FOURIER_6  FOURIER_7</span>
-<span class="sd">    0   0.500000  8.660254e-01    ...  8.660254e-01       -0.5</span>
-<span class="sd">    1   0.866025  5.000000e-01    ... -8.660255e-01       -0.5</span>
-<span class="sd">    2   1.000000 -4.371139e-08    ...  1.748456e-07        1.0</span>
-<span class="sd">    3   0.866025 -5.000001e-01    ...  8.660253e-01       -0.5</span>
-<span class="sd">    4   0.500000 -8.660254e-01    ... -8.660255e-01       -0.5</span>
+<span class="sd">       FOURIER_S12-0     FOURIER_C12-0    ...     FOURIER_S12-3  FOURIER_C12-3</span>
+<span class="sd">    0       0.500000      8.660254e-01    ...      8.660254e-01           -0.5</span>
+<span class="sd">    1       0.866025      5.000000e-01    ...     -8.660255e-01           -0.5</span>
+<span class="sd">    2       1.000000     -4.371139e-08    ...      1.748456e-07            1.0</span>
+<span class="sd">    3       0.866025     -5.000001e-01    ...      8.660253e-01           -0.5</span>
+<span class="sd">    4       0.500000     -8.660254e-01    ...     -8.660255e-01           -0.5</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -269,6 +269,17 @@
         <span class="k">if</span> <span class="n">pfx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pfx</span> <span class="o">=</span> <span class="s2">&quot;FOURIER&quot;</span>
         <span class="k">return</span> <span class="n">pfx</span>
+
+    <span class="k">def</span> <span class="nf">_get_feature_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="n">pfx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_prefix</span><span class="p">()</span>
+        <span class="c1"># E.g., [&#39;FOURIER_S12-0&#39;, &#39;FOURIER_C12-0&#39;, ...]</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">_</span><span class="si">%s%i</span><span class="s1">-</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">pfx</span><span class="p">,</span>
+                <span class="s2">&quot;S&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span>
+                <span class="n">i</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
 
 <div class="viewcode-block" id="FourierFeaturizer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fit the transformer</span>
