@@ -38,15 +38,17 @@ class BaseExogFeaturizer(six.with_metaclass(abc.ABCMeta, BaseExogTransformer)):
     def _safe_hstack(self, exog, features):
         """H-stack dataframes or np.ndarrays"""
         if exog is None or isinstance(exog, pd.DataFrame):
-            # this is set in the 'fit' method
-            pfx = self._get_prefix()
-
             # the features we're adding may be np.ndarray
             if not isinstance(features, pd.DataFrame):
                 features = pd.DataFrame.from_records(features)
-            # set the names
-            features.columns = [
-                '%s_%i' % (pfx, i) for i in range(features.shape[1])]
+
+            # subclass MIGHT define this
+            if hasattr(self, '_get_feature_names'):
+                features.columns = self._get_feature_names(features)
+            else:
+                pfx = self._get_prefix()
+                features.columns = [
+                    '%s_%i' % (pfx, i) for i in range(features.shape[1])]
 
             if exog is not None:
                 return pd.concat([exog, features], axis=1, ignore_index=True)
