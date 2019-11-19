@@ -106,6 +106,9 @@ def test_get_kwargs(pipe, kwargs, expected):
     # show we can convert steps to dict
     assert pipe.named_steps
 
+    # show we can get a summary
+    pipe.summary()
+
 
 def test_pipeline_behavior():
     pipeline = Pipeline([

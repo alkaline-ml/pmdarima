@@ -170,6 +170,11 @@ class AutoARIMA(BaseARIMA):
         return self.model_.update(
             y, exogenous=exogenous, maxiter=maxiter, **kwargs)
 
+    @if_has_delegate('model_')
+    def summary(self):
+        """Get a summary of the ARIMA model"""
+        return self.model_.summary()
+
     # TODO: decorator to automate all this composition + AIC, etc.
 
 
