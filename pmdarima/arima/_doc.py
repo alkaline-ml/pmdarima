@@ -147,15 +147,11 @@ _AUTO_ARIMA_DOCSTR = \
         Uses the transformation suggested in Jones (1980).  If False,
         no checking for stationarity or invertibility is done.
 
-    method : str, one of ('css-mle','mle','css'), optional (default=None)
-        This is the loglikelihood to maximize.  If "css-mle", the
-        conditional sum of squares likelihood is maximized and its values
-        are used as starting values for the computation of the exact
-        likelihood via the Kalman filter.  If "mle", the exact likelihood
-        is maximized via the Kalman Filter.  If "css" the conditional sum
-        of squares likelihood is maximized.  All three methods use
-        `start_params` as starting parameters.  See above for more
-        information. If fitting a seasonal ARIMA, the default is 'lbfgs'
+    method : str, optional (default='lbfgs')
+        One of ('newton', 'bfgs', 'lbfgs', 'powell', 'cg', 'ncg',
+        'basinhopping'). Determines a solver method for maximizing the
+        loglikelihood. Default is 'lbfgs' (limited-memory BFGS with optional
+        box constraints).
 
     trend : str or None, optional (default=None)
         The trend parameter. If ``with_intercept`` is True, ``trend`` will be
@@ -171,11 +167,8 @@ _AUTO_ARIMA_DOCSTR = \
         approximate the Hessian, projected gradient tolerance of 1e-8 and
         factr = 1e2. You can change these by using kwargs.
 
-    maxiter : int, optional (default=None)
-        The maximum number of function evaluations. Statsmodels defaults this
-        value to 50 for SARIMAX models and 500 for ARIMA and ARMA models. If
-        passed as None, will use the seasonal order to determine which to use
-        (50 for seasonal, 500 otherwise).
+    maxiter : int, optional (default=50)
+        The maximum number of function evaluations. Default is 50.
 
     disp : int, optional (default=0)
         If True, convergence information is printed.  For the default

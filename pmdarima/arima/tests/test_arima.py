@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-
 from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
 from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
 from pmdarima.arima._auto_solvers import _fmt_warning_str
@@ -77,7 +75,11 @@ def test_basic_arma():
     assert arma.oob_preds_ is None
 
     # test some of the attrs
-    assert_almost_equal(arma.aic(), 11.201308403566909, decimal=5)
+    assert_almost_equal(arma.aic(), 11.201, decimal=3)  # equivalent in R
+
+    # intercept is param 0
+    intercept = arma.params()[0]
+    assert_almost_equal(intercept, 0.441, decimal=3)  # equivalent in R
     assert_almost_equal(arma.aicc(), 11.74676, decimal=5)
     assert_almost_equal(arma.bic(), 13.639060053303311, decimal=5)
 
@@ -111,15 +113,15 @@ def test_basic_arma():
 
 @pytest.mark.parametrize(
     # will be m - d
-    'model, expected_m_dim', [
-        pytest.param(ARIMA(order=(2, 0, 0)), wineind.shape[0]),  # arma
-        pytest.param(ARIMA(order=(2, 1, 0)), wineind.shape[0] - 1),  # arima
-        pytest.param(ARIMA(order=(2, 1, 0), seasonal_order=(1, 0, 0, 12)),
-                     wineind.shape[0]),  # sarimax
+    'model', [
+        ARIMA(order=(2, 0, 0)),  # arma
+        ARIMA(order=(2, 1, 0)),  # arima
+        ARIMA(order=(2, 1, 0), seasonal_order=(1, 0, 0, 12)),  # sarimax
     ]
 )
-def test_predict_in_sample_conf_int(model, expected_m_dim):
+def test_predict_in_sample_conf_int(model):
     model.fit(wineind)
+    expected_m_dim = wineind.shape[0]
     preds, confints = model.predict_in_sample(return_conf_int=True, alpha=0.05)
     assert preds.shape[0] == expected_m_dim
     assert confints.shape == (expected_m_dim, 2)
@@ -189,13 +191,13 @@ def test_oob_for_issue_28():
     assert not np.isnan(oob)
 
     # Assert that the endog shapes match. First is equal to the original,
-    # and the second is the differenced array, with original shape - d.
+    # and the second is the differenced array
     assert np.allclose(arima.arima_res_.data.endog, hr, rtol=1e-2)
-    assert arima.arima_res_.model.endog.shape[0] == hr.shape[0] - 1
+    assert arima.arima_res_.model.endog.shape[0] == hr.shape[0]
 
     # Now assert the same for exog
     assert np.allclose(arima.arima_res_.data.exog, xreg, rtol=1e-2)
-    assert arima.arima_res_.model.exog.shape[0] == xreg.shape[0] - 1
+    assert arima.arima_res_.model.exog.shape[0] == xreg.shape[0]
 
     # Compare the OOB score to an equivalent fit on data - 10 obs, but
     # without any OOB scoring, and we'll show that the OOB scoring in the
@@ -413,8 +415,8 @@ def test_the_r_src():
     # this is the test the R code provides
     fit = ARIMA(order=(2, 0, 1), trend='c', suppress_warnings=True).fit(abc)
 
-    # the R code's AIC = ~135
-    assert abs(135 - fit.aic()) < 1.0
+    # the R code's AIC = 135.4
+    assert abs(135.4 - fit.aic()) < 1.0
 
     # the R code's AICc = ~ 137
     assert abs(137 - fit.aicc()) < 1.0
@@ -426,10 +428,11 @@ def test_the_r_src():
     #     ar1      ar2     ma1    mean
     # -0.6515  -0.2449  0.8012  5.0370
 
-    # note that statsmodels' mean is on the front, not the end.
-    params = fit.params()
-    assert_almost_equal(params, np.array([5.0370, -0.6515, -0.2449, 0.8012]),
-                        decimal=2)
+    arparams = fit.arparams()
+    assert_almost_equal(arparams, [-0.6515, -0.2449], decimal=3)
+
+    maparams = fit.maparams()
+    assert_almost_equal(maparams, [0.8012], decimal=3)
 
     # > fit = forecast::auto.arima(abc, max.p=5, max.d=5,
     #             max.q=5, max.order=100, stepwise=F)
@@ -437,56 +440,46 @@ def test_the_r_src():
                      seasonal=False, trend='c', suppress_warnings=True,
                      error_action='ignore')
 
-    # this differs from the R fit with a slightly higher AIC...
-    assert abs(137 - fit.aic()) < 1.0  # R's is 135.28
+    assert abs(135.28 - fit.aic()) < 1.0  # R's is 135.28
 
 
-def test_errors():
-    def _assert_val_error(f, *args, **kwargs):
-        # Legacy, didn't really assert anything. Bad news!
-        # try:
-        #     f(*args, **kwargs)
-        #     return False
-        # except ValueError:
-        #     return True
-        with pytest.raises(ValueError):
-            f(*args, **kwargs)
+@pytest.mark.parametrize(
+    'endog, kwargs', [
+        # show we fail for bad start/max p, q values:
+        pytest.param(abc, {'start_p': -1}),
+        pytest.param(abc, {'start_q': -1}),
+        pytest.param(abc, {'max_p': -1}),
+        pytest.param(abc, {'max_q': -1}),
 
-    # show we fail for bad start/max p, q values:
+        # show we fail when start < max:
+        pytest.param(abc, {'start_p': 1, 'max_p': 0}),
+        pytest.param(abc, {'start_q': 1, 'max_q': 0}),
+
+        # other assertions
+        pytest.param(abc, {'max_order': -1}),
+        pytest.param(abc, {'max_d': -1}),
+        pytest.param(abc, {'d': -1}),
+        pytest.param(abc, {'max_D': -1}),
+        pytest.param(abc, {'D': -1}),
+        pytest.param(abc, {'information_criterion': 'bad-value'}),
+        pytest.param(abc, {'m': 0}),
+
+        # show that for starting values > max_order, we'll get an error
+        pytest.param(abc, {'start_p': 5,
+                           'start_q': 5,
+                           'seasonal': False,
+                           'max_order': 3}),
+        pytest.param(abc, {'start_p': 5,
+                           'start_q': 5,
+                           'start_P': 4,
+                           'start_Q': 3,
+                           'seasonal': True,
+                           'max_order': 3}),
+    ]
+)
+def test_value_errors(endog, kwargs):
     with pytest.raises(ValueError):
-        auto_arima(abc, start_p=-1)
-    with pytest.raises(ValueError):
-        auto_arima(abc, start_q=-1)
-    with pytest.raises(ValueError):
-        auto_arima(abc, max_p=-1)
-    with pytest.raises(ValueError):
-        auto_arima(abc, max_q=-1)
-    # (where start < max)
-    with pytest.raises(ValueError):
-        auto_arima(abc, start_p=1, max_p=0)
-    with pytest.raises(ValueError):
-        auto_arima(abc, start_q=1, max_q=0)
-
-    # show max order error
-    _assert_val_error(auto_arima, abc, max_order=-1)
-
-    # show errors for d
-    _assert_val_error(auto_arima, abc, max_d=-1)
-    _assert_val_error(auto_arima, abc, d=-1)
-    _assert_val_error(auto_arima, abc, max_D=-1)
-    _assert_val_error(auto_arima, abc, D=-1)
-
-    # show error for bad IC
-    _assert_val_error(auto_arima, abc, information_criterion='bad-value')
-
-    # show bad m value
-    _assert_val_error(auto_arima, abc, m=0)
-
-    # show that for starting values > max_order, we'll get an error
-    _assert_val_error(auto_arima, abc, start_p=5, start_q=5,
-                      seasonal=False, max_order=3)
-    _assert_val_error(auto_arima, abc, start_p=5, start_q=5, start_P=4,
-                      start_Q=3, seasonal=True, max_order=3)
+        auto_arima(endog, **kwargs)
 
 
 def test_many_orders():
@@ -651,8 +644,7 @@ def test_corner_cases():
 def test_warning_str_fmt():
     order = (1, 1, 1)
     seasonal = (1, 1, 1, 1)
-    for ssnl in (seasonal, None):
-        _fmt_warning_str(order, ssnl)
+    _fmt_warning_str(order, seasonal)
 
 
 @pytest.mark.parametrize(
@@ -834,10 +826,10 @@ def test_for_older_version():
 @pytest.mark.parametrize(
     'order,seasonal', [
         # ARMA
-        pytest.param((1, 0, 0), None),
+        pytest.param((1, 0, 0), (0, 0, 0, 0)),
 
         # ARIMA
-        pytest.param((1, 1, 0), None),
+        pytest.param((1, 1, 0), (0, 0, 0, 0)),
 
         # SARIMAX
         pytest.param((1, 1, 0), (1, 0, 0, 12))
@@ -871,6 +863,7 @@ def test_to_dict_raises_attribute_error_on_unfit_model():
         modl.to_dict()
 
 
+# tgsmith61591: I really hate this test. But it ensures no drift, at least..
 def test_to_dict_is_accurate():
     train = lynx[:90]
     modl = auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
@@ -908,7 +901,7 @@ def test_to_dict_is_accurate():
         'seasonal_order': (0, 0, 0, 1),
         'oob': np.nan,
         'aic': 1487.8850037609368,
-        'aicc': 1488.5992894752226,
+        'aicc': 1488.3555919962284,
         'bic': 1497.8842424422578,
         'bse': np.array([2.26237893e+02, 6.97744631e-02,
                          9.58556537e-02, 1.03225425e+05]),
@@ -1025,17 +1018,6 @@ def test_update_1_iter(model):
 
     # They should be close
     assert np.allclose(params1, params2, atol=0.05)
-
-
-def test_add_new_obs_deprecated():
-    endog = wineind
-    train, test = endog[:125], endog[125:]
-    model = ARIMA(order=(1, 0, 0))
-
-    model.fit(train)
-
-    with pytest.warns(DeprecationWarning):
-        model.add_new_observations(test)
 
 
 def test_AutoARIMA_class():

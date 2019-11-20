@@ -4,6 +4,7 @@
 #
 # The pmdarima module
 
+from pathlib import Path
 import os as _os
 
 # PEP0440 compatible formatted version, see:
@@ -19,10 +20,13 @@ import os as _os
 #   X.YrcN  # Release Candidate
 #   X.Y     # Final release
 #
-# Dev branch marker is: 'X.Y.dev' or 'X.Y.devN' where N is an integer.
-# 'X.Y.dev0' is the canonical version of 'X.Y.dev'
-#
-__version__ = "1.4.1.dev0"
+# We only create a VERSION file in CI/CD on tagged commits.
+# For local development, or non-tagged commits, we will use 0.0.0
+try:
+    version_path = Path(__file__).parent / 'VERSION'
+    __version__ = version_path.read_text().strip()
+except FileNotFoundError:
+    __version__ = '0.0.0'
 
 try:
     # this var is injected in the setup build to enable
@@ -42,7 +46,7 @@ else:
     from . import __check_build
 
     # Stuff we want at top-level
-    from .arima import auto_arima, ARIMA, AutoARIMA
+    from .arima import auto_arima, ARIMA, AutoARIMA, StepwiseContext
     from .utils import acf, autocorr_plot, c, pacf, plot_acf, plot_pacf
 
     # Need these namespaces at the top so they can be used like:
@@ -68,7 +72,8 @@ else:
         'c',
         'pacf',
         'plot_acf',
-        'plot_pacf'
+        'plot_pacf',
+        'StepwiseContext',
     ]
 
     # Delete unwanted variables from global

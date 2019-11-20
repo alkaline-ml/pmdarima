@@ -62,12 +62,11 @@ in_sample_preds, in_sample_confint = \
     pipe.predict_in_sample(exogenous=None, return_conf_int=True)
 
 n_train = train.shape[0]
-d = pipe._final_estimator.model_.order[1]
 
 x0 = np.arange(n_train)
 axes[0].plot(x0, train, alpha=0.75)
-axes[0].scatter(x0[d:], in_sample_preds, alpha=0.4, marker='x')
-axes[0].fill_between(x0[d:], in_sample_confint[:, 0], in_sample_confint[:, 1],
+axes[0].scatter(x0, in_sample_preds, alpha=0.4, marker='x')
+axes[0].fill_between(x0, in_sample_confint[:, 0], in_sample_confint[:, 1],
                      alpha=0.1, color='b')
 axes[0].set_title('Actual train samples vs. in-sample predictions')
 axes[0].set_xlim((0, x0.shape[0]))

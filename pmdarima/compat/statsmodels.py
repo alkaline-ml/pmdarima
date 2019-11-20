@@ -8,9 +8,6 @@ __all__ = [
     'bind_df_model'
 ]
 
-DEFAULT_NON_SEASONAL_MAXITER = 500  # ARMA, ARIMA
-DEFAULT_SEASONAL_MAXITER = 50  # SARIMAX
-
 
 def bind_df_model(model_fit, arima_results):
     """Set model degrees of freedom.

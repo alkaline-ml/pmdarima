@@ -44,6 +44,7 @@ sections for further details.
     arima.KPSSTest
     arima.OCSBTest
     arima.PPTest
+    arima.StepwiseContext
 
 ARIMA auto-parameter selection
 ------------------------------
@@ -161,7 +162,7 @@ Cross validators
 
     model_selection.check_cv
     model_selection.cross_validate
-    model_selection.cross_val_scores
+    model_selection.cross_val_score
 
 
 .. _pipeline_ref:

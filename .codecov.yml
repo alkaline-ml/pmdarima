@@ -22,3 +22,13 @@ coverage:
         # https://github.com/codecov/browser-extension
         target: auto
         threshold: 1%
+
+ignore:
+- "**/setup.py"
+- "*/pmdarima/__check_build/*"
+- "*/pmdarima/_build_utils/*"
+- "*/pmdarima/_config.py"
+- "*/pmdarima/__init__.py"
+- "*/pmdarima/compat/matplotlib.py"
+- "*/pmdarima/utils/tests/test_vis.py"
+- "*/pmdarima/utils/visualization.py"
