@@ -5,11 +5,10 @@
 
 from sklearn.base import BaseEstimator, TransformerMixin
 import six
-from sklearn.utils.validation import check_array, column_or_1d
-
 import abc
 
 from ..compat.numpy import DTYPE
+from ..utils import check_exog, check_endog
 
 __all__ = [
     "BaseTransformer"
@@ -37,12 +36,11 @@ class BaseTransformer(six.with_metaclass(abc.ABCMeta,
         """Validate input"""
         # Do not force finite, since a transformer's goal may be imputation.
         if y is not None:
-            y = column_or_1d(
-                check_array(y, ensure_2d=False, dtype=DTYPE, copy=True,
-                            force_all_finite=False))
+            y = check_endog(y, dtype=DTYPE, copy=True, force_all_finite=False)
+
         if exog is not None:
-            exog = check_array(exog, ensure_2d=True, dtype=DTYPE,
-                               copy=True, force_all_finite=False)
+            exog = check_exog(
+                exog, dtype=DTYPE, copy=True, force_all_finite=False)
         return y, exog
 
     def fit_transform(self, y, exogenous=None, **transform_kwargs):

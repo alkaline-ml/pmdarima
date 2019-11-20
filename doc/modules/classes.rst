@@ -248,6 +248,8 @@ Array helper functions & metaestimators
     utils.acf
     utils.as_series
     utils.c
+    utils.check_endog
+    utils.check_exog
     utils.diff
     utils.if_has_delegate
     utils.is_iterable

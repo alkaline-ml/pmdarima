@@ -60,6 +60,25 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
         which is the default value if not set. The value of ``k`` can be
         selected by minimizing the AIC.
 
+    prefix : str or None, optional (default=None)
+        The feature prefix
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> from pmdarima.preprocessing import FourierFeaturizer
+    >>> from pmdarima.datasets import load_wineind
+    >>> y = load_wineind()
+    >>> trans = FourierFeaturizer(12, 4)
+    >>> y_prime, exog = trans.fit_transform(y)
+    >>> exog.head()
+       FOURIER_S12-0     FOURIER_C12-0    ...     FOURIER_S12-3  FOURIER_C12-3
+    0       0.500000      8.660254e-01    ...      8.660254e-01           -0.5
+    1       0.866025      5.000000e-01    ...     -8.660255e-01           -0.5
+    2       1.000000     -4.371139e-08    ...      1.748456e-07            1.0
+    3       0.866025     -5.000001e-01    ...      8.660253e-01           -0.5
+    4       0.500000     -8.660254e-01    ...     -8.660255e-01           -0.5
+
     Notes
     -----
     * Helpful for long seasonal periods (large ``m``) where ``seasonal=True``
@@ -71,9 +90,28 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
     .. [2] https://robjhyndman.com/hyndsight/longseasonality/
     """
 
-    def __init__(self, m, k=None):
+    def __init__(self, m, k=None, prefix=None):
         self.m = m
         self.k = k
+
+        super().__init__(prefix)
+
+    def _get_prefix(self):
+        pfx = self.prefix
+        if pfx is None:
+            pfx = "FOURIER"
+        return pfx
+
+    def _get_feature_names(self, X):
+        pfx = self._get_prefix()
+        # E.g., ['FOURIER_S12-0', 'FOURIER_C12-0', ...]
+        return [
+            '%s_%s%i-%i' % (
+                pfx,
+                "S" if i % 2 == 0 else "C",
+                self.m,
+                i // 2)
+            for i in range(X.shape[1])]
 
     def fit(self, y, exogenous=None):
         """Fit the transformer
@@ -160,18 +198,14 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
                                  .format(n_periods, exog.shape[0]))
 
         times = np.arange(self.n_ + n_periods, dtype=np.float64) + 1
-        X_fourier = _fourier_terms(self.p_, times)
+        X_fourier = _fourier_terms(self.p_, times)  # type: np.ndarray
 
         # Maybe trim if we're in predict mode... in that case, we only keep the
         # last n_periods rows in the matrix we've created
         if n_periods:
             X_fourier = X_fourier[-n_periods:, :]
 
-        if exog is None:
-            exog = X_fourier
-        else:
-            exog = np.hstack([exog, X_fourier])
-
+        exog = self._safe_hstack(exog, X_fourier)
         return y, exog
 
     def update_and_transform(self, y, exogenous, **kwargs):

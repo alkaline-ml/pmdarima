@@ -75,8 +75,13 @@ data = {
 request = session.post(
     url='https://store.zapier.com/api/records',
     headers={
-        'X-Secret':  os.getenv('ZAPIER_SHA')
+        'X-Secret': os.getenv('ZAPIER_SHA')
     },
     data=json.dumps(data)
 )
 request.raise_for_status()
+
+print(f"""
+New total downloads: {data['total']}
+New weekly downloads: {data['weekly']}
+""")

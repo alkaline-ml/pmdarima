@@ -30,6 +30,12 @@ v0.8.1) will document the latest features.
 * Adds the :class:`pmdarima.preprocessing.LogEndogTransformer` class as discussed in
   `#205 <https://github.com/tgsmith61591/pmdarima/issues/205>`_
 
+* Exogenous arrays are no longer cast to numpy array by default, and will pass pandas
+  frames through to the model. This keeps variable names intact in the summary (`#222 <https://github.com/tgsmith61591/pmdarima/issues/222>`_)
+
+* Added the ``prefix`` param to exogenous featurizers to allow the addition of meaningful
+  names to engineered features.
+
 
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
 --------------------------------------------------

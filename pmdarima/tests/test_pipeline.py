@@ -103,6 +103,9 @@ def test_get_kwargs(pipe, kwargs, expected):
     kw = pipe._get_kwargs(**kwargs)
     assert kw == expected
 
+    # show we can convert steps to dict
+    assert pipe.named_steps
+
 
 def test_pipeline_behavior():
     pipeline = Pipeline([
@@ -180,6 +183,9 @@ def test_pipeline_predict_inverse_transform(pipeline, exog, inverse_transform,
     exog_train, exog_test = exog
 
     pipeline.fit(train, exogenous=exog_train)
+
+    # show we can get a summary
+    pipeline.summary()
 
     # first predict
     predictions = pipeline.predict(

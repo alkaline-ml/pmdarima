@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import pandas as pd
+import numpy as np
 import six
-
 import abc
 
 from ..base import BaseTransformer
@@ -20,7 +21,41 @@ class BaseExogTransformer(six.with_metaclass(abc.ABCMeta, BaseTransformer)):
 
 
 class BaseExogFeaturizer(six.with_metaclass(abc.ABCMeta, BaseExogTransformer)):
-    """Exogenous transformers that create exog features from the endog array"""
+    """Exogenous transformers that create exog features from the endog array
+
+    Parameters
+    ----------
+    prefix : str or None, optional (default=None)
+        The feature prefix
+    """
+    def __init__(self, prefix=None):
+        self.prefix = prefix
+
+    @abc.abstractmethod
+    def _get_prefix(self):
+        """Get the feature prefix for when exog is a pd.DataFrame"""
+
+    def _safe_hstack(self, exog, features):
+        """H-stack dataframes or np.ndarrays"""
+        if exog is None or isinstance(exog, pd.DataFrame):
+            # the features we're adding may be np.ndarray
+            if not isinstance(features, pd.DataFrame):
+                features = pd.DataFrame.from_records(features)
+
+            # subclass MIGHT define this
+            if hasattr(self, '_get_feature_names'):
+                features.columns = self._get_feature_names(features)
+            else:
+                pfx = self._get_prefix()
+                features.columns = [
+                    '%s_%i' % (pfx, i) for i in range(features.shape[1])]
+
+            if exog is not None:
+                return pd.concat([exog, features], axis=1, ignore_index=True)
+            # if exog was None coming in, we'd still like to favor a pd.DF
+            return features
+
+        return np.hstack([exog, features])
 
     def transform(self, y, exogenous=None, n_periods=0, **kwargs):
         """Transform the new array
