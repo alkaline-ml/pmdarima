@@ -34,14 +34,14 @@ which greatly simplifies your life.
  Out::
 
     pmdarima version: 0.0.0
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2819.938, BIC=2861.993, Fit time=0.384 seconds
-    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2942.625, BIC=2972.664, Fit time=0.013 seconds
-    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2867.514, BIC=2900.557, Fit time=0.050 seconds
-    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2830.585, BIC=2863.628, Fit time=0.231 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2817.535, BIC=2856.586, Fit time=0.316 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2817.377, BIC=2853.424, Fit time=0.284 seconds
-    Fit ARIMA: order=(2, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2818.535, BIC=2857.586, Fit time=0.223 seconds
-    Total fit time: 1.505 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2819.938, BIC=2861.993, Fit time=0.434 seconds
+    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2942.625, BIC=2972.664, Fit time=0.014 seconds
+    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2867.514, BIC=2900.557, Fit time=0.049 seconds
+    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2830.585, BIC=2863.628, Fit time=0.211 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2817.535, BIC=2856.586, Fit time=0.293 seconds
+    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2817.377, BIC=2853.424, Fit time=0.239 seconds
+    Fit ARIMA: order=(2, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2818.535, BIC=2857.586, Fit time=0.211 seconds
+    Total fit time: 1.455 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12, prefix=None)),
                     ('arima',
@@ -156,7 +156,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  1.675 seconds)
+**Total running time of the script:** ( 0 minutes  1.618 seconds)
 
 
 
