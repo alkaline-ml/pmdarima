@@ -34,6 +34,23 @@ class LogEndogTransformer(BoxCoxEndogTransformer):
 
         super().__init__(0, lmbda2=lmbda, neg_action=neg_action, floor=floor)
 
+    def fit(self, y, exogenous=None):
+        """Fit the transformer
+
+        Must be called before ``transform``.
+
+        Parameters
+        ----------
+        y : array-like or None, shape=(n_samples,)
+            The endogenous (time-series) array.
+
+        exogenous : array-like or None, shape=(n_samples, n_features), optional
+            The exogenous array of additional covariates. Not used for
+            endogenous transformers. Default is None, and non-None values will
+            serve as pass-through arrays.
+        """
+        return super().fit(y, exogenous)
+
     def transform(self, y, exogenous=None, **transform_kwargs):
         """Apply the log transform to the array
 
