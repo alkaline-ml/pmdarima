@@ -14,7 +14,64 @@ from ._context import ContextType, ContextStore
 from datetime import datetime
 
 
-class _StepwiseFitWrapper(object):
+def _do_root_test(testvec, minroot, sign):
+    """The inner portion of the root test
+
+    The R code for the phi polyroot test::
+
+        k <- abs(testvec) > 1e-8
+        if (sum(k) > 0) {
+          last.nonzero <- max(which(k))
+        } else {
+          last.nonzero <- 0
+        }
+        if (last.nonzero > 0) {
+          testvec <- testvec[1:last.nonzero]
+          proots <- try(polyroot(c(1,-testvec)))
+          if (!is.element("try-error", class(proots))) {
+            minroot <- min(minroot, abs(proots))
+          }
+          else fit$ic <- Inf
+        }
+    """
+    k = np.abs(testvec) > 1e-8
+    last_nonzero = 0
+    if np.sum(k) > 0:
+        last_nonzero = np.where(k)[0].max()
+    if last_nonzero > 0:
+        testvec = np.array([1.] + (testvec[:last_nonzero + 1] * sign).tolist())
+        proots = np.polynomial.polynomial.polyroots(testvec)
+        # TODO: test for real?
+        minroot = min(minroot, *np.abs(proots).tolist())
+    return minroot
+
+
+def _root_test(model, ic, trace):
+    # check the roots of the new model, and set IC to inf if the roots are
+    # near non-invertible
+    # https://github.com/robjhyndman/forecast/blob/master/R/newarima2.R#L780
+    minroot = 2
+    p, d, q = model.order
+    P, D, Q, m = model.seasonal_order
+
+    if p + P > 0:
+        phi = model.arparams()
+        minroot = _do_root_test(phi, minroot, -1)
+
+    if q + Q > 0 and np.isfinite(ic):
+        theta = model.maparams()
+        minroot = _do_root_test(theta, minroot, 1)
+
+    if minroot < 1 + 1e-2:
+        ic = np.inf
+        if trace:
+            print("Near non-invertible roots for order "
+                  "(%i, %i, %i)(%i, %i, %i, %i); setting ic to inf"
+                  % (p, d, q, P, D, Q, m))
+    return ic
+
+
+class _StepwiseFitWrapper:
     """The stepwise algorithm fluctuates the more sensitive pieces of the ARIMA
     (the seasonal components) first, adjusting towards the direction of the
     smaller {A|B|HQ}IC(c), and continues to step down as long as the error
@@ -105,6 +162,11 @@ class _StepwiseFitWrapper(object):
             return False
 
         current_ic, new_ic = self.get_ic(self.bestfit), self.get_ic(new_model)
+
+        # check the roots of the new model, and set IC to inf if the roots are
+        # near non-invertible
+        new_ic = _root_test(new_model, new_ic, self.trace)
+
         return new_ic < current_ic
 
     # this function takes a boolean expression, fits & caches a model,
