@@ -211,6 +211,7 @@ Endogenous transformers
     :template: class.rst
 
     preprocessing.BoxCoxEndogTransformer
+    preprocessing.LogEndogTransformer
 
 Exogenous transformers
 ----------------------

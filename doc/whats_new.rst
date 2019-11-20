@@ -27,8 +27,11 @@ v0.8.1) will document the latest features.
 * New :class:`pmdarima.arima.auto.StepwiseContext` feature for more control over
   fit duration (introduced by `@kpsunkara <https://github.com/kpsunkara>`_ in `#221 <https://github.com/tgsmith61591/pmdarima/pull/221>`_).
 
+* Adds the :class:`pmdarima.preprocessing.LogEndogTransformer` class as discussed in
+  `#205 <https://github.com/tgsmith61591/pmdarima/issues/205>`_
+
 * Exogenous arrays are no longer cast to numpy array by default, and will pass pandas
-  frames through to the model. This keeps variable names intact in the summary
+  frames through to the model. This keeps variable names intact in the summary (`#222 <https://github.com/tgsmith61591/pmdarima/issues/222>`_)
 
 * Added the ``prefix`` param to exogenous featurizers to allow the addition of meaningful
   names to engineered features.

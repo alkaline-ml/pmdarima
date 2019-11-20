@@ -8,6 +8,7 @@ The following people have been core contributors to `pmdarima`'s development:
   * [Steven Hoelscher](https://github.com/shoelsch)
   * [Aaron Smith](https://github.com/aaronreidsmith)
   * [Krishna Sunkara](https://github.com/kpsunkara)
+  * [Christopher Siewert](https://github.com/christopher-siewert)
 
 __Please do not email the authors directly with questions or issues.__ Rather, use
 the [issues](https://github.com/tgsmith61591/pmdarima/issues) page. Furthermore, issues
