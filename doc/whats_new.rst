@@ -7,6 +7,11 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v1.5.0 <http://alkaline-ml.com/pmdarima/1.5.0/>`_
+--------------------------------------------------
+
+* Adds the :class:`pmdarima.preprocessing.LogEndogTransformer` class as discussed in
+  `#205 <https://github.com/tgsmith61591/pmdarima/issues/205>`_
 
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
 --------------------------------------------------
