@@ -39,7 +39,9 @@ def _do_root_test(testvec, minroot, sign):
     if np.sum(k) > 0:
         last_nonzero = np.where(k)[0].max()
     if last_nonzero > 0:
-        testvec = np.array([1.] + (testvec[:last_nonzero + 1] * sign).tolist())
+        # R adds 1 on the front, but statsmodels' polynomial attr in the res
+        # seems to always have a leading 1.
+        testvec = np.array(testvec[:last_nonzero + 1] * sign)
         proots = np.polynomial.polynomial.polyroots(testvec)
         # TODO: test for real?
         minroot = min(minroot, *np.abs(proots).tolist())
@@ -55,11 +57,15 @@ def _root_test(model, ic, trace):
     P, D, Q, m = model.seasonal_order
 
     if p + P > 0:
-        phi = model.arparams()
+        # phi = model.arparams()
+        phi = model.arima_res_.polynomial_ar  # todo: is the right?
         minroot = _do_root_test(phi, minroot, -1)
 
     if q + Q > 0 and np.isfinite(ic):
-        theta = model.maparams()
+        # theta = model.maparams()
+        # even when not seasonal, this seems to contain the same rank as the
+        # theta field R has. TODO: verify this behavior...
+        theta = model.arima_res_.polynomial_seasonal_ma
         minroot = _do_root_test(theta, minroot, 1)
 
     if minroot < 1 + 1e-2:

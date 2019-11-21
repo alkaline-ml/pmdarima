@@ -8,7 +8,7 @@ import pytest
 
 @pytest.mark.parametrize(
     'coef,sign,expected', [
-        pytest.param([-0.080619838, -0.442994620], 1, 1.41421138),
+        pytest.param([1., -0.080619838, -0.442994620], 1, 1.41421138),
     ]
 )
 def test_do_root_test(coef, sign, expected):
