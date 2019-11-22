@@ -173,8 +173,9 @@ def C_intgrt_vec(np.ndarray x,
     cdef np.ndarray ans = np.zeros([1, n + lag], dtype=float)
     cdef np.ndarray rx = x
     cdef np.ndarray y = ans
+
     for i in range(lag, lag+n):
-        y[i] = rx[i-lag] + y[i-lag]
+        y[0][i] = rx[i-lag] + y[0][i-lag]
     return ans;
 
 @cython.boundscheck(False)
