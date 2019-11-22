@@ -57,16 +57,19 @@ def _root_test(model, ic, trace):
     p, d, q = model.order
     P, D, Q, m = model.seasonal_order
 
+    # TODO: validate rules around when to use each polynomial attr
     if p + P > 0:
-        # phi = model.arparams()
-        phi = model.arima_res_.polynomial_ar  # todo: is the right?
+        if P > 0:
+            phi = model.arima_res_.polynomial_seasonal_ar
+        else:
+            phi = model.arima_res_.polynomial_ar
         minroot = _do_root_test(phi, minroot, -1)
 
     if q + Q > 0 and np.isfinite(ic):
-        # theta = model.maparams()
-        # even when not seasonal, this seems to contain the same rank as the
-        # theta field R has. TODO: verify this behavior...
-        theta = model.arima_res_.polynomial_seasonal_ma
+        if Q > 0:
+            theta = model.arima_res_.polynomial_seasonal_ma
+        else:
+            theta = model.arima_res_.polynomial_ma
         minroot = _do_root_test(theta, minroot, 1)
 
     if minroot < 1 + 1e-2:
@@ -352,7 +355,6 @@ class _StepwiseFitWrapper:
 
             # TODO: if (allowdrift || allowmean)
 
-        # TODO: @kpsunkara, should we return here?
         # check if the search has been ended after max_steps
         if self.exec_context.max_steps is not None \
                 and self.k >= self.exec_context.max_steps:
@@ -385,6 +387,7 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
     # for non-stationarity errors or singular matrices, return None
     except (LinAlgError, ValueError) as v:
         if error_action == 'warn':
+            # TODO: do we want to use traceback.format_exc()?
             warnings.warn(_fmt_warning_str(order, seasonal_order),
                           ModelFitWarning)
         elif error_action == 'raise':
