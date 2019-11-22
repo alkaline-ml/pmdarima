@@ -54,6 +54,7 @@ class _StepwiseFitWrapper:
     References
     ----------
     .. [1] R's auto-arima stepwise source code: http://bit.ly/2vOma0W
+    .. [2] https://robjhyndman.com/hyndsight/arma-roots/
     """
     def __init__(self, y, xreg, start_params, trend, method, transparams,
                  solver, maxiter, disp, callback, fit_params,
