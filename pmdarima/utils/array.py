@@ -330,7 +330,8 @@ def diff_inv(x, lag=1, differences=1, xi=None):
     # R code:   stop("'xi' does not have the right length")
     if xi is None:
         xi = np.ndarray(shape=[1, lag*differences], dtype=float)
-    if xi.shape[0] != (lag * differences):
+
+    if xi.shape[1] != (lag * differences):
         raise IndexError('"xi" does not have the right length')
 
     if differences == 1:
@@ -345,15 +346,8 @@ def diff_inv(x, lag=1, differences=1, xi=None):
         # R code:               diff(xi, lag=lag, differences=1L)),
         # R code:               lag, 1L, xi[1L:lag])
         diff_inv(
-            x=diff_inv(
-                x=x,
-                lag=lag,
-                differences=differences-1,
-                xi=diff(
-                    x=xi,
-                    lag=lag,
-                    differences=1
-                )
+            x=diff_inv(x=x, lag=lag, differences=differences-1,
+                xi=diff(x=xi, lag=lag, differences=1)
             ),
             lag=lag,
             differences=1,
