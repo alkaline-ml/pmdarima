@@ -15,69 +15,30 @@ from datetime import datetime
 import functools
 
 
-def _do_root_test(testvec, minroot, sign):
-    """The inner portion of the root test
-
-    The R code for the phi polyroot test::
-
-        k <- abs(testvec) > 1e-8
-        if (sum(k) > 0) {
-          last.nonzero <- max(which(k))
-        } else {
-          last.nonzero <- 0
-        }
-        if (last.nonzero > 0) {
-          testvec <- testvec[1:last.nonzero]
-          proots <- try(polyroot(c(1,-testvec)))
-          if (!is.element("try-error", class(proots))) {
-            minroot <- min(minroot, abs(proots))
-          }
-          else fit$ic <- Inf
-        }
-    """
-    k = np.abs(testvec) > 1e-8
-    last_nonzero = 0
-    if np.sum(k) > 0:
-        last_nonzero = np.where(k)[0].max()
-    if last_nonzero > 0:
-        # R adds 1 on the front, but statsmodels' polynomial attr in the res
-        # seems to always have a leading 1.
-        testvec = np.array(testvec[:last_nonzero + 1] * sign)
-        proots = np.polynomial.polynomial.polyroots(testvec)
-        # TODO: test for real?
-        minroot = min(minroot, *np.abs(proots).tolist())
-    return minroot
-
-
 def _root_test(model, ic, trace):
-    # check the roots of the new model, and set IC to inf if the roots are
-    # near non-invertible
+    # Check the roots of the new model, and set IC to inf if the roots are
+    # near non-invertible. This is a little bit different than how Rob does it:
     # https://github.com/robjhyndman/forecast/blob/master/R/newarima2.R#L780
-    minroot = 2
+    # In our test, we look directly at the inverse roots to see if they come
+    # anywhere near the unit circle border
+    max_invroot = 0
     p, d, q = model.order
     P, D, Q, m = model.seasonal_order
 
-    # TODO: validate rules around when to use each polynomial attr
     if p + P > 0:
-        if P > 0:
-            phi = model.arima_res_.polynomial_seasonal_ar
-        else:
-            phi = model.arima_res_.polynomial_ar
-        minroot = _do_root_test(phi, minroot, -1)
-
+        max_invroot = max(0, *np.abs(1 / model.arroots()))
     if q + Q > 0 and np.isfinite(ic):
-        if Q > 0:
-            theta = model.arima_res_.polynomial_seasonal_ma
-        else:
-            theta = model.arima_res_.polynomial_ma
-        minroot = _do_root_test(theta, minroot, 1)
+        max_invroot = max(0, *np.abs(1 / model.maroots()))
 
-    if minroot < 1 + 1e-2:
+    if max_invroot > 1 - 1e-2:
         ic = np.inf
         if trace:
-            print("Near non-invertible roots for order "
-                  "(%i, %i, %i)(%i, %i, %i, %i); setting ic to inf"
-                  % (p, d, q, P, D, Q, m))
+            warnings.warn(
+                "Near non-invertible roots for order "
+                "(%i, %i, %i)(%i, %i, %i, %i); setting score to inf (at "
+                "least one inverse root too close to the border of the "
+                "unit circle: %.3f)"
+                % (p, d, q, P, D, Q, m, max_invroot))
     return ic
 
 
