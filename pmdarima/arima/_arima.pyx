@@ -163,7 +163,7 @@ cpdef double[:] C_Approx(floating1d x, floating1d y, floating1d xout,
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def intgrt_vec(np.ndarray x,
+def C_intgrt_vec(np.ndarray x,
                np.ndarray xi,
                int lag):
     """

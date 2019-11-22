@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 
 from ..compat import DTYPE
+from ..arima._arima import C_intgrt_vec
 
 __all__ = [
     'as_series',
@@ -20,6 +21,7 @@ __all__ = [
     'check_endog',
     'check_exog',
     'diff',
+    'diff_inv',
     'is_iterable'
 ]
 
@@ -337,9 +339,7 @@ def diff_inv(x, lag=1, differences=1, xi=None):
         # R code:stop(gettextf("invalid value of %s", "length(x)"), domain = NA)
         if np.isnan(n):
             raise IndexError("invalid value of for length(x)")
-
-        #TODO: call pmdarima.arima._arima.intgrt_vec()
-        return None
+        return C_intgrt_vec(x=x, xi=xi, lag=lag)
     else:
         # R code: diffinv.vector(diffinv.vector(x, lag, differences - 1L,
         # R code:               diff(xi, lag=lag, differences=1L)),
