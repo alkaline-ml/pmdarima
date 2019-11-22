@@ -42,7 +42,7 @@ class AutoARIMA(BaseARIMA):
     # todo: someday store defaults somewhere else for single source of truth
     def __init__(self, start_p=2, d=None, start_q=2, max_p=5,
                  max_d=2, max_q=5, start_P=1, D=None, start_Q=1, max_P=2,
-                 max_D=1, max_Q=2, max_order=10, m=1, seasonal=True,
+                 max_D=1, max_Q=2, max_order=5, m=1, seasonal=True,
                  stationary=False, information_criterion='aic', alpha=0.05,
                  test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
                  start_params=None, trend=None, method='lbfgs',
@@ -237,7 +237,7 @@ class StepwiseContext(AbstractContext):
 
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                max_d=2, max_q=5, start_P=1, D=None, start_Q=1, max_P=2,
-               max_D=1, max_Q=2, max_order=10, m=1, seasonal=True,
+               max_D=1, max_Q=2, max_order=5, m=1, seasonal=True,
                stationary=False, information_criterion='aic', alpha=0.05,
                test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
                start_params=None, trend=None, method='lbfgs', transparams=True,
@@ -262,19 +262,6 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             or max_P < start_P or max_Q < start_Q:
         raise ValueError('max p, q, P & Q must be >= than '
                          'their starting values')
-
-    # validate max_order
-    if max_order is None:
-        max_order = np.inf
-    elif max_order < 0:
-        raise ValueError('max_order must be None or a positive integer (>= 0)')
-
-    # alternatively, if the start_p and start_q supercede
-    # the max order, that's a failable offense...
-    if (not seasonal and start_p + start_q > max_order) or \
-            (seasonal and start_P + start_p + start_Q + start_q > max_order):
-        raise ValueError('If max_order is prescribed, it must '
-                         'exceed sum of starting orders')
 
     # validate d & D
     for _d, _max_d in ((d, max_d), (D, max_D)):
@@ -510,6 +497,22 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         )
 
     if not stepwise:
+
+        # validate max_order
+        if max_order is None:
+            max_order = np.inf
+        elif max_order < 0:
+            raise ValueError('max_order must be None or a positive '
+                             'integer (>= 0)')
+
+        # alternatively, if the start_p and start_q supercede
+        # the max order, that's a failable offense...
+        if (not seasonal and start_p + start_q > max_order) or \
+                (seasonal and
+                 start_P + start_p + start_Q + start_q > max_order):
+            raise ValueError('If max_order is prescribed, it must '
+                             'exceed sum of starting orders')
+
         # if we are fitting a random search rather than an exhaustive one, we
         # will scramble up the generator (as a list) and only fit n_iter ARIMAs
         if random:
@@ -561,29 +564,10 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             start_P=start_P, start_Q=start_Q, max_p=max_p, max_q=max_q,
             max_P=max_P, max_Q=max_Q, seasonal=seasonal,
             information_criterion=information_criterion,
-            max_order=max_order, with_intercept=with_intercept,
-            **sarimax_kwargs)
-
-        # fit a baseline p, d, q model and then a null model
-        stepwise_wrapper.fit_increment_k_cache_set(True)  # p, d, q, P, D, Q
-        stepwise_wrapper.fit_increment_k_cache_set(
-            True, p=0, q=0, P=0, Q=0)  # null model
-
-        # fit a basic AR model
-        stepwise_wrapper.fit_increment_k_cache_set(
-            max_p > 0 or max_P > 0, p=int(max_p > 0),
-            q=0, P=int(m > 1 and max_P > 0), Q=0)
-
-        # fit a basic MA model now
-        stepwise_wrapper.fit_increment_k_cache_set(
-            max_q > 0 or max_Q > 0, p=0, q=int(max_q > 0),
-            P=0, Q=int(m > 1 and max_Q > 0))
-
-        # might not be 4 if p, q etc. are already 0
-        # assert stepwise_wrapper.k == 4  # sanity check...
+            with_intercept=with_intercept, **sarimax_kwargs)
 
         # do the step-through...
-        all_res = stepwise_wrapper.step_through()
+        all_res = stepwise_wrapper.solve_stepwise()
 
     # filter the non-successful ones
     filtered = _post_ppc_arima(all_res)

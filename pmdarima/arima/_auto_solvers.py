@@ -12,6 +12,7 @@ from .arima import ARIMA
 from .warnings import ModelFitWarning
 from ._context import ContextType, ContextStore
 from datetime import datetime
+import functools
 
 
 def _do_root_test(testvec, minroot, sign):
@@ -95,36 +96,26 @@ class _StepwiseFitWrapper:
                  suppress_warnings, trace, error_action, out_of_sample_size,
                  scoring, scoring_args, p, d, q, P, D, Q, m, start_p, start_q,
                  start_P, start_Q, max_p, max_q, max_P, max_Q, seasonal,
-                 information_criterion, max_order, with_intercept,
-                 **kwargs):
-        # todo: I really hate how congested this block is, and just for the
-        #       sake of a stateful __init__... Could we just pass **kwargs
-        #       (MUCH less expressive...) in here? It would be much more
-        #       difficult to debug later...
+                 information_criterion, with_intercept, **kwargs):
 
-        # stuff for the fit call
-        self.y = y
-        self.xreg = xreg
-        self.start_params = start_params
-        self.trend = trend
-        self.method = method
-        self.transparams = transparams
-        self.solver = solver
-        self.maxiter = maxiter
-        self.disp = disp
-        self.callback = callback
-        self.fit_params = fit_params
-        self.suppress_warnings = suppress_warnings
+        # Create a partial of the fit call so we don't have arg bloat all over
+        self._fit_arima = functools.partial(
+            _fit_arima,
+            x=y, xreg=xreg, start_params=start_params, trend=trend,
+            method=method, transparams=transparams, solver=solver,
+            maxiter=maxiter, disp=disp, callback=callback,
+            fit_params=fit_params, suppress_warnings=suppress_warnings,
+            trace=trace, error_action=error_action,
+            out_of_sample_size=out_of_sample_size, scoring=scoring,
+            scoring_args=scoring_args,
+            information_criterion=information_criterion,
+            **kwargs)
+
         self.trace = trace
-        self.error_action = error_action
-        self.out_of_sample_size = out_of_sample_size
-        self.scoring = scoring
-        self.scoring_args = scoring_args
         self.information_criterion = information_criterion
         self.with_intercept = with_intercept
-        self.kwargs = {} if not kwargs else kwargs
 
-        # order stuff
+        # order stuff we will be incrementing
         self.p = p
         self.d = d
         self.q = q
@@ -141,7 +132,6 @@ class _StepwiseFitWrapper:
         self.max_P = max_P
         self.max_Q = max_Q
         self.seasonal = seasonal
-        self.max_order = max_order
 
         # execution context passed through the context manager
         self.exec_context = ContextStore.get_or_empty(ContextType.STEPWISE)
@@ -175,53 +165,70 @@ class _StepwiseFitWrapper:
 
         return new_ic < current_ic
 
-    # this function takes a boolean expression, fits & caches a model,
-    # increments k, and then sets the new value for p, d, P, Q, etc.
-    def fit_increment_k_cache_set(self, expr, p=None, q=None, P=None, Q=None):
-        # extract p, q, P, Q
-        p = self.p if p is None else p
-        q = self.q if q is None else q
-        P = self.P if P is None else P
-        Q = self.Q if Q is None else Q
+    def _do_fit(self, order, seasonal_order, constant=None):
+        """Do a fit and determine whether the model is better"""
+        if not self.seasonal:
+            seasonal_order = (0, 0, 0, 0)
 
-        order = (p, self.d, q)
-        ssnl = (P, self.D, Q, self.m) if self.seasonal else (0, 0, 0, 0)
+        # we might be fitting without a constant
+        if constant is None:
+            constant = self.with_intercept
 
-        # if the sum of the orders > max_order we do not build this model...
-        order_sum = p + q + (P + Q if self.seasonal else 0)
+        if (order, seasonal_order, constant) not in self.results_dict:
 
-        # if all conditions hold true, good to build this model.
-        if expr and order_sum <= self.max_order and (order, ssnl) not \
-                in self.results_dict:
+            # increment the number of fits
             self.k += 1
-            # cache the fit
-            fit = _fit_arima(self.y, xreg=self.xreg, order=order,
-                             seasonal_order=ssnl,
-                             start_params=self.start_params, trend=self.trend,
-                             method=self.method, transparams=self.transparams,
-                             solver=self.solver, maxiter=self.maxiter,
-                             disp=self.disp, callback=self.callback,
-                             fit_params=self.fit_params,
-                             suppress_warnings=self.suppress_warnings,
-                             trace=self.trace, error_action=self.error_action,
-                             out_of_sample_size=self.out_of_sample_size,
-                             scoring=self.scoring,
-                             scoring_args=self.scoring_args,
-                             with_intercept=self.with_intercept,
-                             **self.kwargs)
+
+            fit = self._fit_arima(
+                order=order,
+                seasonal_order=seasonal_order,
+                with_intercept=constant)
 
             # use the orders as a key to be hashed for
             # the dictionary (pointing to fit)
-            self.results_dict[(order, ssnl)] = fit
+            self.results_dict[(order, seasonal_order, constant)] = fit
 
             if self.is_new_better(fit):
                 self.bestfit = fit
+                return True
+        return False
 
-                # reset p, d, P, Q, etc.
-                self.p, self.q, self.P, self.Q = p, q, P, Q
-
-    def step_through(self):
+    def solve_stepwise(self):
         start_time = datetime.now()
+        p, d, q = self.p, self.d, self.q
+        P, D, Q, m = self.P, self.D, self.Q, self.m
+        max_p, max_q = self.max_p, self.max_q
+        max_P, max_Q = self.max_P, self.max_Q
+
+        # fit a baseline p, d, q model
+        self._do_fit((p, d, q), (P, D, Q, m))
+
+        # null model with possible constant
+        if self._do_fit((0, d, 0), (0, D, 0, m)):
+            p = q = P = Q = 0
+
+        # A basic AR model
+        if max_p > 0 or max_P > 0:
+            _p = int(max_p > 0)
+            _P = int(m > 1 and max_P > 0)
+            if self._do_fit((_p, d, 0), (_P, D, 0, m)):
+                p = _p
+                P = _P
+                q = Q = 0
+
+        if max_q > 0 or max_Q > 0:
+            _q = int(max_q > 0)
+            _Q = int(m > 1 and max_Q > 0)
+            if self._do_fit((0, d, _q), (0, D, _Q, m)):
+                p = P = 0
+                Q = _Q
+                q = _q
+
+        # Null model with NO constant (if we haven't tried it yet)
+        if self.with_intercept:
+            if self._do_fit((0, d, 0), (0, D, 0, m), constant=False):
+                # TODO: wonder if it's worth a trace message here?
+                p = q = P = Q = 0
 
         while self.start_k < self.k < self.max_k:
             self.start_k = self.k
@@ -237,46 +244,122 @@ class _StepwiseFitWrapper:
                               % (dur, self.max_dur))
                 break
 
-            # Each of these fit the models for an expression, a new p,
-            # q, P or Q, and then reset best models
-            # This takes the place of a lot of copy/pasted code....
+            # The old code was much more concise and stateful, but was also
+            # much more difficult to read and debug. This was rewritten for
+            # v1.5.0 in an effort to make it more simple to decipher.
+            # NOTE: k changes for every fit, so we might need to bail halfway
+            # through the loop, hence the multiple checks.
+            if P > 0 and \
+                    self.k < self.max_k and \
+                    self._do_fit((p, d, q), (P - 1, D, Q, m)):
+                P -= 1
+                continue
 
-            # P fluctuations:
-            self.fit_increment_k_cache_set(self.P > 0, P=self.P - 1)
-            self.fit_increment_k_cache_set(self.P < self.max_P, P=self.P + 1)
+            if Q > 0 and \
+                    self.k < self.max_k and \
+                    self._do_fit((p, d, q), (P, D, Q - 1, m)):
+                Q -= 1
+                continue
 
-            # Q fluctuations:
-            self.fit_increment_k_cache_set(self.Q > 0, Q=self.Q - 1)
-            self.fit_increment_k_cache_set(self.Q < self.max_Q, Q=self.Q + 1)
+            if P < max_P and \
+                    self.k < self.max_k and \
+                    self._do_fit((p, d, q), (P + 1, D, Q, m)):
+                P += 1
+                continue
 
-            # P & Q fluctuations:
-            self.fit_increment_k_cache_set(self.Q > 0 and self.P > 0,
-                                           P=self.P - 1, Q=self.Q - 1)
-            self.fit_increment_k_cache_set(self.Q < self.max_Q and
-                                           self.P < self.max_P, P=self.P + 1,
-                                           Q=self.Q + 1)
+            if Q < max_Q and \
+                    self.k < self.max_k and \
+                    self._do_fit((p, d, q), (P, D, Q + 1, m)):
+                Q += 1
+                continue
 
-            # p fluctuations:
-            self.fit_increment_k_cache_set(self.p > 0, p=self.p - 1)
-            self.fit_increment_k_cache_set(self.p < self.max_p, p=self.p + 1)
+            if Q > 0 and P > 0 and \
+                    self.k < self.max_k and \
+                    self._do_fit((p, d, q), (P - 1, D, Q - 1, m)):
+                Q -= 1
+                P -= 1
+                continue
 
-            # q fluctuations:
-            self.fit_increment_k_cache_set(self.q > 0, q=self.q - 1)
-            self.fit_increment_k_cache_set(self.q < self.max_q, q=self.q + 1)
+            if Q < max_Q and P > 0 and \
+                    self.k < self.max_k and \
+                    self._do_fit((p, d, q), (P - 1, D, Q + 1, m)):
+                Q += 1
+                P -= 1
+                continue
 
-            # p & q fluctuations:
-            self.fit_increment_k_cache_set(self.p > 0 and self.q > 0,
-                                           q=self.q - 1, p=self.p - 1)
-            self.fit_increment_k_cache_set(self.q < self.max_q and
-                                           self.p < self.max_p, q=self.q + 1,
-                                           p=self.p + 1)
+            if Q > 0 and P < max_P and \
+                    self.k < self.max_k and \
+                    self._do_fit((p, d, q), (P + 1, D, Q - 1, m)):
+                Q -= 1
+                P += 1
+                continue
+
+            if Q < max_Q and P < max_P and \
+                    self.k < self.max_k and \
+                    self._do_fit((p, d, q), (P + 1, D, Q + 1, m)):
+                Q += 1
+                P += 1
+                continue
+
+            if p > 0 and \
+                    self.k < self.max_k and \
+                    self._do_fit((p - 1, d, q), (P, D, Q, m)):
+                p -= 1
+                continue
+
+            if q > 0 and \
+                    self.k < self.max_k and \
+                    self._do_fit((p, d, q - 1), (P, D, Q, m)):
+                q -= 1
+                continue
+
+            if p < max_p and \
+                    self.k < self.max_k and \
+                    self._do_fit((p + 1, d, q), (P, D, Q, m)):
+                p += 1
+                continue
+
+            if q < max_q and \
+                    self.k < self.max_k and \
+                    self._do_fit((p, d, q + 1), (P, D, Q, m)):
+                q += 1
+                continue
+
+            if q > 0 and p > 0 and \
+                    self.k < self.max_k and \
+                    self._do_fit((p - 1, d, q - 1), (P, D, Q, m)):
+                q -= 1
+                p -= 1
+                continue
+
+            if q < max_q and p > 0 and \
+                    self.k < self.max_k and \
+                    self._do_fit((p - 1, d, q + 1), (P, D, Q, m)):
+                q += 1
+                p -= 1
+
+            if q > 0 and p < max_p and \
+                    self.k < self.max_k and \
+                    self._do_fit((p + 1, d, q - 1), (P, D, Q, m)):
+                q -= 1
+                p += 1
+
+            if q < max_q and p < max_p and \
+                    self.k < self.max_k and \
+                    self._do_fit((p + 1, d, q + 1), (P, D, Q, m)):
+                q += 1
+                p += 1
+
+            # TODO: if (allowdrift || allowmean)
 
         # TODO: @kpsunkara, should we return here?
         # check if the search has been ended after max_steps
         if self.exec_context.max_steps is not None \
-                and self.k > self.exec_context.max_steps:
+                and self.k >= self.exec_context.max_steps:
             warnings.warn('stepwise search has reached the maximum number '
                           'of tries to find the best fit model')
+
+        # TODO: if (approximation && !is.null(bestfit$arma))
 
         # return the values
         return self.results_dict.values()
