@@ -212,16 +212,16 @@ class _StepwiseFitWrapper:
 
         # A basic AR model
         if max_p > 0 or max_P > 0:
-            _p = int(max_p > 0)
-            _P = int(m > 1 and max_P > 0)
+            _p = 1 if max_p > 0 else 0
+            _P = 1 if (m > 1 and max_P > 0) else 0
             if self._do_fit((_p, d, 0), (_P, D, 0, m)):
                 p = _p
                 P = _P
                 q = Q = 0
 
         if max_q > 0 or max_Q > 0:
-            _q = int(max_q > 0)
-            _Q = int(m > 1 and max_Q > 0)
+            _q = 1 if max_q > 0 else 0
+            _Q = 1 if (m > 1 and max_Q > 0) else 0
             if self._do_fit((0, d, _q), (0, D, _Q, m)):
                 p = P = 0
                 Q = _Q
