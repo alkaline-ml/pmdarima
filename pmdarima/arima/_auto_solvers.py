@@ -16,11 +16,13 @@ import functools
 
 
 def _root_test(model, ic, trace):
-    # Check the roots of the new model, and set IC to inf if the roots are
-    # near non-invertible. This is a little bit different than how Rob does it:
-    # https://github.com/robjhyndman/forecast/blob/master/R/newarima2.R#L780
-    # In our test, we look directly at the inverse roots to see if they come
-    # anywhere near the unit circle border
+    """
+    Check the roots of the new model, and set IC to inf if the roots are
+    near non-invertible. This is a little bit different than how Rob does it:
+    https://github.com/robjhyndman/forecast/blob/master/R/newarima2.R#L780
+    In our test, we look directly at the inverse roots to see if they come
+    anywhere near the unit circle border
+    """
     max_invroot = 0
     p, d, q = model.order
     P, D, Q, m = model.seasonal_order
