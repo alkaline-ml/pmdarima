@@ -88,7 +88,8 @@ _AUTO_ARIMA_DOCSTR = \
         The maximum value of ``Q``, inclusive. Must be a positive integer
         greater than ``start_Q``.
 
-    max_order : int, optional (default=10)
+    max_order : int, optional (default=5)
+        Maximum value of p+q+P+Q if model selection is not stepwise.
         If the sum of ``p`` and ``q`` is >= ``max_order``, a model will
         *not* be fit with those parameters, but will progress to the next
         combination. Default is 5. If ``max_order`` is None, it means there

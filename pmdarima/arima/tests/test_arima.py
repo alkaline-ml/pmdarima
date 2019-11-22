@@ -456,7 +456,7 @@ def test_the_r_src():
         pytest.param(abc, {'start_q': 1, 'max_q': 0}),
 
         # other assertions
-        pytest.param(abc, {'max_order': -1}),
+        pytest.param(abc, {'max_order': -1, 'stepwise': False}),
         pytest.param(abc, {'max_d': -1}),
         pytest.param(abc, {'d': -1}),
         pytest.param(abc, {'max_D': -1}),
@@ -468,13 +468,15 @@ def test_the_r_src():
         pytest.param(abc, {'start_p': 5,
                            'start_q': 5,
                            'seasonal': False,
-                           'max_order': 3}),
+                           'max_order': 3,
+                           'stepwise': False}),
         pytest.param(abc, {'start_p': 5,
                            'start_q': 5,
                            'start_P': 4,
                            'start_Q': 3,
                            'seasonal': True,
-                           'max_order': 3}),
+                           'max_order': 3,
+                           'stepwise': False}),
     ]
 )
 def test_value_errors(endog, kwargs):

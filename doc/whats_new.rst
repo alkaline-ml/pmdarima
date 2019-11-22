@@ -15,11 +15,12 @@ v0.8.1) will document the latest features.
   the ``SARIMAX`` model, which cuts back on a lot of errors/warnings we saw in the past.
   (`#211 <https://github.com/tgsmith61591/pmdarima/issues/211>`_)
 
-* Defaults in the ``ARIMA`` class that have changed as a result:
+* Defaults in the ``ARIMA`` class that have changed as a result of #211:
 
   - ``maxiter`` is now 50 (was ``None``)
   - ``method`` is now 'lbfgs' (was ``None``)
   - ``seasonal_order`` is now ``(0, 0, 0, 0)`` (was ``None``)
+  - ``max_order`` is now 5 (was 10) and is no longer used as a constraint when ``stepwise=True``
 
 * Correct bug where ``aicc`` always added 1 (for constant) to degrees of freedom,
   even when ``df_model`` accounted for the constant term.
@@ -35,6 +36,13 @@ v0.8.1) will document the latest features.
 
 * Added the ``prefix`` param to exogenous featurizers to allow the addition of meaningful
   names to engineered features.
+
+* Added polyroot test of near non-invertibility when ``stepwise=True``. For
+  models that are near non-invertible will be deprioritized in model selection
+  as requested in `#208 <https://github.com/tgsmith61591/pmdarima/issues/208>`_.
+
+* Removes ``pmdarima.arima.ARIMA.add_new_samples``, which was previously deprecated.
+  Use ``pmdarima.arima.ARIMA.update`` instead.
 
 
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_

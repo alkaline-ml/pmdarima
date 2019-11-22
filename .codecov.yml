@@ -1,8 +1,12 @@
+# https://gist.github.com/stevepeak/53bee7b2c326b24a9b4a
+
 # Prevent codecov from commenting
 comment: false
 
-# Opts scikit uses
 coverage:
+  precision: 2
+  round: down
+
   status:
     project:
       default:
@@ -10,6 +14,8 @@ coverage:
         # project coverage decrease by more than 1%:
         target: auto
         threshold: 1%
+        branches:
+          - master
 
     patch:
       default:
@@ -20,8 +26,7 @@ coverage:
         # in the github diff if they install the codecov browser
         # extension:
         # https://github.com/codecov/browser-extension
-        target: auto
-        threshold: 1%
+        target: 95%
 
 ignore:
 - "**/setup.py"
