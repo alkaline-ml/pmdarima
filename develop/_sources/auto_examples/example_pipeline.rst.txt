@@ -34,35 +34,38 @@ which greatly simplifies your life.
  Out::
 
     pmdarima version: 0.0.0
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2819.938, BIC=2861.993, Fit time=0.434 seconds
-    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2942.625, BIC=2972.664, Fit time=0.014 seconds
-    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2867.514, BIC=2900.557, Fit time=0.049 seconds
-    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2830.585, BIC=2863.628, Fit time=0.211 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2817.535, BIC=2856.586, Fit time=0.293 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2817.377, BIC=2853.424, Fit time=0.239 seconds
-    Fit ARIMA: order=(2, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2818.535, BIC=2857.586, Fit time=0.211 seconds
-    Total fit time: 1.455 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2819.938, BIC=2861.993, Fit time=0.443 seconds
+    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2942.625, BIC=2972.664, Fit time=0.013 seconds
+    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2867.514, BIC=2900.557, Fit time=0.048 seconds
+    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2830.585, BIC=2863.628, Fit time=0.207 seconds
+    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2940.651, BIC=2967.686, Fit time=0.077 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2817.535, BIC=2856.586, Fit time=0.288 seconds
+    Fit ARIMA: order=(0, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2814.904, BIC=2850.952, Fit time=0.263 seconds
+    Fit ARIMA: order=(0, 1, 3) seasonal_order=(0, 0, 0, 0); AIC=2818.704, BIC=2857.755, Fit time=0.385 seconds
+    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2817.377, BIC=2853.424, Fit time=0.245 seconds
+    Fit ARIMA: order=(1, 1, 3) seasonal_order=(0, 0, 0, 0); AIC=2818.290, BIC=2860.345, Fit time=0.448 seconds
+    Total fit time: 2.423 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12, prefix=None)),
                     ('arima',
                      AutoARIMA(D=None, alpha=0.05, callback=None, d=None, disp=0,
                                error_action='ignore', information_criterion='aic',
-                               m=1, max_D=1, max_P=2, max_Q=2, max_d=2,
-                               max_order=10, max_p=5, max_q=5, maxiter=50,
-                               method='lbfgs', n_fits=10, n_jobs=1,
-                               offset_test_args=None, out_of_sample_size=0,
-                               random=False, random_state=None, sarimax_kwargs=None,
+                               m=1, max_D=1, max_P=2, max_Q=2, max_d=2, max_order=5,
+                               max_p=5, max_q=5, maxiter=50, method='lbfgs',
+                               n_fits=10, n_jobs=1, offset_test_args=None,
+                               out_of_sample_size=0, random=False,
+                               random_state=None, sarimax_kwargs=None,
                                scoring='mse', scoring_args=None, seasonal=False,
                                seasonal_test='ocsb', seasonal_test_args=None,
                                solver='lbfgs', ...))])
 
     Forecasts:
-    [28472.60860252 29849.14229831 25860.86322375 25000.85835469
-     34301.62948876 33410.13286261 20846.04214353 19773.92818766
-     25996.18597343 25369.6337283 ]
-    [26286.33165213 34004.40365989 33678.23794418 20911.09396051
-     19910.80644604 26106.5517778  25488.66453812 24293.32930229
-     26007.19571442 28752.40848033 30711.7221858 ]
+    [28518.77767228 29963.38441559 25827.05456596 25060.78046603
+     34235.8019525  33509.06300578 21083.18267848 19764.88570594
+     25895.79468881 25434.06369412]
+    [26536.08275776 34421.901483   33695.15536964 21269.27342727
+     19950.98131732 26081.88981551 25620.15609753 24414.25585264
+     26098.85088839 28871.61206751 30770.63509211]
 
 
 
@@ -156,7 +159,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  1.618 seconds)
+**Total running time of the script:** ( 0 minutes  2.596 seconds)
 
 
 

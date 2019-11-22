@@ -210,7 +210,7 @@
     <span class="c1"># todo: someday store defaults somewhere else for single source of truth</span>
 <div class="viewcode-block" id="AutoARIMA.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.AutoARIMA.html#pmdarima.arima.AutoARIMA.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                  <span class="n">max_d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">start_P</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_Q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_P</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                 <span class="n">max_D</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_Q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_order</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">max_D</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_Q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_order</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">stationary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">information_criterion</span><span class="o">=</span><span class="s1">&#39;aic&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
                  <span class="n">test</span><span class="o">=</span><span class="s1">&#39;kpss&#39;</span><span class="p">,</span> <span class="n">seasonal_test</span><span class="o">=</span><span class="s1">&#39;ocsb&#39;</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span>
@@ -405,7 +405,7 @@
 
 <div class="viewcode-block" id="auto_arima"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima">[docs]</a><span class="k">def</span> <span class="nf">auto_arima</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                <span class="n">max_d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">start_P</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_Q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_P</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-               <span class="n">max_D</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_Q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_order</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">max_D</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_Q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_order</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                <span class="n">stationary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">information_criterion</span><span class="o">=</span><span class="s1">&#39;aic&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
                <span class="n">test</span><span class="o">=</span><span class="s1">&#39;kpss&#39;</span><span class="p">,</span> <span class="n">seasonal_test</span><span class="o">=</span><span class="s1">&#39;ocsb&#39;</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span> <span class="n">transparams</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -430,19 +430,6 @@
             <span class="ow">or</span> <span class="n">max_P</span> <span class="o">&lt;</span> <span class="n">start_P</span> <span class="ow">or</span> <span class="n">max_Q</span> <span class="o">&lt;</span> <span class="n">start_Q</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max p, q, P &amp; Q must be &gt;= than &#39;</span>
                          <span class="s1">&#39;their starting values&#39;</span><span class="p">)</span>
-
-    <span class="c1"># validate max_order</span>
-    <span class="k">if</span> <span class="n">max_order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">max_order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
-    <span class="k">elif</span> <span class="n">max_order</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_order must be None or a positive integer (&gt;= 0)&#39;</span><span class="p">)</span>
-
-    <span class="c1"># alternatively, if the start_p and start_q supercede</span>
-    <span class="c1"># the max order, that&#39;s a failable offense...</span>
-    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">seasonal</span> <span class="ow">and</span> <span class="n">start_p</span> <span class="o">+</span> <span class="n">start_q</span> <span class="o">&gt;</span> <span class="n">max_order</span><span class="p">)</span> <span class="ow">or</span> \
-            <span class="p">(</span><span class="n">seasonal</span> <span class="ow">and</span> <span class="n">start_P</span> <span class="o">+</span> <span class="n">start_p</span> <span class="o">+</span> <span class="n">start_Q</span> <span class="o">+</span> <span class="n">start_q</span> <span class="o">&gt;</span> <span class="n">max_order</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;If max_order is prescribed, it must &#39;</span>
-                         <span class="s1">&#39;exceed sum of starting orders&#39;</span><span class="p">)</span>
 
     <span class="c1"># validate d &amp; D</span>
     <span class="k">for</span> <span class="n">_d</span><span class="p">,</span> <span class="n">_max_d</span> <span class="ow">in</span> <span class="p">((</span><span class="n">d</span><span class="p">,</span> <span class="n">max_d</span><span class="p">),</span> <span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">max_D</span><span class="p">)):</span>
@@ -678,6 +665,22 @@
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">stepwise</span><span class="p">:</span>
+
+        <span class="c1"># validate max_order</span>
+        <span class="k">if</span> <span class="n">max_order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">max_order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">elif</span> <span class="n">max_order</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_order must be None or a positive &#39;</span>
+                             <span class="s1">&#39;integer (&gt;= 0)&#39;</span><span class="p">)</span>
+
+        <span class="c1"># alternatively, if the start_p and start_q supercede</span>
+        <span class="c1"># the max order, that&#39;s a failable offense...</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">seasonal</span> <span class="ow">and</span> <span class="n">start_p</span> <span class="o">+</span> <span class="n">start_q</span> <span class="o">&gt;</span> <span class="n">max_order</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="p">(</span><span class="n">seasonal</span> <span class="ow">and</span>
+                 <span class="n">start_P</span> <span class="o">+</span> <span class="n">start_p</span> <span class="o">+</span> <span class="n">start_Q</span> <span class="o">+</span> <span class="n">start_q</span> <span class="o">&gt;</span> <span class="n">max_order</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;If max_order is prescribed, it must &#39;</span>
+                             <span class="s1">&#39;exceed sum of starting orders&#39;</span><span class="p">)</span>
+
         <span class="c1"># if we are fitting a random search rather than an exhaustive one, we</span>
         <span class="c1"># will scramble up the generator (as a list) and only fit n_iter ARIMAs</span>
         <span class="k">if</span> <span class="n">random</span><span class="p">:</span>
@@ -729,29 +732,10 @@
             <span class="n">start_P</span><span class="o">=</span><span class="n">start_P</span><span class="p">,</span> <span class="n">start_Q</span><span class="o">=</span><span class="n">start_Q</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="n">max_p</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="n">max_q</span><span class="p">,</span>
             <span class="n">max_P</span><span class="o">=</span><span class="n">max_P</span><span class="p">,</span> <span class="n">max_Q</span><span class="o">=</span><span class="n">max_Q</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="n">seasonal</span><span class="p">,</span>
             <span class="n">information_criterion</span><span class="o">=</span><span class="n">information_criterion</span><span class="p">,</span>
-            <span class="n">max_order</span><span class="o">=</span><span class="n">max_order</span><span class="p">,</span> <span class="n">with_intercept</span><span class="o">=</span><span class="n">with_intercept</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
-
-        <span class="c1"># fit a baseline p, d, q model and then a null model</span>
-        <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># p, d, q, P, D, Q</span>
-        <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span>
-            <span class="kc">True</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># null model</span>
-
-        <span class="c1"># fit a basic AR model</span>
-        <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span>
-            <span class="n">max_p</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">max_P</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">max_p</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="n">q</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">max_P</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Q</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-        <span class="c1"># fit a basic MA model now</span>
-        <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">fit_increment_k_cache_set</span><span class="p">(</span>
-            <span class="n">max_q</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">max_Q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">max_q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="n">P</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">max_Q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span>
-
-        <span class="c1"># might not be 4 if p, q etc. are already 0</span>
-        <span class="c1"># assert stepwise_wrapper.k == 4  # sanity check...</span>
+            <span class="n">with_intercept</span><span class="o">=</span><span class="n">with_intercept</span><span class="p">,</span> <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
 
         <span class="c1"># do the step-through...</span>
-        <span class="n">all_res</span> <span class="o">=</span> <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">step_through</span><span class="p">()</span>
+        <span class="n">all_res</span> <span class="o">=</span> <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">solve_stepwise</span><span class="p">()</span>
 
     <span class="c1"># filter the non-successful ones</span>
     <span class="n">filtered</span> <span class="o">=</span> <span class="n">_post_ppc_arima</span><span class="p">(</span><span class="n">all_res</span><span class="p">)</span>
