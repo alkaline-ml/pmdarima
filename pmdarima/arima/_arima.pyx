@@ -163,6 +163,22 @@ cpdef double[:] C_Approx(floating1d x, floating1d y, floating1d xout,
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
+def intgrt_vec(np.ndarray x,
+               np.ndarray xi,
+               int lag):
+    """
+    Source code located here: https://github.com/mirror/r/blob/65a0e33a4b0a119703586fcd1f9742654738ae54/src/library/stats/src/PPsum.c#L46
+    """
+    cdef int n = x.shape[0]
+    cdef np.ndarray ans = np.zeros([1, n + lag], dtype=float)
+    cdef np.ndarray rx = x
+    cdef np.ndarray y = ans
+    for i in range(lag, lag+n):
+        y[i] = rx[i-lag] + y[i-lag]
+    return ans;
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def C_canova_hansen_sd_test(INTP ltrunc,
                             INTP Ne,
                             np.float64_t[:,:] Fhataux,
@@ -262,3 +278,4 @@ def C_canova_hansen_sd_test(INTP ltrunc,
         free(wnw)
         free(sq)
         free(frecob)
+

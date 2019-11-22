@@ -313,6 +313,54 @@ def diff(x, lag=1, differences=1):
     return res
 
 
+def diff_inv(x, lag=1, differences=1, xi=None):
+    """
+    Inverse the difference of an array.
+    """
+
+    # R code: if (lag < 1L || differences < 1L)
+    # R code: stop ("bad value for 'lag' or 'differences'")
+    if any(v < 1 for v in (lag, differences)):
+        raise ValueError('lag and differences must be positive (> 0) integers')
+
+    # R code: if (missing(xi)) xi < - rep(0., lag * differences)
+    # R code: if (length(xi) != lag * differences)
+    # R code:   stop("'xi' does not have the right length")
+    if xi is None:
+        xi = np.ndarray(shape=[1, lag*differences], dtype=float)
+    if xi.shape[0] != (lag * differences):
+        raise IndexError('"xi" does not have the right length')
+
+    if differences == 1:
+        n = x.shape[0]
+        # R code: if(is.na(n))
+        # R code:stop(gettextf("invalid value of %s", "length(x)"), domain = NA)
+        if np.isnan(n):
+            raise IndexError("invalid value of for length(x)")
+
+        #TODO: call pmdarima.arima._arima.intgrt_vec()
+        return None
+    else:
+        # R code: diffinv.vector(diffinv.vector(x, lag, differences - 1L,
+        # R code:               diff(xi, lag=lag, differences=1L)),
+        # R code:               lag, 1L, xi[1L:lag])
+        diff_inv(
+            x=diff_inv(
+                x=x,
+                lag=lag,
+                differences=differences-1,
+                xi=diff(
+                    x=xi,
+                    lag=lag,
+                    differences=1
+                )
+            ),
+            lag=lag,
+            differences=1,
+            xi=xi[1:lag]
+        )
+
+
 def is_iterable(x):
     """Test a variable for iterability.
 
