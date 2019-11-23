@@ -59,7 +59,7 @@ class _StepwiseFitWrapper:
     .. [2] https://robjhyndman.com/hyndsight/arma-roots/
     """
     def __init__(self, y, xreg, start_params, trend, method, transparams,
-                 solver, maxiter, disp, callback, fit_params,
+                 solver, maxiter, fit_params,
                  suppress_warnings, trace, error_action, out_of_sample_size,
                  scoring, scoring_args, p, d, q, P, D, Q, m, start_p, start_q,
                  start_P, start_Q, max_p, max_q, max_P, max_Q, seasonal,
@@ -68,12 +68,20 @@ class _StepwiseFitWrapper:
         # Create a partial of the fit call so we don't have arg bloat all over
         self._fit_arima = functools.partial(
             _fit_arima,
-            x=y, xreg=xreg, start_params=start_params, trend=trend,
-            method=method, transparams=transparams, solver=solver,
-            maxiter=maxiter, disp=disp, callback=callback,
-            fit_params=fit_params, suppress_warnings=suppress_warnings,
-            trace=trace, error_action=error_action,
-            out_of_sample_size=out_of_sample_size, scoring=scoring,
+            x=y,
+            xreg=xreg,
+            start_params=start_params,
+            trend=trend,
+            method=method,
+            transparams=transparams,
+            solver=solver,
+            maxiter=maxiter,
+            fit_params=fit_params,
+            suppress_warnings=suppress_warnings,
+            trace=trace,
+            error_action=error_action,
+            out_of_sample_size=out_of_sample_size,
+            scoring=scoring,
             scoring_args=scoring_args,
             information_criterion=information_criterion,
             **kwargs)
@@ -332,7 +340,7 @@ class _StepwiseFitWrapper:
 
 
 def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
-               method, transparams, solver, maxiter, disp, callback,
+               method, transparams, solver, maxiter,
                fit_params, suppress_warnings, trace, error_action,
                out_of_sample_size, scoring, scoring_args, with_intercept,
                **kwargs):
@@ -341,7 +349,6 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
         fit = ARIMA(order=order, seasonal_order=seasonal_order,
                     start_params=start_params, trend=trend, method=method,
                     transparams=transparams, solver=solver, maxiter=maxiter,
-                    disp=disp, callback=callback,
                     suppress_warnings=suppress_warnings,
                     out_of_sample_size=out_of_sample_size, scoring=scoring,
                     scoring_args=scoring_args,
