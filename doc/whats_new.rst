@@ -42,7 +42,15 @@ v0.8.1) will document the latest features.
   as requested in `#208 <https://github.com/tgsmith61591/pmdarima/issues/208>`_.
 
 * Removes ``pmdarima.arima.ARIMA.add_new_samples``, which was previously deprecated.
-  Use ``pmdarima.arima.ARIMA.update`` instead.
+  Use :func:`pmdarima.arima.ARIMA.update` instead.
+
+* The following args have been deprecated:
+
+  - ``disp``
+  - ``callback``
+
+  They can still be passed to the ``fit`` method via ``**fit_kwargs``, but should
+  no longer be passed to the model constructor.
 
 
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_

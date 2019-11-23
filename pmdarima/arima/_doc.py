@@ -171,15 +171,6 @@ _AUTO_ARIMA_DOCSTR = \
     maxiter : int, optional (default=50)
         The maximum number of function evaluations. Default is 50.
 
-    disp : int, optional (default=0)
-        If True, convergence information is printed.  For the default
-        'lbfgs' ``solver``, disp controls the frequency of the output during
-        the iterations. disp < 0 means no output in this case.
-
-    callback : callable, optional (default=None)
-        Called after each iteration as callback(xk) where xk is the current
-        parameter vector. This is only used in non-seasonal ARIMA models.
-
     offset_test_args : dict, optional (default=None)
         The args to pass to the constructor of the offset (``d``) test. See
         ``pmdarima.arima.stationarity`` for more details.
@@ -250,8 +241,7 @@ _AUTO_ARIMA_DOCSTR = \
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
     
-    sarimax_kwargs : dict or None, optional (default=None)
-        Keyword arguments to pass to the SARIMAX constructor, if seasonal.
+    {sarimax_kwargs}
     {fit_args}
     See Also
     --------
@@ -285,6 +275,16 @@ _EXOG_DOCSTR = """
         operation. This should not include a constant or trend. Note that
         if an ``ARIMA`` is fit on exogenous features, it must be provided
         exogenous features for making predictions.
+"""
+
+_KWARGS_DOCSTR = """
+    **kwargs : dict or None, optional (default=None)
+        Keyword arguments to pass to the ARIMA constructor.
+"""
+
+_SARIMAX_ARGS_DOCSTR = """
+    sarimax_kwargs : dict or None, optional (default=None)
+        Keyword arguments to pass to the ARIMA constructor.
 """
 
 _FIT_ARGS_DOCSTR = """

@@ -37,7 +37,11 @@ VALID_CRITERIA = {'aic', 'aicc', 'bic', 'hqic', 'oob'}
 class AutoARIMA(BaseARIMA):
     # Don't add the y, exog, etc. here since they are used in 'fit'
     __doc__ = _doc._AUTO_ARIMA_DOCSTR.format(
-        y="", exogenous="", fit_args="", return_valid_fits="")
+        y="",
+        exogenous="",
+        fit_args="",
+        return_valid_fits="",
+        sarimax_kwargs=_doc._KWARGS_DOCSTR)
 
     # todo: someday store defaults somewhere else for single source of truth
     def __init__(self, start_p=2, d=None, start_q=2, max_p=5,
@@ -46,13 +50,13 @@ class AutoARIMA(BaseARIMA):
                  stationary=False, information_criterion='aic', alpha=0.05,
                  test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
                  start_params=None, trend=None, method='lbfgs',
-                 transparams=True, solver='lbfgs', maxiter=50, disp=0,
-                 callback=None, offset_test_args=None, seasonal_test_args=None,
+                 transparams=True, solver='lbfgs', maxiter=50,
+                 offset_test_args=None, seasonal_test_args=None,
                  suppress_warnings=False, error_action='warn', trace=False,
                  random=False, random_state=None, n_fits=10,
                  out_of_sample_size=0, scoring='mse',
                  scoring_args=None, with_intercept=True,
-                 sarimax_kwargs=None):
+                 **kwargs):
 
         self.start_p = start_p
         self.d = d
@@ -82,8 +86,6 @@ class AutoARIMA(BaseARIMA):
         self.transparams = transparams
         self.solver = solver
         self.maxiter = maxiter
-        self.disp = disp
-        self.callback = callback
         self.offset_test_args = offset_test_args
         self.seasonal_test_args = seasonal_test_args
         self.suppress_warnings = suppress_warnings
@@ -96,7 +98,17 @@ class AutoARIMA(BaseARIMA):
         self.scoring = scoring
         self.scoring_args = scoring_args
         self.with_intercept = with_intercept
-        self.sarimax_kwargs = sarimax_kwargs
+
+        # TODO: pop out the deprecated vars for now, but remove in a later vsn
+        smx = kwargs.pop('sarimax_kwargs', None)
+        if smx:
+            kwargs = smx
+            warnings.warn("The 'sarimax_kwargs' keyword arg has been "
+                          "deprecated in favor of simply passing **kwargs. "
+                          "This will raise in future versions",
+                          DeprecationWarning)
+
+        self.kwargs = kwargs
 
     def fit(self, y, exogenous=None, **fit_args):
         """Fit the auto-arima estimator
@@ -123,7 +135,7 @@ class AutoARIMA(BaseARIMA):
         **fit_args : dict or kwargs
             Any keyword arguments to pass to the auto-arima function.
         """
-        sarimax_kwargs = {} if not self.sarimax_kwargs else self.sarimax_kwargs
+        sarimax_kwargs = {} if not self.kwargs else self.kwargs
         self.model_ = auto_arima(
             y, exogenous=exogenous, start_p=self.start_p, d=self.d,
             start_q=self.start_q, max_p=self.max_p, max_d=self.max_d,
@@ -136,8 +148,8 @@ class AutoARIMA(BaseARIMA):
             stepwise=self.stepwise, n_jobs=self.n_jobs,
             start_params=self.start_params, trend=self.trend,
             method=self.method, transparams=self.transparams,
-            solver=self.solver, maxiter=self.maxiter, disp=self.disp,
-            callback=self.callback, offset_test_args=self.offset_test_args,
+            solver=self.solver, maxiter=self.maxiter,
+            offset_test_args=self.offset_test_args,
             seasonal_test_args=self.seasonal_test_args,
             suppress_warnings=self.suppress_warnings,
             error_action=self.error_action, trace=self.trace,
@@ -241,7 +253,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                stationary=False, information_criterion='aic', alpha=0.05,
                test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
                start_params=None, trend=None, method='lbfgs', transparams=True,
-               solver='lbfgs', maxiter=50, disp=0, callback=None,
+               solver='lbfgs', maxiter=50,
                offset_test_args=None, seasonal_test_args=None,
                suppress_warnings=False, error_action='warn', trace=False,
                random=False, random_state=None, n_fits=10,
@@ -313,7 +325,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                 seasonal_order=(0, 0, 0, 0),
                 start_params=start_params, trend=trend, method=method,
                 transparams=transparams, solver=solver, maxiter=maxiter,
-                disp=disp, callback=callback, fit_params=fit_args,
+                fit_params=fit_args,
                 suppress_warnings=suppress_warnings, trace=trace,
                 error_action=error_action, scoring=scoring,
                 out_of_sample_size=out_of_sample_size,
@@ -454,7 +466,6 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                     start_params=start_params, trend=trend,
                     method=method, transparams=transparams,
                     solver=solver, maxiter=maxiter,
-                    disp=disp, callback=callback,
                     fit_params=fit_args,
                     suppress_warnings=suppress_warnings,
                     trace=trace,
@@ -528,8 +539,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                 seasonal_order=seasonal_order,
                 start_params=start_params, trend=trend,
                 method=method, transparams=transparams,
-                solver=solver, maxiter=maxiter, disp=disp,
-                callback=callback,
+                solver=solver, maxiter=maxiter,
                 fit_params=fit_args,
                 suppress_warnings=suppress_warnings,
                 trace=trace, error_action=error_action,
@@ -556,7 +566,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         stepwise_wrapper = solvers._StepwiseFitWrapper(
             y, xreg=exogenous, start_params=start_params, trend=trend,
             method=method, transparams=transparams, solver=solver,
-            maxiter=maxiter, disp=disp, callback=callback, fit_params=fit_args,
+            maxiter=maxiter, fit_params=fit_args,
             suppress_warnings=suppress_warnings, trace=trace,
             error_action=error_action, out_of_sample_size=out_of_sample_size,
             scoring=scoring, scoring_args=scoring_args, p=p, d=d, q=q,
@@ -591,6 +601,7 @@ auto_arima.__doc__ = _doc._AUTO_ARIMA_DOCSTR.format(
     y=_doc._Y_DOCSTR,
     exogenous=_doc._EXOG_DOCSTR,
     fit_args=_doc._FIT_ARGS_DOCSTR,
+    sarimax_kwargs=_doc._SARIMAX_ARGS_DOCSTR,
     return_valid_fits=_doc._VALID_FITS_DOCSTR
 )
 
