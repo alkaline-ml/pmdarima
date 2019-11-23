@@ -35,11 +35,10 @@ possible.
     Model 1 CV scores: [23.928976841681518, 22.289666122815046, 3.7484080171047283]
     Model 2 CV scores: [1.4413474767581218, 15.413429218463346, 5.572225774148651]
     Lowest average SMAPE: 7.47566748979004 (model2)
-    Best model: ARIMA(callback=None, disp=0, maxiter=50, method='lbfgs', order=(1, 1, 2),
-          out_of_sample_size=0, scoring='mse', scoring_args=None,
-          seasonal_order=(0, 1, 1, 12), solver='lbfgs', start_params=None,
-          suppress_warnings=False, transparams=True, trend=None,
-          with_intercept=True)
+    Best model: ARIMA(maxiter=50, method='lbfgs', order=(1, 1, 2), out_of_sample_size=0,
+          scoring='mse', scoring_args=None, seasonal_order=(0, 1, 1, 12),
+          solver='lbfgs', start_params=None, suppress_warnings=False,
+          transparams=True, trend=None, with_intercept=True)
 
 
 
@@ -92,7 +91,7 @@ possible.
         errors[better_index], better_index + 1))
     print("Best model: {}".format(models[better_index]))
 
-**Total running time of the script:** ( 0 minutes  3.900 seconds)
+**Total running time of the script:** ( 0 minutes  2.615 seconds)
 
 
 

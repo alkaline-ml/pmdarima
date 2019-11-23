@@ -188,32 +188,49 @@
 v0.8.1) will document the latest features.</p>
 <div class="section" id="id1">
 <h2><a class="reference external" href="http://alkaline-ml.com/pmdarima/1.5.0/">v1.5.0</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>No longer use statsmodels’ <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> or <code class="docutils literal notranslate"><span class="pre">ARMA</span></code> class under the hood; only use
+<ul>
+<li><p class="first">No longer use statsmodels’ <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> or <code class="docutils literal notranslate"><span class="pre">ARMA</span></code> class under the hood; only use
 the <code class="docutils literal notranslate"><span class="pre">SARIMAX</span></code> model, which cuts back on a lot of errors/warnings we saw in the past.
-(<a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/211">#211</a>)</li>
-<li>Defaults in the <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> class that have changed as a result of #211:<ul>
+(<a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/211">#211</a>)</p>
+</li>
+<li><p class="first">Defaults in the <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> class that have changed as a result of #211:</p>
+<ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">maxiter</span></code> is now 50 (was <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
 <li><code class="docutils literal notranslate"><span class="pre">method</span></code> is now ‘lbfgs’ (was <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
 <li><code class="docutils literal notranslate"><span class="pre">seasonal_order</span></code> is now <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0)</span></code> (was <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
 <li><code class="docutils literal notranslate"><span class="pre">max_order</span></code> is now 5 (was 10) and is no longer used as a constraint when <code class="docutils literal notranslate"><span class="pre">stepwise=True</span></code></li>
 </ul>
 </li>
-<li>Correct bug where <code class="docutils literal notranslate"><span class="pre">aicc</span></code> always added 1 (for constant) to degrees of freedom,
-even when <code class="docutils literal notranslate"><span class="pre">df_model</span></code> accounted for the constant term.</li>
-<li>New <code class="xref py py-class docutils literal notranslate"><span class="pre">pmdarima.arima.auto.StepwiseContext</span></code> feature for more control over
-fit duration (introduced by <a class="reference external" href="https://github.com/kpsunkara">&#64;kpsunkara</a> in <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/pull/221">#221</a>).</li>
-<li>Adds the <a class="reference internal" href="modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer" title="pmdarima.preprocessing.LogEndogTransformer"><code class="xref py py-class docutils literal notranslate"><span class="pre">pmdarima.preprocessing.LogEndogTransformer</span></code></a> class as discussed in
-<a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/205">#205</a></li>
-<li>Exogenous arrays are no longer cast to numpy array by default, and will pass pandas
-frames through to the model. This keeps variable names intact in the summary (<a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/222">#222</a>)</li>
-<li>Added the <code class="docutils literal notranslate"><span class="pre">prefix</span></code> param to exogenous featurizers to allow the addition of meaningful
-names to engineered features.</li>
-<li>Added polyroot test of near non-invertibility when <code class="docutils literal notranslate"><span class="pre">stepwise=True</span></code>. For
+<li><p class="first">Correct bug where <code class="docutils literal notranslate"><span class="pre">aicc</span></code> always added 1 (for constant) to degrees of freedom,
+even when <code class="docutils literal notranslate"><span class="pre">df_model</span></code> accounted for the constant term.</p>
+</li>
+<li><p class="first">New <code class="xref py py-class docutils literal notranslate"><span class="pre">pmdarima.arima.auto.StepwiseContext</span></code> feature for more control over
+fit duration (introduced by <a class="reference external" href="https://github.com/kpsunkara">&#64;kpsunkara</a> in <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/pull/221">#221</a>).</p>
+</li>
+<li><p class="first">Adds the <a class="reference internal" href="modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer" title="pmdarima.preprocessing.LogEndogTransformer"><code class="xref py py-class docutils literal notranslate"><span class="pre">pmdarima.preprocessing.LogEndogTransformer</span></code></a> class as discussed in
+<a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/205">#205</a></p>
+</li>
+<li><p class="first">Exogenous arrays are no longer cast to numpy array by default, and will pass pandas
+frames through to the model. This keeps variable names intact in the summary (<a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/222">#222</a>)</p>
+</li>
+<li><p class="first">Added the <code class="docutils literal notranslate"><span class="pre">prefix</span></code> param to exogenous featurizers to allow the addition of meaningful
+names to engineered features.</p>
+</li>
+<li><p class="first">Added polyroot test of near non-invertibility when <code class="docutils literal notranslate"><span class="pre">stepwise=True</span></code>. For
 models that are near non-invertible will be deprioritized in model selection
-as requested in <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/208">#208</a>.</li>
-<li>Removes <code class="docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA.add_new_samples</span></code>, which was previously deprecated.
-Use <code class="docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA.update</span></code> instead.</li>
+as requested in <a class="reference external" href="https://github.com/tgsmith61591/pmdarima/issues/208">#208</a>.</p>
+</li>
+<li><p class="first">Removes <code class="docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA.add_new_samples</span></code>, which was previously deprecated.
+Use <a class="reference internal" href="modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.update" title="pmdarima.arima.ARIMA.update"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA.update()</span></code></a> instead.</p>
+</li>
+<li><p class="first">The following args have been deprecated:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">disp</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">callback</span></code></li>
+</ul>
+<p>They can still be passed to the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method via <code class="docutils literal notranslate"><span class="pre">**fit_kwargs</span></code>, but should
+no longer be passed to the model constructor.</p>
+</li>
 </ul>
 </div>
 <div class="section" id="id7">

@@ -350,15 +350,6 @@
 <span class="sd">    maxiter : int, optional (default=50)</span>
 <span class="sd">        The maximum number of function evaluations. Default is 50</span>
 
-<span class="sd">    disp : int, optional (default=0)</span>
-<span class="sd">        If True, convergence information is printed.  For the default</span>
-<span class="sd">        &#39;lbfgs&#39; ``solver``, disp controls the frequency of the output during</span>
-<span class="sd">        the iterations. disp &lt; 0 means no output in this case.</span>
-
-<span class="sd">    callback : callable, optional (default=None)</span>
-<span class="sd">        Called after each iteration as callback(xk) where xk is the current</span>
-<span class="sd">        parameter vector. This is only used in non-seasonal ARIMA models.</span>
-
 <span class="sd">    suppress_warnings : bool, optional (default=False)</span>
 <span class="sd">        Many warnings might be thrown inside of statsmodels. If</span>
 <span class="sd">        ``suppress_warnings`` is True, all of these warnings will be squelched.</span>
@@ -397,7 +388,7 @@
 <span class="sd">        Whether to include an intercept term. Default is True.</span>
 
 <span class="sd">    **sarimax_kwargs : keyword args, optional</span>
-<span class="sd">        Optional arguments to pass to the constructor for seasonal ARIMA fits.</span>
+<span class="sd">        Optional arguments to pass to the SARIMAX constructor.</span>
 <span class="sd">        Examples of potentially valuable kwargs:</span>
 
 <span class="sd">          - time_varying_regression : boolean</span>
@@ -420,6 +411,28 @@
 <span class="sd">            state-space formulation. If False, the full SARIMAX model is</span>
 <span class="sd">            put in state-space form so that all datapoints can be used in</span>
 <span class="sd">            estimation. Default is False.</span>
+
+<span class="sd">          - measurement_error: boolean</span>
+<span class="sd">            Whether or not to assume the endogenous observations endog were</span>
+<span class="sd">            measured with error. Default is False.</span>
+
+<span class="sd">          - mle_regression : boolean</span>
+<span class="sd">            Whether or not to use estimate the regression coefficients for the</span>
+<span class="sd">            exogenous variables as part of maximum likelihood estimation or</span>
+<span class="sd">            through the Kalman filter (i.e. recursive least squares). If</span>
+<span class="sd">            time_varying_regression is True, this must be set to False.</span>
+<span class="sd">            Default is True.</span>
+
+<span class="sd">          - hamilton_representation : boolean</span>
+<span class="sd">            Whether or not to use the Hamilton representation of an ARMA</span>
+<span class="sd">            process (if True) or the Harvey representation (if False).</span>
+<span class="sd">            Default is False.</span>
+
+<span class="sd">          - concentrate_scale : boolean</span>
+<span class="sd">            Whether or not to concentrate the scale (variance of the error</span>
+<span class="sd">            term) out of the likelihood. This reduces the number of parameters</span>
+<span class="sd">            estimated by maximum likelihood by one, but standard errors will</span>
+<span class="sd">            then not be available for the scale parameter.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -451,7 +464,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="ARIMA.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span> <span class="n">transparams</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span>
-                 <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">out_of_sample_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span> <span class="n">scoring_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">trend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">with_intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">):</span>
 
@@ -465,14 +478,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">transparams</span> <span class="o">=</span> <span class="n">transparams</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">solver</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">maxiter</span> <span class="o">=</span> <span class="n">maxiter</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">disp</span> <span class="o">=</span> <span class="n">disp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">callback</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">suppress_warnings</span> <span class="o">=</span> <span class="n">suppress_warnings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_of_sample_size</span> <span class="o">=</span> <span class="n">out_of_sample_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scoring</span> <span class="o">=</span> <span class="n">scoring</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scoring_args</span> <span class="o">=</span> <span class="n">scoring_args</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trend</span> <span class="o">=</span> <span class="n">trend</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">with_intercept</span> <span class="o">=</span> <span class="n">with_intercept</span>
+
+        <span class="c1"># TODO: Remove these warnings in a later version</span>
+        <span class="k">for</span> <span class="n">deprecated_key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;disp&#39;</span><span class="p">,</span> <span class="s1">&#39;callback&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">sarimax_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">deprecated_key</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is deprecated in the ARIMA constructor. &quot;</span>
+                              <span class="s2">&quot;Pass via **fit_kwargs instead&quot;</span><span class="p">,</span>
+                              <span class="ne">DeprecationWarning</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span> <span class="o">=</span> <span class="n">sarimax_kwargs</span></div>
 
     <span class="k">def</span> <span class="nf">_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
@@ -524,11 +543,17 @@
             <span class="c1"># update method, we should default to their preference</span>
             <span class="n">_maxiter</span> <span class="o">=</span> <span class="n">fit_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;maxiter&quot;</span><span class="p">,</span> <span class="n">_maxiter</span><span class="p">)</span>
 
+            <span class="c1"># kwargs that might be in fit args, but if not we override the</span>
+            <span class="c1"># defaults</span>
+            <span class="n">disp</span> <span class="o">=</span> <span class="n">fit_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;disp&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
             <span class="k">return</span> <span class="n">arima</span><span class="p">,</span> <span class="n">arima</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span>
-                                    <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                                    <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
+                                    <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
                                     <span class="n">transparams</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transparams</span><span class="p">,</span>
-                                    <span class="n">solver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="n">_maxiter</span><span class="p">,</span>
-                                    <span class="n">disp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">disp</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">,</span>
+                                    <span class="n">solver</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="p">,</span>
+                                    <span class="n">maxiter</span><span class="o">=</span><span class="n">_maxiter</span><span class="p">,</span>
+                                    <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span>
                                     <span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
 
         <span class="c1"># sometimes too many warnings...</span>
