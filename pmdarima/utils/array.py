@@ -351,7 +351,7 @@ def diff_inv(x, lag=1, differences=1, xi=None):
             ),
             lag=lag,
             differences=1,
-            xi=xi[1:lag]
+            xi=xi[1:lag+1]
         )
 
 
