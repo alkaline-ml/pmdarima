@@ -35,7 +35,7 @@ def _root_test(model, ic, trace):
     if max_invroot > 1 - 1e-2:
         ic = np.inf
         if trace:
-            warnings.warn(
+            print(
                 "Near non-invertible roots for order "
                 "(%i, %i, %i)(%i, %i, %i, %i); setting score to inf (at "
                 "least one inverse root too close to the border of the "
@@ -58,10 +58,10 @@ class _StepwiseFitWrapper:
     .. [1] R's auto-arima stepwise source code: http://bit.ly/2vOma0W
     .. [2] https://robjhyndman.com/hyndsight/arma-roots/
     """
-    def __init__(self, y, xreg, start_params, trend, method, transparams,
-                 solver, maxiter, fit_params,
-                 suppress_warnings, trace, error_action, out_of_sample_size,
-                 scoring, scoring_args, p, d, q, P, D, Q, m, start_p, start_q,
+    def __init__(self, y, xreg, start_params, trend, method, maxiter,
+                 fit_params, suppress_warnings, trace, error_action,
+                 out_of_sample_size, scoring, scoring_args,
+                 p, d, q, P, D, Q, m, start_p, start_q,
                  start_P, start_Q, max_p, max_q, max_P, max_Q, seasonal,
                  information_criterion, with_intercept, **kwargs):
 
@@ -73,8 +73,6 @@ class _StepwiseFitWrapper:
             start_params=start_params,
             trend=trend,
             method=method,
-            transparams=transparams,
-            solver=solver,
             maxiter=maxiter,
             fit_params=fit_params,
             suppress_warnings=suppress_warnings,
@@ -340,16 +338,15 @@ class _StepwiseFitWrapper:
 
 
 def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
-               method, transparams, solver, maxiter,
-               fit_params, suppress_warnings, trace, error_action,
-               out_of_sample_size, scoring, scoring_args, with_intercept,
-               **kwargs):
+               method, maxiter, fit_params, suppress_warnings,
+               trace, error_action,
+               out_of_sample_size, scoring, scoring_args,
+               with_intercept, **kwargs):
     start = time.time()
     try:
         fit = ARIMA(order=order, seasonal_order=seasonal_order,
                     start_params=start_params, trend=trend, method=method,
-                    transparams=transparams, solver=solver, maxiter=maxiter,
-                    suppress_warnings=suppress_warnings,
+                    maxiter=maxiter, suppress_warnings=suppress_warnings,
                     out_of_sample_size=out_of_sample_size, scoring=scoring,
                     scoring_args=scoring_args,
                     with_intercept=with_intercept, **kwargs)\

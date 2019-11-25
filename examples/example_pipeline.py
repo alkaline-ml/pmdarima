@@ -40,7 +40,6 @@ pipe = pipeline.Pipeline([
     ("fourier", ppc.FourierFeaturizer(m=12, k=4)),
     ("arima", arima.AutoARIMA(stepwise=True, trace=1, error_action="ignore",
                               seasonal=False,  # because we use Fourier
-                              transparams=False,
                               suppress_warnings=True))
 ])
 

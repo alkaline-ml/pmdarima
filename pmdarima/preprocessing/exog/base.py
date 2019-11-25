@@ -35,6 +35,10 @@ class BaseExogFeaturizer(six.with_metaclass(abc.ABCMeta, BaseExogTransformer)):
     def _get_prefix(self):
         """Get the feature prefix for when exog is a pd.DataFrame"""
 
+    def _get_feature_names(self, X):
+        pfx = self._get_prefix()
+        return ['%s_%i' % (pfx, i) for i in range(X.shape[1])]
+
     def _safe_hstack(self, exog, features):
         """H-stack dataframes or np.ndarrays"""
         if exog is None or isinstance(exog, pd.DataFrame):
@@ -42,16 +46,15 @@ class BaseExogFeaturizer(six.with_metaclass(abc.ABCMeta, BaseExogTransformer)):
             if not isinstance(features, pd.DataFrame):
                 features = pd.DataFrame.from_records(features)
 
-            # subclass MIGHT define this
-            if hasattr(self, '_get_feature_names'):
-                features.columns = self._get_feature_names(features)
-            else:
-                pfx = self._get_prefix()
-                features.columns = [
-                    '%s_%i' % (pfx, i) for i in range(features.shape[1])]
+            # subclass may override this
+            features.columns = self._get_feature_names(features)
 
             if exog is not None:
-                return pd.concat([exog, features], axis=1, ignore_index=True)
+                # ignore_index will remove names, which is a stupid quirk
+                # of pandas... so manually reset the indices
+                # https://stackoverflow.com/a/43406062/3015734
+                exog.index = features.index = np.arange(exog.shape[0])
+                return pd.concat([exog, features], axis=1)
             # if exog was None coming in, we'd still like to favor a pd.DF
             return features
 
