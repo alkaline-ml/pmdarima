@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 
-from pmdarima.utils.array import diff, c, is_iterable, as_series, check_exog
+from pmdarima.utils.array import diff, diff_inv, c, is_iterable, as_series, check_exog
 from pmdarima.utils import get_callable
 
 from numpy.testing import assert_array_equal, assert_array_almost_equal
@@ -39,6 +39,28 @@ def test_diff():
                        np.array([[12, -10, 14]]))
     assert_array_equal(diff(m, lag=2, differences=1), np.array([[2, -20, 10]]))
     assert diff(m, lag=2, differences=2).shape[0] == 0
+
+
+def test_diff_inv():
+    # test vector for lag = (1, 2), diff = (1, 2)
+    # The below values are the output of the following R:
+    # > x <- c(0, 1, 2, 3, 4)
+    # > diffinv(x, lag=1, differences=1)
+    # [1]  0  0  1  3  6 10
+    # > diffinv(x, lag=1, differences=2)
+    # [1]  0  0  0  1  4 10 20
+    # > diffinv(x, lag=2, differences=1)
+    # [1] 0 0 0 1 2 4 6
+    # > diffinv(x, lag=2, differences=2)
+    # [1] 0 0 0 0 0 1 2 5 8
+    assert_array_equal(diff_inv(x, lag=1, differences=1),
+                       np.array([0., 0., 1., 3., 6., 10.]))
+    assert_array_equal(diff_inv(x, lag=1, differences=2),
+                       np.array([0., 0., 0., 1., 4., 10., 20.]))
+    assert_array_equal(diff_inv(x, lag=2, differences=1),
+                       np.array([0., 0., 0., 1., 2., 4., 6.]))
+    assert_array_equal(diff_inv(x, lag=2, differences=2),
+                       np.array([0., 0., 0., 0., 0., 1., 2., 5., 8.]))
 
 
 def test_concatenate():
