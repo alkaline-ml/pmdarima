@@ -351,7 +351,7 @@ def diff_inv(x, lag=1, differences=1, xi=None):
             ),
             lag=lag,
             differences=1,
-            xi=xi[1:lag+1]
+            xi=xi[1:lag+1]  # Have to add one because R includes the top index, Python does not
         )
 
 
