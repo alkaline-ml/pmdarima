@@ -3,4 +3,6 @@
 from .boxcox import *
 from .log import *
 
-__all__ = [s for s in dir() if not s.startswith("_")]
+# don't want to accidentally hoist `base` to top-level, since preprocessing has
+# its own base
+__all__ = [s for s in dir() if not (s.startswith("_") or s == 'base')]

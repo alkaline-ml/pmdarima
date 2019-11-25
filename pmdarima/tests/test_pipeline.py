@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pmdarima.compat.pytest import pytest_error_str
-from pmdarima.pipeline import Pipeline
+from pmdarima.pipeline import Pipeline, _warn_for_deprecated
 from pmdarima.preprocessing import BoxCoxEndogTransformer, FourierFeaturizer
 from pmdarima.arima import ARIMA, AutoARIMA
 from pmdarima.datasets import load_wineind
@@ -110,6 +110,7 @@ def test_get_kwargs(pipe, kwargs, expected):
 def test_pipeline_behavior():
     pipeline = Pipeline([
         ("fourier", FourierFeaturizer(m=12)),
+        ("boxcox", BoxCoxEndogTransformer()),
         ("arima", AutoARIMA(seasonal=False, stepwise=True,
                             suppress_warnings=True, d=1, max_p=2, max_q=0,
                             start_q=0, start_p=1,
@@ -117,7 +118,7 @@ def test_pipeline_behavior():
     ])
 
     # Quick assertions on indexing
-    assert len(pipeline) == 2
+    assert len(pipeline) == 3
 
     pipeline.fit(train)
     preds = pipeline.predict(5)
@@ -205,3 +206,11 @@ def test_pipeline_predict_inverse_transform(pipeline, exog, inverse_transform,
 
     if return_conf_ints:
         assert isinstance(in_sample, tuple) and len(in_sample) == 2
+
+
+def test_deprecation_warning():
+    kwargs = {'typ': 'foo'}
+    with pytest.warns(DeprecationWarning) as we:
+        kwargs = _warn_for_deprecated(**kwargs)
+    assert not kwargs
+    assert we

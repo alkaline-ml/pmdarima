@@ -4,9 +4,12 @@ import numpy as np
 from numpy.testing import assert_array_almost_equal
 
 from pmdarima.preprocessing.exog import FourierFeaturizer
+from pmdarima.compat.pytest import pytest_error_str
 import pmdarima as pm
 
 import pytest
+
+wineind = pm.datasets.load_wineind()
 
 
 class TestFourierREquivalency:
@@ -124,3 +127,17 @@ def test_update_transform():
     _, xreg2 = trans.transform(y)
     assert_array_almost_equal(xreg2[:100], xreg)
     assert_array_almost_equal(xreg2[100:], Xt)
+
+
+def test_value_error_check():
+    feat = FourierFeaturizer(m=12)
+    with pytest.raises(ValueError) as ve:
+        feat._check_y_exog(wineind, None, null_allowed=False)
+    assert 'non-None' in pytest_error_str(ve)
+
+
+def test_value_error_on_fit():
+    feat = FourierFeaturizer(m=12, k=8)
+    with pytest.raises(ValueError) as ve:
+        feat.fit_transform(wineind)
+    assert 'k must be' in pytest_error_str(ve)

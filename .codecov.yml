@@ -10,20 +10,15 @@ coverage:
   status:
     project:
       default:
-        target: 95%
+        against: parent
+        target: auto
         branches:
           - master
 
     patch:
       default:
-        # Be tolerant on slight code coverage diff on PRs to limit
-        # noisy red coverage status on github PRs.
-        # Note The coverage stats are still uploaded
-        # to codecov so that PR reviewers can see uncovered lines
-        # in the github diff if they install the codecov browser
-        # extension:
-        # https://github.com/codecov/browser-extension
-        target: 95%
+        against: parent
+        target: 80%
 
 ignore:
 - "**/setup.py"
