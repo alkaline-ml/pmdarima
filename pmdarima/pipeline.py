@@ -22,7 +22,8 @@ def _warn_for_deprecated(**kwargs):
     for k in ('typ',):
         if kwargs.pop(k, None):
             warnings.warn("'%s' is deprecated and will be removed in a future "
-                          "release" % k)
+                          "release" % k,
+                          DeprecationWarning)
     return kwargs
 
 

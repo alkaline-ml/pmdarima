@@ -39,7 +39,8 @@ def _warn_for_deprecations(**kwargs):
     for k in ('solver', 'transparams'):
         if kwargs.pop(k, None):
             warnings.warn('%s has been deprecated and will be removed in '
-                          'a future version.' % k)
+                          'a future version.' % k,
+                          DeprecationWarning)
     return kwargs
 
 
