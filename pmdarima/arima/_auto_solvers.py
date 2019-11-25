@@ -35,7 +35,7 @@ def _root_test(model, ic, trace):
     if max_invroot > 1 - 1e-2:
         ic = np.inf
         if trace:
-            warnings.warn(
+            print(
                 "Near non-invertible roots for order "
                 "(%i, %i, %i)(%i, %i, %i, %i); setting score to inf (at "
                 "least one inverse root too close to the border of the "

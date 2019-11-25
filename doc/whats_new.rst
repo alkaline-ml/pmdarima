@@ -44,12 +44,14 @@ v0.8.1) will document the latest features.
 * Removes ``pmdarima.arima.ARIMA.add_new_samples``, which was previously deprecated.
   Use :func:`pmdarima.arima.ARIMA.update` instead.
 
-* The following args have been deprecated:
+* The following args have been deprecated from the :class:`pmdarima.arima.ARIMA` class
+  as well as :func:`pmdarima.arima.auto_arima` and any other calling methods/classes:
 
-  - ``disp``:sup:[1]
-  - ``callback``:sup:[1]
+  - ``disp``:sup:`[1]`
+  - ``callback``:sup:`[1]`
   - ``transparams``
   - ``solver``
+  - ``typ``
 
   [1] These can still be passed to the ``fit`` method via ``**fit_kwargs``, but should
   no longer be passed to the model constructor.

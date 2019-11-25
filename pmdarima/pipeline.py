@@ -17,6 +17,15 @@ from .compat import DTYPE
 __all__ = ['Pipeline']
 
 
+def _warn_for_deprecated(**kwargs):
+    # TODO: remove this in the future
+    for k in ('typ',):
+        if kwargs.pop(k, None):
+            warnings.warn("'%s' is deprecated and will be removed in a future "
+                          "release" % k)
+    return kwargs
+
+
 class Pipeline(BaseEstimator):
     """A pipeline of transformers with an optional final estimator stage
 
@@ -232,7 +241,7 @@ class Pipeline(BaseEstimator):
 
     def predict_in_sample(self, exogenous=None, start=None,
                           end=None, dynamic=False, return_conf_int=False,
-                          alpha=0.05, typ='levels', inverse_transform=True,
+                          alpha=0.05, inverse_transform=True,
                           **kwargs):
         """Generate in-sample predictions from the fit pipeline.
 
@@ -271,16 +280,6 @@ class Pipeline(BaseEstimator):
         alpha : float, optional (default=0.05)
             The confidence intervals for the forecasts are (1 - alpha) %
 
-        typ : str, optional (default='levels')
-            The type of prediction to make. Options are ('linear', 'levels').
-            This is only used when the underlying model is ARIMA (not ARMA or
-            SARIMAX).
-
-              - 'linear': makes linear predictions in terms of the differenced
-                endogenous variables.
-              - 'levels': predicts the levels of the original endogenous
-                variables.
-
         inverse_transform : bool, optional (default=True)
             Whether to inverse transform predictions, if they are in log or
             BoxCox scale. Any endog transformer will be inverse-transformed.
@@ -304,12 +303,13 @@ class Pipeline(BaseEstimator):
             The confidence intervals for the predictions. Only returned if
             ``return_conf_int`` is True.
         """
+        kwargs = _warn_for_deprecated(**kwargs)
         Xt, est, predict_kwargs = self._pre_predict(0, exogenous, **kwargs)
 
         return_vals = est.predict_in_sample(
             exogenous=Xt, start=start, end=end,
             return_conf_int=return_conf_int,
-            alpha=alpha, typ=typ, dynamic=dynamic,
+            alpha=alpha, dynamic=dynamic,
             **predict_kwargs)
 
         return self._post_predict(
@@ -367,6 +367,7 @@ class Pipeline(BaseEstimator):
             The confidence intervals for the forecasts. Only returned if
             ``return_conf_int`` is True.
         """
+        kwargs = _warn_for_deprecated(**kwargs)
         Xt, est, predict_kwargs = self._pre_predict(
             n_periods, exogenous, **kwargs)
 
