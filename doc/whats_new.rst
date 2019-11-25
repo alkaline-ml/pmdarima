@@ -46,10 +46,12 @@ v0.8.1) will document the latest features.
 
 * The following args have been deprecated:
 
-  - ``disp``
-  - ``callback``
+  - ``disp``:sup:[1]
+  - ``callback``:sup:[1]
+  - ``transparams``
+  - ``solver``
 
-  They can still be passed to the ``fit`` method via ``**fit_kwargs``, but should
+  [1] These can still be passed to the ``fit`` method via ``**fit_kwargs``, but should
   no longer be passed to the model constructor.
 
 

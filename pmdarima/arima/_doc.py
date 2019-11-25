@@ -143,11 +143,6 @@ _AUTO_ARIMA_DOCSTR = \
         Starting parameters for ``ARMA(p,q)``.  If None, the default is given
         by ``ARMA._fit_start_params``.
 
-    transparams : bool, optional (default=True)
-        Whether or not to transform the parameters to ensure stationarity.
-        Uses the transformation suggested in Jones (1980).  If False,
-        no checking for stationarity or invertibility is done.
-
     method : str, optional (default='lbfgs')
         One of ('newton', 'bfgs', 'lbfgs', 'powell', 'cg', 'ncg',
         'basinhopping'). Determines a solver method for maximizing the
@@ -158,15 +153,6 @@ _AUTO_ARIMA_DOCSTR = \
         The trend parameter. If ``with_intercept`` is True, ``trend`` will be
         used. If ``with_intercept`` is False, the trend will be set to a no-
         intercept value.
-
-    solver : str or None, optional (default='lbfgs')
-        Solver to be used.  The default is 'lbfgs' (limited memory
-        Broyden-Fletcher-Goldfarb-Shanno).  Other choices are 'bfgs',
-        'newton' (Newton-Raphson), 'nm' (Nelder-Mead), 'cg' -
-        (conjugate gradient), 'ncg' (non-conjugate gradient), and
-        'powell'. By default, the limited memory BFGS uses m=12 to
-        approximate the Hessian, projected gradient tolerance of 1e-8 and
-        factr = 1e2. You can change these by using kwargs.
 
     maxiter : int, optional (default=50)
         The maximum number of function evaluations. Default is 50.
