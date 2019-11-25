@@ -30,11 +30,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
+# C extensions and cython reports
 *.so
 *.c
 pmdarima/arima/*.html
 pmdarima/preprocessing/exog/*.html
+pmdarima/utils/*.html
 
 # Distribution / packaging
 .Python

@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 from ..compat import DTYPE
-from ..arima._arima import C_intgrt_vec
+from ._array import C_intgrt_vec
 
 __all__ = [
     'as_series',
@@ -315,44 +315,72 @@ def diff(x, lag=1, differences=1):
     return res
 
 
+def _diff_inv_vector(x, lag, differences, xi):
+    # R code: if (missing(xi)) xi < - rep(0., lag * differences)
+    # R code: if (length(xi) != lag * differences)
+    # R code:   stop("'xi' does not have the right length")
+    if xi is None:
+        xi = np.zeros(lag * differences, dtype=DTYPE)
+    else:
+        xi = check_endog(xi, dtype=DTYPE, copy=False, force_all_finite=False)
+        if xi.shape[0] != lag * differences:
+            raise IndexError('"xi" does not have the right length')
+
+    if differences == 1:
+        return np.asarray(C_intgrt_vec(x=x, xi=xi, lag=lag))
+    else:
+        # R code: diffinv.vector(diffinv.vector(x, lag, differences - 1L,
+        # R code:               diff(xi, lag=lag, differences=1L)),
+        # R code:               lag, 1L, xi[1L:lag])
+        return diff_inv(
+            x=diff_inv(x=x, lag=lag, differences=differences - 1,
+                       xi=diff(x=xi, lag=lag, differences=1)),
+            lag=lag,
+            differences=1,
+            xi=xi[:lag]  # R: xi[1L:lag]
+        )
+
+
+def _diff_inv_matrix(x, lag, differences, xi):
+    n, m = x.shape
+    y = np.zeros((n + lag * differences, m), dtype=DTYPE)
+
+    if m >= 1:  # todo: R checks this. do we need to?
+        # R: if(missing(xi)) xi <- matrix(0.0, lag*differences, m)
+        if xi is None:
+            xi = np.zeros((lag * differences, m), dtype=DTYPE)
+        else:
+            xi = check_array(
+                xi, dtype=DTYPE, copy=False, force_all_finite=False,
+                ensure_2d=True)
+            if xi.shape != (lag * differences, m):
+                raise IndexError('"xi" does not have the right shape')
+
+        # TODO: can we vectorize?
+        for i in range(m):
+            y[:, i] = _diff_inv_vector(x[:, i], lag, differences, xi[:, i])
+
+    return y
+
+
 def diff_inv(x, lag=1, differences=1, xi=None):
     """
     Inverse the difference of an array.
     """
+    x = check_array(
+        x, dtype=DTYPE, copy=False, force_all_finite=False, ensure_2d=False)
 
     # R code: if (lag < 1L || differences < 1L)
     # R code: stop ("bad value for 'lag' or 'differences'")
     if any(v < 1 for v in (lag, differences)):
         raise ValueError('lag and differences must be positive (> 0) integers')
 
-    # R code: if (missing(xi)) xi < - rep(0., lag * differences)
-    # R code: if (length(xi) != lag * differences)
-    # R code:   stop("'xi' does not have the right length")
-    if xi is None:
-        xi = np.ndarray(shape=[1, lag * differences], dtype=float)
-
-    if xi.shape[1] != (lag * differences):
-        raise IndexError('"xi" does not have the right length')
-
-    if differences == 1:
-        n = x.shape[0]
-        # R code: if(is.na(n))
-        # R code: stop(gettextf("invalid value of %s", "length(x)"),
-        # R code:      domain = NA)
-        if np.isnan(n):
-            raise IndexError("invalid value of for length(x)")
-        return C_intgrt_vec(x=x, xi=xi, lag=lag)
-    else:
-        # R code: diffinv.vector(diffinv.vector(x, lag, differences - 1L,
-        # R code:               diff(xi, lag=lag, differences=1L)),
-        # R code:               lag, 1L, xi[1L:lag])
-        diff_inv(
-            x=diff_inv(x=x, lag=lag, differences=differences-1,
-                       xi=diff(x=xi, lag=lag, differences=1)),
-            lag=lag,
-            differences=1,
-            xi=xi[1:lag + 1]  # R includes the top index, Python does not
-        )
+    if x.ndim == 1:
+        return _diff_inv_vector(x, lag, differences, xi)
+    elif x.ndim == 2:
+        return _diff_inv_matrix(x, lag, differences, xi)
+    raise ValueError("only vector and matrix inverse differencing "
+                     "are supported")
 
 
 def is_iterable(x):
