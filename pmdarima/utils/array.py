@@ -329,7 +329,7 @@ def diff_inv(x, lag=1, differences=1, xi=None):
     # R code: if (length(xi) != lag * differences)
     # R code:   stop("'xi' does not have the right length")
     if xi is None:
-        xi = np.ndarray(shape=[1, lag*differences], dtype=float)
+        xi = np.ndarray(shape=[1, lag * differences], dtype=float)
 
     if xi.shape[1] != (lag * differences):
         raise IndexError('"xi" does not have the right length')
@@ -337,7 +337,8 @@ def diff_inv(x, lag=1, differences=1, xi=None):
     if differences == 1:
         n = x.shape[0]
         # R code: if(is.na(n))
-        # R code:stop(gettextf("invalid value of %s", "length(x)"), domain = NA)
+        # R code: stop(gettextf("invalid value of %s", "length(x)"),
+        # R code:      domain = NA)
         if np.isnan(n):
             raise IndexError("invalid value of for length(x)")
         return C_intgrt_vec(x=x, xi=xi, lag=lag)
@@ -347,11 +348,10 @@ def diff_inv(x, lag=1, differences=1, xi=None):
         # R code:               lag, 1L, xi[1L:lag])
         diff_inv(
             x=diff_inv(x=x, lag=lag, differences=differences-1,
-                xi=diff(x=xi, lag=lag, differences=1)
-            ),
+                       xi=diff(x=xi, lag=lag, differences=1)),
             lag=lag,
             differences=1,
-            xi=xi[1:lag+1]  # Have to add one because R includes the top index, Python does not
+            xi=xi[1:lag + 1]  # R includes the top index, Python does not
         )
 
 
