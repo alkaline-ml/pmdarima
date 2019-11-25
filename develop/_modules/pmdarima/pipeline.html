@@ -185,6 +185,16 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Pipeline&#39;</span><span class="p">]</span>
 
 
+<span class="k">def</span> <span class="nf">_warn_for_deprecated</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># TODO: remove this in the future</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;typ&#39;</span><span class="p">,):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is deprecated and will be removed in a future &quot;</span>
+                          <span class="s2">&quot;release&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">,</span>
+                          <span class="ne">DeprecationWarning</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">kwargs</span>
+
+
 <div class="viewcode-block" id="Pipeline"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline">[docs]</a><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A pipeline of transformers with an optional final estimator stage</span>
 
@@ -400,7 +410,7 @@
 
 <div class="viewcode-block" id="Pipeline.predict_in_sample"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline.predict_in_sample">[docs]</a>    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                           <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s1">&#39;levels&#39;</span><span class="p">,</span> <span class="n">inverse_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">inverse_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                           <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate in-sample predictions from the fit pipeline.</span>
 
@@ -439,16 +449,6 @@
 <span class="sd">        alpha : float, optional (default=0.05)</span>
 <span class="sd">            The confidence intervals for the forecasts are (1 - alpha) %</span>
 
-<span class="sd">        typ : str, optional (default=&#39;levels&#39;)</span>
-<span class="sd">            The type of prediction to make. Options are (&#39;linear&#39;, &#39;levels&#39;).</span>
-<span class="sd">            This is only used when the underlying model is ARIMA (not ARMA or</span>
-<span class="sd">            SARIMAX).</span>
-
-<span class="sd">              - &#39;linear&#39;: makes linear predictions in terms of the differenced</span>
-<span class="sd">                endogenous variables.</span>
-<span class="sd">              - &#39;levels&#39;: predicts the levels of the original endogenous</span>
-<span class="sd">                variables.</span>
-
 <span class="sd">        inverse_transform : bool, optional (default=True)</span>
 <span class="sd">            Whether to inverse transform predictions, if they are in log or</span>
 <span class="sd">            BoxCox scale. Any endog transformer will be inverse-transformed.</span>
@@ -472,12 +472,13 @@
 <span class="sd">            The confidence intervals for the predictions. Only returned if</span>
 <span class="sd">            ``return_conf_int`` is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_warn_for_deprecated</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">Xt</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">predict_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_predict</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">return_vals</span> <span class="o">=</span> <span class="n">est</span><span class="o">.</span><span class="n">predict_in_sample</span><span class="p">(</span>
             <span class="n">exogenous</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
             <span class="n">return_conf_int</span><span class="o">=</span><span class="n">return_conf_int</span><span class="p">,</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="n">typ</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="n">dynamic</span><span class="p">,</span>
             <span class="o">**</span><span class="n">predict_kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post_predict</span><span class="p">(</span>
@@ -535,6 +536,7 @@
 <span class="sd">            The confidence intervals for the forecasts. Only returned if</span>
 <span class="sd">            ``return_conf_int`` is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_warn_for_deprecated</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">Xt</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">predict_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_predict</span><span class="p">(</span>
             <span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 

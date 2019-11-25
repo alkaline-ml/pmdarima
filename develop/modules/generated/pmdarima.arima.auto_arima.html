@@ -192,7 +192,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.auto_arima<a class="headerlink" href="#pmdarima-arima-auto-arima" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.arima.auto_arima">
-<code class="descclassname">pmdarima.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=5</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method='lbfgs'</em>, <em>transparams=True</em>, <em>solver='lbfgs'</em>, <em>maxiter=50</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>sarimax_kwargs=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/eb3701c/pmdarima/arima/auto.py#L250"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=5</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method='lbfgs'</em>, <em>maxiter=50</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>sarimax_kwargs=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/4f0d7a6/pmdarima/arima/auto.py#L257"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically discover the optimal order for an ARIMA model.</p>
 <p>The auto-ARIMA process seeks to identify the most optimal
 parameters for an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> model, settling on a single fitted ARIMA model.
@@ -370,12 +370,6 @@ the model.</p>
 <div><p>Starting parameters for <code class="docutils literal notranslate"><span class="pre">ARMA(p,q)</span></code>.  If None, the default is given
 by <code class="docutils literal notranslate"><span class="pre">ARMA._fit_start_params</span></code>.</p>
 </div></blockquote>
-<p><strong>transparams</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether or not to transform the parameters to ensure stationarity.
-Uses the transformation suggested in Jones (1980).  If False,
-no checking for stationarity or invertibility is done.</p>
-</div></blockquote>
 <p><strong>method</strong> : str, optional (default=’lbfgs’)</p>
 <blockquote>
 <div><p>One of (‘newton’, ‘bfgs’, ‘lbfgs’, ‘powell’, ‘cg’, ‘ncg’,
@@ -388,16 +382,6 @@ box constraints).</p>
 <div><p>The trend parameter. If <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> is True, <code class="docutils literal notranslate"><span class="pre">trend</span></code> will be
 used. If <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> is False, the trend will be set to a no-
 intercept value.</p>
-</div></blockquote>
-<p><strong>solver</strong> : str or None, optional (default=’lbfgs’)</p>
-<blockquote>
-<div><p>Solver to be used.  The default is ‘lbfgs’ (limited memory
-Broyden-Fletcher-Goldfarb-Shanno).  Other choices are ‘bfgs’,
-‘newton’ (Newton-Raphson), ‘nm’ (Nelder-Mead), ‘cg’ -
-(conjugate gradient), ‘ncg’ (non-conjugate gradient), and
-‘powell’. By default, the limited memory BFGS uses m=12 to
-approximate the Hessian, projected gradient tolerance of 1e-8 and
-factr = 1e2. You can change these by using kwargs.</p>
 </div></blockquote>
 <p><strong>maxiter</strong> : int, optional (default=50)</p>
 <blockquote>

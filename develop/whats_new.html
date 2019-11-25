@@ -223,12 +223,16 @@ as requested in <a class="reference external" href="https://github.com/tgsmith61
 <li><p class="first">Removes <code class="docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA.add_new_samples</span></code>, which was previously deprecated.
 Use <a class="reference internal" href="modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.update" title="pmdarima.arima.ARIMA.update"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA.update()</span></code></a> instead.</p>
 </li>
-<li><p class="first">The following args have been deprecated:</p>
+<li><p class="first">The following args have been deprecated from the <a class="reference internal" href="modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA" title="pmdarima.arima.ARIMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA</span></code></a> class
+as well as <a class="reference internal" href="modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima()</span></code></a> and any other calling methods/classes:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">disp</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">callback</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">disp</span></code><sup>[1]</sup></li>
+<li><code class="docutils literal notranslate"><span class="pre">callback</span></code><sup>[1]</sup></li>
+<li><code class="docutils literal notranslate"><span class="pre">transparams</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">solver</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">typ</span></code></li>
 </ul>
-<p>They can still be passed to the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method via <code class="docutils literal notranslate"><span class="pre">**fit_kwargs</span></code>, but should
+<p>[1] These can still be passed to the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method via <code class="docutils literal notranslate"><span class="pre">**fit_kwargs</span></code>, but should
 no longer be passed to the model constructor.</p>
 </li>
 </ul>
