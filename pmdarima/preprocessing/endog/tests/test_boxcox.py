@@ -5,6 +5,7 @@ from numpy.testing import assert_array_almost_equal
 from scipy import stats
 import pytest
 
+from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.preprocessing import BoxCoxEndogTransformer
 
 loggamma = stats.loggamma.rvs(5, size=500) + 5
@@ -37,6 +38,13 @@ def test_invertible_when_lambda_is_0():
     y_t, _ = trans.fit_transform(y)
     y_prime, _ = trans.inverse_transform(y_t)
     assert_array_almost_equal(y, y_prime)
+
+
+def test_value_error_on_neg_lambda():
+    trans = BoxCoxEndogTransformer(lmbda2=-4.)
+    with pytest.raises(ValueError) as ve:
+        trans.fit_transform([1, 2, 3])
+    assert 'lmbda2 must be a non-negative' in pytest_error_str(ve)
 
 
 class TestNonInvertibleBC:

@@ -34,6 +34,16 @@ __all__ = [
 VALID_CRITERIA = {'aic', 'aicc', 'bic', 'hqic', 'oob'}
 
 
+def _warn_for_deprecations(**kwargs):
+    # TODO: remove these warnings in the future
+    for k in ('solver', 'transparams'):
+        if kwargs.pop(k, None):
+            warnings.warn('%s has been deprecated and will be removed in '
+                          'a future version.' % k,
+                          DeprecationWarning)
+    return kwargs
+
+
 class AutoARIMA(BaseARIMA):
     # Don't add the y, exog, etc. here since they are used in 'fit'
     __doc__ = _doc._AUTO_ARIMA_DOCSTR.format(
@@ -49,8 +59,7 @@ class AutoARIMA(BaseARIMA):
                  max_D=1, max_Q=2, max_order=5, m=1, seasonal=True,
                  stationary=False, information_criterion='aic', alpha=0.05,
                  test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
-                 start_params=None, trend=None, method='lbfgs',
-                 transparams=True, solver='lbfgs', maxiter=50,
+                 start_params=None, trend=None, method='lbfgs', maxiter=50,
                  offset_test_args=None, seasonal_test_args=None,
                  suppress_warnings=False, error_action='warn', trace=False,
                  random=False, random_state=None, n_fits=10,
@@ -83,8 +92,6 @@ class AutoARIMA(BaseARIMA):
         self.start_params = start_params
         self.trend = trend
         self.method = method
-        self.transparams = transparams
-        self.solver = solver
         self.maxiter = maxiter
         self.offset_test_args = offset_test_args
         self.seasonal_test_args = seasonal_test_args
@@ -108,6 +115,7 @@ class AutoARIMA(BaseARIMA):
                           "This will raise in future versions",
                           DeprecationWarning)
 
+        kwargs = _warn_for_deprecations(**kwargs)
         self.kwargs = kwargs
 
     def fit(self, y, exogenous=None, **fit_args):
@@ -147,8 +155,7 @@ class AutoARIMA(BaseARIMA):
             alpha=self.alpha, test=self.test, seasonal_test=self.seasonal_test,
             stepwise=self.stepwise, n_jobs=self.n_jobs,
             start_params=self.start_params, trend=self.trend,
-            method=self.method, transparams=self.transparams,
-            solver=self.solver, maxiter=self.maxiter,
+            method=self.method, maxiter=self.maxiter,
             offset_test_args=self.offset_test_args,
             seasonal_test_args=self.seasonal_test_args,
             suppress_warnings=self.suppress_warnings,
@@ -252,8 +259,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                max_D=1, max_Q=2, max_order=5, m=1, seasonal=True,
                stationary=False, information_criterion='aic', alpha=0.05,
                test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
-               start_params=None, trend=None, method='lbfgs', transparams=True,
-               solver='lbfgs', maxiter=50,
+               start_params=None, trend=None, method='lbfgs', maxiter=50,
                offset_test_args=None, seasonal_test_args=None,
                suppress_warnings=False, error_action='warn', trace=False,
                random=False, random_state=None, n_fits=10,
@@ -262,6 +268,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                sarimax_kwargs=None, **fit_args):
 
     # NOTE: Doc is assigned BELOW this function
+
+    # pop out the deprecated kwargs
+    fit_args = _warn_for_deprecations(**fit_args)
 
     start = time.time()
 
@@ -324,8 +333,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                 y, xreg=exogenous, order=(0, 0, 0),
                 seasonal_order=(0, 0, 0, 0),
                 start_params=start_params, trend=trend, method=method,
-                transparams=transparams, solver=solver, maxiter=maxiter,
-                fit_params=fit_args,
+                maxiter=maxiter, fit_params=fit_args,
                 suppress_warnings=suppress_warnings, trace=trace,
                 error_action=error_action, scoring=scoring,
                 out_of_sample_size=out_of_sample_size,
@@ -464,8 +472,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                     y, xreg=exogenous, order=(0, d, 0),
                     seasonal_order=ssn,
                     start_params=start_params, trend=trend,
-                    method=method, transparams=transparams,
-                    solver=solver, maxiter=maxiter,
+                    method=method, maxiter=maxiter,
                     fit_params=fit_args,
                     suppress_warnings=suppress_warnings,
                     trace=trace,
@@ -538,8 +545,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                 y, xreg=exogenous, order=order,
                 seasonal_order=seasonal_order,
                 start_params=start_params, trend=trend,
-                method=method, transparams=transparams,
-                solver=solver, maxiter=maxiter,
+                method=method, maxiter=maxiter,
                 fit_params=fit_args,
                 suppress_warnings=suppress_warnings,
                 trace=trace, error_action=error_action,
@@ -565,8 +571,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         # init the stepwise model wrapper
         stepwise_wrapper = solvers._StepwiseFitWrapper(
             y, xreg=exogenous, start_params=start_params, trend=trend,
-            method=method, transparams=transparams, solver=solver,
-            maxiter=maxiter, fit_params=fit_args,
+            method=method, maxiter=maxiter, fit_params=fit_args,
             suppress_warnings=suppress_warnings, trace=trace,
             error_action=error_action, out_of_sample_size=out_of_sample_size,
             scoring=scoring, scoring_args=scoring_args, p=p, d=d, q=q,

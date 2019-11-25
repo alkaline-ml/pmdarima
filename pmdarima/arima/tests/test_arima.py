@@ -533,6 +533,7 @@ def test_with_seasonality2():
                               'simple_differencing': simple_differencing},
 
                           # Set to super low iter to make test move quickly
+                          max_order=None,
                           maxiter=2)
 
     # show that we can forecast even after the

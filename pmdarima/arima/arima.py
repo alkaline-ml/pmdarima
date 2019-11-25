@@ -159,25 +159,11 @@ class ARIMA(BaseARIMA):
         Starting parameters for ``ARMA(p,q)``.  If None, the default is given
         by ``ARMA._fit_start_params``.
 
-    transparams : bool, optional (default=True)
-        Whether or not to transform the parameters to ensure stationarity.
-        Uses the transformation suggested in Jones (1980).  If False,
-        no checking for stationarity or invertibility is done.
-
     method : str, optional (default='lbfgs')
         One of {'newton', 'bfgs', 'lbfgs', 'powell', 'cg', 'ncg',
         'basinhopping'}. Determines a solver method for maximizing the
         loglikelihood. Default is 'lbfgs' (limited-memory BFGS with optional
         box constraints).
-
-    solver : str or None, optional (default='lbfgs')
-        Solver to be used.  The default is 'lbfgs' (limited memory
-        Broyden-Fletcher-Goldfarb-Shanno).  Other choices are 'bfgs',
-        'newton' (Newton-Raphson), 'nm' (Nelder-Mead), 'cg' -
-        (conjugate gradient), 'ncg' (non-conjugate gradient), and
-        'powell'. By default, the limited memory BFGS uses m=12 to
-        approximate the Hessian, projected gradient tolerance of 1e-8 and
-        factr = 1e2. You can change these by using kwargs.
 
     maxiter : int, optional (default=50)
         The maximum number of function evaluations. Default is 50
@@ -295,8 +281,7 @@ class ARIMA(BaseARIMA):
     .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average
     """
     def __init__(self, order, seasonal_order=(0, 0, 0, 0), start_params=None,
-                 method='lbfgs', transparams=True, solver='lbfgs',
-                 maxiter=50, suppress_warnings=False,
+                 method='lbfgs', maxiter=50, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None,
                  trend=None, with_intercept=True, **sarimax_kwargs):
 
@@ -307,8 +292,6 @@ class ARIMA(BaseARIMA):
         self.seasonal_order = seasonal_order
         self.start_params = start_params
         self.method = method
-        self.transparams = transparams
-        self.solver = solver
         self.maxiter = maxiter
         self.suppress_warnings = suppress_warnings
         self.out_of_sample_size = out_of_sample_size
@@ -318,11 +301,15 @@ class ARIMA(BaseARIMA):
         self.with_intercept = with_intercept
 
         # TODO: Remove these warnings in a later version
-        for deprecated_key in ('disp', 'callback'):
+        for deprecated_key, still_in_use in (
+                ('disp', True), ('callback', True), ('transparams', False),
+                ('solver', False)):
             if sarimax_kwargs.pop(deprecated_key, None):
-                warnings.warn("'%s' is deprecated in the ARIMA constructor. "
-                              "Pass via **fit_kwargs instead",
-                              DeprecationWarning)
+                msg = ("'%s' is deprecated in the ARIMA constructor and will "
+                       "be removed in a future release." % deprecated_key)
+                if still_in_use:
+                    msg += " Pass via **fit_kwargs instead"
+                warnings.warn(msg, DeprecationWarning)
 
         self.sarimax_kwargs = sarimax_kwargs
 
@@ -380,10 +367,7 @@ class ARIMA(BaseARIMA):
             disp = fit_args.pop("disp", 0)
 
             return arima, arima.fit(start_params=start_params,
-                                    trend=trend,
                                     method=method,
-                                    transparams=self.transparams,
-                                    solver=self.solver,
                                     maxiter=_maxiter,
                                     disp=disp,
                                     **fit_args)
