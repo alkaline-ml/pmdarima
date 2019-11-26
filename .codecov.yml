@@ -11,7 +11,7 @@ coverage:
     project:
       default:
         against: parent
-        target: 97%
+        target: 97
         branches:
           - master
 
