@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 
 from ..compat import DTYPE
+from ._array import C_intgrt_vec
 
 __all__ = [
     'as_series',
@@ -20,6 +21,7 @@ __all__ = [
     'check_endog',
     'check_exog',
     'diff',
+    'diff_inv',
     'is_iterable'
 ]
 
@@ -311,6 +313,139 @@ def diff(x, lag=1, differences=1):
             return res
 
     return res
+
+
+def _diff_inv_vector(x, lag, differences, xi):
+    # R code: if (missing(xi)) xi < - rep(0., lag * differences)
+    # R code: if (length(xi) != lag * differences)
+    # R code:   stop("'xi' does not have the right length")
+    if xi is None:
+        xi = np.zeros(lag * differences, dtype=DTYPE)
+    else:
+        xi = check_endog(xi, dtype=DTYPE, copy=False, force_all_finite=False)
+        if xi.shape[0] != lag * differences:
+            raise IndexError('"xi" does not have the right length')
+
+    if differences == 1:
+        return np.asarray(C_intgrt_vec(x=x, xi=xi, lag=lag))
+    else:
+        # R code: diffinv.vector(diffinv.vector(x, lag, differences - 1L,
+        # R code:               diff(xi, lag=lag, differences=1L)),
+        # R code:               lag, 1L, xi[1L:lag])
+        return diff_inv(
+            x=diff_inv(x=x, lag=lag, differences=differences - 1,
+                       xi=diff(x=xi, lag=lag, differences=1)),
+            lag=lag,
+            differences=1,
+            xi=xi[:lag]  # R: xi[1L:lag]
+        )
+
+
+def _diff_inv_matrix(x, lag, differences, xi):
+    n, m = x.shape
+    y = np.zeros((n + lag * differences, m), dtype=DTYPE)
+
+    if m >= 1:  # todo: R checks this. do we need to?
+        # R: if(missing(xi)) xi <- matrix(0.0, lag*differences, m)
+        if xi is None:
+            xi = np.zeros((lag * differences, m), dtype=DTYPE)
+        else:
+            xi = check_array(
+                xi, dtype=DTYPE, copy=False, force_all_finite=False,
+                ensure_2d=True)
+            if xi.shape != (lag * differences, m):
+                raise IndexError('"xi" does not have the right shape')
+
+        # TODO: can we vectorize?
+        for i in range(m):
+            y[:, i] = _diff_inv_vector(x[:, i], lag, differences, xi[:, i])
+
+    return y
+
+
+def diff_inv(x, lag=1, differences=1, xi=None):
+    """
+    Inverse the difference of an array.
+
+    A python implementation of the R ``diffinv`` function [1]. This computes
+    the inverse of lag differences from an array given a ``lag``
+    and ``differencing`` term.
+
+    If ``x`` is a vector of length :math:`n`, ``lag=1`` and ``differences=1``,
+    then the computed result is equal to the cumulative sum plus left-padding
+    of zeros equal to ``lag * differences``.
+
+    Examples
+    --------
+    Where ``lag=1`` and ``differences=1``:
+
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff_inv(x, 1, 1)
+    array([ 0., 10., 14., 16., 25., 59.])
+
+    Where ``lag=1`` and ``differences=2``:
+
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff_inv(x, 1, 2)
+    array([  0.,   0.,  10.,  24.,  40.,  65., 124.])
+
+    Where ``lag=3`` and ``differences=1``:
+
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff_inv(x, 3, 1)
+    array([ 0.,  0.,  0., 10.,  4.,  2., 19., 38.])
+
+    Where ``lag=6`` (larger than the array is) and ``differences=1``:
+
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff_inv(x, 6, 1)
+    array([ 0.,  0.,  0.,  0.,  0.,  0., 10.,  4.,  2.,  9., 34.])
+
+    For a 2d array with ``lag=1`` and ``differences=1``:
+
+    >>> import numpy as np
+    >>>
+    >>> x = np.arange(1, 10).reshape((3, 3)).T
+    >>> diff_inv(x, 1, 1)
+    array([[ 0.,  0.,  0.],
+           [ 1.,  4.,  7.],
+           [ 3.,  9., 15.],
+           [ 6., 15., 24.]])
+
+    Parameters
+    ----------
+    x : array-like, shape=(n_samples, [n_features])
+        The array to difference.
+
+    lag : int, optional (default=1)
+        An integer > 0 indicating which lag to use.
+
+    differences : int, optional (default=1)
+        An integer > 0 indicating the order of the difference.
+
+    Returns
+    -------
+    res : np.ndarray, shape=(n_samples, [n_features])
+        The result of the inverse of the difference arrays.
+
+    References
+    ----------
+    .. [1] https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html # noqa: E501
+    """
+    x = check_array(
+        x, dtype=DTYPE, copy=False, force_all_finite=False, ensure_2d=False)
+
+    # R code: if (lag < 1L || differences < 1L)
+    # R code: stop ("bad value for 'lag' or 'differences'")
+    if any(v < 1 for v in (lag, differences)):
+        raise ValueError('lag and differences must be positive (> 0) integers')
+
+    if x.ndim == 1:
+        return _diff_inv_vector(x, lag, differences, xi)
+    elif x.ndim == 2:
+        return _diff_inv_matrix(x, lag, differences, xi)
+    raise ValueError("only vector and matrix inverse differencing "
+                     "are supported")
 
 
 def is_iterable(x):
