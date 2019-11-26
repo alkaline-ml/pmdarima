@@ -56,8 +56,8 @@ v0.8.1) will document the latest features.
   [1] These can still be passed to the ``fit`` method via ``**fit_kwargs``, but should
   no longer be passed to the model constructor.
 
-* Added `diff_env` function that is in parity with R's implementation,
-  `diffenv <https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html>`_,
+* Added `diff_inv` function that is in parity with R's implementation,
+  `diffinv <https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html>`_,
   as requested in `#180 <https://github.com/tgsmith61591/pmdarima/issues/180>`_.
 
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
