@@ -159,7 +159,7 @@ class ARIMA(BaseARIMA):
         Starting parameters for ``ARMA(p,q)``.  If None, the default is given
         by ``ARMA._fit_start_params``.
 
-    method : str, optional (default='nm')
+    method : str, optional (default='lbfgs')
         The ``method`` determines which solver from ``scipy.optimize``
         is used, and it can be chosen from among the following strings:
 
