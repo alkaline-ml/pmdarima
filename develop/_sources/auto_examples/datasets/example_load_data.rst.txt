@@ -75,7 +75,7 @@ that exhibit seasonality, non-stationarity, and other time series nuances.
     wineind = pm.datasets.load_wineind()
     woolyrnq = pm.datasets.load_woolyrnq()
 
-**Total running time of the script:** ( 0 minutes  0.002 seconds)
+**Total running time of the script:** ( 0 minutes  0.003 seconds)
 
 
 
