@@ -11,14 +11,9 @@ coverage:
     project:
       default:
         against: parent
-        target: auto
+        target: 97%
         branches:
           - master
-
-    patch:
-      default:
-        against: parent
-        target: 80%
 
 ignore:
 - "**/setup.py"
