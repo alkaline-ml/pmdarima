@@ -195,7 +195,7 @@ in conjunction with the <code class="docutils literal notranslate"><span class="
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
@@ -206,17 +206,17 @@ in conjunction with the <code class="docutils literal notranslate"><span class="
 <span class="n">lag_1</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="View documentation for pmdarima.utils.array.diff"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># The result will be the same as: x[1:] - x[:-1]</span>
-<span class="k">print</span><span class="p">(</span><span class="n">lag_1</span><span class="p">)</span>  <span class="c1"># [-6., -2., 7., 25.]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lag_1</span><span class="p">)</span>  <span class="c1"># [-6., -2., 7., 25.]</span>
 
 <span class="c1"># Note that lag and differences are not the same! If we crank diff up by one,</span>
 <span class="c1"># it performs the same differencing as above TWICE. Lag, therefore, controls</span>
 <span class="c1"># the number of steps backward the ts looks when it differences, and the</span>
 <span class="c1"># `differences` parameter controls how many times to repeat.</span>
-<span class="k">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="View documentation for pmdarima.utils.array.diff"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># [4., 9., 18.]</span>
+<span class="nb">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="View documentation for pmdarima.utils.array.diff"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># [4., 9., 18.]</span>
 
 <span class="c1"># Conversely, when we set lag to 2, the array looks two steps back for its</span>
 <span class="c1"># differencing operation (only one).</span>
-<span class="k">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="View documentation for pmdarima.utils.array.diff"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># [-8., 5., 32.]</span>
+<span class="nb">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="View documentation for pmdarima.utils.array.diff"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># [-8., 5., 32.]</span>
 
 <span class="c1"># The lag parameter is controlled by `m`, which is the seasonal periodicity of</span>
 <span class="c1"># a time series. If your series is non-seasonal, lag will typically be 1.</span>

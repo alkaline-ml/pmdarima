@@ -192,7 +192,7 @@
 <p>Since pmdarima is intended to replace R’s <code class="docutils literal notranslate"><span class="pre">auto.arima</span></code>, the interface is
 designed to be quick to learn and easy to use, even for R users making the switch.
 Common functions and tools are elevated to the top-level of the package:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
 
 <span class="c1"># Create an array like you would in R</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
@@ -207,8 +207,8 @@ Common functions and tools are elevated to the top-level of the package:</p>
 <div class="section" id="auto-arima-example">
 <h2>3.1. Auto-ARIMA example<a class="headerlink" href="#auto-arima-example" title="Permalink to this headline">¶</a></h2>
 <p>Here’s a quick example of how we can fit an <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> with pmdarima:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
 <span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_wineind</span>
 
 <span class="c1"># this is a dataset from R</span>
@@ -217,11 +217,11 @@ Common functions and tools are elevated to the top-level of the package:</p>
 <span class="c1"># fit stepwise auto-ARIMA</span>
 <span class="n">stepwise_fit</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">wineind</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                              <span class="n">max_p</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
-                             <span class="n">start_P</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                             <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                             <span class="n">start_P</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                              <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span>  <span class="c1"># don&#39;t want to know if an order does not work</span>
-                             <span class="n">suppress_warnings</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>  <span class="c1"># don&#39;t want convergence warnings</span>
-                             <span class="n">stepwise</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># set to stepwise</span>
+                             <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># don&#39;t want convergence warnings</span>
+                             <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># set to stepwise</span>
 </pre></div>
 </div>
 <p>It’s easy to examine your model fit results. Simply use the <code class="docutils literal notranslate"><span class="pre">summary</span></code> method:</p>

@@ -214,13 +214,13 @@ will not show up under your cells!</p>
 <p>This example was also designed for Python 3.6+. If you’re running python 3.5, simply
 remove the <a class="reference external" href="https://www.python.org/dev/peps/pep-0498/">F-string</a> print statements and
 it will work.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="c1"># %matplotlib inline</span>
 
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Using pmdarima {pm.__version__}&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using pmdarima </span><span class="si">{pm.__version__}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="c1"># Using pmdarima 1.3.0</span>
 </pre></div>
 </div>
@@ -310,8 +310,8 @@ randomly; we must make a clean split in our time series (and exogenous variables
 <span class="n">y_train</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;Open&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 <span class="n">y_test</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;Open&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;{train_len} train samples&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;{df.shape[0] - train_len} test samples&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{train_len}</span><span class="s2"> train samples&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;{df.shape[0] - train_len} test samples&quot;</span><span class="p">)</span>
 <span class="c1"># 6386 train samples</span>
 <span class="c1"># 1597 test samples</span>
 </pre></div>
@@ -354,7 +354,7 @@ data <a class="reference external" href="https://www.statisticshowto.datascience
     <span class="n">ax_row</span><span class="p">,</span> <span class="n">ax_col</span> <span class="o">=</span> <span class="n">ax_coords</span>
     <span class="n">axis</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">ax_row</span><span class="p">][</span><span class="n">ax_col</span><span class="p">]</span>
     <span class="n">lag_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Open&#39;</span><span class="p">],</span> <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
-    <span class="n">axis</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Lag={lag}&quot;</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lag=</span><span class="si">{lag}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -381,7 +381,7 @@ we could try both or allow <code class="docutils literal notranslate"><span clas
 <span class="n">adf_diffs</span> <span class="o">=</span> <span class="n">ndiffs</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;adf&#39;</span><span class="p">,</span> <span class="n">max_d</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">n_diffs</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">adf_diffs</span><span class="p">,</span> <span class="n">kpss_diffs</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Estimated differencing term: {n_diffs}&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated differencing term: </span><span class="si">{n_diffs}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="c1"># Estimated differencing term: 1</span>
 </pre></div>
 </div>
@@ -391,15 +391,15 @@ we could try both or allow <code class="docutils literal notranslate"><span clas
 <div class="section" id="fitting-our-model">
 <h2>8.1.4. Fitting our model<a class="headerlink" href="#fitting-our-model" title="Permalink to this headline">¶</a></h2>
 <p>Now it’s time to let the <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> method do its magic:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">auto</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">n_diffs</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                     <span class="n">suppress_warnings</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
-                     <span class="n">max_order</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">auto</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">n_diffs</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                     <span class="n">max_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Notice that we preset <code class="docutils literal notranslate"><span class="pre">d=n_diffs</span></code>, since we’ve already settled on a value for <code class="docutils literal notranslate"><span class="pre">d</span></code>.
 However, we’re allowing our ARIMA models explore various values of <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">q</span></code>.
 After a few seconds, we arrive at the following solution:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">auto</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">auto</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
 <span class="c1"># (1, 1, 1)</span>
 </pre></div>
 </div>
@@ -419,7 +419,7 @@ measure the error on the forecasts:</p>
 <span class="n">model</span> <span class="o">=</span> <span class="n">auto</span>  <span class="c1"># seeded from the model we&#39;ve already fit</span>
 
 <span class="k">def</span> <span class="nf">forecast_one_step</span><span class="p">():</span>
-    <span class="n">fc</span><span class="p">,</span> <span class="n">conf_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">fc</span><span class="p">,</span> <span class="n">conf_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">fc</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
         <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">conf_int</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
@@ -435,8 +435,8 @@ measure the error on the forecasts:</p>
     <span class="c1"># Updates the existing model with a small number of MLE steps</span>
     <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_ob</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Mean squared error: {mean_squared_error(y_test, forecasts)}&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;SMAPE: {smape(y_test, forecasts)}&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean squared error: {mean_squared_error(y_test, forecasts)}&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SMAPE: {smape(y_test, forecasts)}&quot;</span><span class="p">)</span>
 <span class="c1"># Mean squared error: 0.3416473178248818</span>
 <span class="c1"># SMAPE: 0.981464018635346</span>
 </pre></div>

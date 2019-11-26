@@ -211,21 +211,21 @@ that exhibit seasonality, non-stationarity, and other time series nuances.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
 
 <span class="c1"># #############################################################################</span>
 <span class="c1"># You can load the datasets via load_&lt;name&gt;</span>
 <span class="n">lynx</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="View documentation for pmdarima.datasets.load_lynx"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span></a><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Lynx array:&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">lynx</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Lynx array:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lynx</span><span class="p">)</span>
 
 <span class="c1"># You can also get a series, if you rather</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Lynx series head:&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="View documentation for pmdarima.datasets.load_lynx"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span></a><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Lynx series head:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="View documentation for pmdarima.datasets.load_lynx"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span></a><span class="p">(</span><span class="n">as_series</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 
 <span class="c1"># Several other datasets:</span>
 <span class="n">air_passengers</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_airpassengers.html#pmdarima.datasets.load_airpassengers" title="View documentation for pmdarima.datasets.load_airpassengers"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_airpassengers</span></a><span class="p">()</span>

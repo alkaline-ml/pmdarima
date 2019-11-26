@@ -206,11 +206,11 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
 <span class="kn">import</span> <span class="nn">joblib</span>  <span class="c1"># for persistence</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
@@ -233,7 +233,7 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
     <span class="c1"># Load the model up, create predictions</span>
     <span class="n">arima_loaded</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pickle_tgt</span><span class="p">)</span>
     <span class="n">preds</span> <span class="o">=</span> <span class="n">arima_loaded</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Predictions: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">preds</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Predictions: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">preds</span><span class="p">)</span>
 
 <span class="k">finally</span><span class="p">:</span>
     <span class="c1"># Remove the pickle file at the end of this example</span>
@@ -243,7 +243,7 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
         <span class="k">pass</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  1.151 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  1.720 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../../_downloads/example_persisting_a_model.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_persisting_a_model.py</span></code></a></div>

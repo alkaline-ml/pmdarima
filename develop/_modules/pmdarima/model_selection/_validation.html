@@ -176,16 +176,16 @@
 <span class="kn">import</span> <span class="nn">numbers</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">traceback</span> <span class="k">import</span> <span class="n">format_exception_only</span>
+<span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">format_exception_only</span>
 
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">base</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">regression</span> <span class="k">as</span> <span class="n">reg</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="k">import</span> <span class="n">indexable</span><span class="p">,</span> <span class="n">safe_indexing</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">base</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">regression</span> <span class="k">as</span> <span class="n">reg</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">indexable</span><span class="p">,</span> <span class="n">safe_indexing</span>
 
-<span class="kn">from</span> <span class="nn">._split</span> <span class="k">import</span> <span class="n">check_cv</span>
-<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">metrics</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">check_endog</span>
-<span class="kn">from</span> <span class="nn">..arima.warnings</span> <span class="k">import</span> <span class="n">ModelFitWarning</span>
+<span class="kn">from</span> <span class="nn">._split</span> <span class="kn">import</span> <span class="n">check_cv</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">check_endog</span>
+<span class="kn">from</span> <span class="nn">..arima.warnings</span> <span class="kn">import</span> <span class="n">ModelFitWarning</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;cross_validate&#39;</span><span class="p">,</span>

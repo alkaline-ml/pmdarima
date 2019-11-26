@@ -192,7 +192,7 @@ Pmdarima models can be serialized with <code class="docutils literal notranslate
 most other python objects:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.arima</span> <span class="kn">import</span> <span class="n">auto_arima</span>
 <span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_lynx</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># For serialization:</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
@@ -200,7 +200,7 @@ most other python objects:</p>
 
 <span class="c1"># Load data and fit a model</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">load_lynx</span><span class="p">()</span>
-<span class="n">arima</span> <span class="o">=</span> <span class="n">auto_arima</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">arima</span> <span class="o">=</span> <span class="n">auto_arima</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Serialize with Pickle</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;arima.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pkl</span><span class="p">:</span>

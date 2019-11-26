@@ -207,15 +207,15 @@ possible.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="kn">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
 <span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">model_selection</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;pmdarima version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pm</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pmdarima version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pm</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 
 <span class="c1"># Load the data and split it into separate pieces</span>
 <span class="n">data</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="View documentation for pmdarima.datasets.load_wineind"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
@@ -235,8 +235,8 @@ possible.</p>
 <span class="n">model2_cv_scores</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score" title="View documentation for pmdarima.model_selection.cross_val_score"><span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_score</span></a><span class="p">(</span>
     <span class="n">model2</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;smape&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Model 1 CV scores: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model1_cv_scores</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Model 2 CV scores: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model2_cv_scores</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model 1 CV scores: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model1_cv_scores</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model 2 CV scores: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model2_cv_scores</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
 
 <span class="c1"># Pick based on which has a lower mean error rate</span>
 <span class="n">m1_average_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">model1_cv_scores</span><span class="p">)</span>
@@ -246,12 +246,12 @@ possible.</p>
 
 <span class="c1"># print out the answer</span>
 <span class="n">better_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>  <span class="c1"># type: int</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Lowest average SMAPE: {} (model{})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Lowest average SMAPE: </span><span class="si">{}</span><span class="s2"> (model</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
     <span class="n">errors</span><span class="p">[</span><span class="n">better_index</span><span class="p">],</span> <span class="n">better_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Best model: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">models</span><span class="p">[</span><span class="n">better_index</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best model: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">models</span><span class="p">[</span><span class="n">better_index</span><span class="p">]))</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  2.827 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  4.076 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../../_downloads/example_cross_validation.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_cross_validation.py</span></code></a></div>

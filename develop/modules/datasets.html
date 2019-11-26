@@ -216,7 +216,7 @@ time-series models or are pre-built in R.</p>
 <span id="airpassengers"></span><h3>7.1.1. Air Passengers<a class="headerlink" href="#air-passengers" title="Permalink to this headline">¶</a></h3>
 <p>The classic Box &amp; Jenkins airline data. Monthly totals of international
 airline passengers, 1949 to 1960.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_airpassengers</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_airpassengers</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">0    112.0</span>
 <span class="go">1    118.0</span>
 <span class="go">2    132.0</span>
@@ -230,7 +230,7 @@ airline passengers, 1949 to 1960.</p>
 <span id="id1"></span><h3>7.1.2. Austres<a class="headerlink" href="#austres" title="Permalink to this headline">¶</a></h3>
 <p>Numbers (in thousands) of Australian residents measured quarterly from
 March 1971 to March 1994. The sample consists of 89 records on a quarterly basis.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_austres</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_austres</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">0    13067.3</span>
 <span class="go">1    13130.5</span>
 <span class="go">2    13198.4</span>
@@ -245,7 +245,7 @@ March 1971 to March 1994. The sample consists of 89 records on a quarterly basis
 <p>The heart rate data records sample of heartrate data borrowed from an
 <a class="reference external" href="http://ecg.mit.edu/time-series/">MIT database</a>. The sample consists
 of 150 evenly spaced (0.5 seconds) heartrate measurements.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_heartrate</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_heartrate</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">0    84.2697</span>
 <span class="go">1    84.2697</span>
 <span class="go">2    84.0619</span>
@@ -261,7 +261,7 @@ of 150 evenly spaced (0.5 seconds) heartrate measurements.</p>
 collected over many years by the Hudson’s Bay Company (1821 - 1934). It’s
 commonly used for time-series benchmarking (Brockwell and Davis - 1991) and is
 built into R. The dataset exhibits a clear 10-year cycle.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_lynx</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_lynx</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">1821     269</span>
 <span class="go">1822     321</span>
 <span class="go">1823     585</span>
@@ -276,7 +276,7 @@ built into R. The dataset exhibits a clear 10-year cycle.</p>
 <p>Half-hourly electricity demand in England and Wales from Monday, 5 June,
 2000 to Sunday, 27 August, 2000. Discussed in Taylor (2003), and kindly
 provided by James W Taylor. Units: Megawatts</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_taylor</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_taylor</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">0    22262.0</span>
 <span class="go">1    21756.0</span>
 <span class="go">2    22247.0</span>
@@ -291,7 +291,7 @@ provided by James W Taylor. Units: Megawatts</p>
 <p>This time-series records total wine sales by Australian wine makers in
 bottles &lt;= 1 litre between Jan 1980 – Aug 1994. This dataset is found in the
 R <code class="docutils literal notranslate"><span class="pre">forecast</span></code> package.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_wineind</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_wineind</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">Jan 1980    15136</span>
 <span class="go">Feb 1980    16733</span>
 <span class="go">Mar 1980    20016</span>
@@ -306,7 +306,7 @@ R <code class="docutils literal notranslate"><span class="pre">forecast</span></
 <p>A time-series that records the quarterly production (in tonnes) of woollen
 yarn in Australia between Mar 1965 and Sep 1994. This dataset is found in the
 R <code class="docutils literal notranslate"><span class="pre">forecast</span></code> package.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_woolyrnq</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_woolyrnq</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">Q1 1965    6172</span>
 <span class="go">Q2 1965    6709</span>
 <span class="go">Q3 1965    6633</span>

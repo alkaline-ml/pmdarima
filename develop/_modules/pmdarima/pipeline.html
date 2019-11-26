@@ -168,19 +168,19 @@
   <h1>Source code for pmdarima.pipeline</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">islice</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">clone</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="k">import</span> <span class="n">if_delegate_has_method</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">clone</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_is_fitted</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="kn">import</span> <span class="n">if_delegate_has_method</span>
 
-<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseARIMA</span>
-<span class="kn">from</span> <span class="nn">.preprocessing.base</span> <span class="k">import</span> <span class="n">BaseTransformer</span>
-<span class="kn">from</span> <span class="nn">.preprocessing.endog.base</span> <span class="k">import</span> <span class="n">BaseEndogTransformer</span>
-<span class="kn">from</span> <span class="nn">.preprocessing.exog.base</span> <span class="k">import</span> <span class="n">BaseExogTransformer</span><span class="p">,</span> <span class="n">BaseExogFeaturizer</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">check_endog</span>
-<span class="kn">from</span> <span class="nn">.compat</span> <span class="k">import</span> <span class="n">DTYPE</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseARIMA</span>
+<span class="kn">from</span> <span class="nn">.preprocessing.base</span> <span class="kn">import</span> <span class="n">BaseTransformer</span>
+<span class="kn">from</span> <span class="nn">.preprocessing.endog.base</span> <span class="kn">import</span> <span class="n">BaseEndogTransformer</span>
+<span class="kn">from</span> <span class="nn">.preprocessing.exog.base</span> <span class="kn">import</span> <span class="n">BaseExogTransformer</span><span class="p">,</span> <span class="n">BaseExogFeaturizer</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">check_endog</span>
+<span class="kn">from</span> <span class="nn">.compat</span> <span class="kn">import</span> <span class="n">DTYPE</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Pipeline&#39;</span><span class="p">]</span>
 
@@ -245,7 +245,7 @@
 <span class="sd">                                        transparams=True, trend=None,</span>
 <span class="sd">                                        with_intercept=True))])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Pipeline.__init__"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipeline.__init__"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_steps</span><span class="p">()</span></div>
 
@@ -307,7 +307,7 @@
             <span class="n">params_steps</span><span class="p">[</span><span class="n">step</span><span class="p">][</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="n">pval</span>
         <span class="k">return</span> <span class="n">params_steps</span>
 
-    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the length of the Pipeline</span>
 <span class="sd">        &quot;&quot;&quot;</span>

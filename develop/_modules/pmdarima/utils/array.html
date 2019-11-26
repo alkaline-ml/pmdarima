@@ -172,15 +172,16 @@
 <span class="c1">#</span>
 <span class="c1"># Array utilities</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">column_or_1d</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">column_or_1d</span>
 <span class="kn">import</span> <span class="nn">six</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">..compat</span> <span class="k">import</span> <span class="n">DTYPE</span>
+<span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">DTYPE</span>
+<span class="kn">from</span> <span class="nn">._array</span> <span class="kn">import</span> <span class="n">C_intgrt_vec</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;as_series&#39;</span><span class="p">,</span>
@@ -188,6 +189,7 @@
     <span class="s1">&#39;check_endog&#39;</span><span class="p">,</span>
     <span class="s1">&#39;check_exog&#39;</span><span class="p">,</span>
     <span class="s1">&#39;diff&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;diff_inv&#39;</span><span class="p">,</span>
     <span class="s1">&#39;is_iterable&#39;</span>
 <span class="p">]</span>
 
@@ -479,6 +481,139 @@
             <span class="k">return</span> <span class="n">res</span>
 
     <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="k">def</span> <span class="nf">_diff_inv_vector</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">differences</span><span class="p">,</span> <span class="n">xi</span><span class="p">):</span>
+    <span class="c1"># R code: if (missing(xi)) xi &lt; - rep(0., lag * differences)</span>
+    <span class="c1"># R code: if (length(xi) != lag * differences)</span>
+    <span class="c1"># R code:   stop(&quot;&#39;xi&#39; does not have the right length&quot;)</span>
+    <span class="k">if</span> <span class="n">xi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">lag</span> <span class="o">*</span> <span class="n">differences</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">xi</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">xi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">lag</span> <span class="o">*</span> <span class="n">differences</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;&quot;xi&quot; does not have the right length&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">differences</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">C_intgrt_vec</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">xi</span><span class="o">=</span><span class="n">xi</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># R code: diffinv.vector(diffinv.vector(x, lag, differences - 1L,</span>
+        <span class="c1"># R code:               diff(xi, lag=lag, differences=1L)),</span>
+        <span class="c1"># R code:               lag, 1L, xi[1L:lag])</span>
+        <span class="k">return</span> <span class="n">diff_inv</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">diff_inv</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="n">differences</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                       <span class="n">xi</span><span class="o">=</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xi</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+            <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span>
+            <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">xi</span><span class="o">=</span><span class="n">xi</span><span class="p">[:</span><span class="n">lag</span><span class="p">]</span>  <span class="c1"># R: xi[1L:lag]</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_diff_inv_matrix</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">differences</span><span class="p">,</span> <span class="n">xi</span><span class="p">):</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span> <span class="o">+</span> <span class="n">lag</span> <span class="o">*</span> <span class="n">differences</span><span class="p">,</span> <span class="n">m</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># todo: R checks this. do we need to?</span>
+        <span class="c1"># R: if(missing(xi)) xi &lt;- matrix(0.0, lag*differences, m)</span>
+        <span class="k">if</span> <span class="n">xi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">lag</span> <span class="o">*</span> <span class="n">differences</span><span class="p">,</span> <span class="n">m</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xi</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span>
+                <span class="n">xi</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">xi</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">lag</span> <span class="o">*</span> <span class="n">differences</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;&quot;xi&quot; does not have the right shape&#39;</span><span class="p">)</span>
+
+        <span class="c1"># TODO: can we vectorize?</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="n">y</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_diff_inv_vector</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">lag</span><span class="p">,</span> <span class="n">differences</span><span class="p">,</span> <span class="n">xi</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">y</span>
+
+
+<span class="k">def</span> <span class="nf">diff_inv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">xi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Inverse the difference of an array.</span>
+
+<span class="sd">    A python implementation of the R ``diffinv`` function [1]. This computes</span>
+<span class="sd">    the inverse of lag differences from an array given a ``lag``</span>
+<span class="sd">    and ``differencing`` term.</span>
+
+<span class="sd">    If ``x`` is a vector of length :math:`n`, ``lag=1`` and ``differences=1``,</span>
+<span class="sd">    then the computed result is equal to the cumulative sum plus left-padding</span>
+<span class="sd">    of zeros equal to ``lag * differences``.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Where ``lag=1`` and ``differences=1``:</span>
+
+<span class="sd">    &gt;&gt;&gt; x = c(10, 4, 2, 9, 34)</span>
+<span class="sd">    &gt;&gt;&gt; diff_inv(x, 1, 1)</span>
+<span class="sd">    array([ 0., 10., 14., 16., 25., 59.])</span>
+
+<span class="sd">    Where ``lag=1`` and ``differences=2``:</span>
+
+<span class="sd">    &gt;&gt;&gt; x = c(10, 4, 2, 9, 34)</span>
+<span class="sd">    &gt;&gt;&gt; diff_inv(x, 1, 2)</span>
+<span class="sd">    array([  0.,   0.,  10.,  24.,  40.,  65., 124.])</span>
+
+<span class="sd">    Where ``lag=3`` and ``differences=1``:</span>
+
+<span class="sd">    &gt;&gt;&gt; x = c(10, 4, 2, 9, 34)</span>
+<span class="sd">    &gt;&gt;&gt; diff_inv(x, 3, 1)</span>
+<span class="sd">    array([ 0.,  0.,  0., 10.,  4.,  2., 19., 38.])</span>
+
+<span class="sd">    Where ``lag=6`` (larger than the array is) and ``differences=1``:</span>
+
+<span class="sd">    &gt;&gt;&gt; x = c(10, 4, 2, 9, 34)</span>
+<span class="sd">    &gt;&gt;&gt; diff_inv(x, 6, 1)</span>
+<span class="sd">    array([ 0.,  0.,  0.,  0.,  0.,  0., 10.,  4.,  2.,  9., 34.])</span>
+
+<span class="sd">    For a 2d array with ``lag=1`` and ``differences=1``:</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; x = np.arange(1, 10).reshape((3, 3)).T</span>
+<span class="sd">    &gt;&gt;&gt; diff_inv(x, 1, 1)</span>
+<span class="sd">    array([[ 0.,  0.,  0.],</span>
+<span class="sd">           [ 1.,  4.,  7.],</span>
+<span class="sd">           [ 3.,  9., 15.],</span>
+<span class="sd">           [ 6., 15., 24.]])</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array-like, shape=(n_samples, [n_features])</span>
+<span class="sd">        The array to difference.</span>
+
+<span class="sd">    lag : int, optional (default=1)</span>
+<span class="sd">        An integer &gt; 0 indicating which lag to use.</span>
+
+<span class="sd">    differences : int, optional (default=1)</span>
+<span class="sd">        An integer &gt; 0 indicating the order of the difference.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    res : np.ndarray, shape=(n_samples, [n_features])</span>
+<span class="sd">        The result of the inverse of the difference arrays.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html # noqa: E501</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># R code: if (lag &lt; 1L || differences &lt; 1L)</span>
+    <span class="c1"># R code: stop (&quot;bad value for &#39;lag&#39; or &#39;differences&#39;&quot;)</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">lag</span><span class="p">,</span> <span class="n">differences</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;lag and differences must be positive (&gt; 0) integers&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_diff_inv_vector</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">differences</span><span class="p">,</span> <span class="n">xi</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_diff_inv_matrix</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">differences</span><span class="p">,</span> <span class="n">xi</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;only vector and matrix inverse differencing &quot;</span>
+                     <span class="s2">&quot;are supported&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="is_iterable"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.is_iterable.html#pmdarima.utils.is_iterable">[docs]</a><span class="k">def</span> <span class="nf">is_iterable</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>

@@ -168,13 +168,13 @@
   <h1>Source code for pmdarima.preprocessing.endog.boxcox</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">stats</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_is_fitted</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">.base</span> <span class="k">import</span> <span class="n">BaseEndogTransformer</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseEndogTransformer</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BoxCoxEndogTransformer&#39;</span><span class="p">]</span>
 
@@ -210,7 +210,7 @@
 <span class="sd">        if values are truncated, invertibility will not be preserved, and the</span>
 <span class="sd">        transformed array may not be perfectly inverse-transformed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="BoxCoxEndogTransformer.__init__"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lmbda2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">neg_action</span><span class="o">=</span><span class="s2">&quot;raise&quot;</span><span class="p">,</span> <span class="n">floor</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
+<div class="viewcode-block" id="BoxCoxEndogTransformer.__init__"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lmbda2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">neg_action</span><span class="o">=</span><span class="s2">&quot;raise&quot;</span><span class="p">,</span> <span class="n">floor</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span> <span class="o">=</span> <span class="n">lmbda</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lmbda2</span> <span class="o">=</span> <span class="n">lmbda2</span>
