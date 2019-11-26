@@ -337,6 +337,7 @@ with a lower information criterion or the process exceeds one of the execution t
 
 When in doubt, ``stepwise=True`` is encouraged.
 
+
 Using ``StepwiseContext``
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
