@@ -37,6 +37,7 @@ cpdef double[:] C_intgrt_vec(floating1d x,
     cdef np.ndarray[double, ndim=1, mode='c'] ans = \
         np.zeros(n + lag, dtype=np.float64, order='c')
 
-    for i in range(lag, lag + n):
-        ans[i] = x[i - lag] + ans[i - lag]
+    with nogil:
+        for i in range(lag, lag + n):
+            ans[i] = x[i - lag] + ans[i - lag]
     return ans
