@@ -328,10 +328,22 @@
 <span class="sd">        by ``ARMA._fit_start_params``.</span>
 
 <span class="sd">    method : str, optional (default=&#39;lbfgs&#39;)</span>
-<span class="sd">        One of {&#39;newton&#39;, &#39;bfgs&#39;, &#39;lbfgs&#39;, &#39;powell&#39;, &#39;cg&#39;, &#39;ncg&#39;,</span>
-<span class="sd">        &#39;basinhopping&#39;}. Determines a solver method for maximizing the</span>
-<span class="sd">        loglikelihood. Default is &#39;lbfgs&#39; (limited-memory BFGS with optional</span>
-<span class="sd">        box constraints).</span>
+<span class="sd">        The ``method`` determines which solver from ``scipy.optimize``</span>
+<span class="sd">        is used, and it can be chosen from among the following strings:</span>
+
+<span class="sd">        - &#39;newton&#39; for Newton-Raphson</span>
+<span class="sd">        - &#39;nm&#39; for Nelder-Mead</span>
+<span class="sd">        - &#39;bfgs&#39; for Broyden-Fletcher-Goldfarb-Shanno (BFGS)</span>
+<span class="sd">        - &#39;lbfgs&#39; for limited-memory BFGS with optional box constraints</span>
+<span class="sd">        - &#39;powell&#39; for modified Powell&#39;s method</span>
+<span class="sd">        - &#39;cg&#39; for conjugate gradient</span>
+<span class="sd">        - &#39;ncg&#39; for Newton-conjugate gradient</span>
+<span class="sd">        - &#39;basinhopping&#39; for global basin-hopping solver</span>
+
+<span class="sd">        The explicit arguments in ``fit`` are passed to the solver,</span>
+<span class="sd">        with the exception of the basin-hopping solver. Each</span>
+<span class="sd">        solver has several optional arguments that are not the same across</span>
+<span class="sd">        solvers. These can be passed as **fit_kwargs</span>
 
 <span class="sd">    maxiter : int, optional (default=50)</span>
 <span class="sd">        The maximum number of function evaluations. Default is 50</span>

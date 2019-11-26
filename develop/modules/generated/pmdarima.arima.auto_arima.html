@@ -192,7 +192,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.auto_arima<a class="headerlink" href="#pmdarima-arima-auto-arima" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.arima.auto_arima">
-<code class="descclassname">pmdarima.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=5</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method='lbfgs'</em>, <em>maxiter=50</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>sarimax_kwargs=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/4f0d7a6/pmdarima/arima/auto.py#L257"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=5</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method='lbfgs'</em>, <em>maxiter=50</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='warn'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>sarimax_kwargs=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/tgsmith61591/pmdarima/blob/f64ff1b/pmdarima/arima/auto.py#L257"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically discover the optimal order for an ARIMA model.</p>
 <p>The auto-ARIMA process seeks to identify the most optimal
 parameters for an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> model, settling on a single fitted ARIMA model.
@@ -372,10 +372,22 @@ by <code class="docutils literal notranslate"><span class="pre">ARMA._fit_start_
 </div></blockquote>
 <p><strong>method</strong> : str, optional (default=’lbfgs’)</p>
 <blockquote>
-<div><p>One of (‘newton’, ‘bfgs’, ‘lbfgs’, ‘powell’, ‘cg’, ‘ncg’,
-‘basinhopping’). Determines a solver method for maximizing the
-loglikelihood. Default is ‘lbfgs’ (limited-memory BFGS with optional
-box constraints).</p>
+<div><p>The <code class="docutils literal notranslate"><span class="pre">method</span></code> determines which solver from <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code>
+is used, and it can be chosen from among the following strings:</p>
+<ul class="simple">
+<li>‘newton’ for Newton-Raphson</li>
+<li>‘nm’ for Nelder-Mead</li>
+<li>‘bfgs’ for Broyden-Fletcher-Goldfarb-Shanno (BFGS)</li>
+<li>‘lbfgs’ for limited-memory BFGS with optional box constraints</li>
+<li>‘powell’ for modified Powell’s method</li>
+<li>‘cg’ for conjugate gradient</li>
+<li>‘ncg’ for Newton-conjugate gradient</li>
+<li>‘basinhopping’ for global basin-hopping solver</li>
+</ul>
+<p>The explicit arguments in <code class="docutils literal notranslate"><span class="pre">fit</span></code> are passed to the solver,
+with the exception of the basin-hopping solver. Each
+solver has several optional arguments that are not the same across
+solvers. These can be passed as <a href="#id1"><span class="problematic" id="id2">**</span></a>fit_kwargs</p>
 </div></blockquote>
 <p><strong>trend</strong> : str or None, optional (default=None)</p>
 <blockquote>
@@ -500,19 +512,19 @@ method.</p>
 <table class="docutils citation" frame="void" id="r56" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R56]</a></td><td><a class="reference external" href="https://wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R56]</a></td><td><a class="reference external" href="https://wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="r57" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R57]</a></td><td>R’s auto-arima source code: <a class="reference external" href="http://bit.ly/2gOh5z2">http://bit.ly/2gOh5z2</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id4">[R57]</a></td><td>R’s auto-arima source code: <a class="reference external" href="http://bit.ly/2gOh5z2">http://bit.ly/2gOh5z2</a></td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="r58" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R58]</a></td><td>R’s auto-arima documentation: <a class="reference external" href="http://bit.ly/2wbBvUN">http://bit.ly/2wbBvUN</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id5">[R58]</a></td><td>R’s auto-arima documentation: <a class="reference external" href="http://bit.ly/2wbBvUN">http://bit.ly/2wbBvUN</a></td></tr>
 </tbody>
 </table>
 </dd></dl>
