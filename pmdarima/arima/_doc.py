@@ -143,11 +143,23 @@ _AUTO_ARIMA_DOCSTR = \
         Starting parameters for ``ARMA(p,q)``.  If None, the default is given
         by ``ARMA._fit_start_params``.
 
-    method : str, optional (default='lbfgs')
-        One of ('newton', 'bfgs', 'lbfgs', 'powell', 'cg', 'ncg',
-        'basinhopping'). Determines a solver method for maximizing the
-        loglikelihood. Default is 'lbfgs' (limited-memory BFGS with optional
-        box constraints).
+    method : str, optional (default='nm')
+        The ``method`` determines which solver from ``scipy.optimize``
+        is used, and it can be chosen from among the following strings:
+
+        - 'newton' for Newton-Raphson
+        - 'nm' for Nelder-Mead
+        - 'bfgs' for Broyden-Fletcher-Goldfarb-Shanno (BFGS)
+        - 'lbfgs' for limited-memory BFGS with optional box constraints
+        - 'powell' for modified Powell's method
+        - 'cg' for conjugate gradient
+        - 'ncg' for Newton-conjugate gradient
+        - 'basinhopping' for global basin-hopping solver
+
+        The explicit arguments in ``fit`` are passed to the solver,
+        with the exception of the basin-hopping solver. Each
+        solver has several optional arguments that are not the same across
+        solvers. These can be passed as **fit_kwargs
 
     trend : str or None, optional (default=None)
         The trend parameter. If ``with_intercept`` is True, ``trend`` will be
