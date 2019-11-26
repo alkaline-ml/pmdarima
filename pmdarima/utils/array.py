@@ -366,6 +366,71 @@ def _diff_inv_matrix(x, lag, differences, xi):
 def diff_inv(x, lag=1, differences=1, xi=None):
     """
     Inverse the difference of an array.
+
+    A python implementation of the R ``diffinv`` function [1]. This computes
+    the inverse of lag differences from an array given a ``lag``
+    and ``differencing`` term.
+
+    If ``x`` is a vector of length :math:`n`, ``lag=1`` and ``differences=1``,
+    then the computed result is equal to the cumulative sum plus left-padding
+    of zeros equal to ``lag * differences``.
+
+    Examples
+    --------
+    Where ``lag=1`` and ``differences=1``:
+
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff_inv(x, 1, 1)
+    array([ 0., 10., 14., 16., 25., 59.])
+
+    Where ``lag=1`` and ``differences=2``:
+
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff_inv(x, 1, 2)
+    array([  0.,   0.,  10.,  24.,  40.,  65., 124.])
+
+    Where ``lag=3`` and ``differences=1``:
+
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff_inv(x, 3, 1)
+    array([ 0.,  0.,  0., 10.,  4.,  2., 19., 38.])
+
+    Where ``lag=6`` (larger than the array is) and ``differences=1``:
+
+    >>> x = c(10, 4, 2, 9, 34)
+    >>> diff_inv(x, 6, 1)
+    array([ 0.,  0.,  0.,  0.,  0.,  0., 10.,  4.,  2.,  9., 34.])
+
+    For a 2d array with ``lag=1`` and ``differences=1``:
+
+    >>> import numpy as np
+    >>>
+    >>> x = np.arange(1, 10).reshape((3, 3)).T
+    >>> diff_inv(x, 1, 1)
+    array([[ 0.,  0.,  0.],
+           [ 1.,  4.,  7.],
+           [ 3.,  9., 15.],
+           [ 6., 15., 24.]])
+
+    Parameters
+    ----------
+    x : array-like, shape=(n_samples, [n_features])
+        The array to difference.
+
+    lag : int, optional (default=1)
+        An integer > 0 indicating which lag to use.
+
+    differences : int, optional (default=1)
+        An integer > 0 indicating the order of the difference.
+
+    Returns
+    -------
+    res : np.ndarray, shape=(n_samples, [n_features])
+        The result of the inverse of the difference arrays.
+
+    References
+    ----------
+    .. [1] https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html # noqa: E501
     """
     x = check_array(
         x, dtype=DTYPE, copy=False, force_all_finite=False, ensure_2d=False)
