@@ -9,7 +9,6 @@ import pandas as pd
 import numpy as np
 
 x = np.arange(5)
-x_3d = np.array([[[1]]])
 m = np.array([10, 5, 12, 23, 18, 3, 2, 0, 12]).reshape(3, 3).T
 X = pd.DataFrame.from_records(
     np.random.RandomState(2).rand(4, 4),
@@ -166,6 +165,10 @@ def test_corner():
         diff(x=x, differences=0)
     with pytest.raises(ValueError):
         diff_inv(x=x, differences=0)
+
+    # Passing in xi with the incorrect shape to a 2-d array
+    with pytest.raises(IndexError):
+        diff_inv(x=np.array([[1, 1], [1, 1]]), xi=np.array([[1]]))
 
 
 def test_is_iterable():
