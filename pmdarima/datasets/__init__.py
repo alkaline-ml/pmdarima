@@ -1,5 +1,6 @@
 
 from .airpassengers import *
+from .ausbeer import *
 from .austres import *
 from .heartrate import *
 from .lynx import *
