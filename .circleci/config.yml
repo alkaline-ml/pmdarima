@@ -69,7 +69,7 @@ jobs:
   # For testing PyPy rather than CPython
   pypy:
     docker:
-      - image: alkaline-ml/pmdarima-circle-pypy-base:latest
+      - image: tgsmith61591/pmdarima-circle-pypy-base:latest
     working_directory: ~/pmdarima
     steps:
       - checkout
