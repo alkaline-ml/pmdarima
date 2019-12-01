@@ -34,7 +34,7 @@ with open("README.md", "r") as fh:
     LONG_DESCRIPTION = fh.read()
 
 MAINTAINER = 'Taylor G. Smith'
-MAINTAINER_GIT = 'alkaline-ml'
+MAINTAINER_GIT = 'tgsmith61591'
 MAINTAINER_EMAIL = 'taylor.smith@alkaline-ml.com'
 LICENSE = 'MIT'
 
