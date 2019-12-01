@@ -6,6 +6,8 @@
 
 from __future__ import absolute_import, division
 
+from collections import namedtuple
+
 import six
 from sklearn.linear_model import LinearRegression
 
@@ -26,8 +28,80 @@ from ._arima import C_canova_hansen_sd_test
 
 __all__ = [
     'CHTest',
+    'decompose',
     'OCSBTest'
 ]
+
+
+def decompose(x, type, f, filter=None):
+    """
+
+    :param x:
+    :param type:
+    :param f:
+    :param filter:
+    :return:
+    """
+
+    multiplicative = "multiplicative"
+    additive = "additive"
+
+    # Helper function to stay consistent and concise based on 'type'
+    def _decomposer_helper(a, b, type):
+        if type == multiplicative:
+            return a / b
+        else:
+            return a - b
+
+    if filter is None:
+        filter = np.ones((f,)) / f
+
+    # We only accept the values in multiplicative or additive
+    if type not in (multiplicative, additive):
+        err_msg = "'type' can only take values '{}' or '{}'"
+        raise ValueError(err_msg.format(multiplicative, additive))
+
+    # TODO: Need to calculate 'f' like R, instead of passing it in.
+    try:
+        assert f == int(f)
+    except (ValueError, AssertionError):
+        raise ValueError("'f' should be an integer")
+    if f < 2:
+        raise ValueError("time series has no or less than 2 periods")
+
+    # Talk half of f for the convolution / sma process.
+    half_f = int(f / 2.)
+    trend = np.convolve(x, filter, mode='valid')
+    trend = trend[:-1]  # we remove the final index.
+    sma_xs = range(half_f, len(trend) + half_f)
+
+    # Remove the effect of the trend on the original signal
+    detrend = _decomposer_helper(x[sma_xs], trend, type)
+
+    # Determine the seasonal effect of the signal
+    m = np.reshape(detrend, (int(detrend.shape[0] / f), f))
+    seasonal = np.nanmean(m, axis=0).tolist()
+    seasonal = np.array(seasonal[half_f:] + seasonal[:half_f])
+    temp = seasonal
+    for i in range(m.shape[0]):
+        seasonal = np.concatenate((seasonal, temp))
+
+    # We buffer the trend component so that it is the same length as the other
+    # outputs. This counters the effects of losing data by the convolution/sma
+    buffer = []
+    for i in range(half_f):
+        buffer.append(np.nan)
+    trend = np.array(buffer + trend.tolist() + buffer)
+
+    # Remove the trend and seasonal effects from the original signal to get
+    # the random/noisy effects within the original signal.
+    random = \
+        _decomposer_helper(_decomposer_helper(x, trend, type), seasonal, type)
+
+    decomposed = namedtuple('decomposed', 'x trend seasonal random')
+    decomposed_tuple = decomposed(x, trend, seasonal, random)
+
+    return decomposed_tuple
 
 
 class _SeasonalStationarityTest(six.with_metaclass(ABCMeta,

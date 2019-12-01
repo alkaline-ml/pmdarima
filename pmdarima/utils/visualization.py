@@ -28,6 +28,7 @@ except ImportError:
 
 __all__ = [
     'autocorr_plot',
+    'decomposed_plot',
     'plot_acf',
     'plot_pacf'
 ]
@@ -56,6 +57,40 @@ def _show_or_return(obj, show):
         # returns None implicitly
     else:
         return obj
+
+
+def decomposed_plot(decomposed_tuple, figure_kwargs=None):
+    """
+    Plot the decomposition of a time series
+
+    Parameters
+    ----------
+
+    decomposed_tuple : tuple
+        Tuple of series that consist of data, trend, seasonal, and random.
+
+    figure_kwargs : dict, optional (default=None)
+        Optional dictionary of keyword arguments that are passed to figure.
+
+    """
+
+    _err_for_no_mpl()
+
+    plt = get_compatible_pyplot()
+    plt.figure(figure_kwargs)
+    plt.subplot(4, 1, 1)
+    plt.ylabel('data')
+    plt.plot(decomposed_tuple.x)
+    plt.subplot(4, 1, 2)
+    plt.ylabel('trend')
+    plt.plot(decomposed_tuple.trend)
+    plt.subplot(4, 1, 3)
+    plt.ylabel('seasonal')
+    plt.plot(decomposed_tuple.seasonal)
+    plt.subplot(4, 1, 4)
+    plt.ylabel('random')
+    plt.plot(decomposed_tuple.random)
+    plt.tight_layout()
 
 
 def autocorr_plot(series, show=True):
