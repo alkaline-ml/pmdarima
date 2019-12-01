@@ -232,6 +232,6 @@ def setup(app):
 
 # The following is used by sphinx.ext.linkcode to provide links to github
 linkcode_resolve = make_linkcode_resolve(
-    'pmdarima', u('https://github.com/tgsmith61591/'
+    'pmdarima', u('https://github.com/alkaline-ml/'
                   'pmdarima/blob/{revision}/'
                   '{package}/{path}#L{lineno}'))
