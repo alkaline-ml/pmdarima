@@ -140,7 +140,7 @@ data in order to make it stationary, we can conduct a test of stationarity
 (either ``ADFTest``, ``PPTest`` or ``KPSSTest``).
 
 Each of these tests is based on the R source code, and **are primarily intended to**
-**be used internally**. See `this issue <https://github.com/tgsmith61591/pmdarima/issues/67>`_
+**be used internally**. See `this issue <https://github.com/alkaline-ml/pmdarima/issues/67>`_
 for more info. Here's an example of an ADF test:
 
 .. code-block:: python

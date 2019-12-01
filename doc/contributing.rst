@@ -13,10 +13,10 @@ How to contribute
 -----------------
 
 The preferred workflow for contributing to pmdarima is to fork the
-`main repository <https://github.com/tgsmith61591/pmdarima>`_ on
+`main repository <https://github.com/alkaline-ml/pmdarima>`_ on
 Github, clone, and develop on a branch. Steps:
 
-1. Fork the `project repository <https://github.com/tgsmith61591/pmdarima>`_
+1. Fork the `project repository <https://github.com/alkaline-ml/pmdarima>`_
    by clicking on the 'Fork' button near the top right of the page. This
    creates a copy of the code under your Github user account.
 
@@ -25,7 +25,7 @@ Github, clone, and develop on a branch. Steps:
 
    .. code-block:: bash
 
-       $ git clone https://github.com/tgsmith61591/pmdarima.git
+       $ git clone https://github.com/alkaline-ml/pmdarima.git
        $ cd pmdarima
 
 3. Create a ``feature`` branch to hold your development changes:
@@ -112,8 +112,8 @@ It is recommended to check that your issue complies with the
 following rules before submitting:
 
 -  Verify that your issue is not being currently addressed by other
-   `issues <https://github.com/tgsmith61591/pmdarima/issues>`_
-   or `pull requests <https://github.com/tgsmith61591/pmdarima/pulls>`_.
+   `issues <https://github.com/alkaline-ml/pmdarima/issues>`_
+   or `pull requests <https://github.com/alkaline-ml/pmdarima/pulls>`_.
 
 -  If your issue references and pull request, reference it in the body of your
    descriptive text using ``!<PULL REQUEST NUMBER>``

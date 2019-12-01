@@ -294,5 +294,5 @@ Conclusion
 The TDS article provided an awesome example of how to use ARIMAs to predict stocks. Our
 hope in this example was to show how using pmdarima can simplify and enhance the models
 you build. If you'd like to run the already-setup notebook for yourself, head on over to
-the `project's Git page <https://github.com/tgsmith61591/pmdarima/blob/develop/examples/stock_market_example.ipynb>`_
+the `project's Git page <https://github.com/alkaline-ml/pmdarima/blob/develop/examples/stock_market_example.ipynb>`_
 and grab the example notebook.
