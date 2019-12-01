@@ -3,7 +3,7 @@ function commaFmt(x) {
 }
 
 function fetchContributors() {
-    $.getJSON("https://api.github.com/repos/tgsmith61591/pmdarima/stats/contributors", function(arr) {
+    $.getJSON("https://api.github.com/repos/alkaline-ml/pmdarima/stats/contributors", function(arr) {
         // sort the array based on total count
         arr.sort(function(a, b) {
             var aTotal = a['total'];
@@ -45,7 +45,7 @@ function fetchContributors() {
                            '<div class="contrib-stats-wrapper">' +
                              '<span class="ameta">' +
                                '<span class="cmeta">' +
-                                 '<a href="https://github.com/tgsmith61591/pmdarima/commits?author=' + authorLogin + '" class="cmt">' + commaFmt(total) + ' commit' + p + '</a> / ' +
+                                 '<a href="https://github.com/alkaline-ml/pmdarima/commits?author=' + authorLogin + '" class="cmt">' + commaFmt(total) + ' commit' + p + '</a> / ' +
                                  '<span class="a">' + commaFmt(adds) + ' ++</span> / ' +
                                  '<span class="d">' + commaFmt(dels) + ' --</span>' +
                                '</span>' +
