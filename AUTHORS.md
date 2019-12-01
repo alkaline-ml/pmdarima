@@ -11,6 +11,6 @@ The following people have been core contributors to `pmdarima`'s development:
   * [Christopher Siewert](https://github.com/christopher-siewert)
 
 __Please do not email the authors directly with questions or issues.__ Rather, use
-the [issues](https://github.com/tgsmith61591/pmdarima/issues) page. Furthermore, issues
+the [issues](https://github.com/alkaline-ml/pmdarima/issues) page. Furthermore, issues
 or emails specifically related to assistance in learning time series analysis should be
 saved for Stack Overflow.

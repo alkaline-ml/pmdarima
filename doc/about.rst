@@ -22,7 +22,7 @@ The name...
 
 The name "pyramid" originally was the result of an anagram between the "py" prefix and
 the characters needed to spell "arima". However, the popular web framework sharing the
-same name caused a `namespace collision <https://github.com/tgsmith61591/pmdarima/issues/34>`_
+same name caused a `namespace collision <https://github.com/alkaline-ml/pmdarima/issues/34>`_
 and the package has since been renamed ``pmdarima``. You may still see it referred to interchangeably
 throughout the doc as "pyramid".
 
