@@ -54,7 +54,7 @@ def test_decompose_corner_cases():
         decompose(airpassengers, 'multiplicative', -0.5, None),  # bad `f`
 
     with pytest.raises(ValueError):
-        decompose(ausbeer[:4], 'dummy_type', 4, None)  # bad `x`
+        decompose(ausbeer[:1], 'multiplicative', 4, None)  # bad `x`
 
 
 @pytest.mark.parametrize(
