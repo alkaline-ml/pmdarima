@@ -61,7 +61,9 @@ def _show_or_return(obj, show):
 
 def decomposed_plot(decomposed_tuple, figure_kwargs=None, show=True):
     """
-    Plot the decomposition of a time series
+    Plot the decomposition of a time series.
+
+    This includes the 'x', 'trend', 'seasonal', and 'random' components.
 
     Parameters
     ----------
@@ -82,7 +84,6 @@ def decomposed_plot(decomposed_tuple, figure_kwargs=None, show=True):
     use ``show=False``.
 
     """
-
 
     _err_for_no_mpl()
 

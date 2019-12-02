@@ -99,6 +99,7 @@ Dataset loading functions
     :template: function.rst
 
     datasets.load_airpassengers
+    datasets.load_ausbeer
     datasets.load_austres
     datasets.load_heartrate
     datasets.load_lynx
@@ -251,6 +252,7 @@ Array helper functions & metaestimators
     utils.check_endog
     utils.check_exog
     utils.diff
+    utils.diff_inv
     utils.if_has_delegate
     utils.is_iterable
     utils.pacf
@@ -265,5 +267,6 @@ Plotting utilities & wrappers
     :template: function.rst
 
     utils.autocorr_plot
+    utils.decomposed_plot
     utils.plot_acf
     utils.plot_pacf

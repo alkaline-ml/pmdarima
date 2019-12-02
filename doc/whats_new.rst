@@ -60,6 +60,10 @@ v0.8.1) will document the latest features.
   `diffinv <https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html>`_,
   as requested in `#180 <https://github.com/alkaline-ml/pmdarima/issues/180>`_.
 
+* Added `decompose` function that is in parity with R's implementation,
+  `decompose <https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose>`_,
+  as requested in `#190 <https://github.com/alkaline-ml/pmdarima/issues/190>`_
+
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
 --------------------------------------------------
 
