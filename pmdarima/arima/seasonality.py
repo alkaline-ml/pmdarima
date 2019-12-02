@@ -36,11 +36,50 @@ __all__ = [
 def decompose(x, type, f, filter=None):
     """
 
-    :param x:
-    :param type:
-    :param f:
-    :param filter:
-    :return:
+    Parameters
+    ----------
+    x : np.array
+        The time series of which the trend, seasonal, and noise/random
+        components will be extracted.
+
+    type: str
+        The type of decomposition that will be performed - 'multiplicative' or
+        'additive'. We would use 'multiplicative' generally when we see an
+        increasing trend. We use 'additive' when the trend is relatively
+        stable over time.
+
+    f: int
+        The frequency in terms of number of observations. This behaves
+        similarly to R's frequency for a time series (ts).
+
+    filter: np.array
+        A filter by which the convolution will be performed.
+
+    Returns
+    -------
+    decomposed_tuple : namedtuple
+        A named tuple with `x`, `trend`, `seasonal`, and `random` components
+        where `x` is the input signal, `trend` is the overall trend, `seasonal`
+        is the seasonal component, and `random` is the noisy component. The
+        input signal `x` can be mostly reconstructed by the other three
+        components with a number of points missing equal to `f`.
+
+    Notes
+    -----
+    This function is generally used in conjunction with
+    :func:`pmdarima.utils.visualization.decomposed_plot`,
+    which plots the decomposed components. Also there are two example notebooks
+    within the `examples` folder which mirror existing R examples.
+
+     References
+    ----------
+    .. [1] Example of decompose using both multiplicative and additive types:
+           https://anomaly.io/seasonal-trend-decomposition-in-r/index.html
+
+    .. [2] R documentation for decompose:
+           https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose
+
+
     """
 
     multiplicative = "multiplicative"
@@ -61,12 +100,16 @@ def decompose(x, type, f, filter=None):
         err_msg = "'type' can only take values '{}' or '{}'"
         raise ValueError(err_msg.format(multiplicative, additive))
 
-    # TODO: Need to calculate 'f' like R, instead of passing it in.
+    # Since R's ts class has a frequency as input I think this it acceptable
+    # to ask the user for the frequency.
     try:
         assert f == int(f)
     except (ValueError, AssertionError):
         raise ValueError("'f' should be an integer")
-    if f < 2:
+
+    # There needs to be at least 2 periods. This is due to the behavior of
+    # convolutions and how they behave with respect to losing endpoints
+    if (x.shape[0] / f) < 2:
         raise ValueError("time series has no or less than 2 periods")
 
     # Talk half of f for the convolution / sma process.
@@ -88,16 +131,15 @@ def decompose(x, type, f, filter=None):
 
     # We buffer the trend component so that it is the same length as the other
     # outputs. This counters the effects of losing data by the convolution/sma
-    buffer = []
-    for i in range(half_f):
-        buffer.append(np.nan)
-    trend = np.array(buffer + trend.tolist() + buffer)
+    buffer = [np.nan] * half_f
+    trend = buffer + trend.tolist() + buffer
 
     # Remove the trend and seasonal effects from the original signal to get
     # the random/noisy effects within the original signal.
     random = \
         _decomposer_helper(_decomposer_helper(x, trend, type), seasonal, type)
 
+    # Create a namedtuple so the output mirrors the output of the R function.
     decomposed = namedtuple('decomposed', 'x trend seasonal random')
     decomposed_tuple = decomposed(x, trend, seasonal, random)
 

@@ -59,38 +59,46 @@ def _show_or_return(obj, show):
         return obj
 
 
-def decomposed_plot(decomposed_tuple, figure_kwargs=None):
+def decomposed_plot(decomposed_tuple, figure_kwargs=None, show=True):
     """
     Plot the decomposition of a time series
 
     Parameters
     ----------
-
     decomposed_tuple : tuple
         Tuple of series that consist of data, trend, seasonal, and random.
 
     figure_kwargs : dict, optional (default=None)
         Optional dictionary of keyword arguments that are passed to figure.
 
+    show : bool, optional (default=True)
+        Whether to show the plot after it's been created. If not, will return
+        the plot as an Axis object instead.
+
+    Notes
+    -----
+    This method will only show the plot if ``show=True`` (which is the default
+    behavior). To simply get the axis back (say, to add to another canvas),
+    use ``show=False``.
+
     """
+
 
     _err_for_no_mpl()
 
-    plt = get_compatible_pyplot()
-    plt.figure(figure_kwargs)
-    plt.subplot(4, 1, 1)
-    plt.ylabel('data')
-    plt.plot(decomposed_tuple.x)
-    plt.subplot(4, 1, 2)
-    plt.ylabel('trend')
-    plt.plot(decomposed_tuple.trend)
-    plt.subplot(4, 1, 3)
-    plt.ylabel('seasonal')
-    plt.plot(decomposed_tuple.seasonal)
-    plt.subplot(4, 1, 4)
-    plt.ylabel('random')
-    plt.plot(decomposed_tuple.random)
-    plt.tight_layout()
+    fig, axes = mpl.subplots(4, 1, sharex=True, **figure_kwargs)
+
+    y_labels = ['data', 'trend', 'seasonal', 'random']
+
+    for ax in axes.flat:
+        ax.set(ylabel=y_labels.pop(0))
+
+    axes[0].plot(decomposed_tuple.x)
+    axes[1].plot(decomposed_tuple.trend)
+    axes[2].plot(decomposed_tuple.seasonal)
+    axes[3].plot(decomposed_tuple.random)
+
+    return _show_or_return(axes, show)
 
 
 def autocorr_plot(series, show=True):
