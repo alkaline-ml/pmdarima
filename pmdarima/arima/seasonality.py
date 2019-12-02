@@ -92,6 +92,13 @@ def decompose(x, type, f, filter=None):
         else:
             return a - b
 
+    # Since R's ts class has a frequency as input I think this it acceptable
+    # to ask the user for the frequency.
+    try:
+        assert int(f) > 1 and isinstance(f, int)
+    except (ValueError, AssertionError):
+        raise ValueError("'f' should be a positive integer")
+
     if filter is None:
         filter = np.ones((f,)) / f
 
@@ -100,19 +107,12 @@ def decompose(x, type, f, filter=None):
         err_msg = "'type' can only take values '{}' or '{}'"
         raise ValueError(err_msg.format(multiplicative, additive))
 
-    # Since R's ts class has a frequency as input I think this it acceptable
-    # to ask the user for the frequency.
-    try:
-        assert f == int(f)
-    except (ValueError, AssertionError):
-        raise ValueError("'f' should be an integer")
-
     # There needs to be at least 2 periods. This is due to the behavior of
     # convolutions and how they behave with respect to losing endpoints
     if (x.shape[0] / f) < 2:
         raise ValueError("time series has no or less than 2 periods")
 
-    # Talk half of f for the convolution / sma process.
+    # Take half of f for the convolution / sma process.
     half_f = int(f / 2.)
     trend = np.convolve(x, filter, mode='valid')
     trend = trend[:-1]  # we remove the final index.
