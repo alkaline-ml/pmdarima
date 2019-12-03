@@ -1,5 +1,5 @@
 steps:
-- script: python -m pip install --upgrade pip setuptools
+- script: python -m pip install --upgrade pip
   displayName: 'Updating pip'
 
 - script: |
