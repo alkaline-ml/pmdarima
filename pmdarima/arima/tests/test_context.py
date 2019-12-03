@@ -27,7 +27,7 @@ def test_stepwise_context_args(max_steps, max_dur):
 # test auto_arima stepwise run with  StepwiseContext
 def test_auto_arima_with_stepwise_context():
     samp = lynx[:8]
-    with StepwiseContext(max_steps=5, max_dur=30):
+    with StepwiseContext(max_steps=3, max_dur=30):
         with pytest.warns(UserWarning) as uw:
             auto_arima(samp, suppress_warnings=False, stepwise=True,
                        error_action='ignore')

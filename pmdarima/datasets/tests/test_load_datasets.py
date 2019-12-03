@@ -2,9 +2,9 @@
 
 from __future__ import absolute_import
 
-from pmdarima.datasets import load_heartrate, load_lynx, \
-    load_wineind, load_woolyrnq, load_austres, load_airpassengers, \
-    load_taylor, load_msft
+from pmdarima.datasets import load_heartrate, load_lynx, load_wineind,\
+    load_woolyrnq, load_ausbeer, load_austres,\
+    load_airpassengers, load_taylor, load_msft
 
 import numpy as np
 import pandas as pd
@@ -18,6 +18,7 @@ import pytest
           load_lynx,
           load_wineind,
           load_woolyrnq,
+          load_ausbeer,
           load_austres,
           load_taylor,
           load_airpassengers])

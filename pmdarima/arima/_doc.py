@@ -88,7 +88,8 @@ _AUTO_ARIMA_DOCSTR = \
         The maximum value of ``Q``, inclusive. Must be a positive integer
         greater than ``start_Q``.
 
-    max_order : int, optional (default=10)
+    max_order : int, optional (default=5)
+        Maximum value of p+q+P+Q if model selection is not stepwise.
         If the sum of ``p`` and ``q`` is >= ``max_order``, a model will
         *not* be fit with those parameters, but will progress to the next
         combination. Default is 5. If ``max_order`` is None, it means there
@@ -142,42 +143,31 @@ _AUTO_ARIMA_DOCSTR = \
         Starting parameters for ``ARMA(p,q)``.  If None, the default is given
         by ``ARMA._fit_start_params``.
 
-    transparams : bool, optional (default=True)
-        Whether or not to transform the parameters to ensure stationarity.
-        Uses the transformation suggested in Jones (1980).  If False,
-        no checking for stationarity or invertibility is done.
-
     method : str, optional (default='lbfgs')
-        One of ('newton', 'bfgs', 'lbfgs', 'powell', 'cg', 'ncg',
-        'basinhopping'). Determines a solver method for maximizing the
-        loglikelihood. Default is 'lbfgs' (limited-memory BFGS with optional
-        box constraints).
+        The ``method`` determines which solver from ``scipy.optimize``
+        is used, and it can be chosen from among the following strings:
+
+        - 'newton' for Newton-Raphson
+        - 'nm' for Nelder-Mead
+        - 'bfgs' for Broyden-Fletcher-Goldfarb-Shanno (BFGS)
+        - 'lbfgs' for limited-memory BFGS with optional box constraints
+        - 'powell' for modified Powell's method
+        - 'cg' for conjugate gradient
+        - 'ncg' for Newton-conjugate gradient
+        - 'basinhopping' for global basin-hopping solver
+
+        The explicit arguments in ``fit`` are passed to the solver,
+        with the exception of the basin-hopping solver. Each
+        solver has several optional arguments that are not the same across
+        solvers. These can be passed as **fit_kwargs
 
     trend : str or None, optional (default=None)
         The trend parameter. If ``with_intercept`` is True, ``trend`` will be
         used. If ``with_intercept`` is False, the trend will be set to a no-
         intercept value.
 
-    solver : str or None, optional (default='lbfgs')
-        Solver to be used.  The default is 'lbfgs' (limited memory
-        Broyden-Fletcher-Goldfarb-Shanno).  Other choices are 'bfgs',
-        'newton' (Newton-Raphson), 'nm' (Nelder-Mead), 'cg' -
-        (conjugate gradient), 'ncg' (non-conjugate gradient), and
-        'powell'. By default, the limited memory BFGS uses m=12 to
-        approximate the Hessian, projected gradient tolerance of 1e-8 and
-        factr = 1e2. You can change these by using kwargs.
-
     maxiter : int, optional (default=50)
         The maximum number of function evaluations. Default is 50.
-
-    disp : int, optional (default=0)
-        If True, convergence information is printed.  For the default
-        'lbfgs' ``solver``, disp controls the frequency of the output during
-        the iterations. disp < 0 means no output in this case.
-
-    callback : callable, optional (default=None)
-        Called after each iteration as callback(xk) where xk is the current
-        parameter vector. This is only used in non-seasonal ARIMA models.
 
     offset_test_args : dict, optional (default=None)
         The args to pass to the constructor of the offset (``d``) test. See
@@ -249,8 +239,7 @@ _AUTO_ARIMA_DOCSTR = \
     with_intercept : bool, optional (default=True)
         Whether to include an intercept term. Default is True.
     
-    sarimax_kwargs : dict or None, optional (default=None)
-        Keyword arguments to pass to the SARIMAX constructor, if seasonal.
+    {sarimax_kwargs}
     {fit_args}
     See Also
     --------
@@ -284,6 +273,16 @@ _EXOG_DOCSTR = """
         operation. This should not include a constant or trend. Note that
         if an ``ARIMA`` is fit on exogenous features, it must be provided
         exogenous features for making predictions.
+"""
+
+_KWARGS_DOCSTR = """
+    **kwargs : dict or None, optional (default=None)
+        Keyword arguments to pass to the ARIMA constructor.
+"""
+
+_SARIMAX_ARGS_DOCSTR = """
+    sarimax_kwargs : dict or None, optional (default=None)
+        Keyword arguments to pass to the ARIMA constructor.
 """
 
 _FIT_ARGS_DOCSTR = """

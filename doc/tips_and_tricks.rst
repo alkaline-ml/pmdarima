@@ -140,7 +140,7 @@ data in order to make it stationary, we can conduct a test of stationarity
 (either ``ADFTest``, ``PPTest`` or ``KPSSTest``).
 
 Each of these tests is based on the R source code, and **are primarily intended to**
-**be used internally**. See `this issue <https://github.com/tgsmith61591/pmdarima/issues/67>`_
+**be used internally**. See `this issue <https://github.com/alkaline-ml/pmdarima/issues/67>`_
 for more info. Here's an example of an ADF test:
 
 .. code-block:: python
@@ -337,9 +337,11 @@ with a lower information criterion or the process exceeds one of the execution t
 
 When in doubt, ``stepwise=True`` is encouraged.
 
+
 Using ``StepwiseContext``
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-The ``StepwiseContext`` can be used to set the maximum number of steps and/or duration for the `stepwise` approach.
+
+The ``StepwiseContext`` can be used to set the maximum number of steps and/or duration for the ``stepwise`` approach.
 Please note that these are soft limits that are checked periodically during the stepwise search. The search will be
 stopped as soon as one of the thresholds are hit, and the best fit model at that time is returned. This may be helpful
 in scenarios that need to balance between best fit model and time constraints.
@@ -347,12 +349,46 @@ in scenarios that need to balance between best fit model and time constraints.
 .. code-block:: python
 
     import pmdarima as pm
+    from pmdarima.arima import StepwiseContext
 
     data = pm.datasets.load_wineind()
     train, test = data[:150], data[150:]
 
-    with StepwiseContext(max_steps=10,  max_dur=30):
-        model = pm.auto_arima(train, stepwise = True, error_action='ignore', seasonal=True, m=12)
+    with StepwiseContext(max_dur=15):
+        model = pm.auto_arima(train, stepwise=True, error_action='ignore', seasonal=True, m=12)
+
+
+Other performance concerns
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fitting large models can take some time, and the amount of time tends to scale with ``m``.
+If you are fitting a very large set of models, there are *some* things you can do to
+speed things up (at the cost of precision, of course):
+
+* Make sure you have the right value for ``m``. If you get this wrong, not only will your
+  model suffer, it may take a long time to fit.
+
+* Use ``stepwise``. This is always recommended, but double check if speed is a concern.
+
+* Use a sane value for ``max_p``, ``max_q``, ``max_P`` and ``max_Q``. You don't need to
+  search too high; those models will likely be very overfit, anyways.
+
+* Try using different optimization methods. For instance, ``method='nm'`` seems to
+  perform more quickly than the default 'lbfgs', at the cost of higher amounts of approximation.
+
+* Reduce the ``maxiter`` kwarg. The default is 50, but reducing it by 10-20 iterations is often
+  a good trade-off between speed and robustness.
+
+* Manipulate the ``cov_kwds``. If you *really* want to go down the rabbit hole, you can
+  read about the ``**fit_kwargs`` available to you in the ``auto_arima`` function on
+  the `statsmodels page <https://www.statsmodels.org/stable/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.fit.html#statsmodels.tsa.statespace.sarimax.SARIMAX.fit>`_
+
+* Pre-compute ``d`` or ``D``. You can use the :func:`pmdarima.arima.ndiffs` and :func:`pmdarima.arima.nsdiffs`
+  methods to compute these ahead of time.
+
+* Try using exogenous features instead of a seasonal fit. Sometimes, using fourier exogenous
+  variables will remove the need for a seasonal model. See :class:`pmdarima.preprocessing.FourierFeaturizer`
+  for more information.
 
 
 Pipelining

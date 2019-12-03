@@ -42,7 +42,7 @@ function deploy() {
 
   # We have to re-add the origin with the GH_TOKEN credentials
   git remote rm origin
-  git remote add origin https://${GH_NAME}:${GH_TOKEN}@github.com/${GH_NAME}/pmdarima.git
+  git remote add origin https://${GH_NAME}:${GH_TOKEN}@github.com/alkaline-ml/pmdarima.git
 
   # NOW we should be able to push it
   git push origin gh-pages

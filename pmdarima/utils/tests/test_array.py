@@ -1,9 +1,7 @@
 
-from __future__ import absolute_import
-
-from pmdarima.utils.array import diff, c, is_iterable, as_series, check_exog
+from pmdarima.utils.array import diff, diff_inv, c, is_iterable, as_series, \
+    check_exog
 from pmdarima.utils import get_callable
-
 from numpy.testing import assert_array_equal, assert_array_almost_equal
 
 import pytest
@@ -24,6 +22,9 @@ X_nan.loc[0, 'a'] = np.nan
 X_inf = X.copy()
 X_inf.loc[0, 'a'] = np.inf
 
+# for diffinv
+x_mat = (np.arange(9) + 1).reshape(3, 3).T
+
 
 def test_diff():
     # test vector for lag = (1, 2), diff = (1, 2)
@@ -39,6 +40,103 @@ def test_diff():
                        np.array([[12, -10, 14]]))
     assert_array_equal(diff(m, lag=2, differences=1), np.array([[2, -20, 10]]))
     assert diff(m, lag=2, differences=2).shape[0] == 0
+
+
+@pytest.mark.parametrize(
+    'arr,lag,differences,xi,expected', [
+        # VECTORS -------------------------------------------------------------
+        # > x = c(0, 1, 2, 3, 4)
+        # > diffinv(x, lag=1, differences=1)
+        # [1]  0  0  1  3  6 10
+        pytest.param(x, 1, 1, None, [0, 0, 1, 3, 6, 10]),
+
+        # > diffinv(x, lag=1, differences=2)
+        # [1]  0  0  0  1  4 10 20
+        pytest.param(x, 1, 2, None, [0, 0, 0, 1, 4, 10, 20]),
+
+        # > diffinv(x, lag=2, differences=1)
+        # [1] 0 0 0 1 2 4 6
+        pytest.param(x, 2, 1, None, [0, 0, 0, 1, 2, 4, 6]),
+
+        # > diffinv(x, lag=2, differences=2)
+        # [1] 0 0 0 0 0 1 2 5 8
+        pytest.param(x, 2, 2, None, [0, 0, 0, 0, 0, 1, 2, 5, 8]),
+
+        # This is a test of the intermediate stage when x == [1, 0, 3, 2]
+        pytest.param([1, 0, 3, 2], 1, 1, [0], [0, 1, 1, 4, 6]),
+
+        # This is an intermediate stage when x == [0, 1, 2, 3, 4]
+        pytest.param(x, 1, 1, [0], [0, 0, 1, 3, 6, 10]),
+
+        # MATRICES ------------------------------------------------------------
+        # > matrix(data=c(1, 2, 3, 4, 5, 6, 7, 8, 9), nrow=3, ncol=3)
+        #      [,1] [,2] [,3]
+        # [1,]    1    4    7
+        # [2,]    2    5    8
+        # [3,]    3    6    9
+        # > diffinv(X, 1, 1)
+        #      [,1] [,2] [,3]
+        # [1,]    0    0    0
+        # [2,]    1    4    7
+        # [3,]    3    9   15
+        # [4,]    6   15   24
+        pytest.param(x_mat, 1, 1, None,
+                     [[0, 0, 0],
+                      [1, 4, 7],
+                      [3, 9, 15],
+                      [6, 15, 24]]),
+
+        # > diffinv(X, 1, 2)
+        #      [,1] [,2] [,3]
+        # [1,]    0    0    0
+        # [2,]    0    0    0
+        # [3,]    1    4    7
+        # [4,]    4   13   22
+        # [5,]   10   28   46
+        pytest.param(x_mat, 1, 2, None,
+                     [[0, 0, 0],
+                      [0, 0, 0],
+                      [1, 4, 7],
+                      [4, 13, 22],
+                      [10, 28, 46]]),
+
+        # > diffinv(X, 2, 1)
+        #      [,1] [,2] [,3]
+        # [1,]    0    0    0
+        # [2,]    0    0    0
+        # [3,]    1    4    7
+        # [4,]    2    5    8
+        # [5,]    4   10   16
+        pytest.param(x_mat, 2, 1, None,
+                     [[0, 0, 0],
+                      [0, 0, 0],
+                      [1, 4, 7],
+                      [2, 5, 8],
+                      [4, 10, 16]]),
+
+        # > diffinv(X, 2, 2)
+        #      [,1] [,2] [,3]
+        # [1,]    0    0    0
+        # [2,]    0    0    0
+        # [3,]    0    0    0
+        # [4,]    0    0    0
+        # [5,]    1    4    7
+        # [6,]    2    5    8
+        # [7,]    5   14   23
+        pytest.param(x_mat, 2, 2, None,
+                     [[0, 0, 0],
+                      [0, 0, 0],
+                      [0, 0, 0],
+                      [0, 0, 0],
+                      [1, 4, 7],
+                      [2, 5, 8],
+                      [5, 14, 23]]),
+    ]
+)
+def test_diff_inv(arr, lag, differences, xi, expected):
+    res = diff_inv(arr, lag=lag, differences=differences, xi=xi)
+    expected = np.array(expected, dtype=np.float)
+    assert_array_equal(expected, res)
 
 
 def test_concatenate():
@@ -59,6 +157,18 @@ def test_corner():
     # fails because lag < 1
     with pytest.raises(ValueError):
         diff(x=x, lag=0)
+    with pytest.raises(ValueError):
+        diff_inv(x=x, lag=0)
+
+    # fails because differences < 1
+    with pytest.raises(ValueError):
+        diff(x=x, differences=0)
+    with pytest.raises(ValueError):
+        diff_inv(x=x, differences=0)
+
+    # Passing in xi with the incorrect shape to a 2-d array
+    with pytest.raises(IndexError):
+        diff_inv(x=np.array([[1, 1], [1, 1]]), xi=np.array([[1]]))
 
 
 def test_is_iterable():

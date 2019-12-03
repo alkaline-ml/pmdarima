@@ -159,37 +159,26 @@ class ARIMA(BaseARIMA):
         Starting parameters for ``ARMA(p,q)``.  If None, the default is given
         by ``ARMA._fit_start_params``.
 
-    transparams : bool, optional (default=True)
-        Whether or not to transform the parameters to ensure stationarity.
-        Uses the transformation suggested in Jones (1980).  If False,
-        no checking for stationarity or invertibility is done.
-
     method : str, optional (default='lbfgs')
-        One of {'newton', 'bfgs', 'lbfgs', 'powell', 'cg', 'ncg',
-        'basinhopping'}. Determines a solver method for maximizing the
-        loglikelihood. Default is 'lbfgs' (limited-memory BFGS with optional
-        box constraints).
+        The ``method`` determines which solver from ``scipy.optimize``
+        is used, and it can be chosen from among the following strings:
 
-    solver : str or None, optional (default='lbfgs')
-        Solver to be used.  The default is 'lbfgs' (limited memory
-        Broyden-Fletcher-Goldfarb-Shanno).  Other choices are 'bfgs',
-        'newton' (Newton-Raphson), 'nm' (Nelder-Mead), 'cg' -
-        (conjugate gradient), 'ncg' (non-conjugate gradient), and
-        'powell'. By default, the limited memory BFGS uses m=12 to
-        approximate the Hessian, projected gradient tolerance of 1e-8 and
-        factr = 1e2. You can change these by using kwargs.
+        - 'newton' for Newton-Raphson
+        - 'nm' for Nelder-Mead
+        - 'bfgs' for Broyden-Fletcher-Goldfarb-Shanno (BFGS)
+        - 'lbfgs' for limited-memory BFGS with optional box constraints
+        - 'powell' for modified Powell's method
+        - 'cg' for conjugate gradient
+        - 'ncg' for Newton-conjugate gradient
+        - 'basinhopping' for global basin-hopping solver
+
+        The explicit arguments in ``fit`` are passed to the solver,
+        with the exception of the basin-hopping solver. Each
+        solver has several optional arguments that are not the same across
+        solvers. These can be passed as **fit_kwargs
 
     maxiter : int, optional (default=50)
         The maximum number of function evaluations. Default is 50
-
-    disp : int, optional (default=0)
-        If True, convergence information is printed.  For the default
-        'lbfgs' ``solver``, disp controls the frequency of the output during
-        the iterations. disp < 0 means no output in this case.
-
-    callback : callable, optional (default=None)
-        Called after each iteration as callback(xk) where xk is the current
-        parameter vector. This is only used in non-seasonal ARIMA models.
 
     suppress_warnings : bool, optional (default=False)
         Many warnings might be thrown inside of statsmodels. If
@@ -229,7 +218,7 @@ class ARIMA(BaseARIMA):
         Whether to include an intercept term. Default is True.
 
     **sarimax_kwargs : keyword args, optional
-        Optional arguments to pass to the constructor for seasonal ARIMA fits.
+        Optional arguments to pass to the SARIMAX constructor.
         Examples of potentially valuable kwargs:
 
           - time_varying_regression : boolean
@@ -252,6 +241,28 @@ class ARIMA(BaseARIMA):
             state-space formulation. If False, the full SARIMAX model is
             put in state-space form so that all datapoints can be used in
             estimation. Default is False.
+
+          - measurement_error: boolean
+            Whether or not to assume the endogenous observations endog were
+            measured with error. Default is False.
+
+          - mle_regression : boolean
+            Whether or not to use estimate the regression coefficients for the
+            exogenous variables as part of maximum likelihood estimation or
+            through the Kalman filter (i.e. recursive least squares). If
+            time_varying_regression is True, this must be set to False.
+            Default is True.
+
+          - hamilton_representation : boolean
+            Whether or not to use the Hamilton representation of an ARMA
+            process (if True) or the Harvey representation (if False).
+            Default is False.
+
+          - concentrate_scale : boolean
+            Whether or not to concentrate the scale (variance of the error
+            term) out of the likelihood. This reduces the number of parameters
+            estimated by maximum likelihood by one, but standard errors will
+            then not be available for the scale parameter.
 
     Attributes
     ----------
@@ -282,8 +293,7 @@ class ARIMA(BaseARIMA):
     .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average
     """
     def __init__(self, order, seasonal_order=(0, 0, 0, 0), start_params=None,
-                 method='lbfgs', transparams=True, solver='lbfgs',
-                 maxiter=50, disp=0, callback=None, suppress_warnings=False,
+                 method='lbfgs', maxiter=50, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None,
                  trend=None, with_intercept=True, **sarimax_kwargs):
 
@@ -294,17 +304,25 @@ class ARIMA(BaseARIMA):
         self.seasonal_order = seasonal_order
         self.start_params = start_params
         self.method = method
-        self.transparams = transparams
-        self.solver = solver
         self.maxiter = maxiter
-        self.disp = disp
-        self.callback = callback
         self.suppress_warnings = suppress_warnings
         self.out_of_sample_size = out_of_sample_size
         self.scoring = scoring
         self.scoring_args = scoring_args
         self.trend = trend
         self.with_intercept = with_intercept
+
+        # TODO: Remove these warnings in a later version
+        for deprecated_key, still_in_use in (
+                ('disp', True), ('callback', True), ('transparams', False),
+                ('solver', False)):
+            if sarimax_kwargs.pop(deprecated_key, None):
+                msg = ("'%s' is deprecated in the ARIMA constructor and will "
+                       "be removed in a future release." % deprecated_key)
+                if still_in_use:
+                    msg += " Pass via **fit_kwargs instead"
+                warnings.warn(msg, DeprecationWarning)
+
         self.sarimax_kwargs = sarimax_kwargs
 
     def _fit(self, y, exogenous=None, **fit_args):
@@ -356,11 +374,14 @@ class ARIMA(BaseARIMA):
             # update method, we should default to their preference
             _maxiter = fit_args.pop("maxiter", _maxiter)
 
+            # kwargs that might be in fit args, but if not we override the
+            # defaults
+            disp = fit_args.pop("disp", 0)
+
             return arima, arima.fit(start_params=start_params,
-                                    trend=trend, method=method,
-                                    transparams=self.transparams,
-                                    solver=self.solver, maxiter=_maxiter,
-                                    disp=self.disp, callback=self.callback,
+                                    method=method,
+                                    maxiter=_maxiter,
+                                    disp=disp,
                                     **fit_args)
 
         # sometimes too many warnings...

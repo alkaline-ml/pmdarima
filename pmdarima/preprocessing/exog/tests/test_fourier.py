@@ -4,9 +4,12 @@ import numpy as np
 from numpy.testing import assert_array_almost_equal
 
 from pmdarima.preprocessing.exog import FourierFeaturizer
+from pmdarima.compat.pytest import pytest_error_str
 import pmdarima as pm
 
 import pytest
+
+wineind = pm.datasets.load_wineind()
 
 
 class TestFourierREquivalency:
@@ -91,7 +94,10 @@ def test_hyndman_blog():
     _, xreg = trans.transform(y)
 
     arima = pm.auto_arima(y, exogenous=xreg, seasonal=False,
-                          maxiter=5)  # type: pm.ARIMA
+                          maxiter=5,
+                          start_p=4, max_p=5,
+                          d=0, max_q=1, start_q=0,
+                          simple_differencing=True)  # type: pm.ARIMA
 
     # Show we can forecast 10 in the future
     _, xreg_test = trans.transform(y, n_periods=10)
@@ -121,3 +127,17 @@ def test_update_transform():
     _, xreg2 = trans.transform(y)
     assert_array_almost_equal(xreg2[:100], xreg)
     assert_array_almost_equal(xreg2[100:], Xt)
+
+
+def test_value_error_check():
+    feat = FourierFeaturizer(m=12)
+    with pytest.raises(ValueError) as ve:
+        feat._check_y_exog(wineind, None, null_allowed=False)
+    assert 'non-None' in pytest_error_str(ve)
+
+
+def test_value_error_on_fit():
+    feat = FourierFeaturizer(m=12, k=8)
+    with pytest.raises(ValueError) as ve:
+        feat.fit_transform(wineind)
+    assert 'k must be' in pytest_error_str(ve)

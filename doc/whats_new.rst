@@ -13,40 +13,67 @@ v0.8.1) will document the latest features.
 
 * No longer use statsmodels' ``ARIMA`` or ``ARMA`` class under the hood; only use
   the ``SARIMAX`` model, which cuts back on a lot of errors/warnings we saw in the past.
-  (`#211 <https://github.com/tgsmith61591/pmdarima/issues/211>`_)
+  (`#211 <https://github.com/alkaline-ml/pmdarima/issues/211>`_)
 
-* Defaults in the ``ARIMA`` class that have changed as a result:
+* Defaults in the ``ARIMA`` class that have changed as a result of #211:
 
   - ``maxiter`` is now 50 (was ``None``)
   - ``method`` is now 'lbfgs' (was ``None``)
   - ``seasonal_order`` is now ``(0, 0, 0, 0)`` (was ``None``)
+  - ``max_order`` is now 5 (was 10) and is no longer used as a constraint when ``stepwise=True``
 
 * Correct bug where ``aicc`` always added 1 (for constant) to degrees of freedom,
   even when ``df_model`` accounted for the constant term.
 
 * New :class:`pmdarima.arima.auto.StepwiseContext` feature for more control over
-  fit duration (introduced by `@kpsunkara <https://github.com/kpsunkara>`_ in `#221 <https://github.com/tgsmith61591/pmdarima/pull/221>`_).
+  fit duration (introduced by `@kpsunkara <https://github.com/kpsunkara>`_ in `#221 <https://github.com/alkaline-ml/pmdarima/pull/221>`_).
 
 * Adds the :class:`pmdarima.preprocessing.LogEndogTransformer` class as discussed in
-  `#205 <https://github.com/tgsmith61591/pmdarima/issues/205>`_
+  `#205 <https://github.com/alkaline-ml/pmdarima/issues/205>`_
 
 * Exogenous arrays are no longer cast to numpy array by default, and will pass pandas
-  frames through to the model. This keeps variable names intact in the summary (`#222 <https://github.com/tgsmith61591/pmdarima/issues/222>`_)
+  frames through to the model. This keeps variable names intact in the summary (`#222 <https://github.com/alkaline-ml/pmdarima/issues/222>`_)
 
 * Added the ``prefix`` param to exogenous featurizers to allow the addition of meaningful
   names to engineered features.
 
+* Added polyroot test of near non-invertibility when ``stepwise=True``. For
+  models that are near non-invertible will be deprioritized in model selection
+  as requested in `#208 <https://github.com/alkaline-ml/pmdarima/issues/208>`_.
+
+* Removes ``pmdarima.arima.ARIMA.add_new_samples``, which was previously deprecated.
+  Use :func:`pmdarima.arima.ARIMA.update` instead.
+
+* The following args have been deprecated from the :class:`pmdarima.arima.ARIMA` class
+  as well as :func:`pmdarima.arima.auto_arima` and any other calling methods/classes:
+
+  - ``disp``:sup:`[1]`
+  - ``callback``:sup:`[1]`
+  - ``transparams``
+  - ``solver``
+  - ``typ``
+
+  [1] These can still be passed to the ``fit`` method via ``**fit_kwargs``, but should
+  no longer be passed to the model constructor.
+
+* Added `diff_inv` function that is in parity with R's implementation,
+  `diffinv <https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html>`_,
+  as requested in `#180 <https://github.com/alkaline-ml/pmdarima/issues/180>`_.
+
+* Added `decompose` function that is in parity with R's implementation,
+  `decompose <https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose>`_,
+  as requested in `#190 <https://github.com/alkaline-ml/pmdarima/issues/190>`_
 
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
 --------------------------------------------------
 
-* Fixes `#191 <https://github.com/tgsmith61591/pmdarima/issues/191>`_, an issue where
+* Fixes `#191 <https://github.com/alkaline-ml/pmdarima/issues/191>`_, an issue where
   the OCSB test could raise ``ValueError: negative dimensions are not allowed" in OCSB test``
 
 * Add option to automatically inverse-transform endogenous transformations when predicting
-  from pipelines (`#197 <https://github.com/tgsmith61591/pmdarima/issues/197>`_)
+  from pipelines (`#197 <https://github.com/alkaline-ml/pmdarima/issues/197>`_)
 
-* Add ``predict_in_sample`` to pipeline (`#196 <https://github.com/tgsmith61591/pmdarima/issues/196>`_)
+* Add ``predict_in_sample`` to pipeline (`#196 <https://github.com/alkaline-ml/pmdarima/issues/196>`_)
 
 * Parameterize ``dtype`` option in datasets module
 
@@ -66,14 +93,14 @@ v0.8.1) will document the latest features.
 
 * Adds a new dataset for stock prediction, along with an associated example (``load_msft``)
 
-* Fixes a bug in ``predict_in_sample``, as addressed in `#140 <https://github.com/tgsmith61591/pmdarima/issues/140>`_.
+* Fixes a bug in ``predict_in_sample``, as addressed in `#140 <https://github.com/alkaline-ml/pmdarima/issues/140>`_.
 
 * Numpy 1.16+ is now required
 
 * Statsmodels 0.10.0+ is now required
 
 * Added ``sarimax_kwargs`` to ``ARIMA`` constructor and ``auto_arima`` function.
-  This fixes `#146 <https://github.com/tgsmith61591/pmdarima/issues/146>`_
+  This fixes `#146 <https://github.com/alkaline-ml/pmdarima/issues/146>`_
 
 
 `v1.2.1 <http://alkaline-ml.com/pmdarima/1.2.1/>`_
@@ -85,7 +112,7 @@ v0.8.1) will document the latest features.
 `v1.2.0 <http://alkaline-ml.com/pmdarima/1.2.0/>`_
 --------------------------------------------------
 
-* Adds the ``OCSBTest`` of seasonality, as discussed in `#88 <https://github.com/tgsmith61591/pmdarima/issues/88>`_
+* Adds the ``OCSBTest`` of seasonality, as discussed in `#88 <https://github.com/alkaline-ml/pmdarima/issues/88>`_
 
 * Default value of ``seasonal_test`` changes from "ch" to "ocsb" in ``auto_arima``
 
@@ -121,7 +148,7 @@ v0.8.1) will document the latest features.
 `v1.1.1 <http://alkaline-ml.com/pmdarima/1.1.1/>`_
 --------------------------------------------------
 
-v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/pmdarima/issues/104>`_
+v1.1.1 is a patch release in response to `#104 <https://github.com/alkaline-ml/pmdarima/issues/104>`_
 
 * Deprecates the ``ARIMA.add_new_observations`` method. This method originally was designed to support
   updating the endogenous/exogenous arrays with new observations without changing the model parameters,
@@ -142,16 +169,16 @@ v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/
 `v1.1.0 <http://alkaline-ml.com/pmdarima/1.1.0/>`_
 --------------------------------------------------
 
-* Adds ``ARIMA.plot_diagnostics`` method, as requested in `#49 <https://github.com/tgsmith61591/pmdarima/issues/49>`_
+* Adds ``ARIMA.plot_diagnostics`` method, as requested in `#49 <https://github.com/alkaline-ml/pmdarima/issues/49>`_
 
 * Adds new arg to ``ARIMA`` constructor and ``auto_arima``: ``with_intercept`` (default is True).
 
 * New default for ``trend`` is no longer ``'c'``, it is ``None``.
 
-* Adds ``to_dict`` method to ``ARIMA`` class to address `Issue #54 <https://github.com/tgsmith61591/pmdarima/issues/54>`_
+* Adds ``to_dict`` method to ``ARIMA`` class to address `Issue #54 <https://github.com/alkaline-ml/pmdarima/issues/54>`_
 
 * ARIMA serialization no longer stores statsmodels results wrappers in the cache,
-  but bundles them into the pickle file. This solves `Issue #48 <https://github.com/tgsmith61591/pmdarima/issues/48>`_
+  but bundles them into the pickle file. This solves `Issue #48 <https://github.com/alkaline-ml/pmdarima/issues/48>`_
   and only works on statsmodels 0.9.0+ since they've fixed a bug on their end.
 
 * The ``'PMDARIMA_CACHE'`` and ``'PMDARIMA_CACHE_WARN_SIZE'`` environment variables are
@@ -162,10 +189,10 @@ v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/
 
 * Fixes bug in ``ADFTest`` where ``OLS`` was computed with ``method="pinv"`` rather
   than ``"method=qr"``. This fix means better parity with R's results. See
-  `#71 <https://github.com/tgsmith61591/pmdarima/pull/71>`_ for more context.
+  `#71 <https://github.com/alkaline-ml/pmdarima/pull/71>`_ for more context.
 
 * ``CHTest`` now solves linear regression with ``normalize=True``. This solves
-  `#74 <https://github.com/tgsmith61591/pmdarima/issues/74>`_
+  `#74 <https://github.com/alkaline-ml/pmdarima/issues/74>`_
 
 * Python 3.7 is now supported(!!)
 
@@ -178,7 +205,7 @@ v1.1.1 is a patch release in response to `#104 <https://github.com/tgsmith61591/
 
 * Migrates namespace from 'pyramid-arima' to 'pmdarima'. This is due to the fact that
   a growing web-framework (also named Pyramid) is causing namespace collisions when
-  both packages are installed on a machine. See `Issue #34 <https://github.com/tgsmith61591/pmdarima/issues/34>`_
+  both packages are installed on a machine. See `Issue #34 <https://github.com/alkaline-ml/pmdarima/issues/34>`_
   for more detail.
 
 * Removes redundant Travis tests
@@ -232,7 +259,7 @@ v0.8.1
   - Specifies the location of the ARIMA result pickles (see :ref:`serializing`)
   - Specifies the ARIMA result pickle name pattern
 
-* Fixes bug (`Issue #30 <https://github.com/tgsmith61591/pmdarima/issues/30>`_) in ``ARIMA``
+* Fixes bug (`Issue #30 <https://github.com/alkaline-ml/pmdarima/issues/30>`_) in ``ARIMA``
   where using CV with differencing and no seasonality caused a dim mismatch in the model's
   exog array and its endog array
 

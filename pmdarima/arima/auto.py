@@ -34,25 +34,38 @@ __all__ = [
 VALID_CRITERIA = {'aic', 'aicc', 'bic', 'hqic', 'oob'}
 
 
+def _warn_for_deprecations(**kwargs):
+    # TODO: remove these warnings in the future
+    for k in ('solver', 'transparams'):
+        if kwargs.pop(k, None):
+            warnings.warn('%s has been deprecated and will be removed in '
+                          'a future version.' % k,
+                          DeprecationWarning)
+    return kwargs
+
+
 class AutoARIMA(BaseARIMA):
     # Don't add the y, exog, etc. here since they are used in 'fit'
     __doc__ = _doc._AUTO_ARIMA_DOCSTR.format(
-        y="", exogenous="", fit_args="", return_valid_fits="")
+        y="",
+        exogenous="",
+        fit_args="",
+        return_valid_fits="",
+        sarimax_kwargs=_doc._KWARGS_DOCSTR)
 
     # todo: someday store defaults somewhere else for single source of truth
     def __init__(self, start_p=2, d=None, start_q=2, max_p=5,
                  max_d=2, max_q=5, start_P=1, D=None, start_Q=1, max_P=2,
-                 max_D=1, max_Q=2, max_order=10, m=1, seasonal=True,
+                 max_D=1, max_Q=2, max_order=5, m=1, seasonal=True,
                  stationary=False, information_criterion='aic', alpha=0.05,
                  test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
-                 start_params=None, trend=None, method='lbfgs',
-                 transparams=True, solver='lbfgs', maxiter=50, disp=0,
-                 callback=None, offset_test_args=None, seasonal_test_args=None,
+                 start_params=None, trend=None, method='lbfgs', maxiter=50,
+                 offset_test_args=None, seasonal_test_args=None,
                  suppress_warnings=False, error_action='warn', trace=False,
                  random=False, random_state=None, n_fits=10,
                  out_of_sample_size=0, scoring='mse',
                  scoring_args=None, with_intercept=True,
-                 sarimax_kwargs=None):
+                 **kwargs):
 
         self.start_p = start_p
         self.d = d
@@ -79,11 +92,7 @@ class AutoARIMA(BaseARIMA):
         self.start_params = start_params
         self.trend = trend
         self.method = method
-        self.transparams = transparams
-        self.solver = solver
         self.maxiter = maxiter
-        self.disp = disp
-        self.callback = callback
         self.offset_test_args = offset_test_args
         self.seasonal_test_args = seasonal_test_args
         self.suppress_warnings = suppress_warnings
@@ -96,7 +105,18 @@ class AutoARIMA(BaseARIMA):
         self.scoring = scoring
         self.scoring_args = scoring_args
         self.with_intercept = with_intercept
-        self.sarimax_kwargs = sarimax_kwargs
+
+        # TODO: pop out the deprecated vars for now, but remove in a later vsn
+        smx = kwargs.pop('sarimax_kwargs', None)
+        if smx:
+            kwargs = smx
+            warnings.warn("The 'sarimax_kwargs' keyword arg has been "
+                          "deprecated in favor of simply passing **kwargs. "
+                          "This will raise in future versions",
+                          DeprecationWarning)
+
+        kwargs = _warn_for_deprecations(**kwargs)
+        self.kwargs = kwargs
 
     def fit(self, y, exogenous=None, **fit_args):
         """Fit the auto-arima estimator
@@ -123,7 +143,7 @@ class AutoARIMA(BaseARIMA):
         **fit_args : dict or kwargs
             Any keyword arguments to pass to the auto-arima function.
         """
-        sarimax_kwargs = {} if not self.sarimax_kwargs else self.sarimax_kwargs
+        sarimax_kwargs = {} if not self.kwargs else self.kwargs
         self.model_ = auto_arima(
             y, exogenous=exogenous, start_p=self.start_p, d=self.d,
             start_q=self.start_q, max_p=self.max_p, max_d=self.max_d,
@@ -135,9 +155,8 @@ class AutoARIMA(BaseARIMA):
             alpha=self.alpha, test=self.test, seasonal_test=self.seasonal_test,
             stepwise=self.stepwise, n_jobs=self.n_jobs,
             start_params=self.start_params, trend=self.trend,
-            method=self.method, transparams=self.transparams,
-            solver=self.solver, maxiter=self.maxiter, disp=self.disp,
-            callback=self.callback, offset_test_args=self.offset_test_args,
+            method=self.method, maxiter=self.maxiter,
+            offset_test_args=self.offset_test_args,
             seasonal_test_args=self.seasonal_test_args,
             suppress_warnings=self.suppress_warnings,
             error_action=self.error_action, trace=self.trace,
@@ -237,11 +256,10 @@ class StepwiseContext(AbstractContext):
 
 def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                max_d=2, max_q=5, start_P=1, D=None, start_Q=1, max_P=2,
-               max_D=1, max_Q=2, max_order=10, m=1, seasonal=True,
+               max_D=1, max_Q=2, max_order=5, m=1, seasonal=True,
                stationary=False, information_criterion='aic', alpha=0.05,
                test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
-               start_params=None, trend=None, method='lbfgs', transparams=True,
-               solver='lbfgs', maxiter=50, disp=0, callback=None,
+               start_params=None, trend=None, method='lbfgs', maxiter=50,
                offset_test_args=None, seasonal_test_args=None,
                suppress_warnings=False, error_action='warn', trace=False,
                random=False, random_state=None, n_fits=10,
@@ -250,6 +268,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                sarimax_kwargs=None, **fit_args):
 
     # NOTE: Doc is assigned BELOW this function
+
+    # pop out the deprecated kwargs
+    fit_args = _warn_for_deprecations(**fit_args)
 
     start = time.time()
 
@@ -262,19 +283,6 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             or max_P < start_P or max_Q < start_Q:
         raise ValueError('max p, q, P & Q must be >= than '
                          'their starting values')
-
-    # validate max_order
-    if max_order is None:
-        max_order = np.inf
-    elif max_order < 0:
-        raise ValueError('max_order must be None or a positive integer (>= 0)')
-
-    # alternatively, if the start_p and start_q supercede
-    # the max order, that's a failable offense...
-    if (not seasonal and start_p + start_q > max_order) or \
-            (seasonal and start_P + start_p + start_Q + start_q > max_order):
-        raise ValueError('If max_order is prescribed, it must '
-                         'exceed sum of starting orders')
 
     # validate d & D
     for _d, _max_d in ((d, max_d), (D, max_D)):
@@ -325,8 +333,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                 y, xreg=exogenous, order=(0, 0, 0),
                 seasonal_order=(0, 0, 0, 0),
                 start_params=start_params, trend=trend, method=method,
-                transparams=transparams, solver=solver, maxiter=maxiter,
-                disp=disp, callback=callback, fit_params=fit_args,
+                maxiter=maxiter, fit_params=fit_args,
                 suppress_warnings=suppress_warnings, trace=trace,
                 error_action=error_action, scoring=scoring,
                 out_of_sample_size=out_of_sample_size,
@@ -465,9 +472,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                     y, xreg=exogenous, order=(0, d, 0),
                     seasonal_order=ssn,
                     start_params=start_params, trend=trend,
-                    method=method, transparams=transparams,
-                    solver=solver, maxiter=maxiter,
-                    disp=disp, callback=callback,
+                    method=method, maxiter=maxiter,
                     fit_params=fit_args,
                     suppress_warnings=suppress_warnings,
                     trace=trace,
@@ -510,6 +515,22 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         )
 
     if not stepwise:
+
+        # validate max_order
+        if max_order is None:
+            max_order = np.inf
+        elif max_order < 0:
+            raise ValueError('max_order must be None or a positive '
+                             'integer (>= 0)')
+
+        # alternatively, if the start_p and start_q supercede
+        # the max order, that's a failable offense...
+        if (not seasonal and start_p + start_q > max_order) or \
+                (seasonal and
+                 start_P + start_p + start_Q + start_q > max_order):
+            raise ValueError('If max_order is prescribed, it must '
+                             'exceed sum of starting orders')
+
         # if we are fitting a random search rather than an exhaustive one, we
         # will scramble up the generator (as a list) and only fit n_iter ARIMAs
         if random:
@@ -524,9 +545,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                 y, xreg=exogenous, order=order,
                 seasonal_order=seasonal_order,
                 start_params=start_params, trend=trend,
-                method=method, transparams=transparams,
-                solver=solver, maxiter=maxiter, disp=disp,
-                callback=callback,
+                method=method, maxiter=maxiter,
                 fit_params=fit_args,
                 suppress_warnings=suppress_warnings,
                 trace=trace, error_action=error_action,
@@ -552,8 +571,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         # init the stepwise model wrapper
         stepwise_wrapper = solvers._StepwiseFitWrapper(
             y, xreg=exogenous, start_params=start_params, trend=trend,
-            method=method, transparams=transparams, solver=solver,
-            maxiter=maxiter, disp=disp, callback=callback, fit_params=fit_args,
+            method=method, maxiter=maxiter, fit_params=fit_args,
             suppress_warnings=suppress_warnings, trace=trace,
             error_action=error_action, out_of_sample_size=out_of_sample_size,
             scoring=scoring, scoring_args=scoring_args, p=p, d=d, q=q,
@@ -561,29 +579,10 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             start_P=start_P, start_Q=start_Q, max_p=max_p, max_q=max_q,
             max_P=max_P, max_Q=max_Q, seasonal=seasonal,
             information_criterion=information_criterion,
-            max_order=max_order, with_intercept=with_intercept,
-            **sarimax_kwargs)
-
-        # fit a baseline p, d, q model and then a null model
-        stepwise_wrapper.fit_increment_k_cache_set(True)  # p, d, q, P, D, Q
-        stepwise_wrapper.fit_increment_k_cache_set(
-            True, p=0, q=0, P=0, Q=0)  # null model
-
-        # fit a basic AR model
-        stepwise_wrapper.fit_increment_k_cache_set(
-            max_p > 0 or max_P > 0, p=int(max_p > 0),
-            q=0, P=int(m > 1 and max_P > 0), Q=0)
-
-        # fit a basic MA model now
-        stepwise_wrapper.fit_increment_k_cache_set(
-            max_q > 0 or max_Q > 0, p=0, q=int(max_q > 0),
-            P=0, Q=int(m > 1 and max_Q > 0))
-
-        # might not be 4 if p, q etc. are already 0
-        # assert stepwise_wrapper.k == 4  # sanity check...
+            with_intercept=with_intercept, **sarimax_kwargs)
 
         # do the step-through...
-        all_res = stepwise_wrapper.step_through()
+        all_res = stepwise_wrapper.solve_stepwise()
 
     # filter the non-successful ones
     filtered = _post_ppc_arima(all_res)
@@ -607,6 +606,7 @@ auto_arima.__doc__ = _doc._AUTO_ARIMA_DOCSTR.format(
     y=_doc._Y_DOCSTR,
     exogenous=_doc._EXOG_DOCSTR,
     fit_args=_doc._FIT_ARGS_DOCSTR,
+    sarimax_kwargs=_doc._SARIMAX_ARGS_DOCSTR,
     return_valid_fits=_doc._VALID_FITS_DOCSTR
 )
 

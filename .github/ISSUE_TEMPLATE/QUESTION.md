@@ -10,7 +10,7 @@ assignees: ''
 <!-- Before asking a question, please consult our closed issues and docs to see
 if we have already addressed it:
 
-https://github.com/tgsmith61591/pmdarima/issues?q=is%3Aissue+is%3Aclosed
+https://github.com/alkaline-ml/pmdarima/issues?q=is%3Aissue+is%3Aclosed
 https://www.alkaline-ml.com/pmdarima/
 -->
 

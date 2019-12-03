@@ -34,14 +34,12 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('datasets/tests')
     config.add_subpackage('model_selection')
     config.add_subpackage('model_selection/tests')
-    config.add_subpackage('utils')
-    config.add_subpackage('utils/tests')
 
     # the following packages have cython, so they have to be build
     # after the above.
     config.add_subpackage('arima')
-    config.add_subpackage('arima/tests')
     config.add_subpackage('preprocessing')
+    config.add_subpackage('utils')
 
     # do cythonization
     maybe_cythonize_extensions(top_path, config)
