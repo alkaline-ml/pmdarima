@@ -23,22 +23,22 @@ austres_long = np.asarray(aus_list * 10)  # type: np.ndarray
 
 
 @pytest.mark.parametrize(
-    'x,type,f,filter', [
+    'x,type_,m,filter_', [
         pytest.param(ausbeer, 'additive', 4, None),
         pytest.param(airpassengers, 'multiplicative', 12, None)
     ]
 )
-def test_decompose_happy_path(x, type, f, filter):
+def test_decompose_happy_path(x, type_, m, filter_):
 
-    decomposed_tuple = decompose(x, type, f, filter)
-    first_ind = int(f / 2)
-    last_ind = -int(f / 2)
+    decomposed_tuple = decompose(x, type_, m, filter_)
+    first_ind = int(m / 2)
+    last_ind = -int(m / 2)
     x = decomposed_tuple.x[first_ind:last_ind]
     trend = decomposed_tuple.trend[first_ind:last_ind]
     seasonal = decomposed_tuple.seasonal[first_ind:last_ind]
     random = decomposed_tuple.random[first_ind:last_ind]
 
-    if type == 'multiplicative':
+    if type_ == 'multiplicative':
         reconstructed_x = trend * seasonal * random
     else:
         reconstructed_x = trend + seasonal + random
@@ -48,10 +48,10 @@ def test_decompose_happy_path(x, type, f, filter):
 
 def test_decompose_corner_cases():
     with pytest.raises(ValueError):
-        decompose(ausbeer, 'dummy_type', 4, None),  # bad `type`
+        decompose(ausbeer, 'dummy_type', 4, None),  # bad `type_`
 
     with pytest.raises(ValueError):
-        decompose(airpassengers, 'multiplicative', -0.5, None),  # bad `f`
+        decompose(airpassengers, 'multiplicative', -0.5, None),  # bad `m`
 
     with pytest.raises(ValueError):
         decompose(ausbeer[:1], 'multiplicative', 4, None)  # bad `x`

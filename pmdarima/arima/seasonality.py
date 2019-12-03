@@ -33,26 +33,27 @@ __all__ = [
 ]
 
 
-def decompose(x, type, f, filter=None):
+def decompose(x, type_, m, filter_=None):
     """
+    Decompose the time series into trend, seasonal, and random components.
 
     Parameters
     ----------
-    x : np.array
+    x : np.array, shape=(n_samples,)
         The time series of which the trend, seasonal, and noise/random
         components will be extracted.
 
-    type: str
+    type_: str
         The type of decomposition that will be performed - 'multiplicative' or
         'additive'. We would use 'multiplicative' generally when we see an
         increasing trend. We use 'additive' when the trend is relatively
         stable over time.
 
-    f: int
+    m: int
         The frequency in terms of number of observations. This behaves
         similarly to R's frequency for a time series (ts).
 
-    filter: np.array
+    filter_: np.array, optional (default=None)
         A filter by which the convolution will be performed.
 
     Returns
@@ -85,9 +86,9 @@ def decompose(x, type, f, filter=None):
     multiplicative = "multiplicative"
     additive = "additive"
 
-    # Helper function to stay consistent and concise based on 'type'
-    def _decomposer_helper(a, b, type):
-        if type == multiplicative:
+    # Helper function to stay consistent and concise based on 'type_'
+    def _decomposer_helper(a, b):
+        if type_ == multiplicative:
             return a / b
         else:
             return a - b
@@ -95,49 +96,48 @@ def decompose(x, type, f, filter=None):
     # Since R's ts class has a frequency as input I think this it acceptable
     # to ask the user for the frequency.
     try:
-        assert int(f) > 1 and isinstance(f, int)
+        assert isinstance(m, int) and m > 1
     except (ValueError, AssertionError):
         raise ValueError("'f' should be a positive integer")
 
-    if filter is None:
-        filter = np.ones((f,)) / f
+    if filter_ is None:
+        filter_ = np.ones((m,)) / m
 
     # We only accept the values in multiplicative or additive
-    if type not in (multiplicative, additive):
-        err_msg = "'type' can only take values '{}' or '{}'"
+    if type_ not in (multiplicative, additive):
+        err_msg = "'type_' can only take values '{}' or '{}'"
         raise ValueError(err_msg.format(multiplicative, additive))
 
     # There needs to be at least 2 periods. This is due to the behavior of
     # convolutions and how they behave with respect to losing endpoints
-    if (x.shape[0] / f) < 2:
+    if (x.shape[0] / m) < 2:
         raise ValueError("time series has no or less than 2 periods")
 
-    # Take half of f for the convolution / sma process.
-    half_f = int(f / 2.)
-    trend = np.convolve(x, filter, mode='valid')
+    # Take half of m for the convolution / sma process.
+    half_m = m // 2
+    trend = np.convolve(x, filter_, mode='valid')
     trend = trend[:-1]  # we remove the final index.
-    sma_xs = range(half_f, len(trend) + half_f)
+    sma_xs = range(half_m, len(trend) + half_m)
 
     # Remove the effect of the trend on the original signal
-    detrend = _decomposer_helper(x[sma_xs], trend, type)
+    detrend = _decomposer_helper(x[sma_xs], trend)
 
     # Determine the seasonal effect of the signal
-    m = np.reshape(detrend, (int(detrend.shape[0] / f), f))
+    m = np.reshape(detrend, (int(detrend.shape[0] / m), m))
     seasonal = np.nanmean(m, axis=0).tolist()
-    seasonal = np.array(seasonal[half_f:] + seasonal[:half_f])
+    seasonal = np.array(seasonal[half_m:] + seasonal[:half_m])
     temp = seasonal
     for i in range(m.shape[0]):
         seasonal = np.concatenate((seasonal, temp))
 
     # We buffer the trend component so that it is the same length as the other
     # outputs. This counters the effects of losing data by the convolution/sma
-    buffer = [np.nan] * half_f
+    buffer = [np.nan] * half_m
     trend = buffer + trend.tolist() + buffer
 
     # Remove the trend and seasonal effects from the original signal to get
     # the random/noisy effects within the original signal.
-    random = \
-        _decomposer_helper(_decomposer_helper(x, trend, type), seasonal, type)
+    random = _decomposer_helper(_decomposer_helper(x, trend), seasonal)
 
     # Create a namedtuple so the output mirrors the output of the R function.
     decomposed = namedtuple('decomposed', 'x trend seasonal random')
