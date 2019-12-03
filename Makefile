@@ -32,14 +32,14 @@ doc-requirements:
 documentation: doc-requirements version
 	@make -C doc clean html EXAMPLES_PATTERN=example_*
 
-# If we are on Windows, we want to add the UC Irvine wheel distributions (for statsmodels) and prefer binaries
+# If we are on Windows, we want to add the UC Irvine wheel distributions and only binaries (for statsmodels)
 # (since building statsmodels>=0.10.2 from source breaks) https://www.statsmodels.org/stable/install.html#pre-packaged-binaries
 # Have to do it this way so we can still build PyPy without it breaking
 requirements:
 ifeq ($(OS),Windows_NT)
 	$(PYTHON) -m pip install \
 		--extra-index-url https://www.lfd.uci.edu/~gohlke/pythonlibs/#statsmodels \
-		--prefer-binary \
+		--only-binary statsmodels \
 		-r requirements.txt
 else
 	$(PYTHON) -m pip install -r requirements.txt
