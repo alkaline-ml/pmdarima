@@ -170,9 +170,7 @@
 <span class="c1">#</span>
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 <span class="c1">#</span>
-<span class="c1"># Tests for seasonal differencing terms</span>
-
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span>
+<span class="c1"># Tests for seasonal differencing terms, and seasonal decomposition</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 
@@ -201,7 +199,7 @@
 <span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="decompose"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.decompose.html#pmdarima.arima.decompose">[docs]</a><span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decompose the time series into trend, seasonal, and random components.</span>
 
@@ -227,18 +225,19 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    decomposed_tuple : namedtuple</span>
-<span class="sd">        A named tuple with `x`, `trend`, `seasonal`, and `random` components</span>
-<span class="sd">        where `x` is the input signal, `trend` is the overall trend, `seasonal`</span>
-<span class="sd">        is the seasonal component, and `random` is the noisy component. The</span>
-<span class="sd">        input signal `x` can be mostly reconstructed by the other three</span>
-<span class="sd">        components with a number of points missing equal to `f`.</span>
+<span class="sd">        A named tuple with ``x``, ``trend``, ``seasonal``, and ``random``</span>
+<span class="sd">        components where ``x`` is the input signal, ``trend`` is the overall</span>
+<span class="sd">        trend, ``seasonal`` is the seasonal component, and `random` is the</span>
+<span class="sd">        noisy component. The input signal ``x`` can be mostly reconstructed by</span>
+<span class="sd">        the other three components with a number of points missing equal to</span>
+<span class="sd">        ``m``.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    This function is generally used in conjunction with</span>
 <span class="sd">    :func:`pmdarima.utils.visualization.decomposed_plot`,</span>
 <span class="sd">    which plots the decomposed components. Also there are two example notebooks</span>
-<span class="sd">    within the `examples` folder which mirror existing R examples.</span>
+<span class="sd">    within the ``examples`` folder which mirror existing R examples.</span>
 
 <span class="sd">     References</span>
 <span class="sd">    ----------</span>
@@ -246,9 +245,7 @@
 <span class="sd">           https://anomaly.io/seasonal-trend-decomposition-in-r/index.html</span>
 
 <span class="sd">    .. [2] R documentation for decompose:</span>
-<span class="sd">           https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose</span>
-
-
+<span class="sd">           https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose  # noqa: E501</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">multiplicative</span> <span class="o">=</span> <span class="s2">&quot;multiplicative&quot;</span>
@@ -291,11 +288,11 @@
     <span class="n">detrend</span> <span class="o">=</span> <span class="n">_decomposer_helper</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">sma_xs</span><span class="p">],</span> <span class="n">trend</span><span class="p">)</span>
 
     <span class="c1"># Determine the seasonal effect of the signal</span>
-    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">detrend</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">detrend</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">m</span><span class="p">),</span> <span class="n">m</span><span class="p">))</span>
-    <span class="n">seasonal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">m_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">detrend</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">detrend</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">m</span><span class="p">),</span> <span class="n">m</span><span class="p">))</span>
+    <span class="n">seasonal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">m_arr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
     <span class="n">seasonal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">seasonal</span><span class="p">[</span><span class="n">half_m</span><span class="p">:]</span> <span class="o">+</span> <span class="n">seasonal</span><span class="p">[:</span><span class="n">half_m</span><span class="p">])</span>
     <span class="n">temp</span> <span class="o">=</span> <span class="n">seasonal</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
         <span class="n">seasonal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">seasonal</span><span class="p">,</span> <span class="n">temp</span><span class="p">))</span>
 
     <span class="c1"># We buffer the trend component so that it is the same length as the other</span>
@@ -311,7 +308,7 @@
     <span class="n">decomposed</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;decomposed&#39;</span><span class="p">,</span> <span class="s1">&#39;x trend seasonal random&#39;</span><span class="p">)</span>
     <span class="n">decomposed_tuple</span> <span class="o">=</span> <span class="n">decomposed</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">trend</span><span class="p">,</span> <span class="n">seasonal</span><span class="p">,</span> <span class="n">random</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">decomposed_tuple</span>
+    <span class="k">return</span> <span class="n">decomposed_tuple</span></div>
 
 
 <span class="k">class</span> <span class="nc">_SeasonalStationarityTest</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">with_metaclass</span><span class="p">(</span><span class="n">ABCMeta</span><span class="p">,</span>

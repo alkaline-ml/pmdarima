@@ -194,7 +194,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.SlidingWindowForecastCV<a class="headerlink" href="#pmdarima-model-selection-slidingwindowforecastcv" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.model_selection.SlidingWindowForecastCV">
-<em class="property">class </em><code class="descclassname">pmdarima.model_selection.</code><code class="descname">SlidingWindowForecastCV</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>window_size=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/fd24fb3/pmdarima/model_selection/_split.py#L186"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.model_selection.</code><code class="descname">SlidingWindowForecastCV</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>window_size=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/275b099/pmdarima/model_selection/_split.py#L186"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use a sliding window to perform cross validation</p>
 <p>This approach to CV slides a window over the training samples while using
 several future samples as a test set. While similar to the
@@ -227,10 +227,10 @@ size n_samples // 5 will be used.</p>
 <p class="last"><a class="reference internal" href="pmdarima.model_selection.RollingForecastCV.html#pmdarima.model_selection.RollingForecastCV" title="pmdarima.model_selection.RollingForecastCV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RollingForecastCV</span></code></a></p>
 </div>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r75" rules="none">
+<table class="docutils citation" frame="void" id="r79" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R75]</a></td><td><a class="reference external" href="https://robjhyndman.com/hyndsight/tscv/">https://robjhyndman.com/hyndsight/tscv/</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R79]</a></td><td><a class="reference external" href="https://robjhyndman.com/hyndsight/tscv/">https://robjhyndman.com/hyndsight/tscv/</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -286,19 +286,19 @@ the last index in the training fold:</p>
 </table>
 <dl class="method">
 <dt id="pmdarima.model_selection.SlidingWindowForecastCV.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>window_size=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/fd24fb3/pmdarima/model_selection/_split.py#L249"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>window_size=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/275b099/pmdarima/model_selection/_split.py#L249"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.model_selection.SlidingWindowForecastCV.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/fd24fb3/pmdarima/../sklearn/base.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/275b099/pmdarima/../sklearn/base.py#L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>deep</strong> : boolean, optional</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>deep</strong> : bool, default=True</p>
 <blockquote>
 <div><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
@@ -317,7 +317,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.model_selection.SlidingWindowForecastCV.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/fd24fb3/pmdarima/../sklearn/base.py#L200"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/275b099/pmdarima/../sklearn/base.py#L205"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -327,7 +327,17 @@ component of a nested object.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>**params</strong> : dict</p>
+<blockquote>
+<div><p>Estimator parameters.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>self</strong> : object</p>
+<blockquote class="last">
+<div><p>Estimator instance.</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>
@@ -335,7 +345,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.model_selection.SlidingWindowForecastCV.split">
-<code class="descname">split</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/fd24fb3/pmdarima/model_selection/_split.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.split" title="Permalink to this definition">¶</a></dt>
+<code class="descname">split</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/275b099/pmdarima/model_selection/_split.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.split" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate indices to split data into training and test sets</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

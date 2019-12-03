@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.arima.nsdiffs &mdash; pmdarima 0.0.0 documentation</title>
+  <title>pmdarima.arima.decompose &mdash; pmdarima 0.0.0 documentation</title>
   
 
   
@@ -51,8 +51,8 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pmdarima.arima.decompose" href="pmdarima.arima.decompose.html" />
-    <link rel="prev" title="pmdarima.arima.ndiffs" href="pmdarima.arima.ndiffs.html" /> 
+    <link rel="next" title="pmdarima.datasets.load_airpassengers" href="pmdarima.datasets.load_airpassengers.html" />
+    <link rel="prev" title="pmdarima.arima.nsdiffs" href="pmdarima.arima.nsdiffs.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -105,13 +105,11 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pmdarima-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>: ARIMA estimator &amp; differencing tests</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-estimator-statistical-tests">ARIMA estimator &amp; statistical tests</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../classes.html#arima-auto-parameter-selection">ARIMA auto-parameter selection</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="../classes.html#differencing-helpers">Differencing helpers</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.is_constant.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.is_constant</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.arima.ndiffs.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.ndiffs</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.nsdiffs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../classes.html#differencing-helpers">Differencing helpers</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../classes.html#seasonal-decomposition">Seasonal decomposition</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.decompose</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../classes.html#seasonal-decomposition">Seasonal decomposition</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a></li>
@@ -172,13 +170,13 @@
         
           <li><a href="../classes.html">API Reference</a> &raquo;</li>
         
-      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.nsdiffs</li>
+      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>.decompose</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/modules/generated/pmdarima.arima.nsdiffs.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/modules/generated/pmdarima.arima.decompose.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -191,51 +189,70 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pmdarima-arima-nsdiffs">
-<h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.nsdiffs<a class="headerlink" href="#pmdarima-arima-nsdiffs" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pmdarima-arima-decompose">
+<h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.decompose<a class="headerlink" href="#pmdarima-arima-decompose" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pmdarima.arima.nsdiffs">
-<code class="descclassname">pmdarima.arima.</code><code class="descname">nsdiffs</code><span class="sig-paren">(</span><em>x</em>, <em>m</em>, <em>max_D=2</em>, <em>test='ocsb'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/275b099/pmdarima/arima/utils.py#L59"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/utils.html#nsdiffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.nsdiffs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimate the seasonal differencing term, <code class="docutils literal notranslate"><span class="pre">D</span></code>.</p>
-<p>Perform a test of seasonality for different levels of <code class="docutils literal notranslate"><span class="pre">D</span></code> to
-estimate the number of seasonal differences required to make a given time
-series stationary. Will select the maximum value of <code class="docutils literal notranslate"><span class="pre">D</span></code> for which
-the time series is judged seasonally stationary by the statistical test.</p>
+<dt id="pmdarima.arima.decompose">
+<code class="descclassname">pmdarima.arima.</code><code class="descname">decompose</code><span class="sig-paren">(</span><em>x</em>, <em>type_</em>, <em>m</em>, <em>filter_=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/275b099/pmdarima/arima/seasonality.py#L34"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#decompose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.decompose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decompose the time series into trend, seasonal, and random components.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array-like, shape=(n_samples, [n_features])</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : np.array, shape=(n_samples,)</p>
 <blockquote>
-<div><p>The array to difference.</p>
+<div><p>The time series of which the trend, seasonal, and noise/random
+components will be extracted.</p>
 </div></blockquote>
-<p><strong>m</strong> : int</p>
+<p><strong>type_: str</strong></p>
 <blockquote>
-<div><p>The number of seasonal periods (i.e., frequency of the
-time series)</p>
+<div><p>The type of decomposition that will be performed - ‘multiplicative’ or
+‘additive’. We would use ‘multiplicative’ generally when we see an
+increasing trend. We use ‘additive’ when the trend is relatively
+stable over time.</p>
 </div></blockquote>
-<p><strong>max_D</strong> : int, optional (default=2)</p>
+<p><strong>m: int</strong></p>
 <blockquote>
-<div><p>Maximum number of seasonal differences allowed. Must
-be a positive integer. The estimated value of <code class="docutils literal notranslate"><span class="pre">D</span></code> will not
-exceed <code class="docutils literal notranslate"><span class="pre">max_D</span></code>.</p>
+<div><p>The frequency in terms of number of observations. This behaves
+similarly to R’s frequency for a time series (ts).</p>
 </div></blockquote>
-<p><strong>test</strong> : str, optional (default=’ocsb’)</p>
+<p><strong>filter_: np.array, optional (default=None)</strong></p>
 <blockquote>
-<div><p>Type of unit root test of seasonality to use in order
-to detect seasonal periodicity. Valid tests include (“ocsb”, “ch”).
-Note that the CHTest is very slow for large data.</p>
+<div><p>A filter by which the convolution will be performed.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>D</strong> : int</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>decomposed_tuple</strong> : namedtuple</p>
 <blockquote class="last">
-<div><p>The estimated seasonal differencing term. This is the maximum value
-of <code class="docutils literal notranslate"><span class="pre">D</span></code> such that <code class="docutils literal notranslate"><span class="pre">D</span> <span class="pre">&lt;=</span> <span class="pre">max_D</span></code> and the time series is judged
-seasonally stationary. If the time series is constant, will return 0.</p>
+<div><p>A named tuple with <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">trend</span></code>, <code class="docutils literal notranslate"><span class="pre">seasonal</span></code>, and <code class="docutils literal notranslate"><span class="pre">random</span></code>
+components where <code class="docutils literal notranslate"><span class="pre">x</span></code> is the input signal, <code class="docutils literal notranslate"><span class="pre">trend</span></code> is the overall
+trend, <code class="docutils literal notranslate"><span class="pre">seasonal</span></code> is the seasonal component, and <cite>random</cite> is the
+noisy component. The input signal <code class="docutils literal notranslate"><span class="pre">x</span></code> can be mostly reconstructed by
+the other three components with a number of points missing equal to
+<code class="docutils literal notranslate"><span class="pre">m</span></code>.</p>
 </div></blockquote>
 </td>
 </tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function is generally used in conjunction with
+<code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.utils.visualization.decomposed_plot()</span></code>,
+which plots the decomposed components. Also there are two example notebooks
+within the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder which mirror existing R examples.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r63" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R63]</a></td><td>Example of decompose using both multiplicative and additive types:
+<a class="reference external" href="https://anomaly.io/seasonal-trend-decomposition-in-r/index.html">https://anomaly.io/seasonal-trend-decomposition-in-r/index.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r64" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R64]</a></td><td>R documentation for decompose:
+<a class="reference external" href="https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose">https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose</a>  # noqa: E501</td></tr>
 </tbody>
 </table>
 </dd></dl>
@@ -250,10 +267,10 @@ seasonally stationary. If the time series is constant, will return 0.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pmdarima.arima.decompose.html" class="btn btn-neutral float-right" title="pmdarima.arima.decompose" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pmdarima.datasets.load_airpassengers.html" class="btn btn-neutral float-right" title="pmdarima.datasets.load_airpassengers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pmdarima.arima.ndiffs.html" class="btn btn-neutral float-left" title="pmdarima.arima.ndiffs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pmdarima.arima.nsdiffs.html" class="btn btn-neutral float-left" title="pmdarima.arima.nsdiffs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
