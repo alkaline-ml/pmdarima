@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.utils.diff &mdash; pmdarima 0.0.0 documentation</title>
+  <title>pmdarima.utils.diff_inv &mdash; pmdarima 0.0.0 documentation</title>
   
 
   
@@ -51,8 +51,8 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pmdarima.utils.diff_inv" href="pmdarima.utils.diff_inv.html" />
-    <link rel="prev" title="pmdarima.utils.check_exog" href="pmdarima.utils.check_exog.html" /> 
+    <link rel="next" title="pmdarima.utils.if_has_delegate" href="pmdarima.utils.if_has_delegate.html" />
+    <link rel="prev" title="pmdarima.utils.diff" href="pmdarima.utils.diff.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -115,8 +115,8 @@
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.c.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.c</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.check_endog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_endog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.check_exog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_exog</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.diff_inv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff_inv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.diff.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff_inv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.if_has_delegate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.if_has_delegate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.is_iterable.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.is_iterable</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.pacf.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.pacf</a></li>
@@ -177,13 +177,13 @@
         
           <li><a href="../classes.html">API Reference</a> &raquo;</li>
         
-      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff</li>
+      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff_inv</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/modules/generated/pmdarima.utils.diff.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/modules/generated/pmdarima.utils.diff_inv.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -196,17 +196,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pmdarima-utils-diff">
-<h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.diff<a class="headerlink" href="#pmdarima-utils-diff" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pmdarima-utils-diff-inv">
+<h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.diff_inv<a class="headerlink" href="#pmdarima-utils-diff-inv" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pmdarima.utils.diff">
-<code class="descclassname">pmdarima.utils.</code><code class="descname">diff</code><span class="sig-paren">(</span><em>x</em>, <em>lag=1</em>, <em>differences=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/fd24fb3/pmdarima/utils/array.py#L236"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.diff" title="Permalink to this definition">¶</a></dt>
-<dd><p>Difference an array.</p>
-<p>A python implementation of the R <code class="docutils literal notranslate"><span class="pre">diff</span></code> function [1]. This computes lag
-differences from an array given a <code class="docutils literal notranslate"><span class="pre">lag</span></code> and <code class="docutils literal notranslate"><span class="pre">differencing</span></code> term.</p>
+<dt id="pmdarima.utils.diff_inv">
+<code class="descclassname">pmdarima.utils.</code><code class="descname">diff_inv</code><span class="sig-paren">(</span><em>x</em>, <em>lag=1</em>, <em>differences=1</em>, <em>xi=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/fd24fb3/pmdarima/utils/array.py#L366"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#diff_inv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.diff_inv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse the difference of an array.</p>
+<p>A python implementation of the R <code class="docutils literal notranslate"><span class="pre">diffinv</span></code> function [1]. This computes
+the inverse of lag differences from an array given a <code class="docutils literal notranslate"><span class="pre">lag</span></code>
+and <code class="docutils literal notranslate"><span class="pre">differencing</span></code> term.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">x</span></code> is a vector of length <span class="math notranslate">\(n\)</span>, <code class="docutils literal notranslate"><span class="pre">lag=1</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>,
-then the computed result is equal to the successive differences
-<code class="docutils literal notranslate"><span class="pre">x[lag:n]</span> <span class="pre">-</span> <span class="pre">x[:n-lag]</span></code>.</p>
+then the computed result is equal to the cumulative sum plus left-padding
+of zeros equal to <code class="docutils literal notranslate"><span class="pre">lag</span> <span class="pre">*</span> <span class="pre">differences</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -227,63 +228,58 @@ then the computed result is equal to the successive differences
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>res</strong> : np.ndarray, shape=(n_samples, [n_features])</p>
 <blockquote class="last">
-<div><p>The result of the differenced arrays.</p>
+<div><p>The result of the inverse of the difference arrays.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r79" rules="none">
+<table class="docutils citation" frame="void" id="r80" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R79]</a></td><td><a class="reference external" href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html">https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R80]</a></td><td><a class="reference external" href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html">https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html</a> # noqa: E501</td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Where <code class="docutils literal notranslate"><span class="pre">lag=1</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">array([ -6.,  -2.,   7.,  25.], dtype=float32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff_inv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([ 0., 10., 14., 16., 25., 59.])</span>
 </pre></div>
 </div>
 <p>Where <code class="docutils literal notranslate"><span class="pre">lag=1</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=2</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="go">array([  4.,   9.,  18.], dtype=float32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff_inv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">array([  0.,   0.,  10.,  24.,  40.,  65., 124.])</span>
 </pre></div>
 </div>
 <p>Where <code class="docutils literal notranslate"><span class="pre">lag=3</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">array([ -1.,  30.], dtype=float32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff_inv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([ 0.,  0.,  0., 10.,  4.,  2., 19., 38.])</span>
 </pre></div>
 </div>
 <p>Where <code class="docutils literal notranslate"><span class="pre">lag=6</span></code> (larger than the array is) and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">array([], dtype=float32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff_inv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([ 0.,  0.,  0.,  0.,  0.,  0., 10.,  4.,  2.,  9., 34.])</span>
 </pre></div>
 </div>
 <p>For a 2d array with <code class="docutils literal notranslate"><span class="pre">lag=1</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">array([[ 1.,  1.,  1.],</span>
-<span class="go">       [ 1.,  1.,  1.]], dtype=float32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff_inv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([[ 0.,  0.,  0.],</span>
+<span class="go">       [ 1.,  4.,  7.],</span>
+<span class="go">       [ 3.,  9., 15.],</span>
+<span class="go">       [ 6., 15., 24.]])</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<div class="section" id="examples-using-pmdarima-utils-diff">
-<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.utils.diff</span></code><a class="headerlink" href="#examples-using-pmdarima-utils-diff" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s array differencing, and how it&#x27;s used in conjunction..."><div class="figure" id="id2">
-<img alt="../../_images/sphx_glr_example_array_differencing_thumb.png" src="../../_images/sphx_glr_example_array_differencing_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/utils/example_array_differencing.html#sphx-glr-auto-examples-utils-example-array-differencing-py"><span class="std std-ref">Array differencing</span></a></span></p>
-</div>
-</div><div class="clearer"></div></div>
-</div>
+<div class="clearer"></div></div>
 
 
            </div>
@@ -293,10 +289,10 @@ then the computed result is equal to the successive differences
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pmdarima.utils.diff_inv.html" class="btn btn-neutral float-right" title="pmdarima.utils.diff_inv" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pmdarima.utils.if_has_delegate.html" class="btn btn-neutral float-right" title="pmdarima.utils.if_has_delegate" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pmdarima.utils.check_exog.html" class="btn btn-neutral float-left" title="pmdarima.utils.check_exog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pmdarima.utils.diff.html" class="btn btn-neutral float-left" title="pmdarima.utils.diff" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

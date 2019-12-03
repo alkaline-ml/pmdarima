@@ -129,6 +129,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#pmdarima-datasets-toy-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#dataset-loading-functions">Dataset loading functions</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_airpassengers.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_airpassengers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_ausbeer.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_ausbeer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_austres.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_austres</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_heartrate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_heartrate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_lynx.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_lynx</a></li>
@@ -185,6 +186,7 @@
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.check_endog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_endog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.check_exog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_exog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.diff.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.diff_inv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff_inv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.if_has_delegate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.if_has_delegate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.is_iterable.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.is_iterable</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.pacf.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.pacf</a></li>
@@ -192,6 +194,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#plotting-utilities-wrappers">Plotting utilities &amp; wrappers</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.autocorr_plot.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.autocorr_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.decomposed_plot.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.decomposed_plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.plot_acf.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.plot_acf</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.plot_pacf.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.plot_pacf</a></li>
 </ul>
@@ -391,25 +394,28 @@ would like to prototype a model, this is a good place to find easy-to-access dat
 <tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_airpassengers.html#pmdarima.datasets.load_airpassengers" title="pmdarima.datasets.load_airpassengers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_airpassengers</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Monthly airline passengers.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_austres.html#pmdarima.datasets.load_austres" title="pmdarima.datasets.load_austres"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_austres</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_ausbeer.html#pmdarima.datasets.load_ausbeer" title="pmdarima.datasets.load_ausbeer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_ausbeer</span></code></a>([as_series,&nbsp;dtype])</td>
+<td>Quarterly beer production data.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_austres.html#pmdarima.datasets.load_austres" title="pmdarima.datasets.load_austres"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_austres</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Quarterly residential data.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_heartrate.html#pmdarima.datasets.load_heartrate" title="pmdarima.datasets.load_heartrate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_heartrate</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_heartrate.html#pmdarima.datasets.load_heartrate" title="pmdarima.datasets.load_heartrate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_heartrate</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Uniform heart-rate data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="pmdarima.datasets.load_lynx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_lynx</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="pmdarima.datasets.load_lynx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_lynx</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Annual numbers of lynx trappings for 1821–1934 in Canada.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_msft.html#pmdarima.datasets.load_msft" title="pmdarima.datasets.load_msft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_msft</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_msft.html#pmdarima.datasets.load_msft" title="pmdarima.datasets.load_msft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_msft</span></code></a>()</td>
 <td>Load the microsoft stock data</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_taylor.html#pmdarima.datasets.load_taylor" title="pmdarima.datasets.load_taylor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_taylor</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_taylor.html#pmdarima.datasets.load_taylor" title="pmdarima.datasets.load_taylor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_taylor</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Half-hourly electricity demand</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_wineind</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_wineind</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Australian total wine sales by wine makers in bottles &lt;= 1 litre.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq" title="pmdarima.datasets.load_woolyrnq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_woolyrnq</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq" title="pmdarima.datasets.load_woolyrnq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_woolyrnq</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Quarterly production of woollen yarn in Australia.</td>
 </tr>
 </tbody>
@@ -558,13 +564,16 @@ classes for pre-processing time series or exogenous arrays.</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="pmdarima.utils.diff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.diff</span></code></a>(x[,&nbsp;lag,&nbsp;differences])</td>
 <td>Difference an array.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.if_has_delegate.html#pmdarima.utils.if_has_delegate" title="pmdarima.utils.if_has_delegate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.if_has_delegate</span></code></a>(delegate)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.diff_inv.html#pmdarima.utils.diff_inv" title="pmdarima.utils.diff_inv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.diff_inv</span></code></a>(x[,&nbsp;lag,&nbsp;differences,&nbsp;xi])</td>
+<td>Inverse the difference of an array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.if_has_delegate.html#pmdarima.utils.if_has_delegate" title="pmdarima.utils.if_has_delegate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.if_has_delegate</span></code></a>(delegate)</td>
 <td>Wrap a delegated instance attribute function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.is_iterable.html#pmdarima.utils.is_iterable" title="pmdarima.utils.is_iterable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.is_iterable</span></code></a>(x)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.is_iterable.html#pmdarima.utils.is_iterable" title="pmdarima.utils.is_iterable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.is_iterable</span></code></a>(x)</td>
 <td>Test a variable for iterability.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.pacf.html#pmdarima.utils.pacf" title="pmdarima.utils.pacf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.pacf</span></code></a>(x[,&nbsp;nlags,&nbsp;method,&nbsp;alpha])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.pacf.html#pmdarima.utils.pacf" title="pmdarima.utils.pacf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.pacf</span></code></a>(x[,&nbsp;nlags,&nbsp;method,&nbsp;alpha])</td>
 <td>Partial autocorrelation estimated</td>
 </tr>
 </tbody>
@@ -581,10 +590,13 @@ classes for pre-processing time series or exogenous arrays.</p>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.autocorr_plot.html#pmdarima.utils.autocorr_plot" title="pmdarima.utils.autocorr_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.autocorr_plot</span></code></a>(series[,&nbsp;show])</td>
 <td>Plot a series’ auto-correlation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.plot_acf.html#pmdarima.utils.plot_acf" title="pmdarima.utils.plot_acf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.plot_acf</span></code></a>(series[,&nbsp;ax,&nbsp;lags,&nbsp;alpha,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.decomposed_plot.html#pmdarima.utils.decomposed_plot" title="pmdarima.utils.decomposed_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.decomposed_plot</span></code></a>(decomposed_tuple[,&nbsp;…])</td>
+<td>Plot the decomposition of a time series.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.plot_acf.html#pmdarima.utils.plot_acf" title="pmdarima.utils.plot_acf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.plot_acf</span></code></a>(series[,&nbsp;ax,&nbsp;lags,&nbsp;alpha,&nbsp;…])</td>
 <td>Plot a series’ auto-correlation as a line plot.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.plot_pacf.html#pmdarima.utils.plot_pacf" title="pmdarima.utils.plot_pacf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.plot_pacf</span></code></a>(series[,&nbsp;ax,&nbsp;lags,&nbsp;alpha,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.plot_pacf.html#pmdarima.utils.plot_pacf" title="pmdarima.utils.plot_pacf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.plot_pacf</span></code></a>(series[,&nbsp;ax,&nbsp;lags,&nbsp;alpha,&nbsp;…])</td>
 <td>Plot a series’ partial auto-correlation as a line plot.</td>
 </tr>
 </tbody>

@@ -196,6 +196,7 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;autocorr_plot&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;decomposed_plot&#39;</span><span class="p">,</span>
     <span class="s1">&#39;plot_acf&#39;</span><span class="p">,</span>
     <span class="s1">&#39;plot_pacf&#39;</span>
 <span class="p">]</span>
@@ -224,6 +225,49 @@
         <span class="c1"># returns None implicitly</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">obj</span>
+
+
+<div class="viewcode-block" id="decomposed_plot"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.decomposed_plot.html#pmdarima.utils.decomposed_plot">[docs]</a><span class="k">def</span> <span class="nf">decomposed_plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="p">,</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot the decomposition of a time series.</span>
+
+<span class="sd">    This includes the &#39;x&#39;, &#39;trend&#39;, &#39;seasonal&#39;, and &#39;random&#39; components.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    decomposed_tuple : tuple</span>
+<span class="sd">        Tuple of series that consist of data, trend, seasonal, and random.</span>
+
+<span class="sd">    figure_kwargs : dict, optional (default=None)</span>
+<span class="sd">        Optional dictionary of keyword arguments that are passed to figure.</span>
+
+<span class="sd">    show : bool, optional (default=True)</span>
+<span class="sd">        Whether to show the plot after it&#39;s been created. If not, will return</span>
+<span class="sd">        the plot as an Axis object instead.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This method will only show the plot if ``show=True`` (which is the default</span>
+<span class="sd">    behavior). To simply get the axis back (say, to add to another canvas),</span>
+<span class="sd">    use ``show=False``.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_err_for_no_mpl</span><span class="p">()</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">figure_kwargs</span><span class="p">)</span>
+
+    <span class="n">y_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;trend&#39;</span><span class="p">,</span> <span class="s1">&#39;seasonal&#39;</span><span class="p">,</span> <span class="s1">&#39;random&#39;</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="n">y_labels</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="o">.</span><span class="n">trend</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="o">.</span><span class="n">seasonal</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="o">.</span><span class="n">random</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_show_or_return</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">show</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="autocorr_plot"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.autocorr_plot.html#pmdarima.utils.autocorr_plot">[docs]</a><span class="k">def</span> <span class="nf">autocorr_plot</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
