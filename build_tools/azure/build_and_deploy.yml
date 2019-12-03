@@ -2,9 +2,9 @@ steps:
 - script: python -m pip install --upgrade pip
   displayName: 'Updating pip'
 
-- script: pip install cython
+- script: pip install cython scipy
   condition: eq(variables['Agent.OS'], 'Windows_NT')
-  displayName: 'Preinstalling Cython'
+  displayName: 'Preinstalling Cython and scipy'
 
 - script: |
     make requirements
