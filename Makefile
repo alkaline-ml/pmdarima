@@ -39,7 +39,7 @@ requirements:
 ifeq ($(OS),Windows_NT)
 	$(PYTHON) -m pip install \
 		--extra-index-url https://www.lfd.uci.edu/~gohlke/pythonlibs/#statsmodels \
-		--only-binary \
+		--prefer-binary \
 		-r requirements.txt
 else
 	$(PYTHON) -m pip install -r requirements.txt
