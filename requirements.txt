@@ -8,5 +8,5 @@ six>=1.5
 # Force statsmodels to use a wheel (either from PyPI or UC Irvine)
 # https://www.statsmodels.org/stable/install.html#pre-packaged-binaries
 statsmodels>=0.10.2 --install-option="--extra-index-url https://www.lfd.uci.edu/~gohlke/pythonlibs/#statsmodels" \
-                    --install-option="--only-bindary"
+                    --install-option="--only-binary"
 pathlib
