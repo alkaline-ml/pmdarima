@@ -4,9 +4,8 @@
 #
 # Setup for submodules of pmdarima
 
-from __future__ import absolute_import
-
 import os
+import sys
 
 from pmdarima._build_utils import maybe_cythonize_extensions
 
@@ -35,13 +34,19 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('model_selection')
     config.add_subpackage('model_selection/tests')
 
-    # the following packages have cython, so they have to be build
-    # after the above.
+    # the following packages have cython, and their own setup.py files.
     config.add_subpackage('arima')
     config.add_subpackage('preprocessing')
     config.add_subpackage('utils')
 
-    # do cythonization
+    # add test directory
+    config.add_subpackage('tests')
+
+    # TODO: scikit skips cythonizing on sdist release. should we?
+    # Do cythonization, but only if this is not a release tarball, since the
+    # C/C++ files are not necessarily forward compatible with future versions
+    # of python.
+    # if 'sdist' not in sys.argv:
     maybe_cythonize_extensions(top_path, config)
 
     return config

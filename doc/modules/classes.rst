@@ -74,6 +74,18 @@ Differencing helpers
     arima.nsdiffs
 
 
+Seasonal decomposition
+----------------------
+
+.. currentmodule:: pmdarima
+
+.. autosummary::
+    :toctree: generated/
+    :template: function.rst
+
+    arima.decompose
+
+
 .. _datasets_ref:
 
 :mod:`pmdarima.datasets`: Toy timeseries datasets

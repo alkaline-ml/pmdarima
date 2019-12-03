@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # stationarity tests
 
-from __future__ import absolute_import
-
 from pmdarima.arima.stationarity import ADFTest, PPTest, KPSSTest
 from pmdarima.arima.utils import ndiffs
 from pmdarima.utils.array import diff
