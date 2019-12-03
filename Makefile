@@ -38,8 +38,7 @@ documentation: doc-requirements version
 requirements:
 ifeq ($(OS),Windows_NT)
 	$(PYTHON) -m pip install \
-		--extra-index-url https://www.lfd.uci.edu/~gohlke/pythonlibs/#statsmodels \
-		--only-binary statsmodels \
+		--extra-index-url https://www.lfd.uci.edu/~gohlke/pythonlibs/#statsmodels "statsmodels>=10.2"
 		-r requirements.txt
 else
 	$(PYTHON) -m pip install -r requirements.txt
