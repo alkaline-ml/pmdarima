@@ -32,15 +32,8 @@ doc-requirements:
 documentation: doc-requirements version
 	@make -C doc clean html EXAMPLES_PATTERN=example_*
 
-# If we are on Windows, we want to add install statsmodels from source, then install the requirements
 requirements:
-ifeq ($(OS),Windows_NT)
-	$(PYTHON) -m pip install \
-		git+https://github.com/statsmodels/statsmodels \
-		-r requirements.txt
-else
 	$(PYTHON) -m pip install -r requirements.txt
-endif
 
 bdist_wheel: version
 	$(PYTHON) setup.py bdist_wheel
