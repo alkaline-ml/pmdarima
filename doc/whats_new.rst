@@ -64,6 +64,8 @@ v0.8.1) will document the latest features.
   `decompose <https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose>`_,
   as requested in `#190 <https://github.com/alkaline-ml/pmdarima/issues/190>`_
 
+* Python 3.8 is now supported
+
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
 --------------------------------------------------
 
