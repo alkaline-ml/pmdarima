@@ -3,8 +3,9 @@ steps:
   displayName: 'Updating pip'
 
 - script: |
-    pip install -r build_tools/azure/requirements.txt
+    pip install numpy
     make requirements
+    pip install -r build_tools/azure/requirements.txt
   displayName: 'Installing requirements'
 
 - script: make bdist_wheel
