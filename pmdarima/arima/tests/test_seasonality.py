@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # seasonality tests
 
-from __future__ import absolute_import
-
 from pmdarima.arima.seasonality import CHTest, decompose, OCSBTest
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.compat.pytest import pytest_error_str

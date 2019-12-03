@@ -1,7 +1,5 @@
 # Test the approximation function
 
-from __future__ import absolute_import
-
 from pmdarima.arima.approx import approx, _regularize
 from pmdarima.utils.array import c
 from pmdarima.arima.stationarity import ADFTest
