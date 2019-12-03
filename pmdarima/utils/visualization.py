@@ -28,6 +28,7 @@ except ImportError:
 
 __all__ = [
     'autocorr_plot',
+    'decomposed_plot',
     'plot_acf',
     'plot_pacf'
 ]
@@ -56,6 +57,49 @@ def _show_or_return(obj, show):
         # returns None implicitly
     else:
         return obj
+
+
+def decomposed_plot(decomposed_tuple, figure_kwargs=None, show=True):
+    """
+    Plot the decomposition of a time series.
+
+    This includes the 'x', 'trend', 'seasonal', and 'random' components.
+
+    Parameters
+    ----------
+    decomposed_tuple : tuple
+        Tuple of series that consist of data, trend, seasonal, and random.
+
+    figure_kwargs : dict, optional (default=None)
+        Optional dictionary of keyword arguments that are passed to figure.
+
+    show : bool, optional (default=True)
+        Whether to show the plot after it's been created. If not, will return
+        the plot as an Axis object instead.
+
+    Notes
+    -----
+    This method will only show the plot if ``show=True`` (which is the default
+    behavior). To simply get the axis back (say, to add to another canvas),
+    use ``show=False``.
+
+    """
+
+    _err_for_no_mpl()
+
+    fig, axes = mpl.subplots(4, 1, sharex=True, **figure_kwargs)
+
+    y_labels = ['data', 'trend', 'seasonal', 'random']
+
+    for ax in axes.flat:
+        ax.set(ylabel=y_labels.pop(0))
+
+    axes[0].plot(decomposed_tuple.x)
+    axes[1].plot(decomposed_tuple.trend)
+    axes[2].plot(decomposed_tuple.seasonal)
+    axes[3].plot(decomposed_tuple.random)
+
+    return _show_or_return(axes, show)
 
 
 def autocorr_plot(series, show=True):

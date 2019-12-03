@@ -3,21 +3,58 @@
 
 from __future__ import absolute_import
 
-from pmdarima.arima.seasonality import CHTest, OCSBTest
+from pmdarima.arima.seasonality import CHTest, decompose, OCSBTest
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.compat.pytest import pytest_error_str
-from pmdarima.datasets import load_austres
+from pmdarima.datasets import load_airpassengers, load_ausbeer, load_austres
 
 import numpy as np
 from numpy.testing import assert_almost_equal, assert_array_equal
 from sklearn.utils.validation import check_random_state
 import pytest
 
+airpassengers = load_airpassengers()
 austres = load_austres()
+ausbeer = load_ausbeer()
 
 #  change the length to be longer so we can actually test the large case
 aus_list = austres.tolist()  # type: list
 austres_long = np.asarray(aus_list * 10)  # type: np.ndarray
+
+
+@pytest.mark.parametrize(
+    'x,type_,m,filter_', [
+        pytest.param(ausbeer, 'additive', 4, None),
+        pytest.param(airpassengers, 'multiplicative', 12, None)
+    ]
+)
+def test_decompose_happy_path(x, type_, m, filter_):
+
+    decomposed_tuple = decompose(x, type_, m, filter_)
+    first_ind = int(m / 2)
+    last_ind = -int(m / 2)
+    x = decomposed_tuple.x[first_ind:last_ind]
+    trend = decomposed_tuple.trend[first_ind:last_ind]
+    seasonal = decomposed_tuple.seasonal[first_ind:last_ind]
+    random = decomposed_tuple.random[first_ind:last_ind]
+
+    if type_ == 'multiplicative':
+        reconstructed_x = trend * seasonal * random
+    else:
+        reconstructed_x = trend + seasonal + random
+
+    assert_almost_equal(x, reconstructed_x)
+
+
+def test_decompose_corner_cases():
+    with pytest.raises(ValueError):
+        decompose(ausbeer, 'dummy_type', 4, None),  # bad `type_`
+
+    with pytest.raises(ValueError):
+        decompose(airpassengers, 'multiplicative', -0.5, None),  # bad `m`
+
+    with pytest.raises(ValueError):
+        decompose(ausbeer[:1], 'multiplicative', 4, None)  # bad `x`
 
 
 @pytest.mark.parametrize(
