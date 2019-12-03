@@ -9,6 +9,7 @@ from .utils import *
 from .warnings import *
 
 # These need to be top-level since 0.7.0 for the documentation
+from .seasonality import decompose
 from .seasonality import CHTest
 from .seasonality import OCSBTest
 from .stationarity import ADFTest

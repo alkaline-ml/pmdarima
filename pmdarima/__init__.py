@@ -46,7 +46,7 @@ else:
     from . import __check_build
 
     # Stuff we want at top-level
-    from .arima import auto_arima, ARIMA, AutoARIMA, StepwiseContext
+    from .arima import auto_arima, ARIMA, AutoARIMA, StepwiseContext, decompose
     from .utils import acf, autocorr_plot, c, pacf, plot_acf, plot_pacf
 
     # Need these namespaces at the top so they can be used like:
@@ -64,12 +64,13 @@ else:
         'preprocessing',
         'utils',
 
-        # Function(s) at top level
+        # Functions & non-modules at top level
         'ARIMA',
         'acf',
         'autocorr_plot',
         'auto_arima',
         'c',
+        'decompose',
         'pacf',
         'plot_acf',
         'plot_pacf',

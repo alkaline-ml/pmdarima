@@ -2,9 +2,7 @@
 #
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 #
-# Tests for seasonal differencing terms
-
-from __future__ import absolute_import, division
+# Tests for seasonal differencing terms, and seasonal decomposition
 
 from collections import namedtuple
 
@@ -59,18 +57,19 @@ def decompose(x, type_, m, filter_=None):
     Returns
     -------
     decomposed_tuple : namedtuple
-        A named tuple with `x`, `trend`, `seasonal`, and `random` components
-        where `x` is the input signal, `trend` is the overall trend, `seasonal`
-        is the seasonal component, and `random` is the noisy component. The
-        input signal `x` can be mostly reconstructed by the other three
-        components with a number of points missing equal to `f`.
+        A named tuple with ``x``, ``trend``, ``seasonal``, and ``random``
+        components where ``x`` is the input signal, ``trend`` is the overall
+        trend, ``seasonal`` is the seasonal component, and `random` is the
+        noisy component. The input signal ``x`` can be mostly reconstructed by
+        the other three components with a number of points missing equal to
+        ``m``.
 
     Notes
     -----
     This function is generally used in conjunction with
     :func:`pmdarima.utils.visualization.decomposed_plot`,
     which plots the decomposed components. Also there are two example notebooks
-    within the `examples` folder which mirror existing R examples.
+    within the ``examples`` folder which mirror existing R examples.
 
      References
     ----------
@@ -78,9 +77,7 @@ def decompose(x, type_, m, filter_=None):
            https://anomaly.io/seasonal-trend-decomposition-in-r/index.html
 
     .. [2] R documentation for decompose:
-           https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose
-
-
+           https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose  # noqa: E501
     """
 
     multiplicative = "multiplicative"
@@ -123,11 +120,11 @@ def decompose(x, type_, m, filter_=None):
     detrend = _decomposer_helper(x[sma_xs], trend)
 
     # Determine the seasonal effect of the signal
-    m = np.reshape(detrend, (int(detrend.shape[0] / m), m))
-    seasonal = np.nanmean(m, axis=0).tolist()
+    m_arr = np.reshape(detrend, (int(detrend.shape[0] / m), m))
+    seasonal = np.nanmean(m_arr, axis=0).tolist()
     seasonal = np.array(seasonal[half_m:] + seasonal[:half_m])
     temp = seasonal
-    for i in range(m.shape[0]):
+    for i in range(m_arr.shape[0]):
         seasonal = np.concatenate((seasonal, temp))
 
     # We buffer the trend component so that it is the same length as the other
