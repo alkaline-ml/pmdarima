@@ -32,8 +32,10 @@ doc-requirements:
 documentation: doc-requirements version
 	@make -C doc clean html EXAMPLES_PATTERN=example_*
 
+# Have to add extra index because I guess UC Irvine builds wheels for statsmodels?
+# https://www.statsmodels.org/stable/install.html#pre-packaged-binaries
 requirements:
-	$(PYTHON) -m pip install -r requirements.txt
+	$(PYTHON) -m pip install --extra-index-url https://www.lfd.uci.edu/~gohlke/pythonlibs/#statsmodels -r requirements.txt
 
 bdist_wheel: version
 	$(PYTHON) setup.py bdist_wheel
