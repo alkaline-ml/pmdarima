@@ -126,7 +126,7 @@ jobs:
   # test we can install from sdist
   test-install-from-sdist:
     docker:
-      - image: python: 3.6
+      - image: python:3.6
     working_directory: ~/pmdarima
     steps:
     - checkout
