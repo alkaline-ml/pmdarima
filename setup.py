@@ -64,7 +64,11 @@ SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
     'develop', 'release', 'bdist_egg', 'bdist_rpm',
     'bdist_wininst', 'install_egg_info', 'build_sphinx',
     'egg_info', 'easy_install', 'upload', 'bdist_wheel',
-    '--single-version-externally-managed'
+    '--single-version-externally-managed',
+
+    # This is solely for the README compatibility check against the tarball.
+    # Scikit does not do this
+    'sdist',
 }
 
 if SETUPTOOLS_COMMANDS.intersection(sys.argv):

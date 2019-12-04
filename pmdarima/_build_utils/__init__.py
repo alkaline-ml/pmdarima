@@ -41,9 +41,9 @@ def get_blas_info():
 
 
 def _check_cython_version():
-    message = ('Please install Cython with a version >= {0} in order '
-               'to build a pmdarima distribution from source.').format(
-                    CYTHON_MIN_VERSION)
+    message = 'Please install Cython with a version >= {0} in order ' \
+              'to build a pmdarima distribution from source.' \
+              .format(CYTHON_MIN_VERSION)
     try:
         import Cython
     except ModuleNotFoundError:
