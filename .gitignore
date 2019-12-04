@@ -13,6 +13,9 @@ scratch/
 *.pkl
 !pmdarima/datasets/data/*.pkl
 
+# sdist artifacts
+MANIFEST
+
 # Pypi pws
 .pypipws
 
