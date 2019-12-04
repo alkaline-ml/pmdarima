@@ -1,6 +1,7 @@
 # recursive-include doc *
 include pmdarima/VERSION
 recursive-include examples *
+recursive-include pmdarima *
 recursive-include pmdarima/__check_build *
 recursive-include pmdarima/_build_utils *
 recursive-include pmdarima/arima *
