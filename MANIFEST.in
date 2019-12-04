@@ -10,6 +10,7 @@ recursive-include pmdarima/datasets/data *.pkl
 recursive-include pmdarima/model_selection *
 recursive-include pmdarima/preprocessing/endog *
 recursive-include pmdarima/preprocessing/exog *.c *.pyx *.pyd *.so *.dylib *.dll *.py
+recursive-include pmdarima/tests *
 recursive-include pmdarima/utils *.pyx *.pyd *.so *.dylib *.dll *.py
 include README.md
 include requirements.txt
