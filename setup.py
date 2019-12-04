@@ -66,9 +66,8 @@ SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
     'egg_info', 'easy_install', 'upload', 'bdist_wheel',
     '--single-version-externally-managed',
 
-    # This is solely for the README compatibility check against the tarball.
-    # Scikit does not do this
-    'sdist',
+    # scikit does NOT do this:
+    'sdist,'
 }
 
 if SETUPTOOLS_COMMANDS.intersection(sys.argv):
@@ -81,9 +80,9 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
         zip_safe=False,  # the package can run out of an .egg file
         include_package_data=True,
         # scikit does this:
-        extras_require={
-            'alldeps': REQUIREMENTS
-        }
+        # extras_require={
+        #     'alldeps': REQUIREMENTS
+        # }
     )
 else:
     extra_setuptools_args = dict()
@@ -117,8 +116,9 @@ class CleanCommand(Clean):
                         os.unlink(os.path.join(dirpath, filename))
             for dirname in dirnames:
                 if dirname == '__pycache__':
-                    print('Removing directory: %s' % dirname)
-                    shutil.rmtree(os.path.join(dirpath, dirname))
+                    absdir = os.path.join(dirpath, dirname)
+                    print('Removing directory: %s' % absdir)
+                    shutil.rmtree(absdir)
 
 
 cmdclass = {'clean': CleanCommand}
@@ -296,11 +296,17 @@ def do_setup():
                 "Python version is %s installed in %s."
                 % (platform.python_version(), sys.executable))
 
-        check_package_status('numpy', '1.16')
-        check_package_status('scipy', '1.3')
+        # for sdist, use setuptools so we get the long_description_content_type
+        if 'sdist' in sys.argv:
+            from setuptools import setup
+            print("Setting up with setuptools")
+        else:
+            # we should only need numpy for building. Everything else can be
+            # collected via install_requires above
+            check_package_status('numpy', '1.16')
 
-        from numpy.distutils.core import setup
-        print("Setting up with numpy.distutils.core")
+            from numpy.distutils.core import setup
+            print("Setting up with numpy.distutils.core")
 
         # add the config to the metadata
         metadata['configuration'] = configuration
