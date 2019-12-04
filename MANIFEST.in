@@ -1,14 +1,15 @@
 # recursive-include doc *
 include pmdarima/VERSION
 recursive-include examples *
-recursive-include pmdarima/__check_build *.c *.pyx *.pyd *.so *.dylib *.dll
+recursive-include pmdarima/__check_build *.c *.pyx *.pyd *.so *.dylib *.dll *.py
 recursive-include pmdarima/_build_utils *
-recursive-include pmdarima/arima *.c *.pyx *.pyd *.so *.dylib *.dll
-recursive-include pmdarima/compat *.pyx *.pyd
-recursive-include pmdarima/datasets *.pyx *.pyd
+recursive-include pmdarima/arima *.c *.pyx *.pyd *.so *.dylib *.dll *.py
+recursive-include pmdarima/compat *.pyx *.pyd *.py
+recursive-include pmdarima/datasets *.pyx *.pyd *.py
 recursive-include pmdarima/datasets/data *.pkl
 recursive-include pmdarima/model_selection *
-recursive-include pmdarima/preprocessing/exog *.c *.pyx *.pyd *.so *.dylib *.dll
-recursive-include pmdarima/utils *.pyx *.pyd *.so *.dylib *.dll
+recursive-include pmdarima/preprocessing/endog *
+recursive-include pmdarima/preprocessing/exog *.c *.pyx *.pyd *.so *.dylib *.dll *.py
+recursive-include pmdarima/utils *.pyx *.pyd *.so *.dylib *.dll *.py
 include README.md
 include requirements.txt

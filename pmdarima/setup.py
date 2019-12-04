@@ -22,9 +22,7 @@ def configuration(parent_package='', top_path=None):
 
     # build utilities
     config.add_subpackage('__check_build')
-    config.add_subpackage('__check_build/tests')
     config.add_subpackage('_build_utils')
-    config.add_subpackage('_build_utils/tests')
 
     # modules
     config.add_subpackage('compat')
