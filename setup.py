@@ -2,19 +2,24 @@
 #
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 #
-# Setup the pmdarima module
+# Setup the pmdarima module. This is heavily adapted from the scikit-learn
+# setup.py, since they have a similar package structure and build similar
+# Cython + C modules.
 
-from __future__ import print_function, absolute_import, division
-
-from distutils.command.clean import clean
-import shutil
-import os
 import sys
+import os
+import platform
+import shutil
 
-if sys.version_info[0] < 3:
-    import __builtin__ as builtins
-else:
+from distutils.command.clean import clean as Clean
+from pkg_resources import parse_version
+import traceback
+import importlib
+try:
     import builtins
+except ImportError:
+    # python 2 compat: just to be able to declare that Python >=3.5 is needed
+    import __builtin__ as builtins
 
 # Hacky (!!), adopted from sklearn. This sets a global variable
 # so pmdarima __init__ can detect if it's being loaded in the setup
@@ -26,7 +31,7 @@ builtins.__PMDARIMA_SETUP__ = True
 # metadata
 DISTNAME = 'pmdarima'
 PYPIDIST = 'pmdarima'
-GIT_REPO_NAME = 'pyramid'  # TODO: eventually migrate
+GIT_REPO_NAME = 'pmdarima'
 DESCRIPTION = "Python's forecast::auto.arima equivalent"
 
 # Get the long desc
@@ -37,93 +42,64 @@ MAINTAINER = 'Taylor G. Smith'
 MAINTAINER_GIT = 'tgsmith61591'
 MAINTAINER_EMAIL = 'taylor.smith@alkaline-ml.com'
 LICENSE = 'MIT'
+URL = 'http://alkaline-ml.com/pmdarima'
+DOWNLOAD_URL = 'https://pypi.org/project/pmdarima/#files'
+PROJECT_URLS = {
+    'Bug Tracker': 'https://github.com/alkaline-ml/pmdarima/issues',
+    'Documentation': URL,
+    'Source Code': 'https://github.com/alkaline-ml/pmdarima'
+}
 
-# import restricted version
+# import restricted version of pmdarima that does not need the compiled code
 import pmdarima
-VERSION = pmdarima.__version__
+VERSION = pmdarima.__version__  # will be 0.0.0 unless tagging
 
 # get the installation requirements:
 with open('requirements.txt') as req:
     REQUIREMENTS = [l for l in req.read().split(os.linesep) if l]
     print("Requirements: %r" % REQUIREMENTS)
 
+# Optional setuptools features
 SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
     'develop', 'release', 'bdist_egg', 'bdist_rpm',
     'bdist_wininst', 'install_egg_info', 'build_sphinx',
     'egg_info', 'easy_install', 'upload', 'bdist_wheel',
-    '--single-version-externally-managed'
+    '--single-version-externally-managed',
+
+    # scikit does NOT do this:
+    'sdist,'
 }
 
-# are we building from install or develop?
-we_be_buildin = 'install' in sys.argv
 if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     # we don't use setuptools, but if we don't import it, the "develop"
     # option for setup.py is invalid.
-    import setuptools
-    from setuptools.dist import Distribution
-
-    class BinaryDistribution(Distribution):
-        """The goal is to avoid having to later build the C code
-        on the system itself.
-
-        References
-        ----------
-        .. [1] How to avoid building a C library with my Python package:
-               http://bit.ly/2vQkW47
-
-        .. [2] https://github.com/spotify/dh-virtualenv/issues/113
-        """
-        def is_pure(self):
-            """Since we are distributing binary (.so, .dll, .dylib) files for
-            different platforms we need to make sure the wheel does not build
-            without them! See 'Building Wheels':
-            http://lucumr.pocoo.org/2014/1/27/python-on-wheels/
-
-            Returns
-            -------
-            False
-            """
-            return False
-
-        def has_ext_modules(self):
-            """Pmdarima has external modules. Therefore, unsurprisingly, this
-            returns True to indicate that there are, in fact, external modules.
-
-            Returns
-            -------
-            True
-            """
-            return True
-
-    # only import numpy (later) if we're developing
-    if any(cmd in sys.argv for cmd in {'develop', 'bdist_wheel'}):
-        we_be_buildin = True
+    import setuptools  # noqa
 
     print('Adding extra setuptools args')
     extra_setuptools_args = dict(
         zip_safe=False,  # the package can run out of an .egg file
         include_package_data=True,
-        package_data={'pmdarima': ['*'],
-                      'pmdarima.datasets': ['*', 'data/*']},
-        distclass=BinaryDistribution,
-        install_requires=REQUIREMENTS,
+        # scikit does this:
+        # extras_require={
+        #     'alldeps': REQUIREMENTS
+        # }
     )
 else:
     extra_setuptools_args = dict()
 
 
 # Custom clean command to remove build artifacts -- adopted from sklearn
-class CleanCommand(clean):
+class CleanCommand(Clean):
     description = "Remove build artifacts from the source tree"
 
     # this is mostly in case we ever add a Cython module to SMRT
     def run(self):
-        clean.run(self)
+        Clean.run(self)
         # Remove c files if we are not within a sdist package
         cwd = os.path.abspath(os.path.dirname(__file__))
         remove_c_files = not os.path.exists(os.path.join(cwd, 'PKG-INFO'))
         if remove_c_files:
-            print('Will remove generated .c & .so files')
+            print('Will remove generated .c files')
         if os.path.exists('build'):
             shutil.rmtree('build')
         for dirpath, dirnames, filenames in os.walk(DISTNAME):
@@ -138,20 +114,43 @@ class CleanCommand(clean):
                     pyx_file = str.replace(filename, extension, '.pyx')
                     if os.path.exists(os.path.join(dirpath, pyx_file)):
                         os.unlink(os.path.join(dirpath, filename))
-            # this is for FORTRAN modules, which some of my other packages
-            # have used in the past...
             for dirname in dirnames:
-                if dirname == '__pycache__' or dirname.endswith('.so.dSYM'):
-                    print('Removing directory: %s' % dirname)
-                    shutil.rmtree(os.path.join(dirpath, dirname))
+                if dirname == '__pycache__':
+                    absdir = os.path.join(dirpath, dirname)
+                    print('Removing directory: %s' % absdir)
+                    shutil.rmtree(absdir)
 
 
 cmdclass = {'clean': CleanCommand}
 
 
+# build_ext has to be imported after setuptools
+try:
+    from numpy.distutils.command.build_ext import build_ext  # noqa
+
+    class build_ext_subclass(build_ext):
+        def build_extensions(self):
+            build_ext.build_extensions(self)
+
+    cmdclass['build_ext'] = build_ext_subclass
+
+except ImportError:
+    # Numpy should not be a dependency just to be able to introspect
+    # that python 3.5 is required.
+    pass
+
+# Here is where scikit configures the wheelhouse uploader, but we don't deal
+# with that currently. Maybe in the future...
+
+
 def configuration(parent_package='', top_path=None):
+    if os.path.exists('MANIFEST'):
+        os.remove('MANIFEST')
+
     # we know numpy is a valid import now
     from numpy.distutils.misc_util import Configuration
+    from pmdarima._build_utils import _check_cython_version
+
     config = Configuration(None, parent_package, top_path)
 
     # Avoid non-useful msg
@@ -161,23 +160,61 @@ def configuration(parent_package='', top_path=None):
                        delegate_options_to_subpackages=True,
                        quiet=True)
 
+    # Cython is required by config.add_subpackage, so check that we have the
+    # correct version of Cython
+    _check_cython_version()
+
     config.add_subpackage(DISTNAME)
     return config
+
+
+def check_package_status(package, min_version):
+    """
+    Returns a dictionary containing a boolean specifying whether given package
+    is up-to-date, along with the version string (empty string if
+    not installed).
+    """
+    package_status = {}
+    try:
+        module = importlib.import_module(package)
+        package_version = module.__version__
+        package_status['up_to_date'] = parse_version(
+            package_version) >= parse_version(min_version)
+        package_status['version'] = package_version
+    except ImportError:
+        traceback.print_exc()
+        package_status['up_to_date'] = False
+        package_status['version'] = ""
+
+    req_str = "pmdarima requires {} >= {}.\n".format(
+        package, min_version)
+
+    if package_status['up_to_date'] is False:
+        if package_status['version']:
+            raise ImportError("Your installation of {} "
+                              "{} is out-of-date.\n{}"
+                              .format(package, package_status['version'],
+                                      req_str))
+        else:
+            raise ImportError("{} is not "
+                              "installed.\n{}"
+                              .format(package, req_str))
 
 
 def do_setup():
     # setup the config
     metadata = dict(name=PYPIDIST,
-                    packages=[DISTNAME],
-                    url="https://github.com/%s/%s" % (MAINTAINER_GIT,
-                                                      GIT_REPO_NAME),
+                    # packages=[DISTNAME],
                     maintainer=MAINTAINER,
                     maintainer_email=MAINTAINER_EMAIL,
                     description=DESCRIPTION,
+                    license=LICENSE,
+                    url=URL,
+                    download_url=DOWNLOAD_URL,
+                    project_urls=PROJECT_URLS,
+                    version=VERSION,
                     long_description=LONG_DESCRIPTION,
                     long_description_content_type="text/markdown",
-                    license=LICENSE,
-                    version=VERSION,
                     classifiers=[
                         'Intended Audience :: Science/Research',
                         'Intended Audience :: Developers',
@@ -190,23 +227,49 @@ def do_setup():
                         'Operating System :: POSIX',
                         'Operating System :: Unix',
                         'Operating System :: MacOS',
+                        'Programming Language :: Python :: 3',
                         'Programming Language :: Python :: 3.5',
                         'Programming Language :: Python :: 3.6',
                         'Programming Language :: Python :: 3.7',
+                        ('Programming Language :: Python :: '
+                         'Implementation :: CPython'),
+                        ('Programming Language :: Python :: '
+                         'Implementation :: PyPy')
                     ],
+                    cmdclass=cmdclass,
+                    python_requires='>=3.5',
+                    install_requires=REQUIREMENTS,
+                    # We have a MANIFEST.in, so I'm not convinced this is fully
+                    # necessary, but better to be safe since we've had sdist
+                    # problems in the past...
+                    package_data=dict(
+                        DISTNAME=[
+                            '*',
+                            'pmdarima/*',
+                            'pmdarima/__check_build/*',
+                            'pmdarima/_build_utils/*',
+                            'pmdarima/arima/*',
+                            'pmdarima/arima/tests/data/*',
+                            'pmdarima/compat/*',
+                            'pmdarima/datasets/*',
+                            'pmdarima/datasets/data/*',
+                            'pmdarima/model_selection/*',
+                            'pmdarima/preprocessing/*',
+                            'pmdarima/preprocessing/endog/*',
+                            'pmdarima/preprocessing/exog/*',
+                            'pmdarima/tests/*',
+                            'pmdarima/utils/*',
+                        ]
+                    ),
                     keywords='arima timeseries forecasting pyramid pmdarima '
                              'pyramid-arima scikit-learn statsmodels',
-                    # this will only work for releases that have the right tag
-                    download_url='https://github.com/%s/%s/archive/v%s.tar.gz'
-                                 % (MAINTAINER_GIT, GIT_REPO_NAME, VERSION),
-                    python_requires='>=3.5',
-                    cmdclass=cmdclass,
                     **extra_setuptools_args)
 
     if len(sys.argv) == 1 or (
             len(sys.argv) >= 2 and ('--help' in sys.argv[1:] or
                                     sys.argv[1] in ('--help-commands',
-                                                    'egg-info',
+                                                    'egg_info',
+                                                    'dist_info',
                                                     '--version',
                                                     'clean'))):
         # For these actions, NumPy is not required, so we can import the
@@ -219,25 +282,31 @@ def do_setup():
         # be on the system yet
         try:
             from setuptools import setup
+            print("Setting up with setuptools")
         except ImportError:
+            print("Setting up with distutils")
             from distutils.core import setup
 
         metadata['version'] = VERSION
 
     else:
-        # if we are building for install, develop or bdist_wheel, we NEED
-        # numpy and cython, since they are both used in building the .pyx
-        # files into C modules.
-        if we_be_buildin:
-            try:
-                from numpy.distutils.core import setup
-            except ImportError:
-                raise RuntimeError('Need numpy to build pmdarima')
+        if sys.version_info < (3, 5):
+            raise RuntimeError(
+                "pmdarima requires Python 3.5 or later. The current "
+                "Python version is %s installed in %s."
+                % (platform.python_version(), sys.executable))
 
-        # if we are building to or from a wheel, we do not need numpy,
-        # because it will be handled in the requirements.txt
-        else:
+        # for sdist, use setuptools so we get the long_description_content_type
+        if 'sdist' in sys.argv:
             from setuptools import setup
+            print("Setting up with setuptools")
+        else:
+            # we should only need numpy for building. Everything else can be
+            # collected via install_requires above
+            check_package_status('numpy', '1.16')
+
+            from numpy.distutils.core import setup
+            print("Setting up with numpy.distutils.core")
 
         # add the config to the metadata
         metadata['configuration'] = configuration

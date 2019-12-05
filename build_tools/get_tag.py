@@ -22,7 +22,8 @@ if os.getenv('CIRCLECI', False) and os.getenv('GIT_TAG', False):
 
 # on Azure Pipelines, we have to look at the build branch, and apply this logic:
 # refs/tags/vX.X.X -> ['refs', 'tags', 'vX.X.X'] -> 'vX.X.X'
-elif os.getenv('BUILD_SOURCEBRANCH', False) and os.getenv('BUILD_SOURCEBRANCH').startswith('refs/tags/'):
+elif os.getenv('BUILD_SOURCEBRANCH', False) and \
+        os.getenv('BUILD_SOURCEBRANCH').startswith('refs/tags/'):
     print('Tagged commit on Azure Pipelines. Writing to {0}'.format(OUT_FILE))
     with open(OUT_FILE, 'w') as f:
         tag = os.getenv('BUILD_SOURCEBRANCH').split('/')[-1]
@@ -30,4 +31,5 @@ elif os.getenv('BUILD_SOURCEBRANCH', False) and os.getenv('BUILD_SOURCEBRANCH').
 
 # Local or non-tagged commit, so we don't generate a VERSION file
 else:
-    print('Not a tagged commit, or not on a CI/CD platform. Not writing VERSION file')
+    print('Not a tagged commit, or not on a CI/CD platform. '
+          'Not writing VERSION file')

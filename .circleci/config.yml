@@ -123,6 +123,15 @@ jobs:
     - checkout
     - run: ./build_tools/circle/regression_testing.sh
 
+  # test we can install from sdist
+  test-install-from-sdist:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: ./build_tools/circle/install_from_sdist.sh
+
   # Simple job that passes when all other tests have passed
   testing-passed:
     docker:
@@ -190,7 +199,11 @@ workflows:
   version: 2
   pmdarima-pipeline:
     jobs:
-        # All testing jobs
+        # this is only run in tests
+        - test-version-tagging:
+            filters: *test-only-filters
+
+        # run on test and tag
         - pypy:
             filters: *test-filters
         - cpython35:
@@ -203,8 +216,8 @@ workflows:
             filters: *test-filters
         - regression-testing:
             filters: *test-filters
-        - test-version-tagging:
-            filters: *test-only-filters
+        - test-install-from-sdist:
+            filters: *test-filters
         - testing-passed:
             requires:
                 - pypy
@@ -213,6 +226,7 @@ workflows:
                 - cpython37
                 - test-linting
                 - regression-testing
+                - test-install-from-sdist
             filters: *test-filters
 
         # All deployment jobs
