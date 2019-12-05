@@ -30,6 +30,9 @@ steps:
     fi
   displayName: 'Checking README compatibility'
 
+- script: pip install dist/$(ls dist | grep tar)
+  displayName: 'Ensuring sdist can be installed'
+
   # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
 - script: python -m twine upload --skip-existing dist/pmdarima-*
   displayName: 'Deploying to PyPI'
