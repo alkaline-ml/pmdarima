@@ -69,7 +69,6 @@ jobs:
 
   - template: build_and_deploy.yml
 
-# TODO: can we add a test of sdist install here?
 - job: test_tagging
 
   pool:
