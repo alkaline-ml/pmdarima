@@ -17,6 +17,7 @@ steps:
   displayName: 'Running unit tests'
 
   # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
+  # This also implicitly runs `make version`, which -- if tagged -- gets the right version
 - script: make sdist
   displayName: 'Building source archive'
 
