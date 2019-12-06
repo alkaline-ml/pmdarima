@@ -21,13 +21,16 @@ function build_wheel {
 
     DOCKER_CONTAINER_NAME="wheel_builder"
     ML_IMAGE="quay.io/pypa/manylinux1_${arch}"
+    PMDARIMA_VERSION=`cat ~/pmdarima/pmdarima/VERSION`
 
     docker pull "${ML_IMAGE}"
+    # -v "${_root}":/io \
     docker run \
         --name "${DOCKER_CONTAINER_NAME}" \
-        -v "${_root}":/io \
+        -v `pwd`:/io \
         -e "PYMODULE=pmdarima" \
         -e "PYTHON_VERSION=${ML_PYTHON_VERSION}" \
+        -e "PMDARIMA_VERSION=${PMDARIMA_VERSION}" \
         "${ML_IMAGE}" "/io/build_tools/circle/build_manylinux_wheel.sh"
     sudo docker cp "${DOCKER_CONTAINER_NAME}:/io/dist/." "${_root}/dist/"
     docker rm $(docker ps -a -f status=exited -q)

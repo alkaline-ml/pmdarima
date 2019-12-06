@@ -14,10 +14,10 @@ def get_version_from_tag(tag):
 
 
 # Circle is easy, since they give us the git tag
-if os.getenv('CIRCLECI', False) and os.getenv('GIT_TAG', False):
+if os.getenv('CIRCLECI', False) and os.getenv('CIRCLE_TAG', False):
     print('Tagged commit on Circle CI. Writing to {0}'.format(OUT_FILE))
     with open(OUT_FILE, 'w') as f:
-        tag = get_version_from_tag(os.getenv('GIT_TAG'))
+        tag = get_version_from_tag(os.getenv('CIRCLE_TAG'))
         f.write(tag)
 
 # on Azure Pipelines, we have to look at the build branch, and apply this logic:
