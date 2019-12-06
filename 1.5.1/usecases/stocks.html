@@ -1,0 +1,567 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Stock market prediction &mdash; pmdarima 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="9. Contributing to pmdarima" href="../contributing.html" />
+    <link rel="prev" title="8. Use cases" href="../usecases.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../user_guide.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../about.html">1. About the project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">2. Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html">3. Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../serialization.html">4. Serializing your ARIMA models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../refreshing.html">5. Refreshing your ARIMA models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/datasets.html">7. Toy time-series datasets</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../usecases.html">8. Use cases</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">8.1. Stock Market Prediction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#imports-data-loading">8.1.1. Imports &amp; data loading</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-splitting">8.1.2. Data splitting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pre-modeling-analysis">8.1.3. Pre-modeling analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fitting-our-model">8.1.4. Fitting our model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#updating-the-model">8.1.5. Updating the model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#viewing-forecasts">8.1.6. Viewing forecasts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#conclusion">8.1.7. Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html">9. Contributing to pmdarima</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributors.html">10. Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../citing.html">11. Citing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../user_guide.html">User Guide</a> &raquo;</li>
+        
+          <li><a href="../usecases.html">8. Use cases</a> &raquo;</li>
+        
+      <li>Stock market prediction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/usecases/stocks.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="stock-market-prediction">
+<span id="stock-examples"></span><h1>8.1. Stock Market Prediction<a class="headerlink" href="#stock-market-prediction" title="Permalink to this headline">¶</a></h1>
+<p>A recent post on <a class="reference external" href="https://towardsdatascience.com/stock-market-analysis-using-arima-8731ded2447a">Towards Data Science</a>
+(TDS) demonstrated the use of ARIMA models to predict stock market data with raw statsmodels.
+This post addresses the same problem using <code class="docutils literal notranslate"><span class="pre">pmdarima</span></code>’s auto-ARIMA, and ends up achieving a
+different result with an even lower error rate.</p>
+<div class="section" id="imports-data-loading">
+<h2>8.1.1. Imports &amp; data loading<a class="headerlink" href="#imports-data-loading" title="Permalink to this headline">¶</a></h2>
+<p>For this example, all we’ll need is Numpy, Pandas and pmdarima. Matplotlib is optional,
+but highly encouraged in order to qualitatively validate the results of the model fit.
+To run this example, you’ll need pmdarima version 1.3.0 or greater. If you’re
+running this in a notebook, make sure to include <code class="docutils literal notranslate"><span class="pre">%matplotlib</span> <span class="pre">inline</span></code>, or the plots
+will not show up under your cells!</p>
+<p>This example was also designed for Python 3.6+. If you’re running python 3.5, simply
+remove the <a class="reference external" href="https://www.python.org/dev/peps/pep-0498/">F-string</a> print statements and
+it will work.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1"># %matplotlib inline</span>
+
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using pmdarima </span><span class="si">{pm.__version__}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Using pmdarima 1.3.0</span>
+</pre></div>
+</div>
+<p>The pmdarima module conveniently includes the dataset we’ll be using as an internal
+utility. Rather than carting around <code class="docutils literal notranslate"><span class="pre">.csv</span></code> files, you can simply load the data from
+the package:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.datasets.stocks</span> <span class="kn">import</span> <span class="n">load_msft</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">load_msft</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="18%" />
+<col width="13%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Date</td>
+<td>Open</td>
+<td>High</td>
+<td>Low</td>
+<td>Close</td>
+<td>Volume</td>
+<td>OpenInt</td>
+</tr>
+<tr class="row-even"><td>1986-03-13</td>
+<td>0.06720</td>
+<td>0.07533</td>
+<td>0.06720</td>
+<td>0.07533</td>
+<td>1371330506</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>1986-03-14</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>409569463</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>1986-03-17</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>176995245</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>1986-03-18</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>90067008</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>1986-03-19</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>0.07533</td>
+<td>63655515</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="data-splitting">
+<h2>8.1.2. Data splitting<a class="headerlink" href="#data-splitting" title="Permalink to this headline">¶</a></h2>
+<p>As with all statistical and ML modeling, we need to make sure we’ve split our data so
+we can evaluate model performance on a hold-out set. However, unlike other traditional
+supervised learning, time series models intrinsically introduce endogenous temporality,
+meaning that the values at any given point <span class="math notranslate">\(y_{t}\)</span> in our time series likely have some
+effect on some future value, <span class="math notranslate">\(y_{t+n}\)</span>. Therefore, we cannot simply split our data
+randomly; we must make a clean split in our time series (and exogenous variables, if present).</p>
+<p>As in the TDS example, we’ll use <span class="math notranslate">\(0.8 * dataSize\)</span> as our training sample.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="n">train_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">df</span><span class="p">[:</span><span class="n">train_len</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">train_len</span><span class="p">:]</span>
+
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;Open&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;Open&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{train_len}</span><span class="s2"> train samples&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;{df.shape[0] - train_len} test samples&quot;</span><span class="p">)</span>
+<span class="c1"># 6386 train samples</span>
+<span class="c1"># 1597 test samples</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pre-modeling-analysis">
+<h2>8.1.3. Pre-modeling analysis<a class="headerlink" href="#pre-modeling-analysis" title="Permalink to this headline">¶</a></h2>
+<p>As you may know (if not, venture over to <a class="reference internal" href="../tips_and_tricks.html#tips-and-tricks"><span class="std std-ref">Tips to using auto_arima</span></a> before continuing),
+an ARIMA model has 3 core hyper-parameters, known as “order”:</p>
+<ul class="simple">
+<li><span class="math notranslate">\(p\)</span>: The order of the auto-regressive (AR) model (i.e., the number of lag observations)</li>
+<li><span class="math notranslate">\(d\)</span>: The degree of differencing.</li>
+<li><span class="math notranslate">\(q\)</span>: The order of the moving average (MA) model. This is essentially the size of the “window” function over your time series data.</li>
+</ul>
+<p>Part of the science behind the auto-arima approach is intelligently finding the proper
+combination of <code class="docutils literal notranslate"><span class="pre">p,</span> <span class="pre">d,</span> <span class="pre">q</span></code> such that you achieve the best fit. The TDS article took the
+approach of fixing the <span class="math notranslate">\(p\)</span> parameter at 5 after examining auto-correlations with
+lag plots. A lag plot can provide clues about the underlying structure of your
+data <a class="reference external" href="https://www.statisticshowto.datasciencecentral.com/lag-plot/">[1]</a>:</p>
+<ul class="simple">
+<li>A linear shape to the plot suggests that an autoregressive model is probably a better choice.</li>
+<li>An elliptical plot suggests that the data comes from a single-cycle sinusoidal model.</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pandas.plotting</span> <span class="kn">import</span> <span class="n">lag_plot</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;MSFT Autocorrelation plot&#39;</span><span class="p">)</span>
+
+<span class="c1"># The axis coordinates for the plots</span>
+<span class="n">ax_idcs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="k">for</span> <span class="n">lag</span><span class="p">,</span> <span class="n">ax_coords</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ax_idcs</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">ax_row</span><span class="p">,</span> <span class="n">ax_col</span> <span class="o">=</span> <span class="n">ax_coords</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">ax_row</span><span class="p">][</span><span class="n">ax_col</span><span class="p">]</span>
+    <span class="n">lag_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Open&#39;</span><span class="p">],</span> <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lag=</span><span class="si">{lag}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/stock_lag_plot.png"><img alt="Lag plot" class="align-center" src="../_images/stock_lag_plot.png" style="width: 432.59999999999997px; height: 558.6px;" /></a>
+<p>As you can see, all the lags look fairly linear, so it’s a good indicator that
+an auto-regressive model is a good choice. But since we don’t want to allow simple
+visual bias to impact our decision here, we’ll allow the <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> to select
+the proper lag term for us.</p>
+<div class="section" id="estimating-the-differencing-term">
+<h3>8.1.3.1. Estimating the differencing term<a class="headerlink" href="#estimating-the-differencing-term" title="Permalink to this headline">¶</a></h3>
+<p>The TDS article selected <span class="math notranslate">\(d=1\)</span> as the differencing term. But how did they
+make that choice? With pmdarima, we can run several differencing tests against the
+time series to select the best number of differences such that the time series will
+be stationary.</p>
+<p>Here, we’ll use the <a class="reference external" href="https://en.wikipedia.org/wiki/KPSS_test">KPSS test</a> and
+<a class="reference external" href="https://en.wikipedia.org/wiki/Augmented_Dickey–Fuller_test">ADF test</a>, selecting
+the maximum value between the two to be conservative. Fortunately, in this case, both
+tests indicated that <span class="math notranslate">\(d=1\)</span> was the best answer, but in the case where they disagreed,
+we could try both or allow <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> to auto-select the <code class="docutils literal notranslate"><span class="pre">d</span></code> term.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.arima</span> <span class="kn">import</span> <span class="n">ndiffs</span>
+
+<span class="n">kpss_diffs</span> <span class="o">=</span> <span class="n">ndiffs</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;kpss&#39;</span><span class="p">,</span> <span class="n">max_d</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">adf_diffs</span> <span class="o">=</span> <span class="n">ndiffs</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;adf&#39;</span><span class="p">,</span> <span class="n">max_d</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">n_diffs</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">adf_diffs</span><span class="p">,</span> <span class="n">kpss_diffs</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated differencing term: </span><span class="si">{n_diffs}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Estimated differencing term: 1</span>
+</pre></div>
+</div>
+<p>Therefore, we will use <span class="math notranslate">\(d=1\)</span>.</p>
+</div>
+</div>
+<div class="section" id="fitting-our-model">
+<h2>8.1.4. Fitting our model<a class="headerlink" href="#fitting-our-model" title="Permalink to this headline">¶</a></h2>
+<p>Now it’s time to let the <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> method do its magic:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">auto</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">n_diffs</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                     <span class="n">max_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Notice that we preset <code class="docutils literal notranslate"><span class="pre">d=n_diffs</span></code>, since we’ve already settled on a value for <code class="docutils literal notranslate"><span class="pre">d</span></code>.
+However, we’re allowing our ARIMA models explore various values of <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">q</span></code>.
+After a few seconds, we arrive at the following solution:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">auto</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
+<span class="c1"># (1, 1, 1)</span>
+</pre></div>
+</div>
+<p>Where the TDS model was of order <code class="docutils literal notranslate"><span class="pre">(5,</span> <span class="pre">1,</span> <span class="pre">0)</span></code>, we ended up selecting a significantly
+more simple model. But how does it perform?</p>
+</div>
+<div class="section" id="updating-the-model">
+<h2>8.1.5. Updating the model<a class="headerlink" href="#updating-the-model" title="Permalink to this headline">¶</a></h2>
+<p>Now that the heavy lifting of selecting model hyper-parameters has been performed,
+we can update our model by simulating days passing with our test set. For each new
+observation, we’ll let our model progress for several more iterations, allowing MLE to
+update its discovered parameters and shifting the latest observed value. Then we can
+measure the error on the forecasts:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
+<span class="kn">from</span> <span class="nn">pmdarima.metrics</span> <span class="kn">import</span> <span class="n">smape</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">auto</span>  <span class="c1"># seeded from the model we&#39;ve already fit</span>
+
+<span class="k">def</span> <span class="nf">forecast_one_step</span><span class="p">():</span>
+    <span class="n">fc</span><span class="p">,</span> <span class="n">conf_int</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">fc</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">conf_int</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">forecasts</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">confidence_intervals</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">new_ob</span> <span class="ow">in</span> <span class="n">y_test</span><span class="p">:</span>
+    <span class="n">fc</span><span class="p">,</span> <span class="n">conf</span> <span class="o">=</span> <span class="n">forecast_one_step</span><span class="p">()</span>
+    <span class="n">forecasts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fc</span><span class="p">)</span>
+    <span class="n">confidence_intervals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
+
+    <span class="c1"># Updates the existing model with a small number of MLE steps</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_ob</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean squared error: {mean_squared_error(y_test, forecasts)}&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SMAPE: {smape(y_test, forecasts)}&quot;</span><span class="p">)</span>
+<span class="c1"># Mean squared error: 0.3416473178248818</span>
+<span class="c1"># SMAPE: 0.981464018635346</span>
+</pre></div>
+</div>
+<p>In the end, our model ended up way out-performing the TDS model!</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="25%" />
+<col width="36%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Source</td>
+<td>MSE</td>
+<td>SMAPE</td>
+</tr>
+<tr class="row-even"><td>pmdarima</td>
+<td>0.342</td>
+<td>0.981 (!!)</td>
+</tr>
+<tr class="row-odd"><td>TDS article</td>
+<td>0.343</td>
+<td>40.776</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="viewing-forecasts">
+<h2>8.1.6. Viewing forecasts<a class="headerlink" href="#viewing-forecasts" title="Permalink to this headline">¶</a></h2>
+<p>Let’s take a look at the forecasts our model produces overlaid on the actuals
+(in the first plot), and the confidence intervals of the forecasts (in the second plot):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+<span class="c1"># --------------------- Actual vs. Predicted --------------------------</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training Data&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test_data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">forecasts</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Predicted Price&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test_data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Actual Price&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Microsoft Prices Prediction&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Dates&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Prices&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7982</span><span class="p">,</span> <span class="mi">1300</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">7982</span><span class="p">:</span><span class="mi">1300</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+
+<span class="c1"># ------------------ Predicted with confidence intervals ----------------</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training Data&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">test_data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">forecasts</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Predicted Price&#39;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Prices Predictions &amp; Confidence Intervals&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Dates&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Prices&#39;</span><span class="p">)</span>
+
+<span class="n">conf_int</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">confidence_intervals</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">test_data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+                     <span class="n">conf_int</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">conf_int</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+                     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+                     <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Confidence Intervals&quot;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7982</span><span class="p">,</span> <span class="mi">1300</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">7982</span><span class="p">:</span><span class="mi">1300</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/stock_forecasts.png"><img alt="Lag plot" class="align-center" src="../_images/stock_forecasts.png" style="width: 540.75px; height: 534.75px;" /></a>
+</div>
+<div class="section" id="conclusion">
+<h2>8.1.7. Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>The TDS article provided an awesome example of how to use ARIMAs to predict stocks. Our
+hope in this example was to show how using pmdarima can simplify and enhance the models
+you build. If you’d like to run the already-setup notebook for yourself, head on over to
+the <a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/develop/examples/stock_market_example.ipynb">project’s Git page</a>
+and grab the example notebook.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../contributing.html" class="btn btn-neutral float-right" title="9. Contributing to pmdarima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../usecases.html" class="btn btn-neutral float-left" title="8. Use cases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2019, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

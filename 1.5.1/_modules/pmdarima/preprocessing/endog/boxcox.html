@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.preprocessing.endog.boxcox &mdash; pmdarima 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pmdarima.preprocessing.endog.boxcox</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pmdarima.preprocessing.endog.boxcox</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_is_fitted</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseEndogTransformer</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BoxCoxEndogTransformer&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="BoxCoxEndogTransformer"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer">[docs]</a><span class="k">class</span> <span class="nc">BoxCoxEndogTransformer</span><span class="p">(</span><span class="n">BaseEndogTransformer</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Apply the Box-Cox transformation to an endogenous array</span>
+
+<span class="sd">    The Box-Cox transformation is applied to non-normal data to coerce it more</span>
+<span class="sd">    towards a normal distribution. It&#39;s specified as::</span>
+
+<span class="sd">        (((y + lam2) ** lam1) - 1) / lam1, if lmbda != 0, else</span>
+<span class="sd">        log(y + lam2)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lmbda : float or None, optional (default=None)</span>
+<span class="sd">        The lambda value for the Box-Cox transformation, if known. If not</span>
+<span class="sd">        specified, it will be estimated via MLE.</span>
+
+<span class="sd">    lmbda2 : float, optional (default=0.)</span>
+<span class="sd">        The value to add to ``y`` to make it non-negative. If, after adding</span>
+<span class="sd">        ``lmbda2``, there are still negative values, a ValueError will be</span>
+<span class="sd">        raised.</span>
+
+<span class="sd">    neg_action : str, optional (default=&quot;raise&quot;)</span>
+<span class="sd">        How to respond if any values in ``y &lt;= 0`` after adding ``lmbda2``.</span>
+<span class="sd">        One of (&#39;raise&#39;, &#39;warn&#39;, &#39;ignore&#39;). If anything other than &#39;raise&#39;,</span>
+<span class="sd">        values &lt;= 0 will be truncated to the value of ``floor``.</span>
+
+<span class="sd">    floor : float, optional (default=1e-16)</span>
+<span class="sd">        A positive value that truncate values to if there are values in ``y``</span>
+<span class="sd">        that are zero or negative and ``neg_action`` is not &#39;raise&#39;. Note that</span>
+<span class="sd">        if values are truncated, invertibility will not be preserved, and the</span>
+<span class="sd">        transformed array may not be perfectly inverse-transformed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BoxCoxEndogTransformer.__init__"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lmbda2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">neg_action</span><span class="o">=</span><span class="s2">&quot;raise&quot;</span><span class="p">,</span> <span class="n">floor</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span> <span class="o">=</span> <span class="n">lmbda</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmbda2</span> <span class="o">=</span> <span class="n">lmbda2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neg_action</span> <span class="o">=</span> <span class="n">neg_action</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">floor</span> <span class="o">=</span> <span class="n">floor</span></div>
+
+<div class="viewcode-block" id="BoxCoxEndogTransformer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit the transformer</span>
+
+<span class="sd">        Learns the value of ``lmbda``, if not specified in the constructor.</span>
+<span class="sd">        If defined in the constructor, is not re-learned.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or None, shape=(n_samples,)</span>
+<span class="sd">            The endogenous (time-series) array.</span>
+
+<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">            The exogenous array of additional covariates. Not used for</span>
+<span class="sd">            endogenous transformers. Default is None, and non-None values will</span>
+<span class="sd">            serve as pass-through arrays.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lam1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span>
+        <span class="n">lam2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmbda2</span>
+
+        <span class="k">if</span> <span class="n">lam2</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;lmbda2 must be a non-negative scalar value&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">lam1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">y</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">lam1</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">boxcox</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lam1_</span> <span class="o">=</span> <span class="n">lam1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lam2_</span> <span class="o">=</span> <span class="n">lam2</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="BoxCoxEndogTransformer.transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Transform the new array</span>
+
+<span class="sd">        Apply the Box-Cox transformation to the array after learning the</span>
+<span class="sd">        lambda parameter.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or None, shape=(n_samples,)</span>
+<span class="sd">            The endogenous (time-series) array.</span>
+
+<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">            The exogenous array of additional covariates. Not used for</span>
+<span class="sd">            endogenous transformers. Default is None, and non-None values will</span>
+<span class="sd">            serve as pass-through arrays.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y_transform : array-like or None</span>
+<span class="sd">            The Box-Cox transformed y array</span>
+
+<span class="sd">        exogenous : array-like or None</span>
+<span class="sd">            The exog array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lam1_&quot;</span><span class="p">)</span>
+        <span class="n">lam1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam1_</span>
+        <span class="n">lam2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam2_</span>
+
+        <span class="n">y</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">+=</span> <span class="n">lam2</span>
+
+        <span class="n">neg_mask</span> <span class="o">=</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mf">0.</span>
+        <span class="k">if</span> <span class="n">neg_mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neg_action</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Negative or zero values present in y&quot;</span>
+            <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s2">&quot;raise&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s2">&quot;warn&quot;</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
+            <span class="n">y</span><span class="p">[</span><span class="n">neg_mask</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">floor</span>
+
+        <span class="k">if</span> <span class="n">lam1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">exog</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">y</span> <span class="o">**</span> <span class="n">lam1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">lam1</span><span class="p">,</span> <span class="n">exog</span></div>
+
+<div class="viewcode-block" id="BoxCoxEndogTransformer.inverse_transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.inverse_transform">[docs]</a>    <span class="k">def</span> <span class="nf">inverse_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inverse transform a transformed array</span>
+
+<span class="sd">        Inverse the Box-Cox transformation on the transformed array. Note that</span>
+<span class="sd">        if truncation happened in the ``transform`` method, invertibility will</span>
+<span class="sd">        not be preserved, and the transformed array may not be perfectly</span>
+<span class="sd">        inverse-transformed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or None, shape=(n_samples,)</span>
+<span class="sd">            The transformed endogenous (time-series) array.</span>
+
+<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">            The exogenous array of additional covariates. Not used for</span>
+<span class="sd">            endogenous transformers. Default is None, and non-None values will</span>
+<span class="sd">            serve as pass-through arrays.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        y : array-like or None</span>
+<span class="sd">            The inverse-transformed y array</span>
+
+<span class="sd">        exogenous : array-like or None</span>
+<span class="sd">            The inverse-transformed exogenous array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lam1_&quot;</span><span class="p">)</span>
+        <span class="n">lam1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam1_</span>
+        <span class="n">lam2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam2_</span>
+
+        <span class="n">y</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">lam1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">lam2</span><span class="p">,</span> <span class="n">exog</span>
+
+        <span class="n">numer</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">lam1</span>  <span class="c1"># remove denominator</span>
+        <span class="n">numer</span> <span class="o">+=</span> <span class="mf">1.</span>  <span class="c1"># add 1 back to it</span>
+        <span class="n">de_exp</span> <span class="o">=</span> <span class="n">numer</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">lam1</span><span class="p">)</span>  <span class="c1"># de-exponentiate</span>
+        <span class="k">return</span> <span class="n">de_exp</span> <span class="o">-</span> <span class="n">lam2</span><span class="p">,</span> <span class="n">exog</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2019, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
