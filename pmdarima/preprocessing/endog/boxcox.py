@@ -103,7 +103,7 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
         exogenous : array-like or None
             The exog array
         """
-        check_is_fitted(self, "lam1_")
+        check_is_fitted(self)
         lam1 = self.lam1_
         lam2 = self.lam2_
 
@@ -150,7 +150,7 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
         exogenous : array-like or None
             The inverse-transformed exogenous array
         """
-        check_is_fitted(self, "lam1_")
+        check_is_fitted(self)
         lam1 = self.lam1_
         lam2 = self.lam2_
 

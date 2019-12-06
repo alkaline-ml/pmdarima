@@ -213,7 +213,7 @@ class Pipeline(BaseEstimator):
 
     def _pre_predict(self, n_periods, exogenous, **kwargs):
         """Runs transformation steps before predicting on data"""
-        check_is_fitted(self, "steps_")
+        check_is_fitted(self)
 
         # Push the arrays through the transformer stages, but ONLY the exog
         # transformer stages since we don't have a Y...
@@ -446,7 +446,7 @@ class Pipeline(BaseEstimator):
             compound, comprised of the stage name and the argument name
             separated by a "__".
         """
-        check_is_fitted(self, "steps_")
+        check_is_fitted(self)
 
         # Push the arrays through all of the transformer steps that have the
         # appropriate update_and_transform method

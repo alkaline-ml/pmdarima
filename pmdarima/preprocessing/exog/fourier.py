@@ -187,7 +187,7 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
             ``n_periods`` corresponds to the number of samples that will be
             returned.
         """
-        check_is_fitted(self, "p_")
+        check_is_fitted(self)
         _, exog = self._check_y_exog(y, exogenous, null_allowed=True)
 
         if n_periods and exog is not None:
@@ -226,7 +226,7 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
         **kwargs : keyword args
             Keyword arguments required by the transform function.
         """
-        check_is_fitted(self, "p_")
+        check_is_fitted(self)
 
         self._check_endog(y)
         _, Xt = self.transform(y, exogenous, n_periods=len(y), **kwargs)
