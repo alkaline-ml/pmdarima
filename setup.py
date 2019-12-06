@@ -79,6 +79,9 @@ if SETUPTOOLS_COMMANDS.intersection(sys.argv):
     extra_setuptools_args = dict(
         zip_safe=False,  # the package can run out of an .egg file
         include_package_data=True,
+        data_files=[
+            ('pmdarima', ['pmdarima/VERSION']),
+        ],
         # scikit does this:
         # extras_require={
         #     'alldeps': REQUIREMENTS
@@ -246,6 +249,7 @@ def do_setup():
                         DISTNAME=[
                             '*',
                             'pmdarima/*',
+                            'pmdarima/VERSION',
                             'pmdarima/__check_build/*',
                             'pmdarima/_build_utils/*',
                             'pmdarima/arima/*',

@@ -17,6 +17,10 @@ ${PIP} install --upgrade numpy
 # NOW we can install requirements
 ${PIP} install -r /io/requirements.txt
 make -C /io/ PYTHON="${PYTHON}"
+
+# Make sure the VERSION file is present for this. For whatever reason, the
+# make -C call removes it
+echo ${PMDARIMA_VERSION} > /io/pmdarima/VERSION
 ${PIP} wheel /io/ -w /io/dist/
 
 # Bundle external shared libraries into the wheels.
