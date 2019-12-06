@@ -1,0 +1,12 @@
+:mod:`pmdarima.arima`.is_constant
+==============================================
+
+.. currentmodule:: pmdarima.arima
+
+.. autofunction:: is_constant
+
+.. include:: pmdarima.arima.is_constant.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

@@ -1,0 +1,12 @@
+:mod:`pmdarima.datasets`.load_taylor
+=================================================
+
+.. currentmodule:: pmdarima.datasets
+
+.. autofunction:: load_taylor
+
+.. include:: pmdarima.datasets.load_taylor.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
