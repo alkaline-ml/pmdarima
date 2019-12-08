@@ -44,6 +44,12 @@ jobs:
       - name: Generating VERSION file
         run: python build_tools/get_tag.py
 
+      # It is 100% easier to build the conda distribution from a wheel than source
+      # We still run the tests in conda
+      - name: Building wheel
+        run: make bdist_wheel
+        shell: bash
+
       - name: Render Conda meta.yaml file
         run: |
           pip install jinja2
@@ -63,9 +69,7 @@ jobs:
         shell: bash
 
       - name: Build and test Conda package
-        run: |
-          make bdist_wheel
-          conda build --python=${{ matrix.python-version }} conda/
+        run: conda build --python=${{ matrix.python-version }} conda/
         shell: bash
 
       - name: Deploy to Anaconda
