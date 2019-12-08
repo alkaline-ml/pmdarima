@@ -7,7 +7,7 @@ source:
   path: ../
 
 build:
-  build_string: 'py{{ py_version }}'
+  string: 'py{{ py_version }}'
   script: 'python -m pip install dist/{{ wheel }} --no-deps -vv'
   ignore_run_exports:
     - pip
