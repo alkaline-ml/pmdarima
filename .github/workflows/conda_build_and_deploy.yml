@@ -30,4 +30,4 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
       - name: Confirm Versions
-        bash: python -c 'import sys; print(sys.platform, "\n", sys.version)'
+        run: python -c 'import sys; print(sys.platform, "\n", sys.version)'
