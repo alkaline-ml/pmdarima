@@ -71,7 +71,11 @@ jobs:
         shell: bash
 
       - name: Build and test Conda package
-        run: conda build --python=${{ matrix.python-version }} conda/
+        run: |
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+            export PMD_MPL_BACKEND=TkAgg
+          fi
+          conda build --python=${{ matrix.python-version }} conda/
         shell: bash
 
       - name: Deploy to Anaconda
