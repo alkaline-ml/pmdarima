@@ -87,7 +87,7 @@ jobs:
         run: |
           if [ "${{ matrix.os }}" == "macos-latest" ]; then
             sudo conda install -y --use-local pmdarima
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
             C:\\Miniconda\\condabin\\conda.bat install -y --use-local pmdarima
           else
             conda install -y --use-local pmdarima
