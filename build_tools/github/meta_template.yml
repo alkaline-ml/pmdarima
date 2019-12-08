@@ -8,7 +8,7 @@ source:
 
 build:
   {% raw %}
-  script: '{{ PYTHON }} -m pip install --no-deps --ignore-installed .'
+  script: 'python -m pip install --no-deps --ignore-installed .'
   {% endraw %}
   ignore_run_exports:
     - pip
