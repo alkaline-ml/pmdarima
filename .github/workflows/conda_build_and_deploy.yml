@@ -54,7 +54,6 @@ jobs:
             conda install -y anaconda-client conda-build
           fi
           conda init bash
-          conda activate base
         shell: bash
 
       - name: Generating VERSION file
