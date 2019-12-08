@@ -31,8 +31,20 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
+      - name: Add $CONDA to $PATH
+        run: echo ::add-path::$CONDA/condabin
+        shell: bash
+
       - name: Generating VERSION file
         run: python build_tools/get_tag.py
+
+      - name: Render Conda meta.yaml file
+        run: |
+          pip install jinja2 pathlib
+          python build_tools/github/render_meta.py
+
+      - name: Build and test Conda package
+        run: conda-build --python=${{ matrix.python-version }} conda/
 
       - name: Deploy to Anaconda
         if: github.event_name == 'tag' && success()
