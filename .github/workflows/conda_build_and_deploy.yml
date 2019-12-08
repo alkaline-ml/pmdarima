@@ -37,7 +37,7 @@ jobs:
           if [ "${{ matrix.os }}" != "windows-latest" ]; then
             echo ::add-path::$CONDA/condabin
           else
-            echo ::add-path::$CONDA\conda.bat
+            echo ::add-path::C:\Miniconda\condabin\conda.bat
           fi
         shell: bash
 
