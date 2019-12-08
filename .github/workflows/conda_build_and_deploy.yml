@@ -77,18 +77,18 @@ jobs:
       - name: Building and testing Conda package
         run: |
           if [ "${{ matrix.os }}" != "windows-latest" ]; then
-            conda build --python=${{ matrix.python-version }} --output-folder conda_build/ conda/
+            conda build --python=${{ matrix.python-version }} conda/
           else
-            C:\\Miniconda\\condabin\\conda.bat build --output-folder conda_build/ conda/
+            C:\\Miniconda\\condabin\\conda.bat build conda/
           fi
         shell: bash
 
       - name: Testing conda install
         run: |
           if [ "${{ matrix.os }}" != "windows-latest" ]; then
-            conda install --use-local conda_build
+            conda install --use-local pmdarima
           else
-            C:\\Miniconda\\condabin\\conda.bat install --use-local conda_build
+            C:\\Miniconda\\condabin\\conda.bat install --use-local pmdarima
           fi
         shell: bash
 
