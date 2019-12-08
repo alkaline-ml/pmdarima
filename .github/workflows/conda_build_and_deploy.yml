@@ -12,7 +12,7 @@ on:
       - '*'
 
 jobs:
-  build:
+  build-and-deploy:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -24,18 +24,18 @@ jobs:
       # It is actually checking out the most recent version on this branch
       - name: Checkout Code
         uses: actions/checkout@master
+
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
+
       - name: Confirm Versions
         run: python -c 'import sys; print(sys.platform, "\n", sys.version)'
         shell: bash
 
-  deploy:
-    needs: [build]
-    steps:
-      - name: Test deploy step
-        run: echo "This would have deployed"
+      - name: Deploy to Anaconda
+        if: success() && github.event_name == 'tag'
+        run: echo "This would deploy..."
         shell: bash
