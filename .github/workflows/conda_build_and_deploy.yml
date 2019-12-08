@@ -67,14 +67,14 @@ jobs:
       - name: Installing conda-build and anaconda-client
         run: |
           if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            sudo conda install -y anaconda-client conda-build
+            sudo $CONDA_EXEC install -y anaconda-client conda-build
           else
-            conda install -y anaconda-client conda-build
+            $CONDA_EXEC install -y anaconda-client conda-build
           fi
         shell: bash
 
       - name: Build and test Conda package
-        run: conda build --python=${{ matrix.python-version }} conda/
+        run: $CONDA_EXEC build --python=${{ matrix.python-version }} conda/
         shell: bash
 
       - name: Look for output
