@@ -26,19 +26,19 @@ jobs:
     steps:
       # This LOOKS like it is checking out 'master', but it is using the 'master' version of the checkout action
       # It is actually checking out the most recent version on this branch
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@master
 
-      - name: Setup Python
+      - name: Setting up Python
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
-      - name: Setup Conda
+      - name: Setting up Conda
         run: |
            if [ "${{ matrix.os }}" != "windows-latest" ]; then
-             echo '::set-env name=CONDA_EXEC::${CONDA}/bin/conda'
+             echo '::set-env name=CONDA_EXEC::${CONDA}/condabin'
            else
              echo '::set-env name=CONDA_EXEC::C:\Miniconda\condabin\conda.bat'
            fi
@@ -55,7 +55,7 @@ jobs:
           make bdist_wheel
         shell: bash
 
-      - name: Render Conda meta.yaml file
+      - name: Rendering Conda meta.yaml file
         run: |
           pip install jinja2
           cd build_tools/github
@@ -73,7 +73,7 @@ jobs:
           fi
         shell: bash
 
-      - name: Build and test Conda package
+      - name: Building and testing Conda package
         run: $CONDA_EXEC build --python=${{ matrix.python-version }} conda/
         shell: bash
 
@@ -83,7 +83,7 @@ jobs:
           ls build/
         shell: bash
 
-      - name: Deploy to Anaconda
+      - name: Deploying to Anaconda
         if: github.event_name == 'tag' && success()
         run: echo "This would deploy..."
         shell: bash
