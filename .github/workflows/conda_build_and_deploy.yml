@@ -35,13 +35,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
-      - name: Add conda to $PATH
+      - name: Setup Conda
         run: |
-          if [ "${{ matrix.os }}" != "windows-latest" ]; then
-            echo ::add-path::$CONDA/condabin
-          else
-            alias conda=C:\Miniconda\condabin\conda.bat
-          fi
+           if [ "${{ matrix.os }}" != "windows-latest" ]; then
+             echo '::set-env name=CONDA_EXEC::${CONDA}/bin/conda'
+           else
+             echo '::set-env name=CONDA_EXEC::C:\Miniconda\condabin\conda.bat'
+           fi
         shell: bash
 
       - name: Generating VERSION file
@@ -68,9 +68,6 @@ jobs:
         run: |
           if [ "${{ matrix.os }}" == "macos-latest" ]; then
             sudo conda install -y anaconda-client conda-build
-          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
-            call activate base
-            conda install -y anaconda-client conda-build
           else
             conda install -y anaconda-client conda-build
           fi
