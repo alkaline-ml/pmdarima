@@ -17,8 +17,11 @@ jobs:
       fail-fast: false  # Just for debugging
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ['3.5', '3.6', '3.7']
-        architecture: ['x64']  # Conda doesn't support 32-bit, but this is more flexible than hard-coding later on
+        # Our dependencies only support 64-bit 3.6+ on Conda, so we do the same
+        # exhibit a: https://anaconda.org/anaconda/cython/files
+        # exhibit b: https://anaconda.org/anaconda/numpy/files
+        python-version: ['3.6', '3.7']
+        architecture: ['x64']
     runs-on: ${{ matrix.os }}
     steps:
       # This LOOKS like it is checking out 'master', but it is using the 'master' version of the checkout action
@@ -71,11 +74,13 @@ jobs:
         shell: bash
 
       - name: Build and test Conda package
+        run: conda build --python=${{ matrix.python-version }} conda/
+        shell: bash
+
+      - name: Look for output
         run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            export PMD_MPL_BACKEND=TkAgg
-          fi
-          conda build --python=${{ matrix.python-version }} conda/
+          ls
+          ls dist/
         shell: bash
 
       - name: Deploy to Anaconda
