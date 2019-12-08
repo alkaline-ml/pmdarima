@@ -14,6 +14,7 @@ clean:
 	rm -rf .pytest_cache
 	rm -rf pmdarima.egg-info
 	rm -f pmdarima/VERSION
+	rm -f conda/meta.yaml
 	rm -rf .coverage.*
 
 deploy-requirements:
