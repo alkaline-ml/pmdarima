@@ -1,24 +1,25 @@
 import os
 
 from jinja2 import Environment, FileSystemLoader
-from pathlib import Path
 
-HERE = Path(__file__).parent
-ROOT = HERE.parents[1]
-REQUIREMENTS_FILE = ROOT / 'requirements.txt'
-OUTPUT_DIR = ROOT / 'conda'
-OUTPUT_FILE = OUTPUT_DIR / 'meta.yaml'  # conda is weird about yml vs yaml, so we have to use yaml
+# pathlib fails on Github Actions using Python 3.5, so we have to use these
+VERSION_FILE = '../../VERSION'
+REQUIREMENTS_FILE = '../../requirements.txt'
+OUTPUT_DIR = '../../conda'
+OUTPUT_FILE = '../../conda/meta.yaml'  # conda is weird about yml vs yaml, so we have to use yaml
+TEMPLATE_PATH = '.'
 TEMPLATE_ENVIRONMENT = Environment(
     autoescape=False,
-    loader=FileSystemLoader(str(HERE.resolve())),
+    loader=FileSystemLoader(TEMPLATE_PATH),
     trim_blocks=False
 )
+
 try:
-    VERSION = (ROOT / 'VERSION').read_text()
+    VERSION = open(VERSION_FILE).readline().strip()
 except FileNotFoundError:
     VERSION = '0.0.0'
 
-with open(str(REQUIREMENTS_FILE.resolve())) as file:
+with open(REQUIREMENTS_FILE) as file:
     requirements = [line.strip() for line in file.readlines()]
 
 numpy_version = next(package for package in requirements if 'numpy' in package)
@@ -30,8 +31,8 @@ context = {
 }
 
 # Ensure output directory exists
-os.makedirs(str(OUTPUT_DIR.resolve()), exist_ok=True)
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-with open(str(OUTPUT_FILE.resolve()), 'w') as out:
+with open(OUTPUT_FILE, 'w') as out:
     meta = TEMPLATE_ENVIRONMENT.get_template('meta_template.yml').render(context)
     out.write(meta)

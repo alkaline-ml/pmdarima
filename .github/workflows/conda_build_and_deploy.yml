@@ -41,17 +41,16 @@ jobs:
           fi
         shell: bash
 
-      - name: Making Conda directory
-        run: mkdir conda
-        shell: bash
-
       - name: Generating VERSION file
         run: python build_tools/get_tag.py
 
       - name: Render Conda meta.yaml file
         run: |
-          pip install jinja2 pathlib
+          pip install jinja2
+          cd build_tools/github
           python build_tools/github/render_meta.py
+          cd -
+        shell: bash
 
       # This step requires 'sudo' for mac
       - name: Installing conda-build and anaconda-client
@@ -68,6 +67,7 @@ jobs:
         run: |
           conda activate base
           conda-build --python=${{ matrix.python-version }} conda/
+        shell: bash
 
       - name: Deploy to Anaconda
         if: github.event_name == 'tag' && success()
