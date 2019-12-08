@@ -32,10 +32,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
-      - name: Making Conda directory
-        run: mkdir conda
-        shell: bash
-
       - name: Add $CONDA to $PATH
         run: |
           if [ "${{ matrix.os }}" != "windows-latest" ]; then
@@ -44,6 +40,18 @@ jobs:
             echo ::add-path::$CONDA\conda.bat
           fi
         shell: bash
+
+      - name: Making Conda directory
+        run: mkdir conda
+        shell: bash
+
+      - name: Generating VERSION file
+        run: python build_tools/get_tag.py
+
+      - name: Render Conda meta.yaml file
+        run: |
+          pip install jinja2 pathlib
+          python build_tools/github/render_meta.py
 
       # This step requires 'sudo' for mac
       - name: Installing conda-build and anaconda-client
@@ -56,16 +64,10 @@ jobs:
           conda init bash
         shell: bash
 
-      - name: Generating VERSION file
-        run: python build_tools/get_tag.py
-
-      - name: Render Conda meta.yaml file
-        run: |
-          pip install jinja2 pathlib
-          python build_tools/github/render_meta.py
-
       - name: Build and test Conda package
-        run: conda-build --python=${{ matrix.python-version }} conda/
+        run: |
+          conda activate base
+          conda-build --python=${{ matrix.python-version }} conda/
 
       - name: Deploy to Anaconda
         if: github.event_name == 'tag' && success()
