@@ -1,252 +1,252 @@
-version: 2.1
-
-# This will trigger on tags AND branches
-test-filters: &test-filters
-    tags:
-        only: /.*/
-    branches:
-        only: /.*/
-
-# This will trigger ONLY on branches
-test-only-filters: &test-only-filters
-    tags:
-        ignore: /.*/
-    branches:
-        only: /.*/
-
-# This will ignore for ALL branches, and only trigger on tags
-deploy-filters: &deploy-filters
-    tags:
-        only: /.*/
-    branches:
-        ignore: /.*/
-
-
-# ############################################
+#version: 2.1
 #
-# Set Circle CI Reusable Commands
+## This will trigger on tags AND branches
+#test-filters: &test-filters
+#    tags:
+#        only: /.*/
+#    branches:
+#        only: /.*/
 #
-# For more information, see the documentation:
-# https://circleci.com/docs/2.0/reusing-config
+## This will trigger ONLY on branches
+#test-only-filters: &test-only-filters
+#    tags:
+#        ignore: /.*/
+#    branches:
+#        only: /.*/
 #
-# ############################################
-commands:
-  make-unit-test:
-    description: "Build and run unit tests using the Makefile"
-    steps:
-      - checkout
-      - run: make develop
-      - run: make test-unit
-      - run: codecov || echo "codecov upload failed"
-
-  build-whl-file:
-    description: "Build a wheel file"
-    parameters:
-      pythonversion:
-        type: string
-    steps:
-      # does not use makefile, since will require python>=3.5
-      - run:
-          name: Create VERSION file
-          command: python build_tools/get_tag.py
-      - run:
-          name: Build wheel file
-          command: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
-
-  deploy-to-pypi:
-    description: "Deploy the contents of dist/ to PyPi"
-    steps:
-      - run: |
-          env > vars.env
-          docker run --rm -it \
-            -v `pwd`:/app \
-            -w /app \
-            --env-file vars.env \
-            python:3.7 \
-            ./build_tools/circle/deploy.sh
-
-jobs:
-  # For testing PyPy rather than CPython
-  pypy:
-    docker:
-      - image: tgsmith61591/pmdarima-circle-pypy-base:latest
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - run: ./build_tools/circle/build_test_pypy.sh
-
-  cpython35:
-    docker:
-      - image: python:3.5
-    working_directory: ~/pmdarima
-    steps:
-    - make-unit-test
-
-  cpython36:
-    docker:
-      - image: python:3.6
-    working_directory: ~/pmdarima
-    steps:
-    - make-unit-test
-
-  cpython37:
-    docker:
-      - image: python:3.7
-    working_directory: ~/pmdarima
-    steps:
-    - make-unit-test
-
-  # For testing lint
-  test-linting:
-    docker:
-      - image: python:3.6
-    working_directory: ~/pmdarima
-    steps:
-    - checkout
-    - run: make test-lint
-
-  # Test env vars from tags produce VERSION file
-  test-version-tagging:
-    docker:
-      - image: python:3.6
-    working_directory: ~/pmdarima
-    steps:
-    - checkout
-    - run: ./build_tools/circle/test_version_tagging.sh
-
-  # Regression testing for switch-over to new pmdarima namespace
-  regression-testing:
-    docker:
-      - image: python:3.6
-    working_directory: ~/pmdarima
-    steps:
-    - checkout
-    - run: ./build_tools/circle/regression_testing.sh
-
-  # test we can install from sdist
-  test-install-from-sdist:
-    docker:
-      - image: python:3.6
-    working_directory: ~/pmdarima
-    steps:
-    - checkout
-    - run: ./build_tools/circle/install_from_sdist.sh
-
-  # Simple job that passes when all other tests have passed
-  testing-passed:
-    docker:
-      - image: bash:latest
-    steps:
-      - run:
-          name: pmdarima Testing passed
-          command: echo "All tests passed"
-
-  # ############################################
-  #
-  # Deploy commands
-  #
-  # All deploy commands need Docker in some
-  # capacity, so should be run on machines
-  #
-  # ############################################
-  deploy-cpython35-whl:
-    machine:
-      image: circleci/classic:latest
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - build-whl-file:
-          pythonversion: "3.5"
-      - deploy-to-pypi
-
-  deploy-cpython36-whl:
-    machine:
-      image: circleci/classic:latest
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - build-whl-file:
-          pythonversion: "3.6"
-      - deploy-to-pypi
-
-  deploy-cpython37-whl:
-    machine:
-      image: circleci/classic:latest
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - build-whl-file:
-          pythonversion: "3.7"
-      - deploy-to-pypi
-
-  # For documentation deployment. You'll need the following environment vars
-  # in your Circle CI settings, otherwise this will not work.
-  #
-  # GH_NAME (your git username)
-  # GH_EMAIL (your git email)
-  # GH_TOKEN (the personal Git token with pushes enabled)
-  deploy-doc:
-    docker:
-    - image: python:3.6
-    working_directory: ~/pmdarima
-    steps:
-    - checkout
-    - run: make doc-requirements
-    - run: make install
-    - run: ./build_tools/circle/build_push_doc.sh
-
-workflows:
-  version: 2
-  pmdarima-pipeline:
-    jobs:
-        # this is only run in tests
-        - test-version-tagging:
-            filters: *test-only-filters
-
-        # run on test and tag
-        - pypy:
-            filters: *test-filters
-        - cpython35:
-            filters: *test-filters
-        - cpython36:
-            filters: *test-filters
-        - cpython37:
-            filters: *test-filters
-        - test-linting:
-            filters: *test-filters
-        - regression-testing:
-            filters: *test-filters
-        - test-install-from-sdist:
-            filters: *test-filters
-        - testing-passed:
-            requires:
-                - pypy
-                - cpython35
-                - cpython36
-                - cpython37
-                - test-linting
-                - regression-testing
-                - test-install-from-sdist
-            filters: *test-filters
-
-        # All deployment jobs
-        - deploy-doc:
-            requires:
-                - testing-passed
-            filters: *test-filters
-
-        - deploy-cpython35-whl:
-            filters: *deploy-filters
-            requires:
-                - deploy-doc
-
-        - deploy-cpython36-whl:
-            filters: *deploy-filters
-            requires:
-                - deploy-doc
-
-        - deploy-cpython37-whl:
-            filters: *deploy-filters
-            requires:
-                - deploy-doc
-
+## This will ignore for ALL branches, and only trigger on tags
+#deploy-filters: &deploy-filters
+#    tags:
+#        only: /.*/
+#    branches:
+#        ignore: /.*/
+#
+#
+## ############################################
+##
+## Set Circle CI Reusable Commands
+##
+## For more information, see the documentation:
+## https://circleci.com/docs/2.0/reusing-config
+##
+## ############################################
+#commands:
+#  make-unit-test:
+#    description: "Build and run unit tests using the Makefile"
+#    steps:
+#      - checkout
+#      - run: make develop
+#      - run: make test-unit
+#      - run: codecov || echo "codecov upload failed"
+#
+#  build-whl-file:
+#    description: "Build a wheel file"
+#    parameters:
+#      pythonversion:
+#        type: string
+#    steps:
+#      # does not use makefile, since will require python>=3.5
+#      - run:
+#          name: Create VERSION file
+#          command: python build_tools/get_tag.py
+#      - run:
+#          name: Build wheel file
+#          command: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
+#
+#  deploy-to-pypi:
+#    description: "Deploy the contents of dist/ to PyPi"
+#    steps:
+#      - run: |
+#          env > vars.env
+#          docker run --rm -it \
+#            -v `pwd`:/app \
+#            -w /app \
+#            --env-file vars.env \
+#            python:3.7 \
+#            ./build_tools/circle/deploy.sh
+#
+#jobs:
+#  # For testing PyPy rather than CPython
+#  pypy:
+#    docker:
+#      - image: tgsmith61591/pmdarima-circle-pypy-base:latest
+#    working_directory: ~/pmdarima
+#    steps:
+#      - checkout
+#      - run: ./build_tools/circle/build_test_pypy.sh
+#
+#  cpython35:
+#    docker:
+#      - image: python:3.5
+#    working_directory: ~/pmdarima
+#    steps:
+#    - make-unit-test
+#
+#  cpython36:
+#    docker:
+#      - image: python:3.6
+#    working_directory: ~/pmdarima
+#    steps:
+#    - make-unit-test
+#
+#  cpython37:
+#    docker:
+#      - image: python:3.7
+#    working_directory: ~/pmdarima
+#    steps:
+#    - make-unit-test
+#
+#  # For testing lint
+#  test-linting:
+#    docker:
+#      - image: python:3.6
+#    working_directory: ~/pmdarima
+#    steps:
+#    - checkout
+#    - run: make test-lint
+#
+#  # Test env vars from tags produce VERSION file
+#  test-version-tagging:
+#    docker:
+#      - image: python:3.6
+#    working_directory: ~/pmdarima
+#    steps:
+#    - checkout
+#    - run: ./build_tools/circle/test_version_tagging.sh
+#
+#  # Regression testing for switch-over to new pmdarima namespace
+#  regression-testing:
+#    docker:
+#      - image: python:3.6
+#    working_directory: ~/pmdarima
+#    steps:
+#    - checkout
+#    - run: ./build_tools/circle/regression_testing.sh
+#
+#  # test we can install from sdist
+#  test-install-from-sdist:
+#    docker:
+#      - image: python:3.6
+#    working_directory: ~/pmdarima
+#    steps:
+#    - checkout
+#    - run: ./build_tools/circle/install_from_sdist.sh
+#
+#  # Simple job that passes when all other tests have passed
+#  testing-passed:
+#    docker:
+#      - image: bash:latest
+#    steps:
+#      - run:
+#          name: pmdarima Testing passed
+#          command: echo "All tests passed"
+#
+#  # ############################################
+#  #
+#  # Deploy commands
+#  #
+#  # All deploy commands need Docker in some
+#  # capacity, so should be run on machines
+#  #
+#  # ############################################
+#  deploy-cpython35-whl:
+#    machine:
+#      image: circleci/classic:latest
+#    working_directory: ~/pmdarima
+#    steps:
+#      - checkout
+#      - build-whl-file:
+#          pythonversion: "3.5"
+#      - deploy-to-pypi
+#
+#  deploy-cpython36-whl:
+#    machine:
+#      image: circleci/classic:latest
+#    working_directory: ~/pmdarima
+#    steps:
+#      - checkout
+#      - build-whl-file:
+#          pythonversion: "3.6"
+#      - deploy-to-pypi
+#
+#  deploy-cpython37-whl:
+#    machine:
+#      image: circleci/classic:latest
+#    working_directory: ~/pmdarima
+#    steps:
+#      - checkout
+#      - build-whl-file:
+#          pythonversion: "3.7"
+#      - deploy-to-pypi
+#
+#  # For documentation deployment. You'll need the following environment vars
+#  # in your Circle CI settings, otherwise this will not work.
+#  #
+#  # GH_NAME (your git username)
+#  # GH_EMAIL (your git email)
+#  # GH_TOKEN (the personal Git token with pushes enabled)
+#  deploy-doc:
+#    docker:
+#    - image: python:3.6
+#    working_directory: ~/pmdarima
+#    steps:
+#    - checkout
+#    - run: make doc-requirements
+#    - run: make install
+#    - run: ./build_tools/circle/build_push_doc.sh
+#
+#workflows:
+#  version: 2
+#  pmdarima-pipeline:
+#    jobs:
+#        # this is only run in tests
+#        - test-version-tagging:
+#            filters: *test-only-filters
+#
+#        # run on test and tag
+#        - pypy:
+#            filters: *test-filters
+#        - cpython35:
+#            filters: *test-filters
+#        - cpython36:
+#            filters: *test-filters
+#        - cpython37:
+#            filters: *test-filters
+#        - test-linting:
+#            filters: *test-filters
+#        - regression-testing:
+#            filters: *test-filters
+#        - test-install-from-sdist:
+#            filters: *test-filters
+#        - testing-passed:
+#            requires:
+#                - pypy
+#                - cpython35
+#                - cpython36
+#                - cpython37
+#                - test-linting
+#                - regression-testing
+#                - test-install-from-sdist
+#            filters: *test-filters
+#
+#        # All deployment jobs
+#        - deploy-doc:
+#            requires:
+#                - testing-passed
+#            filters: *test-filters
+#
+#        - deploy-cpython35-whl:
+#            filters: *deploy-filters
+#            requires:
+#                - deploy-doc
+#
+#        - deploy-cpython36-whl:
+#            filters: *deploy-filters
+#            requires:
+#                - deploy-doc
+#
+#        - deploy-cpython37-whl:
+#            filters: *deploy-filters
+#            requires:
+#                - deploy-doc
+#
