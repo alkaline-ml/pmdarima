@@ -31,3 +31,4 @@ jobs:
           architecture: ${{ matrix.architecture }}
       - name: Confirm Versions
         run: python -c 'import sys; print(sys.platform, "\n", sys.version)'
+        shell: bash
