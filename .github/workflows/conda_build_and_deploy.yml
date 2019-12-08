@@ -38,9 +38,9 @@ jobs:
       - name: Setting up Conda
         run: |
            if [ "${{ matrix.os }}" != "windows-latest" ]; then
-             echo '::set-env name=CONDA_EXEC::${CONDA}/condabin'
+             echo ::add-path::$CONDA/condabin
            else
-             echo '::set-env name=CONDA_EXEC::C:\Miniconda\condabin\conda.bat'
+             echo ::add-path::C:\Miniconda\condabin\conda.bat
            fi
         shell: bash
 
@@ -67,14 +67,14 @@ jobs:
       - name: Installing conda-build and anaconda-client
         run: |
           if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            sudo $CONDA_EXEC install -y anaconda-client conda-build
+            sudo conda install -y anaconda-client conda-build
           else
-            $CONDA_EXEC install -y anaconda-client conda-build
+            conda install -y anaconda-client conda-build
           fi
         shell: bash
 
       - name: Building and testing Conda package
-        run: $CONDA_EXEC build --python=${{ matrix.python-version }} conda/
+        run: conda build --python=${{ matrix.python-version }} conda/
         shell: bash
 
       - name: Look for output
