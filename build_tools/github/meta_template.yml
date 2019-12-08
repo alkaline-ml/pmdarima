@@ -43,7 +43,8 @@ test:
   commands:
     # conda-forge has the wrong versions pinned, so we have to pip install these
     - pip install pytest pytest-mpl pytest-benchmark
-    - make test
+    # Cannot use `make` in the meta.yaml file
+    - pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
 
 about:
   home: https://github.com/alkaline-ml/pmdarima
