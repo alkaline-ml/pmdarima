@@ -80,7 +80,7 @@ jobs:
       - name: Look for output
         run: |
           ls
-          ls dist/
+          ls build/
         shell: bash
 
       - name: Deploy to Anaconda
