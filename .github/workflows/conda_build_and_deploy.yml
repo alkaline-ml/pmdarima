@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setting up Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v1.1.1
         with:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
@@ -85,10 +85,12 @@ jobs:
 
       - name: Testing conda install
         run: |
-          if [ "${{ matrix.os }}" != "windows-latest" ]; then
-            conda install --use-local pmdarima
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+            sudo conda install -y --use-local pmdarima
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            C:\\Miniconda\\condabin\\conda.bat install -y --use-local pmdarima
           else
-            C:\\Miniconda\\condabin\\conda.bat install --use-local pmdarima
+            conda install -y --use-local pmdarima
           fi
         shell: bash
 
