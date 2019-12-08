@@ -8,7 +8,9 @@ source:
 
 build:
   string: 'py{{ py_version }}'
-  script: 'python -m pip install dist/{{ wheel }} --no-deps -vv'
+  script: |
+    python -m pip install --upgrade pip
+    python -m pip install dist/{{ wheel }} --no-deps -vv
   ignore_run_exports:
     - pip
     - statsmodels

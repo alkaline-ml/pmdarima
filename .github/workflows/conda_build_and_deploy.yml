@@ -83,6 +83,15 @@ jobs:
           fi
         shell: bash
 
+      - name: Testing conda install
+        run: |
+          if [ "${{ matrix.os }}" != "windows-latest" ]; then
+            conda install --use-local pmdarima
+          else
+            C:\\Miniconda\\condabin\\conda.bat install --use-local pmdarima
+          fi
+        shell: bash
+
       - name: Deploying to Anaconda
         if: github.event_name == 'tag' && success()
         run: echo "This would deploy..."
