@@ -35,6 +35,9 @@ jobs:
         run: echo ::add-path::$CONDA/condabin
         shell: bash
 
+      - name: Installing conda-build and anaconda-client
+        run: conda install -y anaconda-client conda-build
+
       - name: Generating VERSION file
         run: python build_tools/get_tag.py
 
