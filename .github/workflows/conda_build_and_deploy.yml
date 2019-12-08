@@ -14,6 +14,7 @@ on:
 jobs:
   build-and-deploy:
     strategy:
+      fail-fast: false  # Just for debugging
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ['3.5', '3.6', '3.7']
@@ -37,7 +38,12 @@ jobs:
 
       # This step requires 'sudo' for mac
       - name: Installing conda-build and anaconda-client
-        run: sudo conda install -y anaconda-client conda-build
+        run: |
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+            sudo conda install -y anaconda-client conda-build
+          else
+            conda install -y anaconda-client conda-build
+          fi
         shell: bash
 
       - name: Generating VERSION file
