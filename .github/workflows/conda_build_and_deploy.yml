@@ -63,14 +63,8 @@ jobs:
           cd -
         shell: bash
 
-      # This step requires 'sudo' for mac
       - name: Installing conda-build and anaconda-client
-        run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            sudo conda install -y anaconda-client conda-build
-          else
-            conda install -y anaconda-client conda-build
-          fi
+        run: conda install -y anaconda-client conda-build
         shell: bash
 
       - name: Build and test Conda package
