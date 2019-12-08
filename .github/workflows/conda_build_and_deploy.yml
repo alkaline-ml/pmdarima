@@ -40,7 +40,7 @@ jobs:
            if [ "${{ matrix.os }}" != "windows-latest" ]; then
              echo ::add-path::$CONDA/condabin
            else
-             echo ::add-path::C:\Miniconda\condabin\conda.bat
+             alias conda=C:\Miniconda\condabin\conda.bat
            fi
         shell: bash
 
@@ -74,13 +74,11 @@ jobs:
         shell: bash
 
       - name: Building and testing Conda package
-        run: conda build --python=${{ matrix.python-version }} conda/
+        run: conda build --python=${{ matrix.python-version }} --output-folder conda_build/ conda/  # <- This is where meta file is
         shell: bash
 
       - name: Look for output
-        run: |
-          ls
-          ls build/
+        run: ls conda_build/
         shell: bash
 
       - name: Deploying to Anaconda
