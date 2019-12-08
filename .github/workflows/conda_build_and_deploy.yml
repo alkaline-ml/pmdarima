@@ -64,7 +64,7 @@ jobs:
 
       - name: Build and test Conda package
         run: |
-          conda install numpy
+          make requirements
           conda build --python=${{ matrix.python-version }} conda/
         shell: bash
 
