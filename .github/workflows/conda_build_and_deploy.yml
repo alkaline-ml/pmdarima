@@ -31,9 +31,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
-      - name: Confirm Versions
-        run: python -c 'import sys; print(sys.platform, "\n", sys.version)'
-        shell: bash
+      - name: Generating VERSION file
+        run: python build_tools/get_tag.py
 
       - name: Deploy to Anaconda
         if: github.event_name == 'tag' && success()
