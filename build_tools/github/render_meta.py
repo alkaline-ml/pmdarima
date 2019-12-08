@@ -30,7 +30,7 @@ context = {
 }
 
 # Ensure output directory exists
-os.makedirs(os.path.dirname(str(OUTPUT_DIR.resolve())), exist_ok=True)
+os.makedirs(str(OUTPUT_DIR.resolve()), exist_ok=True)
 
 with open(str(OUTPUT_FILE.resolve()), 'w') as out:
     meta = TEMPLATE_ENVIRONMENT.get_template('meta_template.yml').render(context)
