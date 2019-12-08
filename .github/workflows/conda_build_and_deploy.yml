@@ -32,7 +32,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
-      - name: Making conda directory
+      - name: Making Conda directory
         run: mkdir conda
         shell: bash
 
