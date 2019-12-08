@@ -35,12 +35,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
+      # For Linux and Mac, we add conda to the PATH. For Windows, we have to run it manually
       - name: Setting up Conda
         run: |
            if [ "${{ matrix.os }}" != "windows-latest" ]; then
              echo ::add-path::$CONDA/condabin
-           else
-             echo ::add-path::C:\Miniconda\condabin
            fi
         shell: bash
 
@@ -68,17 +67,20 @@ jobs:
         run: |
           if [ "${{ matrix.os }}" == "macos-latest" ]; then
             sudo conda install -y anaconda-client conda-build
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+            C:\Miniconda\condabin\conda.bat install -y anaconda-client conda-build
           else
             conda install -y anaconda-client conda-build
           fi
         shell: bash
 
       - name: Building and testing Conda package
-        run: conda build --output-folder conda_build/ conda/  # <- This is where meta file is
-        shell: bash
-
-      - name: Look for output
-        run: ls conda_build/
+        run: |
+          if [ "${{ matrix.os }}" != "windows-latest" ]; then
+            conda build --output-folder conda_build/ conda/
+          else
+            C:\Miniconda\condabin\conda.bat build --output-folder conda_build/ conda/
+          fi
         shell: bash
 
       - name: Deploying to Anaconda
