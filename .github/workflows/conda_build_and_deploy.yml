@@ -36,6 +36,6 @@ jobs:
         shell: bash
 
       - name: Deploy to Anaconda
-        if: success() && github.event_name == 'tag'
+        if: github.event_name == 'tag' && success()
         run: echo "This would deploy..."
         shell: bash
