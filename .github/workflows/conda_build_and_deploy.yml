@@ -48,7 +48,7 @@ jobs:
         run: |
           pip install jinja2
           cd build_tools/github
-          python build_tools/github/render_meta.py
+          python render_meta.py
           cd -
         shell: bash
 
