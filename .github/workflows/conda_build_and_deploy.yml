@@ -35,8 +35,10 @@ jobs:
         run: echo ::add-path::$CONDA/condabin
         shell: bash
 
+      # This step requires 'sudo' for mac
       - name: Installing conda-build and anaconda-client
-        run: conda install -y anaconda-client conda-build
+        run: sudo conda install -y anaconda-client conda-build
+        shell: bash
 
       - name: Generating VERSION file
         run: python build_tools/get_tag.py
