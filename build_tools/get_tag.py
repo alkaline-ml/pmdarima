@@ -29,6 +29,13 @@ elif os.getenv('BUILD_SOURCEBRANCH', False) and \
         tag = os.getenv('BUILD_SOURCEBRANCH').split('/')[-1]
         f.write(get_version_from_tag(tag))
 
+elif os.getenv('GITHUB_REF') and \
+        os.getenv('GITHUB_REF').startswith('GITHUB_REF'):
+    print('Tagged commit on Github Actions. Writing to {0}'.format(OUT_FILE))
+    with open(OUT_FILE, 'w') as f:
+        tag = os.getenv('GITHUB_REF').split('/')[-1]
+        f.write(get_version_from_tag(tag))
+
 # Local or non-tagged commit, so we don't generate a VERSION file
 else:
     print('Not a tagged commit, or not on a CI/CD platform. '
