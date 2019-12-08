@@ -1,4 +1,5 @@
 import os
+import sys
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -30,7 +31,8 @@ context = {
     'requirements': requirements,
     'numpy_version': numpy_version,
     'VERSION': VERSION,
-    'wheel': wheel
+    'wheel': wheel,
+    'py_version': '{0.major}{0.minor}'.format(sys.version_info)
 }
 
 # Ensure output directory exists
