@@ -40,8 +40,6 @@ jobs:
         run: |
           if [ "${{ matrix.os }}" != "windows-latest" ]; then
             echo ::add-path::$CONDA/condabin
-          else
-            echo ::add-path::C:\\Miniconda\\condabin
           fi
         shell: bash
 
@@ -77,12 +75,12 @@ jobs:
         shell: bash
 
       - name: Building and testing Conda package
-        run: conda build --python=${{ matrix.python-version }} --output-folder conda_build/ conda/
-#          if [ "${{ matrix.os }}" != "windows-latest" ]; then
-#            conda build --python=${{ matrix.python-version }} --output-folder conda_build/ conda/
-#          else
-#            C:\\Miniconda\\condabin\\conda.bat build --output-folder conda_build/ conda/
-#          fi
+        run: |
+          if [ "${{ matrix.os }}" != "windows-latest" ]; then
+            conda build --python=${{ matrix.python-version }} --output-folder conda_build/ conda/
+          else
+            C:\\Miniconda\\condabin\\conda.bat build --output-folder conda_build/ conda/
+          fi
         shell: bash
 
       - name: Deploying to Anaconda
