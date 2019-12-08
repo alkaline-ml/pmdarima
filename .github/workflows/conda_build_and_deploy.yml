@@ -68,7 +68,7 @@ jobs:
           if [ "${{ matrix.os }}" == "macos-latest" ]; then
             sudo conda install -y anaconda-client conda-build
           elif [ "${{ matrix.os }}" == "windows-latest" ]; then
-            C:\Miniconda\condabin\conda.bat install -y anaconda-client conda-build
+            C:\\Miniconda\\condabin\\conda.bat install -y anaconda-client conda-build
           else
             conda install -y anaconda-client conda-build
           fi
@@ -79,7 +79,7 @@ jobs:
           if [ "${{ matrix.os }}" != "windows-latest" ]; then
             conda build --output-folder conda_build/ conda/
           else
-            C:\Miniconda\condabin\conda.bat build --output-folder conda_build/ conda/
+            C:\\Miniconda\\condabin\\conda.bat build --output-folder conda_build/ conda/
           fi
         shell: bash
 
