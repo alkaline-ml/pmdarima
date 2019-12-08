@@ -60,13 +60,11 @@ jobs:
           else
             conda install -y anaconda-client conda-build
           fi
-          conda init bash
         shell: bash
 
       - name: Build and test Conda package
         run: |
-          conda activate base
-          conda-build --python=${{ matrix.python-version }} conda/
+          conda build --python=${{ matrix.python-version }} conda/
         shell: bash
 
       - name: Deploy to Anaconda
