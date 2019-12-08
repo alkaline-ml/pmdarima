@@ -86,9 +86,9 @@ jobs:
       - name: Testing conda install
         run: |
           if [ "${{ matrix.os }}" != "windows-latest" ]; then
-            conda install --use-local pmdarima
+            conda install --use-local conda_build
           else
-            C:\\Miniconda\\condabin\\conda.bat install --use-local pmdarima
+            C:\\Miniconda\\condabin\\conda.bat install --use-local conda_build
           fi
         shell: bash
 
