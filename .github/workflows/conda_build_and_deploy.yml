@@ -35,7 +35,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
-      - name: Add $CONDA to $PATH
+      - name: Add conda to $PATH
         run: |
           if [ "${{ matrix.os }}" != "windows-latest" ]; then
             echo ::add-path::$CONDA/condabin
@@ -68,6 +68,9 @@ jobs:
         run: |
           if [ "${{ matrix.os }}" == "macos-latest" ]; then
             sudo conda install -y anaconda-client conda-build
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+            call activate base
+            conda install -y anaconda-client conda-build
           else
             conda install -y anaconda-client conda-build
           fi
