@@ -48,7 +48,7 @@ jobs:
       # We still run the tests in conda
       - name: Building wheel
         run: |
-          pip install --upgrade pip setuptools
+          pip install --upgrade pip setuptools wheel
           make bdist_wheel
         shell: bash
 
