@@ -32,8 +32,17 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
+      - name: Making conda directory
+        run: mkdir conda
+        shell: bash
+
       - name: Add $CONDA to $PATH
-        run: echo ::add-path::$CONDA/condabin
+        run: |
+          if [ "${{ matrix.os }}" != "windows-latest" ]; then
+            echo ::add-path::$CONDA/condabin
+          else
+            echo ::add-path::$CONDA\conda.bat
+          fi
         shell: bash
 
       # This step requires 'sudo' for mac
@@ -44,6 +53,7 @@ jobs:
           else
             conda install -y anaconda-client conda-build
           fi
+          conda activate base
         shell: bash
 
       - name: Generating VERSION file
