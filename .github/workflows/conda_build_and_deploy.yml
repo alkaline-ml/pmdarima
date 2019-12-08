@@ -53,6 +53,7 @@ jobs:
           else
             conda install -y anaconda-client conda-build
           fi
+          conda init bash
           conda activate base
         shell: bash
 
