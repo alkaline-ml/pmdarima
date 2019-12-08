@@ -74,7 +74,7 @@ jobs:
         shell: bash
 
       - name: Building and testing Conda package
-        run: conda build --python=${{ matrix.python-version }} --output-folder conda_build/ conda/  # <- This is where meta file is
+        run: conda build --output-folder conda_build/ conda/  # <- This is where meta file is
         shell: bash
 
       - name: Look for output
