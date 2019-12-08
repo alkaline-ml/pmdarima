@@ -35,6 +35,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
+      - name: Check Python
+        run: python -c 'import struct; print( 8 * struct.calcsize("P"))'
+        shell: bash
+
       # For Linux and Mac, we add conda to the PATH. For Windows, we have to run it manually
       - name: Setting up Conda
         run: |
