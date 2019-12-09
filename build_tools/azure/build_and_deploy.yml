@@ -4,7 +4,7 @@ steps:
 
 - script: |
     pip install -r requirements.txt
-    pip install -r build_tools/azure/requirements.txt
+    pip install -r build_tools/build_requirements.txt
   displayName: 'Installing requirements'
 
 - script: make bdist_wheel

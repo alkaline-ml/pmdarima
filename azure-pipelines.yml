@@ -1,26 +1,26 @@
-#trigger:
-#  # Trigger for pushes on every branch
-#  branches:
-#    include:
-#    - '*'
-#
-#  # Trigger for all tags
-#  tags:
-#    include:
-#    - '*'
-#
-#pr:
-#  # Cancel if new commits are pushed to the same PR
-#  autoCancel: true
-#
-#  # Trigger for PRs on all branches
-#  branches:
-#    include:
-#    - '*'
-#
-#variables:
-#  # Read deployment variables from our secret group
-#  - group: deploy-vars
-#
-#jobs:
-#- template: build_tools/azure/jobs.yml
+trigger:
+  # Trigger for pushes on every branch
+  branches:
+    include:
+    - '*'
+
+  # Trigger for all tags
+  tags:
+    include:
+    - '*'
+
+pr:
+  # Cancel if new commits are pushed to the same PR
+  autoCancel: true
+
+  # Trigger for PRs on all branches
+  branches:
+    include:
+    - '*'
+
+variables:
+  # Read deployment variables from our secret group
+  - group: deploy-vars
+
+jobs:
+- template: build_tools/azure/jobs.yml

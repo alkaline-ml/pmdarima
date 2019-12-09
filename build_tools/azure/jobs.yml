@@ -5,7 +5,7 @@ jobs:
     vmImage: 'vs2017-win2016'
 
   strategy:
-    maxParallel: 6
+    maxParallel: 2
     matrix:
       Python35-x86:
         python.version: '3.5'
@@ -15,21 +15,21 @@ jobs:
         python.version: '3.5'
         architecture: 'x64'
 
-      Python36-x86:
-        python.version: '3.6'
-        architecture: 'x86'
-
-      Python36-x64:
-        python.version: '3.6'
-        architecture: 'x64'
-
-      Python37-x86:
-        python.version: '3.7'
-        architecture: 'x86'
-
-      Python37-x64:
-        python.version: '3.7'
-        architecture: 'x64'
+#      Python36-x86:
+#        python.version: '3.6'
+#        architecture: 'x86'
+#
+#      Python36-x64:
+#        python.version: '3.6'
+#        architecture: 'x64'
+#
+#      Python37-x86:
+#        python.version: '3.7'
+#        architecture: 'x86'
+#
+#      Python37-x64:
+#        python.version: '3.7'
+#        architecture: 'x64'
 
   steps:
   - task: UsePythonVersion@0
@@ -40,34 +40,81 @@ jobs:
 
   - template: build_and_deploy.yml
 
-- job: macOS
+- job: Conda
+  strategy:
+    # Our dependencies only support 64-bit 3.6+, so that is all we support
+    matrix:
+      Linux-36:
+        os: 'ubuntu-18.04'
+        python.version: '3.6'
+        architecture: 'x64'
+
+      Linux-37:
+        os: 'ubuntu-18.04'
+        python.version: '3.7'
+        architecture: 'x64'
+
+      Windows-36:
+        os: 'vs2017-win2016'
+        python.version: '3.6'
+        architecture: 'x64'
+
+      Windows-37:
+        os: 'vs2017-win2016'
+        python.version: '3.7'
+        architecture: 'x64'
+
+      macOS-36:
+        os: 'macOS-10.14'
+        python.version: '3.6'
+        architecture: 'x64'
+
+      macOS-36:
+        os: 'macOS-10.14'
+        python.version: '3.7'
+        architecture: 'x64'
 
   pool:
-    vmImage: 'macOS-10.14'
-
-  # Only need to set this for macOS
-  variables:
-    PMD_MPL_BACKEND: TkAgg
-
-  strategy:
-    maxParallel: 3
-    matrix:
-      Python35:
-        python.version: '3.5'
-
-      Python36:
-        python.version: '3.6'
-
-      Python37:
-        python.version: '3.7'
+    vmImage: '$(os)'
 
   steps:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '$(python.version)'
-    displayName: 'Setting Python version'
+      architecture: '$(architecture)'
+    displayName: 'Setting Python version and system architecture'
 
-  - template: build_and_deploy.yml
+  - script: python -c 'import sys; print(sys.version, "\n", sys.platform)'
+    displayName: Checking system version
+
+#- job: macOS
+#
+#  pool:
+#    vmImage: 'macOS-10.14'
+#
+#  # Only need to set this for macOS
+#  variables:
+#    PMD_MPL_BACKEND: TkAgg
+#
+#  strategy:
+#    maxParallel: 3
+#    matrix:
+#      Python35:
+#        python.version: '3.5'
+#
+#      Python36:
+#        python.version: '3.6'
+#
+#      Python37:
+#        python.version: '3.7'
+#
+#  steps:
+#  - task: UsePythonVersion@0
+#    inputs:
+#      versionSpec: '$(python.version)'
+#    displayName: 'Setting Python version'
+#
+#  - template: build_and_deploy.yml
 
 - job: test_tagging
 
