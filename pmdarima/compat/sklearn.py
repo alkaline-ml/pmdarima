@@ -4,7 +4,7 @@
 #
 # Patch backend for sklearn
 
-from __future__ import absolute_import
+from pkg_resources import parse_version
 
 import sklearn
 from sklearn.utils.validation import check_is_fitted
@@ -29,17 +29,13 @@ def get_compatible_check_is_fitted(estimator, attributes=None):
 
     """
 
-    # Split the version string from sklearn and use that determine how to use
+    # Use the version string from sklearn to determine how to use
     # the `sklearn.utils.validation import check_is_fitted` function
-    semantic_version_split = [int(x) for x in sklearn.__version__.split(".")]
-    major_version = semantic_version_split[0]
-    minor_version = semantic_version_split[1]
-
     # Determine if we should require a value for the attribute field
     is_no_attribute_needed = False
-    if major_version == 0 and minor_version > 21:
+    if parse_version(sklearn.__version__) >= parse_version('0.22.0'):
         is_no_attribute_needed = True
-
+        
     # If we need to pass in `attributes` but it is not a str type raise error.
     if not is_no_attribute_needed and not isinstance(attributes, str):
         raise TypeError("Parameter `attributes` can only accept str type")
