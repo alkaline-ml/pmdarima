@@ -84,7 +84,7 @@ jobs:
       architecture: '$(architecture)'
     displayName: 'Setting Python version and system architecture'
 
-  - script: python -c 'import sys; print(sys.version, "\n", sys.platform)'
+  - bash: python -c 'import sys; print(sys.version, "\n", sys.platform)'
     displayName: Checking system version
 
 #- job: macOS
