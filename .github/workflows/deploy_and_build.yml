@@ -58,7 +58,7 @@ jobs:
 
       - name: Running unit tests
         run: |
-          if ["${{ matrix.os }}" == "macos-latest" ]; then
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
             export PMD_MPL_BACKEND=TkAgg
           fi
           pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
