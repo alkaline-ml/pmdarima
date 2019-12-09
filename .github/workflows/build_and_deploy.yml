@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest]
-        python-version: ['3.5', '3.6', '3.7']
+        python-version: ['3.6', '3.7']  # We build 3.5 on Azure Pipelines
         architecture: ['x86', 'x64']
         exclude:
           # Don't build 32-bit on Mac
@@ -45,7 +45,7 @@ jobs:
       - name: Installing requirements
         run: |
           pip install -r requirements.txt
-          pip install -r build_tools/azure/requirements.txt
+          pip install -r build_tools/build_requirements.txt
         shell: bash
 
       - name: Building wheel
