@@ -8,7 +8,15 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
-`v1.5.0 <http://alkaline-ml.com/pmdarima/1.5.0/>`_
+`v1.5.2 <http://alkaline-ml.com/pmdarima/1.5.2/>`_
+--------------------------------------------------
+
+* Added ``pmdarima.show_versions`` as a utility for issue filing
+
+* Fixed deprecation for ``check_is_fitted`` in newer versions of scikit-learn
+
+
+`v1.5.1 <http://alkaline-ml.com/pmdarima/1.5.1/>`_
 --------------------------------------------------
 
 * No longer use statsmodels' ``ARIMA`` or ``ARMA`` class under the hood; only use
