@@ -177,7 +177,7 @@
 
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">mean_squared_error</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="kn">import</span> <span class="n">if_delegate_has_method</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_is_fitted</span><span class="p">,</span> <span class="n">check_array</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_array</span>
 
 <span class="kn">from</span> <span class="nn">statsmodels.tsa.base.tsa_model</span> <span class="kn">import</span> <span class="n">TimeSeriesModelResults</span>
 <span class="kn">from</span> <span class="nn">statsmodels</span> <span class="kn">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">sm</span>
@@ -190,6 +190,7 @@
 <span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">BaseARIMA</span>
 <span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="kn">import</span> <span class="n">DTYPE</span>  <span class="c1"># DTYPE for arrays</span>
 <span class="kn">from</span> <span class="nn">..compat.python</span> <span class="kn">import</span> <span class="n">long</span>
+<span class="kn">from</span> <span class="nn">..compat.sklearn</span> <span class="kn">import</span> <span class="n">get_compatible_check_is_fitted</span>
 <span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">get_callable</span><span class="p">,</span> <span class="n">if_has_delegate</span><span class="p">,</span> <span class="n">is_iterable</span><span class="p">,</span> <span class="n">check_endog</span><span class="p">,</span> \
     <span class="n">check_exog</span>
@@ -715,7 +716,7 @@
 <span class="sd">            The confidence intervals for the predictions. Only returned if</span>
 <span class="sd">            ``return_conf_int`` is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+        <span class="n">get_compatible_check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
 
         <span class="c1"># TODO: remove this, it&#39;s a compat check</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;typ&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
@@ -786,7 +787,7 @@
 <span class="sd">            The confidence intervals for the forecasts. Only returned if</span>
 <span class="sd">            ``return_conf_int`` is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+        <span class="n">get_compatible_check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_periods</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;n_periods must be an int or a long&quot;</span><span class="p">)</span>
 
@@ -923,7 +924,7 @@
 <span class="sd">        * Internally, this calls ``fit`` again using the OLD model parameters</span>
 <span class="sd">          as the starting parameters for the new model&#39;s MLE computation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+        <span class="n">get_compatible_check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
         <span class="n">model_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span>
 
         <span class="c1"># Allow updating with a scalar if the user is just adding a single</span>

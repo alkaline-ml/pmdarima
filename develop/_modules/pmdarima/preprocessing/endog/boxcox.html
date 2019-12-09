@@ -169,10 +169,11 @@
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_is_fitted</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">pmdarima.compat</span> <span class="kn">import</span> <span class="n">get_compatible_check_is_fitted</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseEndogTransformer</span>
 
@@ -271,7 +272,7 @@
 <span class="sd">        exogenous : array-like or None</span>
 <span class="sd">            The exog array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lam1_&quot;</span><span class="p">)</span>
+        <span class="n">get_compatible_check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lam1_&quot;</span><span class="p">)</span>
         <span class="n">lam1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam1_</span>
         <span class="n">lam2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam2_</span>
 
@@ -318,7 +319,7 @@
 <span class="sd">        exogenous : array-like or None</span>
 <span class="sd">            The inverse-transformed exogenous array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lam1_&quot;</span><span class="p">)</span>
+        <span class="n">get_compatible_check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lam1_&quot;</span><span class="p">)</span>
         <span class="n">lam1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam1_</span>
         <span class="n">lam2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam2_</span>
 

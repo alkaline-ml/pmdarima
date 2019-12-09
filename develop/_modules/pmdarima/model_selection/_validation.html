@@ -179,7 +179,7 @@
 <span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">format_exception_only</span>
 
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">base</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">regression</span> <span class="k">as</span> <span class="n">reg</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">mean_squared_error</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">indexable</span><span class="p">,</span> <span class="n">safe_indexing</span>
 
 <span class="kn">from</span> <span class="nn">._split</span> <span class="kn">import</span> <span class="n">check_cv</span>
@@ -194,8 +194,8 @@
 
 
 <span class="n">_valid_scoring</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;mean_absolute_error&#39;</span><span class="p">:</span> <span class="n">reg</span><span class="o">.</span><span class="n">mean_absolute_error</span><span class="p">,</span>
-    <span class="s1">&#39;mean_squared_error&#39;</span><span class="p">:</span> <span class="n">reg</span><span class="o">.</span><span class="n">mean_squared_error</span><span class="p">,</span>
+    <span class="s1">&#39;mean_absolute_error&#39;</span><span class="p">:</span> <span class="n">mean_absolute_error</span><span class="p">,</span>
+    <span class="s1">&#39;mean_squared_error&#39;</span><span class="p">:</span> <span class="n">mean_squared_error</span><span class="p">,</span>
     <span class="s1">&#39;smape&#39;</span><span class="p">:</span> <span class="n">metrics</span><span class="o">.</span><span class="n">smape</span><span class="p">,</span>
 <span class="p">}</span>
 
