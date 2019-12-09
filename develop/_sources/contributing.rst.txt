@@ -119,19 +119,14 @@ following rules before submitting:
    descriptive text using ``!<PULL REQUEST NUMBER>``
 
 -  Please include your operating system type and version number, as well
-   as your Python, scikit-learn, numpy, scipy, pandas and pmdarima versions. This
-   information can be found by running the following code snippet:
+   as your Python, statsmodels, scikit-learn, numpy, scipy, pandas and pmdarima
+   versions. This information can be found by running the following code
+   snippet:
 
   .. code-block:: python
 
-      import platform; print(platform.platform())
-      import sys; print("Python", sys.version)
-      import numpy; print("NumPy", numpy.__version__)
-      import scipy; print("SciPy", scipy.__version__)
-      import sklearn; print("Scikit-Learn", sklearn.__version__)
-      import pandas; print("Pandas", pandas.__version__)
-      import statsmodels; print("Statsmodels", statsmodels.__version__)
-      import pmdarima; print("pmdarima", pmdarima.__version__)
+      import pmdarima as pm;
+      pm.show_versions()
 
 - Please don't be a **lazy issue-filer!** Submitting a screen shot of an Excel document,
   or poorly-formatted/incomplete code makes the maintainers' lives difficult. Please include your data inline

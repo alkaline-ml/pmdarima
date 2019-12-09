@@ -25,8 +25,8 @@ data = pm.datasets.load_wineind()
 train, test = data[:150], data[150:]
 
 # Fit a simple auto_arima model
-arima = pm.auto_arima(train, error_action='ignore', trace=1,
-                      suppress_warnings=True,
+arima = pm.auto_arima(train, error_action='ignore', trace=True,
+                      suppress_warnings=True, maxiter=10,
                       seasonal=True, m=12)
 
 # #############################################################################
