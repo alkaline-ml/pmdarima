@@ -13,14 +13,15 @@ on:
 
 jobs:
   build-and-deploy:
-    matrix:
-      os: [windows-latest, macos-latest]
-      python-version: ['3.5', '3.6', '3.7']
-      architecture: ['x86', 'x64']
-      exclude:
-        # Don't build 32-bit on Mac
-        - os: macos-latest
-          architecture: x86
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+        python-version: ['3.5', '3.6', '3.7']
+        architecture: ['x86', 'x64']
+        exclude:
+          # Don't build 32-bit on Mac
+          - os: macos-latest
+            architecture: x86
 
     runs-on: ${{ matrix.os }}
 
