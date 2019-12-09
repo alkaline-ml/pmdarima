@@ -1,100 +1,100 @@
-name: Build, test, and deploy to Conda
-
-on:
-  push:
-    branches:
-      - '*'
-    tags:
-      - '*'
-
-  pull_request:
-    branches:
-      - '*'
-
-jobs:
-  build-and-deploy:
-    strategy:
-      fail-fast: false  # Just for debugging
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        # Our dependencies only support 64-bit 3.6+ on Conda, so we do the same
-        # exhibit a: https://anaconda.org/anaconda/cython/files
-        # exhibit b: https://anaconda.org/anaconda/numpy/files
-        python-version: ['3.6', '3.7']
-        architecture: ['x64']
-    runs-on: ${{ matrix.os }}
-    steps:
-      # This LOOKS like it is checking out 'master', but it is using the 'master' version of the checkout action
-      # It is actually checking out the most recent version on this branch
-      - name: Checkout
-        uses: actions/checkout@master
-
-      - name: Setting up Python
-        uses: actions/setup-python@v1.1.1
-        with:
-          python-version: ${{ matrix.python-version }}
-          architecture: ${{ matrix.architecture }}
-
-      # For Linux and Mac, we add conda to the PATH. For Windows, we have to run it manually
-      - name: Setting up Conda
-        run: |
-          if [ "${{ matrix.os }}" != "windows-latest" ]; then
-            echo ::add-path::$CONDA/condabin
-          fi
-        shell: bash
-
-      - name: Generating VERSION file
-        run: python build_tools/get_tag.py
-
-      # It is 100% easier to build the conda distribution from a wheel than source
-      # We still run the tests in conda
-      - name: Building wheel
-        run: |
-          pip install --upgrade pip setuptools wheel
-          make bdist_wheel
-        shell: bash
-
-      - name: Rendering Conda meta.yaml file
-        run: |
-          pip install jinja2
-          cd build_tools/github
-          python render_meta.py
-          cd -
-        shell: bash
-
-      # This step requires 'sudo' for mac
-      - name: Installing conda-build and anaconda-client
-        run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            sudo conda install -y anaconda-client conda-build
-          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
-            C:\\Miniconda\\condabin\\conda.bat install -y anaconda-client conda-build
-          else
-            conda install -y anaconda-client conda-build
-          fi
-        shell: bash
-
-      - name: Building and testing Conda package
-        run: |
-          if [ "${{ matrix.os }}" != "windows-latest" ]; then
-            conda build --python=${{ matrix.python-version }} conda/
-          else
-            C:\\Miniconda\\condabin\\conda.bat build conda/
-          fi
-        shell: bash
-
-      - name: Testing conda install
-        run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            sudo conda install -y --use-local pmdarima
-          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
-            C:\\Miniconda\\condabin\\conda.bat install -y --use-local pmdarima
-          else
-            conda install -y --use-local pmdarima
-          fi
-        shell: bash
-
-      - name: Deploying to Anaconda
-        if: github.event_name == 'tag' && success()
-        run: echo "This would deploy..."
-        shell: bash
+#name: Build, test, and deploy to Conda
+#
+#on:
+#  push:
+#    branches:
+#      - '*'
+#    tags:
+#      - '*'
+#
+#  pull_request:
+#    branches:
+#      - '*'
+#
+#jobs:
+#  build-and-deploy:
+#    strategy:
+#      fail-fast: false  # Just for debugging
+#      matrix:
+#        os: [ubuntu-latest, macos-latest, windows-latest]
+#        # Our dependencies only support 64-bit 3.6+ on Conda, so we do the same
+#        # exhibit a: https://anaconda.org/anaconda/cython/files
+#        # exhibit b: https://anaconda.org/anaconda/numpy/files
+#        python-version: ['3.6', '3.7']
+#        architecture: ['x64']
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      # This LOOKS like it is checking out 'master', but it is using the 'master' version of the checkout action
+#      # It is actually checking out the most recent version on this branch
+#      - name: Checkout
+#        uses: actions/checkout@master
+#
+#      - name: Setting up Python
+#        uses: actions/setup-python@v1.1.1
+#        with:
+#          python-version: ${{ matrix.python-version }}
+#          architecture: ${{ matrix.architecture }}
+#
+#      # For Linux and Mac, we add conda to the PATH. For Windows, we have to run it manually
+#      - name: Setting up Conda
+#        run: |
+#          if [ "${{ matrix.os }}" != "windows-latest" ]; then
+#            echo ::add-path::$CONDA/condabin
+#          fi
+#        shell: bash
+#
+#      - name: Generating VERSION file
+#        run: python build_tools/get_tag.py
+#
+#      # It is 100% easier to build the conda distribution from a wheel than source
+#      # We still run the tests in conda
+#      - name: Building wheel
+#        run: |
+#          pip install --upgrade pip setuptools wheel
+#          make bdist_wheel
+#        shell: bash
+#
+#      - name: Rendering Conda meta.yaml file
+#        run: |
+#          pip install jinja2
+#          cd build_tools/github
+#          python render_meta.py
+#          cd -
+#        shell: bash
+#
+#      # This step requires 'sudo' for mac
+#      - name: Installing conda-build and anaconda-client
+#        run: |
+#          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+#            sudo conda install -y anaconda-client conda-build
+#          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+#            C:\\Miniconda\\condabin\\conda.bat install -y anaconda-client conda-build
+#          else
+#            conda install -y anaconda-client conda-build
+#          fi
+#        shell: bash
+#
+#      - name: Building and testing Conda package
+#        run: |
+#          if [ "${{ matrix.os }}" != "windows-latest" ]; then
+#            conda build --python=${{ matrix.python-version }} conda/
+#          else
+#            C:\\Miniconda\\condabin\\conda.bat build conda/
+#          fi
+#        shell: bash
+#
+#      - name: Testing conda install
+#        run: |
+#          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+#            sudo conda install -y --use-local pmdarima
+#          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+#            C:\\Miniconda\\condabin\\conda.bat install -y --use-local pmdarima
+#          else
+#            conda install -y --use-local pmdarima
+#          fi
+#        shell: bash
+#
+#      - name: Deploying to Anaconda
+#        if: github.event_name == 'tag' && success()
+#        run: echo "This would deploy..."
+#        shell: bash
