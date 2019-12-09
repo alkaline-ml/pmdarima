@@ -10,6 +10,19 @@ import platform
 import sys
 import importlib
 
+_pmdarima_deps = (
+    "pip",
+    "setuptools",
+    "sklearn",
+    "statsmodels",
+    "numpy",
+    "scipy",
+    "Cython",
+    "pandas",
+    "joblib",
+    "pmdarima",
+)
+
 
 def _get_sys_info():
     """System information
@@ -31,7 +44,7 @@ def _get_sys_info():
     return dict(blob)
 
 
-def _get_deps_info():
+def _get_deps_info(deps=_pmdarima_deps):
     """Overview of the installed version of main dependencies
 
     Returns
@@ -39,18 +52,6 @@ def _get_deps_info():
     deps_info: dict
         version information on relevant Python libraries
     """
-    deps = [
-        "pip",
-        "setuptools",
-        "sklearn",
-        "statsmodels",
-        "numpy",
-        "scipy",
-        "Cython",
-        "pandas",
-        "joblib",
-    ]
-
     def get_version(module):
         return module.__version__
 
