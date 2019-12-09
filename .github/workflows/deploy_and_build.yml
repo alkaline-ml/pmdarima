@@ -1,0 +1,81 @@
+name: Mac and Windows Builds
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '*'
+
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build-and-deploy:
+    matrix:
+      os: [windows-latest, macos-latest]
+      python-version: ['3.5', '3.6', '3.7']
+      architecture: ['x86', 'x64']
+      exclude:
+        # Don't build 32-bit on Mac
+        - os: macos-latest
+          architecture: x86
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      # This LOOKS like it is checking out 'master', but it is using the 'master' version of the checkout action
+      # It is actually checking out the most recent version on this branch
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Setting up Python
+        uses: actions/setup-python@v1.1.1
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: ${{ matrix.architecture }}
+
+      - name: Updating pip
+        run: python -m pip install --upgrade pip
+
+      - name: Installing requirements
+        run: |
+          pip install -r requirements.txt
+          pip install -r build_tools/azure/requirements.txt
+
+      - name: Building wheel
+        run: make bdist_wheel
+
+      - name: Installing generated wheel
+        run: pip install --pre --no-index --find-links dist/ pmdarima
+
+      - name: Running unit tests
+        run: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
+
+      # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
+      # This also implicitly runs `make version`, which -- if tagged -- gets the right version
+      - name: Building source archive
+        run: make sdist
+
+      - name: Checking README compatibility
+        run: |
+          if python -c "from twine.commands.check import check; check(['dist/*'])" | grep  "warning"; then
+              echo "README will not render properly on PyPI"
+              exit 1
+          else
+              echo "README rendered appropriately"
+          fi
+        shell: bash
+
+      - name: Ensuring sdist can be installed
+        run: pip install dist/$(ls dist | grep tar)
+        shell: bash
+
+      # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
+      - name: Deploying to PyPI
+        if: github.event_name == 'tag' && success()  # Only deploy on tags
+        run: python -m twine upload --skip-existing dist/pmdarima-*
+        with:
+          TWINE_USERNAME: placeholder  # $(twineUsername)
+          TWINE_PASSWORD: placeholder  # $(twinePassword)
