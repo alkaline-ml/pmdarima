@@ -53,7 +53,11 @@ jobs:
         run: pip install --pre --no-index --find-links dist/ pmdarima
 
       - name: Running unit tests
-        run: pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
+        run: |
+          if ["${{ matrix.os }}" == "macos-latest" ]; then
+            export PMD_MPL_BACKEND=TkAgg
+          fi
+          pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
 
       # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
       # This also implicitly runs `make version`, which -- if tagged -- gets the right version
