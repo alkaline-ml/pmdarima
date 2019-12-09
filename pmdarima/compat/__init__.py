@@ -9,6 +9,7 @@ from .matplotlib import *
 from .pandas import *
 from .python import *
 from .numpy import *
+from .sklearn import *
 from .statsmodels import *
 
 __all__ = [s for s in dir() if not s.startswith('_')]

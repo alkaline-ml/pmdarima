@@ -11,7 +11,7 @@ import time
 from traceback import format_exception_only
 
 from sklearn import base
-from sklearn.metrics import regression as reg
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils import indexable, safe_indexing
 
 from ._split import check_cv
@@ -26,8 +26,8 @@ __all__ = [
 
 
 _valid_scoring = {
-    'mean_absolute_error': reg.mean_absolute_error,
-    'mean_squared_error': reg.mean_squared_error,
+    'mean_absolute_error': mean_absolute_error,
+    'mean_squared_error': mean_squared_error,
     'smape': metrics.smape,
 }
 

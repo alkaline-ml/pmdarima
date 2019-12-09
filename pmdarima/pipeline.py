@@ -4,7 +4,6 @@ from itertools import islice
 import warnings
 
 from sklearn.base import BaseEstimator, clone
-from sklearn.utils.validation import check_is_fitted
 from sklearn.utils.metaestimators import if_delegate_has_method
 
 from .base import BaseARIMA
@@ -12,7 +11,7 @@ from .preprocessing.base import BaseTransformer
 from .preprocessing.endog.base import BaseEndogTransformer
 from .preprocessing.exog.base import BaseExogTransformer, BaseExogFeaturizer
 from .utils import check_endog
-from .compat import DTYPE
+from .compat import DTYPE, get_compatible_check_is_fitted
 
 __all__ = ['Pipeline']
 
@@ -213,7 +212,7 @@ class Pipeline(BaseEstimator):
 
     def _pre_predict(self, n_periods, exogenous, **kwargs):
         """Runs transformation steps before predicting on data"""
-        check_is_fitted(self, "steps_")
+        get_compatible_check_is_fitted(self, "steps_")
 
         # Push the arrays through the transformer stages, but ONLY the exog
         # transformer stages since we don't have a Y...
@@ -446,7 +445,7 @@ class Pipeline(BaseEstimator):
             compound, comprised of the stage name and the argument name
             separated by a "__".
         """
-        check_is_fitted(self, "steps_")
+        get_compatible_check_is_fitted(self, "steps_")
 
         # Push the arrays through all of the transformer steps that have the
         # appropriate update_and_transform method
