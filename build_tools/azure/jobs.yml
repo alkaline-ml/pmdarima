@@ -69,7 +69,7 @@ jobs:
         python.version: '3.6'
         architecture: 'x64'
 
-      macOS-36:
+      macOS-37:
         os: 'macOS-10.14'
         python.version: '3.7'
         architecture: 'x64'
