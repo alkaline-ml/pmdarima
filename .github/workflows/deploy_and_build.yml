@@ -77,6 +77,6 @@ jobs:
       - name: Deploying to PyPI
         if: github.event_name == 'tag' && success()  # Only deploy on tags
         run: python -m twine upload --skip-existing dist/pmdarima-*
-        with:
+        env:
           TWINE_USERNAME: placeholder  # $(twineUsername)
           TWINE_PASSWORD: placeholder  # $(twinePassword)
