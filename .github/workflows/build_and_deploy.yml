@@ -13,6 +13,7 @@ on:
 
 jobs:
   build-and-deploy:
+    name: Build and Deploy
     strategy:
       fail-fast: false
       matrix:
