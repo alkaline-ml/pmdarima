@@ -31,8 +31,8 @@ steps:
     displayName: 'Rendering meta.yaml file'
 
   - script: |
-      call activate base conda/
-      conda-build --python=$(python.version)
+      call activate base
+      conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution (Windows)'
 
   - script: conda-build --python=$(python.version) conda/
