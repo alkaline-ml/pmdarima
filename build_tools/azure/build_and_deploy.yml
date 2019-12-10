@@ -31,6 +31,7 @@ steps:
     displayName: 'Building wheel file'
 
   - bash: |
+      pip install jinja2
       mkdir conda
       cd build_tools/azure
       python render_meta.py
