@@ -48,4 +48,6 @@ steps:
     condition: ne(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Building and testing conda distribution (Linux and Mac)'
 
-
+  - script:
+      conda install --use-local pmdarima
+    displayName: 'Testing conda installation'
