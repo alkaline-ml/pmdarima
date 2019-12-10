@@ -42,9 +42,9 @@ jobs:
         run: python -m pip install --upgrade pip
         shell: bash
 
-      - name: Check Windows path
+      - name: Find rc
         if: matrix.os == 'windows-latest'
-        run: dir "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN"
+        run: where rc.exe
 
       - name: Installing requirements
         run: |
