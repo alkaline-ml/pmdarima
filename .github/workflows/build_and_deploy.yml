@@ -32,9 +32,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Fix PATH on Windows
+      - name: Find PATH
         if: matrix.os == 'windows-latest'
-        run: echo ::add-path::"/c/Program Files (x86)/Windows Kits/10/bin/10.0.18362.0/x64"
+        run: python -c "from distutils import _msvccompiler; print(_msvccompiler._get_vc_env('x64')['path'])"
         shell: bash
 
       - name: Setting up Python
