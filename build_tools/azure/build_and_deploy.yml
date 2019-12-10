@@ -1,11 +1,4 @@
 steps:
-  - bash: |
-      mkdir conda
-      cd build_tools/azure
-      python render_meta.py
-      cd -
-    displayName: 'Rendering meta.yaml file'
-
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     condition: eq(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Add conda to PATH (Windows)'
@@ -18,3 +11,32 @@ steps:
       fi
     condition: ne(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Add conda to PATH (Linux and Mac)'
+
+  - script: conda install conda-build anaconda-client--yes
+    displayName: 'Installing conda-build and anaconda-client'
+
+  - script: |
+      pip install build_tools/build_requirements
+      make requirements
+    displayName: 'Installing requirements'
+
+  - script: make bdist_wheel
+    displayName: 'Building wheel file'
+
+  - bash: |
+      mkdir conda
+      cd build_tools/azure
+      python render_meta.py
+      cd -
+    displayName: 'Rendering meta.yaml file'
+
+  - script: |
+      call activate base
+      conda-build --python=$(python.version)
+    displayName: 'Building and testing conda distribution (Windows)'
+
+  - script: conda-build --python=$(python.version)
+    condition: ne(variables['Agent.OS'], 'Windows_NT')
+    displayName: 'Building and testing conda distribution (Linux and Mac)'
+
+
