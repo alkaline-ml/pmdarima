@@ -44,8 +44,7 @@ jobs:
 
       - name: Check Windows path
         if: matrix.os == 'windows-latest'
-        run: ls C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\BIN
-        shell: bash
+        run: dir "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN"
 
       - name: Installing requirements
         run: |
