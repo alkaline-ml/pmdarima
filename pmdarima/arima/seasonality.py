@@ -145,7 +145,6 @@ def decompose(x, type_, m, filter_=None):
     # the random/noisy effects within the original signal.
     random = _decomposer_helper(_decomposer_helper(x, trend), seasonal)
 
-    # somehow random is just d_etrended and not removing the seasonal!!!
     # Create a namedtuple so the output mirrors the output of the R function.
     decomposed = namedtuple('decomposed', 'x trend seasonal random')
     decomposed_tuple = decomposed(x, trend, seasonal, random)
