@@ -16,7 +16,7 @@ steps:
       # https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/anaconda?view=azure-devops&tabs=macos#add-conda-to-your-system-path
       echo "##vso[task.prependpath]$CONDA/bin"
       sudo chown -R $USER $CONDA
-    condition: ne(variables['Agent.OS'], 'Windows_NT')
+    condition: eq(variables['Agent.OS'], 'Darwin')
     displayName: 'Add conda to PATH (Mac)'
 
   - bash: conda install conda-build --yes
