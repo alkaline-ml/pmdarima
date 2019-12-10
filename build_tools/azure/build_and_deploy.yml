@@ -5,10 +5,6 @@ steps:
 
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
-      # https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/anaconda?view=azure-devops&tabs=macos#add-conda-to-your-system-path
-      if [ "${{ variables['Agent.OS'] }}" == "Darwin" ]; then
-        sudo chown -R $USER $CONDA
-      fi
     condition: eq(variables['Agent.OS'], 'Linux')
     displayName: 'Add conda to PATH (Linux)'
 
