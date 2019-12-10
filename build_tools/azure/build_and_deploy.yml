@@ -49,5 +49,5 @@ steps:
     displayName: 'Building and testing conda distribution (Linux and Mac)'
 
   - script:
-      conda install --use-local pmdarima
+      conda install --use-local pmdarima --yes
     displayName: 'Testing conda installation'
