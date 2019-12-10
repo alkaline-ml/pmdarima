@@ -16,7 +16,7 @@ steps:
     displayName: 'Installing conda-build and anaconda-client'
 
   - script: |
-      pip install build_tools/build_requirements
+      pip install ir build_tools/build_requirements.txt
       make requirements
     displayName: 'Installing requirements'
 
