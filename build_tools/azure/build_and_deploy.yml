@@ -1,12 +1,4 @@
 steps:
-  - bash: |
-      mkdir conda
-      python -m pip install jinja2  # Only used to build yaml file
-      cd build_tools/azure
-      python render_meta.py
-      cd -
-    displayName: 'Rendering meta.yaml file'
-
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     condition: eq(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Add conda to PATH (Windows)'
@@ -37,6 +29,14 @@ steps:
 
   - script: make bdist_wheel
     displayName: 'Building wheel file'
+
+  - bash: |
+      mkdir conda
+      python -m pip install jinja2  # Only used to build yaml file
+      cd build_tools/azure
+      python render_meta.py
+      cd -
+    displayName: 'Rendering meta.yaml file'
 
   - script: |
       call activate base
