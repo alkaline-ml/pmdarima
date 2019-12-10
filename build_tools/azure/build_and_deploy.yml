@@ -12,8 +12,8 @@ steps:
     condition: ne(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Add conda to PATH (Linux and Mac)'
 
-  - bash: sudo conda install conda-build anaconda-client --yes
-    displayName: 'Installing conda-build and anaconda-client'
+  - bash: conda install conda-build --yes
+    displayName: 'Installing conda-build'
 
   - script: |
       pip install ir build_tools/build_requirements.txt
