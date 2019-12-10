@@ -6,7 +6,6 @@ steps:
 
   - script: |
       python -m pip install -r build_tools/build_requirements.txt
-      python -m pip install jinja2
       make requirements
     displayName: 'Installing requirements'
 
@@ -15,6 +14,7 @@ steps:
 
   - bash: |
       mkdir conda
+      python -m pip install jinja2  # Only used to build yaml file
       cd build_tools/azure
       python render_meta.py
       cd -
