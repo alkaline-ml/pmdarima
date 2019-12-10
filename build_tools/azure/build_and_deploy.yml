@@ -32,11 +32,11 @@ steps:
 
   - script: |
       call activate base
-      conda-build --python=$(python.version)
+      conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution (Windows)'
 
   - script: conda-build --python=$(python.version)
-    condition: ne(variables['Agent.OS'], 'Windows_NT')
+    condition: ne(variables['Agent.OS'], 'Windows_NT') conda/
     displayName: 'Building and testing conda distribution (Linux and Mac)'
 
 
