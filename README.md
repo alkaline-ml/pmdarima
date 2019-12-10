@@ -8,18 +8,26 @@
 ![Downloads](https://img.shields.io/badge/dynamic/json?color=blue&label=downloads&query=%24.total&url=https%3A%2F%2Fstore.zapier.com%2Fapi%2Frecords%3Fsecret%3D1e061b29db6c4f15af01103d403b0237)
 ![Downloads/Week](https://img.shields.io/badge/dynamic/json?color=blue&label=downloads%2Fweek&query=%24.weekly&url=https%3A%2F%2Fstore.zapier.com%2Fapi%2Frecords%3Fsecret%3D1e061b29db6c4f15af01103d403b0237)
 
-Pmdarima (originally `pyramid-arima`, for the anagram of 'py' + 'arima') is a no-nonsense statistical
-Python library with a solitary objective: bring R's
-[`auto.arima`](https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima)
-functionality to Python. Pmdarima operates by wrapping
-[`statsmodels.tsa.ARIMA`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/arima_model.py)
-and [`statsmodels.tsa.statespace.SARIMAX`](https://github.com/statsmodels/statsmodels/blob/master/statsmodels/tsa/statespace/sarimax.py)
-into one estimator class and creating a more user-friendly estimator interface for programmers familiar with scikit-learn.
+Pmdarima (originally `pyramid-arima`, for the anagram of 'py' + 'arima') is a statistical
+library designed to fill the void in Python's time series analysis capabilities. This includes:
 
+  * The equivalent of R's [`auto.arima`](https://www.rdocumentation.org/packages/forecast/versions/7.3/topics/auto.arima) functionality to Python.
+  * A collection of statistical tests of stationarity and seasonality
+  * Array utilities, such as differencing and inverse differencing
+  * Numerous endogenous and exogenous transformers and featurizers, including Box-Cox transformations and Fourier transformations
+  * Time series decompositions
+  * Cross-validation utilities
+  * A rich collection of built-in time series datasets for prototyping and examples
+  * Scikit-learn-esque pipelines to consolidate your estimators and promote productionization
+  
+Pmdarima wraps [statsmodels](https://github.com/statsmodels/statsmodels/blob/master/statsmodels)
+under the hood, but is designed with an interface that's familiar to users coming
+from a scikit-learn background.
 
 ## Installation
 
-Pmdarima is on pypi under the package name `pmdarima` and can be downloaded via `pip`:
+Pmdarima has binary and source distributions for Windows, Mac and Linux (`manylinux`) on pypi
+under the package name `pmdarima` and can be downloaded via `pip`:
 
 ```bash
 $ pip install pmdarima
@@ -34,10 +42,69 @@ $ pip install pyramid-arima
 # python -c 'import pyramid;'
 ```
 
-To ensure the package was built correctly, import the following module in python:
+
+## Quickstart Examples
+
+Fitting a simple auto-ARIMA on the [`wineind`](https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind) dataset:
 
 ```python
-from pmdarima.arima import auto_arima
+import pmdarima as pm
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load/split your data
+y = pm.datasets.load_wineind()
+train, test = y[:150], y[150:]
+
+# Fit your model
+model = pm.auto_arima(train, seasonal=True, m=12)
+
+# make your forecasts
+forecasts = model.predict(test.shape[0])  # predict N steps into the future
+
+# Visualize the forecasts (blue=train, green=forecasts)
+x = np.arange(y.shape[0])
+plt.plot(x[:150], train, c='blue')
+plt.plot(x[150:], forecasts, c='green')
+plt.show()
+```
+
+<img src="etc/img/readme_example1.png"/>
+
+
+Fitting a more complex pipeline:
+
+```python
+import pmdarima as pm
+from pmdarima.pipeline import Pipeline
+from pmdarima.preprocessing import BoxCoxEndogTransformer
+import pickle
+
+# Load/split your data
+y = pm.datasets.load_sunspots()
+train, test = y[:2700], y[2700:]
+
+# Define and fit your pipeline
+pipeline = Pipeline([
+    ('boxcox', BoxCoxEndogTransformer(lmbda2=1e-6)),
+    ('arima', pm.AutoARIMA(seasonal=True, m=12,
+                           suppress_warnings=True,
+                           trace=True))
+])
+
+pipeline.fit(train)
+
+# Serialize your model just like you would in scikit:
+with open('model.pkl', 'wb') as pkl:
+    pickle.dump(pipeline, pkl)
+    
+# Load it and make predictions seamlessly:
+with open('model.pkl', 'rb') as pkl:
+    mod = pickle.load(pkl)
+    print(mod.predict(15))
+# [25.20580375 25.05573898 24.4263037  23.56766793 22.67463049 21.82231043
+# 21.04061069 20.33693017 19.70906027 19.1509862  18.6555793  18.21577243
+# 17.8250318  17.47750614 17.16803394]
 ```
 
 
@@ -54,7 +121,7 @@ will build from the source distribution tarball, however you'll need `cython>=0.
 and `gcc` (Mac/Linux) or `MinGW` (Windows) in order to build the package from source.
 
 
-### Documentation
+## Documentation
 
 All of your questions and more (including examples and guides) can be answered by
 the [`pmdarima` documentation](https://www.alkaline-ml.com/pmdarima). If not, always
