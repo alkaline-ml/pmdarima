@@ -43,8 +43,7 @@ jobs:
       architecture: '$(architecture)'
     displayName: 'Setting Python version and system architecture'
 
-  - bash: python -c 'import sys; print(sys.version, "\n", sys.platform)'
-    displayName: Checking system version
+  - template: build_and_deploy.yml
 
 - job: test_tagging
 
