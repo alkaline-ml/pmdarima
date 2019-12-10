@@ -32,10 +32,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Repair Visual Studio
+      - name: Investigate PATH
         if: matrix.os == 'windows-latest' && matrix.python-version == '3.5'
-        run: "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe repair"
-        shell: cmd
+        run: dir "C:\Program Files (x86)\Windows Kits\8.0\bin\x86"
 
       - name: Setting up Python
         uses: actions/setup-python@v1.1.1
