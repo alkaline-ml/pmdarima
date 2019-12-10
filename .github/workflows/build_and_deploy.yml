@@ -32,10 +32,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Find PATH
-        if: matrix.os == 'windows-latest'
-        run: python -c "from distutils import _msvccompiler; print(_msvccompiler._get_vc_env('x64')['path'])"
-        shell: bash
+      - name: Repair Visual Studio
+        if: matrix.os == 'windows-latest' && matrix.python-version == '3.5'
+        run: C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe repair
+        shell: cmd
 
       - name: Setting up Python
         uses: actions/setup-python@v1.1.1
