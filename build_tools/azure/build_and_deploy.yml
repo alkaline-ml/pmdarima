@@ -9,8 +9,15 @@ steps:
       if [ "${{ variables['Agent.OS'] }}" == "Darwin" ]; then
         sudo chown -R $USER $CONDA
       fi
+    condition: eq(variables['Agent.OS'], 'Linux')
+    displayName: 'Add conda to PATH (Linux)'
+
+  - bash: |
+      # https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/anaconda?view=azure-devops&tabs=macos#add-conda-to-your-system-path
+      echo "##vso[task.prependpath]$CONDA/bin"
+      sudo chown -R $USER $CONDA
     condition: ne(variables['Agent.OS'], 'Windows_NT')
-    displayName: 'Add conda to PATH (Linux and Mac)'
+    displayName: 'Add conda to PATH (Mac)'
 
   - bash: conda install conda-build --yes
     displayName: 'Installing conda-build'
