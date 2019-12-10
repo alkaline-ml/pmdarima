@@ -15,8 +15,8 @@ steps:
     condition: eq(variables['Agent.OS'], 'Darwin')
     displayName: 'Add conda to PATH (Mac)'
 
-  - bash: conda install conda-build --yes
-    displayName: 'Installing conda-build'
+  - bash: conda install conda-build anaconda-client --yes
+    displayName: 'Installing conda-build and anaconda client'
 
   - script: |
       python -m pip install --upgrade pip
