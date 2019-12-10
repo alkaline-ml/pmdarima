@@ -12,7 +12,7 @@ steps:
     condition: ne(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Add conda to PATH (Linux and Mac)'
 
-  - script: conda install conda-build anaconda-client--yes
+  - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
   - script: |
