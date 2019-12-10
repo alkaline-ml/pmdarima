@@ -23,7 +23,11 @@ steps:
     displayName: 'Installing conda-build'
 
   - script: |
-      pip install ir build_tools/build_requirements.txt
+      pip install --upgrade pip
+    displayName: 'Updating pip'
+
+  - script: |
+      pip install -r build_tools/build_requirements.txt
       make requirements
     displayName: 'Installing requirements'
 
