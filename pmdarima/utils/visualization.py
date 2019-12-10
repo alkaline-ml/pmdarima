@@ -383,7 +383,7 @@ def tsdisplay(y, lag_max=50, figsize=(8, 6), title=None, bins=25,
         ax0.set_title(title)
 
     if xlabs is not None:
-        # TODO: figure this one out.
+        # TODO: eventually would be nice to do some well spaced xticks
         pass
 
     # ax1 is the ACF, so we can just use our ACF plotting func
