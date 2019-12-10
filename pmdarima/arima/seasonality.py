@@ -7,6 +7,7 @@
 from collections import namedtuple
 
 import six
+import math
 from sklearn.linear_model import LinearRegression
 
 from scipy.linalg import svd
@@ -114,23 +115,31 @@ def decompose(x, type_, m, filter_=None):
     half_m = m // 2
     trend = np.convolve(x, filter_, mode='valid')
     trend = trend[:-1]  # we remove the final index.
-    sma_xs = range(half_m, len(trend) + half_m)
 
-    # Remove the effect of the trend on the original signal
+    # Remove the effect of the trend on the original signal and pad for reshape
+    sma_xs = range(half_m, len(trend) + half_m)
     detrend = _decomposer_helper(x[sma_xs], trend)
+    num_seasons = math.ceil((1.0 * trend.shape[0]) / m)
+    pad_length = (num_seasons * m) - trend.shape[0]
+    if pad_length > 0:
+        buffer = pad_length * [np.nan]
+        detrend = np.array(detrend.tolist() + buffer)
 
     # Determine the seasonal effect of the signal
-    m_arr = np.reshape(detrend, (int(detrend.shape[0] / m), m))
+    m_arr = np.reshape(detrend, (num_seasons, m))
     seasonal = np.nanmean(m_arr, axis=0).tolist()
     seasonal = np.array(seasonal[half_m:] + seasonal[:half_m])
     temp = seasonal
     for i in range(m_arr.shape[0]):
         seasonal = np.concatenate((seasonal, temp))
+    if pad_length > 0:
+        seasonal = seasonal[:-pad_length]
 
-    # We buffer the trend component so that it is the same length as the other
-    # outputs. This counters the effects of losing data by the convolution/sma
+    # We buffer the trend and seasonal components so that they are the same
+    # length as the other outputs. This counters the effects of losing data
+    # by the convolution/sma
     buffer = [np.nan] * half_m
-    trend = buffer + trend.tolist() + buffer
+    trend = list(buffer + trend.tolist() + buffer)
 
     # Remove the trend and seasonal effects from the original signal to get
     # the random/noisy effects within the original signal.
