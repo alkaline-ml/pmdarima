@@ -21,6 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
+      - name: Setting up Python
+        uses: actions/setup-python@v1.1.1
+        with:
+          python-version: '3.7'
+          architecture: 'x64'
+
       - name: Ensure VERSION tagging works
         run: |
           set -e
