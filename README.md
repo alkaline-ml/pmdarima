@@ -64,7 +64,7 @@ plt.show()
 
 
 Fitting a more complex pipeline on the [`sunspots`](https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots) dataset,
-serializing it, and the loading it from disk to make predictions:
+serializing it, and then loading it from disk to make predictions:
 
 ```python
 import pmdarima as pm
