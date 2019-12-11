@@ -72,4 +72,28 @@ jobs:
 
   - template: build_tools/azure/conda/mac.yml
 
+- job: Windows
+
+  pool:
+    vmImage: 'windows-2019'
+
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+        architecture: 'x64'
+
+      Python37:
+        python.version: '3.7'
+        architecture: 'x64'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: '$(architecture)'
+    displayName: 'Setting Python version and system architecture'
+
+  - template: build_tools/azure/conda/mac.yml
+
 - template: build_tools/azure/jobs.yml
