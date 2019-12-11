@@ -69,7 +69,7 @@ plt.plot(x[150:], forecasts, c='green')
 plt.show()
 ```
 
-<img src="etc/img/readme_example1.png"/>
+<img src="http://alkaline-ml.com/img/static/pmdarima_readme_example1.png" alt="Wineind example"/>
 
 
 Fitting a more complex pipeline:
