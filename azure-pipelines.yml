@@ -23,6 +23,10 @@ variables:
   - group: deploy-vars
 
 # Our dependencies only support 64-bit 3.6+ for conda, so that is all we support
+# We split these into 3 groups because they are all slightly different (rather than adding a condition on every step)
+#  - Linux: Build wheel, then build conda from wheel
+#  - Mac: Requires sudo, then build wheen, then build conda from wheel
+#  - Windows: Build conda from source
 jobs:
 - job: Linux
 
@@ -75,7 +79,7 @@ jobs:
 - job: Windows
 
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'vs2017-win2016'
 
   strategy:
     matrix:
