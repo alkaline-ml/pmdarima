@@ -47,7 +47,8 @@ else:
 
     # Stuff we want at top-level
     from .arima import auto_arima, ARIMA, AutoARIMA, StepwiseContext, decompose
-    from .utils import acf, autocorr_plot, c, pacf, plot_acf, plot_pacf
+    from .utils import acf, autocorr_plot, c, pacf, plot_acf, plot_pacf, \
+        tsdisplay
     from .utils._show_versions import show_versions
 
     # Need these namespaces at the top so they can be used like:

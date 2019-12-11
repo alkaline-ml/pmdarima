@@ -5,6 +5,7 @@ from .austres import *
 from .heartrate import *
 from .lynx import *
 from .stocks import *
+from .sunspots import *
 from .taylor import *
 from .wineind import *
 from .woolyrnq import *
