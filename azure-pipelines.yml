@@ -22,5 +22,30 @@ variables:
   # Read deployment variables from our secret group
   - group: deploy-vars
 
+# Our dependencies only support 64-bit 3.6+, so that is all we support
 jobs:
+- job: Linux
+
+  pool:
+    vmImage: 'ubuntu-18.04'
+
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+        architecture: 'x64'
+
+      Python37:
+        python.version: '3.7'
+        architecture: 'x64'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: '$(architecture)'
+    displayName: 'Setting Python version and system architecture'
+
+  - template: build_tools/azure/conda/linux.yml
+
 - template: build_tools/azure/jobs.yml

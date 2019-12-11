@@ -24,14 +24,17 @@ except FileNotFoundError:
 with open(REQUIREMENTS_FILE) as file:
     requirements = [line.strip() for line in file.readlines()]
 
-# wheel = next(file for file in os.listdir(DIST_PATH) if file.endswith('.whl'))
+if sys.platform != 'win32':
+    wheel = next(file for file in os.listdir(DIST_PATH) if file.endswith('.whl'))
+else:
+    wheel = None
 numpy_version = next(package for package in requirements if 'numpy' in package)
 
 context = {
     'requirements': requirements,
     'numpy_version': numpy_version,
     'VERSION': VERSION,
-    # 'wheel': wheel,
+    'wheel': wheel,
     'py_version': '{0.major}{0.minor}'.format(sys.version_info)
 }
 

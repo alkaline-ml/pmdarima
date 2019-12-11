@@ -8,7 +8,8 @@ source:
 
 build:
   string: 'py{{ py_version }}'
-  script: 'python setup.py install' # 'python -m pip install dist/{{ wheel }} --no-deps -vv'
+  script: 'python -m pip install dist/{{ wheel }} --no-deps -vv'  # [not win]
+  script: 'python setup.py install'  # [win]
   ignore_run_exports:
     - pip
     - statsmodels
