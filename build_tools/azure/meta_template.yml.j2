@@ -1,8 +1,9 @@
+{# This is a Jinja2 template that will render out to $ROOT/conda/meta.yaml #}
 package:
   name: 'pmdarima'
   version: {{ VERSION }}
 
-# Path where setup.py lies from root/conda (since that is where this will be rendered)
+{# Path where setup.py lies from root/conda (since that is where this will be rendered) #}
 source:
   path: ../
 
@@ -43,9 +44,9 @@ build:
 
 test:
   commands:
-    # conda-forge has the wrong versions pinned, so we have to pip install these
+    {# conda-forge has the wrong versions pinned, so we have to pip install these #}
     - pip install pytest pytest-mpl pytest-benchmark
-    # Cannot use `make` in the meta.yaml file
+    {# Cannot use `make` in the meta.yaml file #}
     - pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
 
 about:
