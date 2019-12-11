@@ -29,6 +29,6 @@ jobs:
 
       - name: Ensure VERSION tagging works
         run: |
-          chmod +x build_tools/github/test_tagging.sh
-          ./build_tools/github/test_tagging.sh
+          chmod +x build_tools/github/test_version_tagging.sh
+          ./build_tools/github/test_version_tagging.sh
         shell: bash
