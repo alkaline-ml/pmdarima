@@ -1,13 +1,11 @@
 steps:
-  - bash: |
-      echo "##vso[task.prependpath]$CONDA/bin"
+  - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: 'Add conda to PATH'
 
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
-  - script: |
-      python -m pip install --upgrade pip
+  - script: python -m pip install --upgrade pip
     displayName: 'Updating pip'
 
   - script: |
@@ -30,6 +28,5 @@ steps:
     condition: ne(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Building and testing conda distribution'
 
-  - script:
-      conda install --use-local pmdarima --yes
+  - script: conda install --use-local pmdarima --yes
     displayName: 'Testing conda installation'
