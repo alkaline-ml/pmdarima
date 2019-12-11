@@ -46,6 +46,7 @@ steps:
     displayName: 'Building and testing conda distribution (Windows)'
 
   - script: |
+      conda init
       conda create --name build-env python=$(python.version) --file requirements.txt --yes
       conda activate build-env
       conda-build --python=$(python.version) conda/
