@@ -76,7 +76,7 @@ jobs:
 
       # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
       # This also implicitly runs `make version`, which -- if tagged -- gets the right version
-      - name: Building source archive
+      - name: Building source distribution
         run: make sdist
         shell: bash
 
