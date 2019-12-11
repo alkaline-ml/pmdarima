@@ -38,6 +38,9 @@ steps:
       cd -
     displayName: 'Rendering meta.yaml file'
 
+  - script: conda init
+    displayName: 'Initializing conda'
+
   - script: |
       conda create --name build-env python=$(python.version) --file requirements.txt --yes
       call activate build-env
@@ -46,7 +49,6 @@ steps:
     displayName: 'Building and testing conda distribution (Windows)'
 
   - script: |
-      conda init
       conda create --name build-env python=$(python.version) --file requirements.txt --yes
       conda activate build-env
       conda-build --python=$(python.version) conda/
