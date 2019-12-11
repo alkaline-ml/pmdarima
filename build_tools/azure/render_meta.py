@@ -3,7 +3,6 @@ import sys
 
 from jinja2 import Environment, FileSystemLoader
 
-# pathlib fails on Github Actions using Python 3.5, so we have to use these
 DIST_PATH = '../../dist'
 VERSION_FILE = '../../VERSION'
 REQUIREMENTS_FILE = '../../requirements.txt'
