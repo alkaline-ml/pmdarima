@@ -94,6 +94,6 @@ jobs:
       architecture: '$(architecture)'
     displayName: 'Setting Python version and system architecture'
 
-  - template: build_tools/azure/conda/mac.yml
+  - template: build_tools/azure/conda/windows.yml
 
 - template: build_tools/azure/jobs.yml
