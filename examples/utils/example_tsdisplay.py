@@ -37,5 +37,5 @@ pm.tsdisplay(
 
 print("""
 As evidenced by the more normally distributed values in the transformed series,
-using a BoxCox transformation may prove useful prior to fitting your model.
+using a Box-Cox transformation may prove useful prior to fitting your model.
 """)
