@@ -1,0 +1,35 @@
+name: Test VERSION tagging
+
+on:
+  push:
+    branches:
+      - '*'
+
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  test-tagging:
+    name: Test VERSION tagging
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # This LOOKS like it is checking out 'master', but it is using the 'master' version of the checkout action
+      # It is actually checking out the most recent version on this branch
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Ensure VERSION tagging works
+        run: |
+          set -e
+          pip install pathlib
+
+          GITHUB_REF=refs/tags/v0.99.999 python ${GITHUB_WORKSPACE}/build_tools/get_tag.py
+
+          if [[ ! -f ${GITHUB_WORKSPACE}/pmdarima/VERSION ]]; then
+              echo "Expected VERSION file"
+              exit 4
+          fi
+        shell: bash
