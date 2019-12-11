@@ -39,9 +39,8 @@ steps:
     displayName: 'Rendering meta.yaml file'
 
   - script: |
-      conda create --name build-env python=$(python.version) --yes
+      conda create --name build-env python=$(python.version) --file requirements.txt --yes
       call activate build-env
-      pip install -r requirements.txt
       conda-build --python=$(python.version) conda/
     condition: eq(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Building and testing conda distribution (Windows)'
