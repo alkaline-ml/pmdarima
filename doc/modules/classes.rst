@@ -116,6 +116,8 @@ Dataset loading functions
     datasets.load_heartrate
     datasets.load_lynx
     datasets.load_msft
+    datasets.load_stocks
+    datasets.load_sunspots
     datasets.load_taylor
     datasets.load_wineind
     datasets.load_woolyrnq
