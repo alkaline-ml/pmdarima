@@ -100,5 +100,5 @@ jobs:
         run: python -m twine upload --skip-existing dist/pmdarima-*
         shell: bash
         env:
-          TWINE_USERNAME: placeholder  # $(twineUsername)
-          TWINE_PASSWORD: placeholder  # $(twinePassword)
+          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
