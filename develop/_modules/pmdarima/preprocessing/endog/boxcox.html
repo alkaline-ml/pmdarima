@@ -242,7 +242,7 @@
 
         <span class="k">if</span> <span class="n">lam1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">y</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">lam1</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">boxcox</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">lam1</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">boxcox</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">lam2</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lam1_</span> <span class="o">=</span> <span class="n">lam1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lam2_</span> <span class="o">=</span> <span class="n">lam2</span>

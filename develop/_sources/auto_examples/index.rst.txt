@@ -247,6 +247,26 @@ data, difference arrays, and more.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip=" Visualizing characteristics of a time series is a key component to effective forecasting. In t...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/utils/images/thumb/sphx_glr_example_tsdisplay_thumb.png
+
+        :ref:`sphx_glr_auto_examples_utils_example_tsdisplay.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/utils/example_tsdisplay
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s array differencing, and how it&#x27;s used in conjunction...">
 
 .. only:: html

@@ -172,13 +172,12 @@
 <span class="c1">#</span>
 <span class="c1"># Plotting wrapper functions</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-
 <span class="kn">from</span> <span class="nn">..compat.pandas</span> <span class="kn">import</span> <span class="n">plotting</span> <span class="k">as</span> <span class="n">pd_plotting</span>
 <span class="kn">from</span> <span class="nn">..compat.matplotlib</span> <span class="kn">import</span> <span class="n">get_compatible_pyplot</span>
 
 <span class="kn">from</span> <span class="nn">statsmodels.graphics</span> <span class="kn">import</span> <span class="n">tsaplots</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="c1"># User may not have matplotlib</span>
@@ -198,7 +197,8 @@
     <span class="s1">&#39;autocorr_plot&#39;</span><span class="p">,</span>
     <span class="s1">&#39;decomposed_plot&#39;</span><span class="p">,</span>
     <span class="s1">&#39;plot_acf&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;plot_pacf&#39;</span>
+    <span class="s1">&#39;plot_pacf&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;tsdisplay&#39;</span><span class="p">,</span>
 <span class="p">]</span>
 
 
@@ -228,15 +228,16 @@
 
 
 <div class="viewcode-block" id="decomposed_plot"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.decomposed_plot.html#pmdarima.utils.decomposed_plot">[docs]</a><span class="k">def</span> <span class="nf">decomposed_plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="p">,</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plot the decomposition of a time series.</span>
+    <span class="sd">&quot;&quot;&quot;Plot the decomposition of a time series.</span>
 
-<span class="sd">    This includes the &#39;x&#39;, &#39;trend&#39;, &#39;seasonal&#39;, and &#39;random&#39; components.</span>
+<span class="sd">    Plots the results of the time series decomposition in four plots:</span>
+<span class="sd">    the &#39;x&#39;, &#39;trend&#39;, &#39;seasonal&#39;, and &#39;random&#39; components.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    decomposed_tuple : tuple</span>
-<span class="sd">        Tuple of series that consist of data, trend, seasonal, and random.</span>
+<span class="sd">    decomposed_tuple : tuple, namedtuple or iterable</span>
+<span class="sd">        Named tuple of series that consist of data, trend, seasonal, and</span>
+<span class="sd">        random. Should be the result of :func:`pmdarima.arima.decompose`.</span>
 
 <span class="sd">    figure_kwargs : dict, optional (default=None)</span>
 <span class="sd">        Optional dictionary of keyword arguments that are passed to figure.</span>
@@ -250,7 +251,6 @@
 <span class="sd">    This method will only show the plot if ``show=True`` (which is the default</span>
 <span class="sd">    behavior). To simply get the axis back (say, to add to another canvas),</span>
 <span class="sd">    use ``show=False``.</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_err_for_no_mpl</span><span class="p">()</span>
@@ -262,10 +262,14 @@
     <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">:</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="n">y_labels</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 
-    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="o">.</span><span class="n">trend</span><span class="p">)</span>
-    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="o">.</span><span class="n">seasonal</span><span class="p">)</span>
-    <span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="o">.</span><span class="n">random</span><span class="p">)</span>
+    <span class="c1"># Unpack positionally so that user could pass as a tuple, if they have</span>
+    <span class="c1"># pre-computed...</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">trend</span><span class="p">,</span> <span class="n">ssnl</span><span class="p">,</span> <span class="n">rand</span> <span class="o">=</span> <span class="n">decomposed_tuple</span>
+
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">trend</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ssnl</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rand</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">_show_or_return</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">show</span><span class="p">)</span></div>
 
@@ -473,6 +477,94 @@
         <span class="n">vlines_kwargs</span><span class="o">=</span><span class="n">vlines_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">_show_or_return</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">show</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">tsdisplay</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+              <span class="n">series_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">acf_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hist_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display the time series and some of its key statistics</span>
+
+<span class="sd">    The equivalent of R&#39;s ``forecast::tsdisplay``, showing the series, the</span>
+<span class="sd">    histogram and the ACF plot.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : array-like, shape=(n_samples,)</span>
+<span class="sd">        The series or numpy array for which to plot an auto-correlation.</span>
+
+<span class="sd">    lag_max : int, optional (default=50)</span>
+<span class="sd">        The number of lags for the ACF plot</span>
+
+<span class="sd">    figsize : tuple, optional (default=(8, 6))</span>
+<span class="sd">        The size of the figure</span>
+
+<span class="sd">    title : str, optional (default=None)</span>
+<span class="sd">        A title for the series, if any.</span>
+
+<span class="sd">    bins : int, optional (default=25)</span>
+<span class="sd">        The number of bins for the histogram</span>
+
+<span class="sd">    series_kwargs : dict or None, optional (default=None)</span>
+<span class="sd">        Keyword arguments to pass when plotting the series</span>
+
+<span class="sd">    acf_kwargs : dict or None, optional (default=None)</span>
+<span class="sd">        Keyword arguments to pass when plotting the ACF</span>
+
+<span class="sd">    hist_kwargs : dict or None, optional (default=None)</span>
+<span class="sd">        Keyword arguments to pass when plotting the histogram</span>
+
+<span class="sd">    show : bool, optional (default=True)</span>
+<span class="sd">        Whether to show the plot after it&#39;s been created. If not, will return</span>
+<span class="sd">        the plot as a Figure object instead.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import pmdarima as pm</span>
+<span class="sd">    &gt;&gt;&gt; tsdisplay(pm.datasets.load_sunspots(), show=False)</span>
+<span class="sd">    &lt;Figure size 800x600 with 3 Axes&gt;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plt : Figure or None</span>
+<span class="sd">        If ``show`` is True, does not return anything. If False, returns</span>
+<span class="sd">        the Figure object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_err_for_no_mpl</span><span class="p">()</span>
+    <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">gridspec</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:])</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># ax0 is simply the series itself</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">xlabs</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">):</span>
+        <span class="n">xlabs</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">series_kwargs</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">series_kwargs</span> <span class="k">else</span> <span class="n">series_kwargs</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">series_kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">xlabs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># TODO: eventually would be nice to do some well spaced xticks</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># ax1 is the ACF, so we can just use our ACF plotting func</span>
+    <span class="n">acf_kwargs</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">acf_kwargs</span> <span class="k">else</span> <span class="n">acf_kwargs</span>
+    <span class="n">plot_acf</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;ACF&#39;</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">lag_max</span><span class="p">,</span> <span class="o">**</span><span class="n">acf_kwargs</span><span class="p">)</span>
+
+    <span class="c1"># ax2 is simply the histogram</span>
+    <span class="n">hist_kwargs</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">hist_kwargs</span> <span class="k">else</span> <span class="n">hist_kwargs</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="o">**</span><span class="n">hist_kwargs</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">_show_or_return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">show</span><span class="p">)</span>
 </pre></div>
 
            </div>

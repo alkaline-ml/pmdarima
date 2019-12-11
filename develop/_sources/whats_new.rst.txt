@@ -15,6 +15,8 @@ v0.8.1) will document the latest features.
 
 * Fixed deprecation for ``check_is_fitted`` in newer versions of scikit-learn
 
+* Adds the :func:`pmdarima.datasets.load_sunspots` method with R's `sunspots <https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots>`_ dataset
+
 
 `v1.5.1 <http://alkaline-ml.com/pmdarima/1.5.1/>`_
 --------------------------------------------------
