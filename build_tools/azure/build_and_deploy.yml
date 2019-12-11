@@ -41,7 +41,7 @@ steps:
   - script: |
       conda create --name build-env python=$(python.version) --yes
       conda activate build-env
-      python -c "import sys; print(sys.platform, '\n', sys.version)"
+      conda install --yes --file requirements.txt
       conda-build --python=$(python.version) conda/
     condition: eq(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Building and testing conda distribution (Windows)'
