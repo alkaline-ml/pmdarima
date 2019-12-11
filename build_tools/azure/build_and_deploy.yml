@@ -39,7 +39,6 @@ steps:
     displayName: 'Rendering meta.yaml file'
 
   - script: |
-      set CONDA_FORCE_32BIT=
       call activate base
       conda-build --python=$(python.version) conda/
     condition: eq(variables['Agent.OS'], 'Windows_NT')
