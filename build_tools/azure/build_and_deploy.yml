@@ -40,7 +40,7 @@ steps:
 
   - script: |
       conda create --name build-env python=$(python.version) --yes
-      conda activate build-env
+      call activate build-env
       pip install -r requirements.txt
       conda-build --python=$(python.version) conda/
     condition: eq(variables['Agent.OS'], 'Windows_NT')
