@@ -14,12 +14,12 @@ jobs:
         architecture: 'x64'
 
       Windows-36:
-        os: 'windows-2019'
+        os: 'vs2017-win2016'
         python.version: '3.6'
         architecture: 'x64'
 
       Windows-37:
-        os: 'windows-2019'
+        os: 'vs2017-win2016'
         python.version: '3.7'
         architecture: 'x64'
 
