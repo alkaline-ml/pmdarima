@@ -30,3 +30,4 @@ jobs:
     # Only deploy for tags
     - ${{ if contains(variables['Build.SourceBranch'], 'tags') }}:
       - template: pypi/deploy.yml
+
