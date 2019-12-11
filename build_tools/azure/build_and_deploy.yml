@@ -39,7 +39,7 @@ steps:
     displayName: 'Rendering meta.yaml file'
 
   - script: |
-      conda create --name build-env --python=$(python.version) --yes
+      conda create --name build-env python=$(python.version) --yes
       call activate build-env
       python -c "import sys; print(sys.platform, '\n', sys.version)"
       conda-build --python=$(python.version) conda/
