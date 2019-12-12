@@ -101,6 +101,7 @@ jobs:
             echo "::set-output name=VERSION::$(cat ${GITHUB_WORKSPACE}/pmdarima/VERSION)"
           else
             echo "::set-output name=VERSION::0.0.0"
+          fi
         shell: bash
 
       - name: Test using outputs...
