@@ -95,24 +95,21 @@ jobs:
 
       - name: Ensuring VERSION file existis
         id: version_check  # Need this to refer to output below
-#        if: github.event_name == 'tag' && success()
+        if: github.event_name == 'tag' && success()
         run: |
           if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
-            echo "::set-output name=VERSION::$(cat ${GITHUB_WORKSPACE}/pmdarima/VERSION)"
+            echo "::set-output name=version_exists::true"
           else
-            echo "::set-output name=VERSION::0.0.0"
+            echo "::set-output name=version_exists::false"
           fi
         shell: bash
 
-      - name: Test using outputs...
-        run: echo "${{ steps.version_check.outputs.VERSION }}"
+      # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
+      - name: Deploying to PyPI
+        # Only deploy on tags and when VERSION file created
+        if: github.event_name == 'tag' && success() && steps.version_check.version_exists == 'true'
+        run: python -m twine upload --skip-existing dist/pmdarima-*
         shell: bash
-
-#      # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
-#      - name: Deploying to PyPI
-#        if: github.event_name == 'tag' && success()  # Only deploy on tags
-#        run: python -m twine upload --skip-existing dist/pmdarima-*
-#        shell: bash
-#        env:
-#          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-#          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+        env:
+          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
