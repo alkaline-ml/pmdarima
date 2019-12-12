@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 
 # Since conda is only on Azure Pipelines, we can use their env variables
-ROOT_DIRECTORY = Path(os.getenv('BUILD_SOURCESDIRECTORY'))
+ROOT_DIRECTORY = Path('/Users/asmith/Documents/projects/alkaline-ml/pmdarima')  # os.getenv('BUILD_SOURCESDIRECTORY')
 DIST_PATH = ROOT_DIRECTORY / 'dist'
 VERSION_FILE = ROOT_DIRECTORY / 'pmdarima' / 'VERSION'
 REQUIREMENTS_FILE = ROOT_DIRECTORY / 'requirements.txt'
@@ -14,10 +14,10 @@ REQUIREMENTS_FILE = ROOT_DIRECTORY / 'requirements.txt'
 OUTPUT_DIR = ROOT_DIRECTORY / 'conda'
 OUTPUT_FILE = OUTPUT_DIR / 'meta.yaml'
 
-TEMPLATE_PATH = '.'
+TEMPLATE_PATH = Path(__file__).parent
 TEMPLATE_ENVIRONMENT = Environment(
     autoescape=False,
-    loader=FileSystemLoader(TEMPLATE_PATH),
+    loader=FileSystemLoader(str(TEMPLATE_PATH.resolve())),
     trim_blocks=False
 )
 

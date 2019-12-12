@@ -19,9 +19,7 @@ steps:
   - bash: |
       mkdir conda
       python -m pip install jinja2
-      cd build_tools/azure
-      python render_meta.py
-      cd -
+      python build_tools/azure/render_meta.py
     displayName: 'Rendering meta.yaml file'
 
   - bash: conda-build --python=$(python.version) conda/
