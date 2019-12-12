@@ -69,8 +69,9 @@ def decompose(x, type_, m, filter_=None):
     -----
     This function is generally used in conjunction with
     :func:`pmdarima.utils.visualization.decomposed_plot`,
-    which plots the decomposed components. Also there are two example notebooks
-    within the ``examples`` folder which mirror existing R examples.
+    which plots the decomposed components. Also there is an example script in
+    the ``examples`` folder of the repo and the ``Examples`` section of the
+    docs as well.
 
      References
     ----------
