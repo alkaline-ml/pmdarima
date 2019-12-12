@@ -133,6 +133,26 @@ models.
    :hidden:
 
    /auto_examples/arima/example_add_new_samples
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the ``decompose`` function to extract the trend, seas...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/arima/images/thumb/sphx_glr_example_seasonal_decomposition_thumb.png
+
+        :ref:`sphx_glr_auto_examples_arima_example_seasonal_decomposition.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/arima/example_seasonal_decomposition
 .. raw:: html
 
     <div style='clear:both'></div>
