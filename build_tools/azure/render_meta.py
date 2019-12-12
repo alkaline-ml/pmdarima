@@ -5,9 +5,9 @@ from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 
 # Since conda is only on Azure Pipelines, we can use their env variables
-ROOT_DIRECTORY = Path(os.getenv('BUILD_SOURCESDIRECTORY')) / 'pmdarima'
+ROOT_DIRECTORY = os.getenv('BUILD_SOURCESDIRECTORY')
 DIST_PATH = ROOT_DIRECTORY / 'dist'
-VERSION_FILE = ROOT_DIRECTORY / 'VERSION'
+VERSION_FILE = ROOT_DIRECTORY / 'pmdarima' / 'VERSION'
 REQUIREMENTS_FILE = ROOT_DIRECTORY / 'requirements.txt'
 
 # conda is weird about yml vs yaml, so we have to use yaml
