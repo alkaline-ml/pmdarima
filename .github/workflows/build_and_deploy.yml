@@ -97,8 +97,10 @@ jobs:
         id: version_check  # Need this to refer to output below
         run: |
           if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
+            echo "VERSION file exists"
             echo "::set-output name=version_exists::true"
           else
+            echo "VERSION file does not exist"
             echo "::set-output name=version_exists::false"
           fi
         shell: bash
