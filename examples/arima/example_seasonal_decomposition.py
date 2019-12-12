@@ -1,7 +1,7 @@
 """
-===========================================================================
-Decomposing A Time Series Into Trend, Seasonal, and Random/Noise Components
-===========================================================================
+==========================================
+Seasonal decomposition of your time-series
+==========================================
 
 
 This example demonstrates how we can use the ``decompose`` function to extract
@@ -18,9 +18,9 @@ print(__doc__)
 
 # Author: Charles Drotar <drotarcharles@gmail.com>
 
-from pmdarima.arima.seasonality import decompose
-from pmdarima.datasets import load_ausbeer, load_airpassengers
-from pmdarima.utils.visualization import decomposed_plot
+from pmdarima import arima
+from pmdarima import datasets
+from pmdarima import utils
 
 # #############################################################################
 
@@ -43,6 +43,8 @@ from pmdarima.utils.visualization import decomposed_plot
 # and random components. It is this named tuple that is passed to
 # `decomposed_plot`
 
+figure_kwargs = {'figsize': (6, 6)}  # set figure size for both examples
+
 #
 # ADDITIVE EXAMPLE : ausbeer
 #
@@ -54,14 +56,14 @@ head_index = 17*4+2
 tail_index = 17*4-4
 first_index = head_index - tail_index
 last_index = head_index
-ausbeer = load_ausbeer()
+ausbeer = datasets.load_ausbeer()
 timeserie_beer = ausbeer[first_index:last_index]
-decomposed = decompose(timeserie_beer, 'additive', m=4)
+decomposed = arima.decompose(timeserie_beer, 'additive', m=4)
 
 # Plot the decomposed signal of ausbeer as a subplot
-figure_kwargs = {'figsize': (6, 6)}  # set figure size for plots
 
-axes = decomposed_plot(decomposed, figure_kwargs=figure_kwargs, show=False)
+axes = utils.decomposed_plot(decomposed, figure_kwargs=figure_kwargs,
+                             show=False)
 axes[0].set_title("Ausbeer Seasonal Decomposition")
 
 
@@ -70,10 +72,11 @@ axes[0].set_title("Ausbeer Seasonal Decomposition")
 #
 
 # Decompose the airpassengers dataset into trend, seasonal and random parts.
-decomposed = decompose(load_airpassengers(), 'multiplicative', m=12)
+decomposed = arima.decompose(datasets.load_airpassengers(),
+                             'multiplicative', m=12)
 
 # Plot the decomposed signal of airpassengers as a subplot
-figure_kwargs = {'figsize': (6, 6)}  # set figure size for plots
 
-axes = decomposed_plot(decomposed, figure_kwargs=figure_kwargs, show=False)
+axes = utils.decomposed_plot(decomposed, figure_kwargs=figure_kwargs,
+                             show=False)
 axes[0].set_title("Airpassengers Seasonal Decomposition")
