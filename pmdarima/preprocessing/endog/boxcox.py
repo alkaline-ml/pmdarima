@@ -74,7 +74,7 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
 
         if lam1 is None:
             y, _ = self._check_y_exog(y, exogenous)
-            _, lam1 = stats.boxcox(y, lmbda=None, alpha=None)
+            _, lam1 = stats.boxcox(y + lam2, lmbda=None, alpha=None)
 
         self.lam1_ = lam1
         self.lam2_ = lam2
