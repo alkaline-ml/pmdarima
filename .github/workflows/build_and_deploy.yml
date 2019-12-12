@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest]
-        python-version: ['3.5', '3.6', '3.7']  # We build 3.5 on Azure Pipelines
+        python-version: ['3.5', '3.6', '3.7']
         architecture: ['x86', 'x64']
         exclude:
           # Don't build 32-bit on Mac
@@ -59,7 +59,7 @@ jobs:
         shell: bash
 
       - name: Building wheel
-        run: make bdist_wheel
+        run: make version bdist_wheel
         shell: bash
 
       - name: Installing generated wheel
@@ -71,13 +71,12 @@ jobs:
           if [ "${{ matrix.os }}" == "macos-latest" ]; then
             export PMD_MPL_BACKEND=TkAgg
           fi
-          pytest --showlocals --durations=20 --mpl --mpl-baseline-path=etc/pytest_images --pyargs pmdarima --benchmark-skip
+          pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
         shell: bash
 
       # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
-      # This also implicitly runs `make version`, which -- if tagged -- gets the right version
       - name: Building source distribution
-        run: make sdist
+        run: make version sdist
         shell: bash
 
       - name: Checking README compatibility

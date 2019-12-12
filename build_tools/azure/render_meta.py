@@ -2,13 +2,18 @@ import os
 import sys
 
 from jinja2 import Environment, FileSystemLoader
+from pathlib import Path
 
-# Constant file paths. Relative to this file, so we have to run this file from this directory
-DIST_PATH = '../../dist'
-VERSION_FILE = '../../VERSION'
-REQUIREMENTS_FILE = '../../requirements.txt'
-OUTPUT_DIR = '../../conda'
-OUTPUT_FILE = '../../conda/meta.yaml'  # conda is weird about yml vs yaml, so we have to use yaml
+# Since conda is only on Azure Pipelines, we can use their env variables
+ROOT_DIRECTORY = Path(os.getenv('BUILD_SOURCESDIRECTORY')) / 'pmdarima'
+DIST_PATH = ROOT_DIRECTORY / 'dist'
+VERSION_FILE = ROOT_DIRECTORY / 'VERSION'
+REQUIREMENTS_FILE = ROOT_DIRECTORY / 'requirements.txt'
+
+# conda is weird about yml vs yaml, so we have to use yaml
+OUTPUT_DIR = ROOT_DIRECTORY / 'conda'
+OUTPUT_FILE = OUTPUT_DIR / 'meta.yaml'
+
 TEMPLATE_PATH = '.'
 TEMPLATE_ENVIRONMENT = Environment(
     autoescape=False,
@@ -18,17 +23,18 @@ TEMPLATE_ENVIRONMENT = Environment(
 
 # Find the version
 try:
-    VERSION = open(VERSION_FILE).readline().strip()
+    VERSION = open(str(VERSION_FILE.resolve())).readline().strip()
 except FileNotFoundError:
     VERSION = '0.0.0'
 
 # Find the requirements and versions
-with open(REQUIREMENTS_FILE) as file:
+with open(str(REQUIREMENTS_FILE.resolve())) as file:
     requirements = [line.strip() for line in file.readlines()]
 
 # We build from source on windows, otherwise, we looks for a wheel
 if sys.platform != 'win32':
-    wheel = next(file for file in os.listdir(DIST_PATH) if file.endswith('.whl'))
+    wheel = next(file for file in os.listdir(str(DIST_PATH.resolve()))
+                 if file.endswith('.whl'))
 else:
     wheel = None
 
@@ -45,8 +51,8 @@ context = {
 }
 
 # Ensure output directory exists
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(str(OUTPUT_DIR.resolve()), exist_ok=True)
 
-with open(OUTPUT_FILE, 'w') as out:
+with open(str(OUTPUT_FILE.resolve()), 'w') as out:
     meta = TEMPLATE_ENVIRONMENT.get_template('meta_template.yml.j2').render(context)
     out.write(meta)
