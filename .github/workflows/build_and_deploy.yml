@@ -105,7 +105,7 @@ jobs:
         shell: bash
 
       - name: Test using outputs...
-        run: echo steps.version_check.outputs.VERSION
+        run: echo "${{ steps.version_check.outputs.VERSION }}"
         shell: bash
 
 #      # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
