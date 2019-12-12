@@ -95,7 +95,6 @@ jobs:
 
       - name: Ensuring VERSION file existis
         id: version_check  # Need this to refer to output below
-        if: github.event_name == 'tag' && success()
         run: |
           if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
             echo "::set-output name=version_exists::true"
