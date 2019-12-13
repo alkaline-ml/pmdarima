@@ -19,6 +19,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --target=${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep Cython)"
           python -m pip install --target=${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep numpy)"
+          python -m pip install --target=${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep scipy)"
+          python -m pip install --target=${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep scikit-learn)"
+          python -m pip install --target=${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep pandas)"
+          python -m pip install --target=${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep statsmodels)"
+          python -m pip install --target=${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep matplotlib)"
+          python -m pip install --target=${GITHUB_WORKSPACE}/packages pytest pytest-mpl pytest-benchmark
 
       - name: Checking requirements
         run: ls packages
