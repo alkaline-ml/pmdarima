@@ -16,7 +16,7 @@ loads a seasonal time series of monthly mean relative sunspot numbers from 1749 
 
 Here's what you'll need to run this example:
 
-  * Pmdarima 1.6.0+ (many plotting utilities were added in this version)
+  * Pmdarima 1.5.2+ (many plotting utilities were added in this version)
 
   * Matplotlib - It's not a hard requirement of the package itself, but you'll need it
     to run these examples (if you're running this in a notebook, make sure to include ``%matplotlib inline``)
@@ -42,7 +42,7 @@ train/test sets:
     from pmdarima.datasets import load_sunspots
     from pmdarima.model_selection import train_test_split
     print(f"Using pmdarima {pm.__version__}")
-    # Using pmdarima 1.6.0
+    # Using pmdarima 1.5.2
 
     y = load_sunspots(True)
     train_len = 2750
@@ -71,7 +71,7 @@ For this example, we'll take the first 2750 samples for training, and leave the 
 Examining the data
 ------------------
 
-Pmdarima 1.6.0 introduced a handy utility for visualizing your time series data:
+Pmdarima 1.5.2 introduced a handy utility for visualizing your time series data:
 :func:`pmdarima.utils.vizualization.tsdisplay`. We can use this to visalize our data,
 take a look at the auto-correlation plot, and see the histogram of values:
 
