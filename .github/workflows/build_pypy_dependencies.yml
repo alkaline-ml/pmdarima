@@ -11,6 +11,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@master
 
+      - name: Install build requirements
+        run: |
+          apt-get -yq update && apt-get -yq install \
+            libatlas-dev \
+            libatlas-base-dev \
+            liblapack-dev \
+            gfortran
+
       - name: Fix Python Version
         run: ln -sf `which pypy3` /usr/bin/python
 
