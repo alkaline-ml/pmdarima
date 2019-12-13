@@ -11,7 +11,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@master
 
-      - name: Check Python
+      - name: Fix Python Version
+        run: ln -sf `which pypy3` /usr/bin/python
+
+      - name: Build requirements
         run: |
-          ln -sf `which pypy3` /usr/bin/python
-          python --version
+          python -m pip install --upgrade pip
+          python -m pip install --target=${GITHUB_WORKSPACE}/packages -r requirements.txt
+
+      - name: Checking requirements
+        run: ls packages
