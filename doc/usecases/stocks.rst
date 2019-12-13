@@ -17,7 +17,7 @@ Imports & data loading
 
 For this example, all we'll need is Numpy, Pandas and pmdarima. Matplotlib is optional,
 but highly encouraged in order to qualitatively validate the results of the model fit.
-To run this example, you'll need pmdarima version 1.6.0 or greater. If you're
+To run this example, you'll need pmdarima version 1.5.2 or greater. If you're
 running this in a notebook, make sure to include ``%matplotlib inline``, or the plots
 will not show up under your cells!
 
@@ -34,7 +34,7 @@ it will work.
 
     import pmdarima as pm
     print(f"Using pmdarima {pm.__version__}")
-    # Using pmdarima 1.6.0
+    # Using pmdarima 1.5.2
 
 
 The pmdarima module conveniently includes the dataset we'll be using as an internal
