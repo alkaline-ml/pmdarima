@@ -5,6 +5,7 @@ on: [push]  # Just do it on push for now
 jobs:
   build:
     name: Build PyPY Dependencies
+    runs-on: ubuntu-latest
     container: pypy:3.6-7.1.1
     steps:
       - name: Checkout code
