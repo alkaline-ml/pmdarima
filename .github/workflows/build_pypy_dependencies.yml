@@ -23,7 +23,14 @@ jobs:
             gfortran
           python -m pip install --upgrade pip
           # This seems silly, but we have to install these to build the wheels we want below
-          python -m pip install -r requirements.txt
+          python -m pip install "$(cat requirements.txt | grep Cython)"
+          python -m pip install "$(cat requirements.txt | grep numpy)"
+          python -m pip install "$(cat requirements.txt | grep scipy)"
+          python -m pip install "$(cat requirements.txt | grep scikit-learn)"
+          python -m pip install "$(cat requirements.txt | grep pandas)"
+          python -m pip install "$(cat requirements.txt | grep statsmodels)"
+          python -m pip install "$(cat requirements.txt | grep matplotlib)"
+          python -m pip install pytest pytest-mpl pytest-benchmark
 
       - name: Build requirements
         run: |
