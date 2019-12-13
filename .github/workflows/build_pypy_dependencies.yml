@@ -1,0 +1,14 @@
+name: Build PyPy Dependencies
+
+on: [push]  # Just do it on push for now
+
+jobs:
+  build:
+    name: Build PyPY Dependencies
+    container: pypy:3.6-7.1.1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+
+      - name: Check Python
+        run: which python
