@@ -17,7 +17,8 @@ jobs:
       - name: Build requirements
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --target=${GITHUB_WORKSPACE}/packages -r requirements.txt
+          python -m pip install --target=${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep Cython)"
+          python -m pip install --target=${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep numpy)"
 
       - name: Checking requirements
         run: ls packages
