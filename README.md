@@ -40,12 +40,13 @@ Fitting a simple auto-ARIMA on the [`wineind`](https://alkaline-ml.com/pmdarima/
 
 ```python
 import pmdarima as pm
+from pmdarima.model_selection import train_test_split
 import numpy as np
 import matplotlib.pyplot as plt
 
 # Load/split your data
 y = pm.datasets.load_wineind()
-train, test = y[:150], y[150:]
+train, test = train_test_split(y, train_size=150)
 
 # Fit your model
 model = pm.auto_arima(train, seasonal=True, m=12)
@@ -68,13 +69,14 @@ serializing it, and then loading it from disk to make predictions:
 
 ```python
 import pmdarima as pm
+from pmdarima.model_selection import train_test_split
 from pmdarima.pipeline import Pipeline
 from pmdarima.preprocessing import BoxCoxEndogTransformer
 import pickle
 
 # Load/split your data
 y = pm.datasets.load_sunspots()
-train, test = y[:2700], y[2700:]
+train, test = train_test_split(y, train_size=2700)
 
 # Define and fit your pipeline
 pipeline = Pipeline([

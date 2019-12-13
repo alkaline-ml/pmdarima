@@ -8,7 +8,7 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
-`v1.5.2 <http://alkaline-ml.com/pmdarima/1.5.2/>`_
+`v1.6.0 <http://alkaline-ml.com/pmdarima/1.6.0/>`_
 --------------------------------------------------
 
 * Added ``pmdarima.show_versions`` as a utility for issue filing
@@ -16,6 +16,8 @@ v0.8.1) will document the latest features.
 * Fixed deprecation for ``check_is_fitted`` in newer versions of scikit-learn
 
 * Adds the :func:`pmdarima.datasets.load_sunspots` method with R's `sunspots <https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots>`_ dataset
+
+* Adds the :func:`pmdarima.model_selection.train_test_split` method
 
 
 `v1.5.1 <http://alkaline-ml.com/pmdarima/1.5.1/>`_

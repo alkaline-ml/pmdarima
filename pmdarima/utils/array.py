@@ -4,8 +4,6 @@
 #
 # Array utilities
 
-from __future__ import absolute_import, division
-
 from sklearn.utils.validation import check_array, column_or_1d
 import six
 

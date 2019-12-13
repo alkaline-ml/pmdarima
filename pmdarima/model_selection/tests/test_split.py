@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from pmdarima.model_selection import RollingForecastCV, \
-    SlidingWindowForecastCV, check_cv
+    SlidingWindowForecastCV, check_cv, train_test_split
 from pmdarima.datasets import load_wineind
 import pytest
+import numpy as np
+from numpy.testing import assert_array_equal
 
 y = load_wineind()
 
@@ -86,3 +88,9 @@ def test_check_cv():
 
     with pytest.raises(TypeError):
         check_cv('something else')
+
+
+def test_train_test_split():
+    tr, te = train_test_split(y, test_size=10)
+    assert te.shape[0] == 10
+    assert_array_equal(y, np.concatenate([tr, te]))
