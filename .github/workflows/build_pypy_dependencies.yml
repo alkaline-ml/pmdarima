@@ -12,4 +12,6 @@ jobs:
         uses: actions/checkout@master
 
       - name: Check Python
-        run: python --version
+        run: |
+          ln -sf `which pypy3` /usr/bin/python
+          python --version
