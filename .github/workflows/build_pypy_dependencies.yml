@@ -14,14 +14,6 @@ jobs:
       - name: Fixing Python Version
         run: ln -sf `which pypy3` /usr/bin/python
 
-      # https://github.com/actions/cache/blob/master/examples.md#simple-example
-      - name: Checking for cached pip dependencies
-        uses: actions/cache@v1
-        with:
-          path: $HOME/.pip/cache
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: ${{ runner.os }}-pip-
-
       - name: Installing build requirements
         run: |
           apt-get -yq update && apt-get -yq install \
@@ -31,25 +23,25 @@ jobs:
             gfortran
           python -m pip install --upgrade pip
           # This seems silly, but we have to install these to build the wheels we want below
-          python -m pip install "$(cat requirements.txt | grep Cython)"
-          python -m pip install "$(cat requirements.txt | grep numpy)"
-          python -m pip install "$(cat requirements.txt | grep scipy)"
-          python -m pip install "$(cat requirements.txt | grep scikit-learn)"
-          python -m pip install "$(cat requirements.txt | grep pandas)"
-          python -m pip install "$(cat requirements.txt | grep statsmodels)"
-          python -m pip install matplotlib
+#          python -m pip install "$(cat requirements.txt | grep Cython)"
+#          python -m pip install "$(cat requirements.txt | grep numpy)"
+#          python -m pip install "$(cat requirements.txt | grep scipy)"
+#          python -m pip install "$(cat requirements.txt | grep scikit-learn)"
+#          python -m pip install "$(cat requirements.txt | grep pandas)"
+#          python -m pip install "$(cat requirements.txt | grep statsmodels)"
+#          python -m pip install matplotlib
           python -m pip install pytest pytest-mpl pytest-benchmark
           python -m pip install twine auditwheel
 
       - name: Building wheels
         run: |
-          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep Cython)"
-          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep numpy)"
-          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep scipy)"
-          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep scikit-learn)"
-          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep pandas)"
-          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep statsmodels)"
-          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages matplotlib
+#          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep Cython)"
+#          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep numpy)"
+#          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep scipy)"
+#          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep scikit-learn)"
+#          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep pandas)"
+#          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep statsmodels)"
+#          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages matplotlib
           python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages pytest pytest-mpl pytest-benchmark
 
       - name: Repairing wheels
@@ -57,7 +49,7 @@ jobs:
           wheels=(packages/*)
           for wheel in "$wheels[@]"
           do
-            python -m auditwheel repair $wheel
+            auditwheel repair "$wheel"
           done
         shell: bash
 
