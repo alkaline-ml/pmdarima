@@ -11,10 +11,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@master
 
-      - name: Fix Python Version
+      - name: Fixing Python Version
         run: ln -sf `which pypy3` /usr/bin/python
 
-      - name: Install build requirements
+      - name: Installing build requirements
         run: |
           apt-get -yq update && apt-get -yq install \
             libatlas-dev \
@@ -31,9 +31,9 @@ jobs:
           python -m pip install "$(cat requirements.txt | grep statsmodels)"
           python -m pip install matplotlib
           python -m pip install pytest pytest-mpl pytest-benchmark
-          python -m pip install twine
+          python -m pip install twine auditwheel
 
-      - name: Build wheels
+      - name: Building wheels
         run: |
           python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep Cython)"
           python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages "$(cat requirements.txt | grep numpy)"
@@ -44,8 +44,17 @@ jobs:
           python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages matplotlib
           python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages pytest pytest-mpl pytest-benchmark
 
-      - name: Uploading packages
-        run: twine upload --repository-url https://pkgs.dev.azure.com/tgsmith61591gh/pmdarima/_packaging/pmdarima-pypy-dependencies/pypi/upload --skip-existing packages/*
-        env:
-          TWINE_USERNAME: ${{ secrets.AZURE_ARTIFACTS_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.AZURE_ARTIFACTS_PASSWORD }}
+      - name: Repairing wheels
+        run: |
+          wheels=(packages/*)
+          for wheel in "$wheels[@]"
+          do
+            python -m auditwheel repair $wheel
+          done
+        shell: bash
+
+#      - name: Uploading packages
+#        run: twine upload --repository-url https://pkgs.dev.azure.com/tgsmith61591gh/pmdarima/_packaging/pmdarima-pypy-dependencies/pypi/upload --skip-existing packages/*
+#        env:
+#          TWINE_USERNAME: ${{ secrets.AZURE_ARTIFACTS_USERNAME }}
+#          TWINE_PASSWORD: ${{ secrets.AZURE_ARTIFACTS_PASSWORD }}
