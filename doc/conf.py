@@ -30,6 +30,7 @@ matplotlib.use('agg')  # RISK: could be overridden via environment variables...
 
 import os
 import sys
+import pmdarima  # noqa
 import datetime
 import warnings
 from six import u
