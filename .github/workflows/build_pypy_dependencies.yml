@@ -32,7 +32,8 @@ jobs:
 
       - name: Repairing wheels
         run: |
-          wheels=$(ls packages | grep pypy3_71-linux_x86_64)
+          shopt -s nullglob
+          wheels=(packages/*-pypy3_71-linux_x86_64*)
           for wheel in "${wheels[@]}"
           do
             mv $wheel ${wheel//pypy3_71-linux_x86_64/none-any}
