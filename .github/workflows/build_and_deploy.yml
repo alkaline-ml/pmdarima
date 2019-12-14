@@ -53,7 +53,7 @@ jobs:
         if: startsWith(runner.os, 'macOS')
         uses: actions/cache@v1
         with:
-          path: $HOME/Library/Caches/pip
+          path: ~/Library/Caches/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
@@ -63,7 +63,7 @@ jobs:
         if: startsWith(runner.os, 'Windows')
         uses: actions/cache@v1
         with:
-          path: $HOME\AppData\Local\pip\Cache
+          path: ~\AppData\Local\pip\Cache
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
