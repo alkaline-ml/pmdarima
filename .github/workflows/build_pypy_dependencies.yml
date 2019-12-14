@@ -20,8 +20,7 @@ jobs:
         with:
           path: $HOME/.pip/cache
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          restore-keys: ${{ runner.os }}-pip-
 
       - name: Installing build requirements
         run: |
