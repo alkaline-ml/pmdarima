@@ -32,11 +32,10 @@ jobs:
 
       - name: Repairing wheels
         run: |
-          docker run -i -t -v `pwd`:/io quay.io/pypa/manylinux1_x86_64 /bin/bash
-          wheels=(packages/*)
+          wheels=(packages/*-linux_x86_64)
           for wheel in "${wheels[@]}"
           do
-            auditwheel repair "$wheel"
+            mv $file ${file//linux_x86_64/none}
           done
         shell: bash
 
