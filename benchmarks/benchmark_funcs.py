@@ -3,8 +3,6 @@
 # Benchmark various approaches to functions to speed things up.
 # ... hopefully.
 
-from __future__ import absolute_import
-
 import numpy as np
 
 import time

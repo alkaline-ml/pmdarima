@@ -30,7 +30,7 @@ doc-requirements:
 	$(PYTHON) -m pip install -r build_tools/doc/doc_requirements.txt
 
 documentation: doc-requirements version
-	@make -C doc clean html EXAMPLES_PATTERN=example_*
+	@make -C doc clean html EXAMPLES_PATTERN=example_* PMDARIMA_VERSION=$(PMDARIMA_VERSION)
 
 requirements:
 	$(PYTHON) -m pip install -r requirements.txt

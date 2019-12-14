@@ -24,14 +24,17 @@ print(__doc__)
 
 import numpy as np
 import pmdarima as pm
-from pmdarima import pipeline, preprocessing as ppc, arima
+from pmdarima import pipeline
+from pmdarima import model_selection
+from pmdarima import preprocessing as ppc
+from pmdarima import arima
 from matplotlib import pyplot as plt
 
 print("pmdarima version: %s" % pm.__version__)
 
 # Load the data and split it into separate pieces
 data = pm.datasets.load_wineind()
-train, test = data[:150], data[150:]
+train, test = model_selection.train_test_split(data, train_size=150)
 
 # Let's create a pipeline with multiple stages... the Wineind dataset is
 # seasonal, so we'll include a FourierFeaturizer so we can fit it without

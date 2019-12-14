@@ -17,6 +17,10 @@ v0.8.1) will document the latest features.
 
 * Adds the :func:`pmdarima.datasets.load_sunspots` method with R's `sunspots <https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots>`_ dataset
 
+* Adds the :func:`pmdarima.model_selection.train_test_split` method
+
+* Fix bug where 1.5.1 documentation was labeled version "0.0.0".
+
 
 `v1.5.1 <http://alkaline-ml.com/pmdarima/1.5.1/>`_
 --------------------------------------------------

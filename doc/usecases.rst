@@ -16,6 +16,7 @@ in your forecasting work.
 .. toctree::
 
    usecases/stocks.rst
+   usecases/sun-spots.rst
 
 .. raw:: html
 
