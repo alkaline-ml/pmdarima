@@ -48,6 +48,24 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
 
+      - name: Checking for cached pip dependencies (macOS)
+        if: startsWith(runner.os, 'macOS')
+        uses: actions/cache@v1
+        with:
+          path: $HOME/Library/Caches/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Checking for cached pip dependencies (Windows)
+        if: startsWith(runner.os, 'Windows')
+        uses: actions/cache@v1
+        with:
+          path: $HOME\AppData\Local\pip\Cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Updating pip
         run: python -m pip install --upgrade pip
         shell: bash
