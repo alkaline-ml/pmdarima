@@ -212,13 +212,14 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
 <span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">model_selection</span>
 <span class="kn">import</span> <span class="nn">joblib</span>  <span class="c1"># for persistence</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="c1"># #############################################################################</span>
 <span class="c1"># Load the data and split it into separate pieces</span>
 <span class="n">y</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="View documentation for pmdarima.datasets.load_wineind"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
-<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">125</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">125</span><span class="p">:]</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="View documentation for pmdarima.model_selection.train_test_split"><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mi">125</span><span class="p">)</span>
 
 <span class="c1"># Fit an ARIMA</span>
 <span class="n">arima</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">ARIMA</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
@@ -244,7 +245,7 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
         <span class="k">pass</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  1.440 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  1.271 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../../_downloads/example_persisting_a_model.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_persisting_a_model.py</span></code></a></div>

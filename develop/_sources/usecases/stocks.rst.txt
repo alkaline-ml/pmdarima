@@ -17,7 +17,7 @@ Imports & data loading
 
 For this example, all we'll need is Numpy, Pandas and pmdarima. Matplotlib is optional,
 but highly encouraged in order to qualitatively validate the results of the model fit.
-To run this example, you'll need pmdarima version 1.3.0 or greater. If you're
+To run this example, you'll need pmdarima version 1.5.2 or greater. If you're
 running this in a notebook, make sure to include ``%matplotlib inline``, or the plots
 will not show up under your cells!
 
@@ -34,7 +34,7 @@ it will work.
 
     import pmdarima as pm
     print(f"Using pmdarima {pm.__version__}")
-    # Using pmdarima 1.3.0
+    # Using pmdarima 1.5.2
 
 
 The pmdarima module conveniently includes the dataset we'll be using as an internal
@@ -72,9 +72,10 @@ randomly; we must make a clean split in our time series (and exogenous variables
 As in the TDS example, we'll use :math:`0.8 * dataSize` as our training sample.
 
 .. code-block:: python
+    from pmdarima.model_selection import train_test_split
 
     train_len = int(df.shape[0] * 0.8)
-    train_data, test_data = df[:train_len], df[train_len:]
+    train_data, test_data = train_test_split(df, test_size=train_len)
 
     y_train = train_data['Open'].values
     y_test = test_data['Open'].values

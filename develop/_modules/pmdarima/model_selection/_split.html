@@ -173,12 +173,68 @@
 
 <span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">indexable</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span> <span class="k">as</span> <span class="n">tts</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;check_cv&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;train_test_split&#39;</span><span class="p">,</span>
     <span class="s1">&#39;RollingForecastCV&#39;</span><span class="p">,</span>
     <span class="s1">&#39;SlidingWindowForecastCV&#39;</span>
 <span class="p">]</span>
+
+
+<div class="viewcode-block" id="train_test_split"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split">[docs]</a><span class="k">def</span> <span class="nf">train_test_split</span><span class="p">(</span><span class="o">*</span><span class="n">arrays</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Split arrays or matrices into sequential train and test subsets</span>
+
+<span class="sd">    Creates train/test splits over endogenous arrays an optional exogenous</span>
+<span class="sd">    arrays. This is a wrapper of scikit-learn&#39;s ``train_test_split`` that</span>
+<span class="sd">    does not shuffle.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    *arrays : sequence of indexables with same length / shape[0]</span>
+<span class="sd">        Allowed inputs are lists, numpy arrays, scipy-sparse</span>
+<span class="sd">        matrices or pandas dataframes.</span>
+
+<span class="sd">    test_size : float, int or None, optional (default=None)</span>
+<span class="sd">        If float, should be between 0.0 and 1.0 and represent the proportion</span>
+<span class="sd">        of the dataset to include in the test split. If int, represents the</span>
+<span class="sd">        absolute number of test samples. If None, the value is set to the</span>
+<span class="sd">        complement of the train size. If ``train_size`` is also None, it will</span>
+<span class="sd">        be set to 0.25.</span>
+
+<span class="sd">    train_size : float, int, or None, (default=None)</span>
+<span class="sd">        If float, should be between 0.0 and 1.0 and represent the</span>
+<span class="sd">        proportion of the dataset to include in the train split. If</span>
+<span class="sd">        int, represents the absolute number of train samples. If None,</span>
+<span class="sd">        the value is automatically set to the complement of the test size.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    splitting : list, length=2 * len(arrays)</span>
+<span class="sd">        List containing train-test split of inputs.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import pmdarima as pm</span>
+<span class="sd">    &gt;&gt;&gt; from pmdarima.model_selection import train_test_split</span>
+<span class="sd">    &gt;&gt;&gt; y = pm.datasets.load_sunspots()</span>
+<span class="sd">    &gt;&gt;&gt; y_train, y_test = train_test_split(y, test_size=50)</span>
+<span class="sd">    &gt;&gt;&gt; y_test.shape</span>
+<span class="sd">    (50,)</span>
+
+<span class="sd">    The split is sequential:</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from numpy.testing import assert_array_equal</span>
+<span class="sd">    &gt;&gt;&gt; assert_array_equal(y, np.concatenate([y_train, y_test]))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">tts</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">arrays</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">stratify</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span>
+        <span class="n">train_size</span><span class="o">=</span><span class="n">train_size</span><span class="p">)</span></div>
 
 
 <span class="k">class</span> <span class="nc">BaseTSCrossValidator</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>

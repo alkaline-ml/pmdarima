@@ -34,18 +34,18 @@ which greatly simplifies your life.
  Out::
 
     pmdarima version: 0.0.0
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2819.938, BIC=2861.993, Fit time=0.399 seconds
-    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2942.625, BIC=2972.664, Fit time=0.014 seconds
-    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2867.514, BIC=2900.557, Fit time=0.058 seconds
-    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2830.585, BIC=2863.628, Fit time=0.221 seconds
-    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2940.651, BIC=2967.686, Fit time=0.101 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2817.535, BIC=2856.586, Fit time=0.375 seconds
-    Fit ARIMA: order=(0, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2814.904, BIC=2850.952, Fit time=0.341 seconds
-    Fit ARIMA: order=(0, 1, 3) seasonal_order=(0, 0, 0, 0); AIC=2818.704, BIC=2857.755, Fit time=0.505 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2817.377, BIC=2853.424, Fit time=0.256 seconds
-    Fit ARIMA: order=(1, 1, 3) seasonal_order=(0, 0, 0, 0); AIC=2818.290, BIC=2860.345, Fit time=0.593 seconds
+    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2819.938, BIC=2861.993, Fit time=0.371 seconds
+    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2942.625, BIC=2972.664, Fit time=0.013 seconds
+    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2867.514, BIC=2900.557, Fit time=0.047 seconds
+    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2830.585, BIC=2863.628, Fit time=0.203 seconds
+    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2940.651, BIC=2967.686, Fit time=0.076 seconds
+    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2817.535, BIC=2856.586, Fit time=0.283 seconds
+    Fit ARIMA: order=(0, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2814.904, BIC=2850.952, Fit time=0.262 seconds
+    Fit ARIMA: order=(0, 1, 3) seasonal_order=(0, 0, 0, 0); AIC=2818.704, BIC=2857.755, Fit time=0.369 seconds
+    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2817.377, BIC=2853.424, Fit time=0.237 seconds
+    Fit ARIMA: order=(1, 1, 3) seasonal_order=(0, 0, 0, 0); AIC=2818.290, BIC=2860.345, Fit time=0.437 seconds
     Near non-invertible roots for order (1, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 1.000)
-    Total fit time: 2.870 seconds
+    Total fit time: 2.304 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12, prefix=None)),
                     ('arima',
@@ -81,14 +81,17 @@ which greatly simplifies your life.
 
     import numpy as np
     import pmdarima as pm
-    from pmdarima import pipeline, preprocessing as ppc, arima
+    from pmdarima import pipeline
+    from pmdarima import model_selection
+    from pmdarima import preprocessing as ppc
+    from pmdarima import arima
     from matplotlib import pyplot as plt
 
     print("pmdarima version: %s" % pm.__version__)
 
     # Load the data and split it into separate pieces
     data = pm.datasets.load_wineind()
-    train, test = data[:150], data[150:]
+    train, test = model_selection.train_test_split(data, train_size=150)
 
     # Let's create a pipeline with multiple stages... the Wineind dataset is
     # seasonal, so we'll include a FourierFeaturizer so we can fit it without
@@ -158,7 +161,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  3.032 seconds)
+**Total running time of the script:** ( 0 minutes  2.449 seconds)
 
 
 

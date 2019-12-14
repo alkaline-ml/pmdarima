@@ -42,6 +42,7 @@ dataset available in the :ref:`datasets` submodule.
     # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
     import pmdarima as pm
+    from pmdarima import model_selection
     from sklearn.metrics import mean_squared_error
     import matplotlib.pyplot as plt
     import numpy as np
@@ -49,7 +50,7 @@ dataset available in the :ref:`datasets` submodule.
     # #############################################################################
     # Load the data and split it into separate pieces
     data = pm.datasets.load_lynx()
-    train, test = data[:90], data[90:]
+    train, test = model_selection.train_test_split(data, train_size=90)
 
     # Fit a simple auto_arima model
     modl = pm.auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
@@ -78,7 +79,7 @@ dataset available in the :ref:`datasets` submodule.
     plt.title("Lynx forecasts")
     plt.xlabel("Year")
 
-**Total running time of the script:** ( 0 minutes  0.257 seconds)
+**Total running time of the script:** ( 0 minutes  0.228 seconds)
 
 
 

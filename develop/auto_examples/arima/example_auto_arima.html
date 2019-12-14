@@ -202,6 +202,7 @@ dataset available in the <a class="reference internal" href="../../modules/datas
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
 <span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">model_selection</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -209,7 +210,7 @@ dataset available in the <a class="reference internal" href="../../modules/datas
 <span class="c1"># #############################################################################</span>
 <span class="c1"># Load the data and split it into separate pieces</span>
 <span class="n">data</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="View documentation for pmdarima.datasets.load_lynx"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span></a><span class="p">()</span>
-<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="mi">90</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">90</span><span class="p">:]</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="View documentation for pmdarima.model_selection.train_test_split"><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
 
 <span class="c1"># Fit a simple auto_arima model</span>
 <span class="n">modl</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_P</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_Q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -239,7 +240,7 @@ dataset available in the <a class="reference internal" href="../../modules/datas
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Year&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.257 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.228 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../../_downloads/example_auto_arima.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_auto_arima.py</span></code></a></div>

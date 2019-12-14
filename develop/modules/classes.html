@@ -154,12 +154,13 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#pmdarima-model-selection-cross-validation-classes"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>: Cross-validation classes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#cross-validators">Cross validators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cross-validation-split-utilities">Cross validation &amp; split utilities</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.RollingForecastCV.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.RollingForecastCV</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.SlidingWindowForecastCV.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.SlidingWindowForecastCV</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.check_cv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.cross_validate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_validate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_score.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_score</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.train_test_split.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.train_test_split</a></li>
 </ul>
 </li>
 </ul>
@@ -428,19 +429,16 @@ would like to prototype a model, this is a good place to find easy-to-access dat
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_msft.html#pmdarima.datasets.load_msft" title="pmdarima.datasets.load_msft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_msft</span></code></a>()</td>
 <td>Load the microsoft stock data</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_stocks</span></code></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_sunspots.html#pmdarima.datasets.load_sunspots" title="pmdarima.datasets.load_sunspots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_sunspots</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_sunspots.html#pmdarima.datasets.load_sunspots" title="pmdarima.datasets.load_sunspots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_sunspots</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Monthly Sunspot Numbers, 1749 - 1983</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_taylor.html#pmdarima.datasets.load_taylor" title="pmdarima.datasets.load_taylor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_taylor</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_taylor.html#pmdarima.datasets.load_taylor" title="pmdarima.datasets.load_taylor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_taylor</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Half-hourly electricity demand</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_wineind</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_wineind</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Australian total wine sales by wine makers in bottles &lt;= 1 litre.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq" title="pmdarima.datasets.load_woolyrnq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_woolyrnq</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq" title="pmdarima.datasets.load_woolyrnq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_woolyrnq</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Quarterly production of woollen yarn in Australia.</td>
 </tr>
 </tbody>
@@ -470,8 +468,8 @@ implemented in scikit-learn.</p>
 <span id="model-selection-ref"></span><h2><a class="reference internal" href="#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>: Cross-validation classes<a class="headerlink" href="#pmdarima-model-selection-cross-validation-classes" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code> submodule defines several different strategies
 for cross-validating time series models</p>
-<span class="target" id="module-pmdarima.model_selection"></span><div class="section" id="cross-validators">
-<h3>Cross validators<a class="headerlink" href="#cross-validators" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-pmdarima.model_selection"></span><div class="section" id="cross-validation-split-utilities">
+<h3>Cross validation &amp; split utilities<a class="headerlink" href="#cross-validation-split-utilities" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -500,6 +498,9 @@ for cross-validating time series models</p>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score" title="pmdarima.model_selection.cross_val_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.cross_val_score</span></code></a>(estimator,&nbsp;y)</td>
 <td>Evaluate a score by cross-validation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="pmdarima.model_selection.train_test_split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.train_test_split</span></code></a>(*arrays[,&nbsp;…])</td>
+<td>Split arrays or matrices into sequential train and test subsets</td>
 </tr>
 </tbody>
 </table>

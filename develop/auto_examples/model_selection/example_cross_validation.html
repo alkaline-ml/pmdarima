@@ -219,7 +219,7 @@ possible.</p>
 
 <span class="c1"># Load the data and split it into separate pieces</span>
 <span class="n">data</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="View documentation for pmdarima.datasets.load_wineind"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
-<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="mi">165</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">165</span><span class="p">:]</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="View documentation for pmdarima.model_selection.train_test_split"><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mi">165</span><span class="p">)</span>
 
 <span class="c1"># Even though we have a dedicated train/test split, we can (and should) still</span>
 <span class="c1"># use cross-validation on our training set to get a good estimate of the model</span>
@@ -251,7 +251,7 @@ possible.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best model: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">models</span><span class="p">[</span><span class="n">better_index</span><span class="p">]))</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  3.529 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  3.213 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../../_downloads/example_cross_validation.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_cross_validation.py</span></code></a></div>

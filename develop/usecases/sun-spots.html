@@ -1,0 +1,600 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Model selection with cross-validation &mdash; pmdarima 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="9. Contributing to pmdarima" href="../contributing.html" />
+    <link rel="prev" title="8.1. Stock Market Prediction" href="stocks.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../user_guide.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../about.html">1. About the project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html">2. Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html">3. Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../serialization.html">4. Serializing your ARIMA models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../refreshing.html">5. Refreshing your ARIMA models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/datasets.html">7. Toy time-series datasets</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../usecases.html">8. Use cases</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="stocks.html">8.1. Stock Market Prediction</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">8.2. An end-to-end time series analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#imports-data-loading-splitting">8.2.1. Imports, data loading &amp; splitting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examining-the-data">8.2.2. Examining the data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fitting-a-baseline">8.2.3. Fitting a baseline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transforming-our-data">8.2.4. Transforming our data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fitting-the-transformed-data">8.2.5. Fitting the transformed data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examining-forecasts">8.2.6. Examining forecasts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#final-thoughts">8.2.7. Final thoughts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html">9. Contributing to pmdarima</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributors.html">10. Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../citing.html">11. Citing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../user_guide.html">User Guide</a> &raquo;</li>
+        
+          <li><a href="../usecases.html">8. Use cases</a> &raquo;</li>
+        
+      <li>Model selection with cross-validation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/usecases/sun-spots.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="an-end-to-end-time-series-analysis">
+<span id="sun-spots"></span><h1>8.2. An end-to-end time series analysis<a class="headerlink" href="#an-end-to-end-time-series-analysis" title="Permalink to this headline">¶</a></h1>
+<p>In this example, we’re going to look at why the <a class="reference internal" href="../modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima()</span></code></a> method
+should not be used as a silver bullet, and why qualitative investigation of the data
+may reveal important characteristics about it which may, in turn, affect how you approach
+the problem.</p>
+<p>For this problem, we’ll use the <a class="reference internal" href="../modules/generated/pmdarima.datasets.load_sunspots.html#pmdarima.datasets.load_sunspots" title="pmdarima.datasets.load_sunspots"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.datasets.load_sunspots()</span></code></a> method, which
+loads a seasonal time series of monthly mean relative sunspot numbers from 1749 to 1983.</p>
+<p>Here’s what you’ll need to run this example:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Pmdarima 1.5.2+ (many plotting utilities were added in this version)</li>
+<li>Matplotlib - It’s not a hard requirement of the package itself, but you’ll need it
+to run these examples (if you’re running this in a notebook, make sure to include <code class="docutils literal notranslate"><span class="pre">%matplotlib</span> <span class="pre">inline</span></code>)</li>
+<li>Python 3.6+. If you’re running python 3.5, simply remove the <a class="reference external" href="https://www.python.org/dev/peps/pep-0498/">F-string</a>
+print statements and it will work.</li>
+</ul>
+</div></blockquote>
+<div class="section" id="imports-data-loading-splitting">
+<h2>8.2.1. Imports, data loading &amp; splitting<a class="headerlink" href="#imports-data-loading-splitting" title="Permalink to this headline">¶</a></h2>
+<p>Here’s the set up for our problem. We’ll load the data and split it into our
+train/test sets:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1"># %matplotlib inline</span>
+
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_sunspots</span>
+<span class="kn">from</span> <span class="nn">pmdarima.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using pmdarima </span><span class="si">{pm.__version__}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Using pmdarima 1.5.2</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">load_sunspots</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">train_len</span> <span class="o">=</span> <span class="mi">2750</span>
+<span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="n">train_len</span><span class="p">)</span>
+<span class="n">y_train</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="53%" />
+<col width="47%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Jan 1749</td>
+<td>58.0</td>
+</tr>
+<tr class="row-even"><td>Feb 1749</td>
+<td>62.6</td>
+</tr>
+<tr class="row-odd"><td>Mar 1749</td>
+<td>70.0</td>
+</tr>
+<tr class="row-even"><td>Apr 1749</td>
+<td>55.7</td>
+</tr>
+<tr class="row-odd"><td>May 1749</td>
+<td>85.0</td>
+</tr>
+<tr class="row-even"><td>dtype:</td>
+<td>float64</td>
+</tr>
+</tbody>
+</table>
+<p>Time series data is a bit different from traditional machine learning in the sense
+that it’s temporally sensitive. That means the larger our test set, the higher we
+would expect our error to be for later forecasts, since our model won’t be able to
+effectively forecast for too many periods into the future.</p>
+<p>For this example, we’ll take the first 2750 samples for training, and leave the last
+70 as our test set.</p>
+</div>
+<div class="section" id="examining-the-data">
+<h2>8.2.2. Examining the data<a class="headerlink" href="#examining-the-data" title="Permalink to this headline">¶</a></h2>
+<p>Pmdarima 1.5.2 introduced a handy utility for visualizing your time series data:
+<code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.utils.vizualization.tsdisplay()</span></code>. We can use this to visalize our data,
+take a look at the auto-correlation plot, and see the histogram of values:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.utils</span> <span class="kn">import</span> <span class="n">tsdisplay</span>
+
+<span class="n">tsdisplay</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/untransformed.png"><img alt="Untransformed Time Series" class="align-center" src="../_images/untransformed.png" style="width: 337.2px; height: 254.39999999999998px;" /></a>
+<p>Reading this plot can give us several pieces of information:</p>
+<ul class="simple">
+<li>We are looking at a seasonal time series. Our apriori knowledge of the dataset informs
+us that this data has a seasonal periodicity of <code class="docutils literal notranslate"><span class="pre">m=12</span></code>.</li>
+<li>There seems to be some significant data skew, looking at the histogram. It is
+very zero-inflated. A lot of the statistical techniques used in time series modeling
+behave better when the data is normally distributed, so this may be something to look
+into.</li>
+</ul>
+</div>
+<div class="section" id="fitting-a-baseline">
+<h2>8.2.3. Fitting a baseline<a class="headerlink" href="#fitting-a-baseline" title="Permalink to this headline">¶</a></h2>
+<p>Before we start manipulating our data, let’s examine what would happen if we just
+fit a model straight out of the box:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22834.181</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22881.533</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">7.496</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">23347.880</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">23359.718</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.053</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">23087.391</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">23111.067</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.458</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22931.725</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22955.401</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.314</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">23345.881</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">23351.800</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.030</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22834.415</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22875.848</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">6.067</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22834.465</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22875.898</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">8.268</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22842.107</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22895.378</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">34.407</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.995</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22844.771</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22898.042</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">28.426</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.997</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22832.862</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22868.375</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.334</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22896.004</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22925.599</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.658</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22895.198</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22924.793</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.567</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22830.683</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22872.115</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.810</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22832.671</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22880.023</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">8.964</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22832.590</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22879.942</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">8.747</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22834.543</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22887.814</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">8.893</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.998</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22895.344</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22930.857</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.997</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22829.697</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22877.049</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">3.447</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22831.750</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22885.021</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">11.401</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22831.704</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22884.975</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">9.325</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22832.081</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22891.271</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">13.537</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.999</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22897.185</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22938.618</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.096</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22899.855</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22953.126</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.716</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22834.222</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22887.493</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">4.503</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22890.085</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22937.437</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">3.098</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22898.389</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22945.741</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.600</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">22894.744</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">22953.934</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">4.333</span> <span class="n">seconds</span>
+</pre></div>
+</div>
+<p>Examining the summary gives us:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit1</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                           <span class="n">Statespace</span> <span class="n">Model</span> <span class="n">Results</span>
+<span class="o">==============================================================================</span>
+<span class="n">Dep</span><span class="o">.</span> <span class="n">Variable</span><span class="p">:</span>                      <span class="n">y</span>   <span class="n">No</span><span class="o">.</span> <span class="n">Observations</span><span class="p">:</span>                 <span class="mi">2750</span>
+<span class="n">Model</span><span class="p">:</span>               <span class="n">SARIMAX</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>   <span class="n">Log</span> <span class="n">Likelihood</span>              <span class="o">-</span><span class="mf">11406.849</span>
+<span class="n">Date</span><span class="p">:</span>                <span class="n">Fri</span><span class="p">,</span> <span class="mi">13</span> <span class="n">Dec</span> <span class="mi">2019</span>   <span class="n">AIC</span>                          <span class="mf">22829.697</span>
+<span class="n">Time</span><span class="p">:</span>                        <span class="mi">07</span><span class="p">:</span><span class="mi">46</span><span class="p">:</span><span class="mi">18</span>   <span class="n">BIC</span>                          <span class="mf">22877.049</span>
+<span class="n">Sample</span><span class="p">:</span>                             <span class="mi">0</span>   <span class="n">HQIC</span>                         <span class="mf">22846.806</span>
+                               <span class="o">-</span> <span class="mi">2750</span>
+<span class="n">Covariance</span> <span class="n">Type</span><span class="p">:</span>                  <span class="n">opg</span>
+<span class="o">==============================================================================</span>
+                 <span class="n">coef</span>    <span class="n">std</span> <span class="n">err</span>          <span class="n">z</span>      <span class="n">P</span><span class="o">&gt;|</span><span class="n">z</span><span class="o">|</span>      <span class="p">[</span><span class="mf">0.025</span>      <span class="mf">0.975</span><span class="p">]</span>
+<span class="o">------------------------------------------------------------------------------</span>
+<span class="n">intercept</span>      <span class="mf">0.0012</span>      <span class="mf">0.012</span>      <span class="mf">0.104</span>      <span class="mf">0.917</span>      <span class="o">-</span><span class="mf">0.022</span>       <span class="mf">0.024</span>
+<span class="n">ar</span><span class="o">.</span><span class="n">L1</span>          <span class="mf">1.3845</span>      <span class="mf">0.025</span>     <span class="mf">55.356</span>      <span class="mf">0.000</span>       <span class="mf">1.335</span>       <span class="mf">1.433</span>
+<span class="n">ar</span><span class="o">.</span><span class="n">L2</span>         <span class="o">-</span><span class="mf">0.3867</span>      <span class="mf">0.027</span>    <span class="o">-</span><span class="mf">14.352</span>      <span class="mf">0.000</span>      <span class="o">-</span><span class="mf">0.440</span>      <span class="o">-</span><span class="mf">0.334</span>
+<span class="n">ar</span><span class="o">.</span><span class="n">L3</span>         <span class="o">-</span><span class="mf">0.0085</span>      <span class="mf">0.025</span>     <span class="o">-</span><span class="mf">0.340</span>      <span class="mf">0.734</span>      <span class="o">-</span><span class="mf">0.058</span>       <span class="mf">0.040</span>
+<span class="n">ar</span><span class="o">.</span><span class="n">L4</span>         <span class="o">-</span><span class="mf">0.0394</span>      <span class="mf">0.017</span>     <span class="o">-</span><span class="mf">2.264</span>      <span class="mf">0.024</span>      <span class="o">-</span><span class="mf">0.073</span>      <span class="o">-</span><span class="mf">0.005</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">L1</span>         <span class="o">-</span><span class="mf">1.8193</span>      <span class="mf">0.020</span>    <span class="o">-</span><span class="mf">91.747</span>      <span class="mf">0.000</span>      <span class="o">-</span><span class="mf">1.858</span>      <span class="o">-</span><span class="mf">1.780</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">L2</span>          <span class="mf">0.8570</span>      <span class="mf">0.020</span>     <span class="mf">42.443</span>      <span class="mf">0.000</span>       <span class="mf">0.817</span>       <span class="mf">0.897</span>
+<span class="n">sigma2</span>       <span class="mf">235.3266</span>      <span class="mf">4.006</span>     <span class="mf">58.739</span>      <span class="mf">0.000</span>     <span class="mf">227.474</span>     <span class="mf">243.179</span>
+<span class="o">===================================================================================</span>
+<span class="n">Ljung</span><span class="o">-</span><span class="n">Box</span> <span class="p">(</span><span class="n">Q</span><span class="p">):</span>                       <span class="mf">79.17</span>   <span class="n">Jarque</span><span class="o">-</span><span class="n">Bera</span> <span class="p">(</span><span class="n">JB</span><span class="p">):</span>              <span class="mf">1261.11</span>
+<span class="n">Prob</span><span class="p">(</span><span class="n">Q</span><span class="p">):</span>                              <span class="mf">0.00</span>   <span class="n">Prob</span><span class="p">(</span><span class="n">JB</span><span class="p">):</span>                         <span class="mf">0.00</span>
+<span class="n">Heteroskedasticity</span> <span class="p">(</span><span class="n">H</span><span class="p">):</span>               <span class="mf">1.21</span>   <span class="n">Skew</span><span class="p">:</span>                             <span class="mf">0.31</span>
+<span class="n">Prob</span><span class="p">(</span><span class="n">H</span><span class="p">)</span> <span class="p">(</span><span class="n">two</span><span class="o">-</span><span class="n">sided</span><span class="p">):</span>                  <span class="mf">0.00</span>   <span class="n">Kurtosis</span><span class="p">:</span>                         <span class="mf">6.26</span>
+<span class="o">===================================================================================</span>
+
+<span class="n">Warnings</span><span class="p">:</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">Covariance</span> <span class="n">matrix</span> <span class="n">calculated</span> <span class="n">using</span> <span class="n">the</span> <span class="n">outer</span> <span class="n">product</span> <span class="n">of</span> <span class="n">gradients</span> <span class="p">(</span><span class="nb">complex</span><span class="o">-</span><span class="n">step</span><span class="p">)</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="transforming-our-data">
+<h2>8.2.4. Transforming our data<a class="headerlink" href="#transforming-our-data" title="Permalink to this headline">¶</a></h2>
+<p>Since we expect our model to perform better over more normal data, let’s experiment with log transformations and
+the <a class="reference external" href="https://en.wikipedia.org/wiki/Power_transform#Box–Cox_transformation">Box-Cox transformation</a>,
+each of which is provided as an endogenous transformer in the Pmdarima package. When <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> is called,
+it will learn the transformation parameters:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.preprocessing</span> <span class="kn">import</span> <span class="n">LogEndogTransformer</span>
+
+<span class="n">y_train_log</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">LogEndogTransformer</span><span class="p">(</span><span class="n">lmbda</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">tsdisplay</span><span class="p">(</span><span class="n">y_train_log</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/log-transformed.png"><img alt="Log-transformed Time Series" class="align-center" src="../_images/log-transformed.png" style="width: 340.8px; height: 254.39999999999998px;" /></a>
+<p>Hmm… The log transformation didn’t seem to help too much. In fact, it seems like it just
+shifted the skew to the other tail.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.preprocessing</span> <span class="kn">import</span> <span class="n">BoxCoxEndogTransformer</span>
+
+<span class="n">y_train_bc</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">BoxCoxEndogTransformer</span><span class="p">(</span><span class="n">lmbda2</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">tsdisplay</span><span class="p">(</span><span class="n">y_train_bc</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/bc-transformed.png"><img alt="Box-Cox transformed Time Series" class="align-center" src="../_images/bc-transformed.png" style="width: 337.2px; height: 254.39999999999998px;" /></a>
+<p>However, the Box-Cox transformation seems to work very well as a means to normalize the data!
+In fact, a test of normality shows overwhelmingly that this is a normal distribution:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">normaltest</span>
+<span class="n">normaltest</span><span class="p">(</span><span class="n">y_train_bc</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+<span class="c1"># 3.751017646057429e-14</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fitting-the-transformed-data">
+<h2>8.2.5. Fitting the transformed data<a class="headerlink" href="#fitting-the-transformed-data" title="Permalink to this headline">¶</a></h2>
+<p>Pmdarima implements a scikit-learn-esque pipeline used to chain transformations and
+estimators together. Using this, we can centralize the entire transformer/model fit into
+one metaestimator:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="n">fit2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;boxcox&#39;</span><span class="p">,</span> <span class="n">BoxCoxEndogTransformer</span><span class="p">(</span><span class="n">lmbda2</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;arima&#39;</span><span class="p">,</span> <span class="n">pm</span><span class="o">.</span><span class="n">AutoARIMA</span><span class="p">(</span><span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">))</span>
+<span class="p">])</span>
+
+<span class="n">fit2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9944.949</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">9992.301</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">9.227</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">10560.255</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10572.093</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.049</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">10190.842</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10214.518</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.541</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">10000.189</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10023.865</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.834</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">10558.255</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10564.174</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.057</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9944.067</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">9985.500</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">7.050</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9942.145</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">9977.659</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.284</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9944.073</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">9985.506</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">7.021</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9987.000</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10016.595</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.626</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9986.300</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10015.895</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.697</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9938.391</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">9979.824</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.610</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9939.926</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">9987.278</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">12.276</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9939.653</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">9987.005</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">8.903</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9941.966</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">9995.237</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">12.801</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.996</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9982.150</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10017.664</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">0.734</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9985.360</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10032.711</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.084</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9982.528</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10029.880</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">3.890</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9981.766</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10023.199</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">2.940</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9983.484</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10024.917</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.505</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">9987.366</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">10040.637</span><span class="p">,</span> <span class="n">Fit</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.602</span> <span class="n">seconds</span>
+<span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;boxcox&#39;</span><span class="p">,</span>
+                 <span class="n">BoxCoxEndogTransformer</span><span class="p">(</span><span class="n">floor</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lmbda2</span><span class="o">=</span><span class="mf">1e-06</span><span class="p">,</span>
+                                        <span class="n">neg_action</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;arima&#39;</span><span class="p">,</span>
+                 <span class="n">AutoARIMA</span><span class="p">(</span><span class="n">D</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;warn&#39;</span><span class="p">,</span>
+                           <span class="n">information_criterion</span><span class="o">=</span><span class="s1">&#39;aic&#39;</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">max_D</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_P</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                           <span class="n">max_Q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_order</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                           <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span> <span class="n">n_fits</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">offset_test_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_of_sample_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">random</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span>
+                           <span class="n">scoring_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">seasonal_test</span><span class="o">=</span><span class="s1">&#39;ocsb&#39;</span><span class="p">,</span> <span class="n">seasonal_test_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">start_P</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_Q</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">...</span><span class="p">))])</span>
+</pre></div>
+</div>
+<p>And the model summary:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit2</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                           <span class="n">Statespace</span> <span class="n">Model</span> <span class="n">Results</span>
+<span class="o">==============================================================================</span>
+<span class="n">Dep</span><span class="o">.</span> <span class="n">Variable</span><span class="p">:</span>                      <span class="n">y</span>   <span class="n">No</span><span class="o">.</span> <span class="n">Observations</span><span class="p">:</span>                 <span class="mi">2750</span>
+<span class="n">Model</span><span class="p">:</span>               <span class="n">SARIMAX</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>   <span class="n">Log</span> <span class="n">Likelihood</span>               <span class="o">-</span><span class="mf">4962.196</span>
+<span class="n">Date</span><span class="p">:</span>                <span class="n">Fri</span><span class="p">,</span> <span class="mi">13</span> <span class="n">Dec</span> <span class="mi">2019</span>   <span class="n">AIC</span>                           <span class="mf">9938.391</span>
+<span class="n">Time</span><span class="p">:</span>                        <span class="mi">08</span><span class="p">:</span><span class="mi">17</span><span class="p">:</span><span class="mi">33</span>   <span class="n">BIC</span>                           <span class="mf">9979.824</span>
+<span class="n">Sample</span><span class="p">:</span>                             <span class="mi">0</span>   <span class="n">HQIC</span>                          <span class="mf">9953.361</span>
+                               <span class="o">-</span> <span class="mi">2750</span>
+<span class="n">Covariance</span> <span class="n">Type</span><span class="p">:</span>                  <span class="n">opg</span>
+<span class="o">==============================================================================</span>
+                 <span class="n">coef</span>    <span class="n">std</span> <span class="n">err</span>          <span class="n">z</span>      <span class="n">P</span><span class="o">&gt;|</span><span class="n">z</span><span class="o">|</span>      <span class="p">[</span><span class="mf">0.025</span>      <span class="mf">0.975</span><span class="p">]</span>
+<span class="o">------------------------------------------------------------------------------</span>
+<span class="n">intercept</span>   <span class="mf">9.133e-05</span>      <span class="mf">0.001</span>      <span class="mf">0.076</span>      <span class="mf">0.940</span>      <span class="o">-</span><span class="mf">0.002</span>       <span class="mf">0.002</span>
+<span class="n">ar</span><span class="o">.</span><span class="n">L1</span>          <span class="mf">1.2561</span>      <span class="mf">0.026</span>     <span class="mf">47.432</span>      <span class="mf">0.000</span>       <span class="mf">1.204</span>       <span class="mf">1.308</span>
+<span class="n">ar</span><span class="o">.</span><span class="n">L2</span>         <span class="o">-</span><span class="mf">0.2495</span>      <span class="mf">0.025</span>    <span class="o">-</span><span class="mf">10.071</span>      <span class="mf">0.000</span>      <span class="o">-</span><span class="mf">0.298</span>      <span class="o">-</span><span class="mf">0.201</span>
+<span class="n">ar</span><span class="o">.</span><span class="n">L3</span>         <span class="o">-</span><span class="mf">0.0645</span>      <span class="mf">0.021</span>     <span class="o">-</span><span class="mf">3.140</span>      <span class="mf">0.002</span>      <span class="o">-</span><span class="mf">0.105</span>      <span class="o">-</span><span class="mf">0.024</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">L1</span>         <span class="o">-</span><span class="mf">1.7521</span>      <span class="mf">0.022</span>    <span class="o">-</span><span class="mf">78.615</span>      <span class="mf">0.000</span>      <span class="o">-</span><span class="mf">1.796</span>      <span class="o">-</span><span class="mf">1.708</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">L2</span>          <span class="mf">0.7935</span>      <span class="mf">0.021</span>     <span class="mf">36.997</span>      <span class="mf">0.000</span>       <span class="mf">0.752</span>       <span class="mf">0.836</span>
+<span class="n">sigma2</span>         <span class="mf">2.1643</span>      <span class="mf">0.044</span>     <span class="mf">49.641</span>      <span class="mf">0.000</span>       <span class="mf">2.079</span>       <span class="mf">2.250</span>
+<span class="o">===================================================================================</span>
+<span class="n">Ljung</span><span class="o">-</span><span class="n">Box</span> <span class="p">(</span><span class="n">Q</span><span class="p">):</span>                       <span class="mf">54.00</span>   <span class="n">Jarque</span><span class="o">-</span><span class="n">Bera</span> <span class="p">(</span><span class="n">JB</span><span class="p">):</span>               <span class="mf">336.44</span>
+<span class="n">Prob</span><span class="p">(</span><span class="n">Q</span><span class="p">):</span>                              <span class="mf">0.07</span>   <span class="n">Prob</span><span class="p">(</span><span class="n">JB</span><span class="p">):</span>                         <span class="mf">0.00</span>
+<span class="n">Heteroskedasticity</span> <span class="p">(</span><span class="n">H</span><span class="p">):</span>               <span class="mf">0.71</span>   <span class="n">Skew</span><span class="p">:</span>                            <span class="o">-</span><span class="mf">0.11</span>
+<span class="n">Prob</span><span class="p">(</span><span class="n">H</span><span class="p">)</span> <span class="p">(</span><span class="n">two</span><span class="o">-</span><span class="n">sided</span><span class="p">):</span>                  <span class="mf">0.00</span>   <span class="n">Kurtosis</span><span class="p">:</span>                         <span class="mf">4.70</span>
+<span class="o">===================================================================================</span>
+
+<span class="n">Warnings</span><span class="p">:</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">Covariance</span> <span class="n">matrix</span> <span class="n">calculated</span> <span class="n">using</span> <span class="n">the</span> <span class="n">outer</span> <span class="n">product</span> <span class="n">of</span> <span class="n">gradients</span> <span class="p">(</span><span class="nb">complex</span><span class="o">-</span><span class="n">step</span><span class="p">)</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Notice that not only have our model parameters (predictably) changed, but the AIC is significantly
+lower! <em>But</em>, you say, <em>the data is on a different scale. Is AIC really a good measure?</em> Not per se.
+Let’s look at an apples-to-apples comparison.</p>
+</div>
+<div class="section" id="examining-forecasts">
+<h2>8.2.6. Examining forecasts<a class="headerlink" href="#examining-forecasts" title="Permalink to this headline">¶</a></h2>
+<p>Let’s write a function that examines the forecasts over the next 70 periods and plots
+the residuals:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span> <span class="k">as</span> <span class="n">mse</span>
+
+
+<span class="k">def</span> <span class="nf">plot_forecasts</span><span class="p">(</span><span class="n">forecasts</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">)):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">forecasts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+
+    <span class="c1"># Plot the forecasts</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:],</span> <span class="n">forecasts</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Sunspots (RMSE={np.sqrt(mse(y_test, forecasts)):.3f})&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="c1"># Plot the residuals</span>
+    <span class="n">resid</span> <span class="o">=</span> <span class="n">y_test</span> <span class="o">-</span> <span class="n">forecasts</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">normaltest</span><span class="p">(</span><span class="n">resid</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">resid</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Residuals (p=</span><span class="si">{p:.3f}</span><span class="s1">)&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here’s what the model on the untransformed series produces:</p>
+<a class="reference internal image-reference" href="../_images/model-1.png"><img alt="Forecasts on the untransformed Time Series" class="align-center" src="../_images/model-1.png" style="width: 340.8px; height: 513.6px;" /></a>
+<p>Notice that we are <em>not</em> using the SMAPE (symmetric mean absolute percentage error) as we
+normally might, because our time series contains zeros. When the actual or forecasted value is zero, SMAPE
+is known to produce misleadingly large error terms. Instead, we’re using the RMSE.</p>
+<p>The second image shows the distribution of the residuals. The normal test shows that they
+are not normally distributed (which was kind of expected). Here’s what the model over the
+transformed series produces:</p>
+<a class="reference internal image-reference" href="../_images/model-2.png"><img alt="Forecasts on the Box-Cox transformed Time Series" class="align-center" src="../_images/model-2.png" style="width: 340.8px; height: 513.6px;" /></a>
+<p>A few things to note:</p>
+<ul class="simple">
+<li>These forecasts are on the same scale as the original data. This is because the pipeline
+is smart enough to inverse transform the forecasts back to the original scale when a
+transformer is used.</li>
+<li>There is a lower RMSE in the forecasts (also expected, given our hypothesis was that normal
+data will perform better)</li>
+<li>The residuals are not <em>quite</em> normally distributed, though they are closer than the untransformed model.</li>
+</ul>
+</div>
+<div class="section" id="final-thoughts">
+<h2>8.2.7. Final thoughts<a class="headerlink" href="#final-thoughts" title="Permalink to this headline">¶</a></h2>
+<p>By simply transforming our data prior to fitting our model, we were able to produce
+better forecasts (lower RMSE), a more simple model (fewer parameters) that fit significantly
+faster, and one that also had a much lower AIC. The key to take away from this is that,
+although convenient, the <a class="reference internal" href="../modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima()</span></code></a> method should not be the first
+thing you throw at a time series. Take the time to understand your data, clean it up, and make
+necessary transformations before you begin training models.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../contributing.html" class="btn btn-neutral float-right" title="9. Contributing to pmdarima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="stocks.html" class="btn btn-neutral float-left" title="8.1. Stock Market Prediction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2019, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
