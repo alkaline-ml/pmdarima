@@ -33,7 +33,7 @@ jobs:
       - name: Repairing wheels
         run: |
           wheels=(packages/*)
-          for wheel in "$wheels[@]"
+          for wheel in "${wheels[@]}"
           do
             auditwheel repair "$wheel"
           done
