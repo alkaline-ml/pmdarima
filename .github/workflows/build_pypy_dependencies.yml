@@ -32,10 +32,10 @@ jobs:
 
       - name: Repairing wheels
         run: |
-          wheels=(packages/*-linux_x86_64)
+          wheels=(packages/*-pypy3_71-linux_x86_64)
           for wheel in "${wheels[@]}"
           do
-            mv $file ${file//linux_x86_64/none}
+            mv $wheel ${wheel//pypy3_71-linux_x86_64/none-any}
           done
         shell: bash
 
