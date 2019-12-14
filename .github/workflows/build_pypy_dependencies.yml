@@ -15,7 +15,7 @@ jobs:
         run: ln -sf `which pypy3` /usr/bin/python
 
       # https://github.com/actions/cache/blob/master/examples.md#simple-example
-      - name: Caching pip dependencies
+      - name: Checking for cached pip dependencies
         uses: actions/cache@v1
         with:
           path: $HOME/.pip/cache
