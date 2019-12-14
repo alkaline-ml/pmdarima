@@ -14,6 +14,15 @@ jobs:
       - name: Fixing Python Version
         run: ln -sf `which pypy3` /usr/bin/python
 
+      # https://github.com/actions/cache/blob/master/examples.md#simple-example
+      - name: Caching pip dependencies
+        uses: actions/cache@v1
+        with:
+          path: $HOME/.pip/cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Installing build requirements
         run: |
           apt-get -yq update && apt-get -yq install \
