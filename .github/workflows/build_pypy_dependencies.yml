@@ -47,18 +47,23 @@ jobs:
       # This is hacky. We essentially change the platform tag to `any` without actually converting the file
       # Since these are for internal use, and they will only run on Linux, this should be okay.
       # This is to get around an issue where Azure rejects linux files that aren't `manylinux` distributions
-      - name: Repairing wheels
-        run: |
-          shopt -s nullglob
-          wheels=(packages/*-linux_x86_64*)
-          for wheel in "${wheels[@]}"
-          do
-            mv $wheel ${wheel//linux_x86_64/any}
-          done
-        shell: bash
+#      - name: Repairing wheels
+#        run: |
+#          shopt -s nullglob
+#          wheels=(packages/*-linux_x86_64*)
+#          for wheel in "${wheels[@]}"
+#          do
+#            mv $wheel ${wheel//linux_x86_64/any}
+#          done
+#        shell: bash
 
-      - name: Uploading packages
-        run: twine upload --repository-url https://pkgs.dev.azure.com/tgsmith61591gh/pmdarima/_packaging/pmdarima-pypy-dependencies/pypi/upload --skip-existing packages/*
+      - name: Try gemfury
+        run: twine upload packages/* --repository-url https://push.fury.io/aaronreidsmith
         env:
-          TWINE_USERNAME: ${{ secrets.AZURE_ARTIFACTS_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.AZURE_ARTIFACTS_PASSWORD }}
+          - TWINE_USERNAME: ${{ secrets.GEMFURY_TOKEN }}
+
+#      - name: Uploading packages
+#        run: twine upload --repository-url https://pkgs.dev.azure.com/tgsmith61591gh/pmdarima/_packaging/pmdarima-pypy-dependencies/pypi/upload --skip-existing packages/*
+#        env:
+#          TWINE_USERNAME: ${{ secrets.AZURE_ARTIFACTS_USERNAME }}
+#          TWINE_PASSWORD: ${{ secrets.AZURE_ARTIFACTS_PASSWORD }}
