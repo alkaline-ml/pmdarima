@@ -60,7 +60,7 @@ jobs:
       - name: Try gemfury
         run: twine upload packages/* --repository-url https://push.fury.io/aaronreidsmith
         env:
-          - TWINE_USERNAME: ${{ secrets.GEMFURY_TOKEN }}
+          TWINE_USERNAME: ${{ secrets.GEMFURY_TOKEN }}
 
 #      - name: Uploading packages
 #        run: twine upload --repository-url https://pkgs.dev.azure.com/tgsmith61591gh/pmdarima/_packaging/pmdarima-pypy-dependencies/pypi/upload --skip-existing packages/*
