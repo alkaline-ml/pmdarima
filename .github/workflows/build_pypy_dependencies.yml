@@ -24,7 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           # This seems silly, but we have to install these to build the wheels we want below
           python -m pip install pytest
-          python -m pip install twine auditwheel
+          python -m pip install twine
 
       - name: Building wheels
         run: |
@@ -32,6 +32,7 @@ jobs:
 
       - name: Repairing wheels
         run: |
+          docker run -i -t -v `pwd`:/io quay.io/pypa/manylinux1_x86_64 /bin/bash
           wheels=(packages/*)
           for wheel in "${wheels[@]}"
           do
