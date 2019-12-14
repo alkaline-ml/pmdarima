@@ -23,12 +23,12 @@ jobs:
             gfortran
           python -m pip install --upgrade pip
           # This seems silly, but we have to install these to build the wheels we want below
-          python -m pip install pytest pytest-mpl pytest-benchmark
+          python -m pip install pytest
           python -m pip install twine auditwheel
 
       - name: Building wheels
         run: |
-          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages pytest pytest-mpl pytest-benchmark
+          python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages pytest
 
       - name: Repairing wheels
         run: |
