@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-
 from pmdarima.datasets import load_heartrate, load_lynx, load_wineind,\
     load_woolyrnq, load_ausbeer, load_austres,\
     load_airpassengers, load_taylor, load_msft, load_sunspots, _base as base
