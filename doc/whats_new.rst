@@ -21,6 +21,10 @@ v0.8.1) will document the latest features.
 
 * Fix bug where 1.5.1 documentation was labeled version "0.0.0".
 
+* Fix bug reported in `#272 <https://github.com/alkaline-ml/pmdarima/issues/272>`_, where
+  the new default value of ``max_order`` can cause a ``ValueError`` even in default cases
+  when ``stepwise=False``.
+
 
 `v1.5.1 <http://alkaline-ml.com/pmdarima/1.5.1/>`_
 --------------------------------------------------
