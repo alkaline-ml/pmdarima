@@ -4,8 +4,6 @@
 #
 # R approx function
 
-from __future__ import absolute_import
-
 import numpy as np
 
 from ..utils.array import c, check_endog

@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import numpy
-import os
-import platform
-
 
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration

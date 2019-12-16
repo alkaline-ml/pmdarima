@@ -4,11 +4,8 @@
 #
 # Tests for stationarity
 
-from __future__ import absolute_import, division
-
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LinearRegression
-import six
 
 from statsmodels import api as sm
 from abc import ABCMeta, abstractmethod
@@ -18,8 +15,6 @@ from ..compat.numpy import DTYPE
 from ..decorators import deprecated
 from ..utils.array import c, diff, check_endog
 from .approx import approx
-
-import warnings
 
 # since the C import relies on the C code having been built with Cython,
 # and since the platform might name the .so file something funky (like
@@ -33,7 +28,7 @@ __all__ = [
 ]
 
 
-class _BaseStationarityTest(six.with_metaclass(ABCMeta, BaseEstimator)):
+class _BaseStationarityTest(BaseEstimator, metaclass=ABCMeta):
     @staticmethod
     def _base_case(x):
         # if x is empty, return false so the other methods return False
@@ -56,8 +51,7 @@ class _BaseStationarityTest(six.with_metaclass(ABCMeta, BaseEstimator)):
         # return np.array([x[1:], x[:m]])
 
 
-class _DifferencingStationarityTest(six.with_metaclass(ABCMeta,
-                                                       _BaseStationarityTest)):
+class _DifferencingStationarityTest(_BaseStationarityTest, metaclass=ABCMeta):
     """Provides the base class for stationarity tests such as the
     Kwiatkowski–Phillips–Schmidt–Shin, Augmented Dickey-Fuller and the
     Phillips–Perron tests. These tests are used to determine whether a time

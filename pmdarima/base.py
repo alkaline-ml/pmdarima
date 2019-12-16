@@ -6,10 +6,9 @@ import abc
 from abc import ABCMeta
 
 from sklearn.base import BaseEstimator
-import six
 
 
-class BaseARIMA(six.with_metaclass(ABCMeta, BaseEstimator)):
+class BaseARIMA(BaseEstimator, metaclass=ABCMeta):
     """A base ARIMA class"""
 
     @abc.abstractmethod
