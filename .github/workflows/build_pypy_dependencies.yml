@@ -40,6 +40,6 @@ jobs:
           wheels=(packages/*)
           for wheel in "${wheels[@]}"
           do
-            fury push --as=alkaline-ml --api-token=${{ secrets.GEMFURY_TOKEN }} $wheel || "Version already exists"
+            fury push --as=alkaline-ml --api-token=${{ secrets.GEMFURY_TOKEN }} $wheel || echo "Version already exists"
           done
         shell: bash
