@@ -53,11 +53,10 @@ jobs:
           echo "deb [trusted=yes] https://cli.gemfury.com/apt/ /" > /etc/apt/sources.list.d/fury-cli.list
           apt update
           apt install gemfury
-          fury login --api-token=${{ secrets.GEMFURY_TOKEN }}
           shopt -s nullglob
           wheels=(packages/*)
-          for wheel in "${wheels[@]"
+          for wheel in "${wheels[@]}"
           do
-            fury push --as alkaline-ml $wheel
+            fury push --as=alkaline-ml --api-token=${{ secrets.GEMFURY_TOKEN }} $wheel
           done
           fury logout
