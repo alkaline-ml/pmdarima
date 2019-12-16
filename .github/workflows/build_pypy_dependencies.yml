@@ -53,7 +53,7 @@ jobs:
           python -m pip wheel --wheel-dir ${GITHUB_WORKSPACE}/packages pytest pytest-mpl pytest-benchmark
 
       - name: Upload to Gemfury
-        run: twine upload --repository-url https://push.fury.io/aaronreidsmith -p "" --skip-existing packages/*
+        run: twine upload --repository-url https://push.fury.io/alkaline-ml -p "" --skip-existing packages/*
         env:
           TWINE_USERNAME: ${{ secrets.GEMFURY_TOKEN }}
 
