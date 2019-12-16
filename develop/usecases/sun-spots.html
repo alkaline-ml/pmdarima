@@ -372,8 +372,7 @@ fit a model straight out of the box:</p>
 <h2>8.2.4. Transforming our data<a class="headerlink" href="#transforming-our-data" title="Permalink to this headline">¶</a></h2>
 <p>Since we expect our model to perform better over more normal data, let’s experiment with log transformations and
 the <a class="reference external" href="https://en.wikipedia.org/wiki/Power_transform#Box–Cox_transformation">Box-Cox transformation</a>,
-each of which is provided as an endogenous transformer in the Pmdarima package. When <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> is called,
-it will learn the transformation parameters:</p>
+each of which is provided as an endogenous transformer in the Pmdarima package.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.preprocessing</span> <span class="kn">import</span> <span class="n">LogEndogTransformer</span>
 
 <span class="n">y_train_log</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">LogEndogTransformer</span><span class="p">(</span><span class="n">lmbda</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
@@ -382,7 +381,8 @@ it will learn the transformation parameters:</p>
 </div>
 <a class="reference internal image-reference" href="../_images/log-transformed.png"><img alt="Log-transformed Time Series" class="align-center" src="../_images/log-transformed.png" style="width: 340.8px; height: 254.39999999999998px;" /></a>
 <p>Hmm… The log transformation didn’t seem to help too much. In fact, it seems like it just
-shifted the skew to the other tail.</p>
+shifted the skew to the other tail. Let’s try the Box-Cox transformation. When <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> is called,
+it will learn the lambda transformation parameter:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.preprocessing</span> <span class="kn">import</span> <span class="n">BoxCoxEndogTransformer</span>
 
 <span class="n">y_train_bc</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">BoxCoxEndogTransformer</span><span class="p">(</span><span class="n">lmbda2</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>

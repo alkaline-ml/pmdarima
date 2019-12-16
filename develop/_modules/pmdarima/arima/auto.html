@@ -416,8 +416,8 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">StepwiseContext</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="c1"># override base class member</span>
-    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">ContextType</span><span class="o">.</span><span class="n">STEPWISE</span></div>
+<div class="viewcode-block" id="StepwiseContext.get_type"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.StepwiseContext.html#pmdarima.arima.StepwiseContext.get_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ContextType</span><span class="o">.</span><span class="n">STEPWISE</span></div></div>
 
 
 <div class="viewcode-block" id="auto_arima"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima">[docs]</a><span class="k">def</span> <span class="nf">auto_arima</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
@@ -657,29 +657,6 @@
         <span class="k">if</span> <span class="n">max_Q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">max_q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_q</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="c1"># generate the set of (p, q, P, Q) FIRST, since it is contingent</span>
-    <span class="c1"># on whether or not the user is interested in a seasonal ARIMA result.</span>
-    <span class="c1"># This will reduce the search space for non-seasonal ARIMA models.</span>
-    <span class="c1"># loop p, q. Make sure to loop at +1 interval,</span>
-    <span class="c1"># since max_{p|q} is inclusive.</span>
-    <span class="k">if</span> <span class="n">seasonal</span><span class="p">:</span>
-        <span class="n">gen</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_P</span><span class="p">,</span> <span class="n">max_P</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">Q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_Q</span><span class="p">,</span> <span class="n">max_Q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">+</span> <span class="n">P</span> <span class="o">+</span> <span class="n">Q</span> <span class="o">&lt;=</span> <span class="n">max_order</span>
-        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># otherwise it&#39;s not seasonal, and we don&#39;t need the seasonal pieces</span>
-        <span class="n">gen</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">&lt;=</span> <span class="n">max_order</span>
-        <span class="p">)</span>
-
     <span class="k">if</span> <span class="ow">not</span> <span class="n">stepwise</span><span class="p">:</span>
 
         <span class="c1"># validate max_order</span>
@@ -689,13 +666,32 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_order must be None or a positive &#39;</span>
                              <span class="s1">&#39;integer (&gt;= 0)&#39;</span><span class="p">)</span>
 
-        <span class="c1"># alternatively, if the start_p and start_q supercede</span>
-        <span class="c1"># the max order, that&#39;s a failable offense...</span>
-        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">seasonal</span> <span class="ow">and</span> <span class="n">start_p</span> <span class="o">+</span> <span class="n">start_q</span> <span class="o">&gt;</span> <span class="n">max_order</span><span class="p">)</span> <span class="ow">or</span> \
-                <span class="p">(</span><span class="n">seasonal</span> <span class="ow">and</span>
-                 <span class="n">start_P</span> <span class="o">+</span> <span class="n">start_p</span> <span class="o">+</span> <span class="n">start_Q</span> <span class="o">+</span> <span class="n">start_q</span> <span class="o">&gt;</span> <span class="n">max_order</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;If max_order is prescribed, it must &#39;</span>
-                             <span class="s1">&#39;exceed sum of starting orders&#39;</span><span class="p">)</span>
+        <span class="c1"># NOTE: pre-1.5.2, we started at start_p, start_q, etc. However, when</span>
+        <span class="c1"># using stepwise=FALSE in R, hyndman starts at 0. He only uses start_*</span>
+        <span class="c1"># when stepwise=TRUE.</span>
+
+        <span class="c1"># generate the set of (p, q, P, Q) FIRST, since it is contingent</span>
+        <span class="c1"># on whether or not the user is interested in a seasonal ARIMA result.</span>
+        <span class="c1"># This will reduce the search space for non-seasonal ARIMA models.</span>
+        <span class="c1"># loop p, q. Make sure to loop at +1 interval,</span>
+        <span class="c1"># since max_{p|q} is inclusive.</span>
+        <span class="k">if</span> <span class="n">seasonal</span><span class="p">:</span>
+            <span class="n">gen</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_P</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">Q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_Q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">+</span> <span class="n">P</span> <span class="o">+</span> <span class="n">Q</span> <span class="o">&lt;=</span> <span class="n">max_order</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># otherwise it&#39;s not seasonal and we don&#39;t need the seasonal pieces</span>
+            <span class="n">gen</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">&lt;=</span> <span class="n">max_order</span>
+            <span class="p">)</span>
 
         <span class="c1"># if we are fitting a random search rather than an exhaustive one, we</span>
         <span class="c1"># will scramble up the generator (as a list) and only fit n_iter ARIMAs</span>

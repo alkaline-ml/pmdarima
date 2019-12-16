@@ -187,8 +187,7 @@ Transforming our data
 
 Since we expect our model to perform better over more normal data, let's experiment with log transformations and
 the `Box-Cox transformation <https://en.wikipedia.org/wiki/Power_transform#Box–Cox_transformation>`_,
-each of which is provided as an endogenous transformer in the Pmdarima package. When ``.fit()`` is called,
-it will learn the transformation parameters:
+each of which is provided as an endogenous transformer in the Pmdarima package.
 
 .. code-block:: python
 
@@ -204,7 +203,8 @@ it will learn the transformation parameters:
 
 
 Hmm... The log transformation didn't seem to help too much. In fact, it seems like it just
-shifted the skew to the other tail.
+shifted the skew to the other tail. Let's try the Box-Cox transformation. When ``.fit()`` is called,
+it will learn the lambda transformation parameter:
 
 
 .. code-block:: python
