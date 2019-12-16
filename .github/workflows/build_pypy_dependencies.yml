@@ -1,14 +1,10 @@
 name: Build PyPy Dependencies
 
-on: [push]  # Just do it on push for now
-
-# Once these have been puilt/pushed to the right index,
-# we will only run this if requirements.txt or this file are changed
-#on:
-#  push:
-#    paths:
-#    - 'requirements.txt'
-#    - '.github/workflows/build_pypy_dependencies.yml'
+on:
+  push:
+    paths:
+    - 'requirements.txt'
+    - '.github/workflows/build_pypy_dependencies.yml'
 
 jobs:
   build:
@@ -56,4 +52,3 @@ jobs:
         run: twine upload --repository-url https://push.fury.io/alkaline-ml -p "" --skip-existing packages/*
         env:
           TWINE_USERNAME: ${{ secrets.GEMFURY_TOKEN }}
-
