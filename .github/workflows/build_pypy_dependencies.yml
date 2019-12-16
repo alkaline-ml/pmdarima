@@ -58,6 +58,6 @@ jobs:
           wheels=(packages/*)
           for wheel in "${wheels[@]"
           do
-            fury push $wheel
+            fury push --as alkaline-ml $wheel
           done
           fury logout
