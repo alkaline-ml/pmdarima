@@ -463,20 +463,6 @@ def test_the_r_src():
         pytest.param(abc, {'D': -1}),
         pytest.param(abc, {'information_criterion': 'bad-value'}),
         pytest.param(abc, {'m': 0}),
-
-        # show that for starting values > max_order, we'll get an error
-        pytest.param(abc, {'start_p': 5,
-                           'start_q': 5,
-                           'seasonal': False,
-                           'max_order': 3,
-                           'stepwise': False}),
-        pytest.param(abc, {'start_p': 5,
-                           'start_q': 5,
-                           'start_P': 4,
-                           'start_Q': 3,
-                           'seasonal': True,
-                           'max_order': 3,
-                           'stepwise': False}),
     ]
 )
 def test_value_errors(endog, kwargs):
