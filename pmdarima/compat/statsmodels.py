@@ -2,8 +2,6 @@
 #
 # Handle inconsistencies in the statsmodels API versions
 
-from __future__ import absolute_import
-
 __all__ = [
     'bind_df_model'
 ]

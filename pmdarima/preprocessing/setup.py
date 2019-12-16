@@ -2,7 +2,6 @@
 
 import os
 
-import numpy
 from numpy.distutils.misc_util import Configuration
 
 from pmdarima._build_utils import get_blas_info

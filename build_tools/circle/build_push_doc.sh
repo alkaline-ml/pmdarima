@@ -33,7 +33,7 @@ fi
 # cd doc
 # make clean html EXAMPLES_PATTERN=example_*
 # cd ..
-make documentation
+make documentation PMDARIMA_VERSION=${version}
 
 # move the docs to the top-level directory, stash for checkout
 mv doc/_build/html ./

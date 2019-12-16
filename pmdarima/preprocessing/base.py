@@ -4,7 +4,6 @@
 # potentially get circular imports in sub-classes
 
 from sklearn.base import BaseEstimator, TransformerMixin
-import six
 import abc
 
 from ..compat.numpy import DTYPE
@@ -15,9 +14,7 @@ __all__ = [
 ]
 
 
-class BaseTransformer(six.with_metaclass(abc.ABCMeta,
-                                         BaseEstimator,
-                                         TransformerMixin)):
+class BaseTransformer(BaseEstimator, TransformerMixin, metaclass=abc.ABCMeta):
     """A base pre-processing transformer
 
     A subclass of the scikit-learn ``TransformerMixin``, the purpose of the

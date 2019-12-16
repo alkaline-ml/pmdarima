@@ -17,6 +17,7 @@ print(__doc__)
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
 import pmdarima as pm
+from pmdarima import model_selection
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 import numpy as np
@@ -24,7 +25,7 @@ import numpy as np
 # #############################################################################
 # Load the data and split it into separate pieces
 data = pm.datasets.load_lynx()
-train, test = data[:90], data[90:]
+train, test = model_selection.train_test_split(data, train_size=90)
 
 # Fit a simple auto_arima model
 modl = pm.auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,

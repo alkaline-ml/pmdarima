@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-
 import pmdarima as pm
 from pmdarima.utils.wrapped import acf, pacf
 
