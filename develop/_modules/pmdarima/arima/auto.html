@@ -188,8 +188,6 @@
 <span class="kn">from</span> <span class="nn">._context</span> <span class="kn">import</span> <span class="n">AbstractContext</span><span class="p">,</span> <span class="n">ContextType</span>
 <span class="c1"># Import as a namespace so we can mock</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_auto_solvers</span> <span class="k">as</span> <span class="n">solvers</span>
-<span class="c1"># for python 3 compat</span>
-<span class="kn">from</span> <span class="nn">..compat.python</span> <span class="kn">import</span> <span class="n">xrange</span>
 <span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="kn">import</span> <span class="n">DTYPE</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -667,18 +665,18 @@
     <span class="k">if</span> <span class="n">seasonal</span><span class="p">:</span>
         <span class="n">gen</span> <span class="o">=</span> <span class="p">(</span>
             <span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_P</span><span class="p">,</span> <span class="n">max_P</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">Q</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_Q</span><span class="p">,</span> <span class="n">max_Q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_P</span><span class="p">,</span> <span class="n">max_P</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">Q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_Q</span><span class="p">,</span> <span class="n">max_Q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">+</span> <span class="n">P</span> <span class="o">+</span> <span class="n">Q</span> <span class="o">&lt;=</span> <span class="n">max_order</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># otherwise it&#39;s not seasonal, and we don&#39;t need the seasonal pieces</span>
         <span class="n">gen</span> <span class="o">=</span> <span class="p">(</span>
             <span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">&lt;=</span> <span class="n">max_order</span>
         <span class="p">)</span>
 

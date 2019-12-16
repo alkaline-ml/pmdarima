@@ -91,7 +91,7 @@ possible.
         errors[better_index], better_index + 1))
     print("Best model: {}".format(models[better_index]))
 
-**Total running time of the script:** ( 0 minutes  3.213 seconds)
+**Total running time of the script:** ( 0 minutes  3.761 seconds)
 
 
 

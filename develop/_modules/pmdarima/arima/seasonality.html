@@ -174,7 +174,6 @@
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 
-<span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
 
@@ -321,8 +320,7 @@
     <span class="k">return</span> <span class="n">decomposed_tuple</span></div>
 
 
-<span class="k">class</span> <span class="nc">_SeasonalStationarityTest</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">with_metaclass</span><span class="p">(</span><span class="n">ABCMeta</span><span class="p">,</span>
-                                                   <span class="n">_BaseStationarityTest</span><span class="p">)):</span>
+<span class="k">class</span> <span class="nc">_SeasonalStationarityTest</span><span class="p">(</span><span class="n">_BaseStationarityTest</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Provides the base class for seasonal differencing tests such as the</span>
 <span class="sd">    Canova-Hansen test and the Osborn-Chui-Smith-Birchenhall tests. These tests</span>
 <span class="sd">    are used to determine the seasonal differencing term for a time-series.</span>
