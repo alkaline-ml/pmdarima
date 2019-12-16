@@ -6,7 +6,6 @@
 
 from collections import namedtuple
 
-import six
 import math
 from sklearn.linear_model import LinearRegression
 
@@ -153,8 +152,7 @@ def decompose(x, type_, m, filter_=None):
     return decomposed_tuple
 
 
-class _SeasonalStationarityTest(six.with_metaclass(ABCMeta,
-                                                   _BaseStationarityTest)):
+class _SeasonalStationarityTest(_BaseStationarityTest, metaclass=ABCMeta):
     """Provides the base class for seasonal differencing tests such as the
     Canova-Hansen test and the Osborn-Chui-Smith-Birchenhall tests. These tests
     are used to determine the seasonal differencing term for a time-series.

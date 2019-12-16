@@ -20,8 +20,6 @@ from .warnings import ModelFitWarning
 from ._context import AbstractContext, ContextType
 # Import as a namespace so we can mock
 from . import _auto_solvers as solvers
-# for python 3 compat
-from ..compat.python import xrange
 from ..compat.numpy import DTYPE
 
 __all__ = [
@@ -499,18 +497,18 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
     if seasonal:
         gen = (
             ((p, d, q), (P, D, Q, m))
-            for p in xrange(start_p, max_p + 1)
-            for q in xrange(start_q, max_q + 1)
-            for P in xrange(start_P, max_P + 1)
-            for Q in xrange(start_Q, max_Q + 1)
+            for p in range(start_p, max_p + 1)
+            for q in range(start_q, max_q + 1)
+            for P in range(start_P, max_P + 1)
+            for Q in range(start_Q, max_Q + 1)
             if p + q + P + Q <= max_order
         )
     else:
         # otherwise it's not seasonal, and we don't need the seasonal pieces
         gen = (
             ((p, d, q), (0, 0, 0, 0))
-            for p in xrange(start_p, max_p + 1)
-            for q in xrange(start_q, max_q + 1)
+            for p in range(start_p, max_p + 1)
+            for q in range(start_q, max_q + 1)
             if p + q <= max_order
         )
 

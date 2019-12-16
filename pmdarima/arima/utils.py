@@ -4,8 +4,6 @@
 #
 # Common ARIMA functions
 
-from __future__ import absolute_import
-
 from sklearn.utils.validation import column_or_1d
 import numpy as np
 

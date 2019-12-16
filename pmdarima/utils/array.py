@@ -5,7 +5,6 @@
 # Array utilities
 
 from sklearn.utils.validation import check_array, column_or_1d
-import six
 
 import numpy as np
 import pandas as pd
@@ -487,6 +486,6 @@ def is_iterable(x):
     isiter : bool
         True if iterable, else False.
     """
-    if isinstance(x, six.string_types):
+    if isinstance(x, str):
         return False
     return hasattr(x, '__iter__')

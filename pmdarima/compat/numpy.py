@@ -11,7 +11,6 @@
 # Since DTYPE is used commonly, this removes circular dependencies or
 # hard-coding.
 
-from __future__ import absolute_import
 import numpy as np
 
 # this is going to be the data-type used across pmdarima
