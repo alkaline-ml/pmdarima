@@ -36,7 +36,6 @@ jobs:
       - name: Upload to Gemfury
         run: |
           gem install gemfury
-          shopt -s nullglob
           wheels=(packages/*)
           for wheel in "${wheels[@]}"
           do
