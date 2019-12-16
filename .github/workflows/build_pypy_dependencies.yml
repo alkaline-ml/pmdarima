@@ -40,7 +40,6 @@ jobs:
           wheels=(packages/*)
           for wheel in "${wheels[@]}"
           do
-            echo $wheel
             fury push --as=alkaline-ml --api-token=${{ secrets.GEMFURY_TOKEN }} $wheel
           done
         shell: bash
