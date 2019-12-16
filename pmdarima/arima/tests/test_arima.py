@@ -470,6 +470,29 @@ def test_value_errors(endog, kwargs):
         auto_arima(endog, **kwargs)
 
 
+@pytest.mark.parametrize(
+    'endog, max_order, kwargs', [
+        # show that for starting values > max_order, we can still get a fit
+        pytest.param(abc, 3, {'start_p': 5,
+                              'start_q': 5,
+                              'seasonal': False,
+                              'stepwise': False}),
+
+        pytest.param(abc, 3, {'start_p': 5,
+                              'start_q': 5,
+                              'start_P': 2,
+                              'start_Q': 2,
+                              'seasonal': True,
+                              'stepwise': False}),
+    ]
+)
+def test_valid_max_order_edges(endog, max_order, kwargs):
+    fit = auto_arima(endog, max_order=max_order, **kwargs)
+    order = fit.order
+    ssnal = fit.seasonal_order
+    assert (sum(order) + sum(ssnal[:3])) <= max_order
+
+
 def test_many_orders():
     lam = 0.5
     lynx_bc = ((lynx ** lam) - 1) / lam
