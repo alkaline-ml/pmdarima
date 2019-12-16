@@ -47,6 +47,7 @@ class AbstractContext(ABC):
         ContextStore._remove_context(self)
 
     def __getattr__(self, item):
+        """Lets us access, e.g., ``ctx.max_steps`` even if not in a context"""
         return self.props[item] if item in self.props else None
 
     def __contains__(self, item):
@@ -77,7 +78,7 @@ class AbstractContext(ABC):
 
     @abstractmethod
     def get_type(self):
-        return None
+        """Get the ContextType"""
 
 
 class _emptyContext(AbstractContext):
@@ -87,6 +88,7 @@ class _emptyContext(AbstractContext):
         super(_emptyContext, self).__init__()
 
     def get_type(self):
+        """Indicates we are not in a context manager"""
         return ContextType.EMPTY
 
 
@@ -107,7 +109,7 @@ class ContextStore:
 
         Returns
         -------
-        res: AbstractContext
+        res : AbstractContext
             An instance of AbstractContext subclass or None
         """
         if not isinstance(context_type, ContextType):
@@ -116,13 +118,25 @@ class ContextStore:
         if context_type in _ctx.store and len(_ctx.store[context_type]) > 0:
             return _ctx.store[context_type][-1]
 
+        # If not present
+        return None
+
     @staticmethod
     def get_or_default(context_type, default):
         """Returns most recent instance of given Context Type or default
 
-        :param context_type: Context Type to retrieve from the store
-        :param default: value to return in case given context does not exist
-        :return: an instance of AbstractContext subclass or default
+        Parameters
+        ----------
+        context_type : ContextType
+            Context type to retrieve from the store
+
+        default : AbstractContext
+            Value to return in case given context does not exist
+
+        Returns
+        -------
+        ctx : AbstractContext
+            An instance of AbstractContext subclass or default
         """
         ctx = ContextStore.get_context(context_type)
         return ctx if ctx else default
@@ -131,8 +145,15 @@ class ContextStore:
     def get_or_empty(context_type):
         """Returns recent instance of given Context Type or an empty context
 
-        :param context_type: Context Type to retrieve from the store
-        :return: an instance of AbstractContext subclass
+        Parameters
+        ----------
+        context_type : ContextType
+            Context type to retrieve from the store
+
+        Returns
+        -------
+        res : AbstractContext
+            An instance of AbstractContext subclass
         """
         return ContextStore.get_or_default(context_type, _emptyContext())
 
@@ -145,6 +166,9 @@ class ContextStore:
         if the given ctx is nested, merge parent context, to support
         following usage:
 
+        Examples
+        --------
+        >>> from pmdarima.arima import StepwiseContext, auto_arima
         >>> with StepwiseContext(max_steps=10):
         ...     with StepwiseContext(max_dur=30):
         ...         auto_arima(samp,...)
