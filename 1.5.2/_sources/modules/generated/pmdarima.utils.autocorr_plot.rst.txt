@@ -1,0 +1,12 @@
+:mod:`pmdarima.utils`.autocorr_plot
+================================================
+
+.. currentmodule:: pmdarima.utils
+
+.. autofunction:: autocorr_plot
+
+.. include:: pmdarima.utils.autocorr_plot.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
