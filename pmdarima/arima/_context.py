@@ -4,7 +4,7 @@
 #
 # Re-entrant, reusable context manager to store execution context. Introduced
 # in pmdarima 1.5.0 (see #221), redesigned not to use thread locals in #273
-# (see #271 for context).
+# (see #275 for context).
 
 from abc import ABC, abstractmethod
 from enum import Enum
