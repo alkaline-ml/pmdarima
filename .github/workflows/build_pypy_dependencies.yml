@@ -18,6 +18,11 @@ jobs:
       - name: Fixing Python Version
         run: ln -sf `which pypy3` /usr/bin/python
 
+      # We have to install everything before using `pip wheel`,
+      # or some of the wheels will fail to build (lacking their dependencies).
+      #
+      # We have to install them one-by-one because pip collects everything, THEN installs.
+      # Doing this means it may try to install things in the wrong order and fail
       - name: Installing build requirements
         run: |
           apt-get -yq update && apt-get -yq install \
@@ -30,7 +35,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install "$(cat requirements.txt | grep Cython)"
           python -m pip install "$(cat requirements.txt | grep numpy)"
-          python -m pip install "$(cat requirements.txt | grep scipy)"
+          # Have to force <1.4.0 (see https://github.com/scipy/scipy/releases/tag/v1.4.0)
+          python -m pip install "$(cat requirements.txt | grep scipy),<1.4.0"
           python -m pip install "$(cat requirements.txt | grep scikit-learn)"
           python -m pip install "$(cat requirements.txt | grep pandas)"
           python -m pip install "$(cat requirements.txt | grep statsmodels)"
