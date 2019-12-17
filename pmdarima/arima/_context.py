@@ -3,18 +3,22 @@
 # Author: Krishna Sunkara (kpsunkara)
 #
 # Re-entrant, reusable context manager to store execution context. Introduced
-# in pmdarima 1.5.0 (see #221)
+# in pmdarima 1.5.0 (see #221), redesigned not to use thread locals in #273
+# (see #275 for context).
 
-import threading
 from abc import ABC, abstractmethod
 from enum import Enum
 import collections
 
-# thread local value to store the context info
-_ctx = threading.local()
-_ctx.store = {}
-
 __all__ = ['AbstractContext', 'ContextStore', 'ContextType']
+
+
+class _CtxSingleton:
+    """Singleton class to store context information"""
+    store = {}
+
+
+_ctx = _CtxSingleton()
 
 
 class ContextType(Enum):
@@ -30,9 +34,8 @@ class AbstractContext(ABC):
     """An abstract context manager to store execution context.
 
     A generic, re-entrant, reusable context manager to store
-    execution context in a threading.local instance. Has helper
-    methods to iterate over the context info and provide a
-    string representation of the context info.
+    execution context. Has helper methods to iterate over the context info
+    and provide a string representation of the context info.
     """
     def __init__(self, **kwargs):
         # remove None valued entries,
@@ -93,10 +96,10 @@ class _emptyContext(AbstractContext):
 
 
 class ContextStore:
-    """A class to wrap access to threading.local() context store
+    """A class to wrap access to the global context store
 
-    This class hosts static methods to wrap access to and
-    encapsulate the threading.local() instance
+    This class hosts static methods to wrap access to and encapsulate the
+    singleton content store instance
     """
     @staticmethod
     def get_context(context_type):
