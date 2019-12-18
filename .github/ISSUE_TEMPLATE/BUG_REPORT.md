@@ -20,13 +20,7 @@ Steps to reproduce the behavior:
 **Versions**
 <!--
 Please run the following snippet and paste the output below.
-import platform; print(platform.platform())
-import sys; print("Python", sys.version)
-import pmdarima; print("pmdarima", pmdarima.__version__)
-import numpy; print("NumPy", numpy.__version__)
-import scipy; print("SciPy", scipy.__version__)
-import sklearn; print("Scikit-Learn", sklearn.__version__)
-import statsmodels; print("Statsmodels", statsmodels.__version__)
+import pmdarima; pmdarima.show_versions()
 -->
 
 **Expected behavior**
