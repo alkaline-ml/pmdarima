@@ -20,6 +20,9 @@ https://www.alkaline-ml.com/pmdarima/
 **Versions (if necessary)**
 <!--
 Please run the following snippet and paste the output below.
+import pmdarima; pmdarima.show_versions()
+
+For pmdarima versions <1.5.2 use this:
 import platform; print(platform.platform())
 import sys; print("Python", sys.version)
 import pmdarima; print("pmdarima", pmdarima.__version__)
