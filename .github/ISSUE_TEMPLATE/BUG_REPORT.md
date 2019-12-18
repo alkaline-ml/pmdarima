@@ -21,6 +21,15 @@ Steps to reproduce the behavior:
 <!--
 Please run the following snippet and paste the output below.
 import pmdarima; pmdarima.show_versions()
+
+For pmdarima versions <1.5.2 use this:
+import platform; print(platform.platform())
+import sys; print("Python", sys.version)
+import pmdarima; print("pmdarima", pmdarima.__version__)
+import numpy; print("NumPy", numpy.__version__)
+import scipy; print("SciPy", scipy.__version__)
+import sklearn; print("Scikit-Learn", sklearn.__version__)
+import statsmodels; print("Statsmodels", statsmodels.__version__)
 -->
 
 **Expected behavior**
