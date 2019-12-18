@@ -191,9 +191,11 @@ _AUTO_ARIMA_DOCSTR = \
         an otherwise healthy parameter combination to fail for reasons not
         related to pmdarima.
 
-    trace : bool, optional (default=False)
-        Whether to print status on the fits. Note that this can be
-        very verbose...
+    trace : bool or int, optional (default=False)
+        Whether to print status on the fits. A value of False will print no
+        debugging information. A value of True will print some. Integer values
+        exceeding 1 will print increasing amounts of debug information at each
+        fit.
 
     random : bool, optional (default=False)
         Similar to grid searches, ``auto_arima`` provides the capability to
