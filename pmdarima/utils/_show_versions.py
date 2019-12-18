@@ -82,4 +82,4 @@ def show_versions():
 
     print('\nPython dependencies:')
     for k, stat in deps_info.items():
-        print("{k:>10}: {stat}".format(k=k, stat=stat))
+        print("{k:>11}: {stat}".format(k=k, stat=stat))
