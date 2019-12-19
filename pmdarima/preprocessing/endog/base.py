@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import six
-
 import abc
 
 from ..base import BaseTransformer
 
 
-class BaseEndogTransformer(six.with_metaclass(abc.ABCMeta, BaseTransformer)):
+class BaseEndogTransformer(BaseTransformer, metaclass=abc.ABCMeta):
     """A base class for endogenous array transformers"""
 
     def _check_y_exog(self, y, exog):

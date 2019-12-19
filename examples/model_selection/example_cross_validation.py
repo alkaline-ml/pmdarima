@@ -25,7 +25,7 @@ print("pmdarima version: %s" % pm.__version__)
 
 # Load the data and split it into separate pieces
 data = pm.datasets.load_wineind()
-train, test = data[:165], data[165:]
+train, test = model_selection.train_test_split(data, train_size=165)
 
 # Even though we have a dedicated train/test split, we can (and should) still
 # use cross-validation on our training set to get a good estimate of the model

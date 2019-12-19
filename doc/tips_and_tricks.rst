@@ -242,7 +242,7 @@ sure to pay attention to the ``m`` and the ``max_D`` parameters.
 Setting ``m``
 ~~~~~~~~~~~~~
 
-The ``m`` parameter is the number of observations per seasonal cycle, and is
+The ``m`` parameter relates to the number of observations per seasonal cycle, and is
 one that **must be known apriori**. Typically, ``m`` will correspond to some
 recurrent periodicity such as:
 

@@ -19,13 +19,14 @@ print(__doc__)
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
 import pmdarima as pm
+from pmdarima import model_selection
 import matplotlib.pyplot as plt
 import numpy as np
 
 # #############################################################################
 # Load the data and split it into separate pieces
 data = pm.datasets.load_lynx()
-train, test = data[:100], data[100:]
+train, test = model_selection.train_test_split(data, train_size=100)
 
 # #############################################################################
 # Fit with some validation (cv) samples

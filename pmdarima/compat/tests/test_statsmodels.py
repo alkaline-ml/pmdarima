@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-
 from pmdarima.compat.statsmodels import bind_df_model
 
 

@@ -4,8 +4,6 @@
 #
 # Wrapped functions
 
-from __future__ import absolute_import
-
 from statsmodels.tsa.stattools import acf as sm_acf, pacf as sm_pacf
 
 from functools import wraps

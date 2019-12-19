@@ -20,8 +20,6 @@ from .warnings import ModelFitWarning
 from ._context import AbstractContext, ContextType
 # Import as a namespace so we can mock
 from . import _auto_solvers as solvers
-# for python 3 compat
-from ..compat.python import xrange
 from ..compat.numpy import DTYPE
 
 __all__ = [
@@ -491,29 +489,6 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         if max_Q > 0:
             max_q = min(max_q, m - 1)
 
-    # generate the set of (p, q, P, Q) FIRST, since it is contingent
-    # on whether or not the user is interested in a seasonal ARIMA result.
-    # This will reduce the search space for non-seasonal ARIMA models.
-    # loop p, q. Make sure to loop at +1 interval,
-    # since max_{p|q} is inclusive.
-    if seasonal:
-        gen = (
-            ((p, d, q), (P, D, Q, m))
-            for p in xrange(start_p, max_p + 1)
-            for q in xrange(start_q, max_q + 1)
-            for P in xrange(start_P, max_P + 1)
-            for Q in xrange(start_Q, max_Q + 1)
-            if p + q + P + Q <= max_order
-        )
-    else:
-        # otherwise it's not seasonal, and we don't need the seasonal pieces
-        gen = (
-            ((p, d, q), (0, 0, 0, 0))
-            for p in xrange(start_p, max_p + 1)
-            for q in xrange(start_q, max_q + 1)
-            if p + q <= max_order
-        )
-
     if not stepwise:
 
         # validate max_order
@@ -523,13 +498,32 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             raise ValueError('max_order must be None or a positive '
                              'integer (>= 0)')
 
-        # alternatively, if the start_p and start_q supercede
-        # the max order, that's a failable offense...
-        if (not seasonal and start_p + start_q > max_order) or \
-                (seasonal and
-                 start_P + start_p + start_Q + start_q > max_order):
-            raise ValueError('If max_order is prescribed, it must '
-                             'exceed sum of starting orders')
+        # NOTE: pre-1.5.2, we started at start_p, start_q, etc. However, when
+        # using stepwise=FALSE in R, hyndman starts at 0. He only uses start_*
+        # when stepwise=TRUE.
+
+        # generate the set of (p, q, P, Q) FIRST, since it is contingent
+        # on whether or not the user is interested in a seasonal ARIMA result.
+        # This will reduce the search space for non-seasonal ARIMA models.
+        # loop p, q. Make sure to loop at +1 interval,
+        # since max_{p|q} is inclusive.
+        if seasonal:
+            gen = (
+                ((p, d, q), (P, D, Q, m))
+                for p in range(0, max_p + 1)
+                for q in range(0, max_q + 1)
+                for P in range(0, max_P + 1)
+                for Q in range(0, max_Q + 1)
+                if p + q + P + Q <= max_order
+            )
+        else:
+            # otherwise it's not seasonal and we don't need the seasonal pieces
+            gen = (
+                ((p, d, q), (0, 0, 0, 0))
+                for p in range(0, max_p + 1)
+                for q in range(0, max_q + 1)
+                if p + q <= max_order
+            )
 
         # if we are fitting a random search rather than an exhaustive one, we
         # will scramble up the generator (as a list) and only fit n_iter ARIMAs

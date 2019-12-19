@@ -4,8 +4,6 @@
 #
 # Patch backend for MPL
 
-from __future__ import absolute_import
-
 import sys
 import os
 

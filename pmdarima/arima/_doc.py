@@ -253,8 +253,8 @@ _AUTO_ARIMA_DOCSTR = \
     References
     ----------
     .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average
-    .. [2] R's auto-arima source code: http://bit.ly/2gOh5z2
-    .. [3] R's auto-arima documentation: http://bit.ly/2wbBvUN
+    .. [2] R's auto-arima source code: https://github.com/robjhyndman/forecast/blob/master/R/arima.R  # noqa
+    .. [3] R's auto-arima documentation: https://www.rdocumentation.org/packages/forecast  # noqa
     """
 
 _Y_DOCSTR = """

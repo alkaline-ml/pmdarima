@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
 from numpy.testing import assert_array_almost_equal
-from scipy import stats
-import pytest
 
 from pmdarima.preprocessing import LogEndogTransformer
 from pmdarima.preprocessing import BoxCoxEndogTransformer

@@ -47,6 +47,7 @@ Other versions
 
 Documentation for other release versions of ``pmdarima``:
 
+* `v1.5.2 <http://alkaline-ml.com/pmdarima/1.5.2>`_
 * `v1.5.1 <http://alkaline-ml.com/pmdarima/1.5.1>`_
 * `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0>`_
 * `v1.3.0 <http://alkaline-ml.com/pmdarima/1.3.0>`_
@@ -56,7 +57,7 @@ Documentation for other release versions of ``pmdarima``:
 * `v1.0.0 <http://alkaline-ml.com/pmdarima/1.0.0>`_
 * `v0.9.0 <http://alkaline-ml.com/pmdarima/0.9.0>`_
 
-Documentation for the bleeding edge (``develop`` branch) can also be found here:
+Documentation for the bleeding edge (``master`` branch) can also be found here:
 
 * `Bleeding edge <http://alkaline-ml.com/pmdarima/develop>`_
 
