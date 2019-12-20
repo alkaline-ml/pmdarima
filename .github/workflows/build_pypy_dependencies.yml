@@ -5,6 +5,7 @@ on:
     paths:
     - 'requirements.txt'
     - '.github/workflows/build_pypy_dependencies.yml'
+    - 'setup.py'
 
 jobs:
   build:
