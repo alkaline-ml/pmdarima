@@ -8,5 +8,5 @@ steps:
     displayName: Checking for VERSION file
 
   - bash: echo "Deploy placeholder"
-    condition: and(contains(variables['Build.SourceBranch'], 'refs/tags'), eq(variables['VERSION_EXISTS'], 'true'))
+    condition: and(eq(variables['VERSION_EXISTS'], 'true'), contains(variables['Build.SourceBranch'], 'refs/tags'))
     displayName: Deploying to conda
