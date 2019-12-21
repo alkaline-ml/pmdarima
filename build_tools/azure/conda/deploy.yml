@@ -7,6 +7,10 @@ steps:
       fi
     displayName: Checking for VERSION file
 
-  - bash: echo "Deploy placeholder"
-    condition: and(eq(variables['VERSION_EXISTS'], 'true'), contains(variables['Build.SourceBranch'], 'refs/tags'))
+  - bash: |
+      output_file=$(conda-build --output --python=$(python.version) conda/)
+      conda upload output_file
+#    condition: and(eq(variables['VERSION_EXISTS'], 'true'), contains(variables['Build.SourceBranch'], 'refs/tags'))
     displayName: Deploying to conda
+    env:
+      ANACONDA_API_TOKEN: $(anacondaToken)
