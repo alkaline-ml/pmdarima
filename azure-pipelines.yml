@@ -51,6 +51,7 @@ jobs:
     displayName: 'Setting Python version and system architecture'
 
   - template: build_tools/azure/conda/linux.yml
+  - template: build_tools/azure/conda/deploy.yml
 
 - job: Mac
 
@@ -75,6 +76,7 @@ jobs:
     displayName: 'Setting Python version and system architecture'
 
   - template: build_tools/azure/conda/mac.yml
+  - template: build_tools/azure/conda/deploy.yml
 
 - job: Windows
 
@@ -99,6 +101,7 @@ jobs:
     displayName: 'Setting Python version and system architecture'
 
   - template: build_tools/azure/conda/windows.yml
+  - template: build_tools/azure/conda/deploy.yml
 
 - job: test_tagging
 
