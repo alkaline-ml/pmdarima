@@ -8,8 +8,9 @@ steps:
     displayName: Checking for VERSION file
 
   - bash: |
+      # This looks like it is running `conda build` again, but it just returns the output file
       output_file=$(conda-build --output --python=$(python.version) conda/)
-      conda upload output_file
+      anaconda upload output_file
 #    condition: and(eq(variables['VERSION_EXISTS'], 'true'), contains(variables['Build.SourceBranch'], 'refs/tags'))
     displayName: Deploying to conda
     env:
