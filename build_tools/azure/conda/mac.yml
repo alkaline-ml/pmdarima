@@ -24,7 +24,10 @@ steps:
       python build_tools/azure/render_meta.py
     displayName: 'Rendering meta.yaml file'
 
-  - bash: conda-build --python=$(python.version) conda/
+  - bash: |
+      conda create --name build-env python=$(python.version) --file requirements.txt --yes
+      conda activate build-env
+      conda-build --python=$(python.version) conda/
     condition: ne(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Building and testing conda distribution'
 
