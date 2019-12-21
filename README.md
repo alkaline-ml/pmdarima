@@ -34,6 +34,8 @@ under the package name `pmdarima` and can be downloaded via `pip`:
 $ pip install pmdarima
 ```
 
+Conda distributions are also available for Windows (64-bit only), Mac and Linux and Python 3.6+
+
 
 ## Quickstart Examples
 
