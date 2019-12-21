@@ -1,6 +1,6 @@
 steps:
   - bash: |
-      if [ -f ${BUILD_SOURCESDIRECTORY}/pmdarima/VERSION ]; then
+      if [ -f $BUILD_SOURCESDIRECTORY/pmdarima/VERSION ]; then
         echo "##vso[task.setVariable variable=VERSION_EXISTS]true"
       fi
     displayName: Checking for VERSION file
