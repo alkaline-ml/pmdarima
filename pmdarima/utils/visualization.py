@@ -392,7 +392,7 @@ def tsdisplay(y, lag_max=50, figsize=(8, 6), title=None, bins=25,
 
     # ax2 is simply the histogram
     hist_kwargs = {} if not hist_kwargs else hist_kwargs
-    _ = ax2.hist(y, bins=bins, **hist_kwargs)
+    _ = ax2.hist(y, bins=bins, **hist_kwargs)  # noqa
     ax2.set_title("Frequency")
 
     fig.tight_layout()
