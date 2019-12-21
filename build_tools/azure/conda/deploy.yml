@@ -2,9 +2,11 @@ steps:
   - bash: |
       if [ -f $BUILD_SOURCESDIRECTORY/pmdarima/VERSION ]; then
         echo "##vso[task.setVariable variable=VERSION_EXISTS]true"
+      else
+         echo "##vso[task.setVariable variable=VERSION_EXISTS]false"
       fi
     displayName: Checking for VERSION file
 
   - bash: echo "Deploy placeholder"
-    condition: and(contains(variables['Build.SourceBranch'], 'refs/tags'), eq(variables.VERSION_EXISTS, 'true'))
+    condition: and(contains(variables['Build.SourceBranch'], 'refs/tags'), eq(variables['VERSION_EXISTS'], 'true'))
     displayName: Deploying to conda
