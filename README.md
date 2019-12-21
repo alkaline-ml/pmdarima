@@ -34,7 +34,11 @@ under the package name `pmdarima` and can be downloaded via `pip`:
 $ pip install pmdarima
 ```
 
-Conda distributions are also available for Windows (64-bit only), Mac and Linux and Python 3.6+
+Conda distributions are also available for Windows (64-bit only), Mac and Linux using Python 3.6 or Python 3.7:
+
+```bash
+$ conda install -c alkaline-ml pmdarima
+```
 
 
 ## Quickstart Examples
