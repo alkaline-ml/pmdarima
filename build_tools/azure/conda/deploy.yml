@@ -7,3 +7,4 @@ steps:
 
   - bash: echo "Deploy placeholder"
     condition: and(contains(variables['Build.SourceBranch'], 'refs/tags'), eq(variables.VERSION_EXISTS, 'true'))
+    displayName: Deploying to conda
