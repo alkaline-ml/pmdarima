@@ -9,17 +9,17 @@ steps:
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
-  - bash: |
-      conda create --name build-env python=$(python.version) --file requirements.txt --yes
-      source activate build-env
-      python -m pip install --upgrade pip
-      python -m pip install -r build_tools/build_requirements.txt
-    displayName: Creating build environment
-
-  - script: |
-      source activate build-env
-      make bdist_wheel
-    displayName: 'Building wheel file'
+#  - bash: |
+#      conda create --name build-env python=$(python.version) --file requirements.txt --yes
+#      source activate build-env
+#      python -m pip install --upgrade pip
+#      python -m pip install -r build_tools/build_requirements.txt
+#    displayName: Creating build environment
+#
+#  - script: |
+#      source activate build-env
+#      make bdist_wheel
+#    displayName: 'Building wheel file'
 
   - bash: |
       mkdir conda
@@ -28,6 +28,7 @@ steps:
     displayName: 'Rendering meta.yaml file'
 
   - bash: |
+      conda create --name build-env python=$(python.version) --file requirements.txt --yes
       source activate build-env
       conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
