@@ -1,5 +1,3 @@
-# All conda steps need to be sourced befor anything else.
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/anaconda?view=azure-devops&tabs=macos#run-pipeline-steps-in-an-anaconda-environment
 steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: 'Add conda to PATH'
@@ -7,16 +5,18 @@ steps:
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
-  - bash: |
-      conda create --name build-env python=$(python.version) --file requirements.txt --yes
-      source activate build-env
-      python -m pip install --upgrade pip
-      python -m pip install -r build_tools/build_requirements.txt
-    displayName: Creating build environment
+  - bash: type python
+    displayName: Check python version
+
+  - script: python -m pip install --upgrade pip
+    displayName: 'Updating pip'
 
   - script: |
-      source activate build-env
-      make bdist_wheel
+      python -m pip install -r build_tools/build_requirements.txt
+      make requirements
+    displayName: 'Installing requirements'
+
+  - script: make bdist_wheel
     displayName: 'Building wheel file'
 
   - bash: |
@@ -25,12 +25,9 @@ steps:
       python build_tools/azure/render_meta.py
     displayName: 'Rendering meta.yaml file'
 
-  - bash: |
-      source activate build-env
-      conda-build --python=$(python.version) conda/
+  - bash: conda-build --python=$(python.version) conda/
+    condition: ne(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Building and testing conda distribution'
 
-  - script: |
-      source activate build env
-      conda install --use-local pmdarima --yes
+  - script: conda install --use-local pmdarima --yes
     displayName: 'Testing conda installation'

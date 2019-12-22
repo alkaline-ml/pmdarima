@@ -1,6 +1,23 @@
-# All conda steps need to be sourced befor anything else.
+# All conda steps need to be sourced before anything else.
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/anaconda?view=azure-devops&tabs=macos#run-pipeline-steps-in-an-anaconda-environment
 steps:
+  - script: python -m pip install --upgrade pip
+    displayName: Updating pip
+
+  - script: |
+      python -m pip install -r build_tools/build_requirements.txt
+      make requirements
+    displayName: Installing requirements
+
+  - script: make bdist_wheel
+    displayName: 'Building wheel file'
+
+  - bash: |
+      mkdir conda
+      python -m pip install jinja2
+      python build_tools/azure/render_meta.py
+    displayName: 'Rendering meta.yaml file'
+
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
       sudo chown -R $USER $CONDA
@@ -8,24 +25,6 @@ steps:
 
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
-
-#  - bash: |
-#      conda create --name build-env python=$(python.version) --file requirements.txt --yes
-#      source activate build-env
-#      python -m pip install --upgrade pip
-#      python -m pip install -r build_tools/build_requirements.txt
-#    displayName: Creating build environment
-#
-#  - script: |
-#      source activate build-env
-#      make bdist_wheel
-#    displayName: 'Building wheel file'
-
-  - bash: |
-      mkdir conda
-      python -m pip install jinja2
-      python build_tools/azure/render_meta.py
-    displayName: 'Rendering meta.yaml file'
 
   - bash: |
       conda create --name build-env python=$(python.version) --file requirements.txt --yes
