@@ -12,7 +12,11 @@ steps:
       output_file=$(conda-build --output --python=$(python.version) conda/)
       # --skip just means skip existing versions
       anaconda upload --skip $output_file
-    condition: and(eq(variables['VERSION_EXISTS'], 'true'), contains(variables['Build.SourceBranch'], 'refs/tags'))
+    condition: and(
+      succedded(),
+      eq(variables['VERSION_EXISTS'], 'true'),
+      contains(variables['Build.SourceBranch'], 'refs/tags')
+    )
     displayName: Deploying to conda
     env:
       ANACONDA_API_TOKEN: $(anacondaToken)
