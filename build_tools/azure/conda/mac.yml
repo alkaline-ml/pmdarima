@@ -7,6 +7,9 @@ steps:
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
+  - bash: type python
+    displayName: Check python version
+
   - script: python -m pip install --upgrade pip
     displayName: 'Updating pip'
 
