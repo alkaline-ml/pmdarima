@@ -2,14 +2,11 @@ steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: 'Add conda to PATH'
 
+  - script: conda install python=$(python.version) --yes
+    displayName: 'Fixing conda Python version'
+
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
-
-  - bash: |
-      conda install python=$(python.version) --yes
-      type python
-      ls /usr/share/miniconda/bin
-    displayName: Check python version
 
   - script: python -m pip install --upgrade pip
     displayName: 'Updating pip'
