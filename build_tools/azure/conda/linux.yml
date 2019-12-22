@@ -6,7 +6,7 @@ steps:
     displayName: 'Installing conda-build and anaconda-client'
 
   - bash: |
-      conda install python=$(python.version)
+      conda install python=$(python.version) --yes
       type python
       ls /usr/share/miniconda/bin
     displayName: Check python version
