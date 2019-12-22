@@ -8,7 +8,29 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
-`v1.5.0 <http://alkaline-ml.com/pmdarima/1.5.0/>`_
+`v1.5.2 <http://alkaline-ml.com/pmdarima/1.5.2/>`_
+--------------------------------------------------
+
+* Added ``pmdarima.show_versions`` as a utility for issue filing
+
+* Fixed deprecation for ``check_is_fitted`` in newer versions of scikit-learn
+
+* Adds the :func:`pmdarima.datasets.load_sunspots` method with R's `sunspots <https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots>`_ dataset
+
+* Adds the :func:`pmdarima.model_selection.train_test_split` method
+
+* Fix bug where 1.5.1 documentation was labeled version "0.0.0".
+
+* Fix bug reported in `#271 <https://github.com/alkaline-ml/pmdarima/issues/271>`_, where
+  the use of ``threading.local`` to store stepwise context information may have broken
+  job schedulers.
+
+* Fix bug reported in `#272 <https://github.com/alkaline-ml/pmdarima/issues/272>`_, where
+  the new default value of ``max_order`` can cause a ``ValueError`` even in default cases
+  when ``stepwise=False``.
+
+
+`v1.5.1 <http://alkaline-ml.com/pmdarima/1.5.1/>`_
 --------------------------------------------------
 
 * No longer use statsmodels' ``ARIMA`` or ``ARMA`` class under the hood; only use

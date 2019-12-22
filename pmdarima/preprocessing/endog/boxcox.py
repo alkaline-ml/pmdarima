@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from scipy import stats
-from sklearn.utils.validation import check_is_fitted
 
 import numpy as np
 import warnings
+
+from pmdarima.compat import get_compatible_check_is_fitted
 
 from .base import BaseEndogTransformer
 
@@ -73,7 +74,7 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
 
         if lam1 is None:
             y, _ = self._check_y_exog(y, exogenous)
-            _, lam1 = stats.boxcox(y, lmbda=None, alpha=None)
+            _, lam1 = stats.boxcox(y + lam2, lmbda=None, alpha=None)
 
         self.lam1_ = lam1
         self.lam2_ = lam2
@@ -103,7 +104,7 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
         exogenous : array-like or None
             The exog array
         """
-        check_is_fitted(self, "lam1_")
+        get_compatible_check_is_fitted(self, "lam1_")
         lam1 = self.lam1_
         lam2 = self.lam2_
 
@@ -150,7 +151,7 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
         exogenous : array-like or None
             The inverse-transformed exogenous array
         """
-        check_is_fitted(self, "lam1_")
+        get_compatible_check_is_fitted(self, "lam1_")
         lam1 = self.lam1_
         lam2 = self.lam2_
 

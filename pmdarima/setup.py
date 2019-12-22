@@ -7,7 +7,7 @@
 import os
 import sys
 
-from pmdarima._build_utils import maybe_cythonize_extensions
+from pmdarima._build_utils import cythonize_extensions
 
 
 # DEFINE CONFIG
@@ -22,11 +22,9 @@ def configuration(parent_package='', top_path=None):
 
     # build utilities
     config.add_subpackage('__check_build')
-    config.add_subpackage('__check_build/tests')
     config.add_subpackage('_build_utils')
-    config.add_subpackage('_build_utils/tests')
 
-    # modules
+    # submodules that do NOT have their own setup.py. manually add their tests
     config.add_subpackage('compat')
     config.add_subpackage('compat/tests')
     config.add_subpackage('datasets')
@@ -34,7 +32,7 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('model_selection')
     config.add_subpackage('model_selection/tests')
 
-    # the following packages have cython, and their own setup.py files.
+    # the following packages have cython or their own setup.py files.
     config.add_subpackage('arima')
     config.add_subpackage('preprocessing')
     config.add_subpackage('utils')
@@ -42,12 +40,11 @@ def configuration(parent_package='', top_path=None):
     # add test directory
     config.add_subpackage('tests')
 
-    # TODO: scikit skips cythonizing on sdist release. should we?
     # Do cythonization, but only if this is not a release tarball, since the
     # C/C++ files are not necessarily forward compatible with future versions
     # of python.
-    # if 'sdist' not in sys.argv:
-    maybe_cythonize_extensions(top_path, config)
+    if 'sdist' not in sys.argv:
+        cythonize_extensions(top_path, config)
 
     return config
 

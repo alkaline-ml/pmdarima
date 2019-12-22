@@ -30,7 +30,7 @@ doc-requirements:
 	$(PYTHON) -m pip install -r build_tools/doc/doc_requirements.txt
 
 documentation: doc-requirements version
-	@make -C doc clean html EXAMPLES_PATTERN=example_*
+	@make -C doc clean html EXAMPLES_PATTERN=example_* PMDARIMA_VERSION=$(PMDARIMA_VERSION)
 
 requirements:
 	$(PYTHON) -m pip install -r requirements.txt
@@ -54,7 +54,7 @@ coverage-dependencies:
 	$(PYTHON) -m pip install coverage pytest-cov codecov
 
 test-lint: test-requirements
-	$(PYTHON) -m flake8 pmdarima --filename='*.py' --ignore E803,F401,F403,W293,W504
+	$(PYTHON) -m flake8 pmdarima --filename='*.py' --ignore F401,F403,W293,W504
 
 test-unit: test-requirements coverage-dependencies
 	$(PYTHON) -m pytest -v --durations=20 --cov-config .coveragerc --cov pmdarima -p no:logging --benchmark-skip

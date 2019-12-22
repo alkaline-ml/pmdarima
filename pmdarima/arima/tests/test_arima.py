@@ -463,25 +463,34 @@ def test_the_r_src():
         pytest.param(abc, {'D': -1}),
         pytest.param(abc, {'information_criterion': 'bad-value'}),
         pytest.param(abc, {'m': 0}),
-
-        # show that for starting values > max_order, we'll get an error
-        pytest.param(abc, {'start_p': 5,
-                           'start_q': 5,
-                           'seasonal': False,
-                           'max_order': 3,
-                           'stepwise': False}),
-        pytest.param(abc, {'start_p': 5,
-                           'start_q': 5,
-                           'start_P': 4,
-                           'start_Q': 3,
-                           'seasonal': True,
-                           'max_order': 3,
-                           'stepwise': False}),
     ]
 )
 def test_value_errors(endog, kwargs):
     with pytest.raises(ValueError):
         auto_arima(endog, **kwargs)
+
+
+@pytest.mark.parametrize(
+    'endog, max_order, kwargs', [
+        # show that for starting values > max_order, we can still get a fit
+        pytest.param(abc, 3, {'start_p': 5,
+                              'start_q': 5,
+                              'seasonal': False,
+                              'stepwise': False}),
+
+        pytest.param(abc, 3, {'start_p': 5,
+                              'start_q': 5,
+                              'start_P': 2,
+                              'start_Q': 2,
+                              'seasonal': True,
+                              'stepwise': False}),
+    ]
+)
+def test_valid_max_order_edges(endog, max_order, kwargs):
+    fit = auto_arima(endog, max_order=max_order, **kwargs)
+    order = fit.order
+    ssnal = fit.seasonal_order
+    assert (sum(order) + sum(ssnal[:3])) <= max_order
 
 
 def test_many_orders():

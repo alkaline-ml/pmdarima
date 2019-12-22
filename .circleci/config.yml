@@ -45,10 +45,10 @@ commands:
       pythonversion:
         type: string
     steps:
-      # Currently handled in Makefile, but if ever removed, need this:
-      # - run:
-      #     name: Create VERSION file
-      #     command: make version
+      # does not use makefile, since will require python>=3.5
+      - run:
+          name: Create VERSION file
+          command: python build_tools/get_tag.py
       - run:
           name: Build wheel file
           command: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
@@ -69,7 +69,7 @@ jobs:
   # For testing PyPy rather than CPython
   pypy:
     docker:
-      - image: tgsmith61591/pmdarima-circle-pypy-base:latest
+      - image: alkalineml/pmdarima-circle-pypy-base:latest
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -129,6 +129,15 @@ jobs:
     steps:
     - checkout
     - run: ./build_tools/circle/regression_testing.sh
+
+  # test we can install from sdist
+  test-install-from-sdist:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+    - checkout
+    - run: ./build_tools/circle/install_from_sdist.sh
 
   # Simple job that passes when all other tests have passed
   testing-passed:
@@ -207,7 +216,11 @@ workflows:
   version: 2
   pmdarima-pipeline:
     jobs:
-        # All testing jobs
+        # this is only run in tests
+        - test-version-tagging:
+            filters: *test-only-filters
+
+        # run on test and tag
         - pypy:
             filters: *test-filters
         - cpython35:
@@ -222,8 +235,8 @@ workflows:
             filters: *test-filters
         - regression-testing:
             filters: *test-filters
-        - test-version-tagging:
-            filters: *test-only-filters
+        - test-install-from-sdist:
+            filters: *test-filters
         - testing-passed:
             requires:
                 - pypy
@@ -232,6 +245,7 @@ workflows:
                 - cpython37
                 - test-linting
                 - regression-testing
+                - test-install-from-sdist
             filters: *test-filters
 
         # All deployment jobs

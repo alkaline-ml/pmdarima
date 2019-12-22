@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-
 from pmdarima.__check_build import raise_build_error
 
 import pytest

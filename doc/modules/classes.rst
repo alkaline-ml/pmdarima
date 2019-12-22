@@ -116,6 +116,7 @@ Dataset loading functions
     datasets.load_heartrate
     datasets.load_lynx
     datasets.load_msft
+    datasets.load_sunspots
     datasets.load_taylor
     datasets.load_wineind
     datasets.load_woolyrnq
@@ -157,8 +158,8 @@ for cross-validating time series models
     :no-members:
     :no-inherited-members:
 
-Cross validators
-----------------
+Cross validation & split utilities
+----------------------------------
 
 .. currentmodule:: pmdarima
 
@@ -176,6 +177,7 @@ Cross validators
     model_selection.check_cv
     model_selection.cross_validate
     model_selection.cross_val_score
+    model_selection.train_test_split
 
 
 .. _pipeline_ref:

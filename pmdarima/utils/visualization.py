@@ -4,13 +4,12 @@
 #
 # Plotting wrapper functions
 
-from __future__ import absolute_import
-
 from ..compat.pandas import plotting as pd_plotting
 from ..compat.matplotlib import get_compatible_pyplot
 
 from statsmodels.graphics import tsaplots
 
+import numpy as np
 import os
 
 # User may not have matplotlib
@@ -30,7 +29,8 @@ __all__ = [
     'autocorr_plot',
     'decomposed_plot',
     'plot_acf',
-    'plot_pacf'
+    'plot_pacf',
+    'tsdisplay',
 ]
 
 
@@ -60,15 +60,16 @@ def _show_or_return(obj, show):
 
 
 def decomposed_plot(decomposed_tuple, figure_kwargs=None, show=True):
-    """
-    Plot the decomposition of a time series.
+    """Plot the decomposition of a time series.
 
-    This includes the 'x', 'trend', 'seasonal', and 'random' components.
+    Plots the results of the time series decomposition in four plots:
+    the 'x', 'trend', 'seasonal', and 'random' components.
 
     Parameters
     ----------
-    decomposed_tuple : tuple
-        Tuple of series that consist of data, trend, seasonal, and random.
+    decomposed_tuple : tuple, namedtuple or iterable
+        Named tuple of series that consist of data, trend, seasonal, and
+        random. Should be the result of :func:`pmdarima.arima.decompose`.
 
     figure_kwargs : dict, optional (default=None)
         Optional dictionary of keyword arguments that are passed to figure.
@@ -82,7 +83,6 @@ def decomposed_plot(decomposed_tuple, figure_kwargs=None, show=True):
     This method will only show the plot if ``show=True`` (which is the default
     behavior). To simply get the axis back (say, to add to another canvas),
     use ``show=False``.
-
     """
 
     _err_for_no_mpl()
@@ -94,10 +94,14 @@ def decomposed_plot(decomposed_tuple, figure_kwargs=None, show=True):
     for ax in axes.flat:
         ax.set(ylabel=y_labels.pop(0))
 
-    axes[0].plot(decomposed_tuple.x)
-    axes[1].plot(decomposed_tuple.trend)
-    axes[2].plot(decomposed_tuple.seasonal)
-    axes[3].plot(decomposed_tuple.random)
+    # Unpack positionally so that user could pass as a tuple, if they have
+    # pre-computed...
+    x, trend, ssnl, rand = decomposed_tuple
+
+    axes[0].plot(x)
+    axes[1].plot(trend)
+    axes[2].plot(ssnl)
+    axes[3].plot(rand)
 
     return _show_or_return(axes, show)
 
@@ -305,3 +309,91 @@ def plot_pacf(series, ax=None, lags=None, alpha=None, method='yw',
         vlines_kwargs=vlines_kwargs, **kwargs)
 
     return _show_or_return(res, show)
+
+
+def tsdisplay(y, lag_max=50, figsize=(8, 6), title=None, bins=25,
+              series_kwargs=None, acf_kwargs=None, hist_kwargs=None,
+              show=True):
+    """Display the time series and some of its key statistics
+
+    The equivalent of R's ``forecast::tsdisplay``, showing the series, the
+    histogram and the ACF plot.
+
+    Parameters
+    ----------
+    y : array-like, shape=(n_samples,)
+        The series or numpy array for which to plot an auto-correlation.
+
+    lag_max : int, optional (default=50)
+        The number of lags for the ACF plot
+
+    figsize : tuple, optional (default=(8, 6))
+        The size of the figure
+
+    title : str, optional (default=None)
+        A title for the series, if any.
+
+    bins : int, optional (default=25)
+        The number of bins for the histogram
+
+    series_kwargs : dict or None, optional (default=None)
+        Keyword arguments to pass when plotting the series
+
+    acf_kwargs : dict or None, optional (default=None)
+        Keyword arguments to pass when plotting the ACF
+
+    hist_kwargs : dict or None, optional (default=None)
+        Keyword arguments to pass when plotting the histogram
+
+    show : bool, optional (default=True)
+        Whether to show the plot after it's been created. If not, will return
+        the plot as a Figure object instead.
+
+    Examples
+    --------
+    >>> import pmdarima as pm
+    >>> tsdisplay(pm.datasets.load_sunspots(), show=False)
+    <Figure size 800x600 with 3 Axes>
+
+    Returns
+    -------
+    plt : Figure or None
+        If ``show`` is True, does not return anything. If False, returns
+        the Figure object.
+    """
+
+    _err_for_no_mpl()
+    from matplotlib import gridspec
+
+    fig = mpl.figure(figsize=figsize)
+    gs = gridspec.GridSpec(4, 2)
+    ax0 = fig.add_subplot(gs[0:2, 0:])
+    ax1 = fig.add_subplot(gs[2:, 0])
+    ax2 = fig.add_subplot(gs[2:, 1])
+
+    # ax0 is simply the series itself
+    x0 = np.arange(y.shape[0])
+    xlabs = None
+    if hasattr(y, 'index'):
+        xlabs = y.index.tolist()
+        y = y.values
+    series_kwargs = {} if not series_kwargs else series_kwargs
+    ax0.plot(x0, y, **series_kwargs)
+    if title:
+        ax0.set_title(title)
+
+    if xlabs is not None:
+        # TODO: eventually would be nice to do some well spaced xticks
+        pass
+
+    # ax1 is the ACF, so we can just use our ACF plotting func
+    acf_kwargs = {} if not acf_kwargs else acf_kwargs
+    plot_acf(y, ax=ax1, show=False, title='ACF', lags=lag_max, **acf_kwargs)
+
+    # ax2 is simply the histogram
+    hist_kwargs = {} if not hist_kwargs else hist_kwargs
+    _ = ax2.hist(y, bins=bins, **hist_kwargs)  # noqa
+    ax2.set_title("Frequency")
+
+    fig.tight_layout()
+    return _show_or_return(fig, show)

@@ -3,18 +3,22 @@
 # Author: Krishna Sunkara (kpsunkara)
 #
 # Re-entrant, reusable context manager to store execution context. Introduced
-# in pmdarima 1.5.0 (see #221)
+# in pmdarima 1.5.0 (see #221), redesigned not to use thread locals in #273
+# (see #275 for context).
 
-import threading
 from abc import ABC, abstractmethod
 from enum import Enum
 import collections
 
-# thread local value to store the context info
-_ctx = threading.local()
-_ctx.store = {}
-
 __all__ = ['AbstractContext', 'ContextStore', 'ContextType']
+
+
+class _CtxSingleton:
+    """Singleton class to store context information"""
+    store = {}
+
+
+_ctx = _CtxSingleton()
 
 
 class ContextType(Enum):
@@ -30,9 +34,8 @@ class AbstractContext(ABC):
     """An abstract context manager to store execution context.
 
     A generic, re-entrant, reusable context manager to store
-    execution context in a threading.local instance. Has helper
-    methods to iterate over the context info and provide a
-    string representation of the context info.
+    execution context. Has helper methods to iterate over the context info
+    and provide a string representation of the context info.
     """
     def __init__(self, **kwargs):
         # remove None valued entries,
@@ -47,6 +50,7 @@ class AbstractContext(ABC):
         ContextStore._remove_context(self)
 
     def __getattr__(self, item):
+        """Lets us access, e.g., ``ctx.max_steps`` even if not in a context"""
         return self.props[item] if item in self.props else None
 
     def __contains__(self, item):
@@ -77,7 +81,7 @@ class AbstractContext(ABC):
 
     @abstractmethod
     def get_type(self):
-        return None
+        """Get the ContextType"""
 
 
 class _emptyContext(AbstractContext):
@@ -87,14 +91,15 @@ class _emptyContext(AbstractContext):
         super(_emptyContext, self).__init__()
 
     def get_type(self):
+        """Indicates we are not in a context manager"""
         return ContextType.EMPTY
 
 
 class ContextStore:
-    """A class to wrap access to threading.local() context store
+    """A class to wrap access to the global context store
 
-    This class hosts static methods to wrap access to and
-    encapsulate the threading.local() instance
+    This class hosts static methods to wrap access to and encapsulate the
+    singleton content store instance
     """
     @staticmethod
     def get_context(context_type):
@@ -107,7 +112,7 @@ class ContextStore:
 
         Returns
         -------
-        res: AbstractContext
+        res : AbstractContext
             An instance of AbstractContext subclass or None
         """
         if not isinstance(context_type, ContextType):
@@ -116,13 +121,25 @@ class ContextStore:
         if context_type in _ctx.store and len(_ctx.store[context_type]) > 0:
             return _ctx.store[context_type][-1]
 
+        # If not present
+        return None
+
     @staticmethod
     def get_or_default(context_type, default):
         """Returns most recent instance of given Context Type or default
 
-        :param context_type: Context Type to retrieve from the store
-        :param default: value to return in case given context does not exist
-        :return: an instance of AbstractContext subclass or default
+        Parameters
+        ----------
+        context_type : ContextType
+            Context type to retrieve from the store
+
+        default : AbstractContext
+            Value to return in case given context does not exist
+
+        Returns
+        -------
+        ctx : AbstractContext
+            An instance of AbstractContext subclass or default
         """
         ctx = ContextStore.get_context(context_type)
         return ctx if ctx else default
@@ -131,8 +148,15 @@ class ContextStore:
     def get_or_empty(context_type):
         """Returns recent instance of given Context Type or an empty context
 
-        :param context_type: Context Type to retrieve from the store
-        :return: an instance of AbstractContext subclass
+        Parameters
+        ----------
+        context_type : ContextType
+            Context type to retrieve from the store
+
+        Returns
+        -------
+        res : AbstractContext
+            An instance of AbstractContext subclass
         """
         return ContextStore.get_or_default(context_type, _emptyContext())
 
@@ -145,6 +169,9 @@ class ContextStore:
         if the given ctx is nested, merge parent context, to support
         following usage:
 
+        Examples
+        --------
+        >>> from pmdarima.arima import StepwiseContext, auto_arima
         >>> with StepwiseContext(max_steps=10):
         ...     with StepwiseContext(max_dur=30):
         ...         auto_arima(samp,...)

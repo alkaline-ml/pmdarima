@@ -22,6 +22,7 @@ steps:
   displayName: 'Running unit tests'
 
   # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
+  # This also implicitly runs `make version`, which -- if tagged -- gets the right version
 - script: make sdist
   displayName: 'Building source archive'
 
@@ -33,6 +34,9 @@ steps:
         echo "README rendered appropriately"
     fi
   displayName: 'Checking README compatibility'
+
+- bash: pip install dist/$(ls dist | grep tar)
+  displayName: 'Ensuring sdist can be installed'
 
   # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
 - script: python -m twine upload --skip-existing dist/pmdarima-*

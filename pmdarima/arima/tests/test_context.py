@@ -2,7 +2,11 @@
 
 from pmdarima.arima.auto import StepwiseContext, auto_arima
 from pmdarima.arima._context import ContextStore, ContextType
+from pmdarima.arima import _context as context_lib
 from pmdarima.datasets import load_lynx, load_wineind
+from unittest import mock
+import threading
+import collections
 import pytest
 
 lynx = load_lynx()
@@ -105,3 +109,31 @@ def test_add_get_remove_context_args():
 
     with pytest.raises(ValueError):
         ContextStore.get_context(None)
+
+
+def test_context_store_accessible_across_threads():
+    # Make sure it's completely empty by patching it
+    d = {}
+    with mock.patch('pmdarima.arima._context._ctx.store', d):
+
+        # pushes onto the Context Store
+        def push(n):
+            # n is the number of times this has been executed before. If > 0,
+            # assert there is a context there
+            if n > 0:
+                assert len(context_lib._ctx.store[ContextType.STEPWISE]) == n
+            else:
+                context_lib._ctx.store[ContextType.STEPWISE] = \
+                    collections.deque()
+
+            new_ctx = StepwiseContext()
+            context_lib._ctx.store[ContextType.STEPWISE].append(new_ctx)
+            assert len(context_lib._ctx.store[ContextType.STEPWISE]) == n + 1
+
+        for i in range(5):
+            t = threading.Thread(target=push, args=(i,))
+            t.start()
+            t.join(1)  # it shouldn't take even close to this time
+
+    # Assert the mock has lifted
+    assert context_lib._ctx.store is not d

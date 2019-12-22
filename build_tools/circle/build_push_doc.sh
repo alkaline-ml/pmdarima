@@ -11,6 +11,21 @@ if [[ ! -d pmdarima/__check_build ]]; then
     exit 3
 fi
 
+# The version is retrieved from the CIRCLE_TAG. If there is no version, we just
+# call it 0.0.0, since we won't be pushing anyways (not master and no tag)
+if [[ ! -z ${CIRCLE_TAG} ]]; then
+    # We should have the VERSION file on tags now since 'make documentation'
+    # gets it. If not, we use 0.0.0. There are two cases we ever deploy:
+    #   1. Master (where version is not used, as we use 'develop'
+    #   2. Tags (where version IS defined)
+    echo "On tag"
+    make version
+    version=`cat pmdarima/VERSION`
+else
+    echo "Not on tag, will use version=0.0.0"
+    version="0.0.0"
+fi
+
 # get the running branch
 # branch=$(git symbolic-ref --short HEAD)
 
@@ -18,7 +33,7 @@ fi
 # cd doc
 # make clean html EXAMPLES_PATTERN=example_*
 # cd ..
-make documentation
+make documentation PMDARIMA_VERSION=${version}
 
 # move the docs to the top-level directory, stash for checkout
 mv doc/_build/html ./
@@ -120,20 +135,6 @@ else
   # Move the HTML contents into the local dir
   mv html/* ./
   rm -r html/
-
-  # The version is retrieved from the GIT_TAG. If there is no version, we just
-  # call it 0.0.0, since we won't be pushing anyways (not master and no tag)
-  if [[ ! -z ${GIT_TAG} ]]; then
-    # We should have the VERSION file on tags now since 'make documentation' gets
-    # it. If not, we use 0.0.0. There are two cases we ever deploy:
-    #   1. Master (where version is not used, as we use 'develop'
-    #   2. Tags (where version IS defined)
-    echo "On tag, expecting VERSION file to have been created"
-    version=`cat pmdarima/VERSION`
-  else
-    echo "Not on tag, will use 0.0.0"
-    version="0.0.0"
-  fi
 
   echo ${version} > VERSION
   echo "New version: ${version}"

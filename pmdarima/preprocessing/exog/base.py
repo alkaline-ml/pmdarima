@@ -2,13 +2,12 @@
 
 import pandas as pd
 import numpy as np
-import six
 import abc
 
 from ..base import BaseTransformer
 
 
-class BaseExogTransformer(six.with_metaclass(abc.ABCMeta, BaseTransformer)):
+class BaseExogTransformer(BaseTransformer, metaclass=abc.ABCMeta):
     """A base class for exogenous array transformers"""
 
     def _check_y_exog(self, y, exog, null_allowed=False):
@@ -20,7 +19,7 @@ class BaseExogTransformer(six.with_metaclass(abc.ABCMeta, BaseTransformer)):
         return y, exog
 
 
-class BaseExogFeaturizer(six.with_metaclass(abc.ABCMeta, BaseExogTransformer)):
+class BaseExogFeaturizer(BaseExogTransformer, metaclass=abc.ABCMeta):
     """Exogenous transformers that create exog features from the endog array
 
     Parameters

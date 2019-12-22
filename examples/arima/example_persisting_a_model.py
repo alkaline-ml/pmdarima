@@ -16,13 +16,14 @@ print(__doc__)
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 
 import pmdarima as pm
+from pmdarima import model_selection
 import joblib  # for persistence
 import os
 
 # #############################################################################
 # Load the data and split it into separate pieces
 y = pm.datasets.load_wineind()
-train, test = y[:125], y[125:]
+train, test = model_selection.train_test_split(y, train_size=125)
 
 # Fit an ARIMA
 arima = pm.ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12))

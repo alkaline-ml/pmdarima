@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pmdarima.compat.pytest import pytest_error_str
+from pmdarima.model_selection import train_test_split
 from pmdarima.pipeline import Pipeline, _warn_for_deprecated
 from pmdarima.preprocessing import BoxCoxEndogTransformer, FourierFeaturizer
 from pmdarima.arima import ARIMA, AutoARIMA
@@ -13,8 +14,8 @@ rs = np.random.RandomState(42)
 wineind = load_wineind()
 xreg = rs.rand(wineind.shape[0], 2)
 
-train, test = wineind[:125], wineind[125:]
-x_train, x_test = xreg[:125], xreg[125:]
+train, test, x_train, x_test = train_test_split(
+    wineind, xreg, train_size=125)
 
 
 class TestIllegal:

@@ -5,11 +5,9 @@
 # A much more user-friendly wrapper to the statsmodels ARIMA.
 # Mimics the familiar sklearn interface.
 
-from __future__ import print_function, absolute_import, division
-
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
-from sklearn.utils.validation import check_is_fitted, check_array
+from sklearn.utils.validation import check_array
 
 from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 from statsmodels import api as sm
@@ -21,7 +19,7 @@ import os
 
 from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
-from ..compat.python import long
+from ..compat.sklearn import get_compatible_check_is_fitted
 from ..compat import statsmodels as sm_compat
 from ..utils import get_callable, if_has_delegate, is_iterable, check_endog, \
     check_exog
@@ -547,7 +545,7 @@ class ARIMA(BaseARIMA):
             The confidence intervals for the predictions. Only returned if
             ``return_conf_int`` is True.
         """
-        check_is_fitted(self, 'arima_res_')
+        get_compatible_check_is_fitted(self, 'arima_res_')
 
         # TODO: remove this, it's a compat check
         if kwargs.pop("typ", None):
@@ -618,9 +616,9 @@ class ARIMA(BaseARIMA):
             The confidence intervals for the forecasts. Only returned if
             ``return_conf_int`` is True.
         """
-        check_is_fitted(self, 'arima_res_')
-        if not isinstance(n_periods, (int, long)):
-            raise TypeError("n_periods must be an int or a long")
+        get_compatible_check_is_fitted(self, 'arima_res_')
+        if not isinstance(n_periods, int):
+            raise TypeError("n_periods must be an int")
 
         # if we fit with exog, make sure one was passed:
         exogenous = self._check_exog(exogenous)  # type: np.ndarray
@@ -755,7 +753,7 @@ class ARIMA(BaseARIMA):
         * Internally, this calls ``fit`` again using the OLD model parameters
           as the starting parameters for the new model's MLE computation.
         """
-        check_is_fitted(self, 'arima_res_')
+        get_compatible_check_is_fitted(self, 'arima_res_')
         model_res = self.arima_res_
 
         # Allow updating with a scalar if the user is just adding a single
