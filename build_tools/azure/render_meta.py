@@ -32,11 +32,12 @@ with open(str(REQUIREMENTS_FILE.resolve())) as file:
     requirements = [line.strip() for line in file.readlines()]
 
 # We build from source on windows, otherwise, we looks for a wheel
-if sys.platform != 'win32':
-    wheel = next(file for file in os.listdir(str(DIST_PATH.resolve()))
-                 if file.endswith('.whl'))
-else:
-    wheel = None
+# if sys.platform != 'win32':
+#     wheel = next(file for file in os.listdir(str(DIST_PATH.resolve()))
+#                  if file.endswith('.whl'))
+# else:
+#     wheel = None
+wheel = None
 
 # Numpy version is used for building
 numpy_version = next(package for package in requirements if 'numpy' in package)
