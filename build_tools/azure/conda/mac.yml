@@ -26,7 +26,7 @@ steps:
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
-  - bash: conda create --name build-env python=$(python.version) --file requirements.txt --yesconda init bash
+  - bash: conda create --name build-env python=$(python.version) --file requirements.txt --yes
     displayName: Creating build environment
 
   - bash: |
