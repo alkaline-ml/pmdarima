@@ -26,7 +26,6 @@ steps:
     displayName: 'Rendering meta.yaml file'
 
   - bash: conda-build --python=$(python.version) conda/
-    condition: ne(variables['Agent.OS'], 'Windows_NT')
     displayName: 'Building and testing conda distribution'
 
   - script: conda install --use-local pmdarima --yes

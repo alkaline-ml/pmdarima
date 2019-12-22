@@ -26,10 +26,12 @@ steps:
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
-  - powershell: |
-      conda create --name build-env python=$(python.version) --file requirements.txt --yes
-      call activate build-env
-      conda-build --python=$(python.version) conda/
+  - bash: conda create --name build-env python=$(python.version) --file requirements.txt --yes
+    displayName: Creating build environment
+
+  - bash: |
+      source activate build-env
+      conda-build --python $(python.version) conda/
     displayName: 'Building and testing conda distribution'
 
   - script: conda install --use-local pmdarima --yes
