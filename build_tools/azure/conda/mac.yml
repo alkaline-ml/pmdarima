@@ -1,0 +1,36 @@
+# All conda steps need to be sourced before anything else.
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/anaconda?view=azure-devops&tabs=macos#run-pipeline-steps-in-an-anaconda-environment
+steps:
+  - bash: |
+      echo "##vso[task.prependpath]$CONDA/bin"
+      sudo chown -R $USER $CONDA
+    displayName: 'Add conda to PATH'
+
+  - script: conda install python=$(python.version) --yes
+    displayName: 'Fixing conda Python version'
+
+  - script: conda install conda-build anaconda-client --yes
+    displayName: 'Installing conda-build and anaconda-client'
+
+  - script: python -m pip install --upgrade pip
+    displayName: 'Updating pip'
+
+  - script: |
+      python -m pip install -r build_tools/build_requirements.txt
+      make requirements
+    displayName: 'Installing requirements'
+
+  - script: make bdist_wheel
+    displayName: 'Building wheel file'
+
+  - bash: |
+      mkdir conda
+      python -m pip install jinja2
+      python build_tools/azure/render_meta.py
+    displayName: 'Rendering meta.yaml file'
+
+  - bash: conda-build --python=$(python.version) conda/
+    displayName: 'Building and testing conda distribution'
+
+  - script: conda install --use-local pmdarima --yes
+    displayName: 'Testing conda installation'
