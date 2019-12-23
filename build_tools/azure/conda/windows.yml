@@ -20,7 +20,7 @@ steps:
     displayName: 'Building and testing conda distribution'
 
   # Run pmdarima.show_versions() because I don't 100% trust the conda builder
-  # Have to cd .., because pmdarima doesn't like importing from own dir
+  # Have to cd .. because pmdarima doesn't like importing from own dir
   - bash: |
       cd ..
       conda install --use-local pmdarima --yes
