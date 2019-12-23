@@ -2,9 +2,6 @@ steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: 'Add conda to PATH'
 
-  - script: conda update conda --yes
-    displayName: 'Updating conda'
-
   - script: conda install python=$(python.version) --yes
     displayName: 'Fixing conda Python version'
 
