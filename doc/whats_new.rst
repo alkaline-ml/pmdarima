@@ -12,6 +12,8 @@ v0.8.1) will document the latest features.
 
 * Adds conda distributions as requested in `#173 <https://github.com/alkaline-ml/pmdarima/issues/173>`_
 
+* Adds Python 3.8 support as requested in `#199 <https://github.com/alkaline-ml/pmdarima/issues/199>`_
+
 
 `v1.5.2 <http://alkaline-ml.com/pmdarima/1.5.2/>`_
 --------------------------------------------------
