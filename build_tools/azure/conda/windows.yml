@@ -1,0 +1,22 @@
+steps:
+  - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
+    displayName: 'Add conda to PATH'
+
+  - script: conda install conda-build anaconda-client --yes
+    displayName: 'Installing conda-build and anaconda-client'
+
+  - bash: |
+      mkdir conda
+      python -m pip install jinja2
+      python build_tools/azure/render_meta.py
+    displayName: 'Rendering meta.yaml file'
+
+  - script: |
+      conda create --name build-env python=$(python.version) --file requirements.txt --yes
+      call activate build-env
+      conda-build --python=$(python.version) conda/
+    displayName: 'Building and testing conda distribution'
+
+  - script:
+      conda install --use-local pmdarima --yes
+    displayName: 'Testing conda installation'

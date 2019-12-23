@@ -10,7 +10,8 @@ v0.8.1) will document the latest features.
 `v1.5.3 <http://alkaline-ml.com/pmdarima/1.5.3/>`_
 --------------------------------------------------
 
-* Adds Python 3.8 support
+* Adds conda distributions
+
 
 `v1.5.2 <http://alkaline-ml.com/pmdarima/1.5.2/>`_
 --------------------------------------------------
@@ -89,8 +90,6 @@ v0.8.1) will document the latest features.
 * Added `decompose` function that is in parity with R's implementation,
   `decompose <https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose>`_,
   as requested in `#190 <https://github.com/alkaline-ml/pmdarima/issues/190>`_
-
-* Python 3.8 is now supported, as requested in `#199 <https://github.com/alkaline-ml/pmdarima/issues/199>`_
 
 `v1.4.0 <http://alkaline-ml.com/pmdarima/1.4.0/>`_
 --------------------------------------------------

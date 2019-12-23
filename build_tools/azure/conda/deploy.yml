@@ -1,0 +1,18 @@
+steps:
+  - bash: |
+      if [ -f $BUILD_SOURCESDIRECTORY/pmdarima/VERSION ]; then
+        echo "##vso[task.setvariable variable=VERSION_EXISTS]true"
+      else
+         echo "##vso[task.setvariable variable=VERSION_EXISTS]false"
+      fi
+    displayName: Checking for VERSION file
+
+  - bash: |
+      # This looks like it is running `conda build` again, but it just returns the output file
+      output_file=$(conda-build --output --python=$(python.version) conda/)
+      # --skip just means skip existing versions
+      anaconda upload --skip $output_file
+    condition: and(succeeded(), eq(variables['VERSION_EXISTS'], 'true'), contains(variables['Build.SourceBranch'], 'refs/tags'))
+    displayName: Deploying to conda
+    env:
+      ANACONDA_API_TOKEN: $(anacondaToken)

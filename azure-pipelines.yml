@@ -22,5 +22,94 @@ variables:
   # Read deployment variables from our secret group
   - group: deploy-vars
 
+# Our dependencies only support 64-bit 3.6+ for conda, so that is all we support
+# We split these into 3 groups because they are all slightly different (rather than adding a condition on every step)
+#  - Linux: Build wheel, then build conda from wheel
+#  - Mac: Requires sudo, then build wheel, then build conda from wheel
+#  - Windows: Build conda from source
 jobs:
-- template: build_tools/azure/jobs.yml
+- job: Linux
+
+  pool:
+    vmImage: 'ubuntu-18.04'
+
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+        architecture: 'x64'
+
+      Python37:
+        python.version: '3.7'
+        architecture: 'x64'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: '$(architecture)'
+    displayName: 'Setting Python version and system architecture'
+
+  - template: build_tools/azure/conda/linux.yml
+  - template: build_tools/azure/conda/deploy.yml
+
+- job: Mac
+
+  pool:
+    vmImage: 'macOS-10.14'
+
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+        architecture: 'x64'
+
+      Python37:
+        python.version: '3.7'
+        architecture: 'x64'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: '$(architecture)'
+    displayName: 'Setting Python version and system architecture'
+
+  - template: build_tools/azure/conda/mac.yml
+  - template: build_tools/azure/conda/deploy.yml
+
+- job: Windows
+
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+        architecture: 'x64'
+
+      Python37:
+        python.version: '3.7'
+        architecture: 'x64'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: '$(architecture)'
+    displayName: 'Setting Python version and system architecture'
+
+  - template: build_tools/azure/conda/windows.yml
+  - template: build_tools/azure/conda/deploy.yml
+
+- job: test_tagging
+
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  steps:
+  - bash: build_tools/azure/test_version_tagging.sh
+    # Only want to run this on branches/PRs. NOT tags
+    condition: not(contains(variables['Build.SourceBranch'], 'tags'))
+    displayName: 'Testing git tag logic'
