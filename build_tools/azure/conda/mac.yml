@@ -4,12 +4,6 @@ steps:
       sudo chown -R $USER $CONDA
     displayName: 'Add conda to PATH'
 
-  - script: conda install python=$(python.version) --yes
-    displayName: 'Fixing conda Python version'
-
-  - script: conda update --all --yes
-    displayName: 'Updating conda'
-
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
@@ -30,7 +24,12 @@ steps:
       python build_tools/azure/render_meta.py
     displayName: 'Rendering meta.yaml file'
 
-  - bash: conda-build --python=$(python.version) conda/
+  - bash: |
+      conda create --name build-env --yes
+      source activate build-env
+      conda install --yes python=$(python.version)
+      pip install -r requirements.txt
+      conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
 
   - script: conda install --use-local pmdarima --yes
