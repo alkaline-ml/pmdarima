@@ -1,10 +1,11 @@
-# All conda steps need to be sourced before anything else.
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/anaconda?view=azure-devops&tabs=macos#run-pipeline-steps-in-an-anaconda-environment
 steps:
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
       sudo chown -R $USER $CONDA
     displayName: 'Add conda to PATH'
+
+  - script: conda update conda
+    displayName: 'Updating conda'
 
   - script: conda install python=$(python.version) --yes
     displayName: 'Fixing conda Python version'
