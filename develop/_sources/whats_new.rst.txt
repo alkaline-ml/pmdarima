@@ -7,6 +7,11 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v1.5.3 <http://alkaline-ml.com/pmdarima/1.5.3/>`_
+--------------------------------------------------
+
+* Adds conda distributions
+
 
 `v1.5.2 <http://alkaline-ml.com/pmdarima/1.5.2/>`_
 --------------------------------------------------
