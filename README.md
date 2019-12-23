@@ -5,7 +5,7 @@
 [![Build Status](https://dev.azure.com/tgsmith61591gh/pmdarima/_apis/build/status/alkaline-ml.pmdarima?branchName=master)](https://dev.azure.com/tgsmith61591gh/pmdarima/_build/latest?definitionId=3&branchName=master)
 ![Github Actions Status](https://github.com/alkaline-ml/pmdarima/workflows/Mac%20and%20Windows%20Builds/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/alkaline-ml/pmdarima/branch/master/graph/badge.svg)](https://codecov.io/gh/alkaline-ml/pmdarima)
-![Supported versions](https://img.shields.io/badge/python-3.5,%203.6,%203.7-blue.svg)
+![Supported versions](https://img.shields.io/badge/python-3.5+-blue.svg)
 ![Downloads](https://img.shields.io/badge/dynamic/json?color=blue&label=downloads&query=%24.total&url=https%3A%2F%2Fstore.zapier.com%2Fapi%2Frecords%3Fsecret%3D1e061b29db6c4f15af01103d403b0237)
 ![Downloads/Week](https://img.shields.io/badge/dynamic/json?color=blue&label=downloads%2Fweek&query=%24.weekly&url=https%3A%2F%2Fstore.zapier.com%2Fapi%2Frecords%3Fsecret%3D1e061b29db6c4f15af01103d403b0237)
 
@@ -34,7 +34,7 @@ under the package name `pmdarima` and can be downloaded via `pip`:
 $ pip install pmdarima
 ```
 
-Conda distributions are also available for Windows (64-bit only), Mac and Linux using Python 3.6 or Python 3.7:
+Conda distributions are also available for Windows (64-bit only), Mac and Linux using Python 3.6+:
 
 ```bash
 $ conda install -c alkaline-ml pmdarima
