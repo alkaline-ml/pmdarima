@@ -68,11 +68,11 @@ jobs:
         run: python -m pip install --upgrade pip
         shell: bash
 
-      - name: Preinstalling Cython and scipy (Windows only)
+      - name: Preinstalling Cython and numpy (Windows only)
         if: startsWith(runner.os, 'Windows')
         run: |
           pip install "$(cat requirements.txt | grep Cython)"
-          pip install "$(cat requirements.txt | grep scipy)"
+          pip install "$(cat requirements.txt | grep numpy)"
         shell: bash
 
       - name: Installing requirements
