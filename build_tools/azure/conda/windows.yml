@@ -2,6 +2,11 @@ steps:
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     displayName: 'Add conda to PATH'
 
+  - script: |
+      conda update --yes conda
+      conda config --set pip_interop_enabled True
+    displayName: 'Updating conda'
+
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
@@ -17,11 +22,7 @@ steps:
       conda create --name build-env python=$(python.version) --yes
       source activate build-env
       conda install --yes "$(cat requirements.txt | grep numpy)" || pip install "$(cat requirements.txt | grep numpy)"
-      while read requirement; do
-        if [[ $requirement != *"numpy"* ]]; then
-          conda install --yes --freeze-installed "$requirement" || pip install "$requirement"
-        fi
-      done < requirements.txt
+      while read requirement; do conda install --yes "$requirement" || pip install "$requirement" done < requirements.txt
       conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
 
