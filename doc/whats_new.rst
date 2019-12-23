@@ -10,7 +10,7 @@ v0.8.1) will document the latest features.
 `v1.5.3 <http://alkaline-ml.com/pmdarima/1.5.3/>`_
 --------------------------------------------------
 
-* Adds conda distributions
+* Adds conda distributions as requested in `#173 <https://github.com/alkaline-ml/pmdarima/issues/173>`_
 
 
 `v1.5.2 <http://alkaline-ml.com/pmdarima/1.5.2/>`_
