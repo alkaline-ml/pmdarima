@@ -16,7 +16,7 @@ steps:
   - bash: |
       conda create --name build-env python=$(python.version) --yes
       source activate build-env
-      conda install "$(cat requirements.txt | grep numpy)" || pip install "$(cat requirements.txt | grep numpy)"
+      conda install --yes "$(cat requirements.txt | grep numpy)" || pip install "$(cat requirements.txt | grep numpy)"
       while read requirement; do conda install --yes "$requirement" || pip install "$requirement"; done < requirements.txt
       conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
