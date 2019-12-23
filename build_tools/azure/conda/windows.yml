@@ -19,7 +19,10 @@ steps:
       conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
 
-  - script: |
+  # Run pmdarima.show_versions() because I don't 100% trust the conda builder
+  # Have to cd .., because pmdarima doesn't like importing from own dir
+  - bash: |
+      cd ..
       conda install --use-local pmdarima --yes
       python -c "import pmdarima; pmdarima.show_versions()"
     displayName: 'Testing conda installation'
