@@ -43,6 +43,10 @@ jobs:
         python.version: '3.7'
         architecture: 'x64'
 
+      Python38:
+        python.version: '3.8'
+        architecture: 'x64'
+
   steps:
   - task: UsePythonVersion@0
     inputs:
@@ -68,6 +72,10 @@ jobs:
         python.version: '3.7'
         architecture: 'x64'
 
+      Python38:
+        python.version: '3.8'
+        architecture: 'x64'
+
   steps:
   - task: UsePythonVersion@0
     inputs:
@@ -91,6 +99,10 @@ jobs:
 
       Python37:
         python.version: '3.7'
+        architecture: 'x64'
+
+      Python38:
+        python.version: '3.8'
         architecture: 'x64'
 
   steps:
