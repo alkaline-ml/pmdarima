@@ -11,10 +11,13 @@ steps:
       python build_tools/azure/render_meta.py
     displayName: 'Rendering meta.yaml file'
 
+  # Some of our dependencies are not available from conda, so this let's us try conda first, then pip
+  # Numpy has to be install before anything or conda complains
   - bash: |
       conda create --name build-env python=$(python.version) --yes
       source activate build-env
-      while read requirement; do conda install --yes $requirement || pip install $requirement; done < requirements.txt
+      conda install "$(cat requirements.txt | grep numpy)" || pip install "$(cat requirements.txt | grep numpy)"
+      while read requirement; do conda install --yes "$requirement" || pip install "$requirement"; done < requirements.txt
       conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
 
