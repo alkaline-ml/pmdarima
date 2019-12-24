@@ -1,5 +1,3 @@
-# All conda steps need to be sourced before anything else.
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/anaconda?view=azure-devops&tabs=macos#run-pipeline-steps-in-an-anaconda-environment
 steps:
   - bash: |
       echo "##vso[task.prependpath]$CONDA/bin"
@@ -32,5 +30,10 @@ steps:
   - bash: conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
 
-  - script: conda install --use-local pmdarima --yes
+  # Run pmdarima.show_versions() because I don't 100% trust the conda builder
+  # Have to cd .. because pmdarima doesn't like importing from own dir
+  - bash: |
+      cd ..
+      conda install --use-local pmdarima --yes
+      python -c "import pmdarima; pmdarima.show_versions()"
     displayName: 'Testing conda installation'

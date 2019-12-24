@@ -11,12 +11,19 @@ steps:
       python build_tools/azure/render_meta.py
     displayName: 'Rendering meta.yaml file'
 
+  # A lot of our requirements don't exist on conda (scipy>1.3.3, for instance), so we pip install all of them
   - script: |
-      conda create --name build-env python=$(python.version) --file requirements.txt --yes
+      conda create --name build-env python=$(python.version) --yes
       call activate build-env
+      pip install -r requirements.txt
       conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
 
-  - script:
+  # Run pmdarima.show_versions() because I don't 100% trust the conda builder
+  # Have to cd .. because pmdarima doesn't like importing from own dir
+  - bash: |
+      source activate build-env
+      cd ..
       conda install --use-local pmdarima --yes
+      python -c "import pmdarima; pmdarima.show_versions()"
     displayName: 'Testing conda installation'

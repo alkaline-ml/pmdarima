@@ -96,6 +96,13 @@ jobs:
     steps:
     - make-unit-test
 
+  cpython38:
+    docker:
+      - image: python:3.8
+    working_directory: ~/pmdarima
+    steps:
+      - make-unit-test
+
   # For testing lint
   test-linting:
     docker:
@@ -179,6 +186,16 @@ jobs:
           pythonversion: "3.7"
       - deploy-to-pypi
 
+  deploy-cpython38-whl:
+    machine:
+      image: circleci/classic:latest
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - build-whl-file:
+          pythonversion: "3.8"
+      - deploy-to-pypi
+
   # For documentation deployment. You'll need the following environment vars
   # in your Circle CI settings, otherwise this will not work.
   #
@@ -211,6 +228,8 @@ workflows:
         - cpython36:
             filters: *test-filters
         - cpython37:
+            filters: *test-filters
+        - cpython38:
             filters: *test-filters
         - test-linting:
             filters: *test-filters
@@ -250,3 +269,7 @@ workflows:
             requires:
                 - deploy-doc
 
+        - deploy-cpython38-whl:
+            filters: *deploy-filters
+            requires:
+              - deploy-doc
