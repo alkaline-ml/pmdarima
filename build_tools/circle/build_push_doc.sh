@@ -160,7 +160,7 @@ ls -la
 # Finally, deploy the branch, but if it's a pull request or tag, don't!!
 if [[ ! -z ${CIRCLE_PULL_REQUEST} ]]; then
   echo "Will not deploy doc on pull request (${CIRCLE_PULL_REQUEST})"
-elif [[ ${CIRCLE_BRANCH} == "master" || (! -z ${CIRCLE_TAG} && ${CIRCLE_TAG} =~ '^v?[0-9]+\.[0-9]+\.?[0-9]*?[a-zA-Z]+[0-9]*$')]]; then
+elif [[ ${CIRCLE_BRANCH} == "master" || (! -z ${CIRCLE_TAG} && ${CIRCLE_TAG} =~ '^v?[0-9]+\.[0-9]+\.?[0-9]*?[a-zA-Z]+[0-9]*$') ]]; then
   echo "Deploying documentation"
   deploy
 else
