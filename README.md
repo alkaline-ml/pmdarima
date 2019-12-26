@@ -111,13 +111,17 @@ with open('model.pkl', 'rb') as pkl:
 
 ### Availability
 
-`pmdarima` is available on PyPi in pre-built Wheel files for Python 3.5, 3.6 & 3.7 for the following platforms:
+`pmdarima` is available on PyPi in pre-built Wheel files for Python 3.5+ for the following platforms:
 
 * Mac (64-bit)
 * Linux (64-bit manylinux)
 * Windows (32 & 64-bit)
   
-We have plans for the future for adding Conda distributions, as well.  
+It is also available on conda for Python 3.6 and 3.7 for the following platforms:
+
+* Mac (64-bit)
+* Linux (64-bit)
+* Windows (64-bit)
 
 If a wheel doesn't exist for your platform, you can still `pip install` and it
 will build from the source distribution tarball, however you'll need `cython>=0.29`
