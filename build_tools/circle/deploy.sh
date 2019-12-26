@@ -3,9 +3,15 @@
 set -e -x
 
 pip install twine wheel
-# If the VERSION ends with a letter (beta, rc, etc.), it is considered a test release
-if [[ $CIRCLE_TAG =~ '[a-zA-Z]'$ ]]; then
+# Check our VERSION. Basically, if it contains letters, it is a pre-release. Othewise,
+# it has to match X.Y or X.Y.Z
+#
+# On CircleCI, we look for the `v` at the beginning of the version, since we are looking at the tag
+if [[ $CIRCLE_TAG =~ '^v?[0-9]+\.[0-9]+\.?[0-9]*?[a-zA-Z]+[0-9]*$' ]]; then
   twine upload --skip-existing --repository-url https://test.pypi.org/legacy/ dist/pmdarima-*
-else
+elif [[ $CIRCLE_TAG =~ '^v?[0-9]+\.[0-9]+\.?[0-9]*?$' ]]; then
   twine upload --skip-existing dist/pmdarima-*
+else
+  echo 'Malformed tag'
+  exit 1
 fi
