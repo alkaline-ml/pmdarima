@@ -4,7 +4,7 @@ set -e -x
 
 pip install twine wheel
 
-# Check our VERSION. Basically, if it contains letters, it is a pre-release. Othewise,
+# Check our VERSION. Basically, if it contains letters, it is a pre-release. Otherwise,
 # it has to match X.Y or X.Y.Z
 #
 # On CircleCI, we look for the `v` at the beginning of the version, since we are looking at the tag
