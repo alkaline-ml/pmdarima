@@ -14,7 +14,7 @@ steps:
       # If the VERSION ends with a letter (beta, rc, etc.), it is considered a test release
       # --skip means skip existing (can be a little confusing)
       if [[ $(cat ${BUILD_SOURCESDIRECTORY}/pmdarima/VERSION) =~ '[a-zA-Z]'$ ]]; then
-        # Adding the `test` label maeans it doesn't who up unless you specifically
+        # Adding the `test` label means it doesn't who up unless you specifically
         # search for packages with the label `test`
         anaconda upload --label test --skip $output_file
       else
