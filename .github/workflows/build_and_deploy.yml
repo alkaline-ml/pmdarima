@@ -134,7 +134,12 @@ jobs:
       - name: Deploying to PyPI
         # Only deploy on tags and when VERSION file created
         if: github.event_name == 'tag' && success() && steps.version_check.version_exists == 'true'
-        run: python -m twine upload --skip-existing dist/pmdarima-*
+        run: |
+          if [[ $(cat ${GITHUB_WORKSPACE}/pmdarima/VERSION) =~ '[a-zA-Z]'$ ]]; then
+            python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
+          else
+            python -m twine upload --skip-existing dist/pmdarima-*
+          fi
         shell: bash
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
