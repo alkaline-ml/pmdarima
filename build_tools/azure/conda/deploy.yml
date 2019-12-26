@@ -16,7 +16,7 @@ steps:
       #
       # --skip means skip existing (can be a little confusing)
       if [[ $(cat ${BUILD_SOURCESDIRECTORY}/pmdarima/VERSION) =~ '^[0-9]+\.[0-9]+\.?[0-9]*?[a-zA-Z]+[0-9]*$' ]]; then
-        # Adding the `test` label means it doesn't who up unless you specifically
+        # Adding the `test` label means it doesn't show up unless you specifically
         # search for packages with the label `test`
         anaconda upload --label test --skip $output_file
       elif [[ $(cat ${BUILD_SOURCESDIRECTORY}/pmdarima/VERSION) =~ '^[0-9]+\.[0-9]+\.?[0-9]*?$' ]]; then
