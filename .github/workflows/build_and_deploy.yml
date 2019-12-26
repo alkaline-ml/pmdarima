@@ -130,11 +130,11 @@ jobs:
           fi
         shell: bash
 
-      # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
       - name: Deploying to PyPI
         # Only deploy on tags and when VERSION file created
         if: github.event_name == 'tag' && success() && steps.version_check.version_exists == 'true'
         run: |
+          # If the VERSION ends with a letter (beta, rc, etc.), it is considered a test release
           if [[ $(cat ${GITHUB_WORKSPACE}/pmdarima/VERSION) =~ '[a-zA-Z]'$ ]]; then
             python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
           else
