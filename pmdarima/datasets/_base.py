@@ -52,7 +52,7 @@ def fetch_from_web_or_disk(url, key, cache=True, dtype=DTYPE):
             if rslt is not None:
                 try:
                     r.release_conn()
-                except:
+                except Exception:
                     pass
 
         # if we got here, rslt is good. We need to save it to disk

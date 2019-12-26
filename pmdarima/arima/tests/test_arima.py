@@ -145,6 +145,23 @@ def test_predict_in_sample_exog(model, exog, confints):
         assert isinstance(res, np.ndarray)
 
 
+@pytest.mark.parametrize('as_pd', [True, False])
+def test_with_oob_and_exog(as_pd):
+    endog = hr
+    exog = np.random.RandomState(1).rand(hr.shape[0], 3)
+    if as_pd:
+        exog = pd.DataFrame.from_records(exog)
+        endog = pd.Series(hr)
+
+    arima = ARIMA(order=(2, 1, 2),
+                  suppress_warnings=True,
+                  scoring='mse',
+                  out_of_sample_size=10).fit(y=endog, exogenous=exog)
+
+    # show we can get oob score and preds
+    arima.oob()
+
+
 def test_with_oob():
     # show we can fit with CV (kinda)
     arima = ARIMA(order=(2, 1, 2),
@@ -616,9 +633,13 @@ def test_with_seasonality6():
     # FIXME: we get an IndexError from statsmodels summary if (0, 0, 0)
 
 
-def test_with_seasonality7():
+@pytest.mark.parametrize('as_series', [True, False])
+def test_with_seasonality7(as_series):
+    endog = wineind
+    if as_series:
+        endog = pd.Series(wineind)
     # show we can fit one with OOB as the criterion
-    auto_arima(wineind, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
+    auto_arima(endog, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
                start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
                out_of_sample_size=10, information_criterion='oob',
                suppress_warnings=True,
