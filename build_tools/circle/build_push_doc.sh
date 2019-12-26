@@ -13,7 +13,7 @@ fi
 
 # The version is retrieved from the CIRCLE_TAG. If there is no version, we just
 # call it 0.0.0, since we won't be pushing anyways (not master and no tag)
-if [[ ! -z ${CIRCLE_TAG} && ${CIRCLE_TAG} =~ '^v?[0-9]+\.[0-9]+\.?[0-9]*?[a-zA-Z]+[0-9]*$' ]]; then
+if [[ ! -z ${CIRCLE_TAG} ]]; then
     # We should have the VERSION file on tags now since 'make documentation'
     # gets it. If not, we use 0.0.0. There are two cases we ever deploy:
     #   1. Master (where version is not used, as we use 'develop'
@@ -160,7 +160,7 @@ ls -la
 # Finally, deploy the branch, but if it's a pull request or tag, don't!!
 if [[ ! -z ${CIRCLE_PULL_REQUEST} ]]; then
   echo "Will not deploy doc on pull request (${CIRCLE_PULL_REQUEST})"
-elif [[ ${CIRCLE_BRANCH} == "master" || ! -z ${CIRCLE_TAG} ]]; then
+elif [[ ${CIRCLE_BRANCH} == "master" || (! -z ${CIRCLE_TAG} && ${CIRCLE_TAG} =~ '^v?[0-9]+\.[0-9]+\.?[0-9]*?[a-zA-Z]+[0-9]*$')]]; then
   echo "Deploying documentation"
   deploy
 else
