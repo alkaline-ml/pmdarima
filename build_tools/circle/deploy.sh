@@ -3,6 +3,7 @@
 set -e -x
 
 pip install twine wheel
+
 # Check our VERSION. Basically, if it contains letters, it is a pre-release. Othewise,
 # it has to match X.Y or X.Y.Z
 #
