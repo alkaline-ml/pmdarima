@@ -1,6 +1,6 @@
 steps:
   - bash: |
-      if [ -f $BUILD_SOURCESDIRECTORY/pmdarima/VERSION ]; then
+      if [ -f ${BUILD_SOURCESDIRECTORY}/pmdarima/VERSION ]; then
         echo "##vso[task.setvariable variable=VERSION_EXISTS]true"
       else
          echo "##vso[task.setvariable variable=VERSION_EXISTS]false"
@@ -10,8 +10,16 @@ steps:
   - bash: |
       # This looks like it is running `conda build` again, but it just returns the output file
       output_file=$(conda-build --output --python=$(python.version) conda/)
-      # --skip just means skip existing versions
-      anaconda upload --skip $output_file
+
+      # If the VERSION ends with a letter (beta, rc, etc.), it is considered a test release
+      # --skip means skip existing (can be a little confusing)
+      if [[ $(cat ${BUILD_SOURCESDIRECTORY}/pmdarima/VERSION) =~ '[a-zA-Z]'$ ]]; then
+        # Adding the `test` label maeans it doesn't who up unless you specifically
+        # search for packages with the label `test`
+        anaconda upload --label test --skip $output_file
+      else
+        anaconda upload --skip $output_file
+      fi
     condition: and(succeeded(), eq(variables['VERSION_EXISTS'], 'true'), contains(variables['Build.SourceBranch'], 'refs/tags'))
     displayName: Deploying to conda
     env:
