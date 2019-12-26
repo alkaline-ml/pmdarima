@@ -2,6 +2,8 @@ name: Build PyPy Dependencies
 
 on:
   push:
+    branches-ignore:
+      - 'master'
     paths:
     - 'requirements.txt'
     - '.github/workflows/build_pypy_dependencies.yml'
