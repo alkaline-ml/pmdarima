@@ -15,7 +15,6 @@ jobs:
   build-and-deploy:
     name: Build and Deploy
     strategy:
-      fail-fast: false
       matrix:
         os: [windows-latest, macos-latest]
         python-version: ['3.5', '3.6', '3.7', '3.8']
@@ -130,11 +129,22 @@ jobs:
           fi
         shell: bash
 
-      # Use this one for testing: python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
       - name: Deploying to PyPI
         # Only deploy on tags and when VERSION file created
         if: github.event_name == 'tag' && success() && steps.version_check.version_exists == 'true'
-        run: python -m twine upload --skip-existing dist/pmdarima-*
+        run: |
+          # Check our VERSION. Basically, if it contains letters, it is a pre-release. Otherwise,
+          # it has to match X.Y or X.Y.Z
+          if [[ $(cat ${GITHUB_WORKSPACE}/pmdarima/VERSION) =~ '^[0-9]+\.[0-9]+\.?[0-9]*?[a-zA-Z]+[0-9]*$' ]]; then
+            echo 'Uploading to test pypi'
+            python -m twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/pmdarima-*
+          elif [[ $(cat ${GITHUB_WORKSPACE}/pmdarima/VERSION) =~ '^[0-9]+\.[0-9]+\.?[0-9]*?$' ]]; then
+            echo 'Uploading to production pypi'
+            python -m twine upload --skip-existing dist/pmdarima-*
+          else
+            echo 'Malformed tag'
+            exit 1
+          fi
         shell: bash
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
