@@ -113,6 +113,7 @@ Dataset loading functions
     datasets.load_airpassengers
     datasets.load_ausbeer
     datasets.load_austres
+    datasets.load_gasoline
     datasets.load_heartrate
     datasets.load_lynx
     datasets.load_msft
