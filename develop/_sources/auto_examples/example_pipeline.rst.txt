@@ -34,18 +34,19 @@ which greatly simplifies your life.
  Out::
 
     pmdarima version: 0.0.0
-    Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2819.938, BIC=2861.993, Fit time=0.501 seconds
-    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2942.625, BIC=2972.664, Fit time=0.014 seconds
-    Fit ARIMA: order=(1, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2867.514, BIC=2900.557, Fit time=0.054 seconds
-    Fit ARIMA: order=(0, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2830.585, BIC=2863.628, Fit time=0.232 seconds
-    Fit ARIMA: order=(0, 1, 0) seasonal_order=(0, 0, 0, 0); AIC=2940.651, BIC=2967.686, Fit time=0.089 seconds
-    Fit ARIMA: order=(1, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2817.535, BIC=2856.586, Fit time=0.312 seconds
-    Fit ARIMA: order=(0, 1, 2) seasonal_order=(0, 0, 0, 0); AIC=2814.904, BIC=2850.952, Fit time=0.288 seconds
-    Fit ARIMA: order=(0, 1, 3) seasonal_order=(0, 0, 0, 0); AIC=2818.704, BIC=2857.755, Fit time=0.406 seconds
-    Fit ARIMA: order=(1, 1, 1) seasonal_order=(0, 0, 0, 0); AIC=2817.377, BIC=2853.424, Fit time=0.270 seconds
-    Fit ARIMA: order=(1, 1, 3) seasonal_order=(0, 0, 0, 0); AIC=2818.290, BIC=2860.345, Fit time=0.482 seconds
+    Performing stepwise search to minimize aic
+    Fit ARIMA: (2, 1, 2)x(0, 0, 0, 0) (constant=True); AIC=2819.938, BIC=2861.993, Time=0.433 seconds
+    Fit ARIMA: (0, 1, 0)x(0, 0, 0, 0) (constant=True); AIC=2942.625, BIC=2972.664, Time=0.019 seconds
+    Fit ARIMA: (1, 1, 0)x(0, 0, 0, 0) (constant=True); AIC=2867.514, BIC=2900.557, Time=0.058 seconds
+    Fit ARIMA: (0, 1, 1)x(0, 0, 0, 0) (constant=True); AIC=2830.585, BIC=2863.628, Time=0.236 seconds
+    Fit ARIMA: (0, 1, 0)x(0, 0, 0, 0) (constant=False); AIC=2940.651, BIC=2967.686, Time=0.092 seconds
+    Fit ARIMA: (1, 1, 2)x(0, 0, 0, 0) (constant=True); AIC=2817.535, BIC=2856.586, Time=0.324 seconds
+    Fit ARIMA: (0, 1, 2)x(0, 0, 0, 0) (constant=True); AIC=2814.904, BIC=2850.952, Time=0.307 seconds
+    Fit ARIMA: (0, 1, 3)x(0, 0, 0, 0) (constant=True); AIC=2818.704, BIC=2857.755, Time=0.418 seconds
+    Fit ARIMA: (1, 1, 1)x(0, 0, 0, 0) (constant=True); AIC=2817.377, BIC=2853.424, Time=0.280 seconds
+    Fit ARIMA: (1, 1, 3)x(0, 0, 0, 0) (constant=True); AIC=2818.290, BIC=2860.345, Time=0.490 seconds
     Near non-invertible roots for order (1, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 1.000)
-    Total fit time: 2.654 seconds
+    Total fit time: 2.661 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12, prefix=None)),
                     ('arima',
@@ -161,7 +162,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  2.804 seconds)
+**Total running time of the script:** ( 0 minutes  2.825 seconds)
 
 
 

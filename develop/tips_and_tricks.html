@@ -221,9 +221,12 @@ models.</p>
 <h2>6.1. Understand <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code>, and <code class="docutils literal notranslate"><span class="pre">q</span></code><a class="headerlink" href="#understand-p-d-and-q" title="Permalink to this headline">¶</a></h2>
 <p>ARIMA models are made up of <a class="reference external" href="http://people.duke.edu/~rnau/411arim.htm">three different terms</a>:</p>
 <ul class="simple">
-<li><span class="math notranslate">\(p\)</span>: The order of the auto-regressive (AR) model (i.e., the number of lag observations)</li>
+<li><span class="math notranslate">\(p\)</span>: The order of the auto-regressive (AR) model (i.e., the number of lag observations).
+A time series is considered AR when previous values in the time series are very predictive of
+later values. An AR process will show a very gradual decrease in the ACF plot.</li>
 <li><span class="math notranslate">\(d\)</span>: The degree of differencing.</li>
-<li><span class="math notranslate">\(q\)</span>: The order of the moving average (MA) model. This is essentially the size of the “window” function over your time series data.</li>
+<li><span class="math notranslate">\(q\)</span>: The order of the moving average (MA) model. This is essentially the size of the “window”
+function over your time series data. An MA process is a linear combination of past errors.</li>
 </ul>
 <p>Often times, ARIMA models are written in the form <span class="math notranslate">\(ARIMA(p, d, q)\)</span>, where a
 model with no differencing term, e.g., <span class="math notranslate">\(ARIMA(1, 0, 12)\)</span>, would be an ARMA

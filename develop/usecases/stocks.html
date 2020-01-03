@@ -389,7 +389,7 @@ we could try both or allow <code class="docutils literal notranslate"><span clas
 However, we’re allowing our ARIMA models explore various values of <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">q</span></code>.
 After a few seconds, we arrive at the following solution:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">auto</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
-<span class="c1"># (1, 1, 1)</span>
+<span class="c1"># (0, 1, 0)</span>
 </pre></div>
 </div>
 <p>Where the TDS model was of order <code class="docutils literal notranslate"><span class="pre">(5,</span> <span class="pre">1,</span> <span class="pre">0)</span></code>, we ended up selecting a significantly
@@ -426,8 +426,8 @@ measure the error on the forecasts:</p>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean squared error: {mean_squared_error(y_test, forecasts)}&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SMAPE: {smape(y_test, forecasts)}&quot;</span><span class="p">)</span>
-<span class="c1"># Mean squared error: 0.3416473178248818</span>
-<span class="c1"># SMAPE: 0.981464018635346</span>
+<span class="c1"># Mean squared error: 0.34238951346274243</span>
+<span class="c1"># SMAPE: 0.9825490519101439</span>
 </pre></div>
 </div>
 <p>In the end, our model ended up way out-performing the TDS model!</p>
@@ -444,7 +444,7 @@ measure the error on the forecasts:</p>
 </tr>
 <tr class="row-even"><td>pmdarima</td>
 <td>0.342</td>
-<td>0.981 (!!)</td>
+<td>0.983 (!!)</td>
 </tr>
 <tr class="row-odd"><td>TDS article</td>
 <td>0.343</td>
@@ -499,7 +499,7 @@ measure the error on the forecasts:</p>
 <p>The TDS article provided an awesome example of how to use ARIMAs to predict stocks. Our
 hope in this example was to show how using pmdarima can simplify and enhance the models
 you build. If you’d like to run the already-setup notebook for yourself, head on over to
-the <a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/develop/examples/stock_market_example.ipynb">project’s Git page</a>
+the <a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/master/examples/stock_market_example.ipynb">project’s Git page</a>
 and grab the example notebook.</p>
 </div>
 </div>
