@@ -37,7 +37,7 @@ class BaseTransformer(BaseEstimator, TransformerMixin, metaclass=abc.ABCMeta):
 
         if exog is not None:
             exog = check_exog(
-                exog, dtype=DTYPE, copy=True, force_all_finite=False)
+                exog, dtype=None, copy=True, force_all_finite=False)
         return y, exog
 
     def fit_transform(self, y, exogenous=None, **transform_kwargs):

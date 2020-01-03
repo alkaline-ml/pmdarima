@@ -2,6 +2,7 @@
 from .airpassengers import *
 from .ausbeer import *
 from .austres import *
+from .gasoline import *
 from .heartrate import *
 from .lynx import *
 from .stocks import *

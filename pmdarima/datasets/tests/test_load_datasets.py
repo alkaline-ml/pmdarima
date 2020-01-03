@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from pmdarima.datasets import load_heartrate, load_lynx, load_wineind,\
-    load_woolyrnq, load_ausbeer, load_austres,\
+    load_woolyrnq, load_ausbeer, load_austres, load_gasoline, \
     load_airpassengers, load_taylor, load_msft, load_sunspots, _base as base
 
 import numpy as np
 import pandas as pd
+import os
+import shutil
 
+from numpy.testing import assert_array_equal
 import pytest
 
 
@@ -55,3 +58,35 @@ def test_df_loads(f):
 def test_load_from_gzip(f, cache_name):
     _inner_load(f)
     assert cache_name in base._cache
+
+
+@pytest.mark.parametrize(
+    'func, key', [
+        pytest.param(load_gasoline, 'gasoline'),
+    ]
+)
+def test_load_from_web(func, key):
+    # make sure there is no data folder
+    disk_cache_folder = base.get_data_cache_path()
+    if os.path.exists(disk_cache_folder):
+        shutil.rmtree(disk_cache_folder)
+
+    try:
+        # loads from web
+        y = func(as_series=False)
+
+        # show the key is in _cache
+        assert key in base._cache
+
+        # show exists on disk
+        assert os.path.exists(os.path.join(disk_cache_folder, key + '.csv.gz'))
+
+        # pop from cache so we can load it from disk
+        base._cache.pop(key)
+        x = func(as_series=True)  # true for coverage
+
+        assert_array_equal(y, x.values)
+
+    finally:
+        if os.path.exists(disk_cache_folder):
+            shutil.rmtree(disk_cache_folder)

@@ -75,7 +75,7 @@ As in the TDS example, we'll use :math:`0.8 * dataSize` as our training sample.
     from pmdarima.model_selection import train_test_split
 
     train_len = int(df.shape[0] * 0.8)
-    train_data, test_data = train_test_split(df, test_size=train_len)
+    train_data, test_data = train_test_split(df, train_size=train_len)
 
     y_train = train_data['Open'].values
     y_test = test_data['Open'].values
@@ -187,7 +187,7 @@ After a few seconds, we arrive at the following solution:
 .. code-block:: python
 
     print(auto.order)
-    # (1, 1, 1)
+    # (0, 1, 0)
 
 Where the TDS model was of order ``(5, 1, 0)``, we ended up selecting a significantly
 more simple model. But how does it perform?
@@ -227,15 +227,15 @@ measure the error on the forecasts:
 
     print(f"Mean squared error: {mean_squared_error(y_test, forecasts)}")
     print(f"SMAPE: {smape(y_test, forecasts)}")
-    # Mean squared error: 0.3416473178248818
-    # SMAPE: 0.981464018635346
+    # Mean squared error: 0.34238951346274243
+    # SMAPE: 0.9825490519101439
 
 In the end, our model ended up way out-performing the TDS model!
 
 ===========  =======  ==========
 Source       MSE      SMAPE
 -----------  -------  ----------
-pmdarima     0.342    0.981 (!!)
+pmdarima     0.342    0.983 (!!)
 TDS article  0.343    40.776
 ===========  =======  ==========
 
@@ -295,5 +295,5 @@ Conclusion
 The TDS article provided an awesome example of how to use ARIMAs to predict stocks. Our
 hope in this example was to show how using pmdarima can simplify and enhance the models
 you build. If you'd like to run the already-setup notebook for yourself, head on over to
-the `project's Git page <https://github.com/alkaline-ml/pmdarima/blob/develop/examples/stock_market_example.ipynb>`_
+the `project's Git page <https://github.com/alkaline-ml/pmdarima/blob/master/examples/stock_market_example.ipynb>`_
 and grab the example notebook.

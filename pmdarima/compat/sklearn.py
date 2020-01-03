@@ -10,7 +10,8 @@ import sklearn
 from sklearn.utils.validation import check_is_fitted
 
 __all__ = [
-    'get_compatible_check_is_fitted'
+    'get_compatible_check_is_fitted',
+    'safe_indexing',
 ]
 
 
@@ -47,3 +48,14 @@ def get_compatible_check_is_fitted(estimator, attributes=None):
 
     # Otherwise we use the attribute that was passed in regardless of version.
     return check_is_fitted(estimator=estimator, attributes=attributes)
+
+
+def safe_indexing(X, indices):
+    """Slice an array or dataframe. This is deprecated in sklearn"""
+    if hasattr(X, 'iloc'):
+        return X.iloc[indices]
+    # numpy:
+    if hasattr(X, 'ndim') and X.ndim == 2:
+        return X[indices, :]
+    # list or 1d array
+    return X[indices]

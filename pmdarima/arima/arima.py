@@ -19,7 +19,7 @@ import os
 
 from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
-from ..compat.sklearn import get_compatible_check_is_fitted
+from ..compat.sklearn import get_compatible_check_is_fitted, safe_indexing
 from ..compat import statsmodels as sm_compat
 from ..utils import get_callable, if_has_delegate, is_iterable, check_endog, \
     check_exog
@@ -458,8 +458,9 @@ class ARIMA(BaseARIMA):
 
             # This also means we have to address the exogenous matrix
             if exogenous is not None:
-                cv_exog = exogenous[-cv:, :]
-                exogenous = exogenous[:-cv, :]
+                n_exog = exogenous.shape[0]
+                cv_exog = safe_indexing(exogenous, slice(n_exog - cv, n_exog))
+                exogenous = safe_indexing(exogenous, slice(0, n_exog - cv))
 
         # Internal call
         self._fit(y, exogenous, **fit_args)

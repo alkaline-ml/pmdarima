@@ -84,7 +84,7 @@ class _StepwiseFitWrapper:
             information_criterion=information_criterion,
             **kwargs)
 
-        self.trace = trace
+        self.trace = int(trace)
         self.information_criterion = information_criterion
         self.with_intercept = with_intercept
 
@@ -127,16 +127,21 @@ class _StepwiseFitWrapper:
     def is_new_better(self, new_model):
         if self.bestfit is None:
             return True
-        elif new_model is None:
+        if new_model is None:
             return False
 
-        current_ic, new_ic = self.get_ic(self.bestfit), self.get_ic(new_model)
+        current_ic = self.get_ic(self.bestfit)
+        new_ic = self.get_ic(new_model)
 
         # check the roots of the new model, and set IC to inf if the roots are
         # near non-invertible
         new_ic = _root_test(new_model, new_ic, self.trace)
 
-        return new_ic < current_ic
+        better = new_ic < current_ic
+        if better and self.trace > 1:
+            print("New best model found (%.3f < %.3f)" % (new_ic, current_ic))
+
+        return better
 
     def _do_fit(self, order, seasonal_order, constant=None):
         """Do a fit and determine whether the model is better"""
@@ -172,6 +177,10 @@ class _StepwiseFitWrapper:
         P, D, Q, m = self.P, self.D, self.Q, self.m
         max_p, max_q = self.max_p, self.max_q
         max_P, max_Q = self.max_P, self.max_Q
+
+        if self.trace:
+            print("Performing stepwise search to minimize %s"
+                  % self.information_criterion)
 
         # fit a baseline p, d, q model
         self._do_fit((p, d, q), (P, D, Q, m))
@@ -310,18 +319,33 @@ class _StepwiseFitWrapper:
                     self._do_fit((p - 1, d, q + 1), (P, D, Q, m)):
                 q += 1
                 p -= 1
+                continue
 
             if q > 0 and p < max_p and \
                     self.k < self.max_k and \
                     self._do_fit((p + 1, d, q - 1), (P, D, Q, m)):
                 q -= 1
                 p += 1
+                continue
 
             if q < max_q and p < max_p and \
                     self.k < self.max_k and \
                     self._do_fit((p + 1, d, q + 1), (P, D, Q, m)):
                 q += 1
                 p += 1
+                continue
+
+        if self.trace > 1 and self.bestfit:
+            print("Final model order: (%i, %i, %i)x(%i, %i, %i, %i) "
+                  "(constant=%s)"
+                  % (self.bestfit.order[0],
+                     self.bestfit.order[1],
+                     self.bestfit.order[2],
+                     self.bestfit.seasonal_order[0],
+                     self.bestfit.seasonal_order[1],
+                     self.bestfit.seasonal_order[2],
+                     self.bestfit.seasonal_order[3],
+                     self.bestfit.with_intercept))
 
             # TODO: if (allowdrift || allowmean)
 
@@ -367,8 +391,10 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
 
     # do trace
     if trace:
-        print('Fit ARIMA: %s; AIC=%.3f, BIC=%.3f, Fit time=%.3f seconds'
+        print('Fit ARIMA: %s (constant=%s); AIC=%.3f, BIC=%.3f, '
+              'Time=%.3f seconds'
               % (_fmt_order_info(order, seasonal_order),
+                 with_intercept,
                  fit.aic() if fit is not None else np.nan,
                  fit.bic() if fit is not None else np.nan,
                  time.time() - start if fit is not None else np.nan))
@@ -377,9 +403,9 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
 
 
 def _fmt_order_info(order, seasonal_order):
-    return 'order=(%i, %i, %i)%s' \
+    return '(%i, %i, %i)x%s' \
            % (order[0], order[1], order[2],
-              ' seasonal_order=(%i, %i, %i, %i)'
+              '(%i, %i, %i, %i)'
               % (seasonal_order[0], seasonal_order[1],
                  seasonal_order[2], seasonal_order[3]))
 
