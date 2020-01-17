@@ -13,11 +13,4 @@ fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "${DIR}/get_version.sh"
 
-# get the running branch
-# branch=$(git symbolic-ref --short HEAD)
-
-# cd into docs, make them
-# cd doc
-# make clean html EXAMPLES_PATTERN=example_*
-# cd ..
 make documentation PMDARIMA_VERSION=${version}
