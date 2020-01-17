@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Ensure ${version} is set
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "${DIR}/get_version.sh"
