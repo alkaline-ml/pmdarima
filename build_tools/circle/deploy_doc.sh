@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Ensure ${version} is set
-source $(pwd)/get_version.sh
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${DIR}/get_version.sh"
 
 # move the docs to the top-level directory, stash for checkout
 mv doc/_build/html ./
@@ -104,7 +105,6 @@ else
   mv html/* ./
   rm -r html/
 
-  # shellcheck disable=SC2154
   echo "${version}" > VERSION
   echo "New version: ${version}"
 

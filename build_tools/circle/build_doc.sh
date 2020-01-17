@@ -10,7 +10,8 @@ if [[ ! -d pmdarima/__check_build ]]; then
 fi
 
 # Set ${version}
-source $(pwd)/get_version.sh
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${DIR}/get_version.sh"
 
 # get the running branch
 # branch=$(git symbolic-ref --short HEAD)
