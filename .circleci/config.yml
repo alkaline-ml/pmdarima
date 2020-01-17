@@ -223,6 +223,7 @@ jobs:
     working_directory: ~/pmdarima
     steps:
       - checkout
+      # Restore the workspace from build-doc
       - attach_workspace:
           at: doc/_build/html
       - run: ./build_tools/circle/deploy_doc.sh
