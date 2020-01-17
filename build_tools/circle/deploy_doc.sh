@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Ensure ${version} is set
-source get_version.sh
+source $(pwd)/get_version.sh
 
 # move the docs to the top-level directory, stash for checkout
 mv doc/_build/html ./
