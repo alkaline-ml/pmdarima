@@ -34,6 +34,3 @@ fi
 # make clean html EXAMPLES_PATTERN=example_*
 # cd ..
 make documentation PMDARIMA_VERSION=${version}
-
-# move the docs to the top-level directory to store for deploy step
-mv doc/_build/html ./
