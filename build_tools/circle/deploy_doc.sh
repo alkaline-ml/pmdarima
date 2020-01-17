@@ -1,18 +1,7 @@
 #!/bin/bash
 
-# Have to re-run this from build_doc.sh to ensure ${version} is defined
-if [[ -n ${CIRCLE_TAG} ]]; then
-    # We should have the VERSION file on tags now since 'make documentation'
-    # gets it. If not, we use 0.0.0. There are two cases we ever deploy:
-    #   1. Master (where version is not used, as we use 'develop'
-    #   2. Tags (where version IS defined)
-    echo "On tag"
-    make version
-    version=$(cat pmdarima/VERSION)
-else
-    echo "Not on tag, will use version=0.0.0"
-    version="0.0.0"
-fi
+# Ensure ${version} is set
+source get_version.sh
 
 # move the docs to the top-level directory, stash for checkout
 mv doc/_build/html ./
@@ -36,7 +25,7 @@ function deploy() {
 
   # We have to re-add the origin with the GH_TOKEN credentials
   git remote rm origin
-  git remote add origin https://${GH_NAME}:${GH_TOKEN}@github.com/alkaline-ml/pmdarima.git
+  git remote add origin "https://${GH_NAME}:${GH_TOKEN}@github.com/alkaline-ml/pmdarima.git"
 
   # NOW we should be able to push it
   git push origin gh-pages
@@ -104,7 +93,7 @@ else
   for artifact in "${artifacts[@]}"
   do
     echo "Removing ${artifact}"
-    rm -rf ${artifact}
+    rm -rf "${artifact}"
   done
 
   # Make a copy of the html directory. We'll rename this as the versioned dir
@@ -115,7 +104,8 @@ else
   mv html/* ./
   rm -r html/
 
-  echo ${version} > VERSION
+  # shellcheck disable=SC2154
+  echo "${version}" > VERSION
   echo "New version: ${version}"
 
   # If the version already has a folder, we have to fail out. We don't
@@ -128,7 +118,7 @@ else
 
   # If we get here, we can simply rename the html_copy dir as the versioned
   # directory to be deployed.
-  mv html_copy ${version}
+  mv html_copy "${version}"
 fi
 
 # we need this empty file for git not to try to build a jekyll project
