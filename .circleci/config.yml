@@ -103,6 +103,16 @@ jobs:
     steps:
       - make-unit-test
 
+  build-doc:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - run: make doc-requirements
+      - run: make install
+      - run: ./build_tools/circle/build_doc.sh
+
   # For testing lint
   test-linting:
     docker:
@@ -230,6 +240,8 @@ workflows:
         - cpython37:
             filters: *test-filters
         - cpython38:
+            filters: *test-filters
+        - build-doc:
             filters: *test-filters
         - test-linting:
             filters: *test-filters
