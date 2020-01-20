@@ -128,7 +128,7 @@ touch .nojekyll
 echo "Final directory contents:"
 ls -la
 
-# Finally, deploy the branch, but if it's a pull request don't!!
+# Finally, deploy the branch, but if it's a pull request, don't!!
 if [[ -n ${CIRCLE_PULL_REQUEST} ]]; then
   echo "Will not deploy doc on pull request (${CIRCLE_PULL_REQUEST})"
 elif [[ ${CIRCLE_BRANCH} == "master" || ( ( -n ${CIRCLE_TAG} ) && ( ${CIRCLE_TAG} =~ ^v?[0-9]+\.[0-9]+\.?[0-9]*$ ) ) ]]; then
