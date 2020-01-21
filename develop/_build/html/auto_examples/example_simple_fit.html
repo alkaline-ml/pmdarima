@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Simple auto_arima model &mdash; pmdarima 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pipelines with auto_arima" href="example_pipeline.html" />
+    <link rel="prev" title="Examples" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#id1">General examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Simple auto_arima model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example_pipeline.html">Pipelines with auto_arima</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#arima-examples">ARIMA examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#datasets-examples">Datasets examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#cross-validation-examples">Cross-validation examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#utils-examples">Utils examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Examples</a> &raquo;</li>
+        
+      <li>Simple auto_arima model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/auto_examples/example_simple_fit.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="simple-auto-arima-model">
+<span id="sphx-glr-auto-examples-example-simple-fit-py"></span><h1>Simple auto_arima model<a class="headerlink" href="#simple-auto-arima-model" title="Permalink to this headline">¶</a></h1>
+<p>This is a simple example of how we can fit an ARIMA model in several lines
+without knowing anything about our data or optimal hyper parameters.</p>
+<br/><img alt="../_images/sphx_glr_example_simple_fit_001.png" class="align-center" src="../_images/sphx_glr_example_simple_fit_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Performing</span> <span class="n">stepwise</span> <span class="n">search</span> <span class="n">to</span> <span class="n">minimize</span> <span class="n">aic</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2915.641</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2939.673</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.320</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">3049.597</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">3055.604</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.007</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2954.973</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2966.989</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.122</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2947.014</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2959.029</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.147</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">3047.612</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">3050.616</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.005</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2938.457</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2959.484</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.206</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2915.636</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2936.664</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.210</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2984.606</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">3002.630</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.120</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2915.168</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2939.200</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">2.084</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2917.256</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2944.291</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">2.471</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2924.379</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2945.407</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.132</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2911.007</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2932.034</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.372</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2911.505</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2929.528</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.326</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2912.933</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2936.965</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.385</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2911.904</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2932.932</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.283</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2919.168</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2937.192</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.733</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2927.636</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2945.660</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.280</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2912.748</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2936.780</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">2.095</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2954.725</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2969.745</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.294</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2914.169</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2935.197</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">2.227</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2915.130</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2942.165</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">2.580</span> <span class="n">seconds</span>
+<span class="n">Total</span> <span class="n">fit</span> <span class="n">time</span><span class="p">:</span> <span class="mf">20.421</span> <span class="n">seconds</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+
+<span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
+
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">model_selection</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="c1"># #############################################################################</span>
+<span class="c1"># Load the data and split it into separate pieces</span>
+<span class="n">data</span> <span class="o">=</span> <a href="../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="View documentation for pmdarima.datasets.load_wineind"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <a href="../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="View documentation for pmdarima.model_selection.train_test_split"><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+
+<span class="c1"># Fit a simple auto_arima model</span>
+<span class="n">arima</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                      <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                      <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="c1"># #############################################################################</span>
+<span class="c1"># Plot actual test vs. forecasts:</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">arima</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Actual test samples vs. forecasts&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  20.508 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../_downloads/example_simple_fit.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_simple_fit.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../_downloads/example_simple_fit.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_simple_fit.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="example_pipeline.html" class="btn btn-neutral float-right" title="Pipelines with auto_arima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.utils.diff &mdash; pmdarima 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pmdarima.utils.diff_inv" href="pmdarima.utils.diff_inv.html" />
+    <link rel="prev" title="pmdarima.utils.check_exog" href="pmdarima.utils.check_exog.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-metrics-time-series-metrics"><code class="docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>: Time-series metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-model-selection-cross-validation-classes"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>: Cross-validation classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../classes.html#array-helper-functions-metaestimators">Array helper functions &amp; metaestimators</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.acf.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.acf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.as_series.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.as_series</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.c.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.c</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.check_endog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_endog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.check_exog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_exog</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.diff_inv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff_inv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.if_has_delegate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.if_has_delegate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.is_iterable.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.is_iterable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.pacf.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.pacf</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../classes.html#plotting-utilities-wrappers">Plotting utilities &amp; wrappers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../classes.html">API Reference</a> &raquo;</li>
+        
+      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/generated/pmdarima.utils.diff.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pmdarima-utils-diff">
+<h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.diff<a class="headerlink" href="#pmdarima-utils-diff" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pmdarima.utils.diff">
+<code class="descclassname">pmdarima.utils.</code><code class="descname">diff</code><span class="sig-paren">(</span><em>x</em>, <em>lag=1</em>, <em>differences=1</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/4548e32/pmdarima/utils/array.py#L233"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Difference an array.</p>
+<p>A python implementation of the R <code class="docutils literal notranslate"><span class="pre">diff</span></code> function [1]. This computes lag
+differences from an array given a <code class="docutils literal notranslate"><span class="pre">lag</span></code> and <code class="docutils literal notranslate"><span class="pre">differencing</span></code> term.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">x</span></code> is a vector of length <span class="math notranslate">\(n\)</span>, <code class="docutils literal notranslate"><span class="pre">lag=1</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>,
+then the computed result is equal to the successive differences
+<code class="docutils literal notranslate"><span class="pre">x[lag:n]</span> <span class="pre">-</span> <span class="pre">x[:n-lag]</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array-like, shape=(n_samples, [n_features])</p>
+<blockquote>
+<div><p>The array to difference.</p>
+</div></blockquote>
+<p><strong>lag</strong> : int, optional (default=1)</p>
+<blockquote>
+<div><p>An integer &gt; 0 indicating which lag to use.</p>
+</div></blockquote>
+<p><strong>differences</strong> : int, optional (default=1)</p>
+<blockquote>
+<div><p>An integer &gt; 0 indicating the order of the difference.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>res</strong> : np.ndarray, shape=(n_samples, [n_features])</p>
+<blockquote class="last">
+<div><p>The result of the differenced arrays.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r89" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R89]</a></td><td><a class="reference external" href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html">https://stat.ethz.ch/R-manual/R-devel/library/base/html/diff.html</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Where <code class="docutils literal notranslate"><span class="pre">lag=1</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([ -6.,  -2.,   7.,  25.], dtype=float32)</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">lag=1</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=2</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">array([  4.,   9.,  18.], dtype=float32)</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">lag=3</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([ -1.,  30.], dtype=float32)</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">lag=6</span></code> (larger than the array is) and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([], dtype=float32)</span>
+</pre></div>
+</div>
+<p>For a 2d array with <code class="docutils literal notranslate"><span class="pre">lag=1</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">array([[ 1.,  1.,  1.],</span>
+<span class="go">       [ 1.,  1.,  1.]], dtype=float32)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="section" id="examples-using-pmdarima-utils-diff">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.utils.diff</span></code><a class="headerlink" href="#examples-using-pmdarima-utils-diff" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s array differencing, and how it&#x27;s used in conjunction..."><div class="figure" id="id2">
+<img alt="../../_images/sphx_glr_example_array_differencing_thumb.png" src="../../_images/sphx_glr_example_array_differencing_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/utils/example_array_differencing.html#sphx-glr-auto-examples-utils-example-array-differencing-py"><span class="std std-ref">Array differencing</span></a></span></p>
+</div>
+</div><div class="clearer"></div></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pmdarima.utils.diff_inv.html" class="btn btn-neutral float-right" title="pmdarima.utils.diff_inv" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pmdarima.utils.check_exog.html" class="btn btn-neutral float-left" title="pmdarima.utils.check_exog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
