@@ -6,16 +6,8 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "${DIR}/get_version.sh"
 
-# TODO: Remove after debugging
-ls -al
-ls -al doc/_build/html
-
 # move the docs to the top-level directory, stash for checkout
 mv doc/_build/html ./
-
-# TODO: Remove after debugging
-ls -al
-ls -al html
 
 # html/ will stay there actually...
 git stash
