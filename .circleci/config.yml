@@ -225,7 +225,7 @@ jobs:
       - checkout
       # Restore the workspace from build-doc
       - attach_workspace:
-          at: doc/_build/html
+          at: doc
       - run: ./build_tools/circle/deploy_doc.sh
 
 workflows:
