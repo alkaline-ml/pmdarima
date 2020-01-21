@@ -114,9 +114,9 @@ jobs:
       - run: ./build_tools/circle/build_doc.sh
       # This persists doc/_build/html for the deploy step
       - persist_to_workspace:
-          root: ~/pmdarima
+          root: doc
           paths:
-            - doc/_build/html
+            - _build/html
 
   # For testing lint
   test-linting:
