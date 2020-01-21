@@ -103,6 +103,21 @@ jobs:
     steps:
       - make-unit-test
 
+  build-doc:
+    docker:
+      - image: python:3.6
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - run: make doc-requirements
+      - run: make install
+      - run: ./build_tools/circle/build_doc.sh
+      # This persists doc/_build/html for the deploy step
+      - persist_to_workspace:
+          root: doc
+          paths:
+            - _build/html
+
   # For testing lint
   test-linting:
     docker:
@@ -204,13 +219,14 @@ jobs:
   # GH_TOKEN (the personal Git token with pushes enabled)
   deploy-doc:
     docker:
-    - image: python:3.6
+      - image: python:3.6
     working_directory: ~/pmdarima
     steps:
-    - checkout
-    - run: make doc-requirements
-    - run: make install
-    - run: ./build_tools/circle/build_push_doc.sh
+      - checkout
+      # Restore the workspace from build-doc
+      - attach_workspace:
+          at: doc/_build/html
+      - run: ./build_tools/circle/deploy_doc.sh
 
 workflows:
   version: 2
@@ -231,6 +247,8 @@ workflows:
             filters: *test-filters
         - cpython38:
             filters: *test-filters
+        - build-doc:
+            filters: *test-filters
         - test-linting:
             filters: *test-filters
         - regression-testing:
@@ -243,6 +261,8 @@ workflows:
                 - cpython35
                 - cpython36
                 - cpython37
+                - cpython38
+                - build-doc
                 - test-linting
                 - regression-testing
                 - test-install-from-sdist
@@ -251,6 +271,7 @@ workflows:
         # All deployment jobs
         - deploy-doc:
             requires:
+                - build-doc
                 - testing-passed
             filters: *test-filters
 

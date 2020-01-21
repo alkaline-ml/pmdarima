@@ -1,39 +1,10 @@
 #!/bin/bash
 
-# TODO: what if it's a tag? Will it fail since the version dir already exists?
-
 set -e
 
-# this is a hack, but we have to make sure we're only ever running this from
-# the top level of the package and not in the subdirectory...
-if [[ ! -d pmdarima/__check_build ]]; then
-    echo "This must be run from the pmdarima project directory"
-    exit 3
-fi
-
-# The version is retrieved from the CIRCLE_TAG. If there is no version, we just
-# call it 0.0.0, since we won't be pushing anyways (not master and no tag)
-if [[ ! -z ${CIRCLE_TAG} ]]; then
-    # We should have the VERSION file on tags now since 'make documentation'
-    # gets it. If not, we use 0.0.0. There are two cases we ever deploy:
-    #   1. Master (where version is not used, as we use 'develop'
-    #   2. Tags (where version IS defined)
-    echo "On tag"
-    make version
-    version=`cat pmdarima/VERSION`
-else
-    echo "Not on tag, will use version=0.0.0"
-    version="0.0.0"
-fi
-
-# get the running branch
-# branch=$(git symbolic-ref --short HEAD)
-
-# cd into docs, make them
-# cd doc
-# make clean html EXAMPLES_PATTERN=example_*
-# cd ..
-make documentation PMDARIMA_VERSION=${version}
+# Ensure ${version} is set
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${DIR}/get_version.sh"
 
 # move the docs to the top-level directory, stash for checkout
 mv doc/_build/html ./
@@ -57,7 +28,7 @@ function deploy() {
 
   # We have to re-add the origin with the GH_TOKEN credentials
   git remote rm origin
-  git remote add origin https://${GH_NAME}:${GH_TOKEN}@github.com/alkaline-ml/pmdarima.git
+  git remote add origin "https://${GH_NAME}:${GH_TOKEN}@github.com/alkaline-ml/pmdarima.git"
 
   # NOW we should be able to push it
   git push origin gh-pages
@@ -88,7 +59,7 @@ declare -a leftover=("benchmarks"
 for left in "${leftover[@]}"
 do
   echo "Removing ${left}"
-  rm -rf ${left} || echo "${left} does not exist"
+  rm -rf "${left}" || echo "${left} does not exist"
 done
 
 # If it's master, we can simply rename the "html" directory as the
@@ -125,7 +96,7 @@ else
   for artifact in "${artifacts[@]}"
   do
     echo "Removing ${artifact}"
-    rm -rf ${artifact}
+    rm -rf "${artifact}"
   done
 
   # Make a copy of the html directory. We'll rename this as the versioned dir
@@ -136,7 +107,7 @@ else
   mv html/* ./
   rm -r html/
 
-  echo ${version} > VERSION
+  echo "${version}" > VERSION
   echo "New version: ${version}"
 
   # If the version already has a folder, we have to fail out. We don't
@@ -149,7 +120,7 @@ else
 
   # If we get here, we can simply rename the html_copy dir as the versioned
   # directory to be deployed.
-  mv html_copy ${version}
+  mv html_copy "${version}"
 fi
 
 # we need this empty file for git not to try to build a jekyll project
@@ -157,12 +128,12 @@ touch .nojekyll
 echo "Final directory contents:"
 ls -la
 
-# Finally, deploy the branch, but if it's a pull request or tag, don't!!
-if [[ ! -z ${CIRCLE_PULL_REQUEST} ]]; then
+# Finally, deploy the branch, but if it's a pull request, don't!!
+if [[ -n ${CIRCLE_PULL_REQUEST} ]]; then
   echo "Will not deploy doc on pull request (${CIRCLE_PULL_REQUEST})"
-elif [[ ${CIRCLE_BRANCH} == "master" || ((! -z ${CIRCLE_TAG}) && (${CIRCLE_TAG} =~ '^v?[0-9]+\.[0-9]+\.?[0-9]*?[a-zA-Z]+[0-9]*$')) ]]; then
+elif [[ ${CIRCLE_BRANCH} == "master" || ( ( -n ${CIRCLE_TAG} ) && ( ${CIRCLE_TAG} =~ ^v?[0-9]+\.[0-9]+\.?[0-9]*$ ) ) ]]; then
   echo "Deploying documentation"
   deploy
 else
-  echo "Not on master or tag. Will not deploy doc"
+  echo "Not on master or production tag. Will not deploy doc"
 fi
