@@ -224,8 +224,10 @@ jobs:
     steps:
       - checkout
       # Restore the workspace from build-doc
+      # Circle is a little confusing -- we only supply the root from the persist step
+      # https://circleci.com/docs/2.0/workflows/#using-workspaces-to-share-data-among-jobs
       - attach_workspace:
-          at: doc/_build/html
+          at: doc
       - run: ./build_tools/circle/deploy_doc.sh
 
 workflows:
