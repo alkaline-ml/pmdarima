@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.datasets.load_lynx &mdash; pmdarima 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pmdarima.datasets.load_msft" href="pmdarima.datasets.load_msft.html" />
+    <link rel="prev" title="pmdarima.datasets.load_heartrate" href="pmdarima.datasets.load_heartrate.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../classes.html#dataset-loading-functions">Dataset loading functions</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_airpassengers.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_airpassengers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_ausbeer.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_ausbeer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_austres.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_austres</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_gasoline.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_gasoline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_heartrate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_heartrate</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_lynx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_msft.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_msft</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_sunspots.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_sunspots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_taylor.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_taylor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_wineind.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_wineind</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_woolyrnq.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_woolyrnq</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-metrics-time-series-metrics"><code class="docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>: Time-series metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-model-selection-cross-validation-classes"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>: Cross-validation classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../classes.html">API Reference</a> &raquo;</li>
+        
+      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_lynx</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/generated/pmdarima.datasets.load_lynx.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pmdarima-datasets-load-lynx">
+<h1><a class="reference internal" href="../classes.html#module-pmdarima.datasets" title="pmdarima.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code></a>.load_lynx<a class="headerlink" href="#pmdarima-datasets-load-lynx" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pmdarima.datasets.load_lynx">
+<code class="descclassname">pmdarima.datasets.</code><code class="descname">load_lynx</code><span class="sig-paren">(</span><em>as_series=False</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/b5a75f2/pmdarima/datasets/lynx.py#L17"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/lynx.html#load_lynx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.datasets.load_lynx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Annual numbers of lynx trappings for 1821–1934 in Canada.</p>
+<p>This time-series records the number of skins of predators (lynx) that were
+collected over several years by the Hudson’s Bay Company. The dataset was
+taken from Brockwell &amp; Davis (1991) and appears to be the series
+considered by Campbell &amp; Walker (1977).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>as_series</strong> : bool, optional (default=False)</p>
+<blockquote>
+<div><p>Whether to return a Pandas series. If True, the index will be set to
+the observed years. If False, will return a 1d numpy array.</p>
+</div></blockquote>
+<p><strong>dtype</strong> : type, optional (default=np.float64)</p>
+<blockquote>
+<div><p>The type to return for the array. Default is np.float64, which is used
+throughout the package as the default type.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lynx</strong> : array-like, shape=(n_samples,)</p>
+<blockquote class="last">
+<div><p>The lynx dataset. There are 114 observations.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is annual data and not seasonal in nature (i.e., <span class="math notranslate">\(m=1\)</span>)</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r75" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R75]</a></td><td>Brockwell, P. J. and Davis, R. A. (1991)
+Time Series and Forecasting Methods. Second edition.
+Springer. Series G (page 557).</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r76" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R76]</a></td><td><a class="reference external" href="https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/lynx.html">https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/lynx.html</a>  # noqa: E501</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_lynx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">load_lynx</span><span class="p">()</span>
+<span class="go">array([ 269,  321,  585,  871, 1475, 2821, 3928, 5943, 4950, 2577,  523,</span>
+<span class="go">         98,  184,  279,  409, 2285, 2685, 3409, 1824,  409,  151,   45,</span>
+<span class="go">         68,  213,  546, 1033, 2129, 2536,  957,  361,  377,  225,  360,</span>
+<span class="go">        731, 1638, 2725, 2871, 2119,  684,  299,  236,  245,  552, 1623,</span>
+<span class="go">       3311, 6721, 4254,  687,  255,  473,  358,  784, 1594, 1676, 2251,</span>
+<span class="go">       1426,  756,  299,  201,  229,  469,  736, 2042, 2811, 4431, 2511,</span>
+<span class="go">        389,   73,   39,   49,   59,  188,  377, 1292, 4031, 3495,  587,</span>
+<span class="go">        105,  153,  387,  758, 1307, 3465, 6991, 6313, 3794, 1836,  345,</span>
+<span class="go">        382,  808, 1388, 2713, 3800, 3091, 2985, 3790,  674,   81,   80,</span>
+<span class="go">        108,  229,  399, 1132, 2432, 3574, 2935, 1537,  529,  485,  662,</span>
+<span class="go">       1000, 1590, 2657, 3396])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_lynx</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">1821     269</span>
+<span class="go">1822     321</span>
+<span class="go">1823     585</span>
+<span class="go">1824     871</span>
+<span class="go">1825    1475</span>
+<span class="go">dtype: int64</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="section" id="examples-using-pmdarima-datasets-load-lynx">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.datasets.load_lynx</span></code><a class="headerlink" href="#examples-using-pmdarima-datasets-load-lynx" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the ``auto_arima`` function to select an optimal time..."><div class="figure" id="id3">
+<img alt="../../_images/sphx_glr_example_auto_arima_thumb.png" src="../../_images/sphx_glr_example_auto_arima_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/arima/example_auto_arima.html#sphx-glr-auto-examples-arima-example-auto-arima-py"><span class="std std-ref">Fitting an auto_arima model</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forec..."><div class="figure" id="id4">
+<img alt="../../_images/sphx_glr_example_add_new_samples_thumb.png" src="../../_images/sphx_glr_example_add_new_samples_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/arima/example_add_new_samples.html#sphx-glr-auto-examples-arima-example-add-new-samples-py"><span class="std std-ref">Adding new observations to your model</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s built-in toy datasets that can be used for benchmark..."><div class="figure" id="id5">
+<img alt="../../_images/sphx_glr_example_load_data_thumb.png" src="../../_images/sphx_glr_example_load_data_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/datasets/example_load_data.html#sphx-glr-auto-examples-datasets-example-load-data-py"><span class="std std-ref">Dataset loading</span></a></span></p>
+</div>
+</div><div class="clearer"></div></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pmdarima.datasets.load_msft.html" class="btn btn-neutral float-right" title="pmdarima.datasets.load_msft" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pmdarima.datasets.load_heartrate.html" class="btn btn-neutral float-left" title="pmdarima.datasets.load_heartrate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

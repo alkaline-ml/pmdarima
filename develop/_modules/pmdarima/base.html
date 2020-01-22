@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.base &mdash; pmdarima 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pmdarima.base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pmdarima.base</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># Base classes and interfaces</span>
+
+<span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span>
+
+
+<span class="k">class</span> <span class="nc">BaseARIMA</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A base ARIMA class&quot;&quot;&quot;</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit an ARIMA model&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit an ARIMA to a vector, ``y``, of observations with an</span>
+<span class="sd">        optional matrix of ``exogenous`` variables, and then generate</span>
+<span class="sd">        predictions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or iterable, shape=(n_samples,)</span>
+<span class="sd">            The time-series to which to fit the ``ARIMA`` estimator. This may</span>
+<span class="sd">            either be a Pandas ``Series`` object (statsmodels can internally</span>
+<span class="sd">            use the dates in the index), or a numpy array. This should be a</span>
+<span class="sd">            one-dimensional array of floats, and should not contain any</span>
+<span class="sd">            ``np.nan`` or ``np.inf`` values.</span>
+
+<span class="sd">        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">            An optional 2-d array of exogenous variables. If provided, these</span>
+<span class="sd">            variables are used as additional features in the regression</span>
+<span class="sd">            operation. This should not include a constant or trend. Note that</span>
+<span class="sd">            if an ``ARIMA`` is fit on exogenous features, it must be provided</span>
+<span class="sd">            exogenous features for making predictions.</span>
+
+<span class="sd">        n_periods : int, optional (default=10)</span>
+<span class="sd">            The number of periods in the future to forecast.</span>
+
+<span class="sd">        fit_args : dict or kwargs, optional (default=None)</span>
+<span class="sd">            Any keyword args to pass to the fit method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exogenous</span><span class="p">)</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create forecasts on a fitted model&quot;&quot;&quot;</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">dynamic</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get in-sample forecasts&quot;&quot;&quot;</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update an ARIMA model&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,333 @@
+:orphan:
+
+.. _general_examples:
+
+Examples
+========
+
+General examples
+----------------
+
+General-purpose and introductory examples for ``pmdarima``. These examples are
+designed to introduce you to the package style and layout.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This is a simple example of how we can fit an ARIMA model in several lines without knowing any...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_example_simple_fit_thumb.png
+
+        :ref:`sphx_glr_auto_examples_example_simple_fit.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/example_simple_fit
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` can fit &quot;pipeline&quot; models. That is, a pipeline constitutes a l...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_example_pipeline_thumb.png
+
+        :ref:`sphx_glr_auto_examples_example_pipeline.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/example_pipeline
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+.. _arima_examples:
+
+ARIMA examples
+--------------
+
+Examples of how to use the :mod:`pmdarima.arima` module to fit timeseries
+models.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can persist an ARIMA model to disk after fitting it. It can t...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/arima/images/thumb/sphx_glr_example_persisting_a_model_thumb.png
+
+        :ref:`sphx_glr_auto_examples_arima_example_persisting_a_model.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/arima/example_persisting_a_model
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the ``auto_arima`` function to select an optimal time...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/arima/images/thumb/sphx_glr_example_auto_arima_thumb.png
+
+        :ref:`sphx_glr_auto_examples_arima_example_auto_arima.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/arima/example_auto_arima
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forec...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/arima/images/thumb/sphx_glr_example_add_new_samples_thumb.png
+
+        :ref:`sphx_glr_auto_examples_arima_example_add_new_samples.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/arima/example_add_new_samples
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the ``decompose`` function to extract the trend, seas...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/arima/images/thumb/sphx_glr_example_seasonal_decomposition_thumb.png
+
+        :ref:`sphx_glr_auto_examples_arima_example_seasonal_decomposition.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/arima/example_seasonal_decomposition
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+.. _datasets_examples:
+
+Datasets examples
+-----------------
+
+Examples of how to use the :mod:`pmdarima.datasets` module to conveniently load
+toy time series data for model benchmarking and experimentation.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s built-in toy datasets that can be used for benchmark...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/datasets/images/thumb/sphx_glr_example_load_data_thumb.png
+
+        :ref:`sphx_glr_auto_examples_datasets_example_load_data.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/datasets/example_load_data
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+.. _model_selection_examples:
+
+Cross-validation examples
+-------------------------
+
+Examples of how to use the :mod:`pmdarima.model_selection` module to fit
+timeseries models in a cross-validated fashion.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` provides several different strategies for cross-validating you...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/model_selection/images/thumb/sphx_glr_example_cross_validation_thumb.png
+
+        :ref:`sphx_glr_auto_examples_model_selection_example_cross_validation.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/model_selection/example_cross_validation
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+.. _utils_examples:
+
+Utils examples
+--------------
+
+Examples of how to use the :mod:`pmdarima.utils` module to plot timeseries
+data, difference arrays, and more.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s convenient ``c`` function, which is, in essence, the...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/utils/images/thumb/sphx_glr_example_array_concatenation_thumb.png
+
+        :ref:`sphx_glr_auto_examples_utils_example_array_concatenation.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/utils/example_array_concatenation
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Visualizing characteristics of a time series is a key component to effective forecasting. In t...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/utils/images/thumb/sphx_glr_example_tsdisplay_thumb.png
+
+        :ref:`sphx_glr_auto_examples_utils_example_tsdisplay.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/utils/example_tsdisplay
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s array differencing, and how it&#x27;s used in conjunction...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/utils/images/thumb/sphx_glr_example_array_differencing_thumb.png
+
+        :ref:`sphx_glr_auto_examples_utils_example_array_differencing.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/utils/example_array_differencing
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+
+
+  .. container:: sphx-glr-download
+
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//root/pmdarima/doc/auto_examples/auto_examples_python.zip>`
+
+
+
+  .. container:: sphx-glr-download
+
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//root/pmdarima/doc/auto_examples/auto_examples_jupyter.zip>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.readthedocs.io>`_

@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.datasets.load_airpassengers &mdash; pmdarima 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pmdarima.datasets.load_ausbeer" href="pmdarima.datasets.load_ausbeer.html" />
+    <link rel="prev" title="pmdarima.arima.decompose" href="pmdarima.arima.decompose.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../classes.html#dataset-loading-functions">Dataset loading functions</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_airpassengers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_ausbeer.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_ausbeer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_austres.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_austres</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_gasoline.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_gasoline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_heartrate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_heartrate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_lynx.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_lynx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_msft.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_msft</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_sunspots.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_sunspots</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_taylor.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_taylor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_wineind.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_wineind</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_woolyrnq.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_woolyrnq</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-metrics-time-series-metrics"><code class="docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>: Time-series metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-model-selection-cross-validation-classes"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>: Cross-validation classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../classes.html">API Reference</a> &raquo;</li>
+        
+      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_airpassengers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/modules/generated/pmdarima.datasets.load_airpassengers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pmdarima-datasets-load-airpassengers">
+<h1><a class="reference internal" href="../classes.html#module-pmdarima.datasets" title="pmdarima.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code></a>.load_airpassengers<a class="headerlink" href="#pmdarima-datasets-load-airpassengers" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pmdarima.datasets.load_airpassengers">
+<code class="descclassname">pmdarima.datasets.</code><code class="descname">load_airpassengers</code><span class="sig-paren">(</span><em>as_series=False</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/b5a75f2/pmdarima/datasets/airpassengers.py#L13"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/airpassengers.html#load_airpassengers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.datasets.load_airpassengers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Monthly airline passengers.</p>
+<p>The classic Box &amp; Jenkins airline data. Monthly totals of international
+airline passengers, 1949 to 1960.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>as_series</strong> : bool, optional (default=False)</p>
+<blockquote>
+<div><p>Whether to return a Pandas series. If False, will return a 1d
+numpy array.</p>
+</div></blockquote>
+<p><strong>dtype</strong> : type, optional (default=np.float64)</p>
+<blockquote>
+<div><p>The type to return for the array. Default is np.float64, which is used
+throughout the package as the default type.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rslt</strong> : array-like, shape=(n_samples,)</p>
+<blockquote class="last">
+<div><p>The time series vector.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is monthly data, so <em>m</em> should be set to 12 when using in a seasonal
+context.</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r69" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R69]</a></td><td>Box, G. E. P., Jenkins, G. M. and Reinsel, G. C. (1976)
+“Time Series Analysis, Forecasting and Control. Third Edition.”
+Holden-Day. Series G.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_airpassengers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">load_airpassengers</span><span class="p">()</span>  
+<span class="go">np.array([</span>
+<span class="go">    112, 118, 132, 129, 121, 135, 148, 148, 136, 119, 104, 118,</span>
+<span class="go">    115, 126, 141, 135, 125, 149, 170, 170, 158, 133, 114, 140,</span>
+<span class="go">    145, 150, 178, 163, 172, 178, 199, 199, 184, 162, 146, 166,</span>
+<span class="go">    171, 180, 193, 181, 183, 218, 230, 242, 209, 191, 172, 194,</span>
+<span class="go">    196, 196, 236, 235, 229, 243, 264, 272, 237, 211, 180, 201,</span>
+<span class="go">    204, 188, 235, 227, 234, 264, 302, 293, 259, 229, 203, 229,</span>
+<span class="go">    242, 233, 267, 269, 270, 315, 364, 347, 312, 274, 237, 278,</span>
+<span class="go">    284, 277, 317, 313, 318, 374, 413, 405, 355, 306, 271, 306,</span>
+<span class="go">    315, 301, 356, 348, 355, 422, 465, 467, 404, 347, 305, 336,</span>
+<span class="go">    340, 318, 362, 348, 363, 435, 491, 505, 404, 359, 310, 337,</span>
+<span class="go">    360, 342, 406, 396, 420, 472, 548, 559, 463, 407, 362, 405,</span>
+<span class="go">    417, 391, 419, 461, 472, 535, 622, 606, 508, 461, 390, 432])</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_airpassengers</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="go">0    112.0</span>
+<span class="go">1    118.0</span>
+<span class="go">2    132.0</span>
+<span class="go">3    129.0</span>
+<span class="go">4    121.0</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="section" id="examples-using-pmdarima-datasets-load-airpassengers">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.datasets.load_airpassengers</span></code><a class="headerlink" href="#examples-using-pmdarima-datasets-load-airpassengers" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the ``decompose`` function to extract the trend, seas..."><div class="figure" id="id2">
+<img alt="../../_images/sphx_glr_example_seasonal_decomposition_thumb.png" src="../../_images/sphx_glr_example_seasonal_decomposition_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/arima/example_seasonal_decomposition.html#sphx-glr-auto-examples-arima-example-seasonal-decomposition-py"><span class="std std-ref">Seasonal decomposition of your time-series</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s built-in toy datasets that can be used for benchmark..."><div class="figure" id="id3">
+<img alt="../../_images/sphx_glr_example_load_data_thumb.png" src="../../_images/sphx_glr_example_load_data_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/datasets/example_load_data.html#sphx-glr-auto-examples-datasets-example-load-data-py"><span class="std std-ref">Dataset loading</span></a></span></p>
+</div>
+</div><div class="clearer"></div></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pmdarima.datasets.load_ausbeer.html" class="btn btn-neutral float-right" title="pmdarima.datasets.load_ausbeer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pmdarima.arima.decompose.html" class="btn btn-neutral float-left" title="pmdarima.arima.decompose" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
