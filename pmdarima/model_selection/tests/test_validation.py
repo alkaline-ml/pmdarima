@@ -24,7 +24,7 @@ exogenous = np.random.RandomState(1).rand(y.shape[0], 2)
 ])
 @pytest.mark.parametrize(
     'est', [
-        ARIMA(order=(2, 1, 1), seasonal_order=(0, 0, 0, 1)),
+        ARIMA(order=(2, 1, 1)),
         ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12)),
         Pipeline([
             ("fourier", FourierFeaturizer(m=12)),

@@ -11,6 +11,7 @@ import warnings
 from .arima import ARIMA
 from .warnings import ModelFitWarning
 from ._context import ContextType, ContextStore
+from ..compat import statsmodels as sm_compat
 from datetime import datetime
 import functools
 
@@ -147,6 +148,7 @@ class _StepwiseFitWrapper:
         """Do a fit and determine whether the model is better"""
         if not self.seasonal:
             seasonal_order = (0, 0, 0, 0)
+        seasonal_order = sm_compat.check_seasonal_order(seasonal_order)
 
         # we might be fitting without a constant
         if constant is None:

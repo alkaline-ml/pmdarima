@@ -348,9 +348,12 @@ class ARIMA(BaseARIMA):
             # create the SARIMAX
             sarimax_kwargs = \
                 {} if not self.sarimax_kwargs else self.sarimax_kwargs
+            seasonal_order = \
+                sm_compat.check_seasonal_order(self.seasonal_order)
             arima = sm.tsa.statespace.SARIMAX(
                 endog=y, exog=exogenous, order=self.order,
-                seasonal_order=self.seasonal_order, trend=trend,
+                seasonal_order=seasonal_order,
+                trend=trend,
                 **sarimax_kwargs)
 
             # actually fit the model, now. If this was called from 'update',
@@ -1080,11 +1083,12 @@ class ARIMA(BaseARIMA):
         res : dictionary
             The ARIMA model as a dictionary.
         """
+        seasonal = sm_compat.check_seasonal_order(self.seasonal_order)
         return {
             'pvalues': self.pvalues(),
             'resid': self.resid(),
             'order': self.order,
-            'seasonal_order': self.seasonal_order,
+            'seasonal_order': seasonal,
             'oob': self.oob(),
             'aic': self.aic(),
             'aicc': self.aicc(),
