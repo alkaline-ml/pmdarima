@@ -83,6 +83,11 @@ class BaseTSCrossValidator(BaseEstimator, metaclass=abc.ABCMeta):
         self.h = h
         self.step = step
 
+    @property
+    def horizon(self):
+        """The forecast horizon for the cross-validator"""
+        return self.h
+
     def split(self, y, exogenous=None):
         """Generate indices to split data into training and test sets
 

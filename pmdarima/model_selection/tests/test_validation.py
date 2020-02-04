@@ -8,7 +8,7 @@ from pmdarima.preprocessing import FourierFeaturizer
 from pmdarima.model_selection._split import RollingForecastCV, \
     SlidingWindowForecastCV
 from pmdarima.model_selection._validation import cross_val_score, \
-    _check_scoring, cross_validate
+    _check_scoring, cross_validate, cross_val_predict
 from pmdarima.datasets import load_wineind
 import pytest
 import numpy as np
@@ -39,6 +39,28 @@ def test_cv_scores(cv, est, verbose, exog):
         est, y, exogenous=exog, scoring='mean_squared_error',
         cv=cv, verbose=verbose)
     assert isinstance(scores, np.ndarray)
+
+
+@pytest.mark.parametrize('cv', [
+    SlidingWindowForecastCV(window_size=100, step=24, h=1),
+    RollingForecastCV(initial=150, step=12, h=5),
+])
+@pytest.mark.parametrize(
+    'est', [
+        ARIMA(order=(2, 1, 1)),
+        ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12)),
+        Pipeline([
+            ("fourier", FourierFeaturizer(m=12)),
+            ("arima", ARIMA(order=(2, 1, 0), maxiter=3))
+        ])
+    ]
+)
+@pytest.mark.parametrize('avg', ["mean", "median"])
+def test_cv_predictions(cv, est, avg):
+    preds = cross_val_predict(
+        est, y, cv=cv, verbose=1, averaging=avg)
+    assert isinstance(preds, np.ndarray)
+    assert preds.ndim == 1
 
 
 def test_check_scoring():
