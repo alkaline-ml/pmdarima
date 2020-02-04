@@ -251,6 +251,16 @@ def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
 
         We then average each time step's forecasts to end up with our final
         prediction results.
+
+    Examples
+    --------
+    >>> import pmdarima as pm
+    >>> from pmdarima.model_selection import cross_val_predict,\
+    ...     RollingForecastCV
+    >>> y = pm.datasets.load_wineind()
+    >>> cv = RollingForecastCV(h=14, step=12)
+    >>> preds = cross_val_predict(
+    ...     pm.ARIMA((1, 1, 2), seasonal_order=(0, 1, 1, 12)), y, cv=cv)
     """
     y, exog = indexable(y, exogenous)
     y = check_endog(y, copy=False)
