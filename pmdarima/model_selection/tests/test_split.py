@@ -80,6 +80,9 @@ def test_cv_constructor_value_errors():
     with pytest.raises(ValueError):
         RollingForecastCV(step=-1),  # too low step
 
+    with pytest.raises(ValueError):
+        SlidingWindowForecastCV(step=5, h=4)  # step > h
+
 
 def test_check_cv():
     cv = SlidingWindowForecastCV(h=12)
