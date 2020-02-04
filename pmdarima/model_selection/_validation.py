@@ -39,6 +39,7 @@ _valid_averaging = {
 
 # TODO: can we consolidate these two funcs?
 
+
 def _check_averaging(method):
     if callable(method):
         return method
