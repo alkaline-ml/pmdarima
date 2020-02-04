@@ -38,33 +38,27 @@ _valid_averaging = {
     'median': np.nanmedian,
 }
 
-# TODO: can we consolidate these two funcs?
+
+def _check_callables(x, dct, varname):
+    if callable(x):
+        return x
+    if isinstance(x, str):
+        try:
+            return dct[x]
+        except KeyError:
+            valid_keys = list(dct.keys())
+            raise ValueError('%s can be a callable or a string in %s'
+                             % (varname, str(valid_keys)))
+    raise TypeError('expected a callable or a string, but got %r (type=%s)'
+                    % (x, type(x)))
 
 
 def _check_averaging(method):
-    if callable(method):
-        return method
-    if isinstance(method, str):
-        try:
-            return _valid_averaging[method]
-        except KeyError:
-            raise ValueError('averaging can be a callable or a string in %s'
-                             % str(list(_valid_averaging.keys())))
-    raise TypeError('expected a callable or a string, but got %r (type=%s)'
-                    % (method, type(method)))
+    return _check_callables(method, _valid_averaging, "averaging")
 
 
 def _check_scoring(metric):
-    if callable(metric):
-        return metric
-    if isinstance(metric, str):
-        try:
-            return _valid_scoring[metric]
-        except KeyError:
-            raise ValueError('metric can be a callable or a string in %s'
-                             % str(list(_valid_scoring.keys())))
-    raise TypeError('expected a callable or a string, but got %r (type=%s)'
-                    % (metric, type(metric)))
+    return _check_callables(metric, _valid_scoring, "metric")
 
 
 def _safe_split(y, exog, train, test):

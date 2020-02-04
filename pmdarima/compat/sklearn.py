@@ -55,6 +55,7 @@ def safe_indexing(X, indices):
     if hasattr(X, 'iloc'):
         return X.iloc[indices]
     # numpy:
+    # TODO: this does not currently support axis 1
     if hasattr(X, 'ndim') and X.ndim == 2:
         return X[indices, :]
     # list or 1d array
