@@ -19,8 +19,8 @@ exogenous = np.random.RandomState(1).rand(y.shape[0], 2)
 
 
 @pytest.mark.parametrize('cv', [
-    SlidingWindowForecastCV(window_size=100, step=24, h=1),
-    RollingForecastCV(initial=150, step=12, h=1),
+    SlidingWindowForecastCV(window_size=100, step=24, h=25),
+    RollingForecastCV(initial=150, step=12, h=14),
 ])
 @pytest.mark.parametrize(
     'est', [
@@ -42,8 +42,8 @@ def test_cv_scores(cv, est, verbose, exog):
 
 
 @pytest.mark.parametrize('cv', [
-    SlidingWindowForecastCV(window_size=100, step=24, h=1),
-    RollingForecastCV(initial=150, step=12, h=5),
+    SlidingWindowForecastCV(window_size=100, step=24, h=25),
+    RollingForecastCV(initial=150, step=12, h=13),
 ])
 @pytest.mark.parametrize(
     'est', [
@@ -89,7 +89,7 @@ def test_model_error_returns_nan():
         with pytest.warns(ModelFitWarning):
             scores = cross_val_score(
                 mock_model, y, scoring='mean_squared_error',
-                cv=SlidingWindowForecastCV(window_size=100, step=24, h=1),
+                cv=SlidingWindowForecastCV(window_size=100, step=24, h=25),
                 verbose=0)
 
         assert np.isnan(scores).all()
@@ -98,7 +98,7 @@ def test_model_error_returns_nan():
         with pytest.raises(ValueError):
             cross_val_score(
                 mock_model, y, scoring='mean_squared_error',
-                cv=SlidingWindowForecastCV(window_size=100, step=24, h=1),
+                cv=SlidingWindowForecastCV(window_size=100, step=24, h=25),
                 verbose=0, error_score='raise')
 
 
@@ -107,5 +107,5 @@ def test_error_action_validation():
     with pytest.raises(ValueError) as ve:
         cross_validate(
             est, y, error_score=None, scoring='mean_squared_error',
-            cv=SlidingWindowForecastCV(window_size=100, step=24, h=1))
+            cv=SlidingWindowForecastCV(window_size=100, step=24, h=25))
     assert 'error_score should be' in pytest_error_str(ve)
