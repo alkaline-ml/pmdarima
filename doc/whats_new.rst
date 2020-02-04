@@ -26,6 +26,7 @@ v0.8.1) will document the latest features.
 * Added :func:`pmdarima.model_selection.cross_val_predict`, as requested in
   `#291 <https://github.com/alkaline-ml/pmdarima/issues/291>`_
 
+* Add check in CV classes to raise ``ValueError`` for ``step > h``
 
 
 `v1.5.2 <http://alkaline-ml.com/pmdarima/1.5.2/>`_
