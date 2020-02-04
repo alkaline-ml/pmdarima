@@ -12,12 +12,13 @@ from traceback import format_exception_only
 
 from sklearn import base
 from sklearn.metrics import mean_absolute_error, mean_squared_error
-from sklearn.utils import indexable, safe_indexing
+from sklearn.utils import indexable
 
 from ._split import check_cv
 from .. import metrics
 from ..utils import check_endog
 from ..arima.warnings import ModelFitWarning
+from ..compat.sklearn import safe_indexing
 
 __all__ = [
     'cross_validate',
@@ -229,7 +230,9 @@ def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
         An optional 2-d array of exogenous variables.
 
     cv : BaseTSCrossValidator or None, optional (default=None)
-        An instance of cross-validation. If None, will use a RollingForecastCV
+        An instance of cross-validation. If None, will use a RollingForecastCV.
+        Note that for cross-validation predictions, the CV step cannot exceed
+        the CV horizon, or there will be a gap between fold predictions.
 
     verbose : integer, optional
         The verbosity level.
@@ -267,6 +270,26 @@ def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
     y = check_endog(y, copy=False)
     cv = check_cv(cv)
     avgfunc = _check_averaging(averaging)
+
+    # need to be careful here:
+    # >>> cv = RollingForecastCV(step=6, h=4)
+    # >>> cv_generator = cv.split(wineind)
+    # >>> next(cv_generator)
+    # (array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+    #         15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+    #         30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
+    #         45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57]),
+    #  array([58, 59, 60, 61]))
+    # >>> next(cv_generator)
+    # (array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+    #         15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+    #         30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
+    #         45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
+    #         60, 61, 62, 63]),
+    #  array([64, 65, 66, 67]))  <~~
+    if cv.step > cv.horizon:
+        raise ValueError("CV step cannot be > CV horizon, or there will be a "
+                         "gap in predictions between folds")
 
     # clone estimator to make sure all folds are independent
     prediction_blocks = [

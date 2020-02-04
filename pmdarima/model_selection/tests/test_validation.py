@@ -19,13 +19,15 @@ exogenous = np.random.RandomState(1).rand(y.shape[0], 2)
 
 
 @pytest.mark.parametrize('cv', [
-    SlidingWindowForecastCV(window_size=100, step=24, h=25),
-    RollingForecastCV(initial=150, step=12, h=14),
+    SlidingWindowForecastCV(window_size=100, step=24, h=1),
+    RollingForecastCV(initial=150, step=12, h=1),
 ])
 @pytest.mark.parametrize(
     'est', [
         ARIMA(order=(2, 1, 1)),
-        ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12)),
+        ARIMA(order=(1, 1, 2),
+              seasonal_order=(0, 1, 1, 12),
+              suppress_warnings=True),
         Pipeline([
             ("fourier", FourierFeaturizer(m=12)),
             ("arima", ARIMA(order=(2, 1, 0), maxiter=3))
@@ -42,13 +44,15 @@ def test_cv_scores(cv, est, verbose, exog):
 
 
 @pytest.mark.parametrize('cv', [
-    SlidingWindowForecastCV(window_size=100, step=24, h=25),
-    RollingForecastCV(initial=150, step=12, h=13),
+    SlidingWindowForecastCV(window_size=100, step=12, h=12),
+    RollingForecastCV(initial=150, step=12, h=12),
 ])
 @pytest.mark.parametrize(
     'est', [
         ARIMA(order=(2, 1, 1)),
-        ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12)),
+        ARIMA(order=(1, 1, 2),
+              seasonal_order=(0, 1, 1, 12),
+              suppress_warnings=True),
         Pipeline([
             ("fourier", FourierFeaturizer(m=12)),
             ("arima", ARIMA(order=(2, 1, 0), maxiter=3))
@@ -89,7 +93,7 @@ def test_model_error_returns_nan():
         with pytest.warns(ModelFitWarning):
             scores = cross_val_score(
                 mock_model, y, scoring='mean_squared_error',
-                cv=SlidingWindowForecastCV(window_size=100, step=24, h=25),
+                cv=SlidingWindowForecastCV(window_size=100, step=24, h=1),
                 verbose=0)
 
         assert np.isnan(scores).all()
@@ -98,7 +102,7 @@ def test_model_error_returns_nan():
         with pytest.raises(ValueError):
             cross_val_score(
                 mock_model, y, scoring='mean_squared_error',
-                cv=SlidingWindowForecastCV(window_size=100, step=24, h=25),
+                cv=SlidingWindowForecastCV(window_size=100, step=24, h=1),
                 verbose=0, error_score='raise')
 
 
@@ -107,5 +111,5 @@ def test_error_action_validation():
     with pytest.raises(ValueError) as ve:
         cross_validate(
             est, y, error_score=None, scoring='mean_squared_error',
-            cv=SlidingWindowForecastCV(window_size=100, step=24, h=25))
+            cv=SlidingWindowForecastCV(window_size=100, step=24, h=1))
     assert 'error_score should be' in pytest_error_str(ve)
