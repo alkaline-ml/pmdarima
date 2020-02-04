@@ -32,8 +32,10 @@ train, test = model_selection.train_test_split(data, train_size=165)
 # performance. We can choose which model is better based on how it performs
 # over various folds.
 model1 = pm.ARIMA(order=(2, 1, 1))
-model2 = pm.ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12))
-cv = model_selection.SlidingWindowForecastCV(window_size=100, step=24, h=1)
+model2 = pm.ARIMA(order=(1, 1, 2),
+                  seasonal_order=(0, 1, 1, 12),
+                  suppress_warnings=True)
+cv = model_selection.SlidingWindowForecastCV(window_size=100, step=6, h=8)
 
 model1_cv_scores = model_selection.cross_val_score(
     model1, train, scoring='smape', cv=cv, verbose=2)
