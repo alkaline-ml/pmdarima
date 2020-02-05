@@ -23,8 +23,8 @@ import joblib
 import pyramid as pm
 
 print('fitting and serializing model with old package')
-lynx = pm.datasets.load_lynx()
-arima = pm.auto_arima(lynx)
+wineind = pm.datasets.load_wineind()
+arima = pm.auto_arima(wineind, seasonal=True, m=4, D=1)
 joblib.dump(arima, 'model.pkl')
 "
 

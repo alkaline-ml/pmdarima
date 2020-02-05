@@ -12,7 +12,7 @@ y = load_wineind()
 
 @pytest.mark.parametrize(
     'est', [
-        ARIMA(order=(2, 1, 1), seasonal_order=(0, 0, 0, 1)),
+        ARIMA(order=(2, 1, 1)),
         AutoARIMA(seasonal=False, maxiter=3),
         Pipeline([
             ("fourier", FourierFeaturizer(m=12)),

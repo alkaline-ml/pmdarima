@@ -2,9 +2,14 @@
 #
 # Handle inconsistencies in the statsmodels API versions
 
+from pkg_resources import parse_version
+import statsmodels as sm
+
 __all__ = [
     'bind_df_model'
 ]
+
+_sm_version = sm.__version__
 
 
 def bind_df_model(model_fit, arima_results):
@@ -26,3 +31,23 @@ def bind_df_model(model_fit, arima_results):
             model_fit.k_ar + model_fit.k_ma + \
             model_fit.k_seasonal_ar + model_fit.k_seasonal_ma
         setattr(arima_results, 'df_model', df_model)
+
+
+def check_seasonal_order(order):
+    """Check the seasonal order
+
+    Statsmodels 0.11.0 introduced a check for seasonal order == 1 that can
+    raise a ValueError, but some of our old defaults allow for m == 1 in an
+    otherwise null seasonal order.
+
+    Parameters
+    ----------
+    order : tuple
+        The existing seasonal order
+    """
+    if sum(order[:3]) == 0 and order[-1] == 1:
+        order = (0, 0, 0, 0)
+
+    # user's order may still be invalid, but we'll let statsmodels' validation
+    # handle that.
+    return order

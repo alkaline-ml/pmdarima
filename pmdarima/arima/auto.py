@@ -21,6 +21,7 @@ from ._context import AbstractContext, ContextType
 # Import as a namespace so we can mock
 from . import _auto_solvers as solvers
 from ..compat.numpy import DTYPE
+from ..compat import statsmodels as sm_compat
 
 __all__ = [
     'auto_arima',
@@ -463,7 +464,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                              'suitable for ARIMA modeling')
 
         # perfect regression
-        ssn = (0, 0, 0, 0) if not seasonal else (0, D, 0, m)
+        ssn = (0, 0, 0, 0) if not seasonal \
+            else sm_compat.check_seasonal_order((0, D, 0, m))
         return _return_wrapper(
             _post_ppc_arima(
                 solvers._fit_arima(

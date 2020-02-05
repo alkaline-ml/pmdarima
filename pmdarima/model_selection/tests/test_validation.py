@@ -8,7 +8,7 @@ from pmdarima.preprocessing import FourierFeaturizer
 from pmdarima.model_selection._split import RollingForecastCV, \
     SlidingWindowForecastCV
 from pmdarima.model_selection._validation import cross_val_score, \
-    _check_scoring, cross_validate
+    _check_scoring, cross_validate, cross_val_predict, _check_averaging
 from pmdarima.datasets import load_wineind
 import pytest
 import numpy as np
@@ -24,8 +24,10 @@ exogenous = np.random.RandomState(1).rand(y.shape[0], 2)
 ])
 @pytest.mark.parametrize(
     'est', [
-        ARIMA(order=(2, 1, 1), seasonal_order=(0, 0, 0, 1)),
-        ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12)),
+        ARIMA(order=(2, 1, 1)),
+        ARIMA(order=(1, 1, 2),
+              seasonal_order=(0, 1, 1, 12),
+              suppress_warnings=True),
         Pipeline([
             ("fourier", FourierFeaturizer(m=12)),
             ("arima", ARIMA(order=(2, 1, 0), maxiter=3))
@@ -41,6 +43,30 @@ def test_cv_scores(cv, est, verbose, exog):
     assert isinstance(scores, np.ndarray)
 
 
+@pytest.mark.parametrize('cv', [
+    SlidingWindowForecastCV(window_size=100, step=12, h=12),
+    RollingForecastCV(initial=150, step=12, h=12),
+])
+@pytest.mark.parametrize(
+    'est', [
+        ARIMA(order=(2, 1, 1)),
+        ARIMA(order=(1, 1, 2),
+              seasonal_order=(0, 1, 1, 12),
+              suppress_warnings=True),
+        Pipeline([
+            ("fourier", FourierFeaturizer(m=12)),
+            ("arima", ARIMA(order=(2, 1, 0), maxiter=3))
+        ])
+    ]
+)
+@pytest.mark.parametrize('avg', ["mean", "median"])
+def test_cv_predictions(cv, est, avg):
+    preds = cross_val_predict(
+        est, y, cv=cv, verbose=4, averaging=avg)
+    assert isinstance(preds, np.ndarray)
+    assert preds.ndim == 1
+
+
 def test_check_scoring():
     # This will work since it's a callable
     scorer = (lambda true, pred: np.nan)
@@ -53,6 +79,26 @@ def test_check_scoring():
     # fails for anything else
     with pytest.raises(TypeError):
         _check_scoring(123)
+
+
+def test_check_averaging():
+    # This will work since it's a callable
+    avg = (lambda x, axis: x)
+    assert _check_averaging(avg) is avg
+
+    # fails for bad method
+    with pytest.raises(ValueError):
+        _check_averaging('bad method')
+
+    # fails for anything else
+    with pytest.raises(TypeError):
+        _check_averaging(123)
+
+
+def test_cross_val_predict_error():
+    cv = SlidingWindowForecastCV(step=24, h=1)
+    with pytest.raises(ValueError):
+        cross_val_predict(ARIMA(order=(2, 1, 0), maxiter=3), y, cv=cv)
 
 
 def test_model_error_returns_nan():
