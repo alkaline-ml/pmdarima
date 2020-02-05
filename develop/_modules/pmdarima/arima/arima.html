@@ -516,9 +516,12 @@
             <span class="c1"># create the SARIMAX</span>
             <span class="n">sarimax_kwargs</span> <span class="o">=</span> \
                 <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span>
+            <span class="n">seasonal_order</span> <span class="o">=</span> \
+                <span class="n">sm_compat</span><span class="o">.</span><span class="n">check_seasonal_order</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">)</span>
             <span class="n">arima</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">statespace</span><span class="o">.</span><span class="n">SARIMAX</span><span class="p">(</span>
                 <span class="n">endog</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
-                <span class="n">seasonal_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
+                <span class="n">seasonal_order</span><span class="o">=</span><span class="n">seasonal_order</span><span class="p">,</span>
+                <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
                 <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
 
             <span class="c1"># actually fit the model, now. If this was called from &#39;update&#39;,</span>
@@ -1248,11 +1251,12 @@
 <span class="sd">        res : dictionary</span>
 <span class="sd">            The ARIMA model as a dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">seasonal</span> <span class="o">=</span> <span class="n">sm_compat</span><span class="o">.</span><span class="n">check_seasonal_order</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s1">&#39;pvalues&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pvalues</span><span class="p">(),</span>
             <span class="s1">&#39;resid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resid</span><span class="p">(),</span>
             <span class="s1">&#39;order&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
-            <span class="s1">&#39;seasonal_order&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">,</span>
+            <span class="s1">&#39;seasonal_order&#39;</span><span class="p">:</span> <span class="n">seasonal</span><span class="p">,</span>
             <span class="s1">&#39;oob&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">oob</span><span class="p">(),</span>
             <span class="s1">&#39;aic&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">aic</span><span class="p">(),</span>
             <span class="s1">&#39;aicc&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">aicc</span><span class="p">(),</span>

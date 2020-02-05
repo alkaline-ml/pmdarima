@@ -37,7 +37,7 @@ possible.
     Lowest average SMAPE: 7.47566748979004 (model2)
     Best model: ARIMA(maxiter=50, method='lbfgs', order=(1, 1, 2), out_of_sample_size=0,
           scoring='mse', scoring_args=None, seasonal_order=(0, 1, 1, 12),
-          start_params=None, suppress_warnings=False, trend=None,
+          start_params=None, suppress_warnings=True, trend=None,
           with_intercept=True)
 
 
@@ -66,8 +66,10 @@ possible.
     # use cross-validation on our training set to get a good estimate of the model
     # performance. We can choose which model is better based on how it performs
     # over various folds.
-    model1 = pm.ARIMA(order=(2, 1, 1), seasonal_order=(0, 0, 0, 1))
-    model2 = pm.ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12))
+    model1 = pm.ARIMA(order=(2, 1, 1))
+    model2 = pm.ARIMA(order=(1, 1, 2),
+                      seasonal_order=(0, 1, 1, 12),
+                      suppress_warnings=True)
     cv = model_selection.SlidingWindowForecastCV(window_size=100, step=24, h=1)
 
     model1_cv_scores = model_selection.cross_val_score(
@@ -91,7 +93,7 @@ possible.
         errors[better_index], better_index + 1))
     print("Best model: {}".format(models[better_index]))
 
-**Total running time of the script:** ( 0 minutes  3.240 seconds)
+**Total running time of the script:** ( 0 minutes  3.167 seconds)
 
 
 

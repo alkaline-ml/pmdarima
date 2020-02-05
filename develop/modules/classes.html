@@ -160,6 +160,7 @@
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.SlidingWindowForecastCV.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.SlidingWindowForecastCV</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.check_cv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.cross_validate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_validate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_predict.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_predict</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_score.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_score</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.train_test_split.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.train_test_split</a></li>
 </ul>
@@ -500,10 +501,13 @@ for cross-validating time series models</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.model_selection.cross_validate.html#pmdarima.model_selection.cross_validate" title="pmdarima.model_selection.cross_validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.cross_validate</span></code></a>(estimator,&nbsp;y)</td>
 <td>Evaluate metric(s) by cross-validation and also record fit/score times.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score" title="pmdarima.model_selection.cross_val_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.cross_val_score</span></code></a>(estimator,&nbsp;y)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_predict.html#pmdarima.model_selection.cross_val_predict" title="pmdarima.model_selection.cross_val_predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.cross_val_predict</span></code></a>(estimator,&nbsp;y)</td>
+<td>Generate cross-validated estimates for each input data point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score" title="pmdarima.model_selection.cross_val_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.cross_val_score</span></code></a>(estimator,&nbsp;y)</td>
 <td>Evaluate a score by cross-validation</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="pmdarima.model_selection.train_test_split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.train_test_split</span></code></a>(*arrays[,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="pmdarima.model_selection.train_test_split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.train_test_split</span></code></a>(*arrays[,&nbsp;…])</td>
 <td>Split arrays or matrices into sequential train and test subsets</td>
 </tr>
 </tbody>
@@ -577,7 +581,7 @@ classes for pre-processing time series or exogenous arrays.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.acf.html#pmdarima.utils.acf" title="pmdarima.utils.acf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.acf</span></code></a>(x[,&nbsp;unbiased,&nbsp;nlags,&nbsp;qstat,&nbsp;fft,&nbsp;…])</td>
-<td>Autocorrelation function for 1d arrays.</td>
+<td>Calculate the autocorrelation function.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.as_series.html#pmdarima.utils.as_series" title="pmdarima.utils.as_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.as_series</span></code></a>(x)</td>
 <td>Cast as pandas Series.</td>
@@ -604,7 +608,7 @@ classes for pre-processing time series or exogenous arrays.</p>
 <td>Test a variable for iterability.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.pacf.html#pmdarima.utils.pacf" title="pmdarima.utils.pacf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.pacf</span></code></a>(x[,&nbsp;nlags,&nbsp;method,&nbsp;alpha])</td>
-<td>Partial autocorrelation estimated</td>
+<td>Partial autocorrelation estimate.</td>
 </tr>
 </tbody>
 </table>

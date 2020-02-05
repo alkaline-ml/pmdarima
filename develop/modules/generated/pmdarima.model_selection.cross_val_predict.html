@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.model_selection.check_cv &mdash; pmdarima 0.0.0 documentation</title>
+  <title>pmdarima.model_selection.cross_val_predict &mdash; pmdarima 0.0.0 documentation</title>
   
 
   
@@ -51,8 +51,8 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pmdarima.model_selection.cross_validate" href="pmdarima.model_selection.cross_validate.html" />
-    <link rel="prev" title="pmdarima.model_selection.SlidingWindowForecastCV" href="pmdarima.model_selection.SlidingWindowForecastCV.html" /> 
+    <link rel="next" title="pmdarima.model_selection.cross_val_score" href="pmdarima.model_selection.cross_val_score.html" />
+    <link rel="prev" title="pmdarima.model_selection.cross_validate" href="pmdarima.model_selection.cross_validate.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -109,9 +109,9 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#cross-validation-split-utilities">Cross validation &amp; split utilities</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.RollingForecastCV.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.RollingForecastCV</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.SlidingWindowForecastCV.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.SlidingWindowForecastCV</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.check_cv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_validate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_validate</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_val_predict.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_predict</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_predict</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_val_score.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_score</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.train_test_split.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.train_test_split</a></li>
 </ul>
@@ -173,13 +173,13 @@
         
           <li><a href="../classes.html">API Reference</a> &raquo;</li>
         
-      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</li>
+      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_predict</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/modules/generated/pmdarima.model_selection.check_cv.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/modules/generated/pmdarima.model_selection.cross_val_predict.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -192,31 +192,81 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pmdarima-model-selection-check-cv">
-<h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.check_cv<a class="headerlink" href="#pmdarima-model-selection-check-cv" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pmdarima-model-selection-cross-val-predict">
+<h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.cross_val_predict<a class="headerlink" href="#pmdarima-model-selection-cross-val-predict" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pmdarima.model_selection.check_cv">
-<code class="descclassname">pmdarima.model_selection.</code><code class="descname">check_cv</code><span class="sig-paren">(</span><em>cv=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/673c200/pmdarima/model_selection/_split.py#L339"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#check_cv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.check_cv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Input checker utility for building a cross-validator</p>
+<dt id="pmdarima.model_selection.cross_val_predict">
+<code class="descclassname">pmdarima.model_selection.</code><code class="descname">cross_val_predict</code><span class="sig-paren">(</span><em>estimator</em>, <em>y</em>, <em>exogenous=None</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>averaging='mean'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/673c200/pmdarima/model_selection/_validation.py#L211"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_val_predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.cross_val_predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate cross-validated estimates for each input data point</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cv</strong> : BaseTSCrossValidator or None, optional (default=None)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>estimator</strong> : estimator</p>
+<blockquote>
+<div><p>An estimator object that implements the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method</p>
+</div></blockquote>
+<p><strong>y</strong> : array-like or iterable, shape=(n_samples,)</p>
+<blockquote>
+<div><p>The time-series array.</p>
+</div></blockquote>
+<p><strong>exogenous</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
+<blockquote>
+<div><p>An optional 2-d array of exogenous variables.</p>
+</div></blockquote>
+<p><strong>cv</strong> : BaseTSCrossValidator or None, optional (default=None)</p>
+<blockquote>
+<div><p>An instance of cross-validation. If None, will use a RollingForecastCV.
+Note that for cross-validation predictions, the CV step cannot exceed
+the CV horizon, or there will be a gap between fold predictions.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : integer, optional</p>
+<blockquote>
+<div><p>The verbosity level.</p>
+</div></blockquote>
+<p><strong>averaging</strong> : str or callable, one of [“median”, “mean”] (default=”mean”)</p>
 <blockquote class="last">
-<div><p>An instance of CV or None. Possible inputs:</p>
-<ul class="simple">
-<li>None, to use a default RollingForecastCV</li>
-<li>A BaseTSCrossValidator as a passthrough</li>
-</ul>
+<div><p>Unlike normal CV, time series CV might have different folds (windows)
+forecasting the same time step. After all forecast windows are made,
+we build a matrix of y x n_folds, populating each fold’s forecasts like
+so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nan</span> <span class="n">nan</span> <span class="n">nan</span>  <span class="c1"># training samples</span>
+<span class="n">nan</span> <span class="n">nan</span> <span class="n">nan</span>
+<span class="n">nan</span> <span class="n">nan</span> <span class="n">nan</span>
+<span class="n">nan</span> <span class="n">nan</span> <span class="n">nan</span>
+  <span class="mi">1</span> <span class="n">nan</span> <span class="n">nan</span>  <span class="c1"># test samples</span>
+  <span class="mi">4</span>   <span class="mi">3</span> <span class="n">nan</span>
+  <span class="mi">3</span> <span class="mf">2.5</span> <span class="mf">3.5</span>
+<span class="n">nan</span>   <span class="mi">6</span>   <span class="mi">5</span>
+<span class="n">nan</span> <span class="n">nan</span>   <span class="mi">4</span>
+</pre></div>
+</div>
+<p>We then average each time step’s forecasts to end up with our final
+prediction results.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_predict</span><span class="p">,</span>    <span class="o">...</span>     <span class="n">RollingForecastCV</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">RollingForecastCV</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preds</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">pm</span><span class="o">.</span><span class="n">ARIMA</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">)),</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
-<div class="clearer"></div></div>
+<div class="section" id="examples-using-pmdarima-model-selection-cross-val-predict">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection.cross_val_predict</span></code><a class="headerlink" href="#examples-using-pmdarima-model-selection-cross-val-predict" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip="In addition to computing cross-validation scores, you can use cross-validation to produce predi..."><div class="figure" id="id1">
+<img alt="../../_images/sphx_glr_example_cross_val_predict_thumb.png" src="../../_images/sphx_glr_example_cross_val_predict_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/model_selection/example_cross_val_predict.html#sphx-glr-auto-examples-model-selection-example-cross-val-predict-py"><span class="std std-ref">Cross-validation predictions</span></a></span></p>
+</div>
+</div><div class="clearer"></div></div>
+</div>
 
 
            </div>
@@ -226,10 +276,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pmdarima.model_selection.cross_validate.html" class="btn btn-neutral float-right" title="pmdarima.model_selection.cross_validate" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pmdarima.model_selection.cross_val_score.html" class="btn btn-neutral float-right" title="pmdarima.model_selection.cross_val_score" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pmdarima.model_selection.SlidingWindowForecastCV.html" class="btn btn-neutral float-left" title="pmdarima.model_selection.SlidingWindowForecastCV" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pmdarima.model_selection.cross_validate.html" class="btn btn-neutral float-left" title="pmdarima.model_selection.cross_validate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -21,6 +21,10 @@ v0.8.1) will document the latest features.
 
 * Added integer levels of verbosity in the ``trace`` argument
 
+* Added support for statsmodels 0.11+
+
+* Added :func:`pmdarima.model_selection.cross_val_predict`, as requested in
+  `#291 <https://github.com/alkaline-ml/pmdarima/issues/291>`_
 
 
 `v1.5.2 <http://alkaline-ml.com/pmdarima/1.5.2/>`_

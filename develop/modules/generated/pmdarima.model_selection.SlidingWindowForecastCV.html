@@ -111,6 +111,7 @@
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.SlidingWindowForecastCV</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.check_cv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_validate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_validate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_val_predict.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_predict</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_val_score.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_score</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.train_test_split.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.train_test_split</a></li>
 </ul>
@@ -195,7 +196,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.SlidingWindowForecastCV<a class="headerlink" href="#pmdarima-model-selection-slidingwindowforecastcv" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.model_selection.SlidingWindowForecastCV">
-<em class="property">class </em><code class="descclassname">pmdarima.model_selection.</code><code class="descname">SlidingWindowForecastCV</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>window_size=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/b5a75f2/pmdarima/model_selection/_split.py#L242"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.model_selection.</code><code class="descname">SlidingWindowForecastCV</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>window_size=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/673c200/pmdarima/model_selection/_split.py#L248"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use a sliding window to perform cross validation</p>
 <p>This approach to CV slides a window over the training samples while using
 several future samples as a test set. While similar to the
@@ -223,15 +224,27 @@ size n_samples // 5 will be used.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.model_selection.SlidingWindowForecastCV.horizon" title="pmdarima.model_selection.SlidingWindowForecastCV.horizon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">horizon</span></code></a></td>
+<td>The forecast horizon for the cross-validator</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="pmdarima.model_selection.RollingForecastCV.html#pmdarima.model_selection.RollingForecastCV" title="pmdarima.model_selection.RollingForecastCV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RollingForecastCV</span></code></a></p>
 </div>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r85" rules="none">
+<table class="docutils citation" frame="void" id="r86" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R85]</a></td><td><a class="reference external" href="https://robjhyndman.com/hyndsight/tscv/">https://robjhyndman.com/hyndsight/tscv/</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R86]</a></td><td><a class="reference external" href="https://robjhyndman.com/hyndsight/tscv/">https://robjhyndman.com/hyndsight/tscv/</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -287,13 +300,13 @@ the last index in the training fold:</p>
 </table>
 <dl class="method">
 <dt id="pmdarima.model_selection.SlidingWindowForecastCV.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>window_size=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/b5a75f2/pmdarima/model_selection/_split.py#L305"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>window_size=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/673c200/pmdarima/model_selection/_split.py#L311"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.model_selection.SlidingWindowForecastCV.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/b5a75f2/pmdarima/../sklearn/base.py#L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/673c200/pmdarima/../sklearn/base.py#L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -316,9 +329,15 @@ contained subobjects that are estimators.</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="pmdarima.model_selection.SlidingWindowForecastCV.horizon">
+<code class="descname">horizon</code><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>The forecast horizon for the cross-validator</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="pmdarima.model_selection.SlidingWindowForecastCV.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/b5a75f2/pmdarima/../sklearn/base.py#L205"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/673c200/pmdarima/../sklearn/base.py#L205"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -346,7 +365,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.model_selection.SlidingWindowForecastCV.split">
-<code class="descname">split</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/b5a75f2/pmdarima/model_selection/_split.py#L86"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.split" title="Permalink to this definition">¶</a></dt>
+<code class="descname">split</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/673c200/pmdarima/model_selection/_split.py#L92"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.split" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate indices to split data into training and test sets</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -380,7 +399,11 @@ component of a nested object.</p>
 
 <div class="section" id="examples-using-pmdarima-model-selection-slidingwindowforecastcv">
 <h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection.SlidingWindowForecastCV</span></code><a class="headerlink" href="#examples-using-pmdarima-model-selection-slidingwindowforecastcv" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` provides several different strategies for cross-validating you..."><div class="figure" id="id2">
+<div class="sphx-glr-thumbcontainer" tooltip="In addition to computing cross-validation scores, you can use cross-validation to produce predi..."><div class="figure" id="id2">
+<img alt="../../_images/sphx_glr_example_cross_val_predict_thumb.png" src="../../_images/sphx_glr_example_cross_val_predict_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/model_selection/example_cross_val_predict.html#sphx-glr-auto-examples-model-selection-example-cross-val-predict-py"><span class="std std-ref">Cross-validation predictions</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` provides several different strategies for cross-validating you..."><div class="figure" id="id3">
 <img alt="../../_images/sphx_glr_example_cross_validation_thumb.png" src="../../_images/sphx_glr_example_cross_validation_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/model_selection/example_cross_validation.html#sphx-glr-auto-examples-model-selection-example-cross-validation-py"><span class="std std-ref">Cross-validating your time series models</span></a></span></p>
 </div>

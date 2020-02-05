@@ -177,6 +177,7 @@ Cross validation & split utilities
 
     model_selection.check_cv
     model_selection.cross_validate
+    model_selection.cross_val_predict
     model_selection.cross_val_score
     model_selection.train_test_split
 
