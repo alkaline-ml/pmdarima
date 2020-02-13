@@ -1,0 +1,16 @@
+:mod:`pmdarima.model_selection`.RollingForecastCV
+========================================================
+
+.. currentmodule:: pmdarima.model_selection
+
+.. autoclass:: RollingForecastCV
+
+   
+   .. automethod:: __init__
+   
+
+.. include:: pmdarima.model_selection.RollingForecastCV.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
