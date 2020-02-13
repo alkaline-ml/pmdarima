@@ -131,7 +131,7 @@ jobs:
 
       - name: Deploying to PyPI
         # Only deploy on tags and when VERSION file created
-        if: github.event_name == 'tag' && success() && steps.version_check.version_exists == 'true'
+        if: startsWith(github.ref, 'refs/tags') && success() && steps.version_check.version_exists == 'true'
         run: |
           # Check our VERSION. Basically, if it contains letters, it is a pre-release. Otherwise,
           # it has to match X.Y or X.Y.Z
