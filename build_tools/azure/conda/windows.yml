@@ -7,6 +7,7 @@ steps:
 
   - script: make version
     displayName: 'Ensuring VERSION file is created'
+    condition: contains(variables['Build.SourceBranch'], 'refs/tags')
 
   - bash: |
       mkdir conda
