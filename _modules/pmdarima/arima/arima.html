@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.arima.arima &mdash; pmdarima 1.5.3 documentation</title>
+  <title>pmdarima.arima.arima &mdash; pmdarima 1.5.2 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../../',
-              VERSION:'1.5.3',
+              VERSION:'1.5.2',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                1.5.3
+                1.5.2
               </div>
             
           
@@ -187,7 +187,7 @@
 
 <span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">BaseARIMA</span>
 <span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="kn">import</span> <span class="n">DTYPE</span>  <span class="c1"># DTYPE for arrays</span>
-<span class="kn">from</span> <span class="nn">..compat.sklearn</span> <span class="kn">import</span> <span class="n">get_compatible_check_is_fitted</span><span class="p">,</span> <span class="n">safe_indexing</span>
+<span class="kn">from</span> <span class="nn">..compat.sklearn</span> <span class="kn">import</span> <span class="n">get_compatible_check_is_fitted</span>
 <span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">get_callable</span><span class="p">,</span> <span class="n">if_has_delegate</span><span class="p">,</span> <span class="n">is_iterable</span><span class="p">,</span> <span class="n">check_endog</span><span class="p">,</span> \
     <span class="n">check_exog</span>
@@ -516,12 +516,9 @@
             <span class="c1"># create the SARIMAX</span>
             <span class="n">sarimax_kwargs</span> <span class="o">=</span> \
                 <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span>
-            <span class="n">seasonal_order</span> <span class="o">=</span> \
-                <span class="n">sm_compat</span><span class="o">.</span><span class="n">check_seasonal_order</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">)</span>
             <span class="n">arima</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">tsa</span><span class="o">.</span><span class="n">statespace</span><span class="o">.</span><span class="n">SARIMAX</span><span class="p">(</span>
                 <span class="n">endog</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
-                <span class="n">seasonal_order</span><span class="o">=</span><span class="n">seasonal_order</span><span class="p">,</span>
-                <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
+                <span class="n">seasonal_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
                 <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
 
             <span class="c1"># actually fit the model, now. If this was called from &#39;update&#39;,</span>
@@ -629,9 +626,8 @@
 
             <span class="c1"># This also means we have to address the exogenous matrix</span>
             <span class="k">if</span> <span class="n">exogenous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">n_exog</span> <span class="o">=</span> <span class="n">exogenous</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">cv_exog</span> <span class="o">=</span> <span class="n">safe_indexing</span><span class="p">(</span><span class="n">exogenous</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">n_exog</span> <span class="o">-</span> <span class="n">cv</span><span class="p">,</span> <span class="n">n_exog</span><span class="p">))</span>
-                <span class="n">exogenous</span> <span class="o">=</span> <span class="n">safe_indexing</span><span class="p">(</span><span class="n">exogenous</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_exog</span> <span class="o">-</span> <span class="n">cv</span><span class="p">))</span>
+                <span class="n">cv_exog</span> <span class="o">=</span> <span class="n">exogenous</span><span class="p">[</span><span class="o">-</span><span class="n">cv</span><span class="p">:,</span> <span class="p">:]</span>
+                <span class="n">exogenous</span> <span class="o">=</span> <span class="n">exogenous</span><span class="p">[:</span><span class="o">-</span><span class="n">cv</span><span class="p">,</span> <span class="p">:]</span>
 
         <span class="c1"># Internal call</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
@@ -1251,12 +1247,11 @@
 <span class="sd">        res : dictionary</span>
 <span class="sd">            The ARIMA model as a dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">seasonal</span> <span class="o">=</span> <span class="n">sm_compat</span><span class="o">.</span><span class="n">check_seasonal_order</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s1">&#39;pvalues&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pvalues</span><span class="p">(),</span>
             <span class="s1">&#39;resid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resid</span><span class="p">(),</span>
             <span class="s1">&#39;order&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
-            <span class="s1">&#39;seasonal_order&#39;</span><span class="p">:</span> <span class="n">seasonal</span><span class="p">,</span>
+            <span class="s1">&#39;seasonal_order&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span><span class="p">,</span>
             <span class="s1">&#39;oob&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">oob</span><span class="p">(),</span>
             <span class="s1">&#39;aic&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">aic</span><span class="p">(),</span>
             <span class="s1">&#39;aicc&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">aicc</span><span class="p">(),</span>
@@ -1403,7 +1398,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2020, Taylor G Smith
+        &copy; Copyright 2017-2019, Taylor G Smith
 
     </p>
   </div>

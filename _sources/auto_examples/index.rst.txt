@@ -210,26 +210,6 @@ timeseries models in a cross-validated fashion.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In addition to computing cross-validation scores, you can use cross-validation to produce predi...">
-
-.. only:: html
-
-    .. figure:: /auto_examples/model_selection/images/thumb/sphx_glr_example_cross_val_predict_thumb.png
-
-        :ref:`sphx_glr_auto_examples_model_selection_example_cross_val_predict.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/model_selection/example_cross_val_predict
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` provides several different strategies for cross-validating you...">
 
 .. only:: html

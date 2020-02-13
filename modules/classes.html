@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; pmdarima 1.5.3 documentation</title>
+  <title>API Reference &mdash; pmdarima 1.5.2 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../',
-              VERSION:'1.5.3',
+              VERSION:'1.5.2',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.5.3
+                1.5.2
               </div>
             
           
@@ -135,7 +135,6 @@
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_airpassengers.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_airpassengers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_ausbeer.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_ausbeer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_austres.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_austres</a></li>
-<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_gasoline.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_gasoline</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_heartrate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_heartrate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_lynx.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_lynx</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.datasets.load_msft.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_msft</a></li>
@@ -160,7 +159,6 @@
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.SlidingWindowForecastCV.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.SlidingWindowForecastCV</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.check_cv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.cross_validate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_validate</a></li>
-<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_predict.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_predict</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_score.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_score</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.model_selection.train_test_split.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.train_test_split</a></li>
 </ul>
@@ -422,28 +420,25 @@ would like to prototype a model, this is a good place to find easy-to-access dat
 <tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_austres.html#pmdarima.datasets.load_austres" title="pmdarima.datasets.load_austres"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_austres</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Quarterly residential data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_gasoline.html#pmdarima.datasets.load_gasoline" title="pmdarima.datasets.load_gasoline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_gasoline</span></code></a>([as_series,&nbsp;dtype])</td>
-<td>Weekly US finished motor gasoline products</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_heartrate.html#pmdarima.datasets.load_heartrate" title="pmdarima.datasets.load_heartrate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_heartrate</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_heartrate.html#pmdarima.datasets.load_heartrate" title="pmdarima.datasets.load_heartrate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_heartrate</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Uniform heart-rate data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="pmdarima.datasets.load_lynx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_lynx</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_lynx.html#pmdarima.datasets.load_lynx" title="pmdarima.datasets.load_lynx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_lynx</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Annual numbers of lynx trappings for 1821–1934 in Canada.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_msft.html#pmdarima.datasets.load_msft" title="pmdarima.datasets.load_msft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_msft</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_msft.html#pmdarima.datasets.load_msft" title="pmdarima.datasets.load_msft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_msft</span></code></a>()</td>
 <td>Load the microsoft stock data</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_sunspots.html#pmdarima.datasets.load_sunspots" title="pmdarima.datasets.load_sunspots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_sunspots</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_sunspots.html#pmdarima.datasets.load_sunspots" title="pmdarima.datasets.load_sunspots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_sunspots</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Monthly Sunspot Numbers, 1749 - 1983</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_taylor.html#pmdarima.datasets.load_taylor" title="pmdarima.datasets.load_taylor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_taylor</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_taylor.html#pmdarima.datasets.load_taylor" title="pmdarima.datasets.load_taylor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_taylor</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Half-hourly electricity demand</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_wineind</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_wineind</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Australian total wine sales by wine makers in bottles &lt;= 1 litre.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq" title="pmdarima.datasets.load_woolyrnq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_woolyrnq</span></code></a>([as_series,&nbsp;dtype])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.datasets.load_woolyrnq.html#pmdarima.datasets.load_woolyrnq" title="pmdarima.datasets.load_woolyrnq"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets.load_woolyrnq</span></code></a>([as_series,&nbsp;dtype])</td>
 <td>Quarterly production of woollen yarn in Australia.</td>
 </tr>
 </tbody>
@@ -501,13 +496,10 @@ for cross-validating time series models</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.model_selection.cross_validate.html#pmdarima.model_selection.cross_validate" title="pmdarima.model_selection.cross_validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.cross_validate</span></code></a>(estimator,&nbsp;y)</td>
 <td>Evaluate metric(s) by cross-validation and also record fit/score times.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_predict.html#pmdarima.model_selection.cross_val_predict" title="pmdarima.model_selection.cross_val_predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.cross_val_predict</span></code></a>(estimator,&nbsp;y)</td>
-<td>Generate cross-validated estimates for each input data point</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score" title="pmdarima.model_selection.cross_val_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.cross_val_score</span></code></a>(estimator,&nbsp;y)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score" title="pmdarima.model_selection.cross_val_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.cross_val_score</span></code></a>(estimator,&nbsp;y)</td>
 <td>Evaluate a score by cross-validation</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="pmdarima.model_selection.train_test_split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.train_test_split</span></code></a>(*arrays[,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="pmdarima.model_selection.train_test_split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_selection.train_test_split</span></code></a>(*arrays[,&nbsp;…])</td>
 <td>Split arrays or matrices into sequential train and test subsets</td>
 </tr>
 </tbody>
@@ -581,7 +573,7 @@ classes for pre-processing time series or exogenous arrays.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.acf.html#pmdarima.utils.acf" title="pmdarima.utils.acf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.acf</span></code></a>(x[,&nbsp;unbiased,&nbsp;nlags,&nbsp;qstat,&nbsp;fft,&nbsp;…])</td>
-<td>Calculate the autocorrelation function.</td>
+<td>Autocorrelation function for 1d arrays.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.as_series.html#pmdarima.utils.as_series" title="pmdarima.utils.as_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.as_series</span></code></a>(x)</td>
 <td>Cast as pandas Series.</td>
@@ -608,7 +600,7 @@ classes for pre-processing time series or exogenous arrays.</p>
 <td>Test a variable for iterability.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.pacf.html#pmdarima.utils.pacf" title="pmdarima.utils.pacf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.pacf</span></code></a>(x[,&nbsp;nlags,&nbsp;method,&nbsp;alpha])</td>
-<td>Partial autocorrelation estimate.</td>
+<td>Partial autocorrelation estimated</td>
 </tr>
 </tbody>
 </table>
@@ -659,7 +651,7 @@ classes for pre-processing time series or exogenous arrays.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2020, Taylor G Smith
+        &copy; Copyright 2017-2019, Taylor G Smith
 
     </p>
   </div>

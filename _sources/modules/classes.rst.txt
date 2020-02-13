@@ -113,7 +113,6 @@ Dataset loading functions
     datasets.load_airpassengers
     datasets.load_ausbeer
     datasets.load_austres
-    datasets.load_gasoline
     datasets.load_heartrate
     datasets.load_lynx
     datasets.load_msft
@@ -177,7 +176,6 @@ Cross validation & split utilities
 
     model_selection.check_cv
     model_selection.cross_validate
-    model_selection.cross_val_predict
     model_selection.cross_val_score
     model_selection.train_test_split
 

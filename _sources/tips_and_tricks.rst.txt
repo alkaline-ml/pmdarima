@@ -24,14 +24,9 @@ Understand ``p``, ``d``, and ``q``
 
 ARIMA models are made up of `three different terms <http://people.duke.edu/~rnau/411arim.htm>`_:
 
-* :math:`p`: The order of the auto-regressive (AR) model (i.e., the number of lag observations).
-  A time series is considered AR when previous values in the time series are very predictive of
-  later values. An AR process will show a very gradual decrease in the ACF plot.
-
+* :math:`p`: The order of the auto-regressive (AR) model (i.e., the number of lag observations)
 * :math:`d`: The degree of differencing.
-
-* :math:`q`: The order of the moving average (MA) model. This is essentially the size of the "window"
-  function over your time series data. An MA process is a linear combination of past errors.
+* :math:`q`: The order of the moving average (MA) model. This is essentially the size of the "window" function over your time series data.
 
 Often times, ARIMA models are written in the form :math:`ARIMA(p, d, q)`, where a
 model with no differencing term, e.g., :math:`ARIMA(1, 0, 12)`, would be an ARMA

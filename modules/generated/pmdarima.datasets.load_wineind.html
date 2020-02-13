@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pmdarima.datasets.load_wineind &mdash; pmdarima 1.5.3 documentation</title>
+  <title>pmdarima.datasets.load_wineind &mdash; pmdarima 1.5.2 documentation</title>
   
 
   
@@ -25,7 +25,7 @@
       <script type="text/javascript">
           var DOCUMENTATION_OPTIONS = {
               URL_ROOT:'../../',
-              VERSION:'1.5.3',
+              VERSION:'1.5.2',
               LANGUAGE:'None',
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.5.3
+                1.5.2
               </div>
             
           
@@ -108,7 +108,6 @@
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_airpassengers.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_airpassengers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_ausbeer.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_ausbeer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_austres.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_austres</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_gasoline.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_gasoline</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_heartrate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_heartrate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_lynx.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_lynx</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.datasets.load_msft.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>.load_msft</a></li>
@@ -200,7 +199,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.datasets" title="pmdarima.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code></a>.load_wineind<a class="headerlink" href="#pmdarima-datasets-load-wineind" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.datasets.load_wineind">
-<code class="descclassname">pmdarima.datasets.</code><code class="descname">load_wineind</code><span class="sig-paren">(</span><em>as_series=False</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/673c200/pmdarima/datasets/wineind.py#L19"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/wineind.html#load_wineind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.datasets.load_wineind" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.datasets.</code><code class="descname">load_wineind</code><span class="sig-paren">(</span><em>as_series=False</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0a4ec38c/pmdarima/datasets/wineind.py#L19"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/wineind.html#load_wineind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.datasets.load_wineind" title="Permalink to this definition">¶</a></dt>
 <dd><p>Australian total wine sales by wine makers in bottles &lt;= 1 litre.</p>
 <p>This time-series records wine sales by Australian wine makers between
 Jan 1980 – Aug 1994. This dataset is found in the R <code class="docutils literal notranslate"><span class="pre">forecast</span></code> package.</p>
@@ -232,10 +231,10 @@ throughout the package as the default type.</p>
 <p>This is monthly data, so <em>m</em> should be set to 12 when using in a seasonal
 context.</p>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r82" rules="none">
+<table class="docutils citation" frame="void" id="r77" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R82]</a></td><td><a class="reference external" href="https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/wineind">https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/wineind</a>  # noqa: E501</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R77]</a></td><td><a class="reference external" href="https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/wineind">https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/wineind</a>  # noqa: E501</td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -292,11 +291,7 @@ context.</p>
 <img alt="../../_images/sphx_glr_example_load_data_thumb.png" src="../../_images/sphx_glr_example_load_data_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/datasets/example_load_data.html#sphx-glr-auto-examples-datasets-example-load-data-py"><span class="std std-ref">Dataset loading</span></a></span></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In addition to computing cross-validation scores, you can use cross-validation to produce predi..."><div class="figure" id="id6">
-<img alt="../../_images/sphx_glr_example_cross_val_predict_thumb.png" src="../../_images/sphx_glr_example_cross_val_predict_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/model_selection/example_cross_val_predict.html#sphx-glr-auto-examples-model-selection-example-cross-val-predict-py"><span class="std std-ref">Cross-validation predictions</span></a></span></p>
-</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` provides several different strategies for cross-validating you..."><div class="figure" id="id7">
+</div><div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` provides several different strategies for cross-validating you..."><div class="figure" id="id6">
 <img alt="../../_images/sphx_glr_example_cross_validation_thumb.png" src="../../_images/sphx_glr_example_cross_validation_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/model_selection/example_cross_validation.html#sphx-glr-auto-examples-model-selection-example-cross-validation-py"><span class="std std-ref">Cross-validating your time series models</span></a></span></p>
 </div>
@@ -323,7 +318,7 @@ context.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017-2020, Taylor G Smith
+        &copy; Copyright 2017-2019, Taylor G Smith
 
     </p>
   </div>
