@@ -126,10 +126,10 @@ jobs:
         run: |
           if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
             echo "VERSION file exists"
-            echo "::set-output name=version_exists::yes"
+            echo "::set-output name=version_exists::true"
           else
             echo "VERSION file does not exist"
-            echo "::set-output name=version_exists::no"
+            echo "::set-output name=version_exists::false"
           fi
         shell: bash
 
@@ -147,5 +147,5 @@ jobs:
       - name: Check vars
         run: |
           echo "${{ github.ref }}"
-          echo "${{ steps.version_check.version_exists }}"
+          echo "${{ steps.version_check.outputs.version_exists }}"
         shell: bash
