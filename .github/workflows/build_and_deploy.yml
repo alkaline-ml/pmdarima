@@ -143,3 +143,9 @@ jobs:
 #        env:
 #          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
 #          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+
+      - name: Check vars
+        run: |
+          echo "${{ github.ref }}"
+          echo "${{ steps.version_check.version_exists }}"
+        shell: bash
