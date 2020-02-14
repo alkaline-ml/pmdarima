@@ -1,0 +1,12 @@
+:mod:`pmdarima.arima`.ndiffs
+=========================================
+
+.. currentmodule:: pmdarima.arima
+
+.. autofunction:: ndiffs
+
+.. include:: pmdarima.arima.ndiffs.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
