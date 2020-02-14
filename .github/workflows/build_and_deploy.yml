@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Find the github ref
-        run: echo "${{ github.ref }}
+        run: echo "${{ github.ref }}"
         shell: bash
 
       # Visual Studio 2019 (windows-latest) doesn't include these files for some reason??
