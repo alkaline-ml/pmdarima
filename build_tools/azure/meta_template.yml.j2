@@ -8,7 +8,7 @@ source:
   git_url: ../
 
 build:
-  {% raw %}}
+  {% raw %}
   number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
   {% endraw %}
   script: 'python -m pip install dist/{{ wheel }} --no-deps -vv'  # [not win]
