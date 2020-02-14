@@ -9,9 +9,7 @@ steps:
       fi
     displayName: Checking for VERSION file
 
-  - bash: |
-      chmod +x build_tools/azure/conda/deploy.sh
-      ./build_tools/azure/conda/deploy.sh
+  - bash: build_tools/azure/conda/deploy.sh
     condition: and(succeeded(), eq(variables['VERSION_EXISTS'], 'true'), contains(variables['Build.SourceBranch'], 'refs/tags'))
     displayName: Deploying to conda
     env:
