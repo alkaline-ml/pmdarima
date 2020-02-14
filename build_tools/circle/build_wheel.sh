@@ -11,6 +11,8 @@ function build_wheel {
     ucs_tag="m"
     if [ "$ucs_setting" = "ucs4" ]; then
         ucs_tag="${ucs_tag}u"
+    elif [ "$pyver" = "3.8" ]; then
+        ucs_tag=""
     fi
 
     ML_PYTHON_VERSION=$(python -c \
