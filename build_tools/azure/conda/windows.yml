@@ -5,6 +5,10 @@ steps:
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
+  - script: make version
+    displayName: 'Ensuring VERSION file is created'
+    condition: contains(variables['Build.SourceBranch'], 'refs/tags')
+
   - bash: |
       mkdir conda
       python -m pip install jinja2
