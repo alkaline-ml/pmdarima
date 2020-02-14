@@ -27,28 +27,28 @@ without knowing anything about our data or optimal hyper parameters.
  Out::
 
     Performing stepwise search to minimize aic
-    Fit ARIMA: (2, 1, 2)x(1, 0, 1, 12) (constant=True); AIC=2915.641, BIC=2939.673, Time=0.430 seconds
-    Fit ARIMA: (0, 1, 0)x(0, 0, 0, 12) (constant=True); AIC=3049.597, BIC=3055.604, Time=0.041 seconds
-    Fit ARIMA: (1, 1, 0)x(1, 0, 0, 12) (constant=True); AIC=2954.973, BIC=2966.989, Time=0.205 seconds
-    Fit ARIMA: (0, 1, 1)x(0, 0, 1, 12) (constant=True); AIC=2947.014, BIC=2959.029, Time=0.209 seconds
-    Fit ARIMA: (0, 1, 0)x(0, 0, 0, 12) (constant=False); AIC=3047.612, BIC=3050.616, Time=0.011 seconds
-    Fit ARIMA: (2, 1, 2)x(0, 0, 1, 12) (constant=True); AIC=2938.457, BIC=2959.484, Time=0.320 seconds
-    Fit ARIMA: (2, 1, 2)x(1, 0, 0, 12) (constant=True); AIC=2915.636, BIC=2936.664, Time=0.279 seconds
-    Fit ARIMA: (2, 1, 2)x(0, 0, 0, 12) (constant=True); AIC=2984.606, BIC=3002.630, Time=0.116 seconds
-    Fit ARIMA: (2, 1, 2)x(2, 0, 0, 12) (constant=True); AIC=2915.168, BIC=2939.200, Time=3.103 seconds
-    Fit ARIMA: (2, 1, 2)x(2, 0, 1, 12) (constant=True); AIC=2917.256, BIC=2944.291, Time=6.073 seconds
-    Fit ARIMA: (1, 1, 2)x(2, 0, 0, 12) (constant=True); AIC=2924.379, BIC=2945.407, Time=4.392 seconds
-    Fit ARIMA: (2, 1, 1)x(2, 0, 0, 12) (constant=True); AIC=2911.007, BIC=2932.034, Time=5.811 seconds
-    Fit ARIMA: (2, 1, 1)x(1, 0, 0, 12) (constant=True); AIC=2911.505, BIC=2929.528, Time=0.300 seconds
-    Fit ARIMA: (2, 1, 1)x(2, 0, 1, 12) (constant=True); AIC=2912.933, BIC=2936.965, Time=3.380 seconds
-    Fit ARIMA: (2, 1, 1)x(1, 0, 1, 12) (constant=True); AIC=2911.904, BIC=2932.932, Time=0.397 seconds
-    Fit ARIMA: (1, 1, 1)x(2, 0, 0, 12) (constant=True); AIC=2919.168, BIC=2937.192, Time=2.007 seconds
-    Fit ARIMA: (2, 1, 0)x(2, 0, 0, 12) (constant=True); AIC=2927.636, BIC=2945.660, Time=3.031 seconds
-    Fit ARIMA: (3, 1, 1)x(2, 0, 0, 12) (constant=True); AIC=2912.748, BIC=2936.780, Time=4.394 seconds
-    Fit ARIMA: (1, 1, 0)x(2, 0, 0, 12) (constant=True); AIC=2954.725, BIC=2969.745, Time=1.882 seconds
-    Fit ARIMA: (3, 1, 0)x(2, 0, 0, 12) (constant=True); AIC=2914.169, BIC=2935.197, Time=2.507 seconds
-    Fit ARIMA: (3, 1, 2)x(2, 0, 0, 12) (constant=True); AIC=2915.130, BIC=2942.165, Time=4.796 seconds
-    Total fit time: 43.713 seconds
+    Fit ARIMA: (2, 1, 2)x(1, 0, 1, 12) (constant=True); AIC=2915.641, BIC=2939.673, Time=0.326 seconds
+    Fit ARIMA: (0, 1, 0)x(0, 0, 0, 12) (constant=True); AIC=3049.597, BIC=3055.604, Time=0.009 seconds
+    Fit ARIMA: (1, 1, 0)x(1, 0, 0, 12) (constant=True); AIC=2954.973, BIC=2966.989, Time=0.179 seconds
+    Fit ARIMA: (0, 1, 1)x(0, 0, 1, 12) (constant=True); AIC=2947.014, BIC=2959.029, Time=0.203 seconds
+    Fit ARIMA: (0, 1, 0)x(0, 0, 0, 12) (constant=False); AIC=3047.612, BIC=3050.616, Time=0.010 seconds
+    Fit ARIMA: (2, 1, 2)x(0, 0, 1, 12) (constant=True); AIC=2938.457, BIC=2959.484, Time=0.340 seconds
+    Fit ARIMA: (2, 1, 2)x(1, 0, 0, 12) (constant=True); AIC=2915.636, BIC=2936.664, Time=0.389 seconds
+    Fit ARIMA: (2, 1, 2)x(0, 0, 0, 12) (constant=True); AIC=2984.606, BIC=3002.630, Time=0.120 seconds
+    Fit ARIMA: (2, 1, 2)x(2, 0, 0, 12) (constant=True); AIC=2915.168, BIC=2939.200, Time=4.623 seconds
+    Fit ARIMA: (2, 1, 2)x(2, 0, 1, 12) (constant=True); AIC=2917.256, BIC=2944.291, Time=6.199 seconds
+    Fit ARIMA: (1, 1, 2)x(2, 0, 0, 12) (constant=True); AIC=2924.379, BIC=2945.407, Time=4.427 seconds
+    Fit ARIMA: (2, 1, 1)x(2, 0, 0, 12) (constant=True); AIC=2911.007, BIC=2932.034, Time=7.296 seconds
+    Fit ARIMA: (2, 1, 1)x(1, 0, 0, 12) (constant=True); AIC=2911.505, BIC=2929.528, Time=1.064 seconds
+    Fit ARIMA: (2, 1, 1)x(2, 0, 1, 12) (constant=True); AIC=2912.933, BIC=2936.965, Time=12.894 seconds
+    Fit ARIMA: (2, 1, 1)x(1, 0, 1, 12) (constant=True); AIC=2911.904, BIC=2932.932, Time=1.069 seconds
+    Fit ARIMA: (1, 1, 1)x(2, 0, 0, 12) (constant=True); AIC=2919.168, BIC=2937.192, Time=4.389 seconds
+    Fit ARIMA: (2, 1, 0)x(2, 0, 0, 12) (constant=True); AIC=2927.636, BIC=2945.660, Time=4.749 seconds
+    Fit ARIMA: (3, 1, 1)x(2, 0, 0, 12) (constant=True); AIC=2912.748, BIC=2936.780, Time=6.814 seconds
+    Fit ARIMA: (1, 1, 0)x(2, 0, 0, 12) (constant=True); AIC=2954.725, BIC=2969.745, Time=2.215 seconds
+    Fit ARIMA: (3, 1, 0)x(2, 0, 0, 12) (constant=True); AIC=2914.169, BIC=2935.197, Time=7.482 seconds
+    Fit ARIMA: (3, 1, 2)x(2, 0, 0, 12) (constant=True); AIC=2915.130, BIC=2942.165, Time=8.881 seconds
+    Total fit time: 73.722 seconds
 
 
 
@@ -85,7 +85,7 @@ without knowing anything about our data or optimal hyper parameters.
     plt.title('Actual test samples vs. forecasts')
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  43.808 seconds)
+**Total running time of the script:** ( 1 minutes  13.762 seconds)
 
 
 
