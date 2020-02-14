@@ -8,9 +8,11 @@ source:
   git_url: ../
 
 build:
-  string: 'py{{ py_version }}'
+  {% raw %}}
+  number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
+  {% endraw %}
   script: 'python -m pip install dist/{{ wheel }} --no-deps -vv'  # [not win]
-  script: 'python setup.py install'  # [win]
+  script: 'python -m pip install --no-deps --ignore-installed .'  # [win]
   ignore_run_exports:
     - pip
     - statsmodels
