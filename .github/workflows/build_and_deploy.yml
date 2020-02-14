@@ -32,10 +32,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Find the github ref
-        run: echo "${{ github.ref }}"
-        shell: bash
-
       # Visual Studio 2019 (windows-latest) doesn't include these files for some reason??
       # Even stranger, it really only affects Python 3.5, but we run it across all versions for consistency
       # https://social.msdn.microsoft.com/Forums/vstudio/en-US/06675e6d-9a0b-46f5-8de0-10237fab1ece/link-error-lnk1158?forum=vcgeneral
@@ -133,19 +129,13 @@ jobs:
           fi
         shell: bash
 
-#      - name: Deploying to PyPI
-#        # Only deploy on tags and when VERSION file created
-#        if: startsWith(github.ref, 'refs/tags') && success() && steps.version_check.version_exists == 'true'
-#        run: |
-#          chmod +x build_tools/github/deploy.sh
-#          ./build_tools/github/deploy.sh
-#        shell: bash
-#        env:
-#          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-#          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-
-      - name: Check vars
+      - name: Deploying to PyPI
+        # Only deploy on tags and when VERSION file created
+        if: startsWith(github.ref, 'refs/tags') && success() && steps.version_check.output.version_exists == 'true'
         run: |
-          echo "${{ github.ref }}"
-          echo "${{ steps.version_check.outputs.version_exists }}"
+          chmod +x build_tools/github/deploy.sh
+          ./build_tools/github/deploy.sh
         shell: bash
+        env:
+          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
