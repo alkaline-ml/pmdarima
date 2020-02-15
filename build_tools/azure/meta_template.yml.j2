@@ -10,9 +10,9 @@ source:
 build:
   {% raw %}
   number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
+  string: py{{ PY_VER }}{{ environ.get('GIT_DESCRIBE_TAG', '') }}
   {% endraw %}
-  script: 'python -m pip install dist/{{ wheel }} --no-deps -vv'  # [not win]
-  script: 'python -m pip install --no-deps --ignore-installed .'  # [win]
+  script: 'python -m pip install --no-deps --ignore-installed .'
   ignore_run_exports:
     - pip
     - statsmodels

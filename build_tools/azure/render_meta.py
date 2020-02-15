@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 
 # Since conda is only on Azure Pipelines, we can use their env variables
-ROOT_DIRECTORY = Path(os.getenv('BUILD_SOURCESDIRECTORY'))
+ROOT_DIRECTORY = Path('/pmdarima')  #Path(os.getenv('BUILD_SOURCESDIRECTORY'))
 DIST_PATH = ROOT_DIRECTORY / 'dist'
 VERSION_FILE = ROOT_DIRECTORY / 'pmdarima' / 'VERSION'
 REQUIREMENTS_FILE = ROOT_DIRECTORY / 'requirements.txt'
@@ -31,12 +31,12 @@ except FileNotFoundError:
 with open(str(REQUIREMENTS_FILE.resolve())) as file:
     requirements = [line.strip() for line in file.readlines()]
 
-# We build from source on windows, otherwise, we looks for a wheel
-if sys.platform != 'win32':
-    wheel = next(file for file in os.listdir(str(DIST_PATH.resolve()))
-                 if file.endswith('.whl'))
-else:
-    wheel = None
+# # We build from source on windows, otherwise, we looks for a wheel
+# if sys.platform != 'win32':
+#     wheel = next(file for file in os.listdir(str(DIST_PATH.resolve()))
+#                  if file.endswith('.whl'))
+# else:
+#     wheel = None
 
 # Numpy version is used for building
 numpy_version = next(package for package in requirements if 'numpy' in package)
@@ -46,7 +46,6 @@ context = {
     'requirements': requirements,
     'numpy_version': numpy_version,
     'VERSION': VERSION,
-    'wheel': wheel,
     'py_version': '{0.major}{0.minor}'.format(sys.version_info)
 }
 
