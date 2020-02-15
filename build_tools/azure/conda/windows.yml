@@ -35,9 +35,9 @@ steps:
   - bash: |
       source activate build-env
       output_file=$(conda-build --output --python=$(python.version) conda/)
-      tar xjf $output_file
+      tar xjf "$output_file"
       local_file=$(find . -type f -iname "pmdarima-0.0.0*")
-      cd $local_file
+      cd "$local_file"
       ls
     displayName: 'Looking for lib folder'
 
