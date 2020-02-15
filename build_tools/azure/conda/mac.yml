@@ -37,3 +37,13 @@ steps:
       conda install --use-local pmdarima --yes
       python -c "import pmdarima; pmdarima.show_versions()"
     displayName: 'Testing conda installation'
+
+  - bash: |
+      source activate build-env
+      output_file=$(conda-build --output --python=$(python.version) conda/)
+      echo "$output_file"
+      tar xjvf "$output_file"
+      local_file=$(find . -type f -iname "pmdarima-0.0.0*")
+      cd "$local_file"
+      ls
+    displayName: 'Looking for lib folder'
