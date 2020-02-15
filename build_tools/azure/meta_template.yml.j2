@@ -10,7 +10,6 @@ source:
 build:
   {% raw %}
   number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
-  string: py{{ PY_VER }}{{ environ.get('GIT_DESCRIBE_TAG', '') }}
   {% endraw %}
   script: 'python -m pip install --no-deps --ignore-installed .'
   ignore_run_exports:
@@ -26,6 +25,9 @@ build:
 
   requirements:
     build:
+      {% raw %}
+      - python {{ PY_VER }}
+      (% endraw %)
       - {{ numpy_version }}
       {% raw %}
       - {{ compiler('c') }}
@@ -33,13 +35,17 @@ build:
 
     host:
       - pip
-      - python
+      {% raw %}
+      - python {{ PY_VER }}
+      (% endraw %)
       {% for package in requirements %}
       - {{ package }}
       {% endfor %}
 
     run:
-      - python
+      {% raw %}
+      - python {{ PY_VER }}
+      (% endraw %)
       {% for package in requirements %}
       - {{ package }}
       {% endfor %}
