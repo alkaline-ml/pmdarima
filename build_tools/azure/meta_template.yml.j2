@@ -27,7 +27,7 @@ build:
     build:
       {% raw %}
       - python {{ PY_VER }}
-      (% endraw %)
+      {% endraw %}
       - {{ numpy_version }}
       {% raw %}
       - {{ compiler('c') }}
@@ -37,7 +37,7 @@ build:
       - pip
       {% raw %}
       - python {{ PY_VER }}
-      (% endraw %)
+      {% endraw %}
       {% for package in requirements %}
       - {{ package }}
       {% endfor %}
@@ -45,7 +45,7 @@ build:
     run:
       {% raw %}
       - python {{ PY_VER }}
-      (% endraw %)
+      {% endraw %}
       {% for package in requirements %}
       - {{ package }}
       {% endfor %}
