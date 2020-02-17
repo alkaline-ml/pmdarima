@@ -12,7 +12,7 @@ steps:
 
   - bash: |
       output_file=$(conda-build --output --python=$(python.version) conda/)
-      if [ tar -tf "$output_file" | grep "lib" ]; then
+      if tar -tf "$output_file" | grep "lib"; then
         echo "##vso[task.setvariable variable=LIB_CREATED]true"
         echo "Lib directory created properly"
       else
