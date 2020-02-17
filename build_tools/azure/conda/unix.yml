@@ -15,7 +15,7 @@ steps:
       cat conda/meta.yaml
     displayName: 'Rendering meta.yaml file'
 
-  - bash: conda render --python=$(python.version) conda/
+  - bash: conda render --python=$(python.version) conda/ -f conda/meta.yaml
     displayName: 'Debugging rendered recipe'
 
   - bash: conda-build --python=$(python.version) conda/
