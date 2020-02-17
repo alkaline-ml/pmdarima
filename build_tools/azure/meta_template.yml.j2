@@ -26,9 +26,6 @@ build:
 
   requirements:
     build:
-      {% raw %}
-      - python {{ PY_VER }}
-      {% endraw %}
       - {{ numpy_version }}
       {% raw %}
       - {{ compiler('c') }}
