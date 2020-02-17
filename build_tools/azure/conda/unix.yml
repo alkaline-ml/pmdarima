@@ -24,7 +24,7 @@ steps:
     displayName: 'Creating build environment'
 
   - bash: |
-      conda activate build-env
+      source activate build-env
       conda build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
 
