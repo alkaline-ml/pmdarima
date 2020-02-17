@@ -12,7 +12,11 @@ build:
   number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
   string: py{{ CONDA_PY }}{{ environ.get('GIT_DESCRIBE_HASH', '') }}_{{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
   {% endraw %}
-  {# The first one here i #}
+  {#
+  The first one here installs to the default location (which is where testing happens)
+  and the second one installs to $PREFIX, which is set by conda-build and is necessary
+  for the `lib` folder to end up in the tar.bz2
+  #}
   script: |
     python -m pip install --no-deps --ignore-installed .
     python -m pip install --prefix $PREFIX --no-deps --ignore-installed .
