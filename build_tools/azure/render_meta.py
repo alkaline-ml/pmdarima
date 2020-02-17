@@ -53,7 +53,6 @@ numpy_version = next(package for package in requirements if 'numpy' in package)
 # Render and write the meta.yaml file to $ROOT/conda/meta.yaml
 context = {
     'requirements': requirements,
-    'numpy_version': numpy_version,
     'VERSION': VERSION,
     'py_version': '{0.major}{0.minor}'.format(sys.version_info)
 }
