@@ -5,7 +5,7 @@ steps:
   - script: conda install python=$(python.version) --yes
     displayName: 'Fixing conda Python version'
 
-  - script: conda install conda-build anaconda-client conda-render --yes
+  - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
   - bash: |

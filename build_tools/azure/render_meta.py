@@ -1,11 +1,12 @@
 import os
+import re
 import sys
 
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 
 # Since conda is only on Azure Pipelines, we can use their env variables
-ROOT_DIRECTORY = Path(os.getenv('BUILD_SOURCESDIRECTORY'))
+ROOT_DIRECTORY = Path('/Users/asmith/Documents/projects/alkaline-ml/pmdarima')  #Path(os.getenv('BUILD_SOURCESDIRECTORY'))
 DIST_PATH = ROOT_DIRECTORY / 'dist'
 VERSION_FILE = ROOT_DIRECTORY / 'pmdarima' / 'VERSION'
 REQUIREMENTS_FILE = ROOT_DIRECTORY / 'requirements.txt'
@@ -28,8 +29,16 @@ except FileNotFoundError:
     VERSION = '0.0.0'
 
 # Find the requirements and versions
+# conda puts a space between packages and versions, so we have to match that
+requirements = []
 with open(str(REQUIREMENTS_FILE.resolve())) as file:
-    requirements = [line.strip() for line in file.readlines()]
+    for line in file:
+        requirement = line.strip()
+        match = re.match(r'^([A-Za-z\-0-9]+)', requirement)
+        _, match_end = match.span()
+        package = match.group(0)
+        version = requirement[match_end:].replace('==', '')
+        requirements.append(f'{package} {version}')
 
 # # We build from source on windows, otherwise, we looks for a wheel
 # if sys.platform != 'win32':
