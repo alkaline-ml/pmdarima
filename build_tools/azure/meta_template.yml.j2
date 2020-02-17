@@ -1,7 +1,7 @@
 {# This is a Jinja2 template that will render out to $ROOT/conda/meta.yaml #}
 package:
-  name: 'pmdarima'
-  version: '{{ VERSION }}'
+  name: "pmdarima"
+  version: "{{ VERSION }}"
 
 {# Path where setup.py lies from root/conda (since that is where this will be rendered) #}
 source:
@@ -12,7 +12,7 @@ build:
   number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
   string: py{{ CONDA_PY }}{{ environ.get('GIT_DESCRIBE_HASH', '') }}_{{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
   {% endraw %}
-  script: 'python -m pip install --no-deps .'
+  script: "python -m pip install --no-deps --ignore-installed ."
   ignore_run_exports:
     - pip
     - statsmodels
@@ -57,6 +57,7 @@ test:
     - pip install pytest pytest-mpl pytest-benchmark
     {# Cannot use `make` in the meta.yaml file #}
     - pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
+    - python -c "import pmdarima; pmdarima.show_versions()"
 
 about:
   home: https://github.com/alkaline-ml/pmdarima
