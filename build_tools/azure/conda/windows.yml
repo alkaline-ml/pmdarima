@@ -7,5 +7,5 @@ steps:
 
   - script: |
       call activate build-env
-      conda build --python=$(python.version) conda/
+      conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
