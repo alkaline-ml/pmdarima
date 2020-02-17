@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# This looks like it is running `conda build` again, but it just returns the output file
-output_file=$(conda-build --output --python=$(python.version) conda/)
+output_file=$1
 
 # Check our VERSION. Basically, if it contains letters, it is a pre-release. Otherwise,
 # it has to match X.Y or X.Y.Z
