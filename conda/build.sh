@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x -e
+
 # This is run from the root directory, so we treat it as such
 
 echo "In build.sh"
