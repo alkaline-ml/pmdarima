@@ -50,7 +50,10 @@ jobs:
       architecture: '$(architecture)'
     displayName: 'Setting Python version and system architecture'
 
-  - template: build_tools/azure/conda/linux.yml
+  - bash: echo "##vso[task.prependpath]$CONDA/bin"
+    displayName: 'Adding conda to PATH'
+
+  - template: build_tools/azure/conda/unix.yml
   - template: build_tools/azure/conda/deploy.yml
 
 - job: Mac
@@ -75,7 +78,12 @@ jobs:
       architecture: '$(architecture)'
     displayName: 'Setting Python version and system architecture'
 
-  - template: build_tools/azure/conda/mac.yml
+  - bash: |
+      echo "##vso[task.prependpath]$CONDA/bin"
+      sudo chown -R $USER $CONDA
+    displayName: 'Adding conda to PATH'
+
+  - template: build_tools/azure/conda/unix.yml
   - template: build_tools/azure/conda/deploy.yml
 
 - job: Windows

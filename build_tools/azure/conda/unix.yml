@@ -1,0 +1,24 @@
+steps:
+  - script: conda update conda --yes
+    displayName: 'Updating Conda'
+
+  - script: conda install python=$(python.version) --yes
+    displayName: 'Fixing conda Python version'
+
+  - script: conda install conda-build anaconda-client --yes
+    displayName: 'Installing conda-build and anaconda-client'
+
+  - bash: |
+      mkdir conda
+      python -m pip install jinja2
+      python build_tools/azure/render_meta.py
+    displayName: 'Rendering meta.yaml file'
+
+  - bash: conda-build --python=$(python.version) conda/
+    displayName: 'Building and testing conda distribution'
+
+  - bash: |
+      output_file=$(conda-build --output --python=$(python.version) conda/)
+      echo "$output_file"
+      tar xjvf "$output_file"
+    displayName: 'Looking for lib folder'
