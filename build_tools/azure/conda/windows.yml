@@ -1,23 +1,12 @@
 steps:
-  - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
-    displayName: 'Add conda to PATH'
-
-  - script: conda update conda --yes
-    displayName: 'Updating Conda'
-
-  - script: conda install conda-build anaconda-client --yes
-    displayName: 'Installing conda-build and anaconda-client'
-
-  - bash: |
-      mkdir conda
-      python -m pip install jinja2
-      python build_tools/azure/render_meta.py
-    displayName: 'Rendering meta.yaml file'
-
   # A lot of our requirements don't exist on conda (scipy>1.3.3, for instance), so we pip install all of them
-  - script: |
+  - bash: |
       conda create --name build-env python=$(python.version) --yes
       call activate build-env
-      pip install -r requirements.txt
-      conda-build --python=$(python.version) conda/
+      python -m pip install -r requirements.txt
+    displayName: 'Creating build environment'
+
+  - script: |
+      call activate build-env
+      conda build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'

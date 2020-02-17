@@ -1,25 +1,8 @@
 steps:
-  - script: conda update conda --yes
-    displayName: 'Updating Conda'
-
-  - script: conda install python=$(python.version) --yes
-    displayName: 'Fixing conda Python version'
-
-  - script: conda install conda-build anaconda-client --yes
-    displayName: 'Installing conda-build and anaconda-client'
-
-  - bash: |
-      mkdir conda
-      python -m pip install jinja2
-      python build_tools/azure/render_meta.py
-      cat conda/meta.yaml
-    displayName: 'Rendering meta.yaml file'
-
-  - bash: conda render --python=$(python.version) conda/
-    displayName: 'Debugging rendered recipe'
-
+  # A lot of our requirements don't exist on conda (scipy>1.3.3, for instance), so we pip install all of them
   - bash: |
       conda create --name build-env python=$(python.version) --yes
+      source activate build-env
       python -m pip install -r requirements.txt
     displayName: 'Creating build environment'
 
