@@ -2,7 +2,10 @@
 
 # This is run from the root directory, so we treat it as such
 
-echo "In bld.sh"
+echo "In build.sh"
+
+# Install our dependencies
+python -m pip install -r requirements.txt
 
 # Build our distribution first
 python -m pip install --no-deps --ignore-installed .
