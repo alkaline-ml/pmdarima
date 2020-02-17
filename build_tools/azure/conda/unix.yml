@@ -18,7 +18,14 @@ steps:
   - bash: conda render --python=$(python.version) conda/
     displayName: 'Debugging rendered recipe'
 
-  - bash: conda build --python=$(python.version) conda/
+  - bash: |
+      conda create --name build-env python=$(python.version) --yes
+      python -m pip install -r requirements.txt
+    displayName: 'Creating build environment'
+
+  - bash: |
+      conda activate build-env
+      conda build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
 
   - bash: |

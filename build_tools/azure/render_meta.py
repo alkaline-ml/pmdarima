@@ -1,6 +1,5 @@
 import os
 import re
-import sys
 
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
@@ -40,21 +39,10 @@ with open(str(REQUIREMENTS_FILE.resolve())) as file:
         version = requirement[match_end:].replace('==', '')
         requirements.append(f'{package} {version}')
 
-# # We build from source on windows, otherwise, we looks for a wheel
-# if sys.platform != 'win32':
-#     wheel = next(file for file in os.listdir(str(DIST_PATH.resolve()))
-#                  if file.endswith('.whl'))
-# else:
-#     wheel = None
-
-# Numpy version is used for building
-numpy_version = next(package for package in requirements if 'numpy' in package)
-
 # Render and write the meta.yaml file to $ROOT/conda/meta.yaml
 context = {
     'requirements': requirements,
-    'VERSION': VERSION,
-    'py_version': '{0.major}{0.minor}'.format(sys.version_info)
+    'VERSION': VERSION
 }
 
 # Ensure output directory exists
