@@ -5,7 +5,7 @@ steps:
   - script: conda install python=$(python.version) --yes
     displayName: 'Fixing conda Python version'
 
-  - script: conda install conda-build anaconda-client --yes
+  - script: conda install conda-build anaconda-client conda-render --yes
     displayName: 'Installing conda-build and anaconda-client'
 
   - bash: |
@@ -14,6 +14,8 @@ steps:
       python build_tools/azure/render_meta.py
       cat conda/meta.yaml
     displayName: 'Rendering meta.yaml file'
+
+  - bash: conda render --python=$(python.version) conda/
 
   - bash: conda-build --python=$(python.version) conda/
     displayName: 'Building and testing conda distribution'
