@@ -15,3 +15,7 @@ steps:
       # This line is purely for debugging
       conda render --python=$(python.version) conda/
     displayName: 'Rendering meta.yaml file'
+
+  - bash: make version
+    condition: contains(variables['Build.SourceBranch'], 'refs/tags')
+    displayName: 'Ensuring VERSION file is created'
