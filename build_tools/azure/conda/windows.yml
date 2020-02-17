@@ -9,7 +9,8 @@ steps:
 
   - bash: |
       output_file=$(conda-build --output --python=$(python.version) conda/)
-      if tar -tf "$output_file" --force-local | grep "lib"; then
+      # Windows has to use --force-local to ignore colons, and `Lib` has to be capitalized
+      if tar -tf "$output_file" --force-local | grep "Lib"; then
         echo "##vso[task.setvariable variable=LIB_CREATED]true"
         echo "Lib directory created properly"
       else
