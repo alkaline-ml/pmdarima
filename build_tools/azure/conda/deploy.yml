@@ -12,7 +12,7 @@ steps:
   - bash: |
       # This looks like it is running `conda build` again, but it just returns the output file
       output_file=$(conda-build --output --python=$(python.version) conda/)
-      build_tools/azure/conda/deploy.sh $output_file
+      ./build_tools/azure/conda/deploy.sh $output_file
     condition: and(succeeded(), eq(variables['LIB_CREATED'], 'true'), eq(variables['VERSION_EXISTS'], 'true'), contains(variables['Build.SourceBranch'], 'refs/tags'))
     displayName: Deploying to conda
     env:
