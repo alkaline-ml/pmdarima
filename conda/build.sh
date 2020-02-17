@@ -5,15 +5,15 @@
 echo "In build.sh"
 
 # Install our dependencies
-python -m pip install -r requirements.txt
+$PYTHON -m pip install -r requirements.txt
 
 # Build our distribution first
-python -m pip install --no-deps --ignore-installed .
+$PYTHON -m pip install --no-deps --ignore-installed .
 
 echo "Installed pmdarima"
 
 # Find where the package was installed
-site_packages=$(python -c 'import site; print(site.getsitepackages()[0])')
+site_packages=$($PYTHON -c 'import site; print(site.getsitepackages()[0])')
 
 echo "Found site_packages: ${site_packages}"
 
