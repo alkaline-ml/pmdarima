@@ -4,7 +4,7 @@ steps:
       sudo chown -R $USER $CONDA
     displayName: 'Add conda to PATH'
 
-  - script: conda update conda
+  - script: conda update conda --yes
     displayName: 'Updating Conda'
 
   - script: conda install python=$(python.version) --yes
