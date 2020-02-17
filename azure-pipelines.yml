@@ -53,9 +53,8 @@ jobs:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: 'Adding conda to PATH'
 
-  - template: build_tools/azure/conda/common_pre.yml
+  - template: build_tools/azure/conda/common.yml
   - template: build_tools/azure/conda/unix.yml
-  - template: build_tools/azure/conda/common_post.yml
   - template: build_tools/azure/conda/deploy.yml
 
 - job: Mac
@@ -85,9 +84,8 @@ jobs:
       sudo chown -R $USER $CONDA
     displayName: 'Adding conda to PATH'
 
-  - template: build_tools/azure/conda/common_pre.yml
+  - template: build_tools/azure/conda/common.yml
   - template: build_tools/azure/conda/unix.yml
-  - template: build_tools/azure/conda/common_post.yml
   - template: build_tools/azure/conda/deploy.yml
 
 - job: Windows
@@ -115,9 +113,8 @@ jobs:
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     displayName: 'Adding conda to PATH'
 
-  - template: build_tools/azure/conda/common_pre.yml
+  - template: build_tools/azure/conda/common.yml
   - template: build_tools/azure/conda/windows.yml
-  - template: build_tools/azure/conda/common_post.yml
   - template: build_tools/azure/conda/deploy.yml
 
 - job: test_tagging
