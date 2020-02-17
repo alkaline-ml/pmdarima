@@ -2,7 +2,6 @@ steps:
   # A lot of our requirements don't exist on conda (scipy>1.3.3, for instance), so we pip install all of them
   - bash: |
       conda create --name build-env python=$(python.version) --yes
-      source activate build-env
       python -m pip install -r requirements.txt
     displayName: 'Creating build environment'
 
