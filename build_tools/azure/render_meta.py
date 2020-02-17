@@ -6,7 +6,7 @@ from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 
 # Since conda is only on Azure Pipelines, we can use their env variables
-ROOT_DIRECTORY = Path('/Users/asmith/Documents/projects/alkaline-ml/pmdarima')  #Path(os.getenv('BUILD_SOURCESDIRECTORY'))
+ROOT_DIRECTORY = Path(os.getenv('BUILD_SOURCESDIRECTORY'))
 DIST_PATH = ROOT_DIRECTORY / 'dist'
 VERSION_FILE = ROOT_DIRECTORY / 'pmdarima' / 'VERSION'
 REQUIREMENTS_FILE = ROOT_DIRECTORY / 'requirements.txt'
