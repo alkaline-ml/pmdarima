@@ -2,7 +2,7 @@ steps:
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     displayName: 'Add conda to PATH'
 
-  - script: conda update conda
+  - script: conda update conda --yes
     displayName: 'Updating Conda'
 
   - script: conda install conda-build anaconda-client --yes
