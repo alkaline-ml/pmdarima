@@ -1,5 +1,5 @@
 import os
-import sys
+import re
 
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
@@ -28,26 +28,21 @@ except FileNotFoundError:
     VERSION = '0.0.0'
 
 # Find the requirements and versions
+# conda puts a space between packages and versions, so we have to match that
+requirements = []
 with open(str(REQUIREMENTS_FILE.resolve())) as file:
-    requirements = [line.strip() for line in file.readlines()]
-
-# We build from source on windows, otherwise, we looks for a wheel
-if sys.platform != 'win32':
-    wheel = next(file for file in os.listdir(str(DIST_PATH.resolve()))
-                 if file.endswith('.whl'))
-else:
-    wheel = None
-
-# Numpy version is used for building
-numpy_version = next(package for package in requirements if 'numpy' in package)
+    for line in file:
+        requirement = line.strip()
+        match = re.match(r'^([A-Za-z\-0-9]+)', requirement)
+        _, match_end = match.span()
+        package = match.group(0)
+        version = requirement[match_end:].replace('==', '')
+        requirements.append(f'{package} {version}')
 
 # Render and write the meta.yaml file to $ROOT/conda/meta.yaml
 context = {
     'requirements': requirements,
-    'numpy_version': numpy_version,
-    'VERSION': VERSION,
-    'wheel': wheel,
-    'py_version': '{0.major}{0.minor}'.format(sys.version_info)
+    'VERSION': VERSION
 }
 
 # Ensure output directory exists

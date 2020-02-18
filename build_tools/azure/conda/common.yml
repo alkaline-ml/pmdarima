@@ -1,0 +1,21 @@
+steps:
+  - script: conda update conda --yes
+    displayName: 'Updating Conda'
+
+  - script: conda install python=$(python.version) --yes
+    displayName: 'Fixing conda Python version'
+
+  - script: conda install conda-build anaconda-client --yes
+    displayName: 'Installing conda-build and anaconda-client'
+
+  - bash: |
+      mkdir conda
+      python -m pip install jinja2
+      python build_tools/azure/render_meta.py
+      # This line is purely for debugging
+      conda render --python=$(python.version) conda/
+    displayName: 'Rendering meta.yaml file'
+
+  - bash: make version
+    condition: contains(variables['Build.SourceBranch'], 'refs/tags')
+    displayName: 'Ensuring VERSION file is created'
