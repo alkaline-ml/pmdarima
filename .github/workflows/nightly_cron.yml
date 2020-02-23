@@ -67,5 +67,6 @@ jobs:
           for item in $DEPENDENCIES; do
             echo $item
           done
+        shell: bash
         env:
           DEPENDENCIES: ${{ steps.dependencies.outputs.latest_dependencies }}
