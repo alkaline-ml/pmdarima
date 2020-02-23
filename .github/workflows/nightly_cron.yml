@@ -57,7 +57,7 @@ jobs:
       - name: Collecting dependencies
         id: dependencies  # Needed to retrieve the output of this step later
         run: |
-          dependencies=$(python build_tools/github/get_latest_dependencies)
+          dependencies=$(python build_tools/github/get_latest_dependencies.py)
           echo "::set-output name=latest_dependencies::${dependencies}"
         shell: bash
 
