@@ -62,10 +62,11 @@ jobs:
           echo "::set-output name=latest_dependencies::${dependencies}"
         shell: bash
 
-      - name: Checking output
+      # We install one-by-one because some dependencies depend on others
+      - name: Installing dependencies
         run: |
           for item in $DEPENDENCIES; do
-            echo $item
+            python -m pip install $item
           done
         shell: bash
         env:
