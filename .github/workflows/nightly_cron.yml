@@ -16,6 +16,7 @@ jobs:
   build:
     name: Build against latest dependencies
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
         python-version: ['3.5', '3.6', '3.7', '3.8']
