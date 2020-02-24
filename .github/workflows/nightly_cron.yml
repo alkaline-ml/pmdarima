@@ -75,5 +75,5 @@ jobs:
           if [ "${{ matrix.os }}" == "macos-latest" ]; then
             export PMD_MPL_BACKEND=TkAgg
           fi
-          pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
+          pytest --showlocals --durations=20 --pyargs pmdarima
         shell: bash
