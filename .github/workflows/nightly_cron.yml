@@ -81,9 +81,34 @@ jobs:
       - name: Posting to Slack
         uses: 8398a7/action-slack@v2.7.0
         with:
-          status: ${{ job.status }}
-          text: format('Build failed for {0}, {1}, {2}', ${{ matrix.os }}, ${{ matrix.architecture }}, ${{ matrix.python-version }})
-          author_name: 'Nightly Cron'
+          status: custom
+          payload: |
+            {
+              text: ":no_entry: Nightly Cron Failed",
+              attachments: [{
+                "author_name": "Nightly Cron",
+                fallback: 'Nightly Cron Failed!',
+                color: 'danger',
+                title: 'CI Result',
+                text: 'Failed',
+                fields: [{
+                  title: 'OS',
+                  value: ${{ matrix.os }},
+                  short: false
+                },
+                {
+                  title: 'Architecture',
+                  value: ${{ matrix.architecture }},
+                  short: false
+                },
+                {
+                  title: 'Python Version',
+                  value: ${{ matrix.python-version }},
+                  short: false
+                }],
+                actions: [{}]  // Don't know if we actually need this
+              }]
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
 
