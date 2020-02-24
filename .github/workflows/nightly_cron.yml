@@ -86,10 +86,10 @@ jobs:
           status: custom
           payload: |
             {
-              text: ":no_entry: Nightly Cron Failed",
+              text: ":no_entry: Nightly Build Failed",
               attachments: [{
-                "author_name": "Nightly Cron", // This one needs to be in quotes for some reason
-                fallback: 'Nightly Cron Failed!',
+                "author_name": "Nightly Build", // This one needs to be in quotes for some reason
+                fallback: 'Nightly Build Failed!',
                 color: 'danger',
                 title: 'CI Result',
                 text: 'Failed',
