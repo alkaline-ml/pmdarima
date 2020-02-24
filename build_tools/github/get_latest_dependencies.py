@@ -1,3 +1,5 @@
+"""This script reads our requirements.txt file and removes the pinned versions"""
+
 import re
 import os
 from os.path import abspath, dirname

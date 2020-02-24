@@ -55,7 +55,7 @@ jobs:
         run: python -m pip install --upgrade pip
         shell: bash
 
-      - name: Collecting dependencies
+      - name: Collecting latest dependencies
         id: dependencies  # Needed to retrieve the output of this step later
         run: |
           dependencies=$(python build_tools/github/get_latest_dependencies.py)
@@ -71,3 +71,19 @@ jobs:
         shell: bash
         env:
           DEPENDENCIES: ${{ steps.dependencies.outputs.latest_dependencies }}
+
+      - name: Building wheel
+        run: make bdist_wheel
+        shell: bash
+
+      - name: Installing generated wheel
+        run: pip install --pre --no-index --find-links dist/ pmdarima
+        shell: bash
+
+      - name: Running unit tests
+        run: |
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+            export PMD_MPL_BACKEND=TkAgg
+          fi
+          pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
+        shell: bash
