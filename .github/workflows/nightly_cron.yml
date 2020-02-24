@@ -78,6 +78,7 @@ jobs:
           pytest --showlocals --durations=20 --pyargs pmdarima
         shell: bash
 
+      # https://github.com/marketplace/actions/action-slack#custom-notification
       - name: Posting to Slack
         uses: 8398a7/action-slack@v2.7.0
         with:
@@ -86,27 +87,27 @@ jobs:
             {
               text: ":no_entry: Nightly Cron Failed",
               attachments: [{
-                "author_name": "Nightly Cron",
+                "author_name": "Nightly Cron", // This one needs to be in quotes for some reason
                 fallback: 'Nightly Cron Failed!',
                 color: 'danger',
                 title: 'CI Result',
                 text: 'Failed',
                 fields: [{
                   title: 'OS',
-                  value: ${{ matrix.os }},
+                  value: '${{ matrix.os }}',
                   short: false
                 },
                 {
                   title: 'Architecture',
-                  value: ${{ matrix.architecture }},
+                  value: '${{ matrix.architecture }}',
                   short: false
                 },
                 {
                   title: 'Python Version',
-                  value: ${{ matrix.python-version }},
+                  value: '${{ matrix.python-version }}',
                   short: false
                 }],
-                actions: [{}]  // Don't know if we actually need this
+                actions: [{}]  // Don't know if we actually need this, but it is shown in the docs as empty
               }]
             }
         env:
