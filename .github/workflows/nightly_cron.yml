@@ -81,6 +81,7 @@ jobs:
       # https://github.com/marketplace/actions/action-slack#custom-notification
       - name: Posting to Slack
         uses: 8398a7/action-slack@v2.7.0
+        if: failure()
         with:
           status: custom
           payload: |
