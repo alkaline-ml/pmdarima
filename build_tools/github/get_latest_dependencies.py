@@ -19,7 +19,7 @@ def find_latest_dependencies(*requirements_files):
 
     Returns
     -------
-    list
+    deps : list
         List of parsed dependencies without their pinned versions
     """
     requirements = []
