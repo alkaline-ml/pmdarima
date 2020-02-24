@@ -79,8 +79,11 @@ jobs:
         shell: bash
 
       - name: Posting to Slack
-        uses: Ilshidur/action-slack@1.6.2
+        uses: 8398a7/action-slack@v2.7.0
+        with:
+          status: ${{ job.status }}
+          text: format('Build failed for {0}, {1}, {2}', ${{ matrix.os }}, ${{ matrix.architecture }}, ${{ matrix.python-version }})
+          author_name: 'Nightly Cron'
         env:
-          SLACK_WEBHOOK: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
-        args: format('Build failed for {0}, {1}, {2}', ${{ matrix.os }}, ${{ matrix.architecture }}, ${{ matrix.python-version }})
+          SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
 
