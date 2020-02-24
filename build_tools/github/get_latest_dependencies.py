@@ -39,4 +39,4 @@ def find_latest_dependencies(*requirements_files):
 requirements = find_latest_dependencies(REQUIREMENTS, BUILD_REQUIREMENTS)
 # We print because this is called from a bash script and we need to return a
 # space-separated list
-print(' '.join(list(requirements)))
+print(' '.join(requirements))
