@@ -65,8 +65,8 @@ jobs:
       # We install one-by-one because some dependencies depend on others
       - name: Installing dependencies
         run: |
-          for item in $DEPENDENCIES; do
-            python -m pip install $item
+          for dependency in $DEPENDENCIES; do
+            python -m pip install $dependency
           done
         shell: bash
         env:
