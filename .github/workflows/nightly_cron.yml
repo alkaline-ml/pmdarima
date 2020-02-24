@@ -78,10 +78,9 @@ jobs:
           pytest --showlocals --durations=20 --pyargs pmdarima
         shell: bash
 
-      - name: Post to Slack
-        uses: rtCamp/action-slack-notify@v2.0.0
+      - name: Posting to Slack
+        uses: Ilshidur/action-slack@1.6.2
         env:
-          SLACK_TITLE: format('{0}, {1}, {2}', ${{ matrix.os }}, ${{ matrix.python-version }}, ${{ matrix.architecture }})
-          SLACK_MESSAGE: 'Test'
           SLACK_WEBHOOK: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
+        args: format('Build failed for {0}, {1}, {2}', ${{ matrix.os }}, ${{ matrix.architecture }}, ${{ matrix.python-version }})
 
