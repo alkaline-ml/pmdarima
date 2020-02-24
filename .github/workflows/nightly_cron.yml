@@ -35,16 +35,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      # Visual Studio 2019 (windows-latest) doesn't include these files for some reason??
-      # Even stranger, it really only affects Python 3.5, but we run it across all versions for consistency
-      # https://social.msdn.microsoft.com/Forums/vstudio/en-US/06675e6d-9a0b-46f5-8de0-10237fab1ece/link-error-lnk1158?forum=vcgeneral
-      - name: Fix Windows
-        if: matrix.os == 'windows-latest'
-        run: |
-          Copy-Item "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\rc.exe" -Destination "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN"
-          Copy-Item "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\rcdll.dll" -Destination "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN"
-        shell: powershell
-
       - name: Setting up Python
         uses: actions/setup-python@v1.1.1
         with:
