@@ -350,6 +350,16 @@ def test_oob_for_issue_29():
                         raise
 
 
+def test_oob_with_zero_out_of_sample_size():
+    with pytest.warns(UserWarning) as uw:
+        auto_arima(y, suppress_warnings=False, information_criterion="oob",
+                   out_of_sample_size=0)
+
+    assert uw[0].message.args[0] == "information_criterion cannot be 'oob' " \
+                                    "with out_of_sample_size = 0. Falling " \
+                                    "back to information criterion = aic."
+
+
 def test_issue_30():
     # From the issue:
     vec = np.array([33., 44., 58., 49., 46., 98., 97.])
