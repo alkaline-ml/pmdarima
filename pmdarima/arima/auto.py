@@ -346,12 +346,12 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         raise ValueError('auto_arima not defined for information_criteria=%s. '
                          'Valid information criteria include: %r'
                          % (information_criterion, VALID_CRITERIA))
-        
     
-    #check on information criterion and out_of_sample size 
-    if information_criterion=='oob' and out_of_sample_size==0:
+    # check on information criterion and out_of_sample size
+    if information_criterion == 'oob' and out_of_sample_size == 0:
         information_criterion = 'aic'
-        warnings.warn('information_criterion cannot be \'oob\' with out_of_sample_size = 0. '
+        warnings.warn('information_criterion cannot be \'oob\' with '
+                      'out_of_sample_size = 0. '
                       'Falling back to information criterion = aic.')
 
     # the R code handles this, but I don't think statsmodels
