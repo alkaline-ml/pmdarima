@@ -514,6 +514,13 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;auto_arima not defined for information_criteria=</span><span class="si">%s</span><span class="s1">. &#39;</span>
                          <span class="s1">&#39;Valid information criteria include: </span><span class="si">%r</span><span class="s1">&#39;</span>
                          <span class="o">%</span> <span class="p">(</span><span class="n">information_criterion</span><span class="p">,</span> <span class="n">VALID_CRITERIA</span><span class="p">))</span>
+    
+    <span class="c1"># check on information criterion and out_of_sample size</span>
+    <span class="k">if</span> <span class="n">information_criterion</span> <span class="o">==</span> <span class="s1">&#39;oob&#39;</span> <span class="ow">and</span> <span class="n">out_of_sample_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">information_criterion</span> <span class="o">=</span> <span class="s1">&#39;aic&#39;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;information_criterion cannot be </span><span class="se">\&#39;</span><span class="s1">oob</span><span class="se">\&#39;</span><span class="s1"> with &#39;</span>
+                      <span class="s1">&#39;out_of_sample_size = 0. &#39;</span>
+                      <span class="s1">&#39;Falling back to information criterion = aic.&#39;</span><span class="p">)</span>
 
     <span class="c1"># the R code handles this, but I don&#39;t think statsmodels</span>
     <span class="c1"># will even fit a model this small...</span>
