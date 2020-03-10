@@ -1196,8 +1196,9 @@ class ARIMA(BaseARIMA):
         ax = fig.add_subplot(222)
         # temporarily disable Deprecation warning, normed -> density
         # hist needs to use `density` in future when minimum matplotlib has it
+        # normed keyword arugment is no longer supported in matplotlib since version 3.2.0
         with warnings.catch_warnings(record=True):
-            ax.hist(resid_nonmissing, normed=True, label='Hist')
+            ax.hist(resid_nonmissing, density=True, label='Hist')
 
         kde = gaussian_kde(resid_nonmissing)
         xlim = (-1.96 * 2, 1.96 * 2)
