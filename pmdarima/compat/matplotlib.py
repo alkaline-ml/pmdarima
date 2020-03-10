@@ -8,7 +8,8 @@ import sys
 import os
 
 __all__ = [
-    'get_compatible_pyplot'
+    'get_compatible_pyplot',
+    'mpl_hist_arg'
 ]
 
 
@@ -49,3 +50,22 @@ def get_compatible_pyplot(backend=None, debug=True):
 
     from matplotlib import pyplot as plt
     return plt
+
+
+def mpl_hist_arg():
+    # Function for backwards compatibility with matplotlib.pyplot.hist 'normed' keyword argument
+    # Keyword is deprecated since version 2.1.0 of matplotlib, but was removed completely in version 3.2.0
+    import matplotlib
+    from distutils.version import LooseVersion, StrictVersion
+
+    mpl_version = matplotlib.__version__
+    try:
+        if StrictVersion(mpl_version) >= '2.1.0':
+            return True
+        else:
+            return False
+
+    except ValueError:
+        # matplotlib was not installed from pip or it is a developement version
+        # Assume latest version is installed?
+        return True
