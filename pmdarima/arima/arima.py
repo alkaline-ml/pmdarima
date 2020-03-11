@@ -1201,7 +1201,11 @@ class ARIMA(BaseARIMA):
         # 'normed' argument is no longer supported in matplotlib since
         # version 3.2.0. New function added for backwards compatibility
         with warnings.catch_warnings(record=True):
-            ax.hist(resid_nonmissing, label='Hist', **mpl_compat.mpl_hist_arg())
+            ax.hist(
+                resid_nonmissing,
+                label='Hist',
+                **mpl_compat.mpl_hist_arg()
+            )
 
         kde = gaussian_kde(resid_nonmissing)
         xlim = (-1.96 * 2, 1.96 * 2)

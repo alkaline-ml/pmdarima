@@ -73,5 +73,6 @@ def mpl_hist_arg(value=True):
     """
     import matplotlib
 
-    density_kwarg = 'density' if matplotlib.__version__ >= '2.1.0' else 'normed'
+    density_kwarg = 'density' if matplotlib.__version__ >= '2.1.0'\
+        else 'normed'
     return {density_kwarg: value}
