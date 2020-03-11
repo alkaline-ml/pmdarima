@@ -21,6 +21,7 @@ from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.sklearn import get_compatible_check_is_fitted, safe_indexing
 from ..compat import statsmodels as sm_compat
+from ..compat import matplotlib as mpl_compat
 from ..compat.matplotlib import mpl_hist_arg
 from ..utils import get_callable, if_has_delegate, is_iterable, check_endog, \
     check_exog
@@ -1197,12 +1198,10 @@ class ARIMA(BaseARIMA):
         ax = fig.add_subplot(222)
         # temporarily disable Deprecation warning, normed -> density
         # hist needs to use `density` in future when minimum matplotlib has it
-        # normed keyword arugment is no longer supported in matplotlib since version 3.2.0
+        # 'normed' argument is no longer supported in matplotlib since
+        # version 3.2.0. New function added for backwards compatibility
         with warnings.catch_warnings(record=True):
-            if mpl_hist_arg:
-                ax.hist(resid_nonmissing, density=True, label='Hist')
-            else:
-                ax.hist(resid_nonmissing, normed=True, label='Hist')
+            ax.hist(resid_nonmissing, label='Hist', **mpl_compat.mpl_hist_arg())
 
         kde = gaussian_kde(resid_nonmissing)
         xlim = (-1.96 * 2, 1.96 * 2)

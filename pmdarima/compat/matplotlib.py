@@ -52,20 +52,26 @@ def get_compatible_pyplot(backend=None, debug=True):
     return plt
 
 
-def mpl_hist_arg():
-    # Function for backwards compatibility with matplotlib.pyplot.hist 'normed' keyword argument
-    # Keyword is deprecated since version 2.1.0 of matplotlib, but was removed completely in version 3.2.0
+def mpl_hist_arg(value=True):
+    """Find the appropriate `density` kwarg for our given matplotlib version.
+
+    This will determine if we should use `normed` or `density`. Additionally,
+    since this is a kwarg, the user can supply a value (True or False) that
+    they would like in the output dictionary.
+
+    Parameters
+    ----------
+    value : bool, optional (default=True)
+        The boolean value of density/normed
+
+    Returns
+    -------
+    density_kwarg : dict
+        A dictionary containing the appropriate density kwarg for the
+        installed  matplotlib version, mapped to the provided or default
+        value
+    """
     import matplotlib
-    from distutils.version import LooseVersion, StrictVersion
 
-    mpl_version = matplotlib.__version__
-    try:
-        if StrictVersion(mpl_version) >= '2.1.0':
-            return True
-        else:
-            return False
-
-    except ValueError:
-        # matplotlib was not installed from pip or it is a developement version
-        # Assume latest version is installed?
-        return True
+    density_kwarg = 'density' if matplotlib.__version__ >= '2.1.0' else 'normed'
+    return {density_kwarg: value}
