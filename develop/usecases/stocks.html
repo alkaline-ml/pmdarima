@@ -221,7 +221,7 @@ it will work.</p>
 <span class="c1"># %matplotlib inline</span>
 
 <span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using pmdarima </span><span class="si">{pm.__version__}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using pmdarima </span><span class="si">{</span><span class="n">pm</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="c1"># Using pmdarima 1.5.2</span>
 </pre></div>
 </div>
@@ -343,7 +343,7 @@ data <a class="reference external" href="https://www.statisticshowto.datascience
     <span class="n">ax_row</span><span class="p">,</span> <span class="n">ax_col</span> <span class="o">=</span> <span class="n">ax_coords</span>
     <span class="n">axis</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">ax_row</span><span class="p">][</span><span class="n">ax_col</span><span class="p">]</span>
     <span class="n">lag_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Open&#39;</span><span class="p">],</span> <span class="n">lag</span><span class="o">=</span><span class="n">lag</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
-    <span class="n">axis</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lag=</span><span class="si">{lag}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lag=</span><span class="si">{</span><span class="n">lag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -370,7 +370,7 @@ we could try both or allow <code class="docutils literal notranslate"><span clas
 <span class="n">adf_diffs</span> <span class="o">=</span> <span class="n">ndiffs</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;adf&#39;</span><span class="p">,</span> <span class="n">max_d</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">n_diffs</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">adf_diffs</span><span class="p">,</span> <span class="n">kpss_diffs</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated differencing term: </span><span class="si">{n_diffs}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated differencing term: </span><span class="si">{</span><span class="n">n_diffs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="c1"># Estimated differencing term: 1</span>
 </pre></div>
 </div>
@@ -424,8 +424,8 @@ measure the error on the forecasts:</p>
     <span class="c1"># Updates the existing model with a small number of MLE steps</span>
     <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_ob</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean squared error: {mean_squared_error(y_test, forecasts)}&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SMAPE: {smape(y_test, forecasts)}&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean squared error: </span><span class="si">{</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">forecasts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SMAPE: </span><span class="si">{</span><span class="n">smape</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">forecasts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="c1"># Mean squared error: 0.34238951346274243</span>
 <span class="c1"># SMAPE: 0.9825490519101439</span>
 </pre></div>
