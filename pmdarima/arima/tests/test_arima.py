@@ -814,7 +814,7 @@ def test_seasonal_xreg_differencing():
 def test_inf_max_order():
     _ = auto_arima(lynx, max_order=None,  # noqa: F841
                    suppress_warnings=True,
-                   error_action='ignore')
+                   error_action='trace')
 
 
 # Regression testing for unpickling an ARIMA from an older version
