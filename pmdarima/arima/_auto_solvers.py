@@ -7,6 +7,7 @@ import numpy as np
 
 import time
 import warnings
+import traceback
 
 from .arima import ARIMA
 from .warnings import ModelFitWarning
@@ -381,12 +382,13 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
     # for non-stationarity errors or singular matrices, return None
     except (LinAlgError, ValueError) as v:
         if error_action == 'warn':
-            # TODO: do we want to use traceback.format_exc()?
             warnings.warn(_fmt_warning_str(order, seasonal_order),
                           ModelFitWarning)
+        elif error_action == 'trace':
+            tb = "\nTraceback:\n" + traceback.format_exc()
+            warning_str = _fmt_warning_str(order, seasonal_order) + tb
+            warnings.warn(warning_str, ModelFitWarning)
         elif error_action == 'raise':
-            # todo: can we do something more informative in case
-            # the error is not on the pmdarima side?
             raise v
         # if it's 'ignore' or 'warn', we just return None
         fit = None
@@ -418,5 +420,5 @@ def _fmt_warning_str(order, seasonal_order):
     """
     return ('Unable to fit ARIMA for %s; data is likely non-stationary. '
             '(if you do not want to see these warnings, run '
-            'with error_action="ignore")'
+            'with error_action="ignore"). '
             % _fmt_order_info(order, seasonal_order))

@@ -60,7 +60,7 @@ class AutoARIMA(BaseARIMA):
                  test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
                  start_params=None, trend=None, method='lbfgs', maxiter=50,
                  offset_test_args=None, seasonal_test_args=None,
-                 suppress_warnings=False, error_action='warn', trace=False,
+                 suppress_warnings=False, error_action='trace', trace=False,
                  random=False, random_state=None, n_fits=10,
                  out_of_sample_size=0, scoring='mse',
                  scoring_args=None, with_intercept=True,
@@ -260,7 +260,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                test='kpss', seasonal_test='ocsb', stepwise=True, n_jobs=1,
                start_params=None, trend=None, method='lbfgs', maxiter=50,
                offset_test_args=None, seasonal_test_args=None,
-               suppress_warnings=False, error_action='warn', trace=False,
+               suppress_warnings=False, error_action='trace', trace=False,
                random=False, random_state=None, n_fits=10,
                return_valid_fits=False, out_of_sample_size=0, scoring='mse',
                scoring_args=None, with_intercept=True,
@@ -312,7 +312,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                          'for a random search')
 
     # validate error action
-    actions = {'warn', 'raise', 'ignore', None}
+    actions = {'warn', 'raise', 'ignore', 'trace', None}
     if error_action not in actions:
         raise ValueError('error_action must be one of %r, but got %r'
                          % (actions, error_action))
