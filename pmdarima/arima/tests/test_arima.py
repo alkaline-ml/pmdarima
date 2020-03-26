@@ -2,7 +2,6 @@
 
 from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
 from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
-from pmdarima.arima._auto_solvers import _fmt_warning_str
 from pmdarima.arima.auto import _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.arima.warnings import ModelFitWarning
@@ -682,12 +681,6 @@ def test_corner_cases():
     # show if max* < start* it breaks:
     with pytest.raises(ValueError):
         auto_arima(np.ones(10), start_p=5, max_p=0)
-
-
-def test_warning_str_fmt():
-    order = (1, 1, 1)
-    seasonal = (1, 1, 1, 1)
-    _fmt_warning_str(order, seasonal)
 
 
 @pytest.mark.parametrize(
