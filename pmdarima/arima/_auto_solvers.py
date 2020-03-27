@@ -7,6 +7,7 @@ import numpy as np
 
 import time
 import warnings
+import traceback
 
 from .arima import ARIMA
 from .warnings import ModelFitWarning
@@ -368,7 +369,10 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
                trace, error_action,
                out_of_sample_size, scoring, scoring_args,
                with_intercept, **kwargs):
+
+    debug_str = _arima_debug_str(order, seasonal_order, with_intercept)
     start = time.time()
+
     try:
         fit = ARIMA(order=order, seasonal_order=seasonal_order,
                     start_params=start_params, trend=trend, method=method,
@@ -380,23 +384,27 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
 
     # for non-stationarity errors or singular matrices, return None
     except (LinAlgError, ValueError) as v:
-        if error_action == 'warn':
-            # TODO: do we want to use traceback.format_exc()?
-            warnings.warn(_fmt_warning_str(order, seasonal_order),
-                          ModelFitWarning)
-        elif error_action == 'raise':
-            # todo: can we do something more informative in case
-            # the error is not on the pmdarima side?
+        if error_action == "raise":
             raise v
-        # if it's 'ignore' or 'warn', we just return None
+
+        elif error_action in ("warn", "trace"):
+            warning_str = 'Error fitting %s ' \
+                          '(if you do not want to see these warnings, run ' \
+                          'with error_action="ignore").' \
+                          % debug_str
+
+            if error_action == 'trace':
+                warning_str += "\nTraceback:\n" + traceback.format_exc()
+
+            warnings.warn(warning_str, ModelFitWarning)
+
         fit = None
 
     # do trace
     if trace:
-        print('Fit ARIMA: %s (constant=%s); AIC=%.3f, BIC=%.3f, '
+        print('Fit %s; AIC=%.3f, BIC=%.3f, '
               'Time=%.3f seconds'
-              % (_fmt_order_info(order, seasonal_order),
-                 with_intercept,
+              % (debug_str,
                  fit.aic() if fit is not None else np.nan,
                  fit.bic() if fit is not None else np.nan,
                  time.time() - start if fit is not None else np.nan))
@@ -404,19 +412,8 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
     return fit
 
 
-def _fmt_order_info(order, seasonal_order):
-    return '(%i, %i, %i)x%s' \
-           % (order[0], order[1], order[2],
-              '(%i, %i, %i, %i)'
-              % (seasonal_order[0], seasonal_order[1],
-                 seasonal_order[2], seasonal_order[3]))
-
-
-def _fmt_warning_str(order, seasonal_order):
-    """This is just so we can test that the string will format
-    even if we don't want the warnings in the tests
-    """
-    return ('Unable to fit ARIMA for %s; data is likely non-stationary. '
-            '(if you do not want to see these warnings, run '
-            'with error_action="ignore")'
-            % _fmt_order_info(order, seasonal_order))
+def _arima_debug_str(order, seasonal_order, with_intercept):
+    p, d, q = order
+    P, D, Q, m = seasonal_order
+    return "ARIMA(%i,%i,%i)x(%i,%i,%i,%i) [intercept=%r]" % \
+           (p, d, q, P, D, Q, m, with_intercept)

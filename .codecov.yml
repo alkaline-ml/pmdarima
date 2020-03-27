@@ -10,10 +10,14 @@ coverage:
   status:
     project:
       default:
-        against: parent
-        target: 97%
+        target: 95%
+        informational: true
         branches:
           - master
+
+    # The patch just adds noise to the PRs. We only really care about overall
+    # coverage
+    patch: off
 
 ignore:
 - "**/setup.py"

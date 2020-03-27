@@ -7,6 +7,14 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v1.5.4 <http://alkaline-ml.com/pmdarima/1.5.4/>`_
+--------------------------------------------------
+
+* Support newest versions of matplotlib
+
+* Add new level of ``auto_arima`` error actions: "trace" which will warn for errors while dumping
+  the original stacktrace.
+
 
 `v1.5.3 <http://alkaline-ml.com/pmdarima/1.5.3/>`_
 --------------------------------------------------
