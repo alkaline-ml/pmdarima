@@ -3,9 +3,15 @@
 import os
 from os.path import abspath, dirname, join, expanduser
 import numpy as np
+import pandas as pd
 import urllib3
 
 from ..compat.numpy import DTYPE
+
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 # caches anything read from disk to avoid re-reads
 _cache = {}
@@ -63,3 +69,20 @@ def fetch_from_web_or_disk(url, key, cache=True, dtype=DTYPE):
         _cache[key] = rslt
 
     return rslt
+
+
+def _load_pickle(key):
+    """Internal method for loading a pickle file"""
+    base_path = abspath(dirname(__file__))
+    file_path = join(base_path, "data", key)
+    with open(file_path, "rb") as pkl:
+        return pickle.load(pkl)
+
+
+def load_date_example():
+    """Loads a nondescript dated example for internal use"""
+    X = _load_pickle("dated.pkl")
+    # make sure it's a date time
+    X.loc[:, 'date'] = pd.to_datetime(X['date'])
+    y = X.pop('y')
+    return y, X

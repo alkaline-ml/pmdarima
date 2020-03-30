@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from .dates import *
 from .fourier import *
 
 # don't want to accidentally hoist `base` to top-level, since preprocessing has

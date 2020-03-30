@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from itertools import islice
+import pandas as pd
 import warnings
 
 from sklearn.base import BaseEstimator, clone
@@ -154,6 +155,12 @@ class Pipeline(BaseEstimator):
         estimator = self.steps[-1][1]
         return estimator
 
+    def _check_n_periods(self, n_periods, exog):
+        # if exog was passed in, we have to use that as n_periods
+        if exog is not None and len(exog) != n_periods:
+            n_periods = len(exog)
+        return n_periods
+
     def fit(self, y, exogenous=None, **fit_kwargs):
         """Fit the pipeline of transformers and the ARIMA model
 
@@ -205,6 +212,10 @@ class Pipeline(BaseEstimator):
             # transformer.
             steps[step_idx] = (name, cloned_transformer)
 
+        # Save the order of the columns so we can select in the predict phase
+        self.x_feats_ = Xt.columns.tolist() \
+            if isinstance(Xt, pd.DataFrame) else None
+
         # Now fit the final estimator
         kwargs = named_kwargs[steps[-1][0]]
         self._final_estimator.fit(yt, exogenous=Xt, **kwargs)
@@ -233,11 +244,58 @@ class Pipeline(BaseEstimator):
                                          % (name, num_p, n_periods))
                     kw["n_periods"] = n_periods
 
+                # TODO: manual check to ensure Xt shape == n_periods shape?
+
                 _, Xt = transformer.transform(y=None, exogenous=Xt, **kw)
+
+        # since some exog featurizers require exog input, and others don't,
+        # feat orders may get wonky between fit & pred. Make sure we have them
+        # in the same order when calling the model
+        if self.x_feats_ is not None:
+            Xt = Xt[self.x_feats_]
 
         # Now we should be able to run the prediction
         nm, est = self.steps_[-1]
         return Xt, est, named_kwargs[nm]
+
+    def transform(self, n_periods=10, exogenous=None, **kwargs):
+        """Get the transformed exogenous array
+
+        Generate the exogenous array ``n_periods`` in the future. This passes
+        the provided exog variables through all transformation steps, returning
+        it before it's passed into the model.
+
+        Parameters
+        ----------
+        n_periods : int, optional (default=10)
+            The number of periods in the future to forecast.
+
+        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+            An optional 2-d array of exogenous variables. If provided, these
+            variables are used as additional features in the regression
+            operation. This should not include a constant or trend. Note that
+            if an ``ARIMA`` is fit on exogenous features, it must be provided
+            exogenous features for making predictions.
+\
+        **kwargs : keyword args
+            Extra keyword arguments used for each stage's ``transform`` stage
+            and the estimator's ``predict`` stage. Similar to scikit-learn
+            pipeline keyword args, the keys are compound, comprised of the
+            stage name and the argument name separated by a "__". For instance,
+            if you have a FourierFeaturizer whose stage is named
+            "fourier", your transform kwargs could resemble::
+
+                {"fourier__n_periods": 50}
+
+        Returns
+        -------
+        X_prime : pd.DataFrame
+            The transformed exog array.
+        """
+        n_periods = self._check_n_periods(n_periods, exogenous)
+        kwargs = _warn_for_deprecated(**kwargs)
+        Xt, _, _ = self._pre_predict(n_periods, exogenous, **kwargs)
+        return Xt
 
     def predict_in_sample(self, exogenous=None, start=None,
                           end=None, dynamic=False, return_conf_int=False,
@@ -367,6 +425,7 @@ class Pipeline(BaseEstimator):
             The confidence intervals for the forecasts. Only returned if
             ``return_conf_int`` is True.
         """
+        n_periods = self._check_n_periods(n_periods, exogenous)
         kwargs = _warn_for_deprecated(**kwargs)
         Xt, est, predict_kwargs = self._pre_predict(
             n_periods, exogenous, **kwargs)
@@ -460,6 +519,9 @@ class Pipeline(BaseEstimator):
                     y=yt, exogenous=Xt, **kw)
             else:
                 yt, Xt = transformer.transform(yt, exogenous=Xt, **kw)
+
+        if self.x_feats_ is not None:
+            Xt = Xt[self.x_feats_]
 
         # Now we can update the arima
         nm, est = self.steps_[-1]

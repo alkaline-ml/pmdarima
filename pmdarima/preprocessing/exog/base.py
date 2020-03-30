@@ -20,7 +20,7 @@ class BaseExogTransformer(BaseTransformer, metaclass=abc.ABCMeta):
 
 
 class BaseExogFeaturizer(BaseExogTransformer, metaclass=abc.ABCMeta):
-    """Exogenous transformers that create exog features from the endog array
+    """Transformers that create new exog features from the endog or exog array
 
     Parameters
     ----------

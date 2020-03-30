@@ -1,20 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from os.path import join, abspath, dirname
-
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
+from ._base import _load_pickle
 
 __all__ = ['load_msft']
-
-
-def _load_internal(key):
-    base_path = abspath(dirname(__file__))
-    file_path = join(base_path, "data", key)
-    with open(file_path, "rb") as pkl:
-        return pickle.load(pkl)
 
 
 def load_msft():
@@ -41,4 +29,4 @@ def load_msft():
     df : pd.DataFrame, shape=(7983, 7)
         A dataframe of endog and exog values.
     """
-    return _load_internal("msft.pkl")
+    return _load_pickle("msft.pkl")
