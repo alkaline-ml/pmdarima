@@ -239,6 +239,7 @@ Exogenous transformers
     :toctree: generated/
     :template: class.rst
 
+    preprocessing.DateFeaturizer
     preprocessing.FourierFeaturizer
 
 

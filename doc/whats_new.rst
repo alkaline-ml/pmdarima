@@ -7,13 +7,18 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
-`v1.5.4 <http://alkaline-ml.com/pmdarima/1.5.4/>`_
+
+`v1.6.0 <http://alkaline-ml.com/pmdarima/1.6.0/>`_
 --------------------------------------------------
 
 * Support newest versions of matplotlib
 
 * Add new level of ``auto_arima`` error actions: "trace" which will warn for errors while dumping
   the original stacktrace.
+
+* New featurizer: :class:`pmdarima.preprocessing.DateFeaturizer`. This can be used to create dummy
+  and ordinal exogenous features and is useful when modeling pseudo-seasonal trends or time series
+  with holes in them.
 
 
 `v1.5.3 <http://alkaline-ml.com/pmdarima/1.5.3/>`_
