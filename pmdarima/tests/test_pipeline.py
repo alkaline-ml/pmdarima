@@ -257,4 +257,4 @@ def test_order_does_not_matter_with_date_transformer():
     assert Xt_a.equals(Xt_b[pipeline_a.x_feats_])
 
     # forecasts should be identical
-    assert_array_almost_equal(pred_a, pred_b)
+    assert_array_almost_equal(pred_a, pred_b, decimal=3)
