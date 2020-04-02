@@ -26,7 +26,8 @@ austres_long = np.asarray(aus_list * 10)  # type: np.ndarray
     'x,type_,m,filter_', [
         pytest.param(ausbeer, 'additive', 4, None),
         pytest.param(airpassengers, 'multiplicative', 12, None),
-        pytest.param(wineind, 'additive', 12, None)
+        pytest.param(wineind, 'additive', 12, None),
+        pytest.param(np.array([1., 2., 3., 4., 5., 6.]), 'additive', 3, None)
     ]
 )
 def test_decompose_happy_path(x, type_, m, filter_):
