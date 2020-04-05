@@ -30,11 +30,13 @@ class DateFeaturizer(BaseExogFeaturizer):
           Particular days of the week may align with quasi-seasonal trends.
 
       * Day of the month
-          Useful for avoiding things like the end-of-month effect, ie., a
+          Useful for modeling things like the end-of-month effect, ie., a
           department spends the remainder of its monthly budget to avoid future
           budget cuts, and the last Friday of the month is heavy on spending.
 
-    Note that an exogenous array _must_ be provided at inference.
+    The motivation for this featurizer comes from a blog post by Rob Hyndman
+    [1] on modeling quasi-seasonal patterns in time series. Note that an
+    exogenous array _must_ be provided at inference.
 
     Parameters
     ----------
@@ -74,6 +76,10 @@ class DateFeaturizer(BaseExogFeaturizer):
       dates for which you are forecasting as exog features.
 
     * The ``column_name`` field is dropped in the transformed exogenous array.
+
+    References
+    ----------
+    .. [1] https://robjhyndman.com/hyndsight/monthly-seasonality/
     """
 
     def __init__(self, column_name, with_day_of_week=True,

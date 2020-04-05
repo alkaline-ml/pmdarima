@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ._base import _load_pickle
+from ._base import _load_tarfile
 
 __all__ = ['load_msft']
 
@@ -29,4 +29,4 @@ def load_msft():
     df : pd.DataFrame, shape=(7983, 7)
         A dataframe of endog and exog values.
     """
-    return _load_pickle("msft.pkl")
+    return _load_tarfile("msft.tar.gz")
