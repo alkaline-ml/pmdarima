@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Modeling quasi-seasonal trends with date features &mdash; pmdarima 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Array concatenation" href="../utils/example_array_concatenation.html" />
+    <link rel="prev" title="Cross-validating your time series models" href="../model_selection/example_cross_validation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#id1">General examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#arima-examples">ARIMA examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#datasets-examples">Datasets examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#cross-validation-examples">Cross-validation examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#preprocessing-examples">Preprocessing examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Modeling quasi-seasonal trends with date features</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#utils-examples">Utils examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+        
+      <li>Modeling quasi-seasonal trends with date features</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/auto_examples/preprocessing/example_date_featurizer.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="modeling-quasi-seasonal-trends-with-date-features">
+<span id="sphx-glr-auto-examples-preprocessing-example-date-featurizer-py"></span><h1>Modeling quasi-seasonal trends with date features<a class="headerlink" href="#modeling-quasi-seasonal-trends-with-date-features" title="Permalink to this headline">¶</a></h1>
+<p>Some trends are common enough to appear seasonal, yet sporadic enough that
+approaching them from a seasonal perspective may not be valid. An example of
+this is the <a class="reference external" href="https://robjhyndman.com/hyndsight/monthly-seasonality/">“end-of-the-month” effect</a>.
+In this example, we’ll explore how we can create meaningful features that
+express seasonal trends without needing to fit a seasonal model.</p>
+<br/><ul class="sphx-glr-horizontal">
+<li><a class="first reference internal image-reference" href="../../_images/sphx_glr_example_date_featurizer_001.png"><img alt="../../_images/sphx_glr_example_date_featurizer_001.png" src="../../_images/sphx_glr_example_date_featurizer_001.png" style="width: 376.0px; height: 282.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../../_images/sphx_glr_example_date_featurizer_002.png"><img alt="../../_images/sphx_glr_example_date_featurizer_002.png" src="../../_images/sphx_glr_example_date_featurizer_002.png" style="width: 752.0px; height: 376.0px;" /></a>
+</li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pmdarima</span> <span class="n">version</span><span class="p">:</span> <span class="mf">0.0</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Head</span> <span class="n">of</span> <span class="n">generated</span> <span class="n">exog</span> <span class="n">features</span><span class="p">:</span>
+   <span class="n">DATE</span><span class="o">-</span><span class="n">WEEKDAY</span><span class="o">-</span><span class="mi">0</span>  <span class="o">...</span>  <span class="n">DATE</span><span class="o">-</span><span class="n">DAY</span><span class="o">-</span><span class="n">OF</span><span class="o">-</span><span class="n">MONTH</span>
+<span class="mi">0</span>               <span class="mi">0</span>  <span class="o">...</span>                  <span class="mi">1</span>
+<span class="mi">1</span>               <span class="mi">0</span>  <span class="o">...</span>                  <span class="mi">2</span>
+<span class="mi">2</span>               <span class="mi">0</span>  <span class="o">...</span>                  <span class="mi">3</span>
+<span class="mi">3</span>               <span class="mi">0</span>  <span class="o">...</span>                  <span class="mi">4</span>
+<span class="mi">4</span>               <span class="mi">0</span>  <span class="o">...</span>                  <span class="mi">5</span>
+
+<span class="p">[</span><span class="mi">5</span> <span class="n">rows</span> <span class="n">x</span> <span class="mi">8</span> <span class="n">columns</span><span class="p">]</span>
+<span class="n">Performing</span> <span class="n">stepwise</span> <span class="n">search</span> <span class="n">to</span> <span class="n">minimize</span> <span class="n">aic</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2839.502</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2891.632</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.909</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2864.731</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2901.967</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.031</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2861.910</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2902.869</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.382</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2859.092</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2900.051</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.542</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">False</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2862.772</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2896.284</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.280</span> <span class="n">seconds</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2837.832</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2886.238</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.878</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.998</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2837.790</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2886.197</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.892</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.999</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2841.291</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2897.145</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.986</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.998</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2841.239</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2897.093</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.087</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.998</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2835.791</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2880.474</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.910</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.999</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2838.701</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2890.831</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.130</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.996</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2838.972</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2891.102</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.816</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">0.998</span><span class="p">)</span>
+<span class="n">Fit</span> <span class="n">ARIMA</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="n">intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">];</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2840.653</span><span class="p">,</span> <span class="n">BIC</span><span class="o">=</span><span class="mf">2900.231</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.206</span> <span class="n">seconds</span>
+<span class="n">Near</span> <span class="n">non</span><span class="o">-</span><span class="n">invertible</span> <span class="n">roots</span> <span class="k">for</span> <span class="n">order</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="n">setting</span> <span class="n">score</span> <span class="n">to</span> <span class="n">inf</span> <span class="p">(</span><span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">inverse</span> <span class="n">root</span> <span class="n">too</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span> <span class="n">border</span> <span class="n">of</span> <span class="n">the</span> <span class="n">unit</span> <span class="n">circle</span><span class="p">:</span> <span class="mf">1.000</span><span class="p">)</span>
+<span class="n">Final</span> <span class="n">model</span> <span class="n">order</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">Total</span> <span class="n">fit</span> <span class="n">time</span><span class="p">:</span> <span class="mf">10.054</span> <span class="n">seconds</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+
+<span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
+
+<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">arima</span>
+<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">model_selection</span>
+<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">pipeline</span>
+<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+<span class="kn">from</span> <span class="nn">pmdarima.datasets._base</span> <span class="kn">import</span> <span class="n">load_date_example</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pmdarima version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pm</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># Load the data and split it into separate pieces</span>
+<span class="n">y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">load_date_example</span><span class="p">()</span>
+<span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> \
+    <a href="../../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="View documentation for pmdarima.model_selection.train_test_split"><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># We can examine traits about the time series:</span>
+<span class="n">pm</span><span class="o">.</span><span class="n">tsdisplay</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># We can see the ACF increases and decreases rather rapidly, which means we may</span>
+<span class="c1"># need some differencing. There also does not appear to be an obvious seasonal</span>
+<span class="c1"># trend.</span>
+<span class="n">n_diffs</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.arima.ndiffs.html#pmdarima.arima.ndiffs" title="View documentation for pmdarima.arima.ndiffs"><span class="n">arima</span><span class="o">.</span><span class="n">ndiffs</span></a><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">max_d</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Here&#39;s what the featurizer will create for us:</span>
+<span class="n">date_feat</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.preprocessing.DateFeaturizer.html#pmdarima.preprocessing.DateFeaturizer" title="View documentation for pmdarima.preprocessing.DateFeaturizer"><span class="n">preprocessing</span><span class="o">.</span><span class="n">DateFeaturizer</span></a><span class="p">(</span>
+    <span class="n">column_name</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span>  <span class="c1"># the name of the date feature in the exog matrix</span>
+    <span class="n">with_day_of_week</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">with_day_of_month</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">X_train_feats</span> <span class="o">=</span> <span class="n">date_feat</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Head of generated exog features:</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">X_train_feats</span><span class="o">.</span><span class="n">head</span><span class="p">()))</span>
+
+<span class="c1"># We can plug this exog featurizer into a pipeline:</span>
+<span class="n">pipe</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline" title="View documentation for pmdarima.pipeline.Pipeline"><span class="n">pipeline</span><span class="o">.</span><span class="n">Pipeline</span></a><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">date_feat</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;arima&#39;</span><span class="p">,</span> <span class="n">arima</span><span class="o">.</span><span class="n">AutoARIMA</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">n_diffs</span><span class="p">,</span>
+                              <span class="n">trace</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                              <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">seasonal</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="p">])</span>
+
+<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span>
+
+<span class="c1"># Plot our forecasts</span>
+<span class="n">forecasts</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">exogenous</span><span class="o">=</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">n_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_train</span> <span class="o">+</span> <span class="n">forecasts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="n">n_train</span><span class="p">],</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training Data&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">n_train</span><span class="p">:],</span> <span class="n">forecasts</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Predicted&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">n_train</span><span class="p">:],</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Actual&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">,</span> <span class="n">borderaxespad</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Predicted Foo&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;# Foo&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># What next? Try combining different featurizers in your pipeline to enhance</span>
+<span class="c1"># a model&#39;s predictive power.</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  10.198 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/example_date_featurizer.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_date_featurizer.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/example_date_featurizer.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_date_featurizer.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../utils/example_array_concatenation.html" class="btn btn-neutral float-right" title="Array concatenation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../model_selection/example_cross_validation.html" class="btn btn-neutral float-left" title="Cross-validating your time series models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

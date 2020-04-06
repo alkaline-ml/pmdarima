@@ -251,6 +251,43 @@ timeseries models in a cross-validated fashion.
 
     <div style='clear:both'></div>
 
+.. _preprocessing_examples:
+
+Preprocessing examples
+----------------------
+
+Examples of how to use the :mod:`pmdarima.preprocessing` module to transform
+your time series or exog features inside or outside of a pipeline.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Some trends are common enough to appear seasonal, yet sporadic enough that approaching them fr...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/preprocessing/images/thumb/sphx_glr_example_date_featurizer_thumb.png
+
+        :ref:`sphx_glr_auto_examples_preprocessing_example_date_featurizer.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/preprocessing/example_date_featurizer
+.. raw:: html
+
+    <div style='clear:both'></div>
+
 .. _utils_examples:
 
 Utils examples

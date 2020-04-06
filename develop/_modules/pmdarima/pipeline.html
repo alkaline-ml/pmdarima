@@ -169,6 +169,7 @@
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">clone</span>
@@ -322,6 +323,12 @@
         <span class="n">estimator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">estimator</span>
 
+    <span class="k">def</span> <span class="nf">_check_n_periods</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_periods</span><span class="p">,</span> <span class="n">exog</span><span class="p">):</span>
+        <span class="c1"># if exog was passed in, we have to use that as n_periods</span>
+        <span class="k">if</span> <span class="n">exog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">exog</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_periods</span><span class="p">:</span>
+            <span class="n">n_periods</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exog</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">n_periods</span>
+
 <div class="viewcode-block" id="Pipeline.fit"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fit the pipeline of transformers and the ARIMA model</span>
 
@@ -373,6 +380,10 @@
             <span class="c1"># transformer.</span>
             <span class="n">steps</span><span class="p">[</span><span class="n">step_idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cloned_transformer</span><span class="p">)</span>
 
+        <span class="c1"># Save the order of the columns so we can select in the predict phase</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_feats_</span> <span class="o">=</span> <span class="n">Xt</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> \
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Xt</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+
         <span class="c1"># Now fit the final estimator</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="n">named_kwargs</span><span class="p">[</span><span class="n">steps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_final_estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -401,11 +412,58 @@
                                          <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">num_p</span><span class="p">,</span> <span class="n">n_periods</span><span class="p">))</span>
                     <span class="n">kw</span><span class="p">[</span><span class="s2">&quot;n_periods&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_periods</span>
 
+                <span class="c1"># TODO: manual check to ensure Xt shape == n_periods shape?</span>
+
                 <span class="n">_</span><span class="p">,</span> <span class="n">Xt</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+        <span class="c1"># since some exog featurizers require exog input, and others don&#39;t,</span>
+        <span class="c1"># feat orders may get wonky between fit &amp; pred. Make sure we have them</span>
+        <span class="c1"># in the same order when calling the model</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_feats_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">Xt</span> <span class="o">=</span> <span class="n">Xt</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x_feats_</span><span class="p">]</span>
 
         <span class="c1"># Now we should be able to run the prediction</span>
         <span class="n">nm</span><span class="p">,</span> <span class="n">est</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">Xt</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">named_kwargs</span><span class="p">[</span><span class="n">nm</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Pipeline.transform"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the transformed exogenous array</span>
+
+<span class="sd">        Generate the exogenous array ``n_periods`` in the future. This passes</span>
+<span class="sd">        the provided exog variables through all transformation steps, returning</span>
+<span class="sd">        it before it&#39;s passed into the model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_periods : int, optional (default=10)</span>
+<span class="sd">            The number of periods in the future to forecast.</span>
+
+<span class="sd">        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">            An optional 2-d array of exogenous variables. If provided, these</span>
+<span class="sd">            variables are used as additional features in the regression</span>
+<span class="sd">            operation. This should not include a constant or trend. Note that</span>
+<span class="sd">            if an ``ARIMA`` is fit on exogenous features, it must be provided</span>
+<span class="sd">            exogenous features for making predictions.</span>
+<span class="sd">\</span>
+<span class="sd">        **kwargs : keyword args</span>
+<span class="sd">            Extra keyword arguments used for each stage&#39;s ``transform`` stage</span>
+<span class="sd">            and the estimator&#39;s ``predict`` stage. Similar to scikit-learn</span>
+<span class="sd">            pipeline keyword args, the keys are compound, comprised of the</span>
+<span class="sd">            stage name and the argument name separated by a &quot;__&quot;. For instance,</span>
+<span class="sd">            if you have a FourierFeaturizer whose stage is named</span>
+<span class="sd">            &quot;fourier&quot;, your transform kwargs could resemble::</span>
+
+<span class="sd">                {&quot;fourier__n_periods&quot;: 50}</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        X_prime : pd.DataFrame</span>
+<span class="sd">            The transformed exog array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_periods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_n_periods</span><span class="p">(</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_warn_for_deprecated</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">Xt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_predict</span><span class="p">(</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Xt</span></div>
 
 <div class="viewcode-block" id="Pipeline.predict_in_sample"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline.predict_in_sample">[docs]</a>    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                           <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -535,6 +593,7 @@
 <span class="sd">            The confidence intervals for the forecasts. Only returned if</span>
 <span class="sd">            ``return_conf_int`` is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_periods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_n_periods</span><span class="p">(</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_warn_for_deprecated</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">Xt</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">predict_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_predict</span><span class="p">(</span>
             <span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -628,6 +687,9 @@
                     <span class="n">y</span><span class="o">=</span><span class="n">yt</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">yt</span><span class="p">,</span> <span class="n">Xt</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">Xt</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_feats_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">Xt</span> <span class="o">=</span> <span class="n">Xt</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x_feats_</span><span class="p">]</span>
 
         <span class="c1"># Now we can update the arima</span>
         <span class="n">nm</span><span class="p">,</span> <span class="n">est</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
