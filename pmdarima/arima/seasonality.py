@@ -83,6 +83,7 @@ def decompose(x, type_, m, filter_=None):
 
     multiplicative = "multiplicative"
     additive = "additive"
+    is_m_odd = (m % 2 == 1)
 
     # Helper function to stay consistent and concise based on 'type_'
     def _decomposer_helper(a, b):
@@ -114,7 +115,9 @@ def decompose(x, type_, m, filter_=None):
     # Take half of m for the convolution / sma process.
     half_m = m // 2
     trend = np.convolve(x, filter_, mode='valid')
-    trend = trend[:-1]  # we remove the final index.
+
+    if not is_m_odd:
+        trend = trend[:-1]  # we remove the final index if m is even.
 
     # Remove the effect of the trend on the original signal and pad for reshape
     sma_xs = range(half_m, len(trend) + half_m)
@@ -134,6 +137,8 @@ def decompose(x, type_, m, filter_=None):
         seasonal = np.concatenate((seasonal, temp))
     if pad_length > 0:
         seasonal = seasonal[:-pad_length]
+    if is_m_odd:
+        seasonal = seasonal[:-1]
 
     # We buffer the trend and seasonal components so that they are the same
     # length as the other outputs. This counters the effects of losing data
