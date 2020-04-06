@@ -3,11 +3,14 @@
 from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.model_selection import train_test_split
 from pmdarima.pipeline import Pipeline, _warn_for_deprecated
-from pmdarima.preprocessing import BoxCoxEndogTransformer, FourierFeaturizer
+from pmdarima.preprocessing import BoxCoxEndogTransformer, FourierFeaturizer, \
+    DateFeaturizer
 from pmdarima.arima import ARIMA, AutoARIMA
 from pmdarima.datasets import load_wineind
+from pmdarima.datasets._base import load_date_example
 import numpy as np
 
+from numpy.testing import assert_array_almost_equal
 import pytest
 
 rs = np.random.RandomState(42)
@@ -16,6 +19,8 @@ xreg = rs.rand(wineind.shape[0], 2)
 
 train, test, x_train, x_test = train_test_split(
     wineind, xreg, train_size=125)
+
+y_dates, X_dates = load_date_example()
 
 
 class TestIllegal:
@@ -215,3 +220,41 @@ def test_deprecation_warning():
         kwargs = _warn_for_deprecated(**kwargs)
     assert not kwargs
     assert we
+
+
+def test_order_does_not_matter_with_date_transformer():
+    train_y_dates, test_y_dates, train_X_dates, test_X_dates = \
+        train_test_split(y_dates, X_dates, test_size=15)
+
+    pipeline_a = Pipeline([
+        ('fourier', FourierFeaturizer(m=3, prefix="FOURIER")),
+        ('dates', DateFeaturizer(column_name="date", prefix="DATE")),
+        ("arima", AutoARIMA(seasonal=False, stepwise=True,
+                            suppress_warnings=True,
+                            maxiter=3, error_action='ignore'))
+    ]).fit(train_y_dates, train_X_dates)
+    Xt_a = pipeline_a.transform(exogenous=test_X_dates)
+    pred_a = pipeline_a.predict(exogenous=test_X_dates)
+
+    pipeline_b = Pipeline([
+        ('dates', DateFeaturizer(column_name="date", prefix="DATE")),
+        ('fourier', FourierFeaturizer(m=3, prefix="FOURIER")),
+        ("arima", AutoARIMA(seasonal=False, stepwise=True,
+                            suppress_warnings=True,
+                            maxiter=3, error_action='ignore'))
+    ]).fit(train_y_dates, train_X_dates)
+    Xt_b = pipeline_b.transform(exogenous=test_X_dates)
+    pred_b = pipeline_b.predict(exogenous=test_X_dates)
+
+    # dates in A should differ from those in B
+    assert pipeline_a.x_feats_[0].startswith("FOURIER")
+    assert pipeline_a.x_feats_[-1].startswith("DATE")
+
+    assert pipeline_b.x_feats_[0].startswith("DATE")
+    assert pipeline_b.x_feats_[-1].startswith("FOURIER")
+
+    # columns should be identical once ordered appropriately
+    assert Xt_a.equals(Xt_b[pipeline_a.x_feats_])
+
+    # forecasts should be identical
+    assert_array_almost_equal(pred_a, pred_b, decimal=3)
