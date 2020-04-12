@@ -3,6 +3,7 @@ import json
 import math
 import os
 import requests
+from statistics import mean
 
 
 def millify(n):
@@ -42,6 +43,25 @@ def millify(n):
     return f'{final_output}{millnames[millidx]}'
 
 
+def get_default_value(downloads):
+    """Find the default value (one day's worth of downloads) for a given input
+
+    Parameters
+    ----------
+    downloads : dict
+        A dict of dates and downloads on that day
+
+    Returns
+    -------
+    default_value : int
+        The default value, which is the average of the last 7 days of downloads that are contained in the input
+        dictionary.
+    """
+    last_7_keys = sorted(downloads.keys())[-7:]
+    default_value = int(mean([downloads[key] for key in last_7_keys]))
+    return default_value
+
+
 # Used to calculate downloads for the last week
 today = date.today()
 last_week = today - timedelta(days=7)
@@ -56,12 +76,20 @@ pmdarima = json.loads(session.get('https://api.pepy.tech/api/projects/pmdarima')
 
 # Sum up pmdarima and pyramid-arima downloads to the past week
 pmdarima_downloads = 0
+default_pmpdarima_value = get_default_value(pmdarima['downloads'])
 for i in range(7):
-    pmdarima_downloads += pmdarima['downloads'][(last_week + timedelta(days=i)).strftime(DATE_FORMAT)]
+    pmdarima_downloads += pmdarima['downloads'].get(
+        (last_week + timedelta(days=i)).strftime(DATE_FORMAT),
+        default_pmpdarima_value
+    )
 
 pyramid_arima_downloads = 0
+default_pyramid_arima_value = get_default_value(pyramid_arima['downloads'])
 for i in range(7):
-    pyramid_arima_downloads += pyramid_arima['downloads'][(last_week + timedelta(days=i)).strftime(DATE_FORMAT)]
+    pyramid_arima_downloads += pyramid_arima['downloads'].get(
+        (last_week + timedelta(days=i)).strftime(DATE_FORMAT),
+        default_pyramid_arima_value
+    )
 
 # Millify the totals
 total_downloads = millify(pyramid_arima['total_downloads'] + pmdarima['total_downloads'])
