@@ -54,8 +54,8 @@ def get_default_value(downloads):
     Returns
     -------
     default_value : int
-        The default value, which is the average of the last 7 days of downloads that are contained in the input
-        dictionary.
+        The default value, which is the average of the last 7 days of downloads
+        that are contained in the input dictionary.
     """
     last_7_keys = sorted(downloads.keys())[-7:]
     default_value = int(mean([downloads[key] for key in last_7_keys]))
