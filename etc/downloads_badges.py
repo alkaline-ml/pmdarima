@@ -76,11 +76,11 @@ pmdarima = json.loads(session.get('https://api.pepy.tech/api/projects/pmdarima')
 
 # Sum up pmdarima and pyramid-arima downloads to the past week
 pmdarima_downloads = 0
-default_pmpdarima_value = get_default_value(pmdarima['downloads'])
+default_pmdarima_value = get_default_value(pmdarima['downloads'])
 for i in range(7):
     pmdarima_downloads += pmdarima['downloads'].get(
         (last_week + timedelta(days=i)).strftime(DATE_FORMAT),
-        default_pmpdarima_value
+        default_pmdarima_value
     )
 
 pyramid_arima_downloads = 0
