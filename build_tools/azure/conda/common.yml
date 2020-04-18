@@ -8,6 +8,10 @@ steps:
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
+  - bash: make version
+    condition: contains(variables['Build.SourceBranch'], 'refs/tags')
+    displayName: 'Ensuring VERSION file is created'
+
   - bash: |
       mkdir conda
       python -m pip install jinja2
@@ -15,7 +19,3 @@ steps:
       # This line is purely for debugging
       conda render --python=$(python.version) conda/
     displayName: 'Rendering meta.yaml file'
-
-  - bash: make version
-    condition: contains(variables['Build.SourceBranch'], 'refs/tags')
-    displayName: 'Ensuring VERSION file is created'
