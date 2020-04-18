@@ -20,6 +20,8 @@ v0.8.1) will document the latest features.
   and ordinal exogenous features and is useful when modeling pseudo-seasonal trends or time series
   with holes in them.
 
+* Patch broken Anaconda Cloud releases
+
 
 `v1.5.3 <http://alkaline-ml.com/pmdarima/1.5.3/>`_
 --------------------------------------------------
