@@ -28,39 +28,108 @@ variables:
 #  - Mac: Requires sudo, then build wheel, then build conda from wheel
 #  - Windows: Build conda from source
 jobs:
-- job: Linux
-
+#- job: Linux
+#
+#  pool:
+#    vmImage: 'ubuntu-18.04'
+#
+#  strategy:
+#    matrix:
+#      Python36:
+#        python.version: '3.6'
+#        architecture: 'x64'
+#
+#      Python37:
+#        python.version: '3.7'
+#        architecture: 'x64'
+#
+#  steps:
+#  - task: UsePythonVersion@0
+#    inputs:
+#      versionSpec: '$(python.version)'
+#      architecture: '$(architecture)'
+#    displayName: 'Setting Python version and system architecture'
+#
+#  - bash: echo "##vso[task.prependpath]$CONDA/bin"
+#    displayName: 'Adding conda to PATH'
+#
+#  - template: build_tools/azure/conda/common.yml
+#  - template: build_tools/azure/conda/unix.yml
+#  - template: build_tools/azure/conda/deploy.yml
+#
+#- job: Mac
+#
+#  pool:
+#    vmImage: 'macOS-10.14'
+#
+#  strategy:
+#    matrix:
+#      Python36:
+#        python.version: '3.6'
+#        architecture: 'x64'
+#
+#      Python37:
+#        python.version: '3.7'
+#        architecture: 'x64'
+#
+#  steps:
+#  - task: UsePythonVersion@0
+#    inputs:
+#      versionSpec: '$(python.version)'
+#      architecture: '$(architecture)'
+#    displayName: 'Setting Python version and system architecture'
+#
+#  - bash: |
+#      echo "##vso[task.prependpath]$CONDA/bin"
+#      sudo chown -R $USER $CONDA
+#    displayName: 'Adding conda to PATH'
+#
+#  - template: build_tools/azure/conda/common.yml
+#  - template: build_tools/azure/conda/unix.yml
+#  - template: build_tools/azure/conda/deploy.yml
+#
+#- job: Windows
+#
+#  pool:
+#    vmImage: 'vs2017-win2016'
+#
+#  strategy:
+#    matrix:
+#      Python36:
+#        python.version: '3.6'
+#        architecture: 'x64'
+#
+#      Python37:
+#        python.version: '3.7'
+#        architecture: 'x64'
+#
+#  steps:
+#  - task: UsePythonVersion@0
+#    inputs:
+#      versionSpec: '$(python.version)'
+#      architecture: '$(architecture)'
+#    displayName: 'Setting Python version and system architecture'
+#
+#  - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
+#    displayName: 'Adding conda to PATH'
+#
+#  - template: build_tools/azure/conda/common.yml
+#  - template: build_tools/azure/conda/windows.yml
+#  - template: build_tools/azure/conda/deploy.yml
+#
+#- job: test_tagging
+#
+#  pool:
+#    vmImage: 'vs2017-win2016'
+#
+#  steps:
+#  - bash: build_tools/azure/test_version_tagging.sh
+#    # Only want to run this on branches/PRs. NOT tags
+#    condition: not(contains(variables['Build.SourceBranch'], 'tags'))
+#    displayName: 'Testing git tag logic'
+- job: Conda
   pool:
     vmImage: 'ubuntu-18.04'
-
-  strategy:
-    matrix:
-      Python36:
-        python.version: '3.6'
-        architecture: 'x64'
-
-      Python37:
-        python.version: '3.7'
-        architecture: 'x64'
-
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-      architecture: '$(architecture)'
-    displayName: 'Setting Python version and system architecture'
-
-  - bash: echo "##vso[task.prependpath]$CONDA/bin"
-    displayName: 'Adding conda to PATH'
-
-  - template: build_tools/azure/conda/common.yml
-  - template: build_tools/azure/conda/unix.yml
-  - template: build_tools/azure/conda/deploy.yml
-
-- job: Mac
-
-  pool:
-    vmImage: 'macOS-10.14'
 
   strategy:
     matrix:
@@ -84,46 +153,14 @@ jobs:
       sudo chown -R $USER $CONDA
     displayName: 'Adding conda to PATH'
 
-  - template: build_tools/azure/conda/common.yml
-  - template: build_tools/azure/conda/unix.yml
-  - template: build_tools/azure/conda/deploy.yml
+  - script: conda update conda --yes
+      displayName: 'Updating Conda'
 
-- job: Windows
+  - script: conda install python=$(python.version) --yes
+    displayName: 'Fixing conda Python version'
 
-  pool:
-    vmImage: 'vs2017-win2016'
+  - script: conda install conda-build anaconda-client --yes
+    displayName: 'Installing conda-build and anaconda-client'
 
-  strategy:
-    matrix:
-      Python36:
-        python.version: '3.6'
-        architecture: 'x64'
-
-      Python37:
-        python.version: '3.7'
-        architecture: 'x64'
-
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-      architecture: '$(architecture)'
-    displayName: 'Setting Python version and system architecture'
-
-  - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
-    displayName: 'Adding conda to PATH'
-
-  - template: build_tools/azure/conda/common.yml
-  - template: build_tools/azure/conda/windows.yml
-  - template: build_tools/azure/conda/deploy.yml
-
-- job: test_tagging
-
-  pool:
-    vmImage: 'vs2017-win2016'
-
-  steps:
-  - bash: build_tools/azure/test_version_tagging.sh
-    # Only want to run this on branches/PRs. NOT tags
-    condition: not(contains(variables['Build.SourceBranch'], 'tags'))
-    displayName: 'Testing git tag logic'
+  - script: conda build --python=$(python.version) --numpy=1.17.3 conda/
+    displayName: 'Building conda distribution'
