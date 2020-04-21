@@ -154,7 +154,7 @@ jobs:
     displayName: 'Adding conda to PATH'
 
   - script: conda update conda --yes
-      displayName: 'Updating Conda'
+    displayName: 'Updating Conda'
 
   - script: conda install python=$(python.version) --yes
     displayName: 'Fixing conda Python version'
