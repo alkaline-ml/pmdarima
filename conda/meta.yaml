@@ -28,8 +28,6 @@ build:
 requirements:
   build:
     - numpy 1.17.3         # Min numpy we support
-    - git                  # [not win]
-    - m2-git               # [win]
     - posix                # [win]
     - m2w64-toolchain      # [win]
     - clang_osx-64         # [osx]
@@ -63,7 +61,7 @@ test:
 about:
   home: https://github.com/alkaline-ml/pmdarima
   license: MIT
-  license_file: LICENSE
+#  license_file: LICENSE
   summary: Python's forecast::auto.arima equivalent
 
 extra:
