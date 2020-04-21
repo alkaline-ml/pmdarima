@@ -129,6 +129,3 @@ ENV/
 
 # We want this to only be created on CI/CD platforms
 VERSION
-
-# Since we use a Jinja Template, we only want this to be created as build time
-meta.yaml
