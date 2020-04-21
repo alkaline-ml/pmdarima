@@ -25,6 +25,8 @@ build:
 
 requirements:
   build:
+    - posix                # [win]
+    - m2w64-toolchain      # [win]
     - {{ compiler('c') }}
     - numpy
   host:
