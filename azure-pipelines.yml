@@ -165,7 +165,7 @@ jobs:
 
 - job: macOS
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'macOS-10.14'
 
   strategy:
     matrix:
