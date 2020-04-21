@@ -55,8 +55,8 @@ requirements:
     - urllib3
 
 test:
-  imports:
-    - pmdarima
+  commands:
+    - python -c "import pmdarima; pmdarima.show_versions()"
 
 about:
   home: https://github.com/alkaline-ml/pmdarima
