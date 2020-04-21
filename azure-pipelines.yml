@@ -127,7 +127,43 @@ jobs:
 #    # Only want to run this on branches/PRs. NOT tags
 #    condition: not(contains(variables['Build.SourceBranch'], 'tags'))
 #    displayName: 'Testing git tag logic'
-- job: Conda
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-18.04'
+
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+        architecture: 'x64'
+
+      Python37:
+        python.version: '3.7'
+        architecture: 'x64'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: '$(architecture)'
+    displayName: 'Setting Python version and system architecture'
+
+  - bash: echo "##vso[task.prependpath]$CONDA/bin"
+    displayName: 'Adding conda to PATH'
+
+  - script: conda update conda --yes
+    displayName: 'Updating Conda'
+
+  - script: conda install python=$(python.version) --yes
+    displayName: 'Fixing conda Python version'
+
+  - script: conda install conda-build anaconda-client --yes
+    displayName: 'Installing conda-build and anaconda-client'
+
+  - script: conda build --python=$(python.version) --numpy=1.17.3 conda/
+    displayName: 'Building conda distribution'
+
+- job: macOS
   pool:
     vmImage: 'ubuntu-18.04'
 
