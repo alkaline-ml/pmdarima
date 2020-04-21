@@ -8,7 +8,7 @@ package:
 source:
   # git_url: https://github.com/alkaline-ml/pmdarima.git
   # git_rev: v{{ version }}
-  url: https://pypi.io/packages/source/i/pmdarima/pmdarima-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/p/pmdarima/pmdarima-{{ version }}.tar.gz
   sha256: 8ba38c094abe465afa96f1720f3f7a0830074f3514c44c4bf7d7bf91be8411a8
 
 build:
