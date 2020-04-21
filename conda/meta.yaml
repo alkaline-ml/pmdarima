@@ -25,11 +25,8 @@ build:
 
 requirements:
   build:
-    - numpy 1.17.3         # Min numpy we support
-    - posix                # [win]
-    - m2w64-toolchain      # [win]
-#    - clang_osx-64         # [osx]
     - {{ compiler('c') }}
+    - numpy
   host:
     - python
     - pip

@@ -160,7 +160,7 @@ jobs:
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
-  - script: conda build --python=$(python.version) --numpy=1.17.3 conda/
+  - script: conda build --python=$(python.version) conda/
     displayName: 'Building conda distribution'
 
 - job: macOS
@@ -198,5 +198,44 @@ jobs:
   - script: conda install conda-build anaconda-client --yes
     displayName: 'Installing conda-build and anaconda-client'
 
-  - script: conda build --python=$(python.version) --numpy=1.17.3 conda/
+  - script: conda build --python=$(python.version) conda/
     displayName: 'Building conda distribution'
+
+- job: Windows
+
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+        architecture: 'x64'
+
+      Python37:
+        python.version: '3.7'
+        architecture: 'x64'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: '$(architecture)'
+    displayName: 'Setting Python version and system architecture'
+
+  - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
+    displayName: 'Adding conda to PATH'
+
+  - script: conda update conda --yes
+      displayName: 'Updating Conda'
+
+  - script: conda install python=$(python.version) --yes
+    displayName: 'Fixing conda Python version'
+
+  - script: conda install conda-build anaconda-client --yes
+    displayName: 'Installing conda-build and anaconda-client'
+
+  - script: conda build --python=$(python.version) conda/
+    displayName: 'Building conda distribution'
+
+
