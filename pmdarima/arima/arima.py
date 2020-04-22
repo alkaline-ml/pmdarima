@@ -19,7 +19,7 @@ import os
 
 from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
-from ..compat.sklearn import get_compatible_check_is_fitted, safe_indexing
+from ..compat.sklearn import check_is_fitted, safe_indexing
 from ..compat import statsmodels as sm_compat
 from ..compat import matplotlib as mpl_compat
 from ..compat.matplotlib import mpl_hist_arg
@@ -551,7 +551,7 @@ class ARIMA(BaseARIMA):
             The confidence intervals for the predictions. Only returned if
             ``return_conf_int`` is True.
         """
-        get_compatible_check_is_fitted(self, 'arima_res_')
+        check_is_fitted(self, 'arima_res_')
 
         # TODO: remove this, it's a compat check
         if kwargs.pop("typ", None):
@@ -622,7 +622,7 @@ class ARIMA(BaseARIMA):
             The confidence intervals for the forecasts. Only returned if
             ``return_conf_int`` is True.
         """
-        get_compatible_check_is_fitted(self, 'arima_res_')
+        check_is_fitted(self, 'arima_res_')
         if not isinstance(n_periods, int):
             raise TypeError("n_periods must be an int")
 
@@ -759,7 +759,7 @@ class ARIMA(BaseARIMA):
         * Internally, this calls ``fit`` again using the OLD model parameters
           as the starting parameters for the new model's MLE computation.
         """
-        get_compatible_check_is_fitted(self, 'arima_res_')
+        check_is_fitted(self, 'arima_res_')
         model_res = self.arima_res_
 
         # Allow updating with a scalar if the user is just adding a single
