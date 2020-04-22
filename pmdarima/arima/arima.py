@@ -522,7 +522,8 @@ class ARIMA(BaseARIMA):
 
         start : int, optional (default=None)
             Zero-indexed observation number at which to start forecasting, ie.,
-            the first forecast is start.
+            the first forecast is start. Note that if this value is less than
+            ``d``, the order of differencing, an error will be raised.
 
         end : int, optional (default=None)
             Zero-indexed observation number at which to end forecasting, ie.,
@@ -558,11 +559,12 @@ class ARIMA(BaseARIMA):
                           "arg for predict. In future versions this will "
                           "raise a TypeError.")
 
-        # issue #286
+        # issue #286: we cannot produce valid predictions for a period earlier
+        # than the differencing value
         d = self.order[1]
         if start is not None and start < d:
-            warnings.warn("In-sample predictions undefined for start={0} when "
-                          "d={1}".format(start, d))
+            raise ValueError("In-sample predictions undefined for start={0} "
+                             "when d={1}".format(start, d))
 
         # if we fit with exog, make sure one was passed:
         exogenous = self._check_exog(exogenous)  # type: np.ndarray

@@ -1035,9 +1035,9 @@ def test_issue_286():
     mod = ARIMA(order=(1, 1, 2))
     mod.fit(wineind)
 
-    with pytest.warns(UserWarning,
-                      match="In-sample predictions undefined for"):
+    with pytest.raises(ValueError) as ve:
         mod.predict_in_sample(start=0)
+    assert "In-sample predictions undefined for" in pytest_error_str(ve)
 
 
 @pytest.mark.parametrize(
