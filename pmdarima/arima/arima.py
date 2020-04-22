@@ -2,8 +2,8 @@
 #
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 #
-# A much more user-friendly wrapper to the statsmodels ARIMA.
-# Mimics the familiar sklearn interface.
+# A user-friendly wrapper to the statsmodels ARIMA that mimics the familiar
+# sklearn interface.
 
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
@@ -22,7 +22,6 @@ from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.sklearn import get_compatible_check_is_fitted, safe_indexing
 from ..compat import statsmodels as sm_compat
 from ..compat import matplotlib as mpl_compat
-from ..compat.matplotlib import mpl_hist_arg
 from ..utils import get_callable, if_has_delegate, is_iterable, check_endog, \
     check_exog
 from ..utils.visualization import _get_plt
@@ -556,7 +555,14 @@ class ARIMA(BaseARIMA):
         # TODO: remove this, it's a compat check
         if kwargs.pop("typ", None):
             warnings.warn("As of version 1.5.0 'typ' is no longer a valid "
-                          "arg for predict")
+                          "arg for predict. In future versions this will "
+                          "raise a TypeError.")
+
+        # issue #286
+        d = self.order[1]
+        if start is not None and start < d:
+            warnings.warn("In-sample predictions undefined for start={0} when "
+                          "d={1}".format(start, d))
 
         # if we fit with exog, make sure one was passed:
         exogenous = self._check_exog(exogenous)  # type: np.ndarray

@@ -22,6 +22,8 @@ v0.8.1) will document the latest features.
 
 * Patch broken Anaconda Cloud releases
 
+* Produce a warnings in ``arima.predict_in_sample`` when ``start < d``
+
 
 `v1.5.3 <http://alkaline-ml.com/pmdarima/1.5.3/>`_
 --------------------------------------------------

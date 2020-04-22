@@ -1031,6 +1031,15 @@ def test_issue_104(model):
     assert not np.array_equal(preds1, preds2)
 
 
+def test_issue_286():
+    mod = ARIMA(order=(1, 1, 2))
+    mod.fit(wineind)
+
+    with pytest.warns(UserWarning,
+                      match="In-sample predictions undefined for"):
+        mod.predict_in_sample(start=0)
+
+
 @pytest.mark.parametrize(
     'model', [
         # ARMA
