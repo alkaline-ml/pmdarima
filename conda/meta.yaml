@@ -14,7 +14,7 @@ source:
 build:
   number: 0
   script: |
-    echo {{ version }} >> pmdarima/VERSION
+    echo {{ version }} > pmdarima/VERSION  # Ensure VERSION file is created, since we are using git
     {{ PYTHON }} -m pip install --no-deps --ignore-installed -vv .
   ignore_run_exports:
     - pip
