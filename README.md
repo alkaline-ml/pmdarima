@@ -2,7 +2,6 @@
 
 [![PyPI version](https://badge.fury.io/py/pmdarima.svg)](https://badge.fury.io/py/pmdarima)
 [![CircleCI](https://circleci.com/gh/alkaline-ml/pmdarima.svg?style=svg)](https://circleci.com/gh/alkaline-ml/pmdarima)
-[![Build Status](https://dev.azure.com/tgsmith61591gh/pmdarima/_apis/build/status/alkaline-ml.pmdarima?branchName=master)](https://dev.azure.com/tgsmith61591gh/pmdarima/_build/latest?definitionId=3&branchName=master)
 [![Github Actions Status](https://github.com/alkaline-ml/pmdarima/workflows/Mac%20and%20Windows%20Builds/badge.svg?branch=master)](https://github.com/alkaline-ml/pmdarima/actions?query=workflow%3A%22Mac+and+Windows+Builds%22+branch%3Amaster)
 [![codecov](https://codecov.io/gh/alkaline-ml/pmdarima/branch/master/graph/badge.svg)](https://codecov.io/gh/alkaline-ml/pmdarima)
 ![Supported versions](https://img.shields.io/badge/python-3.5+-blue.svg)
@@ -33,13 +32,6 @@ under the package name `pmdarima` and can be downloaded via `pip`:
 ```bash
 $ pip install pmdarima
 ```
-
-Conda distributions are also available for Windows (64-bit only), Mac and Linux using Python 3.6 or 3.7:
-
-```bash
-$ conda install -c alkaline-ml pmdarima
-```
-
 
 ## Quickstart Examples
 
@@ -116,12 +108,6 @@ with open('model.pkl', 'rb') as pkl:
 * Mac (64-bit)
 * Linux (64-bit manylinux)
 * Windows (32 & 64-bit)
-  
-It is also available on conda for Python 3.6 and 3.7 for the following platforms:
-
-* Mac (64-bit)
-* Linux (64-bit)
-* Windows (64-bit)
 
 If a wheel doesn't exist for your platform, you can still `pip install` and it
 will build from the source distribution tarball, however you'll need `cython>=0.29`
