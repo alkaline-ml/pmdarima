@@ -15,6 +15,6 @@ elif [[ ${CIRCLE_TAG} =~ ^v?[0-9]+\.[0-9]+\.?[0-9]*$ ]]; then
   echo 'Uploading to production pypi'
   twine upload --skip-existing dist/pmdarima-*
 else
-  echo 'Malformed tag'
+  echo "Malformed tag: ${CIRCLE_TAG}"
   exit 1
 fi

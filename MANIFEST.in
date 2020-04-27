@@ -13,6 +13,7 @@ recursive-include pmdarima/preprocessing/endog *
 recursive-include pmdarima/preprocessing/exog *
 recursive-include pmdarima/tests *
 recursive-include pmdarima/utils *
+include LICENSE
 include README.md
 include requirements.txt
 global-exclude __pycache__

@@ -7,6 +7,6 @@ elif [[ $(cat ${GITHUB_WORKSPACE}/pmdarima/VERSION) =~ ^[0-9]+\.[0-9]+\.?[0-9]*$
   echo 'Uploading to production pypi'
   python -m twine upload --skip-existing dist/pmdarima-*
 else
-  echo "Malformed tag": $(cat ${GITHUB_WORKSPACE}/pmdarima/VERSION)""
+  echo "Malformed tag: $(cat ${GITHUB_WORKSPACE}/pmdarima/VERSION)"
   exit 1
 fi
