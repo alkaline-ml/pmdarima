@@ -72,7 +72,7 @@ def load_ausbeer(as_series=False, dtype=DTYPE):
     References
     ----------
     .. [1] https://www.rdocumentation.org/packages/fpp/versions/0.5/topics/ausbeer
-    """ # noqa: E501
+    """  # noqa: E501
     rslt = np.array([284., 213., 227., 308.,
                      262., 228., 236., 320.,
                      272., 233., 237., 313.,
