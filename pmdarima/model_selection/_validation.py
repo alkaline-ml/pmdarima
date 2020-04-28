@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Cross-validation for ARIMA and pipeline estimators.
-See: https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/model_selection/_validation.py  # noqa: E501
-"""
+See: https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/model_selection/_validation.py
+"""  # noqa: E501
 
 import numpy as np
 import numbers

@@ -78,8 +78,8 @@ def decompose(x, type_, m, filter_=None):
            https://anomaly.io/seasonal-trend-decomposition-in-r/index.html
 
     .. [2] R documentation for decompose:
-           https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose  # noqa: E501
-    """
+           https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose
+    """  # noqa: E501
 
     multiplicative = "multiplicative"
     additive = "additive"

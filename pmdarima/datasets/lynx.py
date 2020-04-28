@@ -66,13 +66,13 @@ def load_lynx(as_series=False, dtype=DTYPE):
            Time Series and Forecasting Methods. Second edition.
            Springer. Series G (page 557).
 
-    .. [2] https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/lynx.html  # noqa: E501
+    .. [2] https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/lynx.html
 
     Returns
     -------
     lynx : array-like, shape=(n_samples,)
         The lynx dataset. There are 114 observations.
-    """
+    """  # noqa: E501
     rslt = np.array([269, 321, 585, 871, 1475, 2821, 3928, 5943, 4950,
                      2577, 523, 98, 184, 279, 409, 2285, 2685, 3409,
                      1824, 409, 151, 45, 68, 213, 546, 1033, 2129,

@@ -427,8 +427,8 @@ def diff_inv(x, lag=1, differences=1, xi=None):
 
     References
     ----------
-    .. [1] https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html # noqa: E501
-    """
+    .. [1] https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html
+    """  # noqa: E501
     x = check_array(
         x, dtype=DTYPE, copy=False, force_all_finite=False, ensure_2d=False)
 

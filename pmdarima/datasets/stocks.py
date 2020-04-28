@@ -22,11 +22,11 @@ def load_msft():
 
     References
     ----------
-    .. [1] https://www.kaggle.com/borismarjanovic/price-volume-data-for-all-us-stocks-etfs  # noqa:E501
+    .. [1] https://www.kaggle.com/borismarjanovic/price-volume-data-for-all-us-stocks-etfs
 
     Returns
     -------
     df : pd.DataFrame, shape=(7983, 7)
         A dataframe of endog and exog values.
-    """
+    """  # noqa:E501
     return _load_tarfile("msft.tar.gz")

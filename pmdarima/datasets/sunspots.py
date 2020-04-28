@@ -56,13 +56,13 @@ def load_sunspots(as_series=False, dtype=DTYPE):
 
     References
     ----------
-    .. [1] https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots  # noqa: E501
+    .. [1] https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots
 
     Returns
     -------
     rslt : array-like, shape=(n_samples,)
         The sunspots dataset. There are 2820 observations.
-    """
+    """  # noqa: E501
     rslt = base._cache.get('sunspots', None)
     if rslt is None:
         data_path = join(base.get_data_path(), 'sunspots.txt.gz')

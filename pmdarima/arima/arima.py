@@ -278,7 +278,7 @@ class ARIMA(BaseARIMA):
 
     Notes
     -----
-    * The model internally wraps the statsmodels `SARIMAX class <https://www.statsmodels.org/stable/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html>`_  # noqa: E501
+    * The model internally wraps the statsmodels `SARIMAX class <https://www.statsmodels.org/stable/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html>`_
     * After the model fit, many more methods will become available to the
       fitted model (i.e., :func:`pvalues`, :func:`params`, etc.). These are
       delegate methods which wrap the internal ARIMA results instance.
@@ -290,7 +290,7 @@ class ARIMA(BaseARIMA):
     References
     ----------
     .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average
-    """
+    """  # noqa: E501
     def __init__(self, order, seasonal_order=(0, 0, 0, 0), start_params=None,
                  method='lbfgs', maxiter=50, suppress_warnings=False,
                  out_of_sample_size=0, scoring='mse', scoring_args=None,

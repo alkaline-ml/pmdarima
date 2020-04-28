@@ -55,14 +55,14 @@ def load_gasoline(as_series=False, dtype=DTYPE):
 
     References
     ----------
-    .. [1] http://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=wgfupus2&f=W  # noqa
+    .. [1] http://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=wgfupus2&f=W
     .. [2] https://robjhyndman.com/hyndsight/forecasting-weekly-data/
 
     Returns
     -------
     rslt : array-like, shape=(n_samples,)
         The gasoline dataset. There are 745 examples.
-    """
+    """  # noqa
     rslt = fetch_from_web_or_disk(url, 'gasoline', cache=True).astype(dtype)
     if not as_series:
         return rslt

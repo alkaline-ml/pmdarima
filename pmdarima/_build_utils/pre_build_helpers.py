@@ -1,8 +1,8 @@
 """
 Helpers to check build environment before actual build of pmdarima
 
-Adapted from: https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/_build_utils/pre_build_helpers.py  # noqa
-"""
+Adapted from: https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/_build_utils/pre_build_helpers.py
+"""  # noqa
 
 import os
 import sys
