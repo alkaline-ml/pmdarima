@@ -1137,7 +1137,7 @@ class ARIMA(BaseARIMA):
         from top left):
 
         1. Standardized residuals over time
-        2. Histogram plus estimated density of standardized residulas, along
+        2. Histogram plus estimated density of standardized residuals, along
            with a Normal(0,1) density plotted for reference.
         3. Normal Q-Q plot, with Normal reference line.
         4. Correlogram
