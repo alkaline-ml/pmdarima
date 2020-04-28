@@ -180,7 +180,7 @@
 <span class="kn">from</span> <span class="nn">.preprocessing.endog.base</span> <span class="kn">import</span> <span class="n">BaseEndogTransformer</span>
 <span class="kn">from</span> <span class="nn">.preprocessing.exog.base</span> <span class="kn">import</span> <span class="n">BaseExogTransformer</span><span class="p">,</span> <span class="n">BaseExogFeaturizer</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">check_endog</span>
-<span class="kn">from</span> <span class="nn">.compat</span> <span class="kn">import</span> <span class="n">DTYPE</span><span class="p">,</span> <span class="n">get_compatible_check_is_fitted</span>
+<span class="kn">from</span> <span class="nn">.compat</span> <span class="kn">import</span> <span class="n">DTYPE</span><span class="p">,</span> <span class="n">check_is_fitted</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Pipeline&#39;</span><span class="p">]</span>
 
@@ -391,7 +391,7 @@
 
     <span class="k">def</span> <span class="nf">_pre_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_periods</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Runs transformation steps before predicting on data&quot;&quot;&quot;</span>
-        <span class="n">get_compatible_check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;steps_&quot;</span><span class="p">)</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;steps_&quot;</span><span class="p">)</span>
 
         <span class="c1"># Push the arrays through the transformer stages, but ONLY the exog</span>
         <span class="c1"># transformer stages since we don&#39;t have a Y...</span>
@@ -672,7 +672,7 @@
 <span class="sd">            compound, comprised of the stage name and the argument name</span>
 <span class="sd">            separated by a &quot;__&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">get_compatible_check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;steps_&quot;</span><span class="p">)</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;steps_&quot;</span><span class="p">)</span>
 
         <span class="c1"># Push the arrays through all of the transformer steps that have the</span>
         <span class="c1"># appropriate update_and_transform method</span>
