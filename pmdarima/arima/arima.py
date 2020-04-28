@@ -1149,8 +1149,8 @@ class ARIMA(BaseARIMA):
 
         References
         ----------
-        .. [1] https://www.statsmodels.org/dev/_modules/statsmodels/tsa/statespace/mlemodel.html#MLEResults.plot_diagnostics  # noqa: E501
-        """
+        .. [1] https://www.statsmodels.org/dev/_modules/statsmodels/tsa/statespace/mlemodel.html#MLEResults.plot_diagnostics
+        """  # noqa: E501
         # implicitly checks whether installed, and does our backend magic:
         _get_plt()
 
