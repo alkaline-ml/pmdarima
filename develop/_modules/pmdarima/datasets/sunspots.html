@@ -224,13 +224,13 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    .. [1] https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots  # noqa: E501</span>
+<span class="sd">    .. [1] https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    rslt : array-like, shape=(n_samples,)</span>
 <span class="sd">        The sunspots dataset. There are 2820 observations.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
     <span class="n">rslt</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sunspots&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rslt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">data_path</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">get_data_path</span><span class="p">(),</span> <span class="s1">&#39;sunspots.txt.gz&#39;</span><span class="p">)</span>

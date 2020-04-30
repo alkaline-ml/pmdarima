@@ -223,14 +223,14 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    .. [1] http://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&amp;s=wgfupus2&amp;f=W  # noqa</span>
+<span class="sd">    .. [1] http://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&amp;s=wgfupus2&amp;f=W</span>
 <span class="sd">    .. [2] https://robjhyndman.com/hyndsight/forecasting-weekly-data/</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    rslt : array-like, shape=(n_samples,)</span>
 <span class="sd">        The gasoline dataset. There are 745 examples.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa</span>
     <span class="n">rslt</span> <span class="o">=</span> <span class="n">fetch_from_web_or_disk</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;gasoline&#39;</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">as_series</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">rslt</span>

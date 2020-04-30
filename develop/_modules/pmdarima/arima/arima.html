@@ -446,7 +446,7 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    * The model internally wraps the statsmodels `SARIMAX class &lt;https://www.statsmodels.org/stable/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html&gt;`_  # noqa: E501</span>
+<span class="sd">    * The model internally wraps the statsmodels `SARIMAX class &lt;https://www.statsmodels.org/stable/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html&gt;`_</span>
 <span class="sd">    * After the model fit, many more methods will become available to the</span>
 <span class="sd">      fitted model (i.e., :func:`pvalues`, :func:`params`, etc.). These are</span>
 <span class="sd">      delegate methods which wrap the internal ARIMA results instance.</span>
@@ -458,7 +458,7 @@
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
 <div class="viewcode-block" id="ARIMA.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">out_of_sample_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span> <span class="n">scoring_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1305,7 +1305,7 @@
 <span class="sd">        from top left):</span>
 
 <span class="sd">        1. Standardized residuals over time</span>
-<span class="sd">        2. Histogram plus estimated density of standardized residulas, along</span>
+<span class="sd">        2. Histogram plus estimated density of standardized residuals, along</span>
 <span class="sd">           with a Normal(0,1) density plotted for reference.</span>
 <span class="sd">        3. Normal Q-Q plot, with Normal reference line.</span>
 <span class="sd">        4. Correlogram</span>
@@ -1317,8 +1317,8 @@
 
 <span class="sd">        References</span>
 <span class="sd">        ----------</span>
-<span class="sd">        .. [1] https://www.statsmodels.org/dev/_modules/statsmodels/tsa/statespace/mlemodel.html#MLEResults.plot_diagnostics  # noqa: E501</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        .. [1] https://www.statsmodels.org/dev/_modules/statsmodels/tsa/statespace/mlemodel.html#MLEResults.plot_diagnostics</span>
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
         <span class="c1"># implicitly checks whether installed, and does our backend magic:</span>
         <span class="n">_get_plt</span><span class="p">()</span>
 
