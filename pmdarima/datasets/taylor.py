@@ -52,13 +52,13 @@ def load_taylor(as_series=False, dtype=DTYPE):
            double seasonal exponential smoothing. Journal of the Operational
            Research Society, 54, 799-805.
 
-    .. [2] https://www.rdocumentation.org/packages/forecast/versions/8.9/topics/taylor  # noqa: E501
+    .. [2] https://www.rdocumentation.org/packages/forecast/versions/8.9/topics/taylor
 
     Returns
     -------
     taylor : array-like, shape=(n_samples,)
         The Taylor dataset. There are 4032 observations.
-    """
+    """  # noqa: E501
     rslt = np.array([
         22262, 21756, 22247, 22759, 22549, 22313,
         22128, 21860, 21751, 21336, 21363, 22176,

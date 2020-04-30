@@ -61,13 +61,13 @@ def load_woolyrnq(as_series=False, dtype=DTYPE):
 
     References
     ----------
-    .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/woolyrnq  # noqa: E501
+    .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/woolyrnq
 
     Returns
     -------
     rslt : array-like, shape=(n_samples,)
         The woolyrnq dataset. There are 119 observations.
-    """
+    """  # noqa: E501
     rslt = np.array([
         6172, 6709, 6633, 6660,
         6786, 6800, 6730, 6765,

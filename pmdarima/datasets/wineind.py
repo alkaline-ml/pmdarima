@@ -72,13 +72,13 @@ def load_wineind(as_series=False, dtype=DTYPE):
 
     References
     ----------
-    .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/wineind  # noqa: E501
+    .. [1] https://www.rdocumentation.org/packages/forecast/versions/8.1/topics/wineind
 
     Returns
     -------
     rslt : array-like, shape=(n_samples,)
         The wineind dataset. There are 176 observations.
-    """
+    """  # noqa: E501
     rslt = np.array([
         15136, 16733, 20016, 17708, 18019, 19227, 22893, 23739,
         21133, 22591, 26786, 29740, 15028, 17977, 20008, 21354,
