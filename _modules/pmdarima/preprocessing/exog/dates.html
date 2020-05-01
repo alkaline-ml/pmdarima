@@ -1,0 +1,409 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pmdarima.preprocessing.exog.dates &mdash; pmdarima 1.6.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../../../',
+              VERSION:'1.6.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/gitcontrib.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../../about.html" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.6.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../whats_new.html">What's New?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pmdarima.preprocessing.exog.dates</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pmdarima.preprocessing.exog.dates</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseExogFeaturizer</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;DateFeaturizer&quot;</span>
+<span class="p">]</span>
+
+<span class="c1"># TODO: future usecases might include with_hour_of_day</span>
+
+
+<span class="k">def</span> <span class="nf">_safe_hstack_numpy</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">right</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="DateFeaturizer"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.DateFeaturizer.html#pmdarima.preprocessing.DateFeaturizer">[docs]</a><span class="k">class</span> <span class="nc">DateFeaturizer</span><span class="p">(</span><span class="n">BaseExogFeaturizer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create exogenous date features</span>
+
+<span class="sd">    Given an exogenous feature of dtype TimeStamp, creates a set of dummy and</span>
+<span class="sd">    ordinal variables indicating:</span>
+
+<span class="sd">      * Day of the week</span>
+<span class="sd">          Particular days of the week may align with quasi-seasonal trends.</span>
+
+<span class="sd">      * Day of the month</span>
+<span class="sd">          Useful for modeling things like the end-of-month effect, ie., a</span>
+<span class="sd">          department spends the remainder of its monthly budget to avoid future</span>
+<span class="sd">          budget cuts, and the last Friday of the month is heavy on spending.</span>
+
+<span class="sd">    The motivation for this featurizer comes from a blog post by Rob Hyndman</span>
+<span class="sd">    [1] on modeling quasi-seasonal patterns in time series. Note that an</span>
+<span class="sd">    exogenous array _must_ be provided at inference.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    column_name : str</span>
+<span class="sd">        The name of the date column. This forces the exogenous array to be a</span>
+<span class="sd">        Pandas DataFrame, and does not permit a np.ndarray as others may.</span>
+
+<span class="sd">    with_day_of_week : bool, optional (default=True)</span>
+<span class="sd">        Whether to include dummy variables for the day of the week (in {0, 1}).</span>
+
+<span class="sd">    with_day_of_month : bool, optional (default=True)</span>
+<span class="sd">        Whether to include an ordinal feature for the day of the month (1-31).</span>
+
+<span class="sd">    prefix : str or None, optional (default=None)</span>
+<span class="sd">        The feature prefix</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from pmdarima.datasets._base import load_date_example</span>
+<span class="sd">    &gt;&gt;&gt; y, X = load_date_example()</span>
+<span class="sd">    &gt;&gt;&gt; feat = DateFeaturizer(column_name=&#39;date&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; _, X_prime = feat.fit_transform(y, X)</span>
+<span class="sd">    &gt;&gt;&gt; X_prime.head()</span>
+<span class="sd">       DATE-WEEKDAY-0  DATE-WEEKDAY-1  ...  DATE-WEEKDAY-6  DATE-DAY-OF-MONTH</span>
+<span class="sd">    0               0               1  ...               0                  1</span>
+<span class="sd">    1               0               0  ...               0                  2</span>
+<span class="sd">    2               0               0  ...               0                  3</span>
+<span class="sd">    3               0               0  ...               0                  4</span>
+<span class="sd">    4               0               0  ...               0                  5</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    * In order to use time series with holes, it is required that an exog</span>
+<span class="sd">      array be provided at prediction time. Other featurizers automatically</span>
+<span class="sd">      create exog arrays into the future for inference, but this is not</span>
+<span class="sd">      possible currently with the date featurizer. Your code must provide the</span>
+<span class="sd">      dates for which you are forecasting as exog features.</span>
+
+<span class="sd">    * The ``column_name`` field is dropped in the transformed exogenous array.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] https://robjhyndman.com/hyndsight/monthly-seasonality/</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DateFeaturizer.__init__"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.DateFeaturizer.html#pmdarima.preprocessing.DateFeaturizer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">with_day_of_week</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">with_day_of_month</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">column_name</span> <span class="o">=</span> <span class="n">column_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_day_of_week</span> <span class="o">=</span> <span class="n">with_day_of_week</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_day_of_month</span> <span class="o">=</span> <span class="n">with_day_of_month</span></div>
+
+    <span class="k">def</span> <span class="nf">_check_exog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exog</span><span class="p">):</span>
+        <span class="c1"># exog must be a pd.DataFrame, and the column_name must be a timestamp</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exog</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;exog must be a DataFrame to use the &quot;</span>
+                            <span class="s2">&quot;DateFeaturizer, but got type=</span><span class="si">%s</span><span class="s2">&quot;</span>
+                            <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">exog</span><span class="p">))</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="n">exog</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span>
+                <span class="s1">&#39;datetime64&#39;</span> <span class="ow">in</span> <span class="n">exog</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;column &#39;</span><span class="si">%s</span><span class="s2">&#39; must exist in exog as a &quot;</span>
+                             <span class="s2">&quot;pd.Timestamp type&quot;</span>
+                             <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pfx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span>
+        <span class="k">if</span> <span class="n">pfx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pfx</span> <span class="o">=</span> <span class="s2">&quot;DATE&quot;</span>
+        <span class="k">return</span> <span class="n">pfx</span>
+
+    <span class="c1"># Overrides super abstract method</span>
+    <span class="k">def</span> <span class="nf">_get_feature_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="n">pfx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_prefix</span><span class="p">()</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Something to note is that in Python, 0 is Monday (not Sunday). See</span>
+        <span class="c1"># comments here: https://stackoverflow.com/a/9847269/3015734</span>
+        <span class="c1"># E.g., [&#39;DATE-WEEKDAY-0&#39;, &#39;DATE-WEEKDAY-1&#39;, ...]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_day_of_week</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">-WEEKDAY-</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pfx</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_day_of_month</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">-DAY-OF-MONTH&#39;</span> <span class="o">%</span> <span class="n">pfx</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+
+<div class="viewcode-block" id="DateFeaturizer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.DateFeaturizer.html#pmdarima.preprocessing.DateFeaturizer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit the transformer</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or None, shape=(n_samples,)</span>
+<span class="sd">            The endogenous (time-series) array.</span>
+
+<span class="sd">        exogenous : array-like, shape=(n_samples, n_features)</span>
+<span class="sd">            The exogenous array of additional covariates. Must include the</span>
+<span class="sd">            ``column_name`` feature, which must be a pd.Timestamp dtype.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="n">null_allowed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># enforce pd.DataFrame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_exog</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="c1"># we don&#39;t _technically_ need to do this, but it seems like a nice bit</span>
+        <span class="c1"># of friendly validation to make sure that at least _something_ will</span>
+        <span class="c1"># happen in this transformer.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">with_day_of_month</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_day_of_week</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;DateTransformer will have no effect given disabled &quot;</span>
+                          <span class="s2">&quot;parameters&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="DateFeaturizer.transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.DateFeaturizer.html#pmdarima.preprocessing.DateFeaturizer.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create date features</span>
+
+<span class="sd">        When an ARIMA is fit with an exogenous array, it must be forecasted</span>
+<span class="sd">        with one also. However, unlike other exogenous featurizers, an exog</span>
+<span class="sd">        array is required at inference time for the DateFeaturizer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y : array-like or None, shape=(n_samples,)</span>
+<span class="sd">            The endogenous (time-series) array. This is unused and technically</span>
+<span class="sd">            optional for the Fourier terms, since it uses the pre-computed</span>
+<span class="sd">            ``n`` to calculate the seasonal Fourier terms.</span>
+
+<span class="sd">        exogenous : array-like, shape=(n_samples, n_features)</span>
+<span class="sd">            The exogenous array of additional covariates. The ``column_name``</span>
+<span class="sd">            feature must be present, and of dtype pd.Timestamp</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="n">null_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># enforce pd.DataFrame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_exog</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">date_series</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">]</span>  <span class="c1"># type: pd.Series</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># the right side of the exog array out</span>
+        <span class="n">right_side</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_day_of_week</span><span class="p">:</span>
+            <span class="c1"># we cannot use pd.get_dummies because for a test set with &lt; 7 obs</span>
+            <span class="c1"># we will not produce all the features we need to. create a matrix</span>
+            <span class="c1"># of zeros and mask manually</span>
+            <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">zeros</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">zeros</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">date_series</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">weekday</span><span class="o">.</span><span class="n">values</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">right_side</span> <span class="o">=</span> <span class="n">zeros</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_day_of_month</span><span class="p">:</span>
+            <span class="n">day_of_month</span> <span class="o">=</span> <span class="n">date_series</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">right_side</span> <span class="o">=</span> <span class="n">_safe_hstack_numpy</span><span class="p">(</span><span class="n">right_side</span><span class="p">,</span> <span class="n">day_of_month</span><span class="p">)</span>
+
+        <span class="c1"># stack along axis 1</span>
+        <span class="k">if</span> <span class="n">right_side</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_safe_hstack</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_name</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                                  <span class="n">right_side</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020, Taylor G Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

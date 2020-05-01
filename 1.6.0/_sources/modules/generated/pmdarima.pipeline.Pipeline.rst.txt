@@ -1,0 +1,16 @@
+:mod:`pmdarima.pipeline`.Pipeline
+========================================
+
+.. currentmodule:: pmdarima.pipeline
+
+.. autoclass:: Pipeline
+
+   
+   .. automethod:: __init__
+   
+
+.. include:: pmdarima.pipeline.Pipeline.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
