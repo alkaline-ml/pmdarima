@@ -4,6 +4,8 @@
 #
 # Common ARIMA functions
 
+from numbers import Number
+
 from sklearn.utils.validation import column_or_1d
 import numpy as np
 
@@ -12,6 +14,7 @@ from ..utils.array import diff, check_endog
 from ..compat.numpy import DTYPE
 from .stationarity import KPSSTest, ADFTest, PPTest
 from .seasonality import CHTest, OCSBTest
+from . import ARIMA
 
 __all__ = [
     'is_constant',
@@ -186,3 +189,25 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
 
     # when d >= max_d
     return d
+
+
+def check_residuals(model, lag, test=None, df=None, plot=True, **kwargs):
+    if not test:
+        test = 'BG' if isinstance(model, ARIMA) else 'LB'
+        show_test = True
+    elif isinstance(test, str) and test in ('LB', 'BG'):
+        show_test = True
+    else:
+        show_test = False
+
+    # TODO: isinstance `ts` in R?
+    if isinstance(model, Number):
+        residuals = model
+        model = {'method': 'Missing'}
+    else:
+        residuals = model.resid
+
+    if len(residuals) == 0:
+        raise ValueError("No residuals found")
+
+
