@@ -164,7 +164,7 @@ def cross_validate(estimator, y, exogenous=None, scoring=None, cv=None,
         - 'smape'
         - 'mean_absolute_error'
         - 'mean_squared_error'
-        - 'r2',
+        - 'r2'
 
     cv : BaseTSCrossValidator or None, optional (default=None)
         An instance of cross-validation. If None, will use a RollingForecastCV
