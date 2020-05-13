@@ -11,7 +11,7 @@ import time
 from traceback import format_exception_only
 
 from sklearn import base
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.utils import indexable
 
 from ._split import check_cv
@@ -31,6 +31,7 @@ _valid_scoring = {
     'mean_absolute_error': mean_absolute_error,
     'mean_squared_error': mean_squared_error,
     'smape': metrics.smape,
+    'r2': r2_score,
 }
 
 _valid_averaging = {
@@ -163,6 +164,7 @@ def cross_validate(estimator, y, exogenous=None, scoring=None, cv=None,
         - 'smape'
         - 'mean_absolute_error'
         - 'mean_squared_error'
+        - 'r2',
 
     cv : BaseTSCrossValidator or None, optional (default=None)
         An instance of cross-validation. If None, will use a RollingForecastCV
@@ -330,6 +332,7 @@ def cross_val_score(estimator, y, exogenous=None, scoring=None, cv=None,
         - 'smape'
         - 'mean_absolute_error'
         - 'mean_squared_error'
+        - 'r2'
 
     cv : BaseTSCrossValidator or None, optional (default=None)
         An instance of cross-validation. If None, will use a RollingForecastCV
