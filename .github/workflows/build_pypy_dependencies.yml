@@ -40,7 +40,7 @@ jobs:
           python -m pip install "$(cat requirements.txt | grep numpy)"
           # Have to force <1.4.0 (see https://github.com/scipy/scipy/releases/tag/v1.4.0)
           python -m pip install "$(cat requirements.txt | grep scipy),<1.4.0"
-          python -m pip install "$(cat requirements.txt | grep scikit-learn)"
+          python -m pip install --no-use-pep517 "$(cat requirements.txt | grep scikit-learn)"
           python -m pip install "$(cat requirements.txt | grep pandas)"
           python -m pip install "$(cat requirements.txt | grep statsmodels)"
           python -m pip install matplotlib
