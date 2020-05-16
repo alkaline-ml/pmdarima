@@ -136,15 +136,6 @@ jobs:
     - checkout
     - run: ./build_tools/circle/test_version_tagging.sh
 
-  # Regression testing for switch-over to new pmdarima namespace
-  regression-testing:
-    docker:
-      - image: python:3.6
-    working_directory: ~/pmdarima
-    steps:
-    - checkout
-    - run: ./build_tools/circle/regression_testing.sh
-
   # test we can install from sdist
   test-install-from-sdist:
     docker:
@@ -253,8 +244,6 @@ workflows:
             filters: *test-filters
         - test-linting:
             filters: *test-filters
-        - regression-testing:
-            filters: *test-filters
         - test-install-from-sdist:
             filters: *test-filters
         - testing-passed:
@@ -266,7 +255,6 @@ workflows:
                 - cpython38
                 - build-doc
                 - test-linting
-                - regression-testing
                 - test-install-from-sdist
             filters: *test-filters
 
