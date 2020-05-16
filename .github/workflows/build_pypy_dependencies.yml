@@ -13,7 +13,7 @@ jobs:
   build:
     name: Build PyPy Dependencies
     runs-on: ubuntu-latest
-    container: pypy:3.6-7.1.1-stretch
+    container: pypy:3.6-7.3.0-stretch
     steps:
       - name: Checkout code
         uses: actions/checkout@master
