@@ -200,7 +200,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.CHTest<a class="headerlink" href="#pmdarima-arima-chtest" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.arima.CHTest">
-<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">CHTest</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/7caf18fd/pmdarima/arima/seasonality.py#L181"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">CHTest</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/ae332f24/pmdarima/arima/seasonality.py#L181"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conduct a CH test for seasonality.</p>
 <p>The Canova-Hansen test for seasonal differences. Canova and Hansen
 (1995) proposed a test statistic for the null hypothesis that the seasonal
@@ -262,13 +262,13 @@ and Hansen test statisic: <a class="reference external" href="http://bit.ly/2wKk
 </table>
 <dl class="method">
 <dt id="pmdarima.arima.CHTest.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/7caf18fd/pmdarima/arima/seasonality.py#L218"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/ae332f24/pmdarima/arima/seasonality.py#L218"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.arima.CHTest.estimate_seasonal_differencing_term">
-<code class="descname">estimate_seasonal_differencing_term</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/7caf18fd/pmdarima/arima/seasonality.py#L327"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest.estimate_seasonal_differencing_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.estimate_seasonal_differencing_term" title="Permalink to this definition">¶</a></dt>
+<code class="descname">estimate_seasonal_differencing_term</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/ae332f24/pmdarima/arima/seasonality.py#L327"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#CHTest.estimate_seasonal_differencing_term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.estimate_seasonal_differencing_term" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate the seasonal differencing term.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -302,7 +302,7 @@ statistic is greater than the critical value, or 0 if not.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.CHTest.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/7caf18fd/pmdarima/../sklearn/base.py#L189"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/ae332f24/pmdarima/../sklearn/base.py#L189"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -327,7 +327,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.arima.CHTest.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/7caf18fd/pmdarima/../sklearn/base.py#L221"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/ae332f24/pmdarima/../sklearn/base.py#L221"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.CHTest.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
