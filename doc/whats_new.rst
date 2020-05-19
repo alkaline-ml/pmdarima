@@ -8,6 +8,14 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
+`v1.6.1 <http://alkaline-ml.com/pmdarima/1.6.1/>`_
+--------------------------------------------------
+
+* Pin Cython to be ``>=0.29,<0.29.18``
+
+* Pin statsmodels to be ``>=0.11``
+
+
 `v1.6.0 <http://alkaline-ml.com/pmdarima/1.6.0/>`_
 --------------------------------------------------
 
