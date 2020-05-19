@@ -1,0 +1,12 @@
+:mod:`pmdarima.utils`.decomposed_plot
+==================================================
+
+.. currentmodule:: pmdarima.utils
+
+.. autofunction:: decomposed_plot
+
+.. include:: pmdarima.utils.decomposed_plot.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
