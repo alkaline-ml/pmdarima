@@ -50,29 +50,29 @@ express seasonal trends without needing to fit a seasonal model.
 
     [5 rows x 8 columns]
     Performing stepwise search to minimize aic
-    Fit ARIMA(2,1,2)x(0,0,0,0) [intercept=True]; AIC=2839.502, BIC=2891.632, Time=1.110 seconds
-    Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=True]; AIC=2864.731, BIC=2901.967, Time=0.030 seconds
-    Fit ARIMA(1,1,0)x(0,0,0,0) [intercept=True]; AIC=2861.910, BIC=2902.869, Time=0.488 seconds
-    Fit ARIMA(0,1,1)x(0,0,0,0) [intercept=True]; AIC=2859.092, BIC=2900.051, Time=0.670 seconds
-    Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=False]; AIC=2862.772, BIC=2896.284, Time=0.304 seconds
-    Fit ARIMA(1,1,2)x(0,0,0,0) [intercept=True]; AIC=2837.832, BIC=2886.238, Time=1.020 seconds
+    Fit ARIMA(2,1,2)x(0,0,0,0) [intercept=True]; AIC=2839.502, BIC=2891.632, Time=0.823 seconds
+    Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=True]; AIC=2864.731, BIC=2901.967, Time=0.032 seconds
+    Fit ARIMA(1,1,0)x(0,0,0,0) [intercept=True]; AIC=2861.910, BIC=2902.869, Time=0.355 seconds
+    Fit ARIMA(0,1,1)x(0,0,0,0) [intercept=True]; AIC=2859.092, BIC=2900.051, Time=0.476 seconds
+    Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=False]; AIC=2862.772, BIC=2896.284, Time=0.211 seconds
+    Fit ARIMA(1,1,2)x(0,0,0,0) [intercept=True]; AIC=2837.832, BIC=2886.238, Time=0.723 seconds
     Near non-invertible roots for order (1, 1, 2)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
-    Fit ARIMA(2,1,1)x(0,0,0,0) [intercept=True]; AIC=2837.790, BIC=2886.197, Time=0.979 seconds
+    Fit ARIMA(2,1,1)x(0,0,0,0) [intercept=True]; AIC=2837.790, BIC=2886.197, Time=0.678 seconds
     Near non-invertible roots for order (2, 1, 1)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.999)
-    Fit ARIMA(3,1,2)x(0,0,0,0) [intercept=True]; AIC=2841.291, BIC=2897.145, Time=1.155 seconds
+    Fit ARIMA(3,1,2)x(0,0,0,0) [intercept=True]; AIC=2841.291, BIC=2897.145, Time=0.830 seconds
     Near non-invertible roots for order (3, 1, 2)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
-    Fit ARIMA(2,1,3)x(0,0,0,0) [intercept=True]; AIC=2841.239, BIC=2897.093, Time=1.350 seconds
+    Fit ARIMA(2,1,3)x(0,0,0,0) [intercept=True]; AIC=2841.239, BIC=2897.093, Time=0.958 seconds
     Near non-invertible roots for order (2, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
-    Fit ARIMA(1,1,1)x(0,0,0,0) [intercept=True]; AIC=2835.791, BIC=2880.474, Time=1.030 seconds
+    Fit ARIMA(1,1,1)x(0,0,0,0) [intercept=True]; AIC=2835.791, BIC=2880.474, Time=0.738 seconds
     Near non-invertible roots for order (1, 1, 1)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.999)
-    Fit ARIMA(1,1,3)x(0,0,0,0) [intercept=True]; AIC=2838.701, BIC=2890.831, Time=1.253 seconds
+    Fit ARIMA(1,1,3)x(0,0,0,0) [intercept=True]; AIC=2838.701, BIC=2890.831, Time=0.915 seconds
     Near non-invertible roots for order (1, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.996)
-    Fit ARIMA(3,1,1)x(0,0,0,0) [intercept=True]; AIC=2838.972, BIC=2891.102, Time=1.032 seconds
+    Fit ARIMA(3,1,1)x(0,0,0,0) [intercept=True]; AIC=2838.972, BIC=2891.102, Time=0.742 seconds
     Near non-invertible roots for order (3, 1, 1)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
-    Fit ARIMA(3,1,3)x(0,0,0,0) [intercept=True]; AIC=2840.653, BIC=2900.231, Time=1.475 seconds
+    Fit ARIMA(3,1,3)x(0,0,0,0) [intercept=True]; AIC=2840.653, BIC=2900.231, Time=1.057 seconds
     Near non-invertible roots for order (3, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 1.000)
     Final model order: (2, 1, 2)x(0, 0, 0, 0) (constant=True)
-    Total fit time: 11.907 seconds
+    Total fit time: 8.547 seconds
 
 
 
@@ -154,7 +154,7 @@ express seasonal trends without needing to fit a seasonal model.
     # What next? Try combining different featurizers in your pipeline to enhance
     # a model's predictive power.
 
-**Total running time of the script:** ( 0 minutes  12.122 seconds)
+**Total running time of the script:** ( 0 minutes  8.722 seconds)
 
 
 
