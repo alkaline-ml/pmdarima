@@ -54,7 +54,10 @@ else:
     # Need these namespaces at the top so they can be used like:
     # pm.datasets.load_wineind()
     from . import arima
+    from . import compat
     from . import datasets
+    from . import model_selection
+    from . import preprocessing
     from . import utils
 
     __all__ = [
