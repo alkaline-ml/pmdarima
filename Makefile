@@ -33,6 +33,10 @@ doc-requirements:
 documentation: doc-requirements version
 	@make -C doc clean html EXAMPLES_PATTERN=example_* PMDARIMA_VERSION=$(PMDARIMA_VERSION)
 
+# Same as above, but only relies on version, since we use a docker container on CI/CD
+ci-documenation: version
+	@make -C doc clean html EXAMPLES_PATTERN=example_* PMDARIMA_VERSION=$(PMDARIMA_VERSION)
+
 requirements:
 	$(PYTHON) -m pip install -r requirements.txt
 
