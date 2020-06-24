@@ -22,6 +22,7 @@ from ._context import AbstractContext, ContextType
 from . import _auto_solvers as solvers
 from ..compat.numpy import DTYPE
 from ..compat import statsmodels as sm_compat
+from .. import context_managers as ctx
 
 __all__ = [
     'auto_arima',
@@ -440,7 +441,24 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
     if d is None:
         offset_test_args = offset_test_args \
             if offset_test_args is not None else dict()
-        d = ndiffs(dx, test=test, alpha=alpha, max_d=max_d, **offset_test_args)
+
+        # Numpy can raise if we've seasonal-differenced the array into oblivion
+        with ctx.except_and_reraise(
+                np.linalg.LinAlgError,
+                "Last 2 dimensions of the array must be square",
+                ValueError,
+                "Encountered exception in stationarity test (%r). "
+                "This can occur when a large `m` (currently set to %i) "
+                "coupled with a large enough `D` (currently set to %i) "
+                "difference the training array into too few samples for OLS. "
+                "Try fitting on a larger training size"
+                % (test, m, D),
+        ):
+            d = ndiffs(dx,
+                       test=test,
+                       alpha=alpha,
+                       max_d=max_d,
+                       **offset_test_args)
 
         if d > 0 and exogenous is not None:
             diffxreg = diff(diffxreg, differences=d, lag=1)

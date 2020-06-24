@@ -55,7 +55,9 @@ else:
     # pm.datasets.load_wineind()
     from . import arima
     from . import compat
+    from . import context_managers
     from . import datasets
+    from . import decorators
     from . import model_selection
     from . import preprocessing
     from . import utils
@@ -64,7 +66,9 @@ else:
         # Namespaces we want exposed at top:
         'arima',
         'compat',
+        'context_managers',
         'datasets',
+        'decorators',
         'model_selection',
         'preprocessing',
         'utils',
