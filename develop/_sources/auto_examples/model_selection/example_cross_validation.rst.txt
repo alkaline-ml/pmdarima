@@ -32,9 +32,9 @@ possible.
     [CV] fold=0 ..........................................................
     [CV] fold=1 ..........................................................
     [CV] fold=2 ..........................................................
-    Model 1 CV scores: [23.928976841681518, 22.289666122815046, 3.7484080171047283]
-    Model 2 CV scores: [1.4413474767581218, 15.413429218463346, 5.572225774148651]
-    Lowest average SMAPE: 7.47566748979004 (model2)
+    Model 1 CV scores: [23.929024794500016, 22.289176771338337, 3.748501977068676]
+    Model 2 CV scores: [1.4858070863800765, 15.413921896615129, 5.572021412127509]
+    Lowest average SMAPE: 7.490583465040905 (model2)
     Best model: ARIMA(order=(1, 1, 2), seasonal_order=(0, 1, 1, 12), suppress_warnings=True)
 
 
@@ -90,7 +90,7 @@ possible.
         errors[better_index], better_index + 1))
     print("Best model: {}".format(models[better_index]))
 
-**Total running time of the script:** ( 0 minutes  4.362 seconds)
+**Total running time of the script:** ( 0 minutes  4.083 seconds)
 
 
 

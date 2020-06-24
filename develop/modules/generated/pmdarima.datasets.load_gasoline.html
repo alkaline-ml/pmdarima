@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html4" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,6 +11,13 @@
   
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
@@ -19,7 +25,9 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript">
@@ -41,13 +49,6 @@
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -66,7 +67,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> pmdarima
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
 
           
@@ -93,6 +94,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -135,6 +137,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -173,7 +176,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../classes.html">API Reference</a> &raquo;</li>
         
@@ -200,7 +203,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.datasets" title="pmdarima.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code></a>.load_gasoline<a class="headerlink" href="#pmdarima-datasets-load-gasoline" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.datasets.load_gasoline">
-<code class="descclassname">pmdarima.datasets.</code><code class="descname">load_gasoline</code><span class="sig-paren">(</span><em>as_series=False</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/datasets/gasoline.py#L15"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/gasoline.html#load_gasoline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.datasets.load_gasoline" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.datasets.</code><code class="descname">load_gasoline</code><span class="sig-paren">(</span><em>as_series=False</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/datasets/gasoline.py#L15"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/gasoline.html#load_gasoline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.datasets.load_gasoline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Weekly US finished motor gasoline products</p>
 <p>A weekly time series of US finished motor gasoline products supplied (in
 thousands of barrels per day) from February 1991 to May 2005.</p>
@@ -289,11 +292,19 @@ need to explore using exogenous features</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017-2020, Taylor G Smith
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -304,7 +315,6 @@ need to explore using exogenous features</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

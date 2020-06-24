@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html4" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,6 +11,13 @@
   
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
@@ -19,7 +25,9 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript">
@@ -41,13 +49,6 @@
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -66,7 +67,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> pmdarima
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
 
           
@@ -93,6 +94,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -127,6 +129,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -165,7 +168,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../classes.html">API Reference</a> &raquo;</li>
         
@@ -192,7 +195,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.preprocessing" title="pmdarima.preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code></a>.LogEndogTransformer<a class="headerlink" href="#pmdarima-preprocessing-logendogtransformer" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.preprocessing.LogEndogTransformer">
-<em class="property">class </em><code class="descclassname">pmdarima.preprocessing.</code><code class="descname">LogEndogTransformer</code><span class="sig-paren">(</span><em>lmbda=0</em>, <em>neg_action='raise'</em>, <em>floor=1e-16</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/preprocessing/endog/log.py#L8"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/endog/log.html#LogEndogTransformer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.preprocessing.</code><code class="descname">LogEndogTransformer</code><span class="sig-paren">(</span><em>lmbda=0</em>, <em>neg_action='raise'</em>, <em>floor=1e-16</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/preprocessing/endog/log.py#L8"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/endog/log.html#LogEndogTransformer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply a log transformation to an endogenous array</p>
 <p>When <code class="docutils literal notranslate"><span class="pre">y</span></code> is your endogenous array, the log transform is
 <code class="docutils literal notranslate"><span class="pre">log(y</span> <span class="pre">+</span> <span class="pre">lmbda)</span></code></p>
@@ -252,13 +255,13 @@ transformed array may not be perfectly inverse-transformed.</p>
 </table>
 <dl class="method">
 <dt id="pmdarima.preprocessing.LogEndogTransformer.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>lmbda=0</em>, <em>neg_action='raise'</em>, <em>floor=1e-16</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/preprocessing/endog/log.py#L33"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/endog/log.html#LogEndogTransformer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>lmbda=0</em>, <em>neg_action='raise'</em>, <em>floor=1e-16</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/preprocessing/endog/log.py#L33"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/endog/log.html#LogEndogTransformer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.LogEndogTransformer.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/preprocessing/endog/log.py#L37"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/endog/log.html#LogEndogTransformer.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/preprocessing/endog/log.py#L37"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/endog/log.html#LogEndogTransformer.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the transformer</p>
 <p>Must be called before <code class="docutils literal notranslate"><span class="pre">transform</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -283,7 +286,7 @@ serve as pass-through arrays.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.LogEndogTransformer.fit_transform">
-<code class="descname">fit_transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**transform_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/preprocessing/base.py#L43"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.fit_transform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit_transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**transform_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/preprocessing/base.py#L43"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit and transform the arrays</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -309,7 +312,7 @@ serve as pass-through arrays.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.LogEndogTransformer.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/../sklearn/base.py#L189"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/../sklearn/base.py#L189"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -334,7 +337,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.LogEndogTransformer.inverse_transform">
-<code class="descname">inverse_transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/preprocessing/endog/log.py#L77"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/endog/log.html#LogEndogTransformer.inverse_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.inverse_transform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">inverse_transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/preprocessing/endog/log.py#L77"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/endog/log.html#LogEndogTransformer.inverse_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.inverse_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inverse transform a transformed array</p>
 <p>Inverse the log transformation on the transformed array. Note that
 if truncation happened in the <code class="docutils literal notranslate"><span class="pre">transform</span></code> method, invertibility will
@@ -364,7 +367,7 @@ inverse-transformed.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.LogEndogTransformer.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/../sklearn/base.py#L221"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/../sklearn/base.py#L221"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -392,7 +395,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.LogEndogTransformer.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**transform_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/preprocessing/endog/log.py#L54"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/endog/log.html#LogEndogTransformer.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.transform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**transform_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/preprocessing/endog/log.py#L54"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/endog/log.html#LogEndogTransformer.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.LogEndogTransformer.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the log transform to the array</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -448,11 +451,19 @@ serve as pass-through arrays.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017-2020, Taylor G Smith
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -463,7 +474,6 @@ serve as pass-through arrays.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html4" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,6 +11,13 @@
   
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
   
@@ -19,7 +25,9 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript">
@@ -41,13 +49,6 @@
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -66,7 +67,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> pmdarima
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
 
           
@@ -93,6 +94,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -135,6 +137,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -173,7 +176,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../classes.html">API Reference</a> &raquo;</li>
         
@@ -200,7 +203,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.StepwiseContext<a class="headerlink" href="#pmdarima-arima-stepwisecontext" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.arima.StepwiseContext">
-<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">StepwiseContext</code><span class="sig-paren">(</span><em>max_steps=None</em>, <em>max_dur=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/arima/auto.py#L199"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.arima.</code><code class="descname">StepwiseContext</code><span class="sig-paren">(</span><em>max_steps=None</em>, <em>max_dur=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/arima/auto.py#L199"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Context manager to capture runtime context for stepwise mode.</p>
 <p><code class="docutils literal notranslate"><span class="pre">StepwiseContext</span></code> allows one to call <a class="reference internal" href="pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">auto_arima()</span></code></a> in the context
 of a runtime configuration that offers additional level of
@@ -267,13 +270,13 @@ occurs first and the best fit model at that time will be returned</p>
 </table>
 <dl class="method">
 <dt id="pmdarima.arima.StepwiseContext.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>max_steps=None</em>, <em>max_dur=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/arima/auto.py#L237"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>max_steps=None</em>, <em>max_dur=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/arima/auto.py#L237"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.arima.StepwiseContext.get_type">
-<code class="descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/0fae1e2b/pmdarima/arima/auto.py#L252"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext.get_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext.get_type" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/arima/auto.py#L252"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext.get_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext.get_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the ContextType</p>
 </dd></dl>
 
@@ -301,11 +304,19 @@ occurs first and the best fit model at that time will be returned</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2017-2020, Taylor G Smith
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -316,7 +327,6 @@ occurs first and the best fit model at that time will be returned</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
