@@ -773,6 +773,7 @@ def test_warn_for_stepwise_and_parallel():
 
 
 # Force case where data is simple polynomial after differencing
+@pytest.mark.filterwarnings('ignore:divide by zero')  # Expected, so ignore
 def test_force_polynomial_error():
     x = np.array([1, 2, 3, 4, 5, 6])
     d = 2
