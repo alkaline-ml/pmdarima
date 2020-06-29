@@ -7,6 +7,8 @@
 from sklearn.utils.validation import column_or_1d
 import numpy as np
 
+import warnings
+
 from ..utils import get_callable
 from ..utils.array import diff, check_endog
 from ..compat.numpy import DTYPE
@@ -107,6 +109,16 @@ def nsdiffs(x, m, max_D=2, test='ocsb', **kwargs):
 
         if is_constant(x):
             return D
+
+        # Issue 351: if the differenced array is now shorter than the seasonal
+        # periodicity, we need to bail out now.
+        if len(x) < m:
+            warnings.warn("Appropriate D value may not have been reached; "
+                          "length of seasonally-differenced array (%i) is "
+                          "shorter than m (%i). Using D=%i"
+                          % (len(x), m, D))
+            return D
+
         dodiff = testfunc(x)
 
     return D
