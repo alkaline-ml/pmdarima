@@ -178,11 +178,14 @@
 <span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">column_or_1d</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">context_managers</span> <span class="k">as</span> <span class="n">ctx</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">get_callable</span>
 <span class="kn">from</span> <span class="nn">..utils.array</span> <span class="kn">import</span> <span class="n">diff</span><span class="p">,</span> <span class="n">check_endog</span>
 <span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="kn">import</span> <span class="n">DTYPE</span>
-<span class="kn">from</span> <span class="nn">.stationarity</span> <span class="kn">import</span> <span class="n">KPSSTest</span><span class="p">,</span> <span class="n">ADFTest</span><span class="p">,</span> <span class="n">PPTest</span>
-<span class="kn">from</span> <span class="nn">.seasonality</span> <span class="kn">import</span> <span class="n">CHTest</span><span class="p">,</span> <span class="n">OCSBTest</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">stationarity</span> <span class="k">as</span> <span class="n">statest_lib</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">seasonality</span> <span class="k">as</span> <span class="n">seatest_lib</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;is_constant&#39;</span><span class="p">,</span>
@@ -191,14 +194,14 @@
 <span class="p">]</span>
 
 <span class="n">VALID_TESTS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;kpss&#39;</span><span class="p">:</span> <span class="n">KPSSTest</span><span class="p">,</span>
-    <span class="s1">&#39;adf&#39;</span><span class="p">:</span> <span class="n">ADFTest</span><span class="p">,</span>
-    <span class="s1">&#39;pp&#39;</span><span class="p">:</span> <span class="n">PPTest</span>
+    <span class="s1">&#39;kpss&#39;</span><span class="p">:</span> <span class="n">statest_lib</span><span class="o">.</span><span class="n">KPSSTest</span><span class="p">,</span>
+    <span class="s1">&#39;adf&#39;</span><span class="p">:</span> <span class="n">statest_lib</span><span class="o">.</span><span class="n">ADFTest</span><span class="p">,</span>
+    <span class="s1">&#39;pp&#39;</span><span class="p">:</span> <span class="n">statest_lib</span><span class="o">.</span><span class="n">PPTest</span>
 <span class="p">}</span>
 
 <span class="n">VALID_STESTS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;ocsb&#39;</span><span class="p">:</span> <span class="n">OCSBTest</span><span class="p">,</span>
-    <span class="s1">&#39;ch&#39;</span><span class="p">:</span> <span class="n">CHTest</span>
+    <span class="s1">&#39;ocsb&#39;</span><span class="p">:</span> <span class="n">seatest_lib</span><span class="o">.</span><span class="n">OCSBTest</span><span class="p">,</span>
+    <span class="s1">&#39;ch&#39;</span><span class="p">:</span> <span class="n">seatest_lib</span><span class="o">.</span><span class="n">CHTest</span>
 <span class="p">}</span>
 
 
@@ -278,6 +281,16 @@
 
         <span class="k">if</span> <span class="n">is_constant</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">D</span>
+
+        <span class="c1"># Issue 351: if the differenced array is now shorter than the seasonal</span>
+        <span class="c1"># periodicity, we need to bail out now.</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Appropriate D value may not have been reached; &quot;</span>
+                          <span class="s2">&quot;length of seasonally-differenced array (</span><span class="si">%i</span><span class="s2">) is &quot;</span>
+                          <span class="s2">&quot;shorter than m (</span><span class="si">%i</span><span class="s2">). Using D=</span><span class="si">%i</span><span class="s2">&quot;</span>
+                          <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">m</span><span class="p">,</span> <span class="n">D</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">D</span>
+
         <span class="n">dodiff</span> <span class="o">=</span> <span class="n">testfunc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">D</span></div>
@@ -318,7 +331,8 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    .. [1] R&#39;s auto_arima ndiffs function: https://bit.ly/2Bu8CHN</span>
+<span class="sd">    .. [1] R&#39;s auto_arima ndiffs function</span>
+<span class="sd">           https://github.com/robjhyndman/forecast/blob/19b0711e554524bf6435b7524517715658c07699/R/arima.R#L132  # noqa: E501</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">max_d</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_d must be a positive integer&#39;</span><span class="p">)</span>
@@ -332,28 +346,38 @@
     <span class="k">if</span> <span class="n">is_constant</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">d</span>
 
-    <span class="c1"># get initial diff</span>
-    <span class="n">pval</span><span class="p">,</span> <span class="n">dodiff</span> <span class="o">=</span> <span class="n">testfunc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-
-    <span class="c1"># if initially NaN, return 0</span>
-    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pval</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">0</span>  <span class="c1"># (d is zero, but this is more explicit to the reader)</span>
-
-    <span class="c1"># Begin loop.</span>
-    <span class="k">while</span> <span class="n">dodiff</span> <span class="ow">and</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">max_d</span><span class="p">:</span>
-        <span class="n">d</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="c1"># do differencing</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">is_constant</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">d</span>
-
-        <span class="c1"># get new result</span>
+    <span class="k">with</span> <span class="n">ctx</span><span class="o">.</span><span class="n">except_and_reraise</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">,</span>
+            <span class="n">raise_err</span><span class="o">=</span><span class="ne">ValueError</span><span class="p">,</span>
+            <span class="n">raise_msg</span><span class="o">=</span><span class="s2">&quot;Encountered exception in stationarity test (</span><span class="si">%r</span><span class="s2">). &quot;</span>
+                      <span class="s2">&quot;This can occur in seasonal settings when a large &quot;</span>
+                      <span class="s2">&quot;enough `m` coupled with a large enough `D` difference &quot;</span>
+                      <span class="s2">&quot;the training array into too few samples for OLS &quot;</span>
+                      <span class="s2">&quot;(input contains </span><span class="si">%i</span><span class="s2"> samples). Try fitting on a larger &quot;</span>
+                      <span class="s2">&quot;training size&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span>
+    <span class="p">):</span>
+        <span class="c1"># get initial diff</span>
         <span class="n">pval</span><span class="p">,</span> <span class="n">dodiff</span> <span class="o">=</span> <span class="n">testfunc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-        <span class="c1"># if it&#39;s NaN now, take the last non-null one</span>
+        <span class="c1"># if initially NaN, return 0</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pval</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">d</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="mi">0</span>  <span class="c1"># (d is zero, but this is more explicit to the reader)</span>
+
+        <span class="c1"># Begin loop.</span>
+        <span class="k">while</span> <span class="n">dodiff</span> <span class="ow">and</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">max_d</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># do differencing</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_constant</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">d</span>
+
+            <span class="c1"># get new result</span>
+            <span class="n">pval</span><span class="p">,</span> <span class="n">dodiff</span> <span class="o">=</span> <span class="n">testfunc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="c1"># if it&#39;s NaN now, take the last non-null one</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pval</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">d</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="c1"># when d &gt;= max_d</span>
     <span class="k">return</span> <span class="n">d</span></div>

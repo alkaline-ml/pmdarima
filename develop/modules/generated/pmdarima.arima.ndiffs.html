@@ -198,7 +198,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.ndiffs<a class="headerlink" href="#pmdarima-arima-ndiffs" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.arima.ndiffs">
-<code class="descclassname">pmdarima.arima.</code><code class="descname">ndiffs</code><span class="sig-paren">(</span><em>x</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>max_d=2</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2f31e12c/pmdarima/arima/utils.py#L115"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/utils.html#ndiffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ndiffs" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.arima.</code><code class="descname">ndiffs</code><span class="sig-paren">(</span><em>x</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>max_d=2</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/3838bff7/pmdarima/arima/utils.py#L128"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/utils.html#ndiffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.ndiffs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate ARIMA differencing term, <code class="docutils literal notranslate"><span class="pre">d</span></code>.</p>
 <p>Perform a test of stationarity for different levels of <code class="docutils literal notranslate"><span class="pre">d</span></code> to
 estimate the number of differences required to make a given time
@@ -244,7 +244,8 @@ If the time series is constant, will return 0.</p>
 <table class="docutils citation" frame="void" id="r70" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R70]</a></td><td>R’s auto_arima ndiffs function: <a class="reference external" href="https://bit.ly/2Bu8CHN">https://bit.ly/2Bu8CHN</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R70]</a></td><td>R’s auto_arima ndiffs function
+<a class="reference external" href="https://github.com/robjhyndman/forecast/blob/19b0711e554524bf6435b7524517715658c07699/R/arima.R#L132">https://github.com/robjhyndman/forecast/blob/19b0711e554524bf6435b7524517715658c07699/R/arima.R#L132</a>  # noqa: E501</td></tr>
 </tbody>
 </table>
 </dd></dl>
