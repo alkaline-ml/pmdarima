@@ -30,7 +30,7 @@ deploy-twine-test: bdist_wheel deploy-requirements
 		--password ${TWINE_PASSWORD}
 
 documentation: version
-	$(DOCKER) run -v $(HERE):/pmdarima --rm alkalineml/pmdarima-doc-base:latest /bin/bash -c "cd pmdarima && make install && make docker-documentation"
+	$(DOCKER) run -v $(HERE):/pmdarima -w /pmdarima --rm alkalineml/pmdarima-doc-base:latest /bin/bash -c "make install docker-documentation"
 
 # This one assumes we are in the docker container, so it can either be called from above (locally), or directly (on CI)
 docker-documentation: version
