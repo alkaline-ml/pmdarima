@@ -160,7 +160,8 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
 
     References
     ----------
-    .. [1] R's auto_arima ndiffs function: https://bit.ly/2Bu8CHN
+    .. [1] R's auto_arima ndiffs function
+           https://github.com/robjhyndman/forecast/blob/19b0711e554524bf6435b7524517715658c07699/R/arima.R#L132  # noqa: E501
     """
     if max_d <= 0:
         raise ValueError('max_d must be a positive integer')
