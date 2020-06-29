@@ -9,11 +9,12 @@ import numpy as np
 
 import warnings
 
+from .. import context_managers as ctx
 from ..utils import get_callable
 from ..utils.array import diff, check_endog
 from ..compat.numpy import DTYPE
-from .stationarity import KPSSTest, ADFTest, PPTest
-from .seasonality import CHTest, OCSBTest
+from . import stationarity as statest_lib
+from . import seasonality as seatest_lib
 
 __all__ = [
     'is_constant',
@@ -22,14 +23,14 @@ __all__ = [
 ]
 
 VALID_TESTS = {
-    'kpss': KPSSTest,
-    'adf': ADFTest,
-    'pp': PPTest
+    'kpss': statest_lib.KPSSTest,
+    'adf': statest_lib.ADFTest,
+    'pp': statest_lib.PPTest
 }
 
 VALID_STESTS = {
-    'ocsb': OCSBTest,
-    'ch': CHTest
+    'ocsb': seatest_lib.OCSBTest,
+    'ch': seatest_lib.CHTest
 }
 
 
@@ -173,28 +174,38 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
     if is_constant(x):
         return d
 
-    # get initial diff
-    pval, dodiff = testfunc(x)
-
-    # if initially NaN, return 0
-    if np.isnan(pval):
-        return 0  # (d is zero, but this is more explicit to the reader)
-
-    # Begin loop.
-    while dodiff and d < max_d:
-        d += 1
-
-        # do differencing
-        x = diff(x)
-        if is_constant(x):
-            return d
-
-        # get new result
+    with ctx.except_and_reraise(
+            np.linalg.LinAlgError,
+            raise_err=ValueError,
+            raise_msg="Encountered exception in stationarity test (%r). "
+                      "This can occur in seasonal settings when a large "
+                      "enough `m` coupled with a large enough `D` difference "
+                      "the training array into too few samples for OLS "
+                      "(input contains %i samples). Try fitting on a larger "
+                      "training size" % (test, len(x)),
+    ):
+        # get initial diff
         pval, dodiff = testfunc(x)
 
-        # if it's NaN now, take the last non-null one
+        # if initially NaN, return 0
         if np.isnan(pval):
-            return d - 1
+            return 0  # (d is zero, but this is more explicit to the reader)
+
+        # Begin loop.
+        while dodiff and d < max_d:
+            d += 1
+
+            # do differencing
+            x = diff(x)
+            if is_constant(x):
+                return d
+
+            # get new result
+            pval, dodiff = testfunc(x)
+
+            # if it's NaN now, take the last non-null one
+            if np.isnan(pval):
+                return d - 1
 
     # when d >= max_d
     return d

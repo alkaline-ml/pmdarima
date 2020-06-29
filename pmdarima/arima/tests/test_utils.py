@@ -3,8 +3,17 @@
 import numpy as np
 import pytest
 
-from pmdarima.arima.utils import nsdiffs
-from pmdarima.compat.pytest import pytest_warning_messages
+from pmdarima.arima import utils as arima_utils
+from pmdarima.compat.pytest import pytest_warning_messages, pytest_error_str
+
+
+def test_issue_341():
+    seas_diffed = np.array([124., -114., -163., -83.])
+
+    with pytest.raises(ValueError) as ve:
+        arima_utils.ndiffs(seas_diffed, test='adf')
+
+    assert "raised from LinAlgError" in pytest_error_str(ve)
 
 
 def test_issue_351():
@@ -16,7 +25,7 @@ def test_issue_351():
     ])
 
     with pytest.warns(UserWarning) as w_list:
-        D = nsdiffs(y, m=52, max_D=2, test='ocsb')
+        D = arima_utils.nsdiffs(y, m=52, max_D=2, test='ocsb')
 
     assert D == 1
 
