@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pmdarima.arima import auto
+from pmdarima.compat.pytest import pytest_error_str
 import pytest
 
 
@@ -25,7 +26,7 @@ def test_issue_341():
          191, 234, 253, 155, 25, 0, 228, 234, 265, 205, 191, 19, 0, 188,
          156, 172, 173, 166, 28, 0, 209, 160, 159, 129, 124, 18, 0, 155]
 
-    try:
+    with pytest.raises(ValueError) as ve:
         auto.auto_arima(
             y,
             start_p=1,
@@ -46,7 +47,4 @@ def test_issue_341():
 
     # assert that we catch the np LinAlg error and reraise with a more
     # meaningful message
-    except ValueError as v:
-        assert "Encountered exception in stationarity test" in str(v)
-    else:
-        assert False, "Expected test to fail"
+    assert "Encountered exception in stationarity test" in pytest_error_str(ve)
