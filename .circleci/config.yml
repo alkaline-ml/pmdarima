@@ -105,11 +105,10 @@ jobs:
 
   build-doc:
     docker:
-      - image: python:3.6
+      - image: alkalineml/pmdarima-doc-base:latest
     working_directory: ~/pmdarima
     steps:
       - checkout
-      - run: make doc-requirements
       - run: make install
       - run: ./build_tools/circle/build_doc.sh
       # This persists doc/_build/html for the deploy step

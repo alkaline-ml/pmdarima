@@ -13,4 +13,4 @@ fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "${DIR}/get_version.sh"
 
-make documentation PMDARIMA_VERSION=${version}
+make docker-documentation PMDARIMA_VERSION=${version}
