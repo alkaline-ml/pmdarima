@@ -958,7 +958,7 @@ class ARIMA(BaseARIMA):
 
         Returns
         -------
-        df_model : array-like
+        df_model : floar
             The degrees of freedom in the model.
         """
         return self.arima_res_.df_model
@@ -971,7 +971,7 @@ class ARIMA(BaseARIMA):
 
         Returns
         -------
-        df_resid : array-like
+        df_resid : float
             The residual degrees of freedom.
         """
         return self.arima_res_.df_resid
