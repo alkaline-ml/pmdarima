@@ -258,6 +258,11 @@ def check_residuals(model, lag=None, df=None, test="LB", plot=True, **kwargs):
         The summary of checks the function ran. If ``plot=False``, this is all
         that is returned. If ``plot=True``, a ``matplotlib`` plot will be
         generated in a separate window
+
+    References
+    ----------
+    .. [1] R's checkresiduals function
+           https://rdrr.io/cran/forecast/src/R/checkresiduals.R
     """
     # Lazy import in case they don't want to graph
     if plot:
