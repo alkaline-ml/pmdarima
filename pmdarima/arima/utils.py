@@ -4,8 +4,6 @@
 #
 # Common ARIMA functions
 
-from numbers import Number
-
 from sklearn.utils.validation import column_or_1d
 import numpy as np
 
@@ -215,23 +213,58 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
     return d
 
 
-def check_residuals(model, lag, test=None, df=None, plot=True, **kwargs):
-    if not test:
-        test = 'BG' if isinstance(model, ARIMA) else 'LB'
-        show_test = True
-    elif isinstance(test, str) and test in ('LB', 'BG'):
-        show_test = True
-    else:
-        show_test = False
+def check_residuals(model, lag=None, df=None, test="LB", plot=True, **kwargs):
+    """Check that residuals from an ARIMA model look like white noise
 
-    # TODO: isinstance `ts` in R?
-    if isinstance(model, Number):
-        residuals = model
-        model = {'method': 'Missing'}
-    else:
-        residuals = model.resid
+    If ``plot=True``, produces a time plot of the residuals, the corresponding
+    ACF, and a histogram. If the degrees of freedom for the model can be
+    determined and test is not False, the output from either a Ljung-Box test
+    or Breusch-Godfrey test is printed.
 
+    Parameters
+    ----------
+    model : ARIMA
+        The ARIMA model to check the residuals of
+
+    lag : int or None, optional (default=None)
+        Number of lags to use in the Ljung-Box or Breusch-Godfrey test. If
+        missing, it will be set to ``min(10,n/5)`` for non-seasonal data and
+        ``min(2m, n/5)`` for seasonal data, where ``n`` is the length of the
+        series and ``m`` is the number of seasonal periods. It must also be
+        at least ``df + 3``, where ``df`` is the degrees of freedom. This
+        is necessary for the chi-squared test run internally.
+
+    df : int or None, optional (default=None)
+        Number of degrees of freedom for the fitted model. Ignored if it can
+        be extracted from the supplied model.
+
+    test : str, optional (default='LB')
+        The test to use for serial correlation. Currently, we only support
+        ``'LB'`` (Ljung-Box), but this argument is kept to match R's function
+        signature.
+
+    plot : bool, optional (default=True)
+        Whether or not to plot the output of this function.
+
+    kwargs : keyword args, optional
+        Any keyword arguments to be supplied to matplotlib for plotting
+    """
+    # Only support 'LG' for now, because that is what R uses on ARIMA modela
+    if test not in ('LG',):
+        raise ValueError("'LG' is currently the only supported `test` parameter")
+
+    degrees_of_freedom = model.df_model() or df
+
+    residuals = model.resid()
     if len(residuals) == 0:
         raise ValueError("No residuals found")
 
+    frequency = model.seasonal_order[-1]
+    if not lag:
+        lag = 2 * frequency if frequency > 1 else 10
+        lag = min(lag, round(len(residuals) / 5))
+        lag = max(degrees_of_freedom + 3, lag)
 
+    header = 'Residuals from ARIMA({0}'.format(model.order)
+
+    # TODO
