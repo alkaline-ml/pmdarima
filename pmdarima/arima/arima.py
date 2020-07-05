@@ -958,7 +958,7 @@ class ARIMA(BaseARIMA):
 
         Returns
         -------
-        df_model : floar
+        df_model : float
             The degrees of freedom in the model.
         """
         return self.arima_res_.df_model
