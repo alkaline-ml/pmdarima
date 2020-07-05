@@ -5,8 +5,10 @@
 # Common ARIMA functions
 
 from sklearn.utils.validation import column_or_1d
+from statsmodels.stats.diagnostic import acorr_ljungbox
 import numpy as np
 
+import inspect
 import warnings
 
 from .. import context_managers as ctx
@@ -20,7 +22,8 @@ from . import ARIMA
 __all__ = [
     'is_constant',
     'ndiffs',
-    'nsdiffs'
+    'nsdiffs',
+    'check_residuals'
 ]
 
 VALID_TESTS = {
@@ -96,7 +99,7 @@ def nsdiffs(x, m, max_D=2, test='ocsb', **kwargs):
         raise ValueError('max_D must be a positive integer')
 
     # get the test - this validates m internally
-    testfunc = get_callable(test, VALID_STESTS)(m, **kwargs)\
+    testfunc = get_callable(test, VALID_STESTS)(m, **kwargs) \
         .estimate_seasonal_differencing_term
     x = check_endog(x, dtype=DTYPE, copy=False)
 
@@ -248,10 +251,24 @@ def check_residuals(model, lag=None, df=None, test="LB", plot=True, **kwargs):
 
     kwargs : keyword args, optional
         Any keyword arguments to be supplied to matplotlib for plotting
+
+    Returns
+    -------
+    summary : str
+        The summary of checks the function ran. If ``plot=False``, this is all
+        that is returned. If ``plot=True``, a ``matplotlib`` plot will be
+        generated in a separate window
     """
-    # Only support 'LG' for now, because that is what R uses on ARIMA modela
-    if test not in ('LG',):
-        raise ValueError("'LG' is currently the only supported `test` parameter")
+    # Lazy import in case they don't want to graph
+    if plot:
+        from matplotlib import pyplot as plt
+
+    if not model or not isinstance(model, ARIMA):
+        raise ValueError("`model` must be an instance of pmdarima.arima.ARIMA")
+
+    # Only support 'LB' for now, because that is what R uses on ARIMA models
+    if test not in ('LB',):
+        raise ValueError("'LB' is currently the only supported `test` parameter")
 
     degrees_of_freedom = model.df_model() or df
 
@@ -260,11 +277,31 @@ def check_residuals(model, lag=None, df=None, test="LB", plot=True, **kwargs):
         raise ValueError("No residuals found")
 
     frequency = model.seasonal_order[-1]
+    print(frequency)
     if not lag:
         lag = 2 * frequency if frequency > 1 else 10
         lag = min(lag, round(len(residuals) / 5))
         lag = max(degrees_of_freedom + 3, lag)
 
-    header = 'Residuals from ARIMA({0}'.format(model.order)
+    ljung = acorr_ljungbox(residuals, lags=lag, model_df=degrees_of_freedom,
+                           period=frequency, return_df=True)
 
-    # TODO
+    # Find the most significant row for the summary
+    most_significant_row = ljung[ljung.lb_pvalue == ljung.lb_pvalue.min()]
+    statistic, p_value = most_significant_row.to_numpy()[0]
+
+    # This matches the output from R... Doing this allows us to center the
+    # title on the longest row
+    summary_row = 'Q* = {0}, df = {1}, p-value = {2:.3e}'.format(
+        round(statistic, 3), degrees_of_freedom, p_value
+    )
+    output_raw = [
+        ''
+        'Ljung-Box test'.center(len(summary_row)),
+        '',
+        'data:  Residuals from ARIMA{0}'.format(model.order),
+        summary_row,
+        ''
+    ]
+    output = '\n' + '\n'.join(output_raw)
+    return output

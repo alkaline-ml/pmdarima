@@ -3,6 +3,8 @@
 import numpy as np
 import pytest
 
+import pmdarima as pm
+from pmdarima.datasets import load_gasoline
 from pmdarima.arima import utils as arima_utils
 from pmdarima.compat.pytest import pytest_warning_messages, pytest_error_str
 
@@ -32,3 +34,10 @@ def test_issue_351():
     warnings_messages = pytest_warning_messages(w_list)
     assert len(warnings_messages) == 1
     assert 'shorter than m' in warnings_messages[0]
+
+
+def test_check_residuals():
+    y = load_gasoline()
+    arima = pm.auto_arima(y)
+    test = arima_utils.check_residuals(arima)
+    print(test)
