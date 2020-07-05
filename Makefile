@@ -4,6 +4,8 @@
 # caution: testing won't work on windows
 
 PYTHON ?= python
+DOCKER ?= docker
+HERE = $(shell pwd)
 
 .PHONY: clean develop test install bdist_wheel version
 
@@ -27,10 +29,11 @@ deploy-twine-test: bdist_wheel deploy-requirements
 		--username ${TWINE_USERNAME} \
 		--password ${TWINE_PASSWORD}
 
-doc-requirements:
-	$(PYTHON) -m pip install -r build_tools/doc/doc_requirements.txt
+documentation: version
+	$(DOCKER) run -v $(HERE):/pmdarima -w /pmdarima --rm alkalineml/pmdarima-doc-base:latest /bin/bash -c "make install docker-documentation"
 
-documentation: doc-requirements version
+# This one assumes we are in the docker container, so it can either be called from above (locally), or directly (on CI)
+docker-documentation: version
 	@make -C doc clean html EXAMPLES_PATTERN=example_* PMDARIMA_VERSION=$(PMDARIMA_VERSION)
 
 requirements:

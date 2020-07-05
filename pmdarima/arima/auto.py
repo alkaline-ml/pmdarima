@@ -440,7 +440,12 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
     if d is None:
         offset_test_args = offset_test_args \
             if offset_test_args is not None else dict()
-        d = ndiffs(dx, test=test, alpha=alpha, max_d=max_d, **offset_test_args)
+
+        d = ndiffs(dx,
+                   test=test,
+                   alpha=alpha,
+                   max_d=max_d,
+                   **offset_test_args)
 
         if d > 0 and exogenous is not None:
             diffxreg = diff(diffxreg, differences=d, lag=1)

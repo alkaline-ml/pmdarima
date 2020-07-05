@@ -9,11 +9,14 @@ from numbers import Number
 from sklearn.utils.validation import column_or_1d
 import numpy as np
 
+import warnings
+
+from .. import context_managers as ctx
 from ..utils import get_callable
 from ..utils.array import diff, check_endog
 from ..compat.numpy import DTYPE
-from .stationarity import KPSSTest, ADFTest, PPTest
-from .seasonality import CHTest, OCSBTest
+from . import stationarity as statest_lib
+from . import seasonality as seatest_lib
 from . import ARIMA
 
 __all__ = [
@@ -23,14 +26,14 @@ __all__ = [
 ]
 
 VALID_TESTS = {
-    'kpss': KPSSTest,
-    'adf': ADFTest,
-    'pp': PPTest
+    'kpss': statest_lib.KPSSTest,
+    'adf': statest_lib.ADFTest,
+    'pp': statest_lib.PPTest
 }
 
 VALID_STESTS = {
-    'ocsb': OCSBTest,
-    'ch': CHTest
+    'ocsb': seatest_lib.OCSBTest,
+    'ch': seatest_lib.CHTest
 }
 
 
@@ -110,6 +113,16 @@ def nsdiffs(x, m, max_D=2, test='ocsb', **kwargs):
 
         if is_constant(x):
             return D
+
+        # Issue 351: if the differenced array is now shorter than the seasonal
+        # periodicity, we need to bail out now.
+        if len(x) < m:
+            warnings.warn("Appropriate D value may not have been reached; "
+                          "length of seasonally-differenced array (%i) is "
+                          "shorter than m (%i). Using D=%i"
+                          % (len(x), m, D))
+            return D
+
         dodiff = testfunc(x)
 
     return D
@@ -150,7 +163,8 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
 
     References
     ----------
-    .. [1] R's auto_arima ndiffs function: https://bit.ly/2Bu8CHN
+    .. [1] R's auto_arima ndiffs function
+           https://github.com/robjhyndman/forecast/blob/19b0711e554524bf6435b7524517715658c07699/R/arima.R#L132  # noqa: E501
     """
     if max_d <= 0:
         raise ValueError('max_d must be a positive integer')
@@ -164,28 +178,38 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
     if is_constant(x):
         return d
 
-    # get initial diff
-    pval, dodiff = testfunc(x)
-
-    # if initially NaN, return 0
-    if np.isnan(pval):
-        return 0  # (d is zero, but this is more explicit to the reader)
-
-    # Begin loop.
-    while dodiff and d < max_d:
-        d += 1
-
-        # do differencing
-        x = diff(x)
-        if is_constant(x):
-            return d
-
-        # get new result
+    with ctx.except_and_reraise(
+            np.linalg.LinAlgError,
+            raise_err=ValueError,
+            raise_msg="Encountered exception in stationarity test (%r). "
+                      "This can occur in seasonal settings when a large "
+                      "enough `m` coupled with a large enough `D` difference "
+                      "the training array into too few samples for OLS "
+                      "(input contains %i samples). Try fitting on a larger "
+                      "training size" % (test, len(x)),
+    ):
+        # get initial diff
         pval, dodiff = testfunc(x)
 
-        # if it's NaN now, take the last non-null one
+        # if initially NaN, return 0
         if np.isnan(pval):
-            return d - 1
+            return 0  # (d is zero, but this is more explicit to the reader)
+
+        # Begin loop.
+        while dodiff and d < max_d:
+            d += 1
+
+            # do differencing
+            x = diff(x)
+            if is_constant(x):
+                return d
+
+            # get new result
+            pval, dodiff = testfunc(x)
+
+            # if it's NaN now, take the last non-null one
+            if np.isnan(pval):
+                return d - 1
 
     # when d >= max_d
     return d

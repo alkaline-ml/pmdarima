@@ -8,6 +8,25 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
+`v1.7.0 <http://alkaline-ml.com/pmdarima/1.7.0/>`_
+--------------------------------------------------
+
+* Address issue `#341 <https://github.com/alkaline-ml/pmdarima/issues/341>`_ where
+  a combination of a large ``m`` value and ``D`` value could difference an array into
+  being too small to test stationarity in the ADF test
+
+* Fix issue `#351 <https://github.com/alkaline-ml/pmdarima/issues/351>`_ where a large
+  value of ``m`` could prevent the seasonality test from completing.
+
+
+`v1.6.1 <http://alkaline-ml.com/pmdarima/1.6.1/>`_
+--------------------------------------------------
+
+* Pin Cython to be ``>=0.29,<0.29.18``
+
+* Pin statsmodels to be ``>=0.11``
+
+
 `v1.6.0 <http://alkaline-ml.com/pmdarima/1.6.0/>`_
 --------------------------------------------------
 

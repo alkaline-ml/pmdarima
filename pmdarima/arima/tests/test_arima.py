@@ -11,7 +11,8 @@ from pmdarima.datasets import load_lynx, load_wineind, load_heartrate, \
 from pmdarima.utils import get_callable
 
 import numpy as np
-from numpy.testing import assert_array_almost_equal, assert_almost_equal
+from numpy.testing import assert_array_almost_equal, assert_almost_equal, \
+    assert_allclose
 from numpy.random import RandomState
 
 import joblib
@@ -768,10 +769,11 @@ def test_warn_for_large_differences():
 def test_warn_for_stepwise_and_parallel():
     with pytest.warns(UserWarning):
         auto_arima(lynx, suppress_warnings=False, d=1,  # noqa: F841
-                       error_action='ignore', stepwise=True, n_jobs=2)
+                   error_action='ignore', stepwise=True, n_jobs=2)
 
 
 # Force case where data is simple polynomial after differencing
+@pytest.mark.filterwarnings('ignore:divide by zero')  # Expected, so ignore
 def test_force_polynomial_error():
     x = np.array([1, 2, 3, 4, 5, 6])
     d = 2
@@ -949,14 +951,14 @@ def test_to_dict_is_accurate():
 
     assert actual.keys() == expected.keys()
     assert_almost_equal(actual['pvalues'], expected['pvalues'], decimal=5)
-    assert_almost_equal(actual['resid'], expected['resid'], decimal=5)
+    assert_allclose(actual['resid'], expected['resid'], rtol=1e-3)
     assert actual['order'] == expected['order']
     assert actual['seasonal_order'] == expected['seasonal_order']
     assert np.isnan(actual['oob'])
     assert_almost_equal(actual['aic'], expected['aic'], decimal=5)
     assert_almost_equal(actual['aicc'], expected['aicc'], decimal=5)
     assert_almost_equal(actual['bic'], expected['bic'], decimal=5)
-    assert_almost_equal(actual['bse'], expected['bse'], decimal=3)
+    assert_allclose(actual['bse'], expected['bse'], rtol=1e-3)
     assert_almost_equal(actual['params'], expected['params'], decimal=3)
 
 

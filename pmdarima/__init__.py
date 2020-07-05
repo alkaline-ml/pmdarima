@@ -54,14 +54,21 @@ else:
     # Need these namespaces at the top so they can be used like:
     # pm.datasets.load_wineind()
     from . import arima
+    from . import compat
+    from . import context_managers
     from . import datasets
+    from . import decorators
+    from . import model_selection
+    from . import preprocessing
     from . import utils
 
     __all__ = [
         # Namespaces we want exposed at top:
         'arima',
         'compat',
+        'context_managers',
         'datasets',
+        'decorators',
         'model_selection',
         'preprocessing',
         'utils',
