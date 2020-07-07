@@ -112,7 +112,6 @@ class _StepwiseFitWrapper:
         self.exec_context = ContextStore.get_or_empty(ContextType.STEPWISE)
 
         # other internal start vars
-        self.bestfit = None
         self.k = self.start_k = 0
         self.max_k = 100 if self.exec_context.max_steps is None \
             else self.exec_context.max_steps
@@ -121,29 +120,10 @@ class _StepwiseFitWrapper:
         # results list to store intermittent hashes of orders to determine if
         # we've seen this order before...
         self.results_dict = dict()  # dict[tuple -> ARIMA]
+        self.ic_dict = dict()  # dict[tuple -> float]
 
-        # define the info criterion getter ONCE to avoid multiple lambda
-        # creation calls
-        self.get_ic = (lambda mod: getattr(mod, self.information_criterion)())
-
-    def is_new_better(self, new_model):
-        if self.bestfit is None:
-            return True
-        if new_model is None:
-            return False
-
-        current_ic = self.get_ic(self.bestfit)
-        new_ic = self.get_ic(new_model)
-
-        # check the roots of the new model, and set IC to inf if the roots are
-        # near non-invertible
-        new_ic = _root_test(new_model, new_ic, self.trace)
-
-        better = new_ic < current_ic
-        if better and self.trace > 1:
-            print("New best model found (%.3f < %.3f)" % (new_ic, current_ic))
-
-        return better
+        self.bestfit = None
+        self.bestfit_key = None  # (order, seasonal_order, constant)
 
     def _do_fit(self, order, seasonal_order, constant=None):
         """Do a fit and determine whether the model is better"""
@@ -169,9 +149,44 @@ class _StepwiseFitWrapper:
             # the dictionary (pointing to fit)
             self.results_dict[(order, seasonal_order, constant)] = fit
 
-            if self.is_new_better(fit):
+            # get the new model information criterion
+            new_ic = np.inf
+            if fit is not None:
+                new_ic = getattr(fit, self.information_criterion)()
+
+                # check the roots of the new model, and set IC to inf if the
+                # roots are near non-invertible
+                new_ic = _root_test(fit, new_ic, self.trace)
+
+            # cache this so we can lookup best model IC downstream
+            self.ic_dict[(order, seasonal_order, constant)] = new_ic
+
+            # Determine if the new fit is better than the existing fit
+            if fit is None or np.isinf(new_ic):
+                return False
+
+            # no benchmark model
+            if self.bestfit is None:
                 self.bestfit = fit
+                self.bestfit_key = (order, seasonal_order, constant)
+
+                if self.trace:
+                    print("First viable model found (%.3f)" % new_ic)
                 return True
+
+            # otherwise there's a current best
+            current_ic = self.ic_dict[self.bestfit_key]
+            if new_ic < current_ic:
+
+                if self.trace > 1:
+                    print("New best model found (%.3f < %.3f)"
+                          % (new_ic, current_ic))
+
+                self.bestfit = fit
+                self.bestfit_key = (order, seasonal_order, constant)
+                return True
+
+        # we've seen this model before
         return False
 
     def solve_stepwise(self):
@@ -352,6 +367,9 @@ class _StepwiseFitWrapper:
 
             # TODO: if (allowdrift || allowmean)
 
+        if not self.bestfit:
+            warnings.warn("No viable models found")
+
         # check if the search has been ended after max_steps
         if self.exec_context.max_steps is not None \
                 and self.k >= self.exec_context.max_steps:
@@ -360,8 +378,31 @@ class _StepwiseFitWrapper:
 
         # TODO: if (approximation && !is.null(bestfit$arma))
 
-        # return the values
-        return self.results_dict.values()
+        return _sort_and_filter_fits(self.results_dict, self.ic_dict)
+
+
+def _sort_and_filter_fits(results_dict, ic_dict):
+    # return the sorted values from the dicts
+    filtered_models_ics = sorted(
+        [(v, ic_dict[k])
+         for k, v in results_dict.items()
+         if v is not None],
+        key=(lambda fit_ic: fit_ic[1]),
+    )
+
+    # TODO: can we break ties in sorting by using the more simple model?
+
+    if not filtered_models_ics:
+        raise ValueError(
+            "Could not successfully fit a viable ARIMA model "
+            "to input data using the stepwise algorithm.\nSee "
+            "http://alkaline-ml.com/pmdarima/no-successful-model.html"
+            "for more information on why this can happen."
+        )
+
+    # (fit_a, fit_b), (np.inf, 0.5), etc.
+    fits, _ = zip(*filtered_models_ics)
+    return fits
 
 
 def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,

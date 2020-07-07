@@ -37,6 +37,7 @@ Helpful sections to get started:
 * :ref:`contrib`
 * :ref:`contributors`
 * :ref:`citing`
+* :ref:`no_successful_model`
 * :ref:`quickstart`
 * :ref:`user_guide`
 
@@ -47,6 +48,7 @@ Other versions
 
 Documentation for other release versions of ``pmdarima``:
 
+* `v1.7.0 <http://alkaline-ml.com/pmdarima/1.7.0>`_
 * `v1.6.1 <http://alkaline-ml.com/pmdarima/1.6.1>`_
 * `v1.6.0 <http://alkaline-ml.com/pmdarima/1.6.0>`_
 * `v1.5.3 <http://alkaline-ml.com/pmdarima/1.5.3>`_

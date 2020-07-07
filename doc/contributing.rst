@@ -103,8 +103,8 @@ rules may hinder the speed with which your contribution is merged:
 
 .. _filing_bugs:
 
-Filing bugs
------------
+Filing a bug
+------------
 We use Github issues to track all bugs and feature requests; feel free to
 open an issue if you have found a bug or wish to see a feature implemented.
 

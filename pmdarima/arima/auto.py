@@ -563,8 +563,17 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                 **sarimax_kwargs)
             for order, seasonal_order in gen)
 
-    # otherwise, we're fitting the stepwise algorithm...
+        # filter the non-successful ones
+        filtered = _post_ppc_arima(all_res)
+
+        # sort by the criteria - lower is better for both AIC and BIC
+        # (https://stats.stackexchange.com/questions/81427/aic-guidelines-in-model-selection)  # noqa
+        sorted_res = sorted(filtered,
+                            key=(lambda mod:
+                                 getattr(mod, information_criterion)()))
+
     else:
+        # otherwise, we're fitting the stepwise algorithm...
         if n_samples < 10:
             start_p = min(start_p, 1)
             start_q = min(start_q, 1)
@@ -590,19 +599,9 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             with_intercept=with_intercept, **sarimax_kwargs)
 
         # do the step-through...
-        all_res = stepwise_wrapper.solve_stepwise()
+        sorted_res = stepwise_wrapper.solve_stepwise()
 
-    # filter the non-successful ones
-    filtered = _post_ppc_arima(all_res)
-
-    # sort by the criteria - lower is better for both AIC and BIC
-    # (https://stats.stackexchange.com/questions/81427/aic-guidelines-in-model-selection)
-    sorted_res = sorted(filtered,
-                        key=(lambda mod:
-                             getattr(mod, information_criterion)()))
-
-    # remove all the cached .pmdpkl files... someday write this as an exit hook
-    # in case of a KeyboardInterrupt or anything
+    # TODO: this will go away in the near future
     for model in sorted_res:
         model._clear_cached_state()
 

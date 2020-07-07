@@ -725,6 +725,7 @@ class ARIMA(BaseARIMA):
                           "behavior."
                           % (modl_version, this_version), UserWarning)
 
+    # TODO: get rid of this
     def _clear_cached_state(self):
         # THIS IS A LEGACY METHOD USED PRE-v0.8.0
         if _uses_legacy_pickling(self):
