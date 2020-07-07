@@ -10,7 +10,7 @@ For certain time series, the search may return no viable models::
       File "<stdin>", line 1, in <module>
         "Could not successfully fit a viable ARIMA model "
     ValueError: Could not successfully fit a viable ARIMA model to input data using the stepwise algorithm.
-    See http://alkaline-ml.com/pmdarima/no-successful-model.htmlfor more information on why this can happen.
+    See http://alkaline-ml.com/pmdarima/no-successful-model.html for more information on why this can happen.
 
 
 This can happen for a number of reasons:

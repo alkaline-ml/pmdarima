@@ -367,9 +367,6 @@ class _StepwiseFitWrapper:
 
             # TODO: if (allowdrift || allowmean)
 
-        if not self.bestfit:
-            warnings.warn("No viable models found")
-
         # check if the search has been ended after max_steps
         if self.exec_context.max_steps is not None \
                 and self.k >= self.exec_context.max_steps:
@@ -377,6 +374,9 @@ class _StepwiseFitWrapper:
                           'of tries to find the best fit model')
 
         # TODO: if (approximation && !is.null(bestfit$arma))
+
+        if not self.bestfit:
+            warnings.warn("No viable models found")
 
         return _sort_and_filter_fits(self.results_dict, self.ic_dict)
 
@@ -396,7 +396,7 @@ def _sort_and_filter_fits(results_dict, ic_dict):
         raise ValueError(
             "Could not successfully fit a viable ARIMA model "
             "to input data using the stepwise algorithm.\nSee "
-            "http://alkaline-ml.com/pmdarima/no-successful-model.html"
+            "http://alkaline-ml.com/pmdarima/no-successful-model.html "
             "for more information on why this can happen."
         )
 
