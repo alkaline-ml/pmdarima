@@ -734,8 +734,17 @@
                 <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span> <span class="ow">in</span> <span class="n">gen</span><span class="p">)</span>
 
-    <span class="c1"># otherwise, we&#39;re fitting the stepwise algorithm...</span>
+        <span class="c1"># filter the non-successful ones</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="n">_post_ppc_arima</span><span class="p">(</span><span class="n">all_res</span><span class="p">)</span>
+
+        <span class="c1"># sort by the criteria - lower is better for both AIC and BIC</span>
+        <span class="c1"># (https://stats.stackexchange.com/questions/81427/aic-guidelines-in-model-selection)  # noqa</span>
+        <span class="n">sorted_res</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span>
+                            <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">mod</span><span class="p">:</span>
+                                 <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">information_criterion</span><span class="p">)()))</span>
+
     <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># otherwise, we&#39;re fitting the stepwise algorithm...</span>
         <span class="k">if</span> <span class="n">n_samples</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
             <span class="n">start_p</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">start_q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -761,19 +770,9 @@
             <span class="n">with_intercept</span><span class="o">=</span><span class="n">with_intercept</span><span class="p">,</span> <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
 
         <span class="c1"># do the step-through...</span>
-        <span class="n">all_res</span> <span class="o">=</span> <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">solve_stepwise</span><span class="p">()</span>
+        <span class="n">sorted_res</span> <span class="o">=</span> <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">solve_stepwise</span><span class="p">()</span>
 
-    <span class="c1"># filter the non-successful ones</span>
-    <span class="n">filtered</span> <span class="o">=</span> <span class="n">_post_ppc_arima</span><span class="p">(</span><span class="n">all_res</span><span class="p">)</span>
-
-    <span class="c1"># sort by the criteria - lower is better for both AIC and BIC</span>
-    <span class="c1"># (https://stats.stackexchange.com/questions/81427/aic-guidelines-in-model-selection)</span>
-    <span class="n">sorted_res</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span>
-                        <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">mod</span><span class="p">:</span>
-                             <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">information_criterion</span><span class="p">)()))</span>
-
-    <span class="c1"># remove all the cached .pmdpkl files... someday write this as an exit hook</span>
-    <span class="c1"># in case of a KeyboardInterrupt or anything</span>
+    <span class="c1"># TODO: this will go away in the near future</span>
     <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">sorted_res</span><span class="p">:</span>
         <span class="n">model</span><span class="o">.</span><span class="n">_clear_cached_state</span><span class="p">()</span>
 

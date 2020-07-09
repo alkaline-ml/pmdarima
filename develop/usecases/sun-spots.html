@@ -52,8 +52,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="9. Contributing to pmdarima" href="../contributing.html" />
-    <link rel="prev" title="8.1. Stock Market Prediction" href="stocks.html" /> 
+    <link rel="next" title="10. Contributing to pmdarima" href="../contributing.html" />
+    <link rel="prev" title="9.1. Stock Market Prediction" href="stocks.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -112,24 +112,25 @@
 <li class="toctree-l2"><a class="reference internal" href="../serialization.html">4. Serializing your ARIMA models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../refreshing.html">5. Refreshing your ARIMA models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../modules/datasets.html">7. Toy time-series datasets</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../usecases.html">8. Use cases</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="stocks.html">8.1. Stock Market Prediction</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">8.2. An end-to-end time series analysis</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#imports-data-loading-splitting">8.2.1. Imports, data loading &amp; splitting</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examining-the-data">8.2.2. Examining the data</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fitting-a-baseline">8.2.3. Fitting a baseline</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#transforming-our-data">8.2.4. Transforming our data</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fitting-the-transformed-data">8.2.5. Fitting the transformed data</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examining-forecasts">8.2.6. Examining forecasts</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#final-thoughts">8.2.7. Final thoughts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../no-successful-model.html">7. When no viable models can be found</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/datasets.html">8. Toy time-series datasets</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../usecases.html">9. Use cases</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="stocks.html">9.1. Stock Market Prediction</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">9.2. An end-to-end time series analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#imports-data-loading-splitting">9.2.1. Imports, data loading &amp; splitting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examining-the-data">9.2.2. Examining the data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fitting-a-baseline">9.2.3. Fitting a baseline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transforming-our-data">9.2.4. Transforming our data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fitting-the-transformed-data">9.2.5. Fitting the transformed data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examining-forecasts">9.2.6. Examining forecasts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#final-thoughts">9.2.7. Final thoughts</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../contributing.html">9. Contributing to pmdarima</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../contributors.html">10. Contributors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../citing.html">11. Citing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing.html">10. Contributing to pmdarima</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributors.html">11. Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../citing.html">12. Citing</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New?</a></li>
@@ -181,7 +182,7 @@
         
           <li><a href="../user_guide.html">User Guide</a> &raquo;</li>
         
-          <li><a href="../usecases.html">8. Use cases</a> &raquo;</li>
+          <li><a href="../usecases.html">9. Use cases</a> &raquo;</li>
         
       <li>Model selection with cross-validation</li>
     
@@ -203,7 +204,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="an-end-to-end-time-series-analysis">
-<span id="sun-spots"></span><h1>8.2. An end-to-end time series analysis<a class="headerlink" href="#an-end-to-end-time-series-analysis" title="Permalink to this headline">¶</a></h1>
+<span id="sun-spots"></span><h1>9.2. An end-to-end time series analysis<a class="headerlink" href="#an-end-to-end-time-series-analysis" title="Permalink to this headline">¶</a></h1>
 <p>In this example, we’re going to look at why the <a class="reference internal" href="../modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima()</span></code></a> method
 should not be used as a silver bullet, and why qualitative investigation of the data
 may reveal important characteristics about it which may, in turn, affect how you approach
@@ -221,7 +222,7 @@ print statements and it will work.</li>
 </ul>
 </div></blockquote>
 <div class="section" id="imports-data-loading-splitting">
-<h2>8.2.1. Imports, data loading &amp; splitting<a class="headerlink" href="#imports-data-loading-splitting" title="Permalink to this headline">¶</a></h2>
+<h2>9.2.1. Imports, data loading &amp; splitting<a class="headerlink" href="#imports-data-loading-splitting" title="Permalink to this headline">¶</a></h2>
 <p>Here’s the set up for our problem. We’ll load the data and split it into our
 train/test sets:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -275,7 +276,7 @@ effectively forecast for too many periods into the future.</p>
 70 as our test set.</p>
 </div>
 <div class="section" id="examining-the-data">
-<h2>8.2.2. Examining the data<a class="headerlink" href="#examining-the-data" title="Permalink to this headline">¶</a></h2>
+<h2>9.2.2. Examining the data<a class="headerlink" href="#examining-the-data" title="Permalink to this headline">¶</a></h2>
 <p>Pmdarima 1.5.2 introduced a handy utility for visualizing your time series data:
 <code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.utils.vizualization.tsdisplay()</span></code>. We can use this to visalize our data,
 take a look at the auto-correlation plot, and see the histogram of values:</p>
@@ -296,7 +297,7 @@ into.</li>
 </ul>
 </div>
 <div class="section" id="fitting-a-baseline">
-<h2>8.2.3. Fitting a baseline<a class="headerlink" href="#fitting-a-baseline" title="Permalink to this headline">¶</a></h2>
+<h2>9.2.3. Fitting a baseline<a class="headerlink" href="#fitting-a-baseline" title="Permalink to this headline">¶</a></h2>
 <p>Before we start manipulating our data, let’s examine what would happen if we just
 fit a model straight out of the box:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -372,7 +373,7 @@ fit a model straight out of the box:</p>
 </div>
 </div>
 <div class="section" id="transforming-our-data">
-<h2>8.2.4. Transforming our data<a class="headerlink" href="#transforming-our-data" title="Permalink to this headline">¶</a></h2>
+<h2>9.2.4. Transforming our data<a class="headerlink" href="#transforming-our-data" title="Permalink to this headline">¶</a></h2>
 <p>Since we expect our model to perform better over more normal data, let’s experiment with log transformations and
 the <a class="reference external" href="https://en.wikipedia.org/wiki/Power_transform#Box–Cox_transformation">Box-Cox transformation</a>,
 each of which is provided as an endogenous transformer in the Pmdarima package.</p>
@@ -402,7 +403,7 @@ In fact, a test of normality shows overwhelmingly that this is a normal distribu
 </div>
 </div>
 <div class="section" id="fitting-the-transformed-data">
-<h2>8.2.5. Fitting the transformed data<a class="headerlink" href="#fitting-the-transformed-data" title="Permalink to this headline">¶</a></h2>
+<h2>9.2.5. Fitting the transformed data<a class="headerlink" href="#fitting-the-transformed-data" title="Permalink to this headline">¶</a></h2>
 <p>Pmdarima implements a scikit-learn-esque pipeline used to chain transformations and
 estimators together. Using this, we can centralize the entire transformer/model fit into
 one metaestimator:</p>
@@ -493,7 +494,7 @@ lower! <em>But</em>, you say, <em>the data is on a different scale. Is AIC reall
 Let’s look at an apples-to-apples comparison.</p>
 </div>
 <div class="section" id="examining-forecasts">
-<h2>8.2.6. Examining forecasts<a class="headerlink" href="#examining-forecasts" title="Permalink to this headline">¶</a></h2>
+<h2>9.2.6. Examining forecasts<a class="headerlink" href="#examining-forecasts" title="Permalink to this headline">¶</a></h2>
 <p>Let’s write a function that examines the forecasts over the next 70 periods and plots
 the residuals:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span> <span class="k">as</span> <span class="n">mse</span>
@@ -541,7 +542,7 @@ data will perform better)</li>
 </ul>
 </div>
 <div class="section" id="final-thoughts">
-<h2>8.2.7. Final thoughts<a class="headerlink" href="#final-thoughts" title="Permalink to this headline">¶</a></h2>
+<h2>9.2.7. Final thoughts<a class="headerlink" href="#final-thoughts" title="Permalink to this headline">¶</a></h2>
 <p>By simply transforming our data prior to fitting our model, we were able to produce
 better forecasts (lower RMSE), a more simple model (fewer parameters) that fit significantly
 faster, and one that also had a much lower AIC. The key to take away from this is that,
@@ -559,10 +560,10 @@ necessary transformations before you begin training models.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../contributing.html" class="btn btn-neutral float-right" title="9. Contributing to pmdarima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../contributing.html" class="btn btn-neutral float-right" title="10. Contributing to pmdarima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="stocks.html" class="btn btn-neutral float-left" title="8.1. Stock Market Prediction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="stocks.html" class="btn btn-neutral float-left" title="9.1. Stock Market Prediction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

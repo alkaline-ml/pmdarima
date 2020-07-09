@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>12. Citing &mdash; pmdarima 0.0.0 documentation</title>
+  <title>7. When no viable models can be found &mdash; pmdarima 0.0.0 documentation</title>
   
 
   
@@ -52,8 +52,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="What’s new in pmdarima" href="whats_new.html" />
-    <link rel="prev" title="11. Contributors" href="contributors.html" /> 
+    <link rel="next" title="8. Toy time-series datasets" href="modules/datasets.html" />
+    <link rel="prev" title="6. Tips to using auto_arima" href="tips_and_tricks.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -112,12 +112,12 @@
 <li class="toctree-l2"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="no-successful-model.html">7. When no viable models can be found</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">7. When no viable models can be found</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modules/datasets.html">8. Toy time-series datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usecases.html">9. Use cases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html">10. Contributing to pmdarima</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributors.html">11. Contributors</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">12. Citing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="citing.html">12. Citing</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What's New?</a></li>
@@ -169,13 +169,13 @@
         
           <li><a href="user_guide.html">User Guide</a> &raquo;</li>
         
-      <li>12. Citing</li>
+      <li>7. When no viable models can be found</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/citing.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/no-successful-model.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -188,37 +188,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="citing">
-<span id="id1"></span><h1>12. Citing<a class="headerlink" href="#citing" title="Permalink to this headline">¶</a></h1>
-<p>If you would like to include <code class="docutils literal notranslate"><span class="pre">pmdarima</span></code> in your published work, please cite it as follows:</p>
-<ul>
-  <li>Smith, Taylor G., <i>et al.</i> pmdarima: ARIMA estimators for Python, 2017-,
-  <a href=http://www.alkaline-ml.com/pmdarima target="_blank">http://www.alkaline-ml.com/pmdarima</a>
-  [Online; accessed
-
-  <!-- So we can have the current date in the pre-written citation -->
-    <script type="text/javascript">
-      var today = new Date();
-      var formattedDate = [
-        today.getFullYear(),
-        ('0' + (today.getMonth() + 1)).slice(-2),
-        ('0' + today.getDate()).slice(-2),
-      ].join('-');
-      document.write(formattedDate);
-      document.write('].'); // Easier to just put this in the script tag
-    </script>
-
-  </li>
-</ul><p>BibTeX Entry:</p>
-<div class="highlight-tex notranslate"><div class="highlight"><pre><span></span>@MISC <span class="nb">{</span>pmdarima,
-  author = <span class="nb">{</span>Taylor G. Smith and others<span class="nb">}</span>,
-  title  = <span class="nb">{{</span>pmdarima<span class="nb">}</span>: ARIMA estimators for <span class="nb">{</span>Python<span class="nb">}}</span>,
-  year   = <span class="nb">{</span>2017--<span class="nb">}</span>,
-  url    = &quot;http://www.alkaline-ml.com/pmdarima&quot;,
-  note   = <span class="nb">{</span>[Online; accessed &lt;today&gt;]<span class="nb">}</span>
-<span class="nb">}</span>
+  <div class="section" id="when-no-viable-models-can-be-found">
+<span id="no-successful-model"></span><h1>7. When no viable models can be found<a class="headerlink" href="#when-no-viable-models-can-be-found" title="Permalink to this headline">¶</a></h1>
+<p>For certain time series, the search may return no viable models:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;&lt;stdin&gt;&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="s2">&quot;Could not successfully fit a viable ARIMA model &quot;</span>
+<span class="ne">ValueError</span><span class="p">:</span> <span class="n">Could</span> <span class="ow">not</span> <span class="n">successfully</span> <span class="n">fit</span> <span class="n">a</span> <span class="n">viable</span> <span class="n">ARIMA</span> <span class="n">model</span> <span class="n">to</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">using</span> <span class="n">the</span> <span class="n">stepwise</span> <span class="n">algorithm</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">alkaline</span><span class="o">-</span><span class="n">ml</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pmdarima</span><span class="o">/</span><span class="n">no</span><span class="o">-</span><span class="n">successful</span><span class="o">-</span><span class="n">model</span><span class="o">.</span><span class="n">html</span> <span class="k">for</span> <span class="n">more</span> <span class="n">information</span> <span class="n">on</span> <span class="n">why</span> <span class="n">this</span> <span class="n">can</span> <span class="n">happen</span><span class="o">.</span>
 </pre></div>
 </div>
+<p>This can happen for a number of reasons:</p>
+<ul class="simple">
+<li>Most commonly, the roots of your model may be nearly non-invertible, meaning the inverted roots
+lie too close to the unit circle. Here’s a good <a class="reference external" href="https://robjhyndman.com/hyndsight/arma-roots/">blog post</a>
+on the subject. Make sure <code class="docutils literal notranslate"><span class="pre">trace</span></code> is truthy in order to see these warnings when fitting your model.</li>
+<li>Sometimes, your data may not be stationary and can raise errors from statsmodels when fitting. In this case,
+the stepwise algorithm will filter out problem model fits. This can arise in a number of situations, ranging
+from non-stationarity to actual code errors. Setting <code class="docutils literal notranslate"><span class="pre">error_action='trace'</span></code> will log the stacktraces of
+any errors encountered during the search.</li>
+</ul>
+<p>Make sure to set <code class="docutils literal notranslate"><span class="pre">trace</span></code> to at least 1 in order to see the search progress, and to a value &gt;1 to see the
+maximum trace logging available. If you still cannot diagnose why you are getting this error message, consider
+<a class="reference internal" href="contributing.html#filing-bugs"><span class="std std-ref">Filing a bug</span></a>.</p>
 </div>
 
 
@@ -229,10 +221,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="whats_new.html" class="btn btn-neutral float-right" title="What’s new in pmdarima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="modules/datasets.html" class="btn btn-neutral float-right" title="8. Toy time-series datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="contributors.html" class="btn btn-neutral float-left" title="11. Contributors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="tips_and_tricks.html" class="btn btn-neutral float-left" title="6. Tips to using auto_arima" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

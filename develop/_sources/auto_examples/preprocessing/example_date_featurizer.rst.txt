@@ -50,29 +50,29 @@ express seasonal trends without needing to fit a seasonal model.
 
     [5 rows x 8 columns]
     Performing stepwise search to minimize aic
-    Fit ARIMA(2,1,2)x(0,0,0,0) [intercept=True]; AIC=2839.502, BIC=2891.632, Time=0.802 seconds
-    Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=True]; AIC=2864.731, BIC=2901.967, Time=0.029 seconds
-    Fit ARIMA(1,1,0)x(0,0,0,0) [intercept=True]; AIC=2861.910, BIC=2902.869, Time=0.375 seconds
-    Fit ARIMA(0,1,1)x(0,0,0,0) [intercept=True]; AIC=2859.092, BIC=2900.051, Time=0.497 seconds
-    Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=False]; AIC=2862.772, BIC=2896.284, Time=0.232 seconds
-    Fit ARIMA(1,1,2)x(0,0,0,0) [intercept=True]; AIC=2837.832, BIC=2886.238, Time=0.731 seconds
-    Near non-invertible roots for order (1, 1, 2)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
-    Fit ARIMA(2,1,1)x(0,0,0,0) [intercept=True]; AIC=2837.790, BIC=2886.197, Time=0.701 seconds
-    Near non-invertible roots for order (2, 1, 1)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.999)
-    Fit ARIMA(3,1,2)x(0,0,0,0) [intercept=True]; AIC=2841.291, BIC=2897.145, Time=0.827 seconds
-    Near non-invertible roots for order (3, 1, 2)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
-    Fit ARIMA(2,1,3)x(0,0,0,0) [intercept=True]; AIC=2841.239, BIC=2897.093, Time=0.996 seconds
-    Near non-invertible roots for order (2, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
-    Fit ARIMA(1,1,1)x(0,0,0,0) [intercept=True]; AIC=2835.791, BIC=2880.474, Time=0.792 seconds
+    Fit ARIMA(2,1,2)x(0,0,0,0) [intercept=True]; AIC=2839.502, BIC=2891.632, Time=0.892 seconds
+    Near non-invertible roots for order (2, 1, 2)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
+    Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=True]; AIC=2864.731, BIC=2901.967, Time=0.031 seconds
+    First viable model found (2864.731)
+    Fit ARIMA(1,1,0)x(0,0,0,0) [intercept=True]; AIC=2861.910, BIC=2902.869, Time=0.385 seconds
+    New best model found (2861.910 < 2864.731)
+    Fit ARIMA(0,1,1)x(0,0,0,0) [intercept=True]; AIC=2859.092, BIC=2900.051, Time=0.552 seconds
+    New best model found (2859.092 < 2861.910)
+    Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=False]; AIC=2862.772, BIC=2896.284, Time=0.279 seconds
+    Fit ARIMA(1,1,1)x(0,0,0,0) [intercept=True]; AIC=2835.791, BIC=2880.474, Time=0.901 seconds
     Near non-invertible roots for order (1, 1, 1)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.999)
-    Fit ARIMA(1,1,3)x(0,0,0,0) [intercept=True]; AIC=2838.701, BIC=2890.831, Time=0.903 seconds
+    Fit ARIMA(0,1,2)x(0,0,0,0) [intercept=True]; AIC=2847.648, BIC=2892.331, Time=0.705 seconds
+    New best model found (2847.648 < 2859.092)
+    Fit ARIMA(1,1,2)x(0,0,0,0) [intercept=True]; AIC=2837.832, BIC=2886.238, Time=0.758 seconds
+    Near non-invertible roots for order (1, 1, 2)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
+    Fit ARIMA(0,1,3)x(0,0,0,0) [intercept=True]; AIC=2844.490, BIC=2892.897, Time=0.734 seconds
+    New best model found (2844.490 < 2847.648)
+    Fit ARIMA(1,1,3)x(0,0,0,0) [intercept=True]; AIC=2838.701, BIC=2890.831, Time=0.953 seconds
     Near non-invertible roots for order (1, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.996)
-    Fit ARIMA(3,1,1)x(0,0,0,0) [intercept=True]; AIC=2838.972, BIC=2891.102, Time=0.774 seconds
-    Near non-invertible roots for order (3, 1, 1)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
-    Fit ARIMA(3,1,3)x(0,0,0,0) [intercept=True]; AIC=2840.653, BIC=2900.231, Time=1.076 seconds
-    Near non-invertible roots for order (3, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 1.000)
-    Final model order: (2, 1, 2)x(0, 0, 0, 0) (constant=True)
-    Total fit time: 8.743 seconds
+    Fit ARIMA(0,1,4)x(0,0,0,0) [intercept=True]; AIC=2844.554, BIC=2896.684, Time=0.995 seconds
+    Fit ARIMA(1,1,4)x(0,0,0,0) [intercept=True]; AIC=2846.569, BIC=2902.423, Time=1.098 seconds
+    Final model order: (0, 1, 3)x(0, 0, 0, 0) (constant=True)
+    Total fit time: 8.288 seconds
 
 
 
@@ -154,7 +154,7 @@ express seasonal trends without needing to fit a seasonal model.
     # What next? Try combining different featurizers in your pipeline to enhance
     # a model's predictive power.
 
-**Total running time of the script:** ( 0 minutes  8.867 seconds)
+**Total running time of the script:** ( 0 minutes  8.525 seconds)
 
 
 
