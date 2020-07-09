@@ -24,6 +24,7 @@ contribute you'll need to be able to build from source.
    serialization.rst
    refreshing.rst
    tips_and_tricks.rst
+   no-successful-model.rst
    modules/datasets.rst
    usecases.rst
    contributing.rst
