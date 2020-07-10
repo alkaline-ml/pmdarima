@@ -601,10 +601,6 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         # do the step-through...
         sorted_res = stepwise_wrapper.solve_stepwise()
 
-    # TODO: this will go away in the near future
-    for model in sorted_res:
-        model._clear_cached_state()
-
     return _return_wrapper(sorted_res, return_valid_fits, start, trace)
 
 

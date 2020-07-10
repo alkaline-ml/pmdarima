@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
+import pandas as pd
+
 from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
-from pmdarima.arima.arima import VALID_SCORING, _uses_legacy_pickling
+from pmdarima.arima.arima import VALID_SCORING
 from pmdarima.arima.auto import _post_ppc_arima
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.arima.warnings import ModelFitWarning
@@ -10,20 +13,18 @@ from pmdarima.datasets import load_lynx, load_wineind, load_heartrate, \
     load_austres
 from pmdarima.utils import get_callable
 
-import numpy as np
+from os.path import abspath, dirname
+from numpy.random import RandomState
 from numpy.testing import assert_array_almost_equal, assert_almost_equal, \
     assert_allclose
-from numpy.random import RandomState
+from statsmodels import api as sm
 
 import joblib
-from statsmodels import api as sm
-import pandas as pd
-
+import os
 import pickle
 import pytest
+import tempfile
 import time
-import os
-from os.path import abspath, dirname
 
 
 # initialize the random state
@@ -962,47 +963,24 @@ def test_to_dict_is_accurate():
     assert_almost_equal(actual['params'], expected['params'], decimal=3)
 
 
-def test_new_serialization():
+def test_serialization_methods_equal():
     arima = ARIMA(order=(0, 0, 0), suppress_warnings=True).fit(y)
 
-    # Serialize it, show there is no tmp_loc_
-    pkl_file = "file.pkl"
-    new_loc = "ts_wrapper.pkl"
-    try:
-        joblib.dump(arima, pkl_file)
+    with tempfile.TemporaryDirectory() as dirname:
+        joblib_path = os.path.join(dirname, "joblib.pkl")
+        joblib.dump(arima, joblib_path)
+        loaded = joblib.load(joblib_path)
+        joblib_preds = loaded.predict()
 
-        # Assert it does NOT use the old-style pickling
-        assert not _uses_legacy_pickling(arima)
-        loaded = joblib.load(pkl_file)
-        assert not _uses_legacy_pickling(loaded)
-        preds = loaded.predict()
-        os.unlink(pkl_file)
+        pickle_path = os.path.join(dirname, "pickle.pkl")
+        with open(pickle_path, 'wb') as p:
+            pickle.dump(arima, p)
 
-        # Now save out the arima_res_ piece separately, and show we can load
-        # it from the legacy method
-        arima.summary()
-        arima.arima_res_.save(fname=new_loc)
-        arima.tmp_pkl_ = new_loc
+        with open(pickle_path, 'rb') as p:
+            loaded = pickle.load(p)
+        pickle_preds = loaded.predict()
 
-        assert _uses_legacy_pickling(arima)
-
-        # Save/load it and show it works
-        joblib.dump(arima, pkl_file)
-        loaded2 = joblib.load(pkl_file)
-        assert_array_almost_equal(loaded2.predict(), preds)
-
-        # De-cache
-        arima._clear_cached_state()
-        assert not os.path.exists(new_loc)
-
-        # Show we get an OSError now
-        with pytest.raises(OSError) as ose:
-            joblib.load(pkl_file)
-        assert "Does it still" in pytest_error_str(ose), ose
-
-    finally:
-        _unlink_if_exists(pkl_file)
-        _unlink_if_exists(new_loc)
+    assert_array_almost_equal(joblib_preds, pickle_preds)
 
 
 @pytest.mark.parametrize(

@@ -9,13 +9,11 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
 from sklearn.utils.validation import check_array
 
-from statsmodels.tsa.base.tsa_model import TimeSeriesModelResults
 from statsmodels import api as sm
 
 from scipy.stats import gaussian_kde, norm
 import numpy as np
 import warnings
-import os
 
 from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
@@ -89,12 +87,6 @@ def _seasonal_prediction_with_confidence(arima_res, start, end, exog, alpha,
     conf_int = results.conf_int(alpha=alpha)
     return check_endog(f, dtype=None, copy=False), \
         check_array(conf_int, copy=False, dtype=None)
-
-
-def _uses_legacy_pickling(arima):
-    # If the package version is < 1.1.0 it uses legacy pickling behavior, but
-    # a later version of the package may actually try to load a legacy model..
-    return hasattr(arima, "tmp_pkl_")
 
 
 class ARIMA(BaseARIMA):
@@ -672,22 +664,9 @@ class ARIMA(BaseARIMA):
         # this subhook...
         return self.__dict__
 
-    def _legacy_set_state(self, state):
-        # re-set the results class
-        loc = state.get('tmp_pkl_', None)
-        if loc is not None:
-            try:
-                self.arima_res_ = TimeSeriesModelResults.load(loc)
-            except:  # noqa: E722
-                raise OSError('Could not read saved model state from %s. '
-                              'Does it still exist?' % loc)
-
     def __setstate__(self, state):
-        # I am being unpickled...
+        """I am being unpickled..."""
         self.__dict__ = state
-
-        if _uses_legacy_pickling(self):
-            self._legacy_set_state(state)
 
         # Warn for unpickling a different version's model
         self._warn_for_older_version()
@@ -724,16 +703,6 @@ class ARIMA(BaseARIMA):
                           "pmdarima (%s). This could cause unforeseen "
                           "behavior."
                           % (modl_version, this_version), UserWarning)
-
-    # TODO: get rid of this
-    def _clear_cached_state(self):
-        # THIS IS A LEGACY METHOD USED PRE-v0.8.0
-        if _uses_legacy_pickling(self):
-            # when fit in an auto-arima, a lot of cached .pmdpkl files
-            # are generated if fit in parallel... this removes the tmp file
-            loc = self.__dict__.get('tmp_pkl_', None)
-            if loc is not None:
-                os.unlink(loc)
 
     def update(self, y, exogenous=None, maxiter=None, **kwargs):
         """Update the model fit with additional observed endog/exog values.
