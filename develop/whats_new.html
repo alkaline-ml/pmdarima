@@ -204,6 +204,8 @@ being too small to test stationarity in the ADF test</li>
 value of <code class="docutils literal notranslate"><span class="pre">m</span></code> could prevent the seasonality test from completing.</li>
 <li>Fix issue <a class="reference external" href="https://github.com/alkaline-ml/pmdarima/issues/354">#354</a> where models with
 near non-invertible roots could still be considered as candidate best-fits.</li>
+<li>Remove legacy pickling behavior that separates the statsmodels object from the pmdarima
+object. This breaks backwards compatibility with versions pre-1.2.0.</li>
 </ul>
 </div>
 <div class="section" id="id5">

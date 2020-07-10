@@ -180,13 +180,11 @@
 <span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="kn">import</span> <span class="n">if_delegate_has_method</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_array</span>
 
-<span class="kn">from</span> <span class="nn">statsmodels.tsa.base.tsa_model</span> <span class="kn">import</span> <span class="n">TimeSeriesModelResults</span>
 <span class="kn">from</span> <span class="nn">statsmodels</span> <span class="kn">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">sm</span>
 
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">gaussian_kde</span><span class="p">,</span> <span class="n">norm</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">BaseARIMA</span>
 <span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="kn">import</span> <span class="n">DTYPE</span>  <span class="c1"># DTYPE for arrays</span>
@@ -260,12 +258,6 @@
     <span class="n">conf_int</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">conf_int</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> \
         <span class="n">check_array</span><span class="p">(</span><span class="n">conf_int</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_uses_legacy_pickling</span><span class="p">(</span><span class="n">arima</span><span class="p">):</span>
-    <span class="c1"># If the package version is &lt; 1.1.0 it uses legacy pickling behavior, but</span>
-    <span class="c1"># a later version of the package may actually try to load a legacy model..</span>
-    <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">arima</span><span class="p">,</span> <span class="s2">&quot;tmp_pkl_&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ARIMA"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA">[docs]</a><span class="k">class</span> <span class="nc">ARIMA</span><span class="p">(</span><span class="n">BaseARIMA</span><span class="p">):</span>
@@ -843,22 +835,9 @@
         <span class="c1"># this subhook...</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
 
-    <span class="k">def</span> <span class="nf">_legacy_set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="c1"># re-set the results class</span>
-        <span class="n">loc</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tmp_pkl_&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">loc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span> <span class="o">=</span> <span class="n">TimeSeriesModelResults</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
-            <span class="k">except</span><span class="p">:</span>  <span class="c1"># noqa: E722</span>
-                <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s1">&#39;Could not read saved model state from </span><span class="si">%s</span><span class="s1">. &#39;</span>
-                              <span class="s1">&#39;Does it still exist?&#39;</span> <span class="o">%</span> <span class="n">loc</span><span class="p">)</span>
-
     <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="c1"># I am being unpickled...</span>
+        <span class="sd">&quot;&quot;&quot;I am being unpickled...&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">state</span>
-
-        <span class="k">if</span> <span class="n">_uses_legacy_pickling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_legacy_set_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
         <span class="c1"># Warn for unpickling a different version&#39;s model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_warn_for_older_version</span><span class="p">()</span>
@@ -895,16 +874,6 @@
                           <span class="s2">&quot;pmdarima (</span><span class="si">%s</span><span class="s2">). This could cause unforeseen &quot;</span>
                           <span class="s2">&quot;behavior.&quot;</span>
                           <span class="o">%</span> <span class="p">(</span><span class="n">modl_version</span><span class="p">,</span> <span class="n">this_version</span><span class="p">),</span> <span class="ne">UserWarning</span><span class="p">)</span>
-
-    <span class="c1"># TODO: get rid of this</span>
-    <span class="k">def</span> <span class="nf">_clear_cached_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># THIS IS A LEGACY METHOD USED PRE-v0.8.0</span>
-        <span class="k">if</span> <span class="n">_uses_legacy_pickling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="c1"># when fit in an auto-arima, a lot of cached .pmdpkl files</span>
-            <span class="c1"># are generated if fit in parallel... this removes the tmp file</span>
-            <span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tmp_pkl_&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">loc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ARIMA.update"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the model fit with additional observed endog/exog values.</span>

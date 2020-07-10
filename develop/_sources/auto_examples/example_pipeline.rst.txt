@@ -35,19 +35,19 @@ which greatly simplifies your life.
 
     pmdarima version: 0.0.0
     Performing stepwise search to minimize aic
-    Fit ARIMA(2,1,2)x(0,0,0,0) [intercept=True]; AIC=2819.938, BIC=2861.993, Time=0.440 seconds
+    Fit ARIMA(2,1,2)x(0,0,0,0) [intercept=True]; AIC=2819.938, BIC=2861.993, Time=0.441 seconds
     First viable model found (2819.938)
     Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=True]; AIC=2942.625, BIC=2972.664, Time=0.021 seconds
-    Fit ARIMA(1,1,0)x(0,0,0,0) [intercept=True]; AIC=2867.514, BIC=2900.557, Time=0.071 seconds
-    Fit ARIMA(0,1,1)x(0,0,0,0) [intercept=True]; AIC=2830.585, BIC=2863.628, Time=0.256 seconds
-    Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=False]; AIC=2940.651, BIC=2967.686, Time=0.099 seconds
-    Fit ARIMA(1,1,2)x(0,0,0,0) [intercept=True]; AIC=2817.535, BIC=2856.586, Time=0.353 seconds
-    Fit ARIMA(0,1,2)x(0,0,0,0) [intercept=True]; AIC=2814.904, BIC=2850.952, Time=0.311 seconds
-    Fit ARIMA(0,1,3)x(0,0,0,0) [intercept=True]; AIC=2818.704, BIC=2857.755, Time=0.531 seconds
-    Fit ARIMA(1,1,1)x(0,0,0,0) [intercept=True]; AIC=2817.377, BIC=2853.424, Time=0.303 seconds
-    Fit ARIMA(1,1,3)x(0,0,0,0) [intercept=True]; AIC=2818.290, BIC=2860.345, Time=0.545 seconds
+    Fit ARIMA(1,1,0)x(0,0,0,0) [intercept=True]; AIC=2867.514, BIC=2900.557, Time=0.066 seconds
+    Fit ARIMA(0,1,1)x(0,0,0,0) [intercept=True]; AIC=2830.585, BIC=2863.628, Time=0.257 seconds
+    Fit ARIMA(0,1,0)x(0,0,0,0) [intercept=False]; AIC=2940.651, BIC=2967.686, Time=0.100 seconds
+    Fit ARIMA(1,1,2)x(0,0,0,0) [intercept=True]; AIC=2817.535, BIC=2856.586, Time=0.336 seconds
+    Fit ARIMA(0,1,2)x(0,0,0,0) [intercept=True]; AIC=2814.904, BIC=2850.952, Time=0.309 seconds
+    Fit ARIMA(0,1,3)x(0,0,0,0) [intercept=True]; AIC=2818.704, BIC=2857.755, Time=0.434 seconds
+    Fit ARIMA(1,1,1)x(0,0,0,0) [intercept=True]; AIC=2817.377, BIC=2853.424, Time=0.302 seconds
+    Fit ARIMA(1,1,3)x(0,0,0,0) [intercept=True]; AIC=2818.290, BIC=2860.345, Time=0.512 seconds
     Near non-invertible roots for order (1, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 1.000)
-    Total fit time: 2.939 seconds
+    Total fit time: 2.786 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
                     ('arima',
@@ -156,7 +156,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  3.137 seconds)
+**Total running time of the script:** ( 0 minutes  2.942 seconds)
 
 
 
