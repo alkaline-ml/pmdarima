@@ -966,16 +966,17 @@ def test_to_dict_is_accurate():
 def test_serialization_methods_equal():
     arima = ARIMA(order=(0, 0, 0), suppress_warnings=True).fit(y)
 
-    with tempfile.NamedTemporaryFile() as tmp_pkl1:
-        joblib.dump(arima, tmp_pkl1.name)
-        loaded = joblib.load(tmp_pkl1.name)
+    with tempfile.TemporaryDirectory() as dirname:
+        joblib_path = os.path.join(dirname, "joblib.pkl")
+        joblib.dump(arima, joblib_path)
+        loaded = joblib.load(joblib_path)
         joblib_preds = loaded.predict()
 
-    with tempfile.NamedTemporaryFile() as tmp_pkl2:
-        with open(tmp_pkl2.name, 'wb') as p:
+        pickle_path = os.path.join(dirname, "pickle.pkl")
+        with open(pickle_path, 'wb') as p:
             pickle.dump(arima, p)
 
-        with open(tmp_pkl2.name, 'rb') as p:
+        with open(pickle_path, 'rb') as p:
             loaded = pickle.load(p)
         pickle_preds = loaded.predict()
 
