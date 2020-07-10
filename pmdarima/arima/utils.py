@@ -216,6 +216,29 @@ def ndiffs(x, alpha=0.05, test='kpss', max_d=2, **kwargs):
     return d
 
 
+def _find_degrees_of_freedom(model):
+    """Find the degrees of freedom as calculated in R
+
+    See https://stats.stackexchange.com/a/389817
+    This is different from how it is calculated in statsmodels, so it needs
+    its own function
+
+    Parameters
+    ----------
+    model : pmdarima.arima.ARIMA
+        The model to calculate the df for
+
+    Returns
+    -------
+    df : int
+        The degrees of freedom (as calculated in R) for the input model
+    """
+    df = model.order[0]
+    df += 1 if model.with_intercept else 0
+    df += 1 if model.with_intercept and model.trend else 0
+    return df
+
+
 def check_residuals(model, lag=None, df=None, test="LB", plot=True, **kwargs):
     """Check that residuals from an ARIMA model look like white noise
 
@@ -273,9 +296,10 @@ def check_residuals(model, lag=None, df=None, test="LB", plot=True, **kwargs):
 
     # Only support 'LB' for now, because that is what R uses on ARIMA models
     if test not in ('LB',):
-        raise ValueError("'LB' is currently the only supported `test` parameter")
+        raise ValueError("'LB' is currently the only supported `test` "
+                         "parameter")
 
-    degrees_of_freedom = model.df_model() or df
+    degrees_of_freedom = _find_degrees_of_freedom(model) or df
 
     residuals = model.resid()
     if len(residuals) == 0:
@@ -288,24 +312,25 @@ def check_residuals(model, lag=None, df=None, test="LB", plot=True, **kwargs):
         lag = max(degrees_of_freedom + 3, lag)
 
     ljung = acorr_ljungbox(residuals, lags=lag, model_df=degrees_of_freedom,
-                           period=frequency if frequency > 0 else None, return_df=True)
-
-    # Find the most significant row for the summary
-    most_significant_row = ljung[ljung.lb_pvalue == ljung.lb_pvalue.min()]
-    statistic, p_value = most_significant_row.to_numpy()[0]
+                           return_df=True)
+    print(ljung)
+    statistic, p_value = ljung.to_numpy()[-1]
 
     # This matches the output from R... Doing this allows us to center the
     # title on the longest row
     summary_row = 'Q* = {0}, df = {1}, p-value = {2:.3e}'.format(
-        round(statistic, 3), degrees_of_freedom, p_value
+        round(statistic, 3), lag - degrees_of_freedom, p_value
     )
     output_raw = [
         ''
         'Ljung-Box test'.center(len(summary_row)),
         '',
-        'data:  Residuals from ARIMA{0}'.format(model.order),
+        'data:  Residuals from ARIMA{0}{1}[{2}]'.format
+        (model.order, model.seasonal_order[:-1] if frequency > 0 else '',
+         frequency),
         summary_row,
-        ''
+        '',
+        'Model df: {0}.   Total lags used: {1}'.format(degrees_of_freedom, lag)
     ]
     output = '\n' + '\n'.join(output_raw)
     return output

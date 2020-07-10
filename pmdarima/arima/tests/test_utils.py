@@ -50,7 +50,7 @@ def test_check_residuals():
         Model df: 3.   Total lags used: 24
     """
     y = load_airpassengers()
-    arima = pm.auto_arima(y)  # Yields ARIMA(1, 1, 1)
+    arima = pm.ARIMA((2, 1, 1), (0, 1, 0, 12)).fit(y)
     test = arima_utils.check_residuals(arima)
     print(arima.arima_res_.summary())
     print(test)
