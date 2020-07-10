@@ -18,6 +18,9 @@ v0.8.1) will document the latest features.
 * Fix issue `#351 <https://github.com/alkaline-ml/pmdarima/issues/351>`_ where a large
   value of ``m`` could prevent the seasonality test from completing.
 
+* Fix issue `#354 <https://github.com/alkaline-ml/pmdarima/issues/354>`_ where models with
+  near non-invertible roots could still be considered as candidate best-fits.
+
 
 `v1.6.1 <http://alkaline-ml.com/pmdarima/1.6.1/>`_
 --------------------------------------------------
