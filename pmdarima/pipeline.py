@@ -77,6 +77,7 @@ class Pipeline(BaseEstimator):
                                         transparams=True, trend=None,
                                         with_intercept=True))])
     """
+
     def __init__(self, steps):
         self.steps = steps
         self._validate_steps()
@@ -456,8 +457,10 @@ class Pipeline(BaseEstimator):
             if isinstance(transformer, BaseEndogTransformer):
                 y_pred, Xt = transformer.inverse_transform(y_pred, Xt)
                 if return_conf_int:
-                    conf_ints[:, 0], Xt_lower_bound = transformer.inverse_transform(conf_ints[:, 0], Xt_lower_bound)
-                    conf_ints[:, 1], Xt_upper_bound = transformer.inverse_transform(conf_ints[:, 1], Xt_upper_bound)
+                    conf_ints[:, 0], Xt_lower_bound = transformer.inverse_transform(
+                        conf_ints[:, 0], Xt_lower_bound)
+                    conf_ints[:, 1], Xt_upper_bound = transformer.inverse_transform(
+                        conf_ints[:, 1], Xt_upper_bound)
 
         if return_conf_int:
             return y_pred, conf_ints
