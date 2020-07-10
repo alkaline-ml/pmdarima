@@ -4,15 +4,19 @@
 #
 # Automatically find optimal parameters for an ARIMA
 
-from joblib import Parallel, delayed
 import numpy as np
+
+from joblib import Parallel, delayed
 from sklearn.utils import check_random_state
 from sklearn.linear_model import LinearRegression
+
+import functools
 import time
 import warnings
 
 from ..base import BaseARIMA
 from . import _doc
+from . import _validation
 from .utils import ndiffs, is_constant, nsdiffs
 from ..utils import diff, is_iterable, check_endog
 from ..utils.metaestimators import if_has_delegate
@@ -317,28 +321,45 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         raise ValueError('error_action must be one of %r, but got %r'
                          % (actions, error_action))
 
+    trace = _validation.check_trace(trace)
+
     # copy array
     y = check_endog(y, dtype=DTYPE)
     n_samples = y.shape[0]
 
     sarimax_kwargs = {} if not sarimax_kwargs else sarimax_kwargs
 
+    # the workhorse of the model fits
+    fit_partial = functools.partial(
+        solvers._fit_candidate_model,
+        start_params=start_params,
+        trend=trend,
+        method=method,
+        maxiter=maxiter,
+        fit_params=fit_args,
+        suppress_warnings=suppress_warnings,
+        trace=trace,
+        error_action=error_action,
+        scoring=scoring,
+        out_of_sample_size=out_of_sample_size,
+        scoring_args=scoring_args,
+        with_intercept=with_intercept
+    )
+
     # check for constant data
     if is_constant(y):
         warnings.warn('Input time-series is completely constant; '
                       'returning a (0, 0, 0) ARMA.')
-        return _return_wrapper(_post_ppc_arima(
-            solvers._fit_arima(
-                y, xreg=exogenous, order=(0, 0, 0),
-                seasonal_order=(0, 0, 0, 0),
-                start_params=start_params, trend=trend, method=method,
-                maxiter=maxiter, fit_params=fit_args,
-                suppress_warnings=suppress_warnings, trace=trace,
-                error_action=error_action, scoring=scoring,
-                out_of_sample_size=out_of_sample_size,
-                scoring_args=scoring_args,
-                with_intercept=with_intercept,
-                **sarimax_kwargs)),
+        return _return_wrapper(
+            _post_ppc_arima(
+                fit_partial(
+                    y,
+                    xreg=exogenous,
+                    order=(0, 0, 0),
+                    seasonal_order=(0, 0, 0, 0),
+                    **sarimax_kwargs
+                )
+            ),
             return_valid_fits, start, trace)
 
     # test ic, and use AIC if n <= 3
@@ -480,21 +501,16 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
             else sm_compat.check_seasonal_order((0, D, 0, m))
         return _return_wrapper(
             _post_ppc_arima(
-                solvers._fit_arima(
-                    y, xreg=exogenous, order=(0, d, 0),
+                fit_partial(
+                    y,
+                    xreg=exogenous,
+                    order=(0, d, 0),
                     seasonal_order=ssn,
-                    start_params=start_params, trend=trend,
-                    method=method, maxiter=maxiter,
-                    fit_params=fit_args,
-                    suppress_warnings=suppress_warnings,
-                    trace=trace,
-                    error_action=error_action,
-                    scoring=scoring,
-                    out_of_sample_size=out_of_sample_size,
-                    scoring_args=scoring_args,
-                    with_intercept=with_intercept,
-                    **sarimax_kwargs)),
-            return_valid_fits, start, trace)
+                    **sarimax_kwargs
+                )
+            ),
+            return_valid_fits, start, trace
+        )
 
     # seasonality issues
     if m > 1:
@@ -549,17 +565,11 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
 
         # get results in parallel
         all_res = Parallel(n_jobs=n_jobs)(
-            delayed(solvers._fit_arima)(
-                y, xreg=exogenous, order=order,
+            delayed(fit_partial)(
+                y,
+                xreg=exogenous,
+                order=order,
                 seasonal_order=seasonal_order,
-                start_params=start_params, trend=trend,
-                method=method, maxiter=maxiter,
-                fit_params=fit_args,
-                suppress_warnings=suppress_warnings,
-                trace=trace, error_action=error_action,
-                out_of_sample_size=out_of_sample_size,
-                scoring=scoring, scoring_args=scoring_args,
-                with_intercept=with_intercept,
                 **sarimax_kwargs)
             for order, seasonal_order in gen)
 

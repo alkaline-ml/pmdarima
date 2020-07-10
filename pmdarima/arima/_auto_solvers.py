@@ -12,6 +12,7 @@ import traceback
 from .arima import ARIMA
 from .warnings import ModelFitWarning
 from ._context import ContextType, ContextStore
+from . import _validation
 from ..compat import statsmodels as sm_compat
 from datetime import datetime
 import functools
@@ -36,7 +37,7 @@ def _root_test(model, ic, trace):
 
     if max_invroot > 1 - 1e-2:
         ic = np.inf
-        if trace:
+        if trace > 1:
             print(
                 "Near non-invertible roots for order "
                 "(%i, %i, %i)(%i, %i, %i, %i); setting score to inf (at "
@@ -67,9 +68,11 @@ class _StepwiseFitWrapper:
                  start_P, start_Q, max_p, max_q, max_P, max_Q, seasonal,
                  information_criterion, with_intercept, **kwargs):
 
+        self.trace = _validation.check_trace(trace)
+
         # Create a partial of the fit call so we don't have arg bloat all over
         self._fit_arima = functools.partial(
-            _fit_arima,
+            _fit_candidate_model,
             x=y,
             xreg=xreg,
             start_params=start_params,
@@ -78,15 +81,15 @@ class _StepwiseFitWrapper:
             maxiter=maxiter,
             fit_params=fit_params,
             suppress_warnings=suppress_warnings,
-            trace=trace,
+            trace=self.trace,
             error_action=error_action,
             out_of_sample_size=out_of_sample_size,
             scoring=scoring,
             scoring_args=scoring_args,
             information_criterion=information_criterion,
+            do_root_test=True,
             **kwargs)
 
-        self.trace = int(trace)
         self.information_criterion = information_criterion
         self.with_intercept = with_intercept
 
@@ -140,7 +143,7 @@ class _StepwiseFitWrapper:
             # increment the number of fits
             self.k += 1
 
-            fit = self._fit_arima(
+            fit, _, new_ic = self._fit_arima(
                 order=order,
                 seasonal_order=seasonal_order,
                 with_intercept=constant)
@@ -148,15 +151,6 @@ class _StepwiseFitWrapper:
             # use the orders as a key to be hashed for
             # the dictionary (pointing to fit)
             self.results_dict[(order, seasonal_order, constant)] = fit
-
-            # get the new model information criterion
-            new_ic = np.inf
-            if fit is not None:
-                new_ic = getattr(fit, self.information_criterion)()
-
-                # check the roots of the new model, and set IC to inf if the
-                # roots are near non-invertible
-                new_ic = _root_test(fit, new_ic, self.trace)
 
             # cache this so we can lookup best model IC downstream
             self.ic_dict[(order, seasonal_order, constant)] = new_ic
@@ -170,7 +164,7 @@ class _StepwiseFitWrapper:
                 self.bestfit = fit
                 self.bestfit_key = (order, seasonal_order, constant)
 
-                if self.trace:
+                if self.trace > 1:
                     print("First viable model found (%.3f)" % new_ic)
                 return True
 
@@ -405,14 +399,38 @@ def _sort_and_filter_fits(results_dict, ic_dict):
     return fits
 
 
-def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
-               method, maxiter, fit_params, suppress_warnings,
-               trace, error_action,
-               out_of_sample_size, scoring, scoring_args,
-               with_intercept, **kwargs):
+def _fit_candidate_model(x,
+                         xreg,
+                         order,
+                         seasonal_order,
+                         start_params,
+                         trend,
+                         method,
+                         maxiter,
+                         fit_params,
+                         suppress_warnings,
+                         trace,
+                         error_action,
+                         out_of_sample_size,
+                         scoring,
+                         scoring_args,
+                         with_intercept,
+                         information_criterion,
+                         do_root_test,
+                         **kwargs):
+    """Instantiate and fit a candidate model
 
+    1. Initialize a model
+    2. Fit model
+    3. Perform a root test
+    4. Return model, information criterion
+    """
     debug_str = _arima_debug_str(order, seasonal_order, with_intercept)
+
     start = time.time()
+    fit_time = np.nan
+    ic = np.inf
+    fit = None
 
     try:
         fit = ARIMA(order=order, seasonal_order=seasonal_order,
@@ -439,22 +457,42 @@ def _fit_arima(x, xreg, order, seasonal_order, start_params, trend,
 
             warnings.warn(warning_str, ModelFitWarning)
 
-        fit = None
+    else:
+        fit_time = time.time() - start
+        ic = getattr(fit, information_criterion)()  # aic, bic, aicc, etc.
 
-    # do trace
+        # check the roots of the new model, and set IC to inf if the
+        # roots are near non-invertible
+        if do_root_test:
+            ic = _root_test(fit, ic, trace)
+
+    # log the model fit
     if trace:
-        print('Fit %s; AIC=%.3f, BIC=%.3f, '
-              'Time=%.3f seconds'
-              % (debug_str,
-                 fit.aic() if fit is not None else np.nan,
-                 fit.bic() if fit is not None else np.nan,
-                 time.time() - start if fit is not None else np.nan))
+        print(
+            "{model}   : {ic_name}={ic:.3f}, Time={time:.2f} sec"
+            .format(model=debug_str,
+                    ic_name=information_criterion.upper(),
+                    ic=ic,
+                    time=fit_time)
+        )
 
-    return fit
+    return fit, fit_time, ic
 
 
 def _arima_debug_str(order, seasonal_order, with_intercept):
     p, d, q = order
     P, D, Q, m = seasonal_order
-    return "ARIMA(%i,%i,%i)x(%i,%i,%i,%i) [intercept=%r]" % \
-           (p, d, q, P, D, Q, m, with_intercept)
+    int_str = "intercept"
+    return (
+        " ARIMA({p},{d},{q})({P},{D},{Q})[{m}] {intercept}".format(
+            p=p,
+            d=d,
+            q=q,
+            P=P,
+            D=D,
+            Q=Q,
+            m=m,
+            # just for consistent spacing
+            intercept=int_str if with_intercept else " " * len(int_str)
+        )
+    )
