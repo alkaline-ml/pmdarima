@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 import pmdarima as pm
-from pmdarima.datasets import load_gasoline
+from pmdarima.datasets import load_airpassengers
 from pmdarima.arima import utils as arima_utils
 from pmdarima.compat.pytest import pytest_warning_messages, pytest_error_str
 
@@ -37,7 +37,20 @@ def test_issue_351():
 
 
 def test_check_residuals():
-    y = load_gasoline()
-    arima = pm.auto_arima(y)
+    """
+    R code I am trying to mimic:
+        > model <- auto.arima(AirPassengers)
+        > checkresiduals(model)
+
+            Ljung-Box test
+
+        data:  Residuals from ARIMA(2,1,1)(0,1,0)[12]
+        Q* = 37.784, df = 21, p-value = 0.01366
+
+        Model df: 3.   Total lags used: 24
+    """
+    y = load_airpassengers()
+    arima = pm.auto_arima(y)  # Yields ARIMA(1, 1, 1)
     test = arima_utils.check_residuals(arima)
+    print(arima.arima_res_.summary())
     print(test)

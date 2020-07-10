@@ -282,14 +282,13 @@ def check_residuals(model, lag=None, df=None, test="LB", plot=True, **kwargs):
         raise ValueError("No residuals found")
 
     frequency = model.seasonal_order[-1]
-    print(frequency)
     if not lag:
         lag = 2 * frequency if frequency > 1 else 10
         lag = min(lag, round(len(residuals) / 5))
         lag = max(degrees_of_freedom + 3, lag)
 
     ljung = acorr_ljungbox(residuals, lags=lag, model_df=degrees_of_freedom,
-                           period=frequency, return_df=True)
+                           period=frequency if frequency > 0 else None, return_df=True)
 
     # Find the most significant row for the summary
     most_significant_row = ljung[ljung.lb_pvalue == ljung.lb_pvalue.min()]
