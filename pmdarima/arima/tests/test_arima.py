@@ -5,7 +5,7 @@ import pandas as pd
 
 from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
 from pmdarima.arima.arima import VALID_SCORING
-from pmdarima.arima.auto import _post_ppc_arima
+from pmdarima.arima.auto import _sort_and_post_process
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.arima.warnings import ModelFitWarning
 from pmdarima.compat.pytest import pytest_error_str
@@ -746,10 +746,16 @@ def test_double_pickle():
         os.unlink(file_b)
 
 
-# We fail if we don't end up fitting any models in the auto_arima func
-def test_value_error_on_failed_model_fits():
+@pytest.mark.parametrize(
+    'values', [
+        (None, 1.5),
+        (ARIMA((0, 0, 0)), np.inf),
+    ]
+)
+def test_value_error_on_failed_model_fits(values):
+    # We fail if we don't end up fitting any models in the auto_arima func
     with pytest.raises(ValueError):
-        _post_ppc_arima(None)
+        _sort_and_post_process(values)
 
 
 def test_warn_for_large_differences():

@@ -416,7 +416,7 @@ def _fit_candidate_model(x,
                          scoring_args,
                          with_intercept,
                          information_criterion,
-                         do_root_test,
+                         do_root_test=False,  # TODO: use in non-stepwise?
                          **kwargs):
     """Instantiate and fit a candidate model
 

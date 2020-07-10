@@ -343,7 +343,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         scoring=scoring,
         out_of_sample_size=out_of_sample_size,
         scoring_args=scoring_args,
-        with_intercept=with_intercept
+        with_intercept=with_intercept,
+        information_criterion=information_criterion,
     )
 
     # check for constant data
@@ -351,7 +352,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         warnings.warn('Input time-series is completely constant; '
                       'returning a (0, 0, 0) ARMA.')
         return _return_wrapper(
-            _post_ppc_arima(
+            _sort_and_post_process(
                 fit_partial(
                     y,
                     xreg=exogenous,
@@ -500,7 +501,7 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
         ssn = (0, 0, 0, 0) if not seasonal \
             else sm_compat.check_seasonal_order((0, D, 0, m))
         return _return_wrapper(
-            _post_ppc_arima(
+            _sort_and_post_process(
                 fit_partial(
                     y,
                     xreg=exogenous,
@@ -573,14 +574,8 @@ def auto_arima(y, exogenous=None, start_p=2, d=None, start_q=2, max_p=5,
                 **sarimax_kwargs)
             for order, seasonal_order in gen)
 
-        # filter the non-successful ones
-        filtered = _post_ppc_arima(all_res)
-
-        # sort by the criteria - lower is better for both AIC and BIC
-        # (https://stats.stackexchange.com/questions/81427/aic-guidelines-in-model-selection)  # noqa
-        sorted_res = sorted(filtered,
-                            key=(lambda mod:
-                                 getattr(mod, information_criterion)()))
+        # filter the non-successful ones and sort
+        sorted_res = _sort_and_post_process(all_res)
 
     else:
         # otherwise, we're fitting the stepwise algorithm...
@@ -624,7 +619,7 @@ auto_arima.__doc__ = _doc._AUTO_ARIMA_DOCSTR.format(
 )
 
 
-def _post_ppc_arima(a):
+def _sort_and_post_process(models):
     """If there are no suitable models, raise a ValueError.
     Otherwise, return ``a``. In the case that ``a`` is an iterable
     (i.e., it made it to the end of the function), this method will
@@ -635,21 +630,28 @@ def _post_ppc_arima(a):
     a : ARIMA or iterable
         The list or ARIMAs, or an ARIMA
     """
-    # if it's a result of making it to the end, it will
-    # be a list of ARIMA models. Filter out the Nones
-    # (the failed models)...
-    if is_iterable(a):
-        a = [m for m in a if m is not None]
+    # if it's a result of making it to the end, it will be a list of models
+    if not isinstance(models, list):
+        models = [models]
+
+    # Filter out the Nones or Infs (the failed models)...
+    filtered = [(mod, ic) for mod, _, ic in models
+                if mod is not None and np.isfinite(ic)]
 
     # if the list is empty, or if it was an ARIMA and it's None
-    if not a:  # check for truthiness rather than None explicitly
+    if not filtered:
         raise ValueError('Could not successfully fit ARIMA to input data. '
                          'It is likely your data is non-stationary. Please '
                          'induce stationarity or try a different '
                          'range of model order params. If your data is '
                          'seasonal, check the period (m) of the data.')
-    # good to return
-    return a
+
+    # sort by the criteria - lower is better for both AIC and BIC
+    # (https://stats.stackexchange.com/questions/81427/aic-guidelines-in-model-selection)  # noqa
+    sorted_res = sorted(filtered, key=(lambda mod_ic: mod_ic[1]))
+    models, _ = zip(*sorted_res)
+
+    return models
 
 
 def _return_wrapper(fits, return_all, start, trace):
