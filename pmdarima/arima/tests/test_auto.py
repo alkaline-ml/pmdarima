@@ -39,6 +39,7 @@ abc = np.array([4.439524, 4.769823, 6.558708, 5.070508,
                 6.207962, 3.876891, 4.597115, 4.533345,
                 5.779965, 4.916631])
 
+airpassengers = pm.datasets.load_airpassengers()
 austres = pm.datasets.load_austres()
 hr = pm.datasets.load_heartrate(as_series=True)
 lynx = pm.datasets.load_lynx()
@@ -216,6 +217,21 @@ def test_oob_with_zero_out_of_sample_size():
     assert uw[0].message.args[0] == "information_criterion cannot be 'oob' " \
                                     "with out_of_sample_size = 0. Falling " \
                                     "back to information criterion = aic."
+
+
+@pytest.mark.parametrize(
+    'dataset,m,kwargs,expected_order,expected_seasonal', [
+
+        pytest.param(
+            airpassengers, 12, {}, (2, 1, 1), (0, 1, 0),
+        ),
+
+    ]
+)
+def test_r_equivalency(dataset, m, kwargs, expected_order, expected_seasonal):
+    fit = pm.auto_arima(dataset, m=m, trace=1, suppress_warnings=True)
+    assert fit.order == expected_order
+    assert fit.seasonal_order[:3] == expected_seasonal
 
 
 # Test if exogenous is not None and D > 0
