@@ -77,6 +77,7 @@ class Pipeline(BaseEstimator):
                                         transparams=True, trend=None,
                                         with_intercept=True))])
     """
+
     def __init__(self, steps):
         self.steps = steps
         self._validate_steps()
@@ -442,19 +443,9 @@ class Pipeline(BaseEstimator):
                       inverse_transform):
         """Inverse-transform predictions to original data scale"""
 
-        # we don't currently support this... it will require an API change
-        # to also inverse-transform the 2-d confidence intervals
-        # TODO: fix this ^
-        if inverse_transform and return_conf_int:
-            warnings.warn("Inverse transformation on confidence intervals not "
-                          "currently supported, will not inverse transform",
-                          UserWarning)
-            inverse_transform = False
-
         if not inverse_transform:
             return return_vals
 
-        # TODO: support inverse transform on confidence intervals
         y_pred = return_vals
         conf_ints = None
         if return_conf_int:
@@ -464,6 +455,13 @@ class Pipeline(BaseEstimator):
         for name, transformer in self.steps_[::-1]:
             if isinstance(transformer, BaseEndogTransformer):
                 y_pred, Xt = transformer.inverse_transform(y_pred, Xt)
+                if return_conf_int:
+                    # inverse transform of Xt is irrelevant to y
+                    # so only transform it once
+                    conf_ints[:, 0], _ = transformer.inverse_transform(
+                        conf_ints[:, 0], Xt)
+                    conf_ints[:, 1], _ = transformer.inverse_transform(
+                        conf_ints[:, 1], Xt)
 
         if return_conf_int:
             return y_pred, conf_ints
