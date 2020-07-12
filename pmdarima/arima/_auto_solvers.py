@@ -346,7 +346,15 @@ class _StepwiseFitWrapper:
                 p += 1
                 continue
 
-            # TODO: if (allowdrift || allowmean)
+            # R: if (allowdrift || allowmean)
+            # we don't have these args, so we just default this case to true to
+            # evaluate all corners
+            if self.k < self.max_k and \
+                    self._do_fit((p, d, q),
+                                 (P, D, Q, m),
+                                 constant=not self.with_intercept):
+                self.with_intercept = not self.with_intercept
+                continue
 
         # check if the search has been ended after max_steps
         if self.exec_context.max_steps is not None \
@@ -354,7 +362,7 @@ class _StepwiseFitWrapper:
             warnings.warn('stepwise search has reached the maximum number '
                           'of tries to find the best fit model')
 
-        # TODO: if (approximation && !is.null(bestfit$arma))
+        # TODO: if (approximation && !is.null(bestfit$arma)) - refit best w MLE
 
         filtered_models_ics = sorted(
             [(v, self.fit_time_dict[k], self.ic_dict[k])

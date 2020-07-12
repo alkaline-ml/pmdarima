@@ -222,10 +222,12 @@ def test_oob_with_zero_out_of_sample_size():
 @pytest.mark.parametrize(
     'dataset,m,kwargs,expected_order,expected_seasonal', [
 
+        # model <- auto.arima(AirPassengers, trace=TRUE)
         pytest.param(
             airpassengers, 12, {}, (2, 1, 1), (0, 1, 0),
         ),
 
+        # TODO: eventually some more.
     ]
 )
 def test_r_equivalency(dataset, m, kwargs, expected_order, expected_seasonal):
