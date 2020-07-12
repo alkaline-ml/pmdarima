@@ -248,6 +248,7 @@
 <span class="sd">                                        transparams=True, trend=None,</span>
 <span class="sd">                                        with_intercept=True))])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Pipeline.__init__"><a class="viewcode-back" href="../../modules/generated/pmdarima.pipeline.Pipeline.html#pmdarima.pipeline.Pipeline.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_steps</span><span class="p">()</span></div>
@@ -613,19 +614,9 @@
                       <span class="n">inverse_transform</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Inverse-transform predictions to original data scale&quot;&quot;&quot;</span>
 
-        <span class="c1"># we don&#39;t currently support this... it will require an API change</span>
-        <span class="c1"># to also inverse-transform the 2-d confidence intervals</span>
-        <span class="c1"># TODO: fix this ^</span>
-        <span class="k">if</span> <span class="n">inverse_transform</span> <span class="ow">and</span> <span class="n">return_conf_int</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Inverse transformation on confidence intervals not &quot;</span>
-                          <span class="s2">&quot;currently supported, will not inverse transform&quot;</span><span class="p">,</span>
-                          <span class="ne">UserWarning</span><span class="p">)</span>
-            <span class="n">inverse_transform</span> <span class="o">=</span> <span class="kc">False</span>
-
         <span class="k">if</span> <span class="ow">not</span> <span class="n">inverse_transform</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">return_vals</span>
 
-        <span class="c1"># TODO: support inverse transform on confidence intervals</span>
         <span class="n">y_pred</span> <span class="o">=</span> <span class="n">return_vals</span>
         <span class="n">conf_ints</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">return_conf_int</span><span class="p">:</span>
@@ -635,6 +626,13 @@
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">transformer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps_</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">BaseEndogTransformer</span><span class="p">):</span>
                 <span class="n">y_pred</span><span class="p">,</span> <span class="n">Xt</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">Xt</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">return_conf_int</span><span class="p">:</span>
+                    <span class="c1"># inverse transform of Xt is irrelevant to y</span>
+                    <span class="c1"># so only transform it once</span>
+                    <span class="n">conf_ints</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span>
+                        <span class="n">conf_ints</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">Xt</span><span class="p">)</span>
+                    <span class="n">conf_ints</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span>
+                        <span class="n">conf_ints</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">Xt</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">return_conf_int</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">conf_ints</span>
