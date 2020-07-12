@@ -58,9 +58,9 @@ class _StepwiseFitWrapper:
 
     References
     ----------
-    .. [1] R's auto-arima stepwise source code: http://bit.ly/2vOma0W
+    .. [1] R's auto-arima stepwise source code: https://github.com/robjhyndman/forecast/blob/30308a4e314ff29338291462e81bf68ff0c5f86d/R/newarima2.R#L366
     .. [2] https://robjhyndman.com/hyndsight/arma-roots/
-    """
+    """  # noqa
     def __init__(self, y, xreg, start_params, trend, method, maxiter,
                  fit_params, suppress_warnings, trace, error_action,
                  out_of_sample_size, scoring, scoring_args,
@@ -124,6 +124,7 @@ class _StepwiseFitWrapper:
         # we've seen this order before...
         self.results_dict = dict()  # dict[tuple -> ARIMA]
         self.ic_dict = dict()  # dict[tuple -> float]
+        self.fit_time_dict = dict()  # dict[tuple -> float]
 
         self.bestfit = None
         self.bestfit_key = None  # (order, seasonal_order, constant)
@@ -143,7 +144,7 @@ class _StepwiseFitWrapper:
             # increment the number of fits
             self.k += 1
 
-            fit, _, new_ic = self._fit_arima(
+            fit, fit_time, new_ic = self._fit_arima(
                 order=order,
                 seasonal_order=seasonal_order,
                 with_intercept=constant)
@@ -154,6 +155,7 @@ class _StepwiseFitWrapper:
 
             # cache this so we can lookup best model IC downstream
             self.ic_dict[(order, seasonal_order, constant)] = new_ic
+            self.fit_time_dict[(order, seasonal_order, constant)] = fit_time
 
             # Determine if the new fit is better than the existing fit
             if fit is None or np.isinf(new_ic):
@@ -210,6 +212,7 @@ class _StepwiseFitWrapper:
                 P = _P
                 q = Q = 0
 
+        # Basic MA model
         if max_q > 0 or max_Q > 0:
             _q = 1 if max_q > 0 else 0
             _Q = 1 if (m > 1 and max_Q > 0) else 0
@@ -221,7 +224,6 @@ class _StepwiseFitWrapper:
         # Null model with NO constant (if we haven't tried it yet)
         if self.with_intercept:
             if self._do_fit((0, d, 0), (0, D, 0, m), constant=False):
-                # TODO: wonder if it's worth a trace message here?
                 p = q = P = Q = 0
 
         while self.start_k < self.k < self.max_k:
@@ -238,9 +240,6 @@ class _StepwiseFitWrapper:
                               % (dur, self.max_dur))
                 break
 
-            # The old code was much more concise and stateful, but was also
-            # much more difficult to read and debug. This was rewritten for
-            # v1.5.0 in an effort to make it more simple to decipher.
             # NOTE: k changes for every fit, so we might need to bail halfway
             # through the loop, hence the multiple checks.
             if P > 0 and \
@@ -347,18 +346,6 @@ class _StepwiseFitWrapper:
                 p += 1
                 continue
 
-        if self.trace > 1 and self.bestfit:
-            print("Final model order: (%i, %i, %i)x(%i, %i, %i, %i) "
-                  "(constant=%s)"
-                  % (self.bestfit.order[0],
-                     self.bestfit.order[1],
-                     self.bestfit.order[2],
-                     self.bestfit.seasonal_order[0],
-                     self.bestfit.seasonal_order[1],
-                     self.bestfit.seasonal_order[2],
-                     self.bestfit.seasonal_order[3],
-                     self.bestfit.with_intercept))
-
             # TODO: if (allowdrift || allowmean)
 
         # check if the search has been ended after max_steps
@@ -369,34 +356,18 @@ class _StepwiseFitWrapper:
 
         # TODO: if (approximation && !is.null(bestfit$arma))
 
-        if not self.bestfit:
-            warnings.warn("No viable models found")
-
-        return _sort_and_filter_fits(self.results_dict, self.ic_dict)
-
-
-def _sort_and_filter_fits(results_dict, ic_dict):
-    # return the sorted values from the dicts
-    filtered_models_ics = sorted(
-        [(v, ic_dict[k])
-         for k, v in results_dict.items()
-         if v is not None],
-        key=(lambda fit_ic: fit_ic[1]),
-    )
-
-    # TODO: can we break ties in sorting by using the more simple model?
-
-    if not filtered_models_ics:
-        raise ValueError(
-            "Could not successfully fit a viable ARIMA model "
-            "to input data using the stepwise algorithm.\nSee "
-            "http://alkaline-ml.com/pmdarima/no-successful-model.html "
-            "for more information on why this can happen."
+        filtered_models_ics = sorted(
+            [(v, self.fit_time_dict[k], self.ic_dict[k])
+             for k, v in self.results_dict.items()
+             if v is not None],
+            key=(lambda fit_ic: fit_ic[1]),
         )
 
-    # (fit_a, fit_b), (np.inf, 0.5), etc.
-    fits, _ = zip(*filtered_models_ics)
-    return fits
+        sorted_fits = _sort_and_filter_fits(filtered_models_ics)
+        if self.trace and sorted_fits:
+            print("\nBest model: %s" % str(sorted_fits[0]))
+
+        return sorted_fits
 
 
 def _fit_candidate_model(x,
@@ -425,21 +396,21 @@ def _fit_candidate_model(x,
     3. Perform a root test
     4. Return model, information criterion
     """
-    debug_str = _arima_debug_str(order, seasonal_order, with_intercept)
-
     start = time.time()
     fit_time = np.nan
     ic = np.inf
-    fit = None
+
+    # Fit outside try block, so if there is a type error in user input we
+    # don't mask it with a warning or worse
+    fit = ARIMA(order=order, seasonal_order=seasonal_order,
+                start_params=start_params, trend=trend, method=method,
+                maxiter=maxiter, suppress_warnings=suppress_warnings,
+                out_of_sample_size=out_of_sample_size, scoring=scoring,
+                scoring_args=scoring_args,
+                with_intercept=with_intercept, **kwargs)
 
     try:
-        fit = ARIMA(order=order, seasonal_order=seasonal_order,
-                    start_params=start_params, trend=trend, method=method,
-                    maxiter=maxiter, suppress_warnings=suppress_warnings,
-                    out_of_sample_size=out_of_sample_size, scoring=scoring,
-                    scoring_args=scoring_args,
-                    with_intercept=with_intercept, **kwargs)\
-            .fit(x, exogenous=xreg, **fit_params)
+        fit.fit(x, exogenous=xreg, **fit_params)
 
     # for non-stationarity errors or singular matrices, return None
     except (LinAlgError, ValueError) as v:
@@ -450,7 +421,7 @@ def _fit_candidate_model(x,
             warning_str = 'Error fitting %s ' \
                           '(if you do not want to see these warnings, run ' \
                           'with error_action="ignore").' \
-                          % debug_str
+                          % str(fit)
 
             if error_action == 'trace':
                 warning_str += "\nTraceback:\n" + traceback.format_exc()
@@ -470,7 +441,7 @@ def _fit_candidate_model(x,
     if trace:
         print(
             "{model}   : {ic_name}={ic:.3f}, Time={time:.2f} sec"
-            .format(model=debug_str,
+            .format(model=str(fit),
                     ic_name=information_criterion.upper(),
                     ic=ic,
                     time=fit_time)
@@ -479,20 +450,41 @@ def _fit_candidate_model(x,
     return fit, fit_time, ic
 
 
-def _arima_debug_str(order, seasonal_order, with_intercept):
-    p, d, q = order
-    P, D, Q, m = seasonal_order
-    int_str = "intercept"
-    return (
-        " ARIMA({p},{d},{q})({P},{D},{Q})[{m}] {intercept}".format(
-            p=p,
-            d=d,
-            q=q,
-            P=P,
-            D=D,
-            Q=Q,
-            m=m,
-            # just for consistent spacing
-            intercept=int_str if with_intercept else " " * len(int_str)
+def _sort_and_filter_fits(models):
+    """Sort the results in ascending order, by information criterion
+
+    If there are no suitable models, raise a ValueError.
+    Otherwise, return ``a``. In the case that ``a`` is an iterable
+    (i.e., it made it to the end of the function), this method will
+    filter out the None values and assess whether the list is empty.
+
+    Parameters
+    ----------
+    models : tuple or list
+        The list or (model, fit_time, information_criterion), or a single tuple
+    """
+    # if it's a result of making it to the end, it will be a list of models
+    if not isinstance(models, list):
+        models = [models]
+
+    # Filter out the Nones or Infs (the failed models)...
+    filtered = [(mod, ic) for mod, _, ic in models
+                if mod is not None and np.isfinite(ic)]
+
+    # if the list is empty, or if it was an ARIMA and it's None
+    if not filtered:
+        raise ValueError(
+            "Could not successfully fit a viable ARIMA model "
+            "to input data using the stepwise algorithm.\nSee "
+            "http://alkaline-ml.com/pmdarima/no-successful-model.html "
+            "for more information on why this can happen."
         )
-    )
+
+    # sort by the criteria - lower is better for both AIC and BIC
+    # (https://stats.stackexchange.com/questions/81427/aic-guidelines-in-model-selection)  # noqa
+    sorted_res = sorted(filtered, key=(lambda mod_ic: mod_ic[1]))
+
+    # TODO: break ties with fit time?
+    models, _ = zip(*sorted_res)
+
+    return models

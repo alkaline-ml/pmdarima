@@ -5,10 +5,9 @@ import pandas as pd
 
 from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
 from pmdarima.arima.arima import VALID_SCORING
-from pmdarima.arima.auto import _sort_and_post_process
 from pmdarima.arima.utils import nsdiffs
 from pmdarima.arima.warnings import ModelFitWarning
-from pmdarima.compat.pytest import pytest_error_str
+from pmdarima.compat.pytest import pytest_error_str, pytest_warning_messages
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate, \
     load_austres
 from pmdarima.utils import get_callable
@@ -746,18 +745,6 @@ def test_double_pickle():
         os.unlink(file_b)
 
 
-@pytest.mark.parametrize(
-    'values', [
-        (None, 1.5),
-        (ARIMA((0, 0, 0)), np.inf),
-    ]
-)
-def test_value_error_on_failed_model_fits(values):
-    # We fail if we don't end up fitting any models in the auto_arima func
-    with pytest.raises(ValueError):
-        _sort_and_post_process(values)
-
-
 def test_warn_for_large_differences():
     # First: d is too large
     with pytest.warns(ModelFitWarning):
@@ -782,20 +769,19 @@ def test_warn_for_stepwise_and_parallel():
 # Force case where data is simple polynomial after differencing
 @pytest.mark.filterwarnings('ignore:divide by zero')  # Expected, so ignore
 def test_force_polynomial_error():
-    x = np.array([1, 2, 3, 4, 5, 6])
-    d = 2
+    x = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+    d = 3
     xreg = None
 
-    with pytest.raises(ValueError) as ve:
-        auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg)
+    with pytest.raises(ValueError) as ve, \
+            pytest.warns(ModelFitWarning) as mfw:
+        auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg, trace=2)
+
     err_msg = pytest_error_str(ve)
     assert 'simple polynomial' in err_msg, err_msg
 
-    # but it should pass when xreg is not none
-    xreg = rs.rand(x.shape[0], 2)
-    _ = auto_arima(x, d=d, D=0, seasonal=False,  # noqa: F841
-                   exogenous=xreg,
-                   error_action='ignore', suppress_warnings=True)
+    warning_msgs = pytest_warning_messages(mfw)
+    assert any('more differencing operation' in w for w in warning_msgs)
 
 
 # Test if exogenous is not None and D > 0

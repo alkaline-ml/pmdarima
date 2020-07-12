@@ -305,7 +305,9 @@ class ARIMA(BaseARIMA):
 
         # TODO: Remove these warnings in a later version
         for deprecated_key, still_in_use in (
-                ('disp', True), ('callback', True), ('transparams', False),
+                ('disp', True),
+                ('callback', True),
+                ('transparams', False),
                 ('solver', False)):
             if sarimax_kwargs.pop(deprecated_key, None):
                 msg = ("'%s' is deprecated in the ARIMA constructor and will "
@@ -335,6 +337,9 @@ class ARIMA(BaseARIMA):
                               "will raise in future versions", UserWarning)
                 method = 'lbfgs'
 
+            # this considers `with_intercept` truthy, so if auto_arima gets
+            # here without explicitly changing `with_intercept` from 'auto' we
+            # will treat it as True.
             if trend is None and self.with_intercept:
                 trend = 'c'
 
@@ -703,6 +708,26 @@ class ARIMA(BaseARIMA):
                           "pmdarima (%s). This could cause unforeseen "
                           "behavior."
                           % (modl_version, this_version), UserWarning)
+
+    def __str__(self):
+        """Different from __repr__, returns a debug string used in logging"""
+        p, d, q = self.order
+        P, D, Q, m = self.seasonal_order
+        int_str = "intercept"
+        with_intercept = self.with_intercept
+        return (
+            " ARIMA({p},{d},{q})({P},{D},{Q})[{m}] {intercept}".format(
+                p=p,
+                d=d,
+                q=q,
+                P=P,
+                D=D,
+                Q=Q,
+                m=m,
+                # just for consistent spacing
+                intercept=int_str if with_intercept else " " * len(int_str)
+            )
+        )
 
     def update(self, y, exogenous=None, maxiter=None, **kwargs):
         """Update the model fit with additional observed endog/exog values.
