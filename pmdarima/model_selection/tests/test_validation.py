@@ -9,28 +9,32 @@ from pmdarima.model_selection._split import RollingForecastCV, \
     SlidingWindowForecastCV
 from pmdarima.model_selection._validation import cross_val_score, \
     _check_scoring, cross_validate, cross_val_predict, _check_averaging
-from pmdarima.datasets import load_wineind
+from pmdarima.datasets import load_airpassengers
 import pytest
 import numpy as np
 from unittest import mock
 
-y = load_wineind()
+y = load_airpassengers()
 exogenous = np.random.RandomState(1).rand(y.shape[0], 2)
 
 
 @pytest.mark.parametrize('cv', [
     SlidingWindowForecastCV(window_size=100, step=24, h=1),
-    RollingForecastCV(initial=150, step=12, h=1),
+    RollingForecastCV(initial=120, step=12, h=1),
 ])
 @pytest.mark.parametrize(
     'est', [
-        ARIMA(order=(2, 1, 1)),
+        ARIMA(order=(2, 1, 1), maxiter=2, simple_differencing=True),
         ARIMA(order=(1, 1, 2),
               seasonal_order=(0, 1, 1, 12),
+              maxiter=2,
+              simple_differencing=True,
               suppress_warnings=True),
         Pipeline([
             ("fourier", FourierFeaturizer(m=12)),
-            ("arima", ARIMA(order=(2, 1, 0), maxiter=3))
+            ("arima", ARIMA(order=(2, 1, 0),
+                            maxiter=2,
+                            simple_differencing=True))
         ])
     ]
 )
@@ -45,17 +49,20 @@ def test_cv_scores(cv, est, verbose, exog):
 
 @pytest.mark.parametrize('cv', [
     SlidingWindowForecastCV(window_size=100, step=12, h=12),
-    RollingForecastCV(initial=150, step=12, h=12),
+    RollingForecastCV(initial=120, step=12, h=12),
 ])
 @pytest.mark.parametrize(
     'est', [
-        ARIMA(order=(2, 1, 1)),
+        ARIMA(order=(2, 1, 1), simple_differencing=True),
         ARIMA(order=(1, 1, 2),
               seasonal_order=(0, 1, 1, 12),
+              simple_differencing=True,
               suppress_warnings=True),
         Pipeline([
             ("fourier", FourierFeaturizer(m=12)),
-            ("arima", ARIMA(order=(2, 1, 0), maxiter=3))
+            ("arima", ARIMA(order=(2, 1, 0),
+                            maxiter=2,
+                            simple_differencing=True))
         ])
     ]
 )

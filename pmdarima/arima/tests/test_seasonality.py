@@ -12,6 +12,8 @@ from numpy.testing import assert_almost_equal, assert_array_equal
 from sklearn.utils.validation import check_random_state
 import pytest
 
+from unittest import mock
+
 airpassengers = load_airpassengers()
 austres = load_austres()
 ausbeer = load_ausbeer()
@@ -71,15 +73,23 @@ def test_ch_test_m_values(m, expected):
     assert CHTest(m=m).estimate_seasonal_differencing_term(austres) == expected
 
 
-@pytest.mark.parametrize('m', [
-    # y len is now 1760, which is > 2 * m + 5
-    365,
+@pytest.mark.parametrize(
+    'm,chstat,expected', [
+        pytest.param(365, 66., 1),
+        pytest.param(365, 63., 0),
+        pytest.param(366, 65., 1),
+        pytest.param(366, 60., 0),
+    ]
+)
+def test_ch_test_long(m, chstat, expected):
+    chtest = CHTest(m=m)
+    y = np.random.rand(m * 3)  # very long, but mock makes it not matter
 
-    # what if m > 365???
-    366])
-def test_ch_test_long(m):
-    # TODO: what to assert??
-    CHTest(m=m).estimate_seasonal_differencing_term(austres_long)
+    mock_sdtest = (lambda *args, **kwargs: chstat)
+    with mock.patch.object(chtest, '_sd_test', mock_sdtest):
+        res = chtest.estimate_seasonal_differencing_term(y)
+
+    assert expected == res
 
 
 def test_ch_base():

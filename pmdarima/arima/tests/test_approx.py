@@ -36,33 +36,37 @@ def test_approx_rule2():
     assert_array_almost_equal(y, c(0.01))
 
 
-def test_corners():
-    # fails for length differences
-    with pytest.raises(ValueError):
-        approx(x=[1, 2, 3], y=[1, 2], xout=1.0)
+@pytest.mark.parametrize(
+    'kwargs', [
 
-    # fails for bad string
-    with pytest.raises(ValueError):
-        approx(x=table, y=table, xout=1.0, method='bad-string')
+        # fails for length differences
+        dict(x=[1, 2, 3], y=[1, 2], xout=1.0),
 
-    # fails for bad length
-    with pytest.raises(ValueError):
-        approx(x=[], y=[], xout=[], ties='mean')
+        # fails for bad string
+        dict(x=table, y=table, xout=1.0, method='bad-string'),
 
-    # fails for bad length
-    with pytest.raises(ValueError):
-        approx(x=[], y=[], xout=[], method='constant')
+        # fails for bad length
+        dict(x=[], y=[], xout=[], ties='mean'),
 
-    # fails for linear when < 2 samples
-    with pytest.raises(ValueError):
-        approx(x=[1], y=[1], xout=[], method='linear', ties='ordered')
+        # fails for bad length
+        dict(x=[], y=[], xout=[], method='constant'),
 
-    # but *doesn't* fail for constant when < 2 samples
+        # fails for linear when < 2 samples
+        dict(x=[1], y=[1], xout=[], method='linear', ties='ordered'),
+
+        # fails for bad length
+        dict(x=[], y=[], xout=[], method='constant'),
+
+    ]
+)
+def test_corner_errors(kwargs):
+    with pytest.raises(ValueError):
+        approx(**kwargs)
+
+
+def test_valid_corner():
+    # *doesn't* fail for constant when < 2 samples
     approx(x=[1], y=[1], xout=[], method='constant', ties='ordered')
-
-    # fails for bad length
-    with pytest.raises(ValueError):
-        approx(x=[], y=[], xout=[], method='constant')
 
 
 def test_approx_precision():
