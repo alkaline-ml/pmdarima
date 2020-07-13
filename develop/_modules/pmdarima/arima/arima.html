@@ -476,7 +476,9 @@
 
         <span class="c1"># TODO: Remove these warnings in a later version</span>
         <span class="k">for</span> <span class="n">deprecated_key</span><span class="p">,</span> <span class="n">still_in_use</span> <span class="ow">in</span> <span class="p">(</span>
-                <span class="p">(</span><span class="s1">&#39;disp&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;callback&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;transparams&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;disp&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;callback&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;transparams&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
                 <span class="p">(</span><span class="s1">&#39;solver&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">sarimax_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">deprecated_key</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is deprecated in the ARIMA constructor and will &quot;</span>
@@ -506,6 +508,9 @@
                               <span class="s2">&quot;will raise in future versions&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
                 <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;lbfgs&#39;</span>
 
+            <span class="c1"># this considers `with_intercept` truthy, so if auto_arima gets</span>
+            <span class="c1"># here without explicitly changing `with_intercept` from &#39;auto&#39; we</span>
+            <span class="c1"># will treat it as True.</span>
             <span class="k">if</span> <span class="n">trend</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_intercept</span><span class="p">:</span>
                 <span class="n">trend</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span>
 
@@ -874,6 +879,26 @@
                           <span class="s2">&quot;pmdarima (</span><span class="si">%s</span><span class="s2">). This could cause unforeseen &quot;</span>
                           <span class="s2">&quot;behavior.&quot;</span>
                           <span class="o">%</span> <span class="p">(</span><span class="n">modl_version</span><span class="p">,</span> <span class="n">this_version</span><span class="p">),</span> <span class="ne">UserWarning</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Different from __repr__, returns a debug string used in logging&quot;&quot;&quot;</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span>
+        <span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span>
+        <span class="n">int_str</span> <span class="o">=</span> <span class="s2">&quot;intercept&quot;</span>
+        <span class="n">with_intercept</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_intercept</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot; ARIMA(</span><span class="si">{p}</span><span class="s2">,</span><span class="si">{d}</span><span class="s2">,</span><span class="si">{q}</span><span class="s2">)(</span><span class="si">{P}</span><span class="s2">,</span><span class="si">{D}</span><span class="s2">,</span><span class="si">{Q}</span><span class="s2">)[</span><span class="si">{m}</span><span class="s2">] </span><span class="si">{intercept}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+                <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span>
+                <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+                <span class="n">P</span><span class="o">=</span><span class="n">P</span><span class="p">,</span>
+                <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span>
+                <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span>
+                <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
+                <span class="c1"># just for consistent spacing</span>
+                <span class="n">intercept</span><span class="o">=</span><span class="n">int_str</span> <span class="k">if</span> <span class="n">with_intercept</span> <span class="k">else</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">int_str</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="ARIMA.update"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the model fit with additional observed endog/exog values.</span>

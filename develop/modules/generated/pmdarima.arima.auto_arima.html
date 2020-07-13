@@ -196,7 +196,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.auto_arima<a class="headerlink" href="#pmdarima-arima-auto-arima" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.arima.auto_arima">
-<code class="descclassname">pmdarima.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=5</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method='lbfgs'</em>, <em>maxiter=50</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='trace'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept=True</em>, <em>sarimax_kwargs=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/ad07a697/pmdarima/arima/auto.py#L256"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.arima.</code><code class="descname">auto_arima</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>start_p=2</em>, <em>d=None</em>, <em>start_q=2</em>, <em>max_p=5</em>, <em>max_d=2</em>, <em>max_q=5</em>, <em>start_P=1</em>, <em>D=None</em>, <em>start_Q=1</em>, <em>max_P=2</em>, <em>max_D=1</em>, <em>max_Q=2</em>, <em>max_order=5</em>, <em>m=1</em>, <em>seasonal=True</em>, <em>stationary=False</em>, <em>information_criterion='aic'</em>, <em>alpha=0.05</em>, <em>test='kpss'</em>, <em>seasonal_test='ocsb'</em>, <em>stepwise=True</em>, <em>n_jobs=1</em>, <em>start_params=None</em>, <em>trend=None</em>, <em>method='lbfgs'</em>, <em>maxiter=50</em>, <em>offset_test_args=None</em>, <em>seasonal_test_args=None</em>, <em>suppress_warnings=False</em>, <em>error_action='trace'</em>, <em>trace=False</em>, <em>random=False</em>, <em>random_state=None</em>, <em>n_fits=10</em>, <em>return_valid_fits=False</em>, <em>out_of_sample_size=0</em>, <em>scoring='mse'</em>, <em>scoring_args=None</em>, <em>with_intercept='auto'</em>, <em>sarimax_kwargs=None</em>, <em>**fit_args</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/1ead4fe9/pmdarima/arima/auto.py#L285"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically discover the optimal order for an ARIMA model.</p>
 <p>The auto-ARIMA process seeks to identify the most optimal
 parameters for an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> model, settling on a single fitted ARIMA model.
@@ -417,17 +417,28 @@ test. See <code class="docutils literal notranslate"><span class="pre">pmdarima.
 <blockquote>
 <div><p>Many warnings might be thrown inside of statsmodels. If
 <code class="docutils literal notranslate"><span class="pre">suppress_warnings</span></code> is True, all of the warnings coming from
-<code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> will be squelched.</p>
+<code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> will be squelched. Note that this will not suppress
+UserWarnings created by bad argument combinations.</p>
 </div></blockquote>
 <p><strong>error_action</strong> : str, optional (default=’warn’)</p>
 <blockquote>
-<div><p>If unable to fit an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> due to stationarity issues, whether to
-warn (‘warn’), raise the <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> (‘raise’) or ignore (‘ignore’).
-Note that the default behavior is to warn, and fits that fail will be
-returned as None. This is the recommended behavior, as statsmodels
-ARIMA and SARIMAX models hit bugs periodically that can cause
-an otherwise healthy parameter combination to fail for reasons not
-related to pmdarima.</p>
+<div><p>If unable to fit an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> for whatever reason, this controls the
+error-handling behavior. Model fits can fail for linear algebra errors,
+convergence errors, or any number of problems related to stationarity
+or input data.</p>
+<blockquote>
+<div><ul class="simple">
+<li>‘warn’: Warns when an error is encountered (default)</li>
+<li>‘raise’: Raises when an error is encountered</li>
+<li>‘ignore’: Ignores errors (not recommended)</li>
+<li><dl class="first docutils">
+<dt>‘trace’: Logs the entire error stacktrace and continues the</dt>
+<dd>search. This is the best option when trying to determine why a
+model is failing.</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
 </div></blockquote>
 <p><strong>trace</strong> : bool or int, optional (default=False)</p>
 <blockquote>
@@ -488,9 +499,11 @@ metric to use for scoring the out-of-sample data. One of (‘mse’, ‘mae’)<
 <div><p>A dictionary of key-word arguments to be passed to the <code class="docutils literal notranslate"><span class="pre">scoring</span></code>
 metric.</p>
 </div></blockquote>
-<p><strong>with_intercept</strong> : bool, optional (default=True)</p>
+<p><strong>with_intercept</strong> : bool or str, optional (default=”auto”)</p>
 <blockquote>
-<div><p>Whether to include an intercept term. Default is True.</p>
+<div><p>Whether to include an intercept term. Default is “auto” which behaves
+like True until a point in the search where the sum of differencing
+terms will explicitly set it to True or False.</p>
 </div></blockquote>
 <p><strong>sarimax_kwargs</strong> : dict or None, optional (default=None)</p>
 <blockquote>

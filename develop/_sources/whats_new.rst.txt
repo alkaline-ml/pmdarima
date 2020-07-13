@@ -24,6 +24,14 @@ v0.8.1) will document the latest features.
 * Remove legacy pickling behavior that separates the statsmodels object from the pmdarima
   object. This breaks backwards compatibility with versions pre-1.2.0.
 
+* Change default ``with_intercept`` in :func:`pmdarima.arima.auto_arima` to ``'auto'`` rather than
+  ``True``. This will behave much like the current behavior, where a truthiness check will still return
+  True, but allows the stepwise search to selectively change it to ``False`` in the presence of certain
+  differencing conditions.
+
+* Inverse endog transformation is now supported when ``return_conf_int=True`` on pipeline predictions
+  (thanks to `skyetim <https://github.com/skyetim>`_)
+
 
 `v1.6.1 <http://alkaline-ml.com/pmdarima/1.6.1/>`_
 --------------------------------------------------

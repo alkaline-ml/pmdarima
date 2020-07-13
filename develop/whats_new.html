@@ -206,6 +206,12 @@ value of <code class="docutils literal notranslate"><span class="pre">m</span></
 near non-invertible roots could still be considered as candidate best-fits.</li>
 <li>Remove legacy pickling behavior that separates the statsmodels object from the pmdarima
 object. This breaks backwards compatibility with versions pre-1.2.0.</li>
+<li>Change default <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> in <a class="reference internal" href="modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima()</span></code></a> to <code class="docutils literal notranslate"><span class="pre">'auto'</span></code> rather than
+<code class="docutils literal notranslate"><span class="pre">True</span></code>. This will behave much like the current behavior, where a truthiness check will still return
+True, but allows the stepwise search to selectively change it to <code class="docutils literal notranslate"><span class="pre">False</span></code> in the presence of certain
+differencing conditions.</li>
+<li>Inverse endog transformation is now supported when <code class="docutils literal notranslate"><span class="pre">return_conf_int=True</span></code> on pipeline predictions
+(thanks to <a class="reference external" href="https://github.com/skyetim">skyetim</a>)</li>
 </ul>
 </div>
 <div class="section" id="id5">
