@@ -483,7 +483,7 @@ def _sort_and_filter_fits(models):
     if not filtered:
         raise ValueError(
             "Could not successfully fit a viable ARIMA model "
-            "to input data using the stepwise algorithm.\nSee "
+            "to input data.\nSee "
             "http://alkaline-ml.com/pmdarima/no-successful-model.html "
             "for more information on why this can happen."
         )
