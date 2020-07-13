@@ -236,6 +236,21 @@ def test_r_equivalency(dataset, m, kwargs, expected_order, expected_seasonal):
     assert fit.seasonal_order[:3] == expected_seasonal
 
 
+@pytest.mark.parametrize('endog', [austres, pd.Series(austres)])
+def test_random_with_oob(endog):
+    # show we can fit one with OOB as the criterion
+    pm.auto_arima(endog, start_p=1, start_q=1, max_p=2, max_q=2, m=4,
+                  start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
+                  out_of_sample_size=10, information_criterion='oob',
+                  suppress_warnings=True,
+                  error_action='raise',  # do raise so it fails fast
+                  random=True, random_state=42, n_fits=2,
+                  stepwise=False,
+
+                  # Set to super low iter to make test move quickly
+                  maxiter=3)
+
+
 # Test if exogenous is not None and D > 0
 @pytest.mark.parametrize('m', [2])  # , 12])
 def test_seasonal_xreg_differencing(m):
@@ -255,6 +270,16 @@ def test_small_samples():
     samp = lynx[:8]
     pm.auto_arima(samp, suppress_warnings=True, stepwise=True,
                   error_action='ignore')
+
+
+def test_start_pq_equal_max_pq():
+    # show that we can fit an ARIMA where the max_p|q == start_p|q
+    m = pm.auto_arima(hr, start_p=0, max_p=0, d=0, start_q=0, max_q=0,
+                      seasonal=False, max_order=np.inf,
+                      suppress_warnings=True)
+
+    # older versions of sm would raise IndexError for (0, 0, 0) on summary
+    m.summary()
 
 
 @pytest.mark.parametrize(
@@ -282,24 +307,12 @@ def test_valid_max_order_edges(endog, max_order, kwargs):
 
 @pytest.mark.parametrize(
     'endog, kwargs', [
-        # show we fail for bad start/max p, q values:
-        pytest.param(abc, {'start_p': -1}),
-        pytest.param(abc, {'start_q': -1}),
-        pytest.param(abc, {'max_p': -1}),
-        pytest.param(abc, {'max_q': -1}),
-
-        # show we fail when start < max:
-        pytest.param(abc, {'start_p': 1, 'max_p': 0}),
-        pytest.param(abc, {'start_q': 1, 'max_q': 0}),
-
         # other assertions
         pytest.param(abc, {'max_order': -1, 'stepwise': False}),
         pytest.param(abc, {'max_d': -1}),
         pytest.param(abc, {'d': -1}),
         pytest.param(abc, {'max_D': -1}),
         pytest.param(abc, {'D': -1}),
-        pytest.param(abc, {'information_criterion': 'bad-value'}),
-        pytest.param(abc, {'m': 0}),
     ]
 )
 def test_value_errors(endog, kwargs):
@@ -309,44 +322,38 @@ def test_value_errors(endog, kwargs):
 
 def test_warn_for_large_differences():
     # First: d is too large
-    with pytest.warns(ModelFitWarning):
+    with pytest.warns(ModelFitWarning) as w:
         pm.auto_arima(wineind, seasonal=True, m=1, suppress_warnings=False,
-                      d=3, error_action='warn', maxiter=5)
+                      d=3, maxiter=5)
+    assert any('Having 3 or more differencing operations' in s
+               for s in pytest_warning_messages(w))
 
     # Second: D is too large. M needs to be > 1 or D will be set to 0...
     # unfortunately, this takes a long time.
-    with pytest.warns(ModelFitWarning):
+    with pytest.warns(ModelFitWarning) as w:
         pm.auto_arima(wineind, seasonal=True, m=2,  # noqa: F841
                       suppress_warnings=False,
-                      D=3, error_action='warn',
+                      D=3,
                       maxiter=5)
+    assert any('Having more than one seasonal differences' in s
+               for s in pytest_warning_messages(w))
 
 
-def test_warn_for_stepwise_and_parallel():
-    with pytest.warns(UserWarning):
-        pm.auto_arima(lynx, suppress_warnings=False, d=1,  # noqa: F841
-                      error_action='ignore', stepwise=True, n_jobs=2)
-
-
-def test_with_seasonality1():
-    def do_fit(simple_differencing=False):
+def test_stepwise_with_simple_differencing():
+    def do_fit(simple_differencing):
         return pm.auto_arima(wineind, start_p=1, start_q=1, max_p=2,
                              max_q=2, m=2, start_P=0,
-                             seasonal=True, n_jobs=2,
-                             d=1, D=1, stepwise=False,
-                             suppress_warnings=True,
+                             seasonal=True,
+                             d=1, D=1, stepwise=True,
                              error_action='ignore',
-                             n_fits=20, random_state=42,
                              sarimax_kwargs={
-                                 'simple_differencing': simple_differencing},
-
-                             # Set to super low iter to make test move quickly
-                             max_order=None,
+                                 'simple_differencing': simple_differencing
+                             },
                              maxiter=2)
 
     # show that we can forecast even after the
     # pickling (this was fit in parallel)
-    seasonal_fit = do_fit()
+    seasonal_fit = do_fit(False)
     seasonal_fit.predict(n_periods=10)
 
     # ensure summary still works
@@ -405,30 +412,3 @@ def test_with_seasonality4():
 
     # show it is a list
     assert hasattr(all_res, '__iter__')
-
-
-def test_with_seasonality5():
-    # show that we can fit an ARIMA where the max_p|q == start_p|q
-    pm.auto_arima(hr, start_p=0, max_p=0, d=0, start_q=0, max_q=0,
-                  seasonal=False, max_order=np.inf,
-                  suppress_warnings=True)
-
-    # FIXME: we get an IndexError from statsmodels summary if (0, 0, 0)
-
-
-@pytest.mark.parametrize('as_series', [True, False])
-def test_with_seasonality6(as_series):
-    endog = wineind
-    if as_series:
-        endog = pd.Series(wineind)
-    # show we can fit one with OOB as the criterion
-    pm.auto_arima(endog, start_p=1, start_q=1, max_p=2, max_q=2, m=12,
-                  start_P=0, seasonal=True, n_jobs=1, d=1, D=1,
-                  out_of_sample_size=10, information_criterion='oob',
-                  suppress_warnings=True,
-                  error_action='raise',  # do raise so it fails fast
-                  random=True, random_state=42, n_fits=2,
-                  stepwise=False,
-
-                  # Set to super low iter to make test move quickly
-                  maxiter=5)

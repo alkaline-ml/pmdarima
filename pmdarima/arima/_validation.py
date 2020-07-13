@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+"""
+Arg validation for auto-arima calls. This allows us to test validation more
+directly without having to fit numerous combinations of models.
+"""
+
+import numpy as np
 import warnings
 
 # The valid information criteria
@@ -40,6 +46,44 @@ def check_kwargs(kwargs):
     if kwargs:
         return kwargs
     return {}
+
+
+def check_m(m, seasonal):
+    """Check the value of M (seasonal periodicity)"""
+    if (m < 1 and seasonal) or m < 0:
+        raise ValueError('m must be a positive integer (> 0)')
+
+    if m > 0 and not seasonal:
+        warnings.warn("m (%i) set for non-seasonal fit. Setting to 0" % m)
+        m = 0
+
+    return m
+
+
+def check_n_jobs(stepwise, n_jobs):
+    """Potentially update the n_jobs parameter
+
+    We can't run in parallel with the stepwise algorithm. This checks
+    ``n_jobs`` w.r.t. stepwise and will warn.
+    """
+    if stepwise and n_jobs != 1:
+        n_jobs = 1
+        warnings.warn('stepwise model cannot be fit in parallel (n_jobs=%i). '
+                      'Falling back to stepwise parameter search.' % n_jobs)
+    return n_jobs
+
+
+def check_start_max_values(st, mx, argname):
+    """Ensure starting points and ending points are valid"""
+    if mx is None:
+        mx = np.inf
+    if st is None:
+        raise ValueError("start_%s cannot be None" % argname)
+    if st < 0:
+        raise ValueError("start_%s must be positive" % argname)
+    if mx < st:
+        raise ValueError("max_%s must be >= start_%s" % (argname, argname))
+    return st, mx
 
 
 def check_trace(trace):

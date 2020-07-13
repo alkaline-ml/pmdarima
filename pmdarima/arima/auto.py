@@ -16,7 +16,7 @@ import warnings
 
 from ..base import BaseARIMA
 from . import _doc
-from . import _validation
+from . import _validation as val
 from .utils import ndiffs, is_constant, nsdiffs
 from ..utils import diff, is_iterable, check_endog
 from ..utils.metaestimators import if_has_delegate
@@ -332,22 +332,21 @@ def auto_arima(y,
     fit_args = _warn_for_deprecations(**fit_args)
 
     # misc kwargs passed to various fit or test methods
-    offset_test_args = _validation.check_kwargs(offset_test_args)
-    seasonal_test_args = _validation.check_kwargs(seasonal_test_args)
-    scoring_args = _validation.check_kwargs(scoring_args)
-    sarimax_kwargs = _validation.check_kwargs(sarimax_kwargs)
+    offset_test_args = val.check_kwargs(offset_test_args)
+    seasonal_test_args = val.check_kwargs(seasonal_test_args)
+    scoring_args = val.check_kwargs(scoring_args)
+    sarimax_kwargs = val.check_kwargs(sarimax_kwargs)
 
-    start = time.time()
+    m = val.check_m(m, seasonal)
+    trace = val.check_trace(trace)
+    # can't have stepwise AND parallel
+    n_jobs = val.check_n_jobs(stepwise, n_jobs)
 
     # validate start/max points
-    if any(_ < 0 for _ in (max_p, max_q, max_P, max_Q, start_p,
-                           start_q, start_P, start_Q)):
-        raise ValueError('starting and max p, q, P & Q values must '
-                         'be positive integers (>= 0)')
-    if max_p < start_p or max_q < start_q \
-            or max_P < start_P or max_Q < start_Q:
-        raise ValueError('max p, q, P & Q must be >= than '
-                         'their starting values')
+    start_p, max_p = val.check_start_max_values(start_p, max_p, "p")
+    start_q, max_q = val.check_start_max_values(start_q, max_q, "q")
+    start_P, max_P = val.check_start_max_values(start_P, max_P, "P")
+    start_Q, max_Q = val.check_start_max_values(start_Q, max_Q, "Q")
 
     # validate d & D
     for _d, _max_d in ((d, max_d), (D, max_D)):
@@ -357,17 +356,6 @@ def auto_arima(y,
             if _d < 0:
                 raise ValueError('d & D must be None or a positive '
                                  'integer (>= 0)')
-
-    # is stepwise AND parallel enabled?
-    if stepwise and n_jobs != 1:
-        n_jobs = 1
-        warnings.warn('stepwise model cannot be fit in parallel (n_jobs=%i). '
-                      'Falling back to stepwise parameter search.' % n_jobs)
-
-    # check on m
-    # todo: if m == 1, should we set seasonal=False?
-    if m < 1:
-        raise ValueError('m must be a positive integer (> 0)')
 
     # check on n_iter
     if random and n_fits < 0:
@@ -380,7 +368,8 @@ def auto_arima(y,
         raise ValueError('error_action must be one of %r, but got %r'
                          % (actions, error_action))
 
-    trace = _validation.check_trace(trace)
+    # start the timer after the parameter validation
+    start = time.time()
 
     # copy array
     y = check_endog(y, dtype=DTYPE)
@@ -415,7 +404,7 @@ def auto_arima(y,
                     xreg=exogenous,
                     order=(0, 0, 0),
                     seasonal_order=(0, 0, 0, 0),
-                    with_intercept=_validation.auto_intercept(
+                    with_intercept=val.auto_intercept(
                         with_intercept, False),  # False for the constant model
                     **sarimax_kwargs
                 )
@@ -423,8 +412,8 @@ def auto_arima(y,
             return_valid_fits, start, trace)
 
     information_criterion = \
-        _validation.check_information_criterion(information_criterion,
-                                                out_of_sample_size)
+        val.check_information_criterion(information_criterion,
+                                        out_of_sample_size)
 
     # the R code handles this, but I don't think statsmodels
     # will even fit a model this small...
@@ -545,7 +534,7 @@ def auto_arima(y,
         # more options to control that we don't, but this is more readable
         # with a single `else` clause than a complex `elif`.
         if D > 0 and d == 0:
-            with_intercept = _validation.auto_intercept(with_intercept, True)
+            with_intercept = val.auto_intercept(with_intercept, True)
             # TODO: if ever implemented in sm
             # fixed=mean(dx/m, na.rm = TRUE)
         elif D > 0 and d > 0:
@@ -553,7 +542,7 @@ def auto_arima(y,
         elif d == 2:
             pass
         elif d < 2:
-            with_intercept = _validation.auto_intercept(with_intercept, True)
+            with_intercept = val.auto_intercept(with_intercept, True)
             # TODO: if ever implemented in sm
             # fixed=mean(dx, na.rm = TRUE)
         else:
