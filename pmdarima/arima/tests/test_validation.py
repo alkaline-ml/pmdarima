@@ -67,9 +67,10 @@ def test_check_kwargs(kwargs, expected):
         pytest.param(12, True, False, False, 12),
         pytest.param(1, True, False, False, 1),
         pytest.param(0, False, False, False, 0),
+        pytest.param(1, False, False, False, 0),
 
         # unhappy path :-(
-        pytest.param(1, False, False, True, 0),
+        pytest.param(2, False, False, True, 0),
         pytest.param(0, True, True, False, None),
         pytest.param(-1, False, True, False, None),
 
