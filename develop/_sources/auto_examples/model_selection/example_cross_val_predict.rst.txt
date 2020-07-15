@@ -139,7 +139,7 @@ average their forecasts using either a "mean" or "median" (tunable).
     plt.title("Cross-validated wineind forecasts")
     plt.show()
 
-**Total running time of the script:** ( 1 minutes  25.809 seconds)
+**Total running time of the script:** ( 2 minutes  1.350 seconds)
 
 
 
