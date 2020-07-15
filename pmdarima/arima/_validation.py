@@ -53,8 +53,10 @@ def check_m(m, seasonal):
     if (m < 1 and seasonal) or m < 0:
         raise ValueError('m must be a positive integer (> 0)')
 
-    if m > 0 and not seasonal:
-        warnings.warn("m (%i) set for non-seasonal fit. Setting to 0" % m)
+    if not seasonal:
+        # default m is 1, so if it's the default, don't warn
+        if m > 1:
+            warnings.warn("m (%i) set for non-seasonal fit. Setting to 0" % m)
         m = 0
 
     return m
