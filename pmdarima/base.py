@@ -7,6 +7,8 @@ from abc import ABCMeta
 
 from sklearn.base import BaseEstimator
 
+# TODO: change this to base TS model if we ever hope to support more
+
 
 class BaseARIMA(BaseEstimator, metaclass=ABCMeta):
     """A base ARIMA class"""

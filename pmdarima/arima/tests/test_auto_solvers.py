@@ -8,36 +8,38 @@ import pytest
 
 
 @pytest.mark.parametrize(
-    'results_dict,ic_dict,expected', [
+    'models,expected', [
 
         # No nones, no overlap in IC
         pytest.param(
-            {'foo_key': 'foo', 'bar_key': 'bar', 'baz_key': 'baz'},
-            {'foo_key': 1.0, 'bar_key': 3.0, 'baz_key': 2.0},
+            [('foo', 'time', 1.0),
+             ('bar', 'time', 3.0),
+             ('baz', 'time', 2.0)],
             ['foo', 'baz', 'bar'],
         ),
 
-        # we filter out Nones
+        # we filter out Nones and infs
         pytest.param(
-            {'foo_key': 'foo', 'bar_key': 'bar', 'baz_key': None},
-            {'foo_key': 1.0, 'bar_key': 3.0, 'baz_key': np.inf},
+            [('foo', 'time', 1.0),
+             ('bar', 'time', 3.0),
+             ('baz', 'time', np.inf),
+             (None, 'time', 0.0)],
             ['foo', 'bar'],
         ),
 
     ]
 )
-def test_sort_and_filter_valid(results_dict, ic_dict, expected):
-    actual = solvers._sort_and_filter_fits(results_dict, ic_dict)
+def test_sort_and_filter_fits_valid(models, expected):
+    actual = solvers._sort_and_filter_fits(models)
     assert tuple(expected) == tuple(actual), \
         "\nExpected: %r" \
         "\nActual: %r" \
         % (expected, actual)
 
 
-def test_sort_and_filter_error():
-    results_dict = {'foo_key': None, 'bar_key': None, 'baz_key': None}
-    ic_dict = {'foo_key': np.inf, 'bar_key': np.inf, 'baz_key': np.inf}
+def test_sort_and_filter_fits_error():
+    results = [(None, 'time', 1.0), ('foo', 'time', np.inf)]
 
     with pytest.raises(ValueError) as ve:
-        solvers._sort_and_filter_fits(results_dict, ic_dict)
+        solvers._sort_and_filter_fits(results)
     assert "no-successful-model" in pytest_error_str(ve)

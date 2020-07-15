@@ -203,6 +203,11 @@ def test_pipeline_predict_inverse_transform(pipeline, exog, inverse_transform,
 
     if return_conf_ints:
         assert isinstance(predictions, tuple) and len(predictions) == 2
+        y_pred, conf_ints = predictions
+        assert conf_ints.shape[1] == 2
+        assert np.all(
+            (conf_ints[:, 0] <= y_pred) & (y_pred <= conf_ints[:, 1])
+        )
 
     # now in sample
     in_sample = pipeline.predict_in_sample(
@@ -212,6 +217,11 @@ def test_pipeline_predict_inverse_transform(pipeline, exog, inverse_transform,
 
     if return_conf_ints:
         assert isinstance(in_sample, tuple) and len(in_sample) == 2
+        y_pred, conf_ints = predictions
+        assert conf_ints.shape[1] == 2
+        assert np.all(
+            (conf_ints[:, 0] <= y_pred) & (y_pred <= conf_ints[:, 1])
+        )
 
 
 def test_deprecation_warning():

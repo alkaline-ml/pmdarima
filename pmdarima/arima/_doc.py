@@ -180,16 +180,20 @@ _AUTO_ARIMA_DOCSTR = \
     suppress_warnings : bool, optional (default=False)
         Many warnings might be thrown inside of statsmodels. If
         ``suppress_warnings`` is True, all of the warnings coming from
-        ``ARIMA`` will be squelched.
+        ``ARIMA`` will be squelched. Note that this will not suppress
+        UserWarnings created by bad argument combinations.
 
     error_action : str, optional (default='warn')
-        If unable to fit an ``ARIMA`` due to stationarity issues, whether to
-        warn ('warn'), raise the ``ValueError`` ('raise') or ignore ('ignore').
-        Note that the default behavior is to warn, and fits that fail will be
-        returned as None. This is the recommended behavior, as statsmodels
-        ARIMA and SARIMAX models hit bugs periodically that can cause
-        an otherwise healthy parameter combination to fail for reasons not
-        related to pmdarima.
+        If unable to fit an ``ARIMA`` for whatever reason, this controls the
+        error-handling behavior. Model fits can fail for linear algebra errors,
+        convergence errors, or any number of problems related to stationarity
+        or input data.
+            - 'warn': Warns when an error is encountered (default)
+            - 'raise': Raises when an error is encountered
+            - 'ignore': Ignores errors (not recommended)
+            - 'trace': Logs the entire error stacktrace and continues the
+               search. This is the best option when trying to determine why a
+               model is failing.
 
     trace : bool or int, optional (default=False)
         Whether to print status on the fits. A value of False will print no
@@ -238,8 +242,10 @@ _AUTO_ARIMA_DOCSTR = \
         A dictionary of key-word arguments to be passed to the ``scoring``
         metric.
 
-    with_intercept : bool, optional (default=True)
-        Whether to include an intercept term. Default is True.
+    with_intercept : bool or str, optional (default="auto")
+        Whether to include an intercept term. Default is "auto" which behaves
+        like True until a point in the search where the sum of differencing
+        terms will explicitly set it to True or False.
     
     {sarimax_kwargs}
     {fit_args}
