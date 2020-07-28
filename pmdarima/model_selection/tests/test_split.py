@@ -94,3 +94,12 @@ def test_train_test_split():
     tr, te = train_test_split(y, test_size=10)
     assert te.shape[0] == 10
     assert_array_equal(y, np.concatenate([tr, te]))
+
+
+def test_issue_364_bad_splits():
+    endog = y[:100]
+    cv = SlidingWindowForecastCV(window_size=90, step=1, h=4)
+    gen = cv.split(endog)
+
+    # should be 7
+    assert len(list(gen)) == 7

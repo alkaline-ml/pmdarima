@@ -329,10 +329,16 @@ class SlidingWindowForecastCV(BaseTSCrossValidator):
             window_size = max(3, n_samples // 5)
 
         indices = np.arange(n_samples)
-        for window_start in range(0, n_samples - h - window_size, step):
+        window_start = 0
+        while True:
             window_end = window_start + window_size
+            if window_end + h > n_samples:
+                break
+
             train_indices = indices[window_start: window_end]
             test_indices = indices[window_end: window_end + h]
+            window_start += step
+
             yield train_indices, test_indices
 
 
