@@ -328,6 +328,9 @@ class SlidingWindowForecastCV(BaseTSCrossValidator):
             # TODO: what's a good sane default for this?
             window_size = max(3, n_samples // 5)
 
+        if window_size < 3:
+            raise ValueError("window_size must be > 2")
+
         indices = np.arange(n_samples)
         window_start = 0
         while True:
