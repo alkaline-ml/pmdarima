@@ -499,11 +499,20 @@
             <span class="c1"># TODO: what&#39;s a good sane default for this?</span>
             <span class="n">window_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">//</span> <span class="mi">5</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">window_size</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;window_size must be &gt; 2&quot;</span><span class="p">)</span>
+
         <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">window_start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">-</span> <span class="n">h</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+        <span class="n">window_start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">window_end</span> <span class="o">=</span> <span class="n">window_start</span> <span class="o">+</span> <span class="n">window_size</span>
+            <span class="k">if</span> <span class="n">window_end</span> <span class="o">+</span> <span class="n">h</span> <span class="o">&gt;</span> <span class="n">n_samples</span><span class="p">:</span>
+                <span class="k">break</span>
+
             <span class="n">train_indices</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">window_start</span><span class="p">:</span> <span class="n">window_end</span><span class="p">]</span>
             <span class="n">test_indices</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">window_end</span><span class="p">:</span> <span class="n">window_end</span> <span class="o">+</span> <span class="n">h</span><span class="p">]</span>
+            <span class="n">window_start</span> <span class="o">+=</span> <span class="n">step</span>
+
             <span class="k">yield</span> <span class="n">train_indices</span><span class="p">,</span> <span class="n">test_indices</span></div>
 
 
