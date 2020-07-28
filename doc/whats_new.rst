@@ -32,6 +32,9 @@ v0.8.1) will document the latest features.
 * Inverse endog transformation is now supported when ``return_conf_int=True`` on pipeline predictions
   (thanks to `skyetim <https://github.com/skyetim>`_)
 
+* Fix a bug where the :class:`pmdarima.model_selection.SlidingWindowForecastCV` could produce
+  too few splits for the given input data.
+
 
 `v1.6.1 <http://alkaline-ml.com/pmdarima/1.6.1/>`_
 --------------------------------------------------
