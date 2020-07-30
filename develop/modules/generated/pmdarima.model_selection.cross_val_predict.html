@@ -199,7 +199,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.cross_val_predict<a class="headerlink" href="#pmdarima-model-selection-cross-val-predict" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.model_selection.cross_val_predict">
-<code class="descclassname">pmdarima.model_selection.</code><code class="descname">cross_val_predict</code><span class="sig-paren">(</span><em>estimator</em>, <em>y</em>, <em>exogenous=None</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>averaging='mean'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/840b6b1b/pmdarima/model_selection/_validation.py#L211"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_val_predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.cross_val_predict" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.model_selection.</code><code class="descname">cross_val_predict</code><span class="sig-paren">(</span><em>estimator</em>, <em>y</em>, <em>exogenous=None</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>averaging='mean'</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/2cb61f01/pmdarima/model_selection/_validation.py#L211"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_val_predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.cross_val_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate cross-validated estimates for each input data point</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -258,6 +258,9 @@ prediction results.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">RollingForecastCV</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">preds</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">pm</span><span class="o">.</span><span class="n">ARIMA</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">)),</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">preds</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="go">array([30710.45743168, 34902.94929722, 17994.16587163, 22127.71167249,</span>
+<span class="go">       25473.60876435])</span>
 </pre></div>
 </div>
 </dd></dl>

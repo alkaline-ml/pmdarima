@@ -430,6 +430,9 @@
 <span class="sd">    &gt;&gt;&gt; cv = RollingForecastCV(h=14, step=12)</span>
 <span class="sd">    &gt;&gt;&gt; preds = cross_val_predict(</span>
 <span class="sd">    ...     pm.ARIMA((1, 1, 2), seasonal_order=(0, 1, 1, 12)), y, cv=cv)</span>
+<span class="sd">    &gt;&gt;&gt; preds[:5]</span>
+<span class="sd">    array([30710.45743168, 34902.94929722, 17994.16587163, 22127.71167249,</span>
+<span class="sd">           25473.60876435])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="n">indexable</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -451,7 +454,7 @@
     <span class="c1">#         30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,</span>
     <span class="c1">#         45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,</span>
     <span class="c1">#         60, 61, 62, 63]),</span>
-    <span class="c1">#  array([64, 65, 66, 67]))  &lt;~~</span>
+    <span class="c1">#  array([64, 65, 66, 67]))  &lt;~~ 64 vs. 61</span>
     <span class="k">if</span> <span class="n">cv</span><span class="o">.</span><span class="n">step</span> <span class="o">&gt;</span> <span class="n">cv</span><span class="o">.</span><span class="n">horizon</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;CV step cannot be &gt; CV horizon, or there will be a &quot;</span>
                          <span class="s2">&quot;gap in predictions between folds&quot;</span><span class="p">)</span>

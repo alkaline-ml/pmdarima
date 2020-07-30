@@ -636,6 +636,16 @@
     <span class="k">def</span> <span class="nf">_fit_ocsb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">max_lag</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fit the linear model used to compute the test statistic&quot;&quot;&quot;</span>
         <span class="n">y_first_order_diff</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+
+        <span class="c1"># if there are no more samples, we have to bail</span>
+        <span class="k">if</span> <span class="n">y_first_order_diff</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;There are no more samples after a first-order &quot;</span>
+                <span class="s2">&quot;seasonal differencing. See http://alkaline-ml.com/pmdarima/&quot;</span>
+                <span class="s2">&quot;seasonal-differencing-issues.html for a more in-depth &quot;</span>
+                <span class="s2">&quot;explanation and potential work-arounds.&quot;</span>
+            <span class="p">)</span>
+
         <span class="n">y</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">y_first_order_diff</span><span class="p">)</span>
         <span class="n">ylag</span> <span class="o">=</span> <span class="n">OCSBTest</span><span class="o">.</span><span class="n">_gen_lags</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lag</span><span class="p">)</span>
 

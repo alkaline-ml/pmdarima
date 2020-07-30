@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>5. Refreshing your ARIMA models &mdash; pmdarima 0.0.0 documentation</title>
+  <title>8. Encountering issues in seasonal differencing &mdash; pmdarima 0.0.0 documentation</title>
   
 
   
@@ -52,8 +52,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="6. Tips to using auto_arima" href="tips_and_tricks.html" />
-    <link rel="prev" title="4. Serializing your ARIMA models" href="serialization.html" /> 
+    <link rel="next" title="9. Toy time-series datasets" href="modules/datasets.html" />
+    <link rel="prev" title="7. When no viable models can be found" href="no-successful-model.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -110,13 +110,10 @@
 <li class="toctree-l2"><a class="reference internal" href="setup.html">2. Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="serialization.html">4. Serializing your ARIMA models</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">5. Refreshing your ARIMA models</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#updating-your-model-with-new-observations">5.1. Updating your model with new observations</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="refreshing.html">5. Refreshing your ARIMA models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tips_and_tricks.html">6. Tips to using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="no-successful-model.html">7. When no viable models can be found</a></li>
-<li class="toctree-l2"><a class="reference internal" href="seasonal-differencing-issues.html">8. Encountering issues in seasonal differencing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">8. Encountering issues in seasonal differencing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="modules/datasets.html">9. Toy time-series datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usecases.html">10. Use cases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html">11. Contributing to pmdarima</a></li>
@@ -173,13 +170,13 @@
         
           <li><a href="user_guide.html">User Guide</a> &raquo;</li>
         
-      <li>5. Refreshing your ARIMA models</li>
+      <li>8. Encountering issues in seasonal differencing</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/refreshing.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/seasonal-differencing-issues.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -192,48 +189,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="refreshing-your-arima-models">
-<span id="refreshing"></span><h1>5. Refreshing your ARIMA models<a class="headerlink" href="#refreshing-your-arima-models" title="Permalink to this headline">¶</a></h1>
-<p>There are two ways to keep your models up-to-date with pmdarima:</p>
-<ol class="arabic simple">
-<li>Periodically, your ARIMA will need to be refreshed given new observations. See
-<a class="reference external" href="https://stats.stackexchange.com/questions/34139/updating-arima-models-at-frequent-intervals">this discussion</a>
-and <a class="reference external" href="https://stats.stackexchange.com/questions/57745/what-do-you-consider-a-new-model-versus-an-updated-model-time-series">this one</a>
-on either re-using <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code>-estimated order terms or re-fitting altogether.</li>
-<li>If you’re not ready to totally refresh your model parameters, but would like to add observations to
-your model (so new forecasts originate from the latest samples) with minor parameter updates, the ARIMA class makes it
-possible to <a class="reference external" href="./modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.update">add new samples</a>.
-See <a class="reference external" href="auto_examples/arima/example_add_new_samples.html#adding-new-observations-to-your-model">this example</a>
-for more info.</li>
-</ol>
-<div class="section" id="updating-your-model-with-new-observations">
-<h2>5.1. Updating your model with new observations<a class="headerlink" href="#updating-your-model-with-new-observations" title="Permalink to this headline">¶</a></h2>
-<p>The easiest way to keep your model up-to-date without completely refitting it is simply to
-update your model with new observations so that future forecasts take the newest observations
-into consideration. Assume that you fit the following model:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_wineind</span>
-
-<span class="n">y</span> <span class="o">=</span> <span class="n">load_wineind</span><span class="p">()</span>
-<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="mi">125</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">125</span><span class="p">:]</span>
-
-<span class="c1"># Fit an ARIMA</span>
-<span class="n">arima</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">ARIMA</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
-<span class="n">arima</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <div class="section" id="encountering-issues-in-seasonal-differencing">
+<span id="seasonal-differencing-issues"></span><h1>8. Encountering issues in seasonal differencing<a class="headerlink" href="#encountering-issues-in-seasonal-differencing" title="Permalink to this headline">¶</a></h1>
+<p>For certain time series, the seasonal differencing operation may fail:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;&lt;stdin&gt;&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="s2">&quot;Could not successfully fit a viable ARIMA model &quot;</span>
+<span class="n">There</span> <span class="n">are</span> <span class="n">no</span> <span class="n">more</span> <span class="n">samples</span> <span class="n">after</span> <span class="n">a</span> <span class="n">first</span><span class="o">-</span><span class="n">order</span> <span class="n">seasonal</span> <span class="n">differencing</span><span class="o">.</span> <span class="n">See</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">alkaline</span><span class="o">-</span><span class="n">ml</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pmdarima</span><span class="o">/</span><span class="n">seasonal</span><span class="o">-</span><span class="n">differencing</span><span class="o">-</span><span class="n">issues</span><span class="o">.</span><span class="n">html</span> <span class="k">for</span> <span class="n">a</span>
+<span class="n">more</span> <span class="ow">in</span><span class="o">-</span><span class="n">depth</span> <span class="n">explanation</span> <span class="ow">and</span> <span class="n">potential</span> <span class="n">work</span><span class="o">-</span><span class="n">arounds</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>After fitting and persisting your model (see <a class="reference internal" href="serialization.html#serializing"><span class="std std-ref">Serializing your ARIMA models</span></a>), you use your model
-to produce forecasts. After a few forecasts, you want to record the <em>actual</em> observed
-values so your model considers them when making newer forecasts:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">arima</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>  <span class="c1"># pretend these are the new ones</span>
-</pre></div>
-</div>
-<p>Your model will now produce forecasts from the <em>new</em> latest observations. Of course,
-you’ll have to re-persist your ARIMA model after updating it! Internally, this step
-uses the existing parameters, taking a small amount of steps and allowing MLE to
-update your parameters a small amount. You can pass the <code class="docutils literal notranslate"><span class="pre">maxiter</span></code> to control the
-amount your model updates.</p>
-</div>
+<p>In short, the seasonal differencing test has detected your time series could benefit
+from a non-zero seasonal differencing term, <code class="docutils literal notranslate"><span class="pre">D</span></code>, but your data is exhausted after
+differencing it by <code class="docutils literal notranslate"><span class="pre">m</span></code>. Basically, your dataset is too small to be differenced by <code class="docutils literal notranslate"><span class="pre">m</span></code>.
+You only have several options as a work-around here:</p>
+<ul class="simple">
+<li>Use a larger training set.</li>
+<li>Determine whether or not you’ve set the appropriate <code class="docutils literal notranslate"><span class="pre">m</span></code>. Should it be smaller? See
+<a class="reference internal" href="tips_and_tricks.html#period"><span class="std std-ref">Setting m</span></a> for more information on the topic.</li>
+<li>Manually set <code class="docutils literal notranslate"><span class="pre">D=0</span></code> in the <a class="reference internal" href="modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima()</span></code></a> call. This is the least
+desirable solution, since it skips a step that could lead to a better model.</li>
+</ul>
+<p>The best decision is always to use a larger training set, but sometimes that simply
+is not possible. Make sure to set <code class="docutils literal notranslate"><span class="pre">trace</span></code> to at least 1 in order to see the search progress, and to a value &gt;1 to see the
+maximum trace logging available. If you still cannot diagnose why you are getting this error message, consider
+<a class="reference internal" href="contributing.html#filing-bugs"><span class="std std-ref">Filing a bug</span></a>.</p>
 </div>
 
 
@@ -244,10 +225,10 @@ amount your model updates.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="tips_and_tricks.html" class="btn btn-neutral float-right" title="6. Tips to using auto_arima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="modules/datasets.html" class="btn btn-neutral float-right" title="9. Toy time-series datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="serialization.html" class="btn btn-neutral float-left" title="4. Serializing your ARIMA models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="no-successful-model.html" class="btn btn-neutral float-left" title="7. When no viable models can be found" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

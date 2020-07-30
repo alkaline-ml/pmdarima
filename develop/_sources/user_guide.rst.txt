@@ -26,6 +26,7 @@ contribute you'll need to be able to build from source, as laid out in the
    refreshing.rst
    tips_and_tricks.rst
    no-successful-model.rst
+   seasonal-differencing-issues.rst
    modules/datasets.rst
    usecases.rst
    contributing.rst
