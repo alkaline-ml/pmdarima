@@ -465,6 +465,16 @@ class OCSBTest(_SeasonalStationarityTest):
     def _fit_ocsb(x, m, lag, max_lag):
         """Fit the linear model used to compute the test statistic"""
         y_first_order_diff = diff(x, m)
+
+        # if there are no more samples, we have to bail
+        if y_first_order_diff.shape[0] == 0:
+            raise ValueError(
+                "There are no more samples after a first-order "
+                "seasonal differencing. See http://alkaline-ml.com/pmdarima/"
+                "seasonal-differencing-issues.html for a more in-depth "
+                "explanation and potential work-arounds."
+            )
+
         y = diff(y_first_order_diff)
         ylag = OCSBTest._gen_lags(y, lag)
 
