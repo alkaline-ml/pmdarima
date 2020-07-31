@@ -220,6 +220,7 @@ def cross_validate(estimator,
     return ret
 
 
+<<<<<<< HEAD
 def cross_val_predict(estimator,
                       y,
                       X=None,
@@ -227,6 +228,10 @@ def cross_val_predict(estimator,
                       verbose=0,
                       averaging="mean",
                       **kwargs):  # TODO: remove kwargs
+=======
+def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
+                      averaging="mean", return_forecast_horizons=False):
+>>>>>>> first iteration
     """Generate cross-validated estimates for each input data point
 
     Parameters
@@ -266,6 +271,24 @@ def cross_val_predict(estimator,
 
         We then average each time step's forecasts to end up with our final
         prediction results.
+
+    return_forecast_horizons: bool (default=False)
+        If True, raw predictions are returned in a y x h matrix. E.g. if h=3,
+        and step=1 then:
+
+            nan nan nan # training samples
+            nan nan nan
+            nan nan nan
+            nan nan nan
+            1   4   2   # test samples
+            2   5   7
+            8   9   1
+            nan nan nan
+            nan nan nan
+
+        First column contains all one-step-ahead-predictions, second column all
+        two-step-ahead-predictions and so forth. Further metrics can then be
+        calculated as desired.
 
     Examples
     --------
@@ -326,6 +349,14 @@ def cross_val_predict(estimator,
     pred_matrix = np.ones((y.shape[0], len(prediction_blocks))) * np.nan
     for i, (pred_block, test_indices) in enumerate(prediction_blocks):
         pred_matrix[test_indices, i] = pred_block
+
+    if return_forecast_horizons:
+        pred_matrix = np.ones((y.shape[0], cv.horizon)) * np.nan
+        prediction_blocks = np.array(prediction_blocks)
+        predictions = prediction_blocks[:,0,:]
+        indices = prediction_blocks[:,1,:][:,0].astype(int) - 1
+        pred_matrix[indices] = predictions
+        return pred_matrix
 
     # from there, we need to apply nanmean (or some other metric) along rows
     # to agree on a forecast for a sample.
