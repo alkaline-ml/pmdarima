@@ -8,15 +8,15 @@ import numpy as np
 import pandas as pd
 
 from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
-from pmdarima.arima.arima import VALID_SCORING
+from pmdarima.arima import _validation as val
 from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate
-from pmdarima.utils import get_callable
 
 from numpy.random import RandomState
 from numpy.testing import assert_array_almost_equal, assert_almost_equal, \
     assert_allclose
 from statsmodels import api as sm
+from sklearn.metrics import mean_squared_error
 
 import joblib
 import os
@@ -150,8 +150,14 @@ def test_predict_in_sample_exog(model, exog, confints):
         assert isinstance(res, np.ndarray)
 
 
+def _two_times_mse(y_true, y_pred, **_):
+    """A custom loss to test we can pass custom scoring metrics"""
+    return mean_squared_error(y_true, y_pred) * 2
+
+
 @pytest.mark.parametrize('as_pd', [True, False])
-def test_with_oob_and_exog(as_pd):
+@pytest.mark.parametrize('scoring', ['mse', _two_times_mse])
+def test_with_oob_and_exog(as_pd, scoring):
     endog = hr
     exog = np.random.RandomState(1).rand(hr.shape[0], 3)
     if as_pd:
@@ -160,7 +166,7 @@ def test_with_oob_and_exog(as_pd):
 
     arima = ARIMA(order=(2, 1, 2),
                   suppress_warnings=True,
-                  scoring='mse',
+                  scoring=scoring,
                   out_of_sample_size=10).fit(y=endog, exogenous=exog)
 
     # show we can get oob score and preds
@@ -180,7 +186,7 @@ def test_with_oob():
     # Assert the predictions give the expected MAE/MSE
     oob_preds = arima.oob_preds_
     assert oob_preds.shape[0] == 10
-    scoring = get_callable('mse', VALID_SCORING)
+    scoring = val.get_scoring_metric('mse')
     assert scoring(hr[-10:], oob_preds) == oob
 
     # show we can fit if ooss < 0 and oob will be nan
@@ -230,7 +236,7 @@ def test_oob_for_issue_28():
         out_of_sample_size=0).fit(y=hr[:-10],
                                   exogenous=xreg[:-10, :])
 
-    scoring = get_callable(arima_no_oob.scoring, VALID_SCORING)
+    scoring = val.get_scoring_metric(arima_no_oob.scoring)
     preds = arima_no_oob.predict(n_periods=10, exogenous=xreg[-10:, :])
     assert np.allclose(oob, scoring(hr[-10:], preds), rtol=1e-2)
 
@@ -290,7 +296,7 @@ def test_oob_sarimax():
     oob = fit.oob()
 
     # compare scores:
-    scoring = get_callable(fit_no_oob.scoring, VALID_SCORING)
+    scoring = val.get_scoring_metric(fit_no_oob.scoring)
     no_oob_preds = fit_no_oob.predict(n_periods=15, exogenous=xreg[-15:, :])
     assert np.allclose(oob, scoring(wineind[-15:], no_oob_preds), rtol=1e-2)
 
