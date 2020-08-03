@@ -176,7 +176,6 @@
 <span class="c1"># A user-friendly wrapper to the statsmodels ARIMA that mimics the familiar</span>
 <span class="c1"># sklearn interface.</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">mean_squared_error</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="kn">import</span> <span class="n">if_delegate_has_method</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_array</span>
 
@@ -186,13 +185,13 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_validation</span> <span class="k">as</span> <span class="n">val</span>
 <span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">BaseARIMA</span>
 <span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="kn">import</span> <span class="n">DTYPE</span>  <span class="c1"># DTYPE for arrays</span>
 <span class="kn">from</span> <span class="nn">..compat.sklearn</span> <span class="kn">import</span> <span class="n">check_is_fitted</span><span class="p">,</span> <span class="n">safe_indexing</span>
 <span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
 <span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">matplotlib</span> <span class="k">as</span> <span class="n">mpl_compat</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">get_callable</span><span class="p">,</span> <span class="n">if_has_delegate</span><span class="p">,</span> <span class="n">is_iterable</span><span class="p">,</span> <span class="n">check_endog</span><span class="p">,</span> \
-    <span class="n">check_exog</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">if_has_delegate</span><span class="p">,</span> <span class="n">is_iterable</span><span class="p">,</span> <span class="n">check_endog</span><span class="p">,</span> <span class="n">check_exog</span>
 <span class="kn">from</span> <span class="nn">..utils.visualization</span> <span class="kn">import</span> <span class="n">_get_plt</span>
 
 <span class="c1"># Get the version</span>
@@ -201,11 +200,6 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;ARIMA&#39;</span>
 <span class="p">]</span>
-
-<span class="n">VALID_SCORING</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;mse&#39;</span><span class="p">:</span> <span class="n">mean_squared_error</span><span class="p">,</span>
-    <span class="s1">&#39;mae&#39;</span><span class="p">:</span> <span class="n">mean_absolute_error</span>
-<span class="p">}</span>
 
 
 <span class="k">def</span> <span class="nf">_aicc</span><span class="p">(</span><span class="n">model_results</span><span class="p">,</span> <span class="n">nobs</span><span class="p">,</span> <span class="n">add_constant</span><span class="p">):</span>
@@ -362,9 +356,20 @@
 <span class="sd">            &gt; Score on: [5, 6]</span>
 <span class="sd">            &gt; Append [5, 6] to end of self.arima_res_.data.endog values</span>
 
-<span class="sd">    scoring : str, optional (default=&#39;mse&#39;)</span>
+<span class="sd">    scoring : str or callable, optional (default=&#39;mse&#39;)</span>
 <span class="sd">        If performing validation (i.e., if ``out_of_sample_size`` &gt; 0), the</span>
-<span class="sd">        metric to use for scoring the out-of-sample data. One of {&#39;mse&#39;, &#39;mae&#39;}</span>
+<span class="sd">        metric to use for scoring the out-of-sample data:</span>
+<span class="sd">        </span>
+<span class="sd">            * If a string, must be a valid metric name importable from</span>
+<span class="sd">              ``sklearn.metrics``.</span>
+<span class="sd">            * If a callable, must adhere to the function signature::</span>
+<span class="sd">            </span>
+<span class="sd">                def foo_loss(y_true, y_pred)</span>
+<span class="sd">                </span>
+<span class="sd">        Note that models are selected by *minimizing* loss. If using a</span>
+<span class="sd">        maximizing metric (such as ``sklearn.metrics.r2_score``), it is the</span>
+<span class="sd">        user&#39;s responsibility to wrap the function such that it returns a</span>
+<span class="sd">        negative value for minimizing.</span>
 
 <span class="sd">    scoring_args : dict, optional (default=None)</span>
 <span class="sd">        A dictionary of key-word arguments to be passed to the</span>
@@ -610,7 +615,7 @@
 
         <span class="c1"># determine the CV args, if any</span>
         <span class="n">cv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_of_sample_size</span>
-        <span class="n">scoring</span> <span class="o">=</span> <span class="n">get_callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scoring</span><span class="p">,</span> <span class="n">VALID_SCORING</span><span class="p">)</span>
+        <span class="n">scoring</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">get_scoring_metric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scoring</span><span class="p">)</span>
 
         <span class="c1"># don&#39;t allow negative, don&#39;t allow &gt; n_samples</span>
         <span class="n">cv</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cv</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>

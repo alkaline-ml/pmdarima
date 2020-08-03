@@ -35,6 +35,9 @@ v0.8.1) will document the latest features.
 * Fix a bug where the :class:`pmdarima.model_selection.SlidingWindowForecastCV` could produce
   too few splits for the given input data.
 
+* Permit custom scoring metrics to be passed for out-of-sample scoring, as requested in
+  `#368 <https://github.com/alkaline-ml/pmdarima/issues/368>`_.
+
 
 `v1.6.1 <http://alkaline-ml.com/pmdarima/1.6.1/>`_
 --------------------------------------------------
