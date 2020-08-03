@@ -7,6 +7,7 @@ directly without having to fit numerous combinations of models.
 
 import numpy as np
 import warnings
+from sklearn import metrics
 
 # The valid information criteria
 VALID_CRITERIA = {'aic', 'aicc', 'bic', 'hqic', 'oob'}
@@ -98,3 +99,40 @@ def check_trace(trace):
     if trace:
         return 1
     return 0
+
+
+def get_scoring_metric(metric):
+    """Get a scoring metric by name, or passthrough a callable
+
+    Parameters
+    ----------
+    metric : str or callable
+        A name of a scoring metric, or a custom callable function. If it is a
+        callable, it must adhere to the signature::
+
+            def func(y_true, y_pred)
+
+        Note that the ARIMA model selection seeks to MINIMIZE the score, and it
+        is up to the user to ensure that scoring methods that return maximizing
+        criteria (i.e., ``r2_score``) are wrapped in a function that will
+        return the negative value of the score.
+    """
+    if isinstance(metric, str):
+
+        # XXX: legacy support, remap mse/mae to their long versions
+        if metric == "mse":
+            return metrics.mean_squared_error
+        if metric == "mae":
+            return metrics.mean_absolute_error
+
+        try:
+            return getattr(metrics, metric)
+        except AttributeError:
+            raise ValueError("'%s' is not a valid scoring method." % metric)
+
+    if not callable(metric):
+        raise TypeError("`metric` must be a valid scoring method, or a "
+                        "callable, but got type=%s" % type(metric))
+
+    # TODO: warn for potentially invalid signature?
+    return metric
