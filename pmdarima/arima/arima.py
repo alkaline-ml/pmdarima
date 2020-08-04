@@ -5,7 +5,6 @@
 # A user-friendly wrapper to the statsmodels ARIMA that mimics the familiar
 # sklearn interface.
 
-from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.utils.metaestimators import if_delegate_has_method
 from sklearn.utils.validation import check_array
 
@@ -15,13 +14,13 @@ from scipy.stats import gaussian_kde, norm
 import numpy as np
 import warnings
 
+from . import _validation as val
 from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.sklearn import check_is_fitted, safe_indexing
 from ..compat import statsmodels as sm_compat
 from ..compat import matplotlib as mpl_compat
-from ..utils import get_callable, if_has_delegate, is_iterable, check_endog, \
-    check_exog
+from ..utils import if_has_delegate, is_iterable, check_endog, check_exog
 from ..utils.visualization import _get_plt
 
 # Get the version
@@ -30,11 +29,6 @@ import pmdarima
 __all__ = [
     'ARIMA'
 ]
-
-VALID_SCORING = {
-    'mse': mean_squared_error,
-    'mae': mean_absolute_error
-}
 
 
 def _aicc(model_results, nobs, add_constant):
@@ -191,9 +185,20 @@ class ARIMA(BaseARIMA):
             > Score on: [5, 6]
             > Append [5, 6] to end of self.arima_res_.data.endog values
 
-    scoring : str, optional (default='mse')
+    scoring : str or callable, optional (default='mse')
         If performing validation (i.e., if ``out_of_sample_size`` > 0), the
-        metric to use for scoring the out-of-sample data. One of {'mse', 'mae'}
+        metric to use for scoring the out-of-sample data:
+        
+            * If a string, must be a valid metric name importable from
+              ``sklearn.metrics``.
+            * If a callable, must adhere to the function signature::
+            
+                def foo_loss(y_true, y_pred)
+                
+        Note that models are selected by *minimizing* loss. If using a
+        maximizing metric (such as ``sklearn.metrics.r2_score``), it is the
+        user's responsibility to wrap the function such that it returns a
+        negative value for minimizing.
 
     scoring_args : dict, optional (default=None)
         A dictionary of key-word arguments to be passed to the
@@ -439,7 +444,7 @@ class ARIMA(BaseARIMA):
 
         # determine the CV args, if any
         cv = self.out_of_sample_size
-        scoring = get_callable(self.scoring, VALID_SCORING)
+        scoring = val.get_scoring_metric(self.scoring)
 
         # don't allow negative, don't allow > n_samples
         cv = max(cv, 0)

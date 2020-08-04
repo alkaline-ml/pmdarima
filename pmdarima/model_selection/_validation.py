@@ -259,6 +259,9 @@ def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
     >>> cv = RollingForecastCV(h=14, step=12)
     >>> preds = cross_val_predict(
     ...     pm.ARIMA((1, 1, 2), seasonal_order=(0, 1, 1, 12)), y, cv=cv)
+    >>> preds[:5]
+    array([30710.45743168, 34902.94929722, 17994.16587163, 22127.71167249,
+           25473.60876435])
     """
     y, exog = indexable(y, exogenous)
     y = check_endog(y, copy=False)
@@ -280,7 +283,7 @@ def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
     #         30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
     #         45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
     #         60, 61, 62, 63]),
-    #  array([64, 65, 66, 67]))  <~~
+    #  array([64, 65, 66, 67]))  <~~ 64 vs. 61
     if cv.step > cv.horizon:
         raise ValueError("CV step cannot be > CV horizon, or there will be a "
                          "gap in predictions between folds")

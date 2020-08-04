@@ -67,9 +67,10 @@ def test_check_kwargs(kwargs, expected):
         pytest.param(12, True, False, False, 12),
         pytest.param(1, True, False, False, 1),
         pytest.param(0, False, False, False, 0),
+        pytest.param(1, False, False, False, 0),
 
         # unhappy path :-(
-        pytest.param(1, False, False, True, 0),
+        pytest.param(2, False, False, True, 0),
         pytest.param(0, True, True, False, None),
         pytest.param(-1, False, True, False, None),
 
@@ -158,3 +159,23 @@ def test_check_start_max_values(st, mx, argname, exp_vals, exp_err_msg):
 def test_check_trace(trace, expected):
     res = val.check_trace(trace)
     assert expected == res
+
+
+@pytest.mark.parametrize(
+    'metric,expected_error,expected_error_msg', [
+        pytest.param("mae", None, None),
+        pytest.param("mse", None, None),
+        pytest.param("mean_squared_error", None, None),
+        pytest.param("r2_score", None, None),
+
+        pytest.param("foo", ValueError, "is not a valid scoring"),
+        pytest.param(123, TypeError, "must be a valid scoring method, or a"),
+    ]
+)
+def test_valid_metrics(metric, expected_error, expected_error_msg):
+    if not expected_error:
+        assert callable(val.get_scoring_metric(metric))
+    else:
+        with pytest.raises(expected_error) as err:
+            val.get_scoring_metric(metric)
+        assert expected_error_msg in pytest_error_str(err)
