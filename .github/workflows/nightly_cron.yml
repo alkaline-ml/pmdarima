@@ -111,7 +111,7 @@ jobs:
                   },
                   {
                     title: 'Link to Run',
-                    value: '<https://github.com/alkaline-ml/pmdarima/actions/runs/${{ env.GITHUB_RUN_ID }}|HERE>',
+                    value: `<https://github.com/alkaline-ml/pmdarima/actions/runs/$GITHUB_RUN_ID|HERE>`,
                     short: false
                   }
                 ],
@@ -120,5 +120,4 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
-          GITHUB_RUN_ID: $GITHUB_RUN_ID
 
