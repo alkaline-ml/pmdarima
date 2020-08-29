@@ -33,7 +33,9 @@ jobs:
 
     steps:
       - name: Check run_id
-        run: echo $GITHUB_RUN_ID
+        run: |
+          echo $GITHUB_RUN_ID
+          echo $GITHUB_ACTION
         shell: bash
 
       - name: Checkout
