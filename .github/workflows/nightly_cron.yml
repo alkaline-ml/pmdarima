@@ -127,12 +127,42 @@ jobs:
 #          SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
 #          RUN_ID: ${{ steps.definition.outputs.run_id }}
 
+  # We only run this job if the previous one fails (any of the 4 jobs that it spins up)
   send_latest_releases:
     needs: [build]
     if: failure()
     name: Send Latest Releases to Slack
     runs-on: ubuntu-latest
     steps:
-      - name: Test
-        run: echo "We're here"
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Setting up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Get dependency release dates
+        id: dependencies  # Needed to retrieve the output of this step later
+        run: |
+          dependencies=$(python build_tools/github/get_latest_dependencies.py)
+          json=(python .github/utils/get_dependency_releases.py $dependencies)
+          echo "::set-output name=json::$json"
         shell: bash
+
+      - name: Posting to Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              text: "Latest dependency release dates",
+              attachments: [{
+                fallback: 'Latest dependency release dates',
+                fields: ${{ env.FIELDS }},
+                actions: [{}]  // Don't know if we actually need this, but it is shown in the docs as empty
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
+          FIELDS: ${{ steps.dependencies.outputs.json }}
