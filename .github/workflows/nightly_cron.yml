@@ -148,7 +148,7 @@ jobs:
           pip install requests tabulate
           dependencies=$(python build_tools/github/get_latest_dependencies.py)
           table=$(python .github/utils/get_dependency_releases.py $dependencies)
-          echo "::set-output name=table::table"
+          echo "::set-output name=table::$table"
         shell: bash
 
       - name: Posting to Slack

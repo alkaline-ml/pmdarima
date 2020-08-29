@@ -26,4 +26,4 @@ table = tabulate(
     headers=['Package', 'Version', 'Release Date']
 )
 # Need repr so this is on one line for Slack
-print(repr('```\n' + table + '\n```'))
+print(repr('```\n' + table + '\n```').replace("'", ''))
