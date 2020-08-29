@@ -80,7 +80,7 @@ jobs:
 
       - name: Check run_id
         run: echo $GITZHUB_RUN_ID
-        shellL: bash
+        shell: bash
 
       # https://github.com/marketplace/actions/action-slack#custom-notification
       - name: Posting to Slack
