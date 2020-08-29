@@ -20,4 +20,10 @@ for package in sorted(packages):
     )
 
 session.close()
-print('```\n' + tabulate(releases, headers=['Package', 'Version', 'Release Date']) + '\n```')
+
+table = tabulate(
+    sorted(releases, key=lambda entry: entry[2], reverse=True),
+    headers=['Package', 'Version', 'Release Date']
+)
+# Need repr so this is on one line for Slack
+print(repr('```\n' + table + '\n```'))

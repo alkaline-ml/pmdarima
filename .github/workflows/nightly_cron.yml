@@ -157,7 +157,7 @@ jobs:
           status: custom
           custom_payload: |
             {
-              text: "Latest Dependency Releases:\n${{ env.TABLE }}",
+              text: "Latest Dependency Releases (most recent first):\n${{ env.TABLE }}",
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
