@@ -120,4 +120,5 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
+          GITHUB_RUN_ID: $GITHUB_RUN_ID
 
