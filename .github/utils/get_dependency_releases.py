@@ -1,6 +1,7 @@
 import sys
 
 import requests
+from tabulate import tabulate
 
 if len(sys.argv) < 2:
     print(f'Usage: python {sys.argv[0]} <list of packages>')
@@ -9,33 +10,14 @@ if len(sys.argv) < 2:
 packages = sys.argv[1:]
 session = requests.Session()
 
-# This is the format for a two-column table. We start with the headers, and
-# build up the rest in the below loop. https://stackoverflow.com/a/55734396/10696164
-releases = {
-    'type': 'section',
-    'fields': [
-        {
-            "type": "mrkdwn",
-            "text": "*Package*"
-        },
-        {
-            "type": "mrkdwn",
-            "text": "*Release Date*"
-        }
-    ]
-}
+releases = []
 for package in sorted(packages):
     pypi = session.get(f'https://pypi.org/pypi/{package}/json').json()
     latest_version = pypi['info']['version']
     latest_release_date = pypi['releases'][latest_version][0]['upload_time']
-    releases['fields'].append({
-        'type': 'plain_text',
-        'text': f'{package} {latest_version}'
-    })
-    releases['fields'].append({
-        'type': 'plain_text',
-        'text': latest_release_date.replace('T', ' ') + ' UTC'
-    })
+    releases.append([
+        package, latest_version, latest_release_date.replace('T', ' ') + ' UTC']
+    )
 
 session.close()
-print([releases])  # this will be used in GitHub Actions
+print('```\n' + tabulate(releases, headers=['Package', 'Version', 'Release Date']) + '\n```')

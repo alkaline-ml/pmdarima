@@ -145,7 +145,7 @@ jobs:
       - name: Get dependency release dates
         id: dependencies  # Needed to retrieve the output of this step later
         run: |
-          pip install requests
+          pip install requests tabulate
           dependencies=$(python build_tools/github/get_latest_dependencies.py)
           json=$(python .github/utils/get_dependency_releases.py $dependencies)
           echo $json
@@ -158,9 +158,8 @@ jobs:
           status: custom
           custom_payload: |
             {
-              text: "Latest dependency release dates",
-              blocks: ${{ env.BLOCKS }}
+              text: "Latest Dependency Releases:\n${{ env.TABLE }}",
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
-          BLOCKS: ${{ steps.dependencies.outputs.json }}
+          TABLE: ${{ steps.dependencies.outputs.json }}
