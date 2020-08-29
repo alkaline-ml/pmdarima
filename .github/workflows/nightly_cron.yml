@@ -32,6 +32,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: Check run_id
+        run: echo $GITZHUB_RUN_ID
+        shell: bash
+
       - name: Checkout
         uses: actions/checkout@master
 
@@ -78,43 +82,39 @@ jobs:
           pytest --showlocals --durations=20 --pyargs pmdarima
         shell: bash
 
-      - name: Check run_id
-        run: echo $GITZHUB_RUN_ID
-        shell: bash
-
       # https://github.com/marketplace/actions/action-slack#custom-notification
-      - name: Posting to Slack
-        uses: 8398a7/action-slack@v3
-        if: failure()
-        with:
-          status: custom
-          custom_payload: |
-            {
-              text: ":no_entry: Nightly Build Failed",
-              attachments: [{
-                "author_name": "Nightly Build", // This one needs to be in quotes for some reason
-                fallback: 'Nightly Build Failed!',
-                color: 'danger',
-                title: 'CI Result',
-                text: 'Failed',
-                fields: [{
-                  title: 'OS',
-                  value: '${{ matrix.os }}',
-                  short: false
-                },
-                {
-                  title: 'Architecture',
-                  value: '${{ matrix.architecture }}',
-                  short: false
-                },
-                {
-                  title: 'Python Version',
-                  value: '${{ matrix.python-version }}',
-                  short: false
-                }],
-                actions: [{}]  // Don't know if we actually need this, but it is shown in the docs as empty
-              }]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
+#      - name: Posting to Slack
+#        uses: 8398a7/action-slack@v3
+#        if: failure()
+#        with:
+#          status: custom
+#          custom_payload: |
+#            {
+#              text: ":no_entry: Nightly Build Failed",
+#              attachments: [{
+#                "author_name": "Nightly Build", // This one needs to be in quotes for some reason
+#                fallback: 'Nightly Build Failed!',
+#                color: 'danger',
+#                title: 'CI Result',
+#                text: 'Failed',
+#                fields: [{
+#                  title: 'OS',
+#                  value: '${{ matrix.os }}',
+#                  short: false
+#                },
+#                {
+#                  title: 'Architecture',
+#                  value: '${{ matrix.architecture }}',
+#                  short: false
+#                },
+#                {
+#                  title: 'Python Version',
+#                  value: '${{ matrix.python-version }}',
+#                  short: false
+#                }],
+#                actions: [{}]  // Don't know if we actually need this, but it is shown in the docs as empty
+#              }]
+#            }
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
 
