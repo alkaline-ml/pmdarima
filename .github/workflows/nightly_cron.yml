@@ -78,6 +78,10 @@ jobs:
           pytest --showlocals --durations=20 --pyargs pmdarima
         shell: bash
 
+      - name: Check run_id
+        run: echo $GITZHUB_RUN_ID
+        shellL: bash
+
       # https://github.com/marketplace/actions/action-slack#custom-notification
       - name: Posting to Slack
         uses: 8398a7/action-slack@v3
