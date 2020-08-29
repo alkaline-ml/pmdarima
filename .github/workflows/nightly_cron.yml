@@ -117,7 +117,7 @@ jobs:
                   },
                   {
                     title: 'Link to Run',
-                    value: '<https://github.com/alkaline-ml/pmdarima/actions/runs/${{ env.RUN_ID }}|HERE>',
+                    value: '<https://github.com/alkaline-ml/pmdarima/actions/runs/$RUN_ID|HERE>',
                     short: false
                   }
                 ],
