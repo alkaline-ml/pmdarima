@@ -148,6 +148,7 @@ jobs:
           pip install requests
           dependencies=$(python build_tools/github/get_latest_dependencies.py)
           json=$(python .github/utils/get_dependency_releases.py $dependencies)
+          echo $json
           echo "::set-output name=json::$json"
         shell: bash
 
@@ -158,13 +159,8 @@ jobs:
           custom_payload: |
             {
               text: "Latest dependency release dates",
-              attachments: [{
-                "author_name": "Nightly Build", // This one needs to be in quotes for some reason
-                fallback: 'Latest dependency release dates',
-                fields: ${{ env.FIELDS }},
-                actions: [{}]  // Don't know if we actually need this, but it is shown in the docs as empty
-              }]
+              blocks: ${{ env.BLOCKS }}
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
-          FIELDS: ${{ steps.dependencies.outputs.json }}
+          BLOCKS: ${{ steps.dependencies.outputs.json }}
