@@ -1,10 +1,21 @@
-from datetime import datetime
+import sys
 
 import requests
 
-session = requests.Session()
-package = 'pmdarima'
+if len(sys.argv) < 2:
+    print(f'Usage: python {sys.argv[0]} <list of packages>')
+    sys.exit(1)
 
-info = session.get(f'https://pypi.org/pypi/{package}/json').json()
-latest_release_date = info['releases'][-1]['upload_time']
-print(latest_release_date)
+packages = sys.argv[1:]
+session = requests.Session()
+
+# Build up our table of release dates
+releases = {}
+for package in packages:
+    pypi = session.get(f'https://pypi.org/pypi/{package}/json').json()
+    latest_version = pypi['info']['version']
+    latest_release_date = pypi['releases'][latest_version][0]['upload_time']
+    releases[package] = latest_release_date.replace('T', ' ') + ' UTC'
+
+session.close()
+# Format as a slack message to return to GitHub Action
