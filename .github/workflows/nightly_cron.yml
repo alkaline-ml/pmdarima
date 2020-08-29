@@ -131,7 +131,7 @@ jobs:
   send_latest_releases:
     needs: [build]
     if: failure()
-    name: Send Latest Releases to Slack
+    name: Send latest dependency releases to Slack
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -146,7 +146,7 @@ jobs:
         id: dependencies  # Needed to retrieve the output of this step later
         run: |
           dependencies=$(python build_tools/github/get_latest_dependencies.py)
-          json=(python .github/utils/get_dependency_releases.py $dependencies)
+          json=$(python .github/utils/get_dependency_releases.py $dependencies)
           echo "::set-output name=json::$json"
         shell: bash
 
