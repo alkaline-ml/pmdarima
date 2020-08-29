@@ -129,6 +129,7 @@ jobs:
 
   send_latest_releases:
     needs: [build]
+    if: failure()
     name: Send Latest Releases to Slack
     runs-on: ubuntu-latest
     steps:
