@@ -147,9 +147,8 @@ jobs:
         run: |
           pip install requests tabulate
           dependencies=$(python build_tools/github/get_latest_dependencies.py)
-          json=$(python .github/utils/get_dependency_releases.py $dependencies)
-          echo $json
-          echo "::set-output name=json::$json"
+          table=$(python .github/utils/get_dependency_releases.py $dependencies)
+          echo "::set-output name=table::table"
         shell: bash
 
       - name: Posting to Slack
@@ -162,4 +161,4 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
-          TABLE: ${{ steps.dependencies.outputs.json }}
+          TABLE: ${{ steps.dependencies.outputs.table }}
