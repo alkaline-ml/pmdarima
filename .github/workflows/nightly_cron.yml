@@ -145,6 +145,7 @@ jobs:
       - name: Get dependency release dates
         id: dependencies  # Needed to retrieve the output of this step later
         run: |
+          pip install requests
           dependencies=$(python build_tools/github/get_latest_dependencies.py)
           json=$(python .github/utils/get_dependency_releases.py $dependencies)
           echo "::set-output name=json::$json"
