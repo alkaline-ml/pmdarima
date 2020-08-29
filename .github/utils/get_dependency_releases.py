@@ -11,7 +11,7 @@ packages = sys.argv[1:]
 session = requests.Session()
 
 releases = []
-for package in sorted(packages):
+for package in packages:
     pypi = session.get(f'https://pypi.org/pypi/{package}/json').json()
     latest_version = pypi['info']['version']
     latest_release_date = pypi['releases'][latest_version][0]['upload_time']
