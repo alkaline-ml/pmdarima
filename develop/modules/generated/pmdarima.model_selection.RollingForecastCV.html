@@ -199,7 +199,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.RollingForecastCV<a class="headerlink" href="#pmdarima-model-selection-rollingforecastcv" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.model_selection.RollingForecastCV">
-<em class="property">class </em><code class="descclassname">pmdarima.model_selection.</code><code class="descname">RollingForecastCV</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>initial=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/8fefd343/pmdarima/model_selection/_split.py#L133"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#RollingForecastCV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.RollingForecastCV" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.model_selection.</code><code class="descname">RollingForecastCV</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>initial=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/1cc18db6/pmdarima/model_selection/_split.py#L133"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#RollingForecastCV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.RollingForecastCV" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use a rolling forecast to perform cross validation</p>
 <p>Sometimes called “evaluation on a rolling forecasting origin” [1], this
 approach to CV incrementally grows the training size while using a single
@@ -321,13 +321,13 @@ in the training fold:</p>
 </table>
 <dl class="method">
 <dt id="pmdarima.model_selection.RollingForecastCV.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>initial=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/8fefd343/pmdarima/model_selection/_split.py#L214"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#RollingForecastCV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.RollingForecastCV.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>h=1</em>, <em>step=1</em>, <em>initial=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/1cc18db6/pmdarima/model_selection/_split.py#L214"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#RollingForecastCV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.RollingForecastCV.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.model_selection.RollingForecastCV.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/8fefd343/pmdarima/../sklearn/base.py#L189"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.RollingForecastCV.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/1cc18db6/pmdarima/../sklearn/base.py#L189"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.RollingForecastCV.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -358,7 +358,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.model_selection.RollingForecastCV.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/8fefd343/pmdarima/../sklearn/base.py#L221"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.RollingForecastCV.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/1cc18db6/pmdarima/../sklearn/base.py#L221"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.RollingForecastCV.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -386,7 +386,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.model_selection.RollingForecastCV.split">
-<code class="descname">split</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/8fefd343/pmdarima/model_selection/_split.py#L92"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.RollingForecastCV.split" title="Permalink to this definition">¶</a></dt>
+<code class="descname">split</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/1cc18db6/pmdarima/model_selection/_split.py#L92"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.RollingForecastCV.split" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate indices to split data into training and test sets</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
