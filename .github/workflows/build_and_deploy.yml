@@ -3,7 +3,7 @@ name: Mac and Windows Builds
 on:
   push:
     branches:
-      - '*'
+      - 'master'
     tags:
       - '*'
 
