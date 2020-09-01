@@ -3,7 +3,7 @@ name: Test VERSION tagging
 on:
   push:
     branches:
-      - '*'
+      - 'master'
 
   pull_request:
     branches:
