@@ -32,9 +32,9 @@ possible.
     [CV] fold=0 ..........................................................
     [CV] fold=1 ..........................................................
     [CV] fold=2 ..........................................................
-    Model 1 CV scores: [23.928976841681518, 22.289666122815046, 3.7484080171047283]
-    Model 2 CV scores: [1.4413474767581218, 15.413429218463346, 5.572225774148651]
-    Lowest average SMAPE: 7.47566748979004 (model2)
+    Model 1 CV scores: [23.92897591530385, 22.289666174351435, 3.7484075369532053]
+    Model 2 CV scores: [1.4772800360106546, 15.413428596219074, 5.57222577821664]
+    Lowest average SMAPE: 7.487644803482123 (model2)
     Best model:  ARIMA(1,1,2)(0,1,1)[12] intercept
 
 
@@ -90,7 +90,7 @@ possible.
         errors[better_index], better_index + 1))
     print("Best model: {}".format(models[better_index]))
 
-**Total running time of the script:** ( 0 minutes  3.849 seconds)
+**Total running time of the script:** ( 0 minutes  3.184 seconds)
 
 
 
