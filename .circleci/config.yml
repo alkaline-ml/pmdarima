@@ -66,14 +66,6 @@ commands:
             ./build_tools/circle/deploy.sh
 
 jobs:
-  # For testing PyPy rather than CPython
-  pypy:
-    docker:
-      - image: alkalineml/pmdarima-circle-pypy-base:latest
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - run: ./build_tools/circle/build_test_pypy.sh
 
   cpython35:
     docker:
@@ -229,8 +221,6 @@ workflows:
             filters: *test-only-filters
 
         # run on test and tag
-        - pypy:
-            filters: *test-filters
         - cpython35:
             filters: *test-filters
         - cpython36:
@@ -247,7 +237,6 @@ workflows:
             filters: *test-filters
         - testing-passed:
             requires:
-                - pypy
                 - cpython35
                 - cpython36
                 - cpython37
