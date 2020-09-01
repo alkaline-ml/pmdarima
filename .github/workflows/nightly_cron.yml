@@ -30,6 +30,8 @@ jobs:
             architecture: x86
 
     runs-on: ${{ matrix.os }}
+    outputs:
+      dependency-table: ${{ steps.dependency-table.outputs.table }}
 
     steps:
       - name: Checkout
@@ -50,12 +52,36 @@ jobs:
         run: python -m pip install --upgrade pip
         shell: bash
 
-      - name: Collecting latest dependencies
+      - name: Collecting naked dependencies
         id: dependencies  # Needed to retrieve the output of this step later
         run: |
           dependencies=$(python build_tools/github/get_latest_dependencies.py)
-          echo "::set-output name=latest_dependencies::${dependencies}"
+          echo "::set-output name=latest_dependencies::$dependencies"
         shell: bash
+
+        # https://github.com/actions/cache/blob/master/examples.md#using-pip-to-get-cache-location
+      - name: Get pip cache dir
+        id: pip-cache-dir-path
+        run: echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: Generating cache key file
+        id: dependency-table  # Needed to set output of job
+        run: |
+          pip install requests tabulate
+          dependencies=$(python build_tools/github/get_latest_dependencies.py)
+          table=$(python .github/utils/get_dependency_releases.py $dependencies)
+          echo $table > dependencies_key.txt
+
+          # This is used in the next job (if necessary) rather than re-running the above
+          echo "::set-output name=table::$table"
+        shell: bash
+
+      - name: Check for cache hit
+        id: pip-cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/dependencies_key.txt') }}
 
       # We install one-by-one because some dependencies depend on others
       - name: Installing dependencies
@@ -142,15 +168,6 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: Get dependency release dates
-        id: dependencies  # Needed to retrieve the output of this step later
-        run: |
-          pip install requests tabulate
-          dependencies=$(python build_tools/github/get_latest_dependencies.py)
-          table=$(python .github/utils/get_dependency_releases.py $dependencies)
-          echo "::set-output name=table::$table"
-        shell: bash
-
       - name: Posting to Slack
         uses: 8398a7/action-slack@v3
         with:
@@ -161,4 +178,4 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.NIGHTLY_SLACK_CHANNEL }}
-          TABLE: ${{ steps.dependencies.outputs.table }}
+          TABLE: ${{ needs.build.outputs.dependency-table }}
