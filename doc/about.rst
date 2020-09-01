@@ -60,7 +60,7 @@ This is an open-source (read: *FREE*) project. That means several things:
 * It's a community effort
 * Making demands doesn't go over well
 
-I know that there are those who have built models with Pyramid-arima as a tool
+I know that there are those who have built models with pmdarima as a tool
 to support their work. I also know that people can depend on the functionality of
 this library in order to do their job well. And for that, I'm committed to
 keeping things running smoothly.
