@@ -30,6 +30,7 @@ jobs:
             architecture: x86
 
     runs-on: ${{ matrix.os }}
+
     outputs:
       dependency-table: ${{ steps.dependency-table.outputs.table }}
 
