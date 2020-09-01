@@ -68,13 +68,14 @@ jobs:
         id: dependency-table  # Needed to set output of job
         run: |
           pip install requests tabulate
-          dependencies=$(python build_tools/github/get_latest_dependencies.py)
-          table=$(python .github/utils/get_dependency_releases.py $dependencies)
+          table=$(python .github/utils/get_dependency_releases.py $DEPENDENCIES)
           echo $table > dependencies_key.txt
 
           # This is used in the next job (if necessary) rather than re-running the above
           echo "::set-output name=table::$table"
         shell: bash
+        env:
+          DEPENDENCIES: ${{ steps.dependencies.outputs.latest_dependencies }}
 
       - name: Check for cache hit
         id: pip-cache
@@ -85,6 +86,7 @@ jobs:
 
       # We install one-by-one because some dependencies depend on others
       - name: Installing dependencies
+        if: steps.pip-cache.outputs.cache-hit != 'true'
         run: |
           for dependency in $DEPENDENCIES; do
             python -m pip install $dependency
@@ -94,14 +96,17 @@ jobs:
           DEPENDENCIES: ${{ steps.dependencies.outputs.latest_dependencies }}
 
       - name: Building wheel
+        if: steps.pip-cache.outputs.cache-hit != 'true'
         run: make bdist_wheel
         shell: bash
 
       - name: Installing generated wheel
+        if: steps.pip-cache.outputs.cache-hit != 'true'
         run: pip install --pre --no-index --find-links dist/ pmdarima
         shell: bash
 
       - name: Running unit tests
+        if: steps.pip-cache.outputs.cache-hit != 'true'
         run: |
           if [ "${{ matrix.os }}" == "macos-latest" ]; then
             export PMD_MPL_BACKEND=TkAgg
