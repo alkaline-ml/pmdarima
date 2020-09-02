@@ -21,9 +21,7 @@ To run this example, you'll need pmdarima version 1.5.2 or greater. If you're
 running this in a notebook, make sure to include ``%matplotlib inline``, or the plots
 will not show up under your cells!
 
-This example was also designed for Python 3.6+. If you're running python 3.5, simply
-remove the `F-string <https://www.python.org/dev/peps/pep-0498/>`_ print statements and
-it will work.
+Keep in mind you'll need Python 3.6+ to install ``pmdarima``.
 
 .. code-block:: python
 

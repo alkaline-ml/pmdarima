@@ -8,6 +8,13 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
+`v1.8.0 <http://alkaline-ml.com/pmdarima/1.8.0/>`_
+--------------------------------------------------
+
+* Wheels are no longer built for ``pmdarima`` on Python <3.6, and backward-compatibility
+  is no longer guaranteed for older python versions.
+
+
 `v1.7.1 <http://alkaline-ml.com/pmdarima/1.7.1/>`_
 --------------------------------------------------
 
