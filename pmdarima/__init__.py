@@ -6,6 +6,8 @@
 
 from pathlib import Path
 import os as _os
+import sys as _sys
+import warnings as _warnings
 
 # PEP0440 compatible formatted version, see:
 # https://www.python.org/dev/peps/pep-0440/
@@ -87,8 +89,24 @@ else:
         'StepwiseContext',
     ]
 
+    _min_version = (3, 6)
+    _py_version = _sys.version_info
+    if _py_version < _min_version:
+        _warnings.warn(
+            "pmdarima is not built or tested against versions of python "
+            "older than {0}.{1}. Your python version ({2}.{3}.{4}) is "
+            "not guaranteed to be supported".format(
+                _min_version[0], _min_version[1],
+                _py_version.major, _py_version.minor, _py_version.micro,
+            )
+        )
+
     # Delete unwanted variables from global
+    del _min_version
     del _os
+    del _py_version
+    del _sys
+    del _warnings
     del __check_build
     del __PMDARIMA_SETUP__
 
