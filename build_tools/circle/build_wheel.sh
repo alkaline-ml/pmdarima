@@ -21,7 +21,7 @@ function build_wheel {
 	       min='${pyver}'.split('.')[1], \
 	       ucs='${ucs_tag}'))")
 
-    DOCKER_CONTAINER_NAME="wheel_builder"
+    DOCKER_CONTAINER_NAME=wheel_builder_$(uuidgen)
 
     # Pin this image because wheel versions in later tags conflict
     ML_IMAGE="quay.io/pypa/manylinux1_${arch}:2020-01-31-d8fa357"

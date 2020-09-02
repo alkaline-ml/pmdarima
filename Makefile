@@ -51,22 +51,19 @@ develop: version
 install: version
 	$(PYTHON) setup.py install
 
-test-requirements:
-	$(PYTHON) -m pip install pytest flake8 matplotlib pytest-mpl pytest-benchmark
+lint-requirements:
+	$(PYTHON) -m pip install flake8
 
-coverage-dependencies:
-	$(PYTHON) -m pip install coverage pytest-cov codecov
+testing-requirements:
+	$(PYTHON) -m pip install pytest flake8 matplotlib pytest-mpl pytest-benchmark coverage pytest-cov codecov
 
-test-lint: test-requirements
+test-lint:
 	$(PYTHON) -m flake8 pmdarima --filename='*.py' --ignore F401,F403,W293,W504
 
-test-unit: test-requirements coverage-dependencies
+test-unit:
 	$(PYTHON) -m pytest -v --durations=20 --cov-config .coveragerc --cov pmdarima -p no:logging --benchmark-skip
 
-test-benchmark: test-requirements coverage-dependencies
-	$(PYTHON) -m pytest -v --durations=12 --cov-config .coveragerc --cov pmdarima -p no:logging --benchmark-min-rounds=5 --benchmark-min-time=1 --benchmark-only
-
-test: develop test-unit test-lint
+test: test-unit test-lint
 	# Coverage creates all these random little artifacts we don't want
 	rm .coverage.* || echo "No coverage artifacts to remove"
 

@@ -15,11 +15,11 @@ from distutils.command.clean import clean as Clean
 from pkg_resources import parse_version
 import traceback
 import importlib
-try:
-    import builtins
-except ImportError:
-    # python 2 compat: just to be able to declare that Python >=3.5 is needed
-    import __builtin__ as builtins
+
+import builtins
+
+# Minimum allowed version
+MIN_PYTHON = (3, 6)
 
 # Hacky (!!), adopted from sklearn. This sets a global variable
 # so pmdarima __init__ can detect if it's being loaded in the setup
@@ -57,7 +57,7 @@ VERSION = pmdarima.__version__  # will be 0.0.0 unless tagging
 # get the installation requirements:
 with open('requirements.txt') as req:
     REQUIREMENTS = [l for l in req.read().split(os.linesep) if l]
-    print("Requirements: %r" % REQUIREMENTS)
+    print(f"Requirements: {REQUIREMENTS}")
 
 # Optional setuptools features
 SETUPTOOLS_COMMANDS = {  # this is a set literal, not a dict
@@ -109,7 +109,7 @@ class CleanCommand(Clean):
             for filename in filenames:
                 if any(filename.endswith(suffix) for suffix in
                        (".so", ".pyd", ".dll", ".pyc")):
-                    print('Removing file: %s' % filename)
+                    print(f'Removing file: {filename}')
                     os.unlink(os.path.join(dirpath, filename))
                     continue
                 extension = os.path.splitext(filename)[1]
@@ -120,7 +120,7 @@ class CleanCommand(Clean):
             for dirname in dirnames:
                 if dirname == '__pycache__':
                     absdir = os.path.join(dirpath, dirname)
-                    print('Removing directory: %s' % absdir)
+                    print(f'Removing directory: {absdir}')
                     shutil.rmtree(absdir)
 
 
@@ -139,7 +139,7 @@ try:
 
 except ImportError:
     # Numpy should not be a dependency just to be able to introspect
-    # that python 3.5 is required.
+    # that python 3.X is required.
     pass
 
 # Here is where scikit configures the wheelhouse uploader, but we don't deal
@@ -231,17 +231,14 @@ def do_setup():
                         'Operating System :: Unix',
                         'Operating System :: MacOS',
                         'Programming Language :: Python :: 3',
-                        'Programming Language :: Python :: 3.5',
                         'Programming Language :: Python :: 3.6',
                         'Programming Language :: Python :: 3.7',
                         'Programming Language :: Python :: 3.8',
                         ('Programming Language :: Python :: '
                          'Implementation :: CPython'),
-                        ('Programming Language :: Python :: '
-                         'Implementation :: PyPy')
                     ],
                     cmdclass=cmdclass,
-                    python_requires='>=3.5',
+                    python_requires=f'>={MIN_PYTHON[0]}.{MIN_PYTHON[1]}',
                     install_requires=REQUIREMENTS,
                     # We have a MANIFEST.in, so I'm not convinced this is fully
                     # necessary, but better to be safe since we've had sdist
@@ -295,11 +292,17 @@ def do_setup():
         metadata['version'] = VERSION
 
     else:
-        if sys.version_info < (3, 5):
+        if sys.version_info < MIN_PYTHON:
             raise RuntimeError(
-                "pmdarima requires Python 3.5 or later. The current "
-                "Python version is %s installed in %s."
-                % (platform.python_version(), sys.executable))
+                # Don't make this an F-string so that the error can be rendered
+                # on older versions of python
+                "pmdarima requires Python {0}.{1} or later. The current "
+                "Python version is {2} installed in {3}.".format(
+                    MIN_PYTHON[0], MIN_PYTHON[1],
+                    platform.python_version(),
+                    sys.executable
+                )
+            )
 
         # for sdist, use setuptools so we get the long_description_content_type
         if 'sdist' in sys.argv:

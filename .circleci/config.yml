@@ -36,6 +36,7 @@ commands:
     steps:
       - checkout
       - run: make develop
+      - run: make testing-requirements
       - run: make test-unit
       - run: codecov || echo "codecov upload failed"
 
@@ -66,13 +67,6 @@ commands:
             ./build_tools/circle/deploy.sh
 
 jobs:
-
-  cpython35:
-    docker:
-      - image: python:3.5
-    working_directory: ~/pmdarima
-    steps:
-    - make-unit-test
 
   cpython36:
     docker:
@@ -116,6 +110,7 @@ jobs:
     working_directory: ~/pmdarima
     steps:
     - checkout
+    - run: make lint-requirements
     - run: make test-lint
 
   # Test env vars from tags produce VERSION file
@@ -153,15 +148,6 @@ jobs:
   # capacity, so should be run on machines
   #
   # ############################################
-  deploy-cpython35-whl:
-    machine:
-      image: circleci/classic:latest
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - build-whl-file:
-          pythonversion: "3.5"
-      - deploy-to-pypi
 
   deploy-cpython36-whl:
     machine:
@@ -221,8 +207,6 @@ workflows:
             filters: *test-only-filters
 
         # run on test and tag
-        - cpython35:
-            filters: *test-filters
         - cpython36:
             filters: *test-filters
         - cpython37:
@@ -237,7 +221,6 @@ workflows:
             filters: *test-filters
         - testing-passed:
             requires:
-                - cpython35
                 - cpython36
                 - cpython37
                 - cpython38
@@ -252,11 +235,6 @@ workflows:
                 - build-doc
                 - testing-passed
             filters: *test-filters
-
-        - deploy-cpython35-whl:
-            filters: *deploy-filters
-            requires:
-                - deploy-doc
 
         - deploy-cpython36-whl:
             filters: *deploy-filters
