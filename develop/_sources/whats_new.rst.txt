@@ -8,6 +8,16 @@ As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
 
+`v1.7.1 <http://alkaline-ml.com/pmdarima/1.7.1/>`_
+--------------------------------------------------
+
+* Pin ``setuptools<50.0.0``
+
+* Pin ``statsmodels<0.12``
+
+* Warn for Python versions <3.6. We will remove Python 3.5 support in version 1.8.0
+
+
 `v1.7.0 <http://alkaline-ml.com/pmdarima/1.7.0/>`_
 --------------------------------------------------
 
