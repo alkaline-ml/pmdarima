@@ -21,8 +21,7 @@ Here's what you'll need to run this example:
   * Matplotlib - It's not a hard requirement of the package itself, but you'll need it
     to run these examples (if you're running this in a notebook, make sure to include ``%matplotlib inline``)
 
-  * Python 3.6+. If you're running python 3.5, simply remove the `F-string <https://www.python.org/dev/peps/pep-0498/>`_
-    print statements and it will work.
+  * Python 3.6+
 
 
 Imports, data loading & splitting
