@@ -14,4 +14,4 @@ is transparent and makes sense to all users.
    :maxdepth: 2
    :hidden:
 
-   Renaming the ``exogenous`` argument <./372-exog-to-x-rst.rst>
+   Renaming the ``exogenous`` argument <./372-exog-to-x.rst>
