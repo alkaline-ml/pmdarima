@@ -9,8 +9,8 @@ pmdarima: ARIMA estimators for Python
 
 ``pmdarima`` brings R's beloved ``auto.arima`` to Python, making an even stronger
 case for why you don't need R for data science. ``pmdarima`` is 100% Python + Cython
-and does not leverage any R code, and implements a single, easy-to-use
-scikit-learn-esque estimator.
+and does not leverage any R code, but is implemented in a powerful, yet easy-to-use set of
+functions & classes that will be familiar to scikit-learn users.
 
 .. toctree::
    :maxdepth: 2
@@ -20,6 +20,7 @@ scikit-learn-esque estimator.
    Examples <./auto_examples/index.rst>
    User Guide <./user_guide.rst>
    What's New? <./whats_new.rst>
+   RFCs <./rfc/index.rst>
 
 
 .. raw:: html
