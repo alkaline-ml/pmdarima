@@ -106,14 +106,14 @@ def test_issue_30():
     # This is a way to force it:
     ARIMA(order=(0, 1, 0), out_of_sample_size=1).fit(vec)
 
-    # Want to make sure it works with exog arrays as well
-    exog = np.random.RandomState(1).rand(vec.shape[0], 2)
-    auto_arima(vec, exogenous=exog, out_of_sample_size=1,
+    # Want to make sure it works with X arrays as well
+    X = np.random.RandomState(1).rand(vec.shape[0], 2)
+    auto_arima(vec, X=X, out_of_sample_size=1,
                seasonal=False,
                suppress_warnings=True)
 
     # This is a way to force it:
-    ARIMA(order=(0, 1, 0), out_of_sample_size=1).fit(vec, exogenous=exog)
+    ARIMA(order=(0, 1, 0), out_of_sample_size=1).fit(vec, X=X)
 
 
 @pytest.mark.parametrize(
@@ -139,11 +139,11 @@ def test_predict_in_sample_conf_int(model):
         ARIMA(order=(2, 1, 0), seasonal_order=(1, 0, 0, 12)),  # sarimax
     ]
 )
-@pytest.mark.parametrize('exog', [None, rs.rand(wineind.shape[0], 2)])
+@pytest.mark.parametrize('X', [None, rs.rand(wineind.shape[0], 2)])
 @pytest.mark.parametrize('confints', [True, False])
-def test_predict_in_sample_exog(model, exog, confints):
-    model.fit(wineind, exogenous=exog)
-    res = model.predict_in_sample(exog, return_conf_int=confints)
+def test_predict_in_sample_X(model, X, confints):
+    model.fit(wineind, X=X)
+    res = model.predict_in_sample(X, return_conf_int=confints)
     if confints:
         assert isinstance(res, tuple) and len(res) == 2
     else:
@@ -157,17 +157,17 @@ def _two_times_mse(y_true, y_pred, **_):
 
 @pytest.mark.parametrize('as_pd', [True, False])
 @pytest.mark.parametrize('scoring', ['mse', _two_times_mse])
-def test_with_oob_and_exog(as_pd, scoring):
+def test_with_oob_and_X(as_pd, scoring):
     endog = hr
-    exog = np.random.RandomState(1).rand(hr.shape[0], 3)
+    X = np.random.RandomState(1).rand(hr.shape[0], 3)
     if as_pd:
-        exog = pd.DataFrame.from_records(exog)
+        X = pd.DataFrame.from_records(X)
         endog = pd.Series(hr)
 
     arima = ARIMA(order=(2, 1, 2),
                   suppress_warnings=True,
                   scoring=scoring,
-                  out_of_sample_size=10).fit(y=endog, exogenous=exog)
+                  out_of_sample_size=10).fit(y=endog, X=X)
 
     # show we can get oob score and preds
     arima.oob()
@@ -208,12 +208,12 @@ def test_with_oob():
 
 # Test Issue #28 ----------------------------------------------------------
 def test_oob_for_issue_28():
-    # Continuation of above: can we do one with an exogenous array, too?
+    # Continuation of above: can we do one with an X array, too?
     xreg = rs.rand(hr.shape[0], 4)
     arima = ARIMA(order=(2, 1, 2),
                   suppress_warnings=True,
                   out_of_sample_size=10).fit(
-        y=hr, exogenous=xreg)
+        y=hr, X=xreg)
 
     oob = arima.oob()
     assert not np.isnan(oob)
@@ -223,7 +223,7 @@ def test_oob_for_issue_28():
     assert np.allclose(arima.arima_res_.data.endog, hr, rtol=1e-2)
     assert arima.arima_res_.model.endog.shape[0] == hr.shape[0]
 
-    # Now assert the same for exog
+    # Now assert the same for X
     assert np.allclose(arima.arima_res_.data.exog, xreg, rtol=1e-2)
     assert arima.arima_res_.model.exog.shape[0] == xreg.shape[0]
 
@@ -234,10 +234,10 @@ def test_oob_for_issue_28():
     arima_no_oob = ARIMA(
         order=(2, 1, 2), suppress_warnings=True,
         out_of_sample_size=0).fit(y=hr[:-10],
-                                  exogenous=xreg[:-10, :])
+                                  X=xreg[:-10, :])
 
     scoring = val.get_scoring_metric(arima_no_oob.scoring)
-    preds = arima_no_oob.predict(n_periods=10, exogenous=xreg[-10:, :])
+    preds = arima_no_oob.predict(n_periods=10, X=xreg[-10:, :])
     assert np.allclose(oob, scoring(hr[-10:], preds), rtol=1e-2)
 
     # Show that the model parameters are not the same because the model was
@@ -246,9 +246,9 @@ def test_oob_for_issue_28():
     assert not np.allclose(arima.params(), arima_no_oob.params(), rtol=1e-2)
 
     # Now assert on the forecast differences.
-    with_oob_forecasts = arima.predict(n_periods=5, exogenous=xreg_test)
+    with_oob_forecasts = arima.predict(n_periods=5, X=xreg_test)
     no_oob_forecasts = arima_no_oob.predict(n_periods=5,
-                                            exogenous=xreg_test)
+                                            X=xreg_test)
 
     with pytest.raises(AssertionError):
         assert_array_almost_equal(with_oob_forecasts, no_oob_forecasts)
@@ -256,7 +256,7 @@ def test_oob_for_issue_28():
     # But after we update the no_oob model with the latest data, we should
     # be producing the same exact forecasts
 
-    # First, show we'll fail if we try to add observations with no exogenous
+    # First, show we'll fail if we try to add observations with no X
     with pytest.raises(ValueError):
         arima_no_oob.update(hr[-10:], None)
 
@@ -264,15 +264,14 @@ def test_oob_for_issue_28():
     with pytest.raises(ValueError):
         arima_no_oob.update(hr[-10:], xreg_test)
 
-    # Show we fail if we try to add observations with a different dim exog
+    # Show we fail if we try to add observations with a different dim X
     with pytest.raises(ValueError):
         arima_no_oob.update(hr[-10:], xreg_test[:, :2])
 
     # Actually add them now, and compare the forecasts (should be the same)
     arima_no_oob.update(hr[-10:], xreg[-10:, :])
     assert np.allclose(with_oob_forecasts,
-                       arima_no_oob.predict(n_periods=5,
-                                            exogenous=xreg_test),
+                       arima_no_oob.predict(n_periods=5, X=xreg_test),
                        rtol=1e-2)
 
 
@@ -283,21 +282,21 @@ def test_oob_sarimax():
     fit = ARIMA(order=(1, 1, 1),
                 seasonal_order=(0, 1, 1, 12),
                 maxiter=5,
-                out_of_sample_size=15).fit(y=wineind, exogenous=xreg)
+                out_of_sample_size=15).fit(y=wineind, X=xreg)
 
     fit_no_oob = ARIMA(order=(1, 1, 1),
                        seasonal_order=(0, 1, 1, 12),
                        out_of_sample_size=0,
                        maxiter=5,
                        suppress_warnings=True).fit(y=wineind[:-15],
-                                                   exogenous=xreg[:-15, :])
+                                                   X=xreg[:-15, :])
 
     # now assert some of the same things here that we did in the former test
     oob = fit.oob()
 
     # compare scores:
     scoring = val.get_scoring_metric(fit_no_oob.scoring)
-    no_oob_preds = fit_no_oob.predict(n_periods=15, exogenous=xreg[-15:, :])
+    no_oob_preds = fit_no_oob.predict(n_periods=15, X=xreg[-15:, :])
     assert np.allclose(oob, scoring(wineind[-15:], no_oob_preds), rtol=1e-2)
 
     # show params are no longer the same
@@ -330,22 +329,20 @@ class TestIssue29:
 
     @pytest.mark.parametrize('d', [0, 1])
     @pytest.mark.parametrize('cv', [0, 3])
-    @pytest.mark.parametrize('exog', [xreg, None])
-    def test_oob_for_issue_29(self, d, cv, exog):
+    @pytest.mark.parametrize('X', [xreg, None])
+    def test_oob_for_issue_29(self, d, cv, X):
         model = ARIMA(order=(2, d, 0),
-                      out_of_sample_size=cv).fit(self.dta,
-                                                 exogenous=exog)
+                      out_of_sample_size=cv).fit(self.dta, X=X)
 
-        # If exogenous is defined, we need to pass n_periods of
-        # exogenous rows to the predict function. Otherwise we'll
+        # If X is defined, we need to pass n_periods of
+        # X rows to the predict function. Otherwise we'll
         # just leave it at None
-        if exog is not None:
-            xr = exog[:3, :]
+        if X is not None:
+            xr = X[:3, :]
         else:
             xr = None
 
-        _, _ = model.predict(n_periods=3, return_conf_int=True,
-                             exogenous=xr)
+        _, _ = model.predict(n_periods=3, return_conf_int=True, X=xr)
 
 
 def _try_get_attrs(arima):
@@ -366,10 +363,9 @@ def test_more_elaborate():
     arima = ARIMA(order=(2, 1, 2), suppress_warnings=True).fit(y=hr)
     _try_get_attrs(arima)
 
-    # can we fit this same arima with a made-up exogenous array?
+    # can we fit this same arima with a made-up X array?
     xreg = rs.rand(hr.shape[0], 4)
-    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True).fit(
-        y=hr, exogenous=xreg)
+    arima = ARIMA(order=(2, 1, 2), suppress_warnings=True).fit(y=hr, X=xreg)
     _try_get_attrs(arima)
 
     with tempfile.TemporaryDirectory() as tdir:
@@ -383,25 +379,25 @@ def test_more_elaborate():
 
         # show we can predict with this even though it's been pickled
         new_xreg = rs.rand(5, 4)
-        _preds = arima.predict(n_periods=5, exogenous=new_xreg)
+        _preds = arima.predict(n_periods=5, X=new_xreg)
 
         # now unpickle
         with open(fl, 'rb') as p:
             other = pickle.load(p)
 
         # show we can still predict, compare
-        _other_preds = other.predict(n_periods=5, exogenous=new_xreg)
+        _other_preds = other.predict(n_periods=5, X=new_xreg)
         assert_array_almost_equal(_preds, _other_preds)
 
-    # now show that since we fit the ARIMA with an exogenous array,
+    # now show that since we fit the ARIMA with an X array,
     # we need to provide one for predictions otherwise it breaks.
     with pytest.raises(ValueError):
-        arima.predict(n_periods=5, exogenous=None)
+        arima.predict(n_periods=5, X=None)
 
-    # show that if we DO provide an exogenous and it's the wrong dims, we
+    # show that if we DO provide an X and it's the wrong dims, we
     # also break things down.
     with pytest.raises(ValueError):
-        arima.predict(n_periods=5, exogenous=rs.rand(4, 4))
+        arima.predict(n_periods=5, X=rs.rand(4, 4))
 
 
 def test_the_r_src():

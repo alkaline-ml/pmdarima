@@ -283,7 +283,7 @@ class StepwiseContext(AbstractContext):
 
 
 def auto_arima(y,
-               exogenous=None,
+               X=None,
                start_p=2,
                d=None,
                start_q=2,
@@ -327,6 +327,9 @@ def auto_arima(y,
                **fit_args):
 
     # NOTE: Doc is assigned BELOW this function
+
+    # Temporary shim until we remove `exogenous` support completely
+    X, kwargs = pm_compat.get_X(X, **fit_args)
 
     # pop out the deprecated kwargs
     fit_args = _warn_for_deprecations(**fit_args)

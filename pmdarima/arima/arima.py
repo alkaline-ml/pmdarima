@@ -20,6 +20,7 @@ from ..compat.numpy import DTYPE  # DTYPE for arrays
 from ..compat.sklearn import check_is_fitted, safe_indexing
 from ..compat import statsmodels as sm_compat
 from ..compat import matplotlib as mpl_compat
+from ..compat import pmdarima as pm_compat
 from ..utils import if_has_delegate, is_iterable, check_endog, check_exog
 from ..utils.visualization import _get_plt
 
@@ -59,7 +60,11 @@ def _append_to_endog(endog, new_y):
         np.concatenate((endog.ravel(), new_y))[:, np.newaxis]
 
 
-def _seasonal_prediction_with_confidence(arima_res, start, end, exog, alpha,
+def _seasonal_prediction_with_confidence(arima_res,
+                                         start,
+                                         end,
+                                         X,
+                                         alpha,
                                          **kwargs):
     """Compute the prediction for a SARIMAX and get a conf interval
 
@@ -74,7 +79,7 @@ def _seasonal_prediction_with_confidence(arima_res, start, end, exog, alpha,
     results = arima_res.get_prediction(
         start=start,
         end=end,
-        exog=exog,
+        exog=X,
         **kwargs)
 
     f = results.predicted_mean
@@ -323,8 +328,11 @@ class ARIMA(BaseARIMA):
 
         self.sarimax_kwargs = sarimax_kwargs
 
-    def _fit(self, y, exogenous=None, **fit_args):
+    def _fit(self, y, X=None, **fit_args):
         """Internal fit"""
+
+        # Temporary shim until we remove `exogenous` support completely
+        X, fit_args = pm_compat.get_X(X, **fit_args)
 
         # This wrapper is used for fitting either an ARIMA or a SARIMAX
         def _fit_wrapper():
@@ -354,7 +362,7 @@ class ARIMA(BaseARIMA):
             seasonal_order = \
                 sm_compat.check_seasonal_order(self.seasonal_order)
             arima = sm.tsa.statespace.SARIMAX(
-                endog=y, exog=exogenous, order=self.order,
+                endog=y, exog=X, order=self.order,
                 seasonal_order=seasonal_order,
                 trend=trend,
                 **sarimax_kwargs)
@@ -401,7 +409,7 @@ class ARIMA(BaseARIMA):
 
         # if the model is fit with an exogenous array, it must
         # be predicted with one as well.
-        self.fit_with_exog_ = exogenous is not None
+        self.fit_with_exog_ = X is not None
 
         # Save nobs since we might change it later if using OOB
         self.nobs_ = y.shape[0]
@@ -411,9 +419,9 @@ class ARIMA(BaseARIMA):
         self.pkg_version_ = pmdarima.__version__
         return self
 
-    def fit(self, y, exogenous=None, **fit_args):
+    def fit(self, y, X=None, **fit_args):
         """Fit an ARIMA to a vector, ``y``, of observations with an
-        optional matrix of ``exogenous`` variables.
+        optional matrix of ``X`` variables.
 
         Parameters
         ----------
@@ -424,7 +432,7 @@ class ARIMA(BaseARIMA):
             one-dimensional array of floats, and should not contain any
             ``np.nan`` or ``np.inf`` values.
 
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -437,10 +445,12 @@ class ARIMA(BaseARIMA):
         y = check_endog(y, dtype=DTYPE)
         n_samples = y.shape[0]
 
+        # Temporary shim until we remove `exogenous` support completely
+        X, fit_args = pm_compat.get_X(X, **fit_args)
+
         # if exog was included, check the array...
-        if exogenous is not None:
-            exogenous = check_exog(exogenous, force_all_finite=False,
-                                   copy=False, dtype=DTYPE)
+        if X is not None:
+            X = check_exog(X, force_all_finite=False, copy=False, dtype=DTYPE)
 
         # determine the CV args, if any
         cv = self.out_of_sample_size
@@ -462,21 +472,21 @@ class ARIMA(BaseARIMA):
             cv_samples = y[-cv:]
             y = y[:-cv]
 
-            # This also means we have to address the exogenous matrix
-            if exogenous is not None:
-                n_exog = exogenous.shape[0]
-                cv_exog = safe_indexing(exogenous, slice(n_exog - cv, n_exog))
-                exogenous = safe_indexing(exogenous, slice(0, n_exog - cv))
+            # This also means we have to address X
+            if X is not None:
+                n_exog = X.shape[0]
+                cv_exog = safe_indexing(X, slice(n_exog - cv, n_exog))
+                X = safe_indexing(X, slice(0, n_exog - cv))
 
         # Internal call
-        self._fit(y, exogenous, **fit_args)
+        self._fit(y, X, **fit_args)
 
         # now make a forecast if we're validating to compute the
         # out-of-sample score
         if cv_samples is not None:
             # get the predictions (use self.predict, which calls forecast
             # from statsmodels internally)
-            pred = self.predict(n_periods=cv, exogenous=cv_exog)
+            pred = self.predict(n_periods=cv, X=cv_exog)
             scoring_args = {} if not self.scoring_args else self.scoring_args
             self.oob_ = scoring(cv_samples, pred, **scoring_args)
             self.oob_preds_ = pred
@@ -491,21 +501,25 @@ class ARIMA(BaseARIMA):
 
         return self
 
-    def _check_exog(self, exogenous):
+    def _check_exog(self, X):
         # if we fit with exog, make sure one was passed, or else fail out:
         if self.fit_with_exog_:
-            if exogenous is None:
-                raise ValueError('When an ARIMA is fit with an exogenous '
+            if X is None:
+                raise ValueError('When an ARIMA is fit with an X '
                                  'array, it must also be provided one for '
                                  'predicting or updating observations.')
             else:
-                return check_exog(
-                    exogenous, force_all_finite=True, dtype=DTYPE)
+                return check_exog(X, force_all_finite=True, dtype=DTYPE)
         return None
 
-    def predict_in_sample(self, exogenous=None, start=None,
-                          end=None, dynamic=False, return_conf_int=False,
-                          alpha=0.05, **kwargs):
+    def predict_in_sample(self,
+                          X=None,
+                          start=None,
+                          end=None,
+                          dynamic=False,
+                          return_conf_int=False,
+                          alpha=0.05,
+                          **kwargs):
         """Generate in-sample predictions from the fit ARIMA model.
 
         Predicts the original training (in-sample) time series values. This can
@@ -515,7 +529,7 @@ class ARIMA(BaseARIMA):
 
         Parameters
         ----------
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -555,6 +569,9 @@ class ARIMA(BaseARIMA):
         """
         check_is_fitted(self, 'arima_res_')
 
+        # Temporary shim until we remove `exogenous` support completely
+        X, kwargs = pm_compat.get_X(X, **kwargs)
+
         # TODO: remove this, it's a compat check
         if kwargs.pop("typ", None):
             warnings.warn("As of version 1.5.0 'typ' is no longer a valid "
@@ -569,14 +586,17 @@ class ARIMA(BaseARIMA):
                              "when d={1}".format(start, d))
 
         # if we fit with exog, make sure one was passed:
-        exogenous = self._check_exog(exogenous)  # type: np.ndarray
+        X = self._check_exog(X)  # type: np.ndarray
         results_wrapper = self.arima_res_
 
         # If not returning the confidence intervals, we have it really easy
         if not return_conf_int:
             preds = results_wrapper.predict(
-                exog=exogenous, start=start,
-                end=end, dynamic=dynamic)
+                exog=X,
+                start=start,
+                end=end,
+                dynamic=dynamic,
+            )
 
             return preds
 
@@ -591,14 +611,19 @@ class ARIMA(BaseARIMA):
             arima_res=results_wrapper,
             start=start,
             end=end,
-            exog=exogenous,
+            X=X,
             alpha=alpha,
-            dynamic=dynamic)
+            dynamic=dynamic,
+        )
 
         return preds, conf_int
 
-    def predict(self, n_periods=10, exogenous=None,
-                return_conf_int=False, alpha=0.05):
+    def predict(self,
+                n_periods=10,
+                X=None,
+                return_conf_int=False,
+                alpha=0.05,
+                **kwargs):  # TODO: remove kwargs after exog disappears
         """Forecast future values
 
         Generate predictions (forecasts) ``n_periods`` in the future.
@@ -610,7 +635,7 @@ class ARIMA(BaseARIMA):
         n_periods : int, optional (default=10)
             The number of periods in the future to forecast.
 
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -636,10 +661,13 @@ class ARIMA(BaseARIMA):
         if not isinstance(n_periods, int):
             raise TypeError("n_periods must be an int")
 
+        # Temporary shim until we remove `exogenous` support completely
+        X, _ = pm_compat.get_X(X, **kwargs)
+
         # if we fit with exog, make sure one was passed:
-        exogenous = self._check_exog(exogenous)  # type: np.ndarray
-        if exogenous is not None and exogenous.shape[0] != n_periods:
-            raise ValueError('Exogenous array dims (n_rows) != n_periods')
+        X = self._check_exog(X)  # type: np.ndarray
+        if X is not None and X.shape[0] != n_periods:
+            raise ValueError('X array dims (n_rows) != n_periods')
 
         # f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
         arima = self.arima_res_
@@ -649,7 +677,7 @@ class ARIMA(BaseARIMA):
             arima_res=arima,
             start=arima.nobs,
             end=end,
-            exog=exogenous,
+            exog=X,
             alpha=alpha)
 
         if return_conf_int:
@@ -734,7 +762,7 @@ class ARIMA(BaseARIMA):
             )
         )
 
-    def update(self, y, exogenous=None, maxiter=None, **kwargs):
+    def update(self, y, X=None, maxiter=None, **kwargs):
         """Update the model fit with additional observed endog/exog values.
 
         Updating an ARIMA adds new observations to the model, updating the
@@ -749,7 +777,7 @@ class ARIMA(BaseARIMA):
             ``Series`` object or a numpy array. This should be a one-
             dimensional array of finite floats.
 
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If the model was
             fit with an exogenous array of covariates, it will be required for
             updating the observed values.
@@ -770,6 +798,9 @@ class ARIMA(BaseARIMA):
         check_is_fitted(self, 'arima_res_')
         model_res = self.arima_res_
 
+        # Temporary shim until we remove `exogenous` support completely
+        X, kwargs = pm_compat.get_X(X, **kwargs)
+
         # Allow updating with a scalar if the user is just adding a single
         # sample.
         if not is_iterable(y):
@@ -779,35 +810,35 @@ class ARIMA(BaseARIMA):
         y = check_endog(y, dtype=DTYPE)
         n_samples = y.shape[0]
 
-        # if exogenous is None and new exog provided, or vice versa, raise
-        exogenous = self._check_exog(exogenous)  # type: np.ndarray
+        # if X is None and new X provided, or vice versa, raise
+        X = self._check_exog(X)  # type: np.ndarray
 
         # ensure the k_exog matches
-        if exogenous is not None:
+        if X is not None:
             k_exog = model_res.model.k_exog
-            n_exog, exog_dim = exogenous.shape
+            n_exog, exog_dim = X.shape
 
-            if exogenous.shape[1] != k_exog:
-                raise ValueError("Dim mismatch in fit exogenous (%i) and new "
-                                 "exogenous (%i)" % (k_exog, exog_dim))
+            if X.shape[1] != k_exog:
+                raise ValueError("Dim mismatch in fit X (%i) and new "
+                                 "X (%i)" % (k_exog, exog_dim))
 
-            # make sure the number of samples in exogenous match the number
+            # make sure the number of samples in X match the number
             # of samples in the endog
             if n_exog != n_samples:
-                raise ValueError("Dim mismatch in n_samples "
-                                 "(endog=%i, exog=%i)"
-                                 % (n_samples, n_exog))
+                raise ValueError(
+                    f"Dim mismatch in n_samples (y={n_samples}, X={n_exog})"
+                )
 
         # first concatenate the original data (might be 2d or 1d)
         y = np.squeeze(_append_to_endog(model_res.data.endog, y))
 
-        # Now create the new exogenous.
-        if exogenous is not None:
+        # Now create the new X.
+        if X is not None:
             # Concatenate
-            exog = np.concatenate((model_res.data.exog, exogenous), axis=0)
+            X_prime = np.concatenate((model_res.data.exog, X), axis=0)
         else:
             # Just so it's in the namespace
-            exog = None
+            X_prime = None
 
         # This is currently arbitrary... but it's here to avoid accidentally
         # overfitting a user's model. Would be nice to find some papers that
@@ -820,7 +851,7 @@ class ARIMA(BaseARIMA):
         # arbitrary model. Statsmodels does not handle patching new samples in
         # very well, so we seed the new model with the existing parameters.
         params = model_res.params
-        self._fit(y, exog, start_params=params, maxiter=maxiter, **kwargs)
+        self._fit(y, X_prime, start_params=params, maxiter=maxiter, **kwargs)
 
         # Behaves like `fit`
         return self
