@@ -677,7 +677,7 @@ class ARIMA(BaseARIMA):
             arima_res=arima,
             start=arima.nobs,
             end=end,
-            exog=X,
+            X=X,
             alpha=alpha)
 
         if return_conf_int:

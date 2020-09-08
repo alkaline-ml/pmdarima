@@ -5,7 +5,7 @@ import numpy as np
 
 from .base import BaseExogFeaturizer
 from ..base import UpdatableMixin
-from ...compat import check_is_fitted
+from ...compat import check_is_fitted, pmdarima as pm_compat
 from ._fourier import C_fourier_terms
 
 __all__ = ['FourierFeaturizer']
@@ -70,8 +70,8 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
     >>> from pmdarima.datasets import load_wineind
     >>> y = load_wineind()
     >>> trans = FourierFeaturizer(12, 4)
-    >>> y_prime, exog = trans.fit_transform(y)
-    >>> exog.head()
+    >>> y_prime, X = trans.fit_transform(y)
+    >>> X.head()
        FOURIER_S12-0     FOURIER_C12-0    ...     FOURIER_S12-3  FOURIER_C12-3
     0       0.500000      8.660254e-01    ...      8.660254e-01           -0.5
     1       0.866025      5.000000e-01    ...     -8.660255e-01           -0.5
@@ -113,7 +113,7 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
                 i // 2)
             for i in range(X.shape[1])]
 
-    def fit(self, y, exogenous=None):
+    def fit(self, y, X=None, **kwargs):  # TODO: kwargs go away
         """Fit the transformer
 
         Computes the periods of all the Fourier terms. The values of ``y`` are
@@ -125,14 +125,18 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exogenous : array-like or None, shape=(n_samples, n_features), optional
+        X : array-like or None, shape=(n_samples, n_features), optional
             The exogenous array of additional covariates. If specified, the
             Fourier terms will be column-bound on the right side of the matrix.
             Otherwise, the Fourier terms will be returned as the new exogenous
             array.
         """
+
+        # Temporary shim until we remove `exogenous` support completely
+        X, _ = pm_compat.get_X(X, **kwargs)
+
         # Since we don't fit any params here, we can just check the params
-        _, _ = self._check_y_exog(y, exogenous, null_allowed=True)
+        _, _ = self._check_y_X(y, X, null_allowed=True)
 
         m = self.m
         k = self.k
@@ -155,7 +159,7 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
 
         return self
 
-    def transform(self, y, exogenous=None, n_periods=0, **_):
+    def transform(self, y, X=None, n_periods=0, **kwargs):
         """Create Fourier term features
 
         When an ARIMA is fit with an exogenous array, it must be forecasted
@@ -175,7 +179,7 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
             optional for the Fourier terms, since it uses the pre-computed
             ``n`` to calculate the seasonal Fourier terms.
 
-        exogenous : array-like or None, shape=(n_samples, n_features), optional
+        X : array-like or None, shape=(n_samples, n_features), optional
             The exogenous array of additional covariates. If specified, the
             Fourier terms will be column-bound on the right side of the matrix.
             Otherwise, the Fourier terms will be returned as the new exogenous
@@ -188,14 +192,17 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
             returned.
         """
         check_is_fitted(self, "p_")
-        _, exog = self._check_y_exog(y, exogenous, null_allowed=True)
 
-        if n_periods and exog is not None:
-            if n_periods != exog.shape[0]:
-                raise ValueError("If n_periods and exog are specified, "
-                                 "n_periods must match dims of exogenous "
-                                 "({0} != {1})"
-                                 .format(n_periods, exog.shape[0]))
+        # Temporary shim until we remove `exogenous` support completely
+        X, _ = pm_compat.get_X(X, **kwargs)
+        _, X = self._check_y_X(y, X, null_allowed=True)
+
+        if n_periods and X is not None:
+            if n_periods != X.shape[0]:
+                raise ValueError(
+                    f"If n_periods and X are specified, n_periods must match "
+                    f"dims of X ({n_periods} != {X.shape[0]})"
+                )
 
         times = np.arange(self.n_ + n_periods, dtype=np.float64) + 1
         X_fourier = _fourier_terms(self.p_, times)  # type: np.ndarray
@@ -205,10 +212,12 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
         if n_periods:
             X_fourier = X_fourier[-n_periods:, :]
 
-        exog = self._safe_hstack(exog, X_fourier)
-        return y, exog
+        X = self._safe_hstack(X, X_fourier)
+        return y, X
 
-    def update_and_transform(self, y, exogenous, **kwargs):
+    # TODO: remove default None value for X when we remove kwargs
+
+    def update_and_transform(self, y, X=None, **kwargs):
         """Update the params and return the transformed arrays
 
         Since no parameters really get updated in the Fourier featurizer, all
@@ -220,7 +229,7 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exogenous : array-like or None, shape=(n_samples, n_features)
+        X : array-like or None, shape=(n_samples, n_features)
             The exogenous array of additional covariates.
 
         **kwargs : keyword args
@@ -228,8 +237,11 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
         """
         check_is_fitted(self, "p_")
 
+        # Temporary shim until we remove `exogenous` support completely
+        X, kwargs = pm_compat.get_X(X, **kwargs)
+
         self._check_endog(y)
-        _, Xt = self.transform(y, exogenous, n_periods=len(y), **kwargs)
+        _, Xt = self.transform(y, X, n_periods=len(y), **kwargs)
 
         # Update this *after* getting the exog features
         self.n_ += len(y)

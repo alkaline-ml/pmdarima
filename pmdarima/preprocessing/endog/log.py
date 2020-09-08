@@ -34,7 +34,7 @@ class LogEndogTransformer(BoxCoxEndogTransformer):
 
         super().__init__(0, lmbda2=lmbda, neg_action=neg_action, floor=floor)
 
-    def fit(self, y, exogenous=None):
+    def fit(self, y, X=None, **kwargs):  # TODO: kwargs go away
         """Fit the transformer
 
         Must be called before ``transform``.
@@ -44,14 +44,14 @@ class LogEndogTransformer(BoxCoxEndogTransformer):
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exogenous : array-like or None, shape=(n_samples, n_features), optional
+        X : array-like or None, shape=(n_samples, n_features), optional
             The exogenous array of additional covariates. Not used for
             endogenous transformers. Default is None, and non-None values will
             serve as pass-through arrays.
         """
-        return super().fit(y, exogenous)
+        return super().fit(y, X, **kwargs)
 
-    def transform(self, y, exogenous=None, **transform_kwargs):
+    def transform(self, y, X=None, **transform_kwargs):
         """Apply the log transform to the array
 
         Parameters
@@ -59,7 +59,7 @@ class LogEndogTransformer(BoxCoxEndogTransformer):
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exogenous : array-like or None, shape=(n_samples, n_features), optional
+        X : array-like or None, shape=(n_samples, n_features), optional
             The exogenous array of additional covariates. Not used for
             endogenous transformers. Default is None, and non-None values will
             serve as pass-through arrays.
@@ -69,12 +69,12 @@ class LogEndogTransformer(BoxCoxEndogTransformer):
         y_transform : array-like or None
             The log transformed y array
 
-        exogenous : array-like or None
+        X : array-like or None
             The exog array
         """
-        return super().transform(y, exogenous, **transform_kwargs)
+        return super().transform(y, X, **transform_kwargs)
 
-    def inverse_transform(self, y, exogenous=None):
+    def inverse_transform(self, y, X=None, **kwargs):  # TODO: kwargs go away
         """Inverse transform a transformed array
 
         Inverse the log transformation on the transformed array. Note that
@@ -85,19 +85,19 @@ class LogEndogTransformer(BoxCoxEndogTransformer):
         Parameters
         ----------
         y : array-like or None, shape=(n_samples,)
-        The transformed endogenous (time-series) array.
+            The transformed endogenous (time-series) array.
 
-        exogenous : array-like or None, shape=(n_samples, n_features), optional
-        The exogenous array of additional covariates. Not used for
-        endogenous transformers. Default is None, and non-None values will
-        serve as pass-through arrays.
+        X : array-like or None, shape=(n_samples, n_features), optional
+            The exogenous array of additional covariates. Not used for
+            endogenous transformers. Default is None, and non-None values will
+            serve as pass-through arrays.
 
         Returns
         -------
         y : array-like or None
-        The inverse-transformed y array
+            The inverse-transformed y array
 
-        exogenous : array-like or None
-        The inverse-transformed exogenous array
+        X : array-like or None
+            The inverse-transformed exogenous array
         """
-        return super().inverse_transform(y, exogenous=exogenous)
+        return super().inverse_transform(y, X, **kwargs)

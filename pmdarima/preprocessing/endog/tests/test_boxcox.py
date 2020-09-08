@@ -12,24 +12,24 @@ loggamma = stats.loggamma.rvs(5, size=500) + 5
 
 
 @pytest.mark.parametrize(
-    'exog', [
+    'X', [
         None,
         np.random.rand(loggamma.shape[0], 3),
     ]
 )
-def test_invertible(exog):
+def test_invertible(X):
     trans = BoxCoxEndogTransformer()
-    y_t, e_t = trans.fit_transform(loggamma, exogenous=exog)
-    y_prime, e_prime = trans.inverse_transform(y_t, exogenous=e_t)
+    y_t, e_t = trans.fit_transform(loggamma, X=X)
+    y_prime, e_prime = trans.inverse_transform(y_t, X=e_t)
 
     assert_array_almost_equal(loggamma, y_prime)
 
-    # exog should all be the same too
-    if exog is None:
-        assert exog is e_t is e_prime is None
+    # X should all be the same too
+    if X is None:
+        assert X is e_t is e_prime is None
     else:
-        assert_array_almost_equal(exog, e_t)
-        assert_array_almost_equal(exog, e_prime)
+        assert_array_almost_equal(X, e_t)
+        assert_array_almost_equal(X, e_prime)
 
 
 def test_invertible_when_lambda_is_0():

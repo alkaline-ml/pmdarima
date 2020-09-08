@@ -14,28 +14,28 @@ class RandomExogFeaturizer(base.BaseExogFeaturizer):
     def _get_prefix(self):
         return "RND"
 
-    def fit(self, y, exogenous):
+    def fit(self, y, X, **_):
         return self
 
-    def transform(self, y, exogenous=None, n_periods=0, **_):
-        exog = np.random.rand(y.shape[0], 4)
-        exog = self._safe_hstack(exogenous, exog)
-        return y, exog
+    def transform(self, y, X=None, n_periods=0, **_):
+        Xt = np.random.rand(y.shape[0], 4)
+        Xt = self._safe_hstack(X, Xt)
+        return y, Xt
 
 
 def test_default_get_feature_names():
     feat = RandomExogFeaturizer()
-    y_trans, exog = feat.fit_transform(wineind)
+    y_trans, X = feat.fit_transform(wineind)
     assert y_trans is wineind
-    assert exog.columns.tolist() == \
+    assert X.columns.tolist() == \
         ['RND_0', 'RND_1', 'RND_2', 'RND_3']
 
 
-def test_default_get_feature_names_with_exog():
+def test_default_get_feature_names_with_X():
     feat = RandomExogFeaturizer()
-    exog = pd.DataFrame.from_records(np.random.rand(wineind.shape[0], 2),
-                                     columns=['a', 'b'])
-    y_trans, exog_trans = feat.fit_transform(wineind, exog)
+    X = pd.DataFrame.from_records(
+        np.random.rand(wineind.shape[0], 2), columns=['a', 'b'])
+    y_trans, X_trans = feat.fit_transform(wineind, X)
     assert y_trans is wineind
-    assert exog_trans.columns.tolist() == \
+    assert X_trans.columns.tolist() == \
         ['a', 'b', 'RND_0', 'RND_1', 'RND_2', 'RND_3']

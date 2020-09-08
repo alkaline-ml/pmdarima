@@ -34,7 +34,7 @@ _AUTO_ARIMA_DOCSTR = \
     Khandakar (2008).
 
     Parameters
-    ----------{y}{exogenous}
+    ----------{y}{X}
     start_p : int, optional (default=2)
         The starting value of ``p``, the order (or number of time lags)
         of the auto-regressive ("AR") model. Must be a positive integer.

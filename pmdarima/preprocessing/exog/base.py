@@ -10,13 +10,12 @@ from ..base import BaseTransformer
 class BaseExogTransformer(BaseTransformer, metaclass=abc.ABCMeta):
     """A base class for exogenous array transformers"""
 
-    def _check_y_exog(self, y, exog, null_allowed=False):
+    def _check_y_X(self, y, X, null_allowed=False):
         """Check the endog and exog arrays"""
-        y, exog = super(BaseExogTransformer, self)._check_y_exog(y, exog)
-        if exog is None and not null_allowed:
-            raise ValueError("exog must be non-None for exogenous "
-                             "transformers")
-        return y, exog
+        y, X = super(BaseExogTransformer, self)._check_y_X(y, X)
+        if X is None and not null_allowed:
+            raise ValueError("X must be non-None for exog transformers")
+        return y, X
 
 
 class BaseExogFeaturizer(BaseExogTransformer, metaclass=abc.ABCMeta):
@@ -38,9 +37,9 @@ class BaseExogFeaturizer(BaseExogTransformer, metaclass=abc.ABCMeta):
         pfx = self._get_prefix()
         return ['%s_%i' % (pfx, i) for i in range(X.shape[1])]
 
-    def _safe_hstack(self, exog, features):
+    def _safe_hstack(self, X, features):
         """H-stack dataframes or np.ndarrays"""
-        if exog is None or isinstance(exog, pd.DataFrame):
+        if X is None or isinstance(X, pd.DataFrame):
             # the features we're adding may be np.ndarray
             if not isinstance(features, pd.DataFrame):
                 features = pd.DataFrame.from_records(features)
@@ -48,18 +47,18 @@ class BaseExogFeaturizer(BaseExogTransformer, metaclass=abc.ABCMeta):
             # subclass may override this
             features.columns = self._get_feature_names(features)
 
-            if exog is not None:
+            if X is not None:
                 # ignore_index will remove names, which is a stupid quirk
                 # of pandas... so manually reset the indices
                 # https://stackoverflow.com/a/43406062/3015734
-                exog.index = features.index = np.arange(exog.shape[0])
-                return pd.concat([exog, features], axis=1)
-            # if exog was None coming in, we'd still like to favor a pd.DF
+                X.index = features.index = np.arange(X.shape[0])
+                return pd.concat([X, features], axis=1)
+            # if X was None coming in, we'd still like to favor a pd.DF
             return features
 
-        return np.hstack([exog, features])
+        return np.hstack([X, features])
 
-    def transform(self, y, exogenous=None, n_periods=0, **kwargs):
+    def transform(self, y, X=None, n_periods=0, **kwargs):
         """Transform the new array
 
         Apply the transformation to the array after learning the training set's
@@ -72,8 +71,8 @@ class BaseExogFeaturizer(BaseExogTransformer, metaclass=abc.ABCMeta):
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exogenous : array-like or None, shape=(n_samples, n_features)
-            The exogenous array of additional covariates.
+        X : array-like or None, shape=(n_samples, n_features)
+            An array of additional covariates.
 
         n_periods : int, optional (default=0)
             The number of periods in the future to forecast. If ``n_periods``
@@ -89,6 +88,6 @@ class BaseExogFeaturizer(BaseExogTransformer, metaclass=abc.ABCMeta):
         y : array-like or None
             The transformed y array
 
-        exogenous : array-like or None
-            The transformed exogenous array
+        X : array-like or None
+            The transformed X array
         """
