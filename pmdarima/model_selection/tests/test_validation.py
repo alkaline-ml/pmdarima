@@ -39,10 +39,10 @@ exogenous = np.random.RandomState(1).rand(y.shape[0], 2)
     ]
 )
 @pytest.mark.parametrize('verbose', [0, 2, 4])
-@pytest.mark.parametrize('exog', [None, exogenous])
-def test_cv_scores(cv, est, verbose, exog):
+@pytest.mark.parametrize('X', [None, exogenous])
+def test_cv_scores(cv, est, verbose, X):
     scores = cross_val_score(
-        est, y, exogenous=exog, scoring='mean_squared_error',
+        est, y, X=X, scoring='mean_squared_error',
         cv=cv, verbose=verbose)
     assert isinstance(scores, np.ndarray)
 

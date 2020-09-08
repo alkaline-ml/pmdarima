@@ -182,14 +182,14 @@ def test_pipeline_behavior():
                             maxiter=3, error_action='ignore'))
     ]),
 ])
-@pytest.mark.parametrize('exog', [(None, None), (x_train, x_test)])
+@pytest.mark.parametrize('X', [(None, None), (x_train, x_test)])
 @pytest.mark.parametrize('inverse_transform', [True, False])
 @pytest.mark.parametrize('return_conf_ints', [True, False])
-def test_pipeline_predict_inverse_transform(pipeline, exog, inverse_transform,
+def test_pipeline_predict_inverse_transform(pipeline, X, inverse_transform,
                                             return_conf_ints):
-    exog_train, exog_test = exog
+    X_train, X_test = X
 
-    pipeline.fit(train, exogenous=exog_train)
+    pipeline.fit(train, X=X_train)
 
     # show we can get a summary
     pipeline.summary()
@@ -197,7 +197,7 @@ def test_pipeline_predict_inverse_transform(pipeline, exog, inverse_transform,
     # first predict
     predictions = pipeline.predict(
         n_periods=test.shape[0],
-        exogenous=exog_test,
+        X=X_test,
         inverse_transform=inverse_transform,
         return_conf_int=return_conf_ints)
 
@@ -211,7 +211,7 @@ def test_pipeline_predict_inverse_transform(pipeline, exog, inverse_transform,
 
     # now in sample
     in_sample = pipeline.predict_in_sample(
-        exogenous=exog_train,
+        X=X_train,
         inverse_transform=inverse_transform,
         return_conf_int=return_conf_ints)
 
@@ -243,8 +243,8 @@ def test_order_does_not_matter_with_date_transformer():
                             suppress_warnings=True,
                             maxiter=3, error_action='ignore'))
     ]).fit(train_y_dates, train_X_dates)
-    Xt_a = pipeline_a.transform(exogenous=test_X_dates)
-    pred_a = pipeline_a.predict(exogenous=test_X_dates)
+    Xt_a = pipeline_a.transform(X=test_X_dates)
+    pred_a = pipeline_a.predict(X=test_X_dates)
 
     pipeline_b = Pipeline([
         ('dates', DateFeaturizer(column_name="date", prefix="DATE")),
@@ -253,8 +253,8 @@ def test_order_does_not_matter_with_date_transformer():
                             suppress_warnings=True,
                             maxiter=3, error_action='ignore'))
     ]).fit(train_y_dates, train_X_dates)
-    Xt_b = pipeline_b.transform(exogenous=test_X_dates)
-    pred_b = pipeline_b.predict(exogenous=test_X_dates)
+    Xt_b = pipeline_b.transform(X=test_X_dates)
+    pred_b = pipeline_b.predict(X=test_X_dates)
 
     # dates in A should differ from those in B
     assert pipeline_a.x_feats_[0].startswith("FOURIER")

@@ -418,7 +418,7 @@ def _fit_candidate_model(x,
                 with_intercept=with_intercept, **kwargs)
 
     try:
-        fit.fit(x, exogenous=xreg, **fit_params)
+        fit.fit(x, X=xreg, **fit_params)
 
     # for non-stationarity errors or singular matrices, return None
     except (LinAlgError, ValueError) as v:

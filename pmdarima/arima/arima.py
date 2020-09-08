@@ -407,7 +407,7 @@ class ARIMA(BaseARIMA):
         # Set df_model attribute for SARIMAXResults object
         sm_compat.bind_df_model(fit, self.arima_res_)
 
-        # if the model is fit with an exogenous array, it must
+        # if the model is fit with an X array, it must
         # be predicted with one as well.
         self.fit_with_exog_ = X is not None
 
@@ -669,7 +669,7 @@ class ARIMA(BaseARIMA):
         if X is not None and X.shape[0] != n_periods:
             raise ValueError('X array dims (n_rows) != n_periods')
 
-        # f = self.arima_res_.forecast(steps=n_periods, exog=exogenous)
+        # f = self.arima_res_.forecast(steps=n_periods, exog=X)
         arima = self.arima_res_
         end = arima.nobs + n_periods - 1
 

@@ -275,7 +275,7 @@ _Y_DOCSTR = """
 """
 
 _EXOG_DOCSTR = """
-    exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+    X : array-like, shape=[n_obs, n_vars], optional (default=None)
         An optional 2-d array of exogenous variables. If provided, these
         variables are used as additional features in the regression
         operation. This should not include a constant or trend. Note that
