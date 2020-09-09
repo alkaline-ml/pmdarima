@@ -56,30 +56,30 @@ class TestFourierREquivalency:
     ])
 
     @pytest.mark.parametrize(
-        'exog', [
+        'X', [
             None,
             np.random.rand(y.shape[0], 3)
         ]
     )
-    def test_r_equivalency(self, exog):
+    def test_r_equivalency(self, X):
         y = self.y
         expected = self.expected
 
         trans = FourierFeaturizer(m=5, k=2).fit(y)
-        _, xreg = trans.transform(y, exog)
+        _, xreg = trans.transform(y, X)
 
         # maybe subset
         if hasattr(xreg, 'iloc'):
             xreg = xreg.values
         assert_array_almost_equal(expected, xreg[:, -4:])
 
-        # maybe assert on exog
-        if exog is not None:
-            assert_array_almost_equal(exog, xreg[:, :3])
+        # maybe assert on X
+        if X is not None:
+            assert_array_almost_equal(X, xreg[:, :3])
 
-            # Test a bad forecast (exog dim does not match n_periods dim)
+            # Test a bad forecast (X dim does not match n_periods dim)
             with pytest.raises(ValueError):
-                trans.transform(y, exogenous=np.random.rand(5, 3), n_periods=2)
+                trans.transform(y, X=np.random.rand(5, 3), n_periods=2)
 
 
 def test_hyndman_blog():
@@ -94,7 +94,7 @@ def test_hyndman_blog():
     _, xreg = trans.transform(y)
 
     arima = pm.auto_arima(y,
-                          exogenous=xreg,
+                          X=xreg,
                           seasonal=False,
                           maxiter=2,  # very short
                           start_p=4,
@@ -106,7 +106,7 @@ def test_hyndman_blog():
 
     # Show we can forecast 10 in the future
     _, xreg_test = trans.transform(y, n_periods=10)
-    arima.predict(n_periods=10, exogenous=xreg_test)
+    arima.predict(n_periods=10, X=xreg_test)
 
 
 def test_update_transform():
@@ -121,7 +121,7 @@ def test_update_transform():
     _, xreg = trans.transform(train)
 
     # Now update with the test set and show the xreg is diff
-    yt, Xt = trans.update_and_transform(test, exogenous=None)
+    yt, Xt = trans.update_and_transform(test, X=None)
     assert yt is test
     assert Xt.shape[0] == test.shape[0]
     assert trans.n_ == y.shape[0]
@@ -137,7 +137,7 @@ def test_update_transform():
 def test_value_error_check():
     feat = FourierFeaturizer(m=12)
     with pytest.raises(ValueError) as ve:
-        feat._check_y_exog(wineind, None, null_allowed=False)
+        feat._check_y_X(wineind, None, null_allowed=False)
     assert 'non-None' in pytest_error_str(ve)
 
 

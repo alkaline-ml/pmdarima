@@ -61,7 +61,7 @@ fig.tight_layout()
 
 # Visualize goodness of fit
 in_sample_preds, in_sample_confint = \
-    pipe.predict_in_sample(exogenous=None, return_conf_int=True)
+    pipe.predict_in_sample(X=None, return_conf_int=True)
 
 n_train = train.shape[0]
 

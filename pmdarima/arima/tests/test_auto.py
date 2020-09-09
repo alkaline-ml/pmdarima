@@ -115,7 +115,7 @@ def test_force_polynomial_error():
 
     with pytest.raises(ValueError) as ve, \
             pytest.warns(ModelFitWarning) as mfw:
-        pm.auto_arima(x, d=d, D=0, seasonal=False, exogenous=xreg, trace=2)
+        pm.auto_arima(x, d=d, D=0, seasonal=False, X=xreg, trace=2)
 
     err_msg = pytest_error_str(ve)
     assert 'simple polynomial' in err_msg, err_msg
@@ -251,14 +251,14 @@ def test_random_with_oob(endog):
                   maxiter=3)
 
 
-# Test if exogenous is not None and D > 0
+# Test if X is not None and D > 0
 @pytest.mark.parametrize('m', [2])  # , 12])
 def test_seasonal_xreg_differencing(m):
     # Test both a small M and a large M since M is used as the lag parameter
     # in the xreg array differencing. If M is 1, D is set to 0
     _ = pm.auto_arima(wineind, d=1, D=1,  # noqa: F841
                       seasonal=True,
-                      exogenous=wineind_xreg, error_action='ignore',
+                      X=wineind_xreg, error_action='ignore',
                       suppress_warnings=True, m=m,
 
                       # Set to super low iter to make test move quickly
@@ -396,7 +396,7 @@ def test_with_seasonality3():
 
 
 def test_with_seasonality4():
-    # can we fit the same thing with an exogenous array of predictors?
+    # can we fit the same thing with an X array of predictors?
     # also make it stationary and make sure that works...
     # 9/22/18 - make not parallel to reduce mem overhead on pytest
     all_res = pm.auto_arima(wineind, start_p=1, start_q=1, max_p=2,
@@ -405,7 +405,7 @@ def test_with_seasonality4():
                             suppress_warnings=True, stationary=True,
                             random_state=42, return_valid_fits=True,
                             stepwise=True,
-                            exogenous=rs.rand(wineind.shape[0], 4),
+                            X=rs.rand(wineind.shape[0], 4),
 
                             # Set to super low iter to make test move quickly
                             maxiter=5)

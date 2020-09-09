@@ -26,6 +26,7 @@ from ._context import AbstractContext, ContextType
 from . import _auto_solvers as solvers
 from ..compat.numpy import DTYPE
 from ..compat import statsmodels as sm_compat
+from ..compat import pmdarima as pm_compat
 
 __all__ = [
     'auto_arima',
@@ -48,7 +49,7 @@ class AutoARIMA(BaseARIMA):
     # Don't add the y, exog, etc. here since they are used in 'fit'
     __doc__ = _doc._AUTO_ARIMA_DOCSTR.format(
         y="",
-        exogenous="",
+        X="",
         fit_args="",
         return_valid_fits="",
         sarimax_kwargs=_doc._KWARGS_DOCSTR)
@@ -146,11 +147,11 @@ class AutoARIMA(BaseARIMA):
         kwargs = _warn_for_deprecations(**kwargs)
         self.kwargs = kwargs
 
-    def fit(self, y, exogenous=None, **fit_args):
+    def fit(self, y, X=None, **fit_args):
         """Fit the auto-arima estimator
 
         Fit an AutoARIMA to a vector, ``y``, of observations with an
-        optional matrix of ``exogenous`` variables.
+        optional matrix of ``X`` variables.
 
         Parameters
         ----------
@@ -161,7 +162,7 @@ class AutoARIMA(BaseARIMA):
             one-dimensional array of floats, and should not contain any
             ``np.nan`` or ``np.inf`` values.
 
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -172,50 +173,111 @@ class AutoARIMA(BaseARIMA):
             Any keyword arguments to pass to the auto-arima function.
         """
         sarimax_kwargs = {} if not self.kwargs else self.kwargs
+
+        # Temporary shim until we remove `exogenous` support completely
+        X, fit_kwargs = pm_compat.get_X(X, **fit_args)
         self.model_ = auto_arima(
-            y, exogenous=exogenous, start_p=self.start_p, d=self.d,
-            start_q=self.start_q, max_p=self.max_p, max_d=self.max_d,
-            max_q=self.max_q, start_P=self.start_P, D=self.D,
-            start_Q=self.start_Q, max_P=self.max_P, max_D=self.max_D,
-            max_Q=self.max_Q, max_order=self.max_order, m=self.m,
-            seasonal=self.seasonal, stationary=self.stationary,
+            y,
+            X=X,
+            start_p=self.start_p,
+            d=self.d,
+            start_q=self.start_q,
+            max_p=self.max_p,
+            max_d=self.max_d,
+            max_q=self.max_q,
+            start_P=self.start_P,
+            D=self.D,
+            start_Q=self.start_Q,
+            max_P=self.max_P,
+            max_D=self.max_D,
+            max_Q=self.max_Q,
+            max_order=self.max_order,
+            m=self.m,
+            seasonal=self.seasonal,
+            stationary=self.stationary,
             information_criterion=self.information_criterion,
-            alpha=self.alpha, test=self.test, seasonal_test=self.seasonal_test,
-            stepwise=self.stepwise, n_jobs=self.n_jobs,
-            start_params=self.start_params, trend=self.trend,
-            method=self.method, maxiter=self.maxiter,
+            alpha=self.alpha,
+            test=self.test,
+            seasonal_test=self.seasonal_test,
+            stepwise=self.stepwise,
+            n_jobs=self.n_jobs,
+            start_params=self.start_params,
+            trend=self.trend,
+            method=self.method,
+            maxiter=self.maxiter,
             offset_test_args=self.offset_test_args,
             seasonal_test_args=self.seasonal_test_args,
             suppress_warnings=self.suppress_warnings,
-            error_action=self.error_action, trace=self.trace,
-            random=self.random, random_state=self.random_state,
+            error_action=self.error_action,
+            trace=self.trace,
+            random=self.random,
+            random_state=self.random_state,
             n_fits=self.n_fits,
             return_valid_fits=False,  # only return ONE
-            out_of_sample_size=self.out_of_sample_size, scoring=self.scoring,
-            scoring_args=self.scoring_args, with_intercept=self.with_intercept,
-            sarimax_kwargs=sarimax_kwargs, **fit_args)
+            out_of_sample_size=self.out_of_sample_size,
+            scoring=self.scoring,
+            scoring_args=self.scoring_args,
+            with_intercept=self.with_intercept,
+            sarimax_kwargs=sarimax_kwargs,
+            **fit_args)
 
         return self
 
     @if_has_delegate("model_")
-    def predict_in_sample(self, exogenous=None, start=None,
-                          end=None, dynamic=False, return_conf_int=False,
-                          alpha=0.05, typ='levels'):
+    def predict_in_sample(self,
+                          X=None,
+                          start=None,
+                          end=None,
+                          dynamic=False,
+                          return_conf_int=False,
+                          alpha=0.05,
+                          typ='levels',
+                          **kwargs):  # TODO: remove kwargs when exog goes
+
+        # Temporary shim until we remove `exogenous` support completely
+        X, _ = pm_compat.get_X(X, **kwargs)
         return self.model_.predict_in_sample(
-            exogenous=exogenous, start=start, end=end, dynamic=dynamic,
-            return_conf_int=return_conf_int, alpha=alpha, typ=typ)
+            X=X,
+            start=start,
+            end=end,
+            dynamic=dynamic,
+            return_conf_int=return_conf_int,
+            alpha=alpha,
+            typ=typ,
+        )
 
     @if_has_delegate("model_")
-    def predict(self, n_periods=10, exogenous=None,
-                return_conf_int=False, alpha=0.05):
+    def predict(self,
+                n_periods=10,
+                X=None,
+                return_conf_int=False,
+                alpha=0.05,
+                **kwargs):  # TODO: remove kwargs when exog goes
+
+        # Temporary shim until we remove `exogenous` support completely
+        X, _ = pm_compat.get_X(X, **kwargs)
         return self.model_.predict(
-            n_periods=n_periods, exogenous=exogenous,
-            return_conf_int=return_conf_int, alpha=alpha)
+            n_periods=n_periods,
+            X=X,
+            return_conf_int=return_conf_int,
+            alpha=alpha,
+        )
 
     @if_has_delegate("model_")
-    def update(self, y, exogenous=None, maxiter=None, **kwargs):
+    def update(self,
+               y,
+               X=None,
+               maxiter=None,
+               **kwargs):
+
+        # Temporary shim until we remove `exogenous` support completely
+        X, kwargs = pm_compat.get_X(X, **kwargs)
         return self.model_.update(
-            y, exogenous=exogenous, maxiter=maxiter, **kwargs)
+            y,
+            X=X,
+            maxiter=maxiter,
+            **kwargs
+        )
 
     @if_has_delegate('model_')
     def summary(self):
@@ -283,7 +345,7 @@ class StepwiseContext(AbstractContext):
 
 
 def auto_arima(y,
-               exogenous=None,
+               X=None,
                start_p=2,
                d=None,
                start_q=2,
@@ -327,6 +389,9 @@ def auto_arima(y,
                **fit_args):
 
     # NOTE: Doc is assigned BELOW this function
+
+    # Temporary shim until we remove `exogenous` support completely
+    X, fit_args = pm_compat.get_X(X, **fit_args)
 
     # pop out the deprecated kwargs
     fit_args = _warn_for_deprecations(**fit_args)
@@ -401,7 +466,7 @@ def auto_arima(y,
             solvers._sort_and_filter_fits(
                 fit_partial(
                     y,
-                    xreg=exogenous,
+                    xreg=X,
                     order=(0, 0, 0),
                     seasonal_order=(0, 0, 0, 0),
                     with_intercept=val.auto_intercept(
@@ -442,9 +507,9 @@ def auto_arima(y,
 
     # TODO: check rank deficiency, check for constant Xs, regress if necessary
     xx = y.copy()
-    if exogenous is not None:
-        lm = LinearRegression().fit(exogenous, y)
-        xx = y - lm.predict(exogenous)
+    if X is not None:
+        lm = LinearRegression().fit(X, y)
+        xx = y - lm.predict(X)
 
     # choose the order of differencing
     # is the TS stationary?
@@ -459,8 +524,8 @@ def auto_arima(y,
         D = nsdiffs(xx, m=m, test=seasonal_test, max_D=max_D,
                     **seasonal_test_args)
 
-        if D > 0 and exogenous is not None:
-            diffxreg = diff(exogenous, differences=D, lag=m)
+        if D > 0 and X is not None:
+            diffxreg = diff(X, differences=D, lag=m)
             # check for constance on any column
             if np.apply_along_axis(is_constant, arr=diffxreg, axis=0).any():
                 D -= 1
@@ -482,11 +547,11 @@ def auto_arima(y,
                          % D)
 
     # difference the exogenous matrix
-    if exogenous is not None:
+    if X is not None:
         if D > 0:
-            diffxreg = diff(exogenous, differences=D, lag=m)
+            diffxreg = diff(X, differences=D, lag=m)
         else:
-            diffxreg = exogenous
+            diffxreg = X
     else:
         # here's the thing... we're only going to use diffxreg if exogenous
         # was not None in the first place. However, PyCharm doesn't know that
@@ -503,7 +568,7 @@ def auto_arima(y,
                    max_d=max_d,
                    **offset_test_args)
 
-        if d > 0 and exogenous is not None:
+        if d > 0 and X is not None:
             diffxreg = diff(diffxreg, differences=d, lag=1)
 
             # if any columns are constant, subtract one order of differencing
@@ -554,7 +619,7 @@ def auto_arima(y,
             solvers._sort_and_filter_fits(
                 fit_partial(
                     y,
-                    xreg=exogenous,
+                    xreg=X,
                     order=(0, d, 0),
                     seasonal_order=ssn,
                     with_intercept=with_intercept,
@@ -630,7 +695,7 @@ def auto_arima(y,
         all_res = Parallel(n_jobs=n_jobs)(
             delayed(fit_partial)(
                 y,
-                xreg=exogenous,
+                xreg=X,
                 order=order,
                 seasonal_order=seasonal_order,
                 with_intercept=with_intercept,
@@ -655,7 +720,7 @@ def auto_arima(y,
 
         # init the stepwise model wrapper
         stepwise_wrapper = solvers._StepwiseFitWrapper(
-            y, xreg=exogenous, start_params=start_params, trend=trend,
+            y, xreg=X, start_params=start_params, trend=trend,
             method=method, maxiter=maxiter, fit_params=fit_args,
             suppress_warnings=suppress_warnings, trace=trace,
             error_action=error_action, out_of_sample_size=out_of_sample_size,
@@ -675,7 +740,7 @@ def auto_arima(y,
 # Assign the doc to the auto_arima func
 auto_arima.__doc__ = _doc._AUTO_ARIMA_DOCSTR.format(
     y=_doc._Y_DOCSTR,
-    exogenous=_doc._EXOG_DOCSTR,
+    X=_doc._EXOG_DOCSTR,
     fit_args=_doc._FIT_ARGS_DOCSTR,
     sarimax_kwargs=_doc._SARIMAX_ARGS_DOCSTR,
     return_valid_fits=_doc._VALID_FITS_DOCSTR

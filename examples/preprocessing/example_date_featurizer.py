@@ -45,14 +45,14 @@ n_diffs = arima.ndiffs(y_train, max_d=5)
 
 # Here's what the featurizer will create for us:
 date_feat = preprocessing.DateFeaturizer(
-    column_name="date",  # the name of the date feature in the exog matrix
+    column_name="date",  # the name of the date feature in the X matrix
     with_day_of_week=True,
     with_day_of_month=True)
 
 _, X_train_feats = date_feat.fit_transform(y_train, X_train)
-print("Head of generated exog features:\n%s" % repr(X_train_feats.head()))
+print("Head of generated X features:\n%s" % repr(X_train_feats.head()))
 
-# We can plug this exog featurizer into a pipeline:
+# We can plug this X featurizer into a pipeline:
 pipe = pipeline.Pipeline([
     ('date', date_feat),
     ('arima', arima.AutoARIMA(d=n_diffs,
@@ -65,7 +65,7 @@ pipe = pipeline.Pipeline([
 pipe.fit(y_train, X_train)
 
 # Plot our forecasts
-forecasts = pipe.predict(exogenous=X_test)
+forecasts = pipe.predict(X=X_test)
 
 fig = plt.figure(figsize=(16, 8))
 ax = fig.add_subplot(1, 1, 1)

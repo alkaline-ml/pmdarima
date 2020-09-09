@@ -29,18 +29,17 @@ class BaseTransformer(BaseEstimator, TransformerMixin, metaclass=abc.ABCMeta):
     of the same schema.
     """
     @staticmethod
-    def _check_y_exog(y, exog):
+    def _check_y_X(y, X):
         """Validate input"""
         # Do not force finite, since a transformer's goal may be imputation.
         if y is not None:
             y = check_endog(y, dtype=DTYPE, copy=True, force_all_finite=False)
 
-        if exog is not None:
-            exog = check_exog(
-                exog, dtype=None, copy=True, force_all_finite=False)
-        return y, exog
+        if X is not None:
+            X = check_exog(X, dtype=None, copy=True, force_all_finite=False)
+        return y, X
 
-    def fit_transform(self, y, exogenous=None, **transform_kwargs):
+    def fit_transform(self, y, X=None, **kwargs):
         """Fit and transform the arrays
 
         Parameters
@@ -48,17 +47,17 @@ class BaseTransformer(BaseEstimator, TransformerMixin, metaclass=abc.ABCMeta):
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exogenous : array-like or None, shape=(n_samples, n_features), optional
+        X : array-like or None, shape=(n_samples, n_features), optional
             The exogenous array of additional covariates.
 
-        **transform_kwargs : keyword args
+        **kwargs : keyword args
             Keyword arguments required by the transform function.
         """
-        self.fit(y, exogenous)
-        return self.transform(y, exogenous, **transform_kwargs)
+        self.fit(y, X, **kwargs)  # TODO: eventually do not pass kwargs to fit
+        return self.transform(y, X, **kwargs)
 
     @abc.abstractmethod
-    def fit(self, y, exogenous):
+    def fit(self, y, X, **kwargs):  # TODO: eventually remove kwargs from fit
         """Fit the transformer
 
         The purpose of the ``fit`` method is to learn a set of statistics or
@@ -72,7 +71,7 @@ class BaseTransformer(BaseEstimator, TransformerMixin, metaclass=abc.ABCMeta):
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exogenous : array-like or None, shape=(n_samples, n_features)
+        X : array-like or None, shape=(n_samples, n_features)
             The exogenous array of additional covariates.
 
         Returns
@@ -84,7 +83,7 @@ class BaseTransformer(BaseEstimator, TransformerMixin, metaclass=abc.ABCMeta):
         """
 
     @abc.abstractmethod
-    def transform(self, y, exogenous, **kwargs):
+    def transform(self, y, X, **kwargs):
         """Transform the new array
 
         Apply the transformation to the array after learning the training set's
@@ -95,7 +94,7 @@ class BaseTransformer(BaseEstimator, TransformerMixin, metaclass=abc.ABCMeta):
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exogenous : array-like or None, shape=(n_samples, n_features)
+        X : array-like or None, shape=(n_samples, n_features)
             The exogenous array of additional covariates.
 
         **kwargs : keyword args
@@ -106,8 +105,8 @@ class BaseTransformer(BaseEstimator, TransformerMixin, metaclass=abc.ABCMeta):
         y : array-like or None
             The transformed y array
 
-        exogenous : array-like or None
-            The transformed exogenous array
+        X : array-like or None
+            The transformed X array
         """
 
 
@@ -118,7 +117,9 @@ class UpdatableMixin:
         if y is None:
             raise ValueError("endog array cannot be None when updating")
 
-    def update_and_transform(self, y, exogenous, **kwargs):
+    # TODO: remove default None value for X when we remove kwargs
+
+    def update_and_transform(self, y, X=None, **kwargs):
         """Update the params and return the transformed arrays
 
         Parameters
@@ -126,7 +127,7 @@ class UpdatableMixin:
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exogenous : array-like or None, shape=(n_samples, n_features)
+        X : array-like or None, shape=(n_samples, n_features)
             The exogenous array of additional covariates.
 
         **kwargs : keyword args

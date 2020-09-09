@@ -19,6 +19,7 @@ from .. import metrics
 from ..utils import check_endog
 from ..arima.warnings import ModelFitWarning
 from ..compat.sklearn import safe_indexing
+from ..compat import pmdarima as pm_compat
 
 __all__ = [
     'cross_validate',
@@ -61,18 +62,17 @@ def _check_scoring(metric):
     return _check_callables(metric, _valid_scoring, "metric")
 
 
-def _safe_split(y, exog, train, test):
+def _safe_split(y, X, train, test):
     """Performs the CV indexing given the indices"""
     y_train, y_test = y.take(train), y.take(test)
-    if exog is None:
-        exog_train = exog_test = None
+    if X is None:
+        X_train = X_test = None
     else:
-        exog_train, exog_test = \
-            safe_indexing(exog, train), safe_indexing(exog, test)
-    return y_train, y_test, exog_train, exog_test
+        X_train, X_test = safe_indexing(X, train), safe_indexing(X, test)
+    return y_train, y_test, X_train, X_test
 
 
-def _fit_and_score(fold, estimator, y, exog, scorer, train, test, verbose,
+def _fit_and_score(fold, estimator, y, X, scorer, train, test, verbose,
                    error_score):
     """Fit estimator and compute scores for a given dataset split."""
     msg = 'fold=%i' % fold
@@ -80,10 +80,10 @@ def _fit_and_score(fold, estimator, y, exog, scorer, train, test, verbose,
         print("[CV] %s %s" % (msg, (64 - len(msg)) * '.'))
 
     start_time = time.time()
-    y_train, y_test, exog_train, exog_test = _safe_split(y, exog, train, test)
+    y_train, y_test, X_train, X_test = _safe_split(y, X, train, test)
 
     try:
-        estimator.fit(y_train, exogenous=exog_train)
+        estimator.fit(y_train, X=X_train)
 
     except Exception as e:
         fit_time = time.time() - start_time
@@ -102,7 +102,7 @@ def _fit_and_score(fold, estimator, y, exog, scorer, train, test, verbose,
         fit_time = time.time() - start_time
 
         # forecast h periods into the future and compute the score
-        preds = estimator.predict(n_periods=len(test), exogenous=exog_test)
+        preds = estimator.predict(n_periods=len(test), X=X_test)
         test_scores = scorer(y_test, preds)
         score_time = time.time() - start_time - fit_time
 
@@ -115,22 +115,22 @@ def _fit_and_score(fold, estimator, y, exog, scorer, train, test, verbose,
     return test_scores, fit_time, score_time
 
 
-def _fit_and_predict(fold, estimator, y, exog, train, test, verbose):
+def _fit_and_predict(fold, estimator, y, X, train, test, verbose):
     """Fit estimator and compute scores for a given dataset split."""
     msg = 'fold=%i' % fold
     if verbose > 1:
         print("[CV] %s %s" % (msg, (64 - len(msg)) * '.'))
 
     start_time = time.time()
-    y_train, _, exog_train, exog_test = _safe_split(y, exog, train, test)
+    y_train, _, X_train, X_test = _safe_split(y, X, train, test)
 
     # scikit doesn't handle failures on cv predict, so we won't either.
-    estimator.fit(y_train, exogenous=exog_train)
+    estimator.fit(y_train, X=X_train)
     fit_time = time.time() - start_time
 
     # forecast h periods into the future
     start_time = time.time()
-    preds = estimator.predict(n_periods=len(test), exogenous=exog_test)
+    preds = estimator.predict(n_periods=len(test), X=X_test)
     pred_time = time.time() - start_time
 
     if verbose > 2:
@@ -141,8 +141,14 @@ def _fit_and_predict(fold, estimator, y, exog, train, test, verbose):
     return preds, test
 
 
-def cross_validate(estimator, y, exogenous=None, scoring=None, cv=None,
-                   verbose=0, error_score=np.nan):
+def cross_validate(estimator,
+                   y,
+                   X=None,
+                   scoring=None,
+                   cv=None,
+                   verbose=0,
+                   error_score=np.nan,
+                   **kwargs):  # TODO: remove kwargs
     """Evaluate metric(s) by cross-validation and also record fit/score times.
 
     Parameters
@@ -153,7 +159,7 @@ def cross_validate(estimator, y, exogenous=None, scoring=None, cv=None,
     y : array-like or iterable, shape=(n_samples,)
             The time-series array.
 
-    exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+    X : array-like, shape=[n_obs, n_vars], optional (default=None)
         An optional 2-d array of exogenous variables.
 
     scoring : str or callable, optional (default=None)
@@ -176,7 +182,10 @@ def cross_validate(estimator, y, exogenous=None, scoring=None, cv=None,
         If a numeric value is given, ModelFitWarning is raised. This parameter
         does not affect the refit step, which will always raise the error.
     """
-    y, exog = indexable(y, exogenous)
+    # Temporary shim until we remove `exogenous` support completely
+    X, _ = pm_compat.get_X(X, **kwargs)
+
+    y, X = indexable(y, X)
     y = check_endog(y, copy=False)
 
     cv = check_cv(cv)
@@ -191,13 +200,16 @@ def cross_validate(estimator, y, exogenous=None, scoring=None, cv=None,
     #   . could cause cross threads in parallelism..
 
     results = [
-        _fit_and_score(fold, base.clone(estimator), y, exog,
+        _fit_and_score(fold,
+                       base.clone(estimator),
+                       y,
+                       X,
                        scorer=scoring,
                        train=train,
                        test=test,
                        verbose=verbose,
                        error_score=error_score)
-        for fold, (train, test) in enumerate(cv.split(y, exog))]
+        for fold, (train, test) in enumerate(cv.split(y, X))]
     scores, fit_times, score_times = list(zip(*results))
 
     ret = {
@@ -208,8 +220,13 @@ def cross_validate(estimator, y, exogenous=None, scoring=None, cv=None,
     return ret
 
 
-def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
-                      averaging="mean"):
+def cross_val_predict(estimator,
+                      y,
+                      X=None,
+                      cv=None,
+                      verbose=0,
+                      averaging="mean",
+                      **kwargs):  # TODO: remove kwargs
     """Generate cross-validated estimates for each input data point
 
     Parameters
@@ -220,7 +237,7 @@ def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
     y : array-like or iterable, shape=(n_samples,)
             The time-series array.
 
-    exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+    X : array-like, shape=[n_obs, n_vars], optional (default=None)
         An optional 2-d array of exogenous variables.
 
     cv : BaseTSCrossValidator or None, optional (default=None)
@@ -263,7 +280,10 @@ def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
     array([30710.45743168, 34902.94929722, 17994.16587163, 22127.71167249,
            25473.60876435])
     """
-    y, exog = indexable(y, exogenous)
+    # Temporary shim until we remove `exogenous` support completely
+    X, _ = pm_compat.get_X(X, **kwargs)
+
+    y, X = indexable(y, X)
     y = check_endog(y, copy=False)
     cv = check_cv(cv)
     avgfunc = _check_averaging(averaging)
@@ -290,11 +310,14 @@ def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
 
     # clone estimator to make sure all folds are independent
     prediction_blocks = [
-        _fit_and_predict(fold, base.clone(estimator), y, exog,
+        _fit_and_predict(fold,
+                         base.clone(estimator),
+                         y,
+                         X,
                          train=train,
                          test=test,
                          verbose=verbose,)  # TODO: fit params?
-        for fold, (train, test) in enumerate(cv.split(y, exog))]
+        for fold, (train, test) in enumerate(cv.split(y, X))]
 
     # Unlike normal CV, time series CV might have different folds (windows)
     # forecasting the same time step. In this stage, we build a matrix of
@@ -311,8 +334,14 @@ def cross_val_predict(estimator, y, exogenous=None, cv=None, verbose=0,
     return avgfunc(predictions, axis=1)
 
 
-def cross_val_score(estimator, y, exogenous=None, scoring=None, cv=None,
-                    verbose=0, error_score=np.nan):
+def cross_val_score(estimator,
+                    y,
+                    X=None,
+                    scoring=None,
+                    cv=None,
+                    verbose=0,
+                    error_score=np.nan,
+                    **kwargs):  # TODO: remove kwargs
     """Evaluate a score by cross-validation
 
     Parameters
@@ -323,7 +352,7 @@ def cross_val_score(estimator, y, exogenous=None, scoring=None, cv=None,
     y : array-like or iterable, shape=(n_samples,)
             The time-series array.
 
-    exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+    X : array-like, shape=[n_obs, n_vars], optional (default=None)
         An optional 2-d array of exogenous variables.
 
     scoring : str or callable, optional (default=None)
@@ -346,8 +375,14 @@ def cross_val_score(estimator, y, exogenous=None, scoring=None, cv=None,
         If a numeric value is given, ModelFitWarning is raised. This parameter
         does not affect the refit step, which will always raise the error.
     """
-    cv_results = cross_validate(estimator=estimator, y=y, exogenous=exogenous,
-                                scoring=scoring, cv=cv,
+    # Temporary shim until we remove `exogenous` support completely
+    X, _ = pm_compat.get_X(X, **kwargs)
+
+    cv_results = cross_validate(estimator=estimator,
+                                y=y,
+                                X=X,
+                                scoring=scoring,
+                                cv=cv,
                                 verbose=verbose,
                                 error_score=error_score)
     return cv_results['test_score']

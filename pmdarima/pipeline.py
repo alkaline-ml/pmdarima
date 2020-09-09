@@ -13,6 +13,7 @@ from .preprocessing.endog.base import BaseEndogTransformer
 from .preprocessing.exog.base import BaseExogTransformer, BaseExogFeaturizer
 from .utils import check_endog
 from .compat import DTYPE, check_is_fitted
+from .compat import pmdarima as pm_compat
 
 __all__ = ['Pipeline']
 
@@ -162,10 +163,10 @@ class Pipeline(BaseEstimator):
             n_periods = len(exog)
         return n_periods
 
-    def fit(self, y, exogenous=None, **fit_kwargs):
+    def fit(self, y, X=None, **fit_kwargs):
         """Fit the pipeline of transformers and the ARIMA model
 
-        Chain the time-series and exogenous arrays through a series of
+        Chain the time-series and X array through a series of
         transformations, fitting each stage along the way, finally fitting an
         ARIMA or AutoARIMA model.
 
@@ -178,7 +179,7 @@ class Pipeline(BaseEstimator):
             one-dimensional array of floats, and should not contain any
             ``np.nan`` or ``np.inf`` values.
 
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -197,8 +198,11 @@ class Pipeline(BaseEstimator):
         # Shallow copy
         steps = self.steps_ = self._validate_steps()
 
+        # Temporary shim until we remove `exogenous` support completely
+        X, fit_kwargs = pm_compat.get_X(X, **fit_kwargs)
+
         yt = check_endog(y, dtype=DTYPE, copy=False)
-        Xt = exogenous
+        Xt = X
         named_kwargs = self._get_kwargs(**fit_kwargs)
 
         # store original shape for later in-sample preds
@@ -219,16 +223,16 @@ class Pipeline(BaseEstimator):
 
         # Now fit the final estimator
         kwargs = named_kwargs[steps[-1][0]]
-        self._final_estimator.fit(yt, exogenous=Xt, **kwargs)
+        self._final_estimator.fit(yt, X=Xt, **kwargs)
         return self
 
-    def _pre_predict(self, n_periods, exogenous, **kwargs):
+    def _pre_predict(self, n_periods, X, **kwargs):
         """Runs transformation steps before predicting on data"""
         check_is_fitted(self, "steps_")
 
         # Push the arrays through the transformer stages, but ONLY the exog
         # transformer stages since we don't have a Y...
-        Xt = exogenous
+        Xt = X
         named_kwargs = self._get_kwargs(**kwargs)
 
         for step_idx, name, transformer in self._iter(with_final=False):
@@ -247,7 +251,7 @@ class Pipeline(BaseEstimator):
 
                 # TODO: manual check to ensure Xt shape == n_periods shape?
 
-                _, Xt = transformer.transform(y=None, exogenous=Xt, **kw)
+                _, Xt = transformer.transform(y=None, X=Xt, **kw)
 
         # since some exog featurizers require exog input, and others don't,
         # feat orders may get wonky between fit & pred. Make sure we have them
@@ -259,10 +263,10 @@ class Pipeline(BaseEstimator):
         nm, est = self.steps_[-1]
         return Xt, est, named_kwargs[nm]
 
-    def transform(self, n_periods=10, exogenous=None, **kwargs):
-        """Get the transformed exogenous array
+    def transform(self, n_periods=10, X=None, **kwargs):
+        """Get the transformed X array
 
-        Generate the exogenous array ``n_periods`` in the future. This passes
+        Generate the X array ``n_periods`` in the future. This passes
         the provided exog variables through all transformation steps, returning
         it before it's passed into the model.
 
@@ -271,7 +275,7 @@ class Pipeline(BaseEstimator):
         n_periods : int, optional (default=10)
             The number of periods in the future to forecast.
 
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -293,14 +297,22 @@ class Pipeline(BaseEstimator):
         X_prime : pd.DataFrame
             The transformed exog array.
         """
-        n_periods = self._check_n_periods(n_periods, exogenous)
+        # Temporary shim until we remove `exogenous` support completely
+        X, kwargs = pm_compat.get_X(X, **kwargs)
+
+        n_periods = self._check_n_periods(n_periods, X)
         kwargs = _warn_for_deprecated(**kwargs)
-        Xt, _, _ = self._pre_predict(n_periods, exogenous, **kwargs)
+        Xt, _, _ = self._pre_predict(n_periods, X, **kwargs)
         return Xt
 
-    def predict_in_sample(self, exogenous=None, start=None,
-                          end=None, dynamic=False, return_conf_int=False,
-                          alpha=0.05, inverse_transform=True,
+    def predict_in_sample(self,
+                          X=None,
+                          start=None,
+                          end=None,
+                          dynamic=False,
+                          return_conf_int=False,
+                          alpha=0.05,
+                          inverse_transform=True,
                           **kwargs):
         """Generate in-sample predictions from the fit pipeline.
 
@@ -311,7 +323,7 @@ class Pipeline(BaseEstimator):
 
         Parameters
         ----------
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -362,25 +374,35 @@ class Pipeline(BaseEstimator):
             The confidence intervals for the predictions. Only returned if
             ``return_conf_int`` is True.
         """
+        # Temporary shim until we remove `exogenous` support completely
+        X, kwargs = pm_compat.get_X(X, **kwargs)
+
         kwargs = _warn_for_deprecated(**kwargs)
-        Xt, est, predict_kwargs = self._pre_predict(0, exogenous, **kwargs)
+        Xt, est, predict_kwargs = self._pre_predict(0, X, **kwargs)
 
         return_vals = est.predict_in_sample(
-            exogenous=Xt, start=start, end=end,
+            X=Xt,
+            start=start,
+            end=end,
             return_conf_int=return_conf_int,
-            alpha=alpha, dynamic=dynamic,
+            alpha=alpha,
+            dynamic=dynamic,
             **predict_kwargs)
 
         return self._post_predict(
             Xt, return_vals, return_conf_int, inverse_transform)
 
-    def predict(self, n_periods=10, exogenous=None,
-                return_conf_int=False, alpha=0.05, inverse_transform=True,
+    def predict(self,
+                n_periods=10,
+                X=None,
+                return_conf_int=False,
+                alpha=0.05,
+                inverse_transform=True,
                 **kwargs):
         """Forecast future (transformed) values
 
         Generate predictions (forecasts) ``n_periods`` in the future.
-        Note that if ``exogenous`` variables were used in the model fit, they
+        Note that if an ``X`` array was used in the model fit, it
         will be expected for the predict procedure and will fail otherwise.
         Forecasts may be transformed by the endogenous steps along the way and
         might be on a different scale than raw training/test data.
@@ -390,7 +412,7 @@ class Pipeline(BaseEstimator):
         n_periods : int, optional (default=10)
             The number of periods in the future to forecast.
 
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If provided, these
             variables are used as additional features in the regression
             operation. This should not include a constant or trend. Note that
@@ -426,20 +448,28 @@ class Pipeline(BaseEstimator):
             The confidence intervals for the forecasts. Only returned if
             ``return_conf_int`` is True.
         """
-        n_periods = self._check_n_periods(n_periods, exogenous)
+        # Temporary shim until we remove `exogenous` support completely
+        X, kwargs = pm_compat.get_X(X, **kwargs)
+
+        n_periods = self._check_n_periods(n_periods, X)
         kwargs = _warn_for_deprecated(**kwargs)
         Xt, est, predict_kwargs = self._pre_predict(
-            n_periods, exogenous, **kwargs)
+            n_periods, X, **kwargs)
 
         return_vals = est.predict(
-            n_periods=n_periods, exogenous=Xt,
+            n_periods=n_periods,
+            X=Xt,
             return_conf_int=return_conf_int,
-            alpha=alpha, **predict_kwargs)
+            alpha=alpha,
+            **predict_kwargs)
 
         return self._post_predict(
             Xt, return_vals, return_conf_int, inverse_transform)
 
-    def _post_predict(self, Xt, return_vals, return_conf_int,
+    def _post_predict(self,
+                      Xt,
+                      return_vals,
+                      return_conf_int,
                       inverse_transform):
         """Inverse-transform predictions to original data scale"""
 
@@ -472,11 +502,11 @@ class Pipeline(BaseEstimator):
         """Get a summary of the ARIMA model"""
         return self._final_estimator.summary()
 
-    def update(self, y, exogenous=None, maxiter=None, **kwargs):
+    def update(self, y, X=None, maxiter=None, **kwargs):
         """Update an ARIMA or auto-ARIMA as well as any necessary transformers
 
         Passes the newly observed values through the appropriate endog
-        transformations, and the exogenous array through the exog transformers
+        transformations, and the ``X`` array through the exog transformers
         (updating where necessary) before finally updating the ARIMA model.
 
         Parameters
@@ -487,7 +517,7 @@ class Pipeline(BaseEstimator):
             ``Series`` object or a numpy array. This should be a one-
             dimensional array of finite floats.
 
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables. If the model was
             fit with an exogenous array of covariates, it will be required for
             updating the observed values.
@@ -504,19 +534,22 @@ class Pipeline(BaseEstimator):
         """
         check_is_fitted(self, "steps_")
 
+        # Temporary shim until we remove `exogenous` support completely
+        X, kwargs = pm_compat.get_X(X, **kwargs)
+
         # Push the arrays through all of the transformer steps that have the
         # appropriate update_and_transform method
         yt = y
-        Xt = exogenous
+        Xt = X
         named_kwargs = self._get_kwargs(**kwargs)
 
         for step_idx, name, transformer in self._iter(with_final=False):
             kw = named_kwargs[name]
             if hasattr(transformer, "update_and_transform"):
                 yt, Xt = transformer.update_and_transform(
-                    y=yt, exogenous=Xt, **kw)
+                    y=yt, X=Xt, **kw)
             else:
-                yt, Xt = transformer.transform(yt, exogenous=Xt, **kw)
+                yt, Xt = transformer.transform(yt, X=Xt, **kw)
 
         if self.x_feats_ is not None:
             Xt = Xt[self.x_feats_]
@@ -524,4 +557,4 @@ class Pipeline(BaseEstimator):
         # Now we can update the arima
         nm, est = self.steps_[-1]
         return est.update(
-            yt, exogenous=Xt, maxiter=maxiter, **named_kwargs[nm])
+            yt, X=Xt, maxiter=maxiter, **named_kwargs[nm])

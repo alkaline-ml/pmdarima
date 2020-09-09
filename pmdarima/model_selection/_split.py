@@ -7,6 +7,8 @@ from sklearn.base import BaseEstimator
 from sklearn.utils.validation import indexable
 from sklearn.model_selection import train_test_split as tts
 
+from ..compat import pmdarima as pm_compat
+
 __all__ = [
     'check_cv',
     'train_test_split',
@@ -89,7 +91,7 @@ class BaseTSCrossValidator(BaseEstimator, metaclass=abc.ABCMeta):
         """The forecast horizon for the cross-validator"""
         return self.h
 
-    def split(self, y, exogenous=None):
+    def split(self, y, X=None, **kwargs):  # TODO: remove kwargs
         """Generate indices to split data into training and test sets
 
         Parameters
@@ -97,7 +99,7 @@ class BaseTSCrossValidator(BaseEstimator, metaclass=abc.ABCMeta):
         y : array-like or iterable, shape=(n_samples,)
             The time-series array.
 
-        exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)
+        X : array-like, shape=[n_obs, n_vars], optional (default=None)
             An optional 2-d array of exogenous variables.
 
         Yields
@@ -108,16 +110,19 @@ class BaseTSCrossValidator(BaseEstimator, metaclass=abc.ABCMeta):
         test : np.ndarray
             The test set indices for the split
         """
-        y, exog = indexable(y, exogenous)
+        # Temporary shim until we remove `exogenous` support completely
+        X, _ = pm_compat.get_X(X, **kwargs)
+
+        y, X = indexable(y, X)
         indices = np.arange(y.shape[0])
-        for train_index, test_index in self._iter_train_test_masks(y, exog):
+        for train_index, test_index in self._iter_train_test_masks(y, X):
             train_index = indices[train_index]
             test_index = indices[test_index]
             yield train_index, test_index
 
-    def _iter_train_test_masks(self, y, exog):
+    def _iter_train_test_masks(self, y, X):
         """Generate boolean masks corresponding to test sets"""
-        for train_index, test_index in self._iter_train_test_indices(y, exog):
+        for train_index, test_index in self._iter_train_test_indices(y, X):
             train_mask = np.zeros(y.shape[0], dtype=np.bool)
             test_mask = np.zeros(y.shape[0], dtype=np.bool)
 
@@ -126,7 +131,7 @@ class BaseTSCrossValidator(BaseEstimator, metaclass=abc.ABCMeta):
             yield train_mask, test_mask
 
     @abc.abstractmethod
-    def _iter_train_test_indices(self, y, exog):
+    def _iter_train_test_indices(self, y, X):
         """Yields the train/test indices"""
 
 
@@ -215,7 +220,7 @@ class RollingForecastCV(BaseTSCrossValidator):
         super().__init__(h, step)
         self.initial = initial
 
-    def _iter_train_test_indices(self, y, exog):
+    def _iter_train_test_indices(self, y, X):
         """Yields the train/test indices"""
         n_samples = y.shape[0]
         initial = self.initial
@@ -312,7 +317,7 @@ class SlidingWindowForecastCV(BaseTSCrossValidator):
         super().__init__(h, step)
         self.window_size = window_size
 
-    def _iter_train_test_indices(self, y, exog):
+    def _iter_train_test_indices(self, y, X):
         """Yields the train/test indices"""
         n_samples = y.shape[0]
         window_size = self.window_size

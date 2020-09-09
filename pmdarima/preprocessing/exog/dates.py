@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from .base import BaseExogFeaturizer
+from ...compat import pmdarima as pm_compat
 
 import numpy as np
 import pandas as pd
@@ -69,7 +70,7 @@ class DateFeaturizer(BaseExogFeaturizer):
 
     Notes
     -----
-    * In order to use time series with holes, it is required that an exog
+    * In order to use time series with holes, it is required that an X
       array be provided at prediction time. Other featurizers automatically
       create exog arrays into the future for inference, but this is not
       possible currently with the date featurizer. Your code must provide the
@@ -90,16 +91,17 @@ class DateFeaturizer(BaseExogFeaturizer):
         self.with_day_of_week = with_day_of_week
         self.with_day_of_month = with_day_of_month
 
-    def _check_exog(self, exog):
+    def _check_X(self, X):
         # exog must be a pd.DataFrame, and the column_name must be a timestamp
-        if not isinstance(exog, pd.DataFrame):
-            raise TypeError("exog must be a DataFrame to use the "
-                            "DateFeaturizer, but got type=%s"
-                            % type(exog))
+        if not isinstance(X, pd.DataFrame):
+            raise TypeError(
+                f"X must be a DataFrame to use the DateFeaturizer, but got "
+                f"type={type(X)}"
+            )
 
         name = self.column_name
-        if not (name in exog.columns and
-                'datetime64' in exog[name].dtype.name):
+        if not (name in X.columns and
+                'datetime64' in X[name].dtype.name):
             raise ValueError("column '%s' must exist in exog as a "
                              "pd.Timestamp type"
                              % name)
@@ -126,7 +128,7 @@ class DateFeaturizer(BaseExogFeaturizer):
 
         return out
 
-    def fit(self, y, exogenous=None):
+    def fit(self, y, X=None, **kwargs):  # TODO: remove kwargs later
         """Fit the transformer
 
         Parameters
@@ -134,14 +136,17 @@ class DateFeaturizer(BaseExogFeaturizer):
         y : array-like or None, shape=(n_samples,)
             The endogenous (time-series) array.
 
-        exogenous : array-like, shape=(n_samples, n_features)
+        X : array-like, shape=(n_samples, n_features)
             The exogenous array of additional covariates. Must include the
             ``column_name`` feature, which must be a pd.Timestamp dtype.
         """
-        y, X = self._check_y_exog(y, exogenous, null_allowed=False)
+        # Temporary shim until we remove `exogenous` support completely
+        X, _ = pm_compat.get_X(X, **kwargs)
+
+        y, X = self._check_y_X(y, X, null_allowed=False)
 
         # enforce pd.DataFrame
-        self._check_exog(X)
+        self._check_X(X)
 
         # we don't _technically_ need to do this, but it seems like a nice bit
         # of friendly validation to make sure that at least _something_ will
@@ -152,11 +157,11 @@ class DateFeaturizer(BaseExogFeaturizer):
 
         return self
 
-    def transform(self, y, exogenous=None, **_):
+    def transform(self, y, X=None, **kwargs):
         """Create date features
 
-        When an ARIMA is fit with an exogenous array, it must be forecasted
-        with one also. However, unlike other exogenous featurizers, an exog
+        When an ARIMA is fit with an X array, it must be forecasted
+        with one also. However, unlike other exogenous featurizers, an X
         array is required at inference time for the DateFeaturizer.
 
         Parameters
@@ -166,14 +171,18 @@ class DateFeaturizer(BaseExogFeaturizer):
             optional for the Fourier terms, since it uses the pre-computed
             ``n`` to calculate the seasonal Fourier terms.
 
-        exogenous : array-like, shape=(n_samples, n_features)
+        X : array-like, shape=(n_samples, n_features)
             The exogenous array of additional covariates. The ``column_name``
             feature must be present, and of dtype pd.Timestamp
         """
-        y, X = self._check_y_exog(y, exogenous, null_allowed=True)
+
+        # Temporary shim until we remove `exogenous` support completely
+        X, _ = pm_compat.get_X(X, **kwargs)
+
+        y, X = self._check_y_X(y, X, null_allowed=True)
 
         # enforce pd.DataFrame
-        self._check_exog(X)
+        self._check_X(X)
         date_series = X[self.column_name]  # type: pd.Series
         m = X.shape[0]
 

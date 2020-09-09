@@ -47,7 +47,7 @@ def test_numpy_array_fails():
     with pytest.raises(TypeError) as te:
         feat.fit_transform(y, X.values)
 
-    assert "exog must be" in pytest_error_str(te)
+    assert "X must be" in pytest_error_str(te)
 
 
 def _dummy_assertions(X_prime):
