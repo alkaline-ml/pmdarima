@@ -6,8 +6,6 @@
 
 import numpy as np
 
-from joblib import Parallel, delayed
-from sklearn.utils import check_random_state
 from sklearn.linear_model import LinearRegression
 
 import functools
@@ -656,84 +654,73 @@ def auto_arima(y,
             raise ValueError('max_order must be None or a positive '
                              'integer (>= 0)')
 
-        # NOTE: pre-1.5.2, we started at start_p, start_q, etc. However, when
-        # using stepwise=FALSE in R, hyndman starts at 0. He only uses start_*
-        # when stepwise=TRUE.
-
-        # generate the set of (p, q, P, Q) FIRST, since it is contingent
-        # on whether or not the user is interested in a seasonal ARIMA result.
-        # This will reduce the search space for non-seasonal ARIMA models.
-        # loop p, q. Make sure to loop at +1 interval,
-        # since max_{p|q} is inclusive.
-        if seasonal:
-            gen = (
-                ((p, d, q), (P, D, Q, m))
-                for p in range(0, max_p + 1)
-                for q in range(0, max_q + 1)
-                for P in range(0, max_P + 1)
-                for Q in range(0, max_Q + 1)
-                if p + q + P + Q <= max_order
-            )
-        else:
-            # otherwise it's not seasonal and we don't need the seasonal pieces
-            gen = (
-                ((p, d, q), (0, 0, 0, 0))
-                for p in range(0, max_p + 1)
-                for q in range(0, max_q + 1)
-                if p + q <= max_order
-            )
-
-        # if we are fitting a random search rather than an exhaustive one, we
-        # will scramble up the generator (as a list) and only fit n_iter ARIMAs
-        if random:
-            random_state = check_random_state(random_state)
-
-            # make a list to scramble...
-            gen = random_state.permutation(list(gen))[:n_fits]
-
-        # get results in parallel
-        all_res = Parallel(n_jobs=n_jobs)(
-            delayed(fit_partial)(
-                y,
-                xreg=X,
-                order=order,
-                seasonal_order=seasonal_order,
-                with_intercept=with_intercept,
-                **sarimax_kwargs)
-            for order, seasonal_order in gen)
-
-        # filter the non-successful ones and sort
-        sorted_res = solvers._sort_and_filter_fits(all_res)
+        search = solvers._RandomFitWrapper(
+            y=y,
+            X=X,
+            fit_partial=fit_partial,
+            d=d,
+            D=D,
+            m=m,
+            max_order=max_order,
+            max_p=max_p,
+            max_q=max_q,
+            max_P=max_P,
+            max_Q=max_Q,
+            random=random,
+            random_state=random_state,
+            n_fits=n_fits,
+            n_jobs=n_jobs,
+            seasonal=seasonal,
+            trace=trace,
+            with_intercept=with_intercept,
+            sarimax_kwargs=sarimax_kwargs,
+        )
 
     else:
-        # otherwise, we're fitting the stepwise algorithm...
         if n_samples < 10:
             start_p = min(start_p, 1)
             start_q = min(start_q, 1)
             start_P = start_Q = 0
 
-        # adjust to p, q, P, Q vals
-        p = start_p = min(start_p, max_p)
-        q = start_q = min(start_q, max_q)
-        P = start_P = min(start_P, max_P)
-        Q = start_Q = min(start_Q, max_Q)
+        # seed p, q, P, Q vals
+        p = min(start_p, max_p)
+        q = min(start_q, max_q)
+        P = min(start_P, max_P)
+        Q = min(start_Q, max_Q)
 
         # init the stepwise model wrapper
-        stepwise_wrapper = solvers._StepwiseFitWrapper(
-            y, xreg=X, start_params=start_params, trend=trend,
-            method=method, maxiter=maxiter, fit_params=fit_args,
-            suppress_warnings=suppress_warnings, trace=trace,
-            error_action=error_action, out_of_sample_size=out_of_sample_size,
-            scoring=scoring, scoring_args=scoring_args, p=p, d=d, q=q,
-            P=P, D=D, Q=Q, m=m, start_p=start_p, start_q=start_q,
-            start_P=start_P, start_Q=start_Q, max_p=max_p, max_q=max_q,
-            max_P=max_P, max_Q=max_Q, seasonal=seasonal,
+        search = solvers._StepwiseFitWrapper(
+            y,
+            X=X,
+            start_params=start_params,
+            trend=trend,
+            method=method,
+            maxiter=maxiter,
+            fit_params=fit_args,
+            suppress_warnings=suppress_warnings,
+            trace=trace,
+            error_action=error_action,
+            out_of_sample_size=out_of_sample_size,
+            scoring=scoring,
+            scoring_args=scoring_args,
+            p=p,
+            d=d,
+            q=q,
+            P=P,
+            D=D,
+            Q=Q,
+            m=m,
+            max_p=max_p,
+            max_q=max_q,
+            max_P=max_P,
+            max_Q=max_Q,
+            seasonal=seasonal,
             information_criterion=information_criterion,
-            with_intercept=with_intercept, **sarimax_kwargs)
+            with_intercept=with_intercept,
+            **sarimax_kwargs,
+        )
 
-        # do the step-through...
-        sorted_res = stepwise_wrapper.solve_stepwise()
-
+    sorted_res = search.solve()
     return _return_wrapper(sorted_res, return_valid_fits, start, trace)
 
 

@@ -5,6 +5,12 @@
 from numpy.linalg import LinAlgError
 import numpy as np
 
+from datetime import datetime
+from joblib import Parallel, delayed
+from sklearn.utils import check_random_state
+
+import abc
+import functools
 import time
 import warnings
 import traceback
@@ -14,8 +20,6 @@ from .warnings import ModelFitWarning
 from ._context import ContextType, ContextStore
 from . import _validation
 from ..compat import statsmodels as sm_compat
-from datetime import datetime
-import functools
 
 
 def _root_test(model, ic, trace):
@@ -47,8 +51,96 @@ def _root_test(model, ic, trace):
     return ic
 
 
-class _StepwiseFitWrapper:
-    """The stepwise algorithm fluctuates the more sensitive pieces of the ARIMA
+class _SolverMixin(metaclass=abc.ABCMeta):
+    """The solver interface implemented by wrapper classes"""
+
+    @abc.abstractmethod
+    def solve(self):
+        """Must be implemented by subclasses"""
+
+
+class _RandomFitWrapper(_SolverMixin):
+    """Searches for the best model using a random search"""
+
+    def __init__(self, y, X, fit_partial, d, D, m, max_order,
+                 max_p, max_q, max_P, max_Q, random, random_state,
+                 n_fits, n_jobs, seasonal, trace, with_intercept,
+                 sarimax_kwargs):
+
+        # NOTE: pre-1.5.2, we started at start_p, start_q, etc. However, when
+        # using stepwise=FALSE in R, hyndman starts at 0. He only uses start_*
+        # when stepwise=TRUE.
+
+        # generate the set of (p, q, P, Q) FIRST, since it is contingent
+        # on whether or not the user is interested in a seasonal ARIMA result.
+        # This will reduce the search space for non-seasonal ARIMA models.
+        # loop p, q. Make sure to loop at +1 interval,
+        # since max_{p|q} is inclusive.
+        if seasonal:
+            gen = (
+                ((p, d, q), (P, D, Q, m))
+                for p in range(0, max_p + 1)
+                for q in range(0, max_q + 1)
+                for P in range(0, max_P + 1)
+                for Q in range(0, max_Q + 1)
+                if p + q + P + Q <= max_order
+            )
+        else:
+            # otherwise it's not seasonal and we don't need the seasonal pieces
+            gen = (
+                ((p, d, q), (0, 0, 0, 0))
+                for p in range(0, max_p + 1)
+                for q in range(0, max_q + 1)
+                if p + q <= max_order
+            )
+
+        # if we are fitting a random search rather than an exhaustive one, we
+        # will scramble up the generator (as a list) and only fit n_iter ARIMAs
+        if random:
+            random_state = check_random_state(random_state)
+
+            # make a list to scramble...
+            gen = random_state.permutation(list(gen))[:n_fits]
+
+        self.gen = gen
+        self.n_jobs = n_jobs
+        self.trace = trace
+
+        # New partial containing y, X
+        self.fit_partial = functools.partial(
+            fit_partial,
+            y=y,
+            X=X,
+            with_intercept=with_intercept,
+            **sarimax_kwargs,
+        )
+
+    def solve(self):
+        """Do a random search"""
+        fit_partial = self.fit_partial
+        n_jobs = self.n_jobs
+        gen = self.gen
+
+        # get results in parallel
+        all_res = Parallel(n_jobs=n_jobs)(
+            delayed(fit_partial)(
+                order=order,
+                seasonal_order=seasonal_order,
+            )
+            for order, seasonal_order in gen
+        )
+
+        sorted_fits = _sort_and_filter_fits(all_res)
+        if self.trace and sorted_fits:
+            print(f"\nBest model: {str(sorted_fits[0])}")
+
+        return sorted_fits
+
+
+class _StepwiseFitWrapper(_SolverMixin):
+    """Searches for the best model using the stepwise algorithm.
+    
+    The stepwise algorithm fluctuates the more sensitive pieces of the ARIMA
     (the seasonal components) first, adjusting towards the direction of the
     smaller {A|B|HQ}IC(c), and continues to step down as long as the error
     shrinks. As long as the error term decreases and the best parameters have
@@ -61,11 +153,10 @@ class _StepwiseFitWrapper:
     .. [1] R's auto-arima stepwise source code: https://github.com/robjhyndman/forecast/blob/30308a4e314ff29338291462e81bf68ff0c5f86d/R/newarima2.R#L366
     .. [2] https://robjhyndman.com/hyndsight/arma-roots/
     """  # noqa
-    def __init__(self, y, xreg, start_params, trend, method, maxiter,
+    def __init__(self, y, X, start_params, trend, method, maxiter,
                  fit_params, suppress_warnings, trace, error_action,
                  out_of_sample_size, scoring, scoring_args,
-                 p, d, q, P, D, Q, m, start_p, start_q,
-                 start_P, start_Q, max_p, max_q, max_P, max_Q, seasonal,
+                 p, d, q, P, D, Q, m, max_p, max_q, max_P, max_Q, seasonal,
                  information_criterion, with_intercept, **kwargs):
 
         self.trace = _validation.check_trace(trace)
@@ -74,7 +165,7 @@ class _StepwiseFitWrapper:
         self._fit_arima = functools.partial(
             _fit_candidate_model,
             x=y,
-            xreg=xreg,
+            X=X,
             start_params=start_params,
             trend=trend,
             method=method,
@@ -87,7 +178,6 @@ class _StepwiseFitWrapper:
             scoring=scoring,
             scoring_args=scoring_args,
             information_criterion=information_criterion,
-            do_root_test=True,
             **kwargs)
 
         self.information_criterion = information_criterion
@@ -101,10 +191,6 @@ class _StepwiseFitWrapper:
         self.D = D
         self.Q = Q
         self.m = m
-        self.start_p = start_p
-        self.start_q = start_q
-        self.start_P = start_P
-        self.start_Q = start_Q
         self.max_p = max_p
         self.max_q = max_q
         self.max_P = max_P
@@ -185,7 +271,7 @@ class _StepwiseFitWrapper:
         # we've seen this model before
         return False
 
-    def solve_stepwise(self):
+    def solve(self):
         start_time = datetime.now()
         p, d, q = self.p, self.d, self.q
         P, D, Q, m = self.P, self.D, self.Q, self.m
@@ -373,13 +459,13 @@ class _StepwiseFitWrapper:
 
         sorted_fits = _sort_and_filter_fits(filtered_models_ics)
         if self.trace and sorted_fits:
-            print("\nBest model: %s" % str(sorted_fits[0]))
+            print(f"\nBest model: {str(sorted_fits[0])}")
 
         return sorted_fits
 
 
-def _fit_candidate_model(x,
-                         xreg,
+def _fit_candidate_model(y,
+                         X,
                          order,
                          seasonal_order,
                          start_params,
@@ -395,7 +481,6 @@ def _fit_candidate_model(x,
                          scoring_args,
                          with_intercept,
                          information_criterion,
-                         do_root_test=False,  # TODO: use in non-stepwise?
                          **kwargs):
     """Instantiate and fit a candidate model
 
@@ -418,7 +503,7 @@ def _fit_candidate_model(x,
                 with_intercept=with_intercept, **kwargs)
 
     try:
-        fit.fit(x, X=xreg, **fit_params)
+        fit.fit(y, X=X, **fit_params)
 
     # for non-stationarity errors or singular matrices, return None
     except (LinAlgError, ValueError) as v:
@@ -442,8 +527,7 @@ def _fit_candidate_model(x,
 
         # check the roots of the new model, and set IC to inf if the
         # roots are near non-invertible
-        if do_root_test:
-            ic = _root_test(fit, ic, trace)
+        ic = _root_test(fit, ic, trace)
 
     # log the model fit
     if trace:

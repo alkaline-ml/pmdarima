@@ -28,7 +28,7 @@ from pmdarima.datasets._base import load_date_example
 import numpy as np
 from matplotlib import pyplot as plt
 
-print("pmdarima version: %s" % pm.__version__)
+print(f"pmdarima version: {pm.__version__}")
 
 # Load the data and split it into separate pieces
 y, X = load_date_example()
@@ -50,7 +50,7 @@ date_feat = preprocessing.DateFeaturizer(
     with_day_of_month=True)
 
 _, X_train_feats = date_feat.fit_transform(y_train, X_train)
-print("Head of generated X features:\n%s" % repr(X_train_feats.head()))
+print(f"Head of generated X features:\n{repr(X_train_feats.head())}")
 
 # We can plug this X featurizer into a pipeline:
 pipe = pipeline.Pipeline([
