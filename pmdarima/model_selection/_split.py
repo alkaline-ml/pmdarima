@@ -113,9 +113,9 @@ class BaseTSCrossValidator(BaseEstimator, metaclass=abc.ABCMeta):
         # Temporary shim until we remove `exogenous` support completely
         X, _ = pm_compat.get_X(X, **kwargs)
 
-        y, exog = indexable(y, X)
+        y, X = indexable(y, X)
         indices = np.arange(y.shape[0])
-        for train_index, test_index in self._iter_train_test_masks(y, exog):
+        for train_index, test_index in self._iter_train_test_masks(y, X):
             train_index = indices[train_index]
             test_index = indices[test_index]
             yield train_index, test_index

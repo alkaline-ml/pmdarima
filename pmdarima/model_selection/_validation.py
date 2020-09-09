@@ -62,15 +62,14 @@ def _check_scoring(metric):
     return _check_callables(metric, _valid_scoring, "metric")
 
 
-def _safe_split(y, exog, train, test):
+def _safe_split(y, X, train, test):
     """Performs the CV indexing given the indices"""
     y_train, y_test = y.take(train), y.take(test)
-    if exog is None:
-        exog_train = exog_test = None
+    if X is None:
+        X_train = X_test = None
     else:
-        exog_train, exog_test = \
-            safe_indexing(exog, train), safe_indexing(exog, test)
-    return y_train, y_test, exog_train, exog_test
+        X_train, X_test = safe_indexing(X, train), safe_indexing(X, test)
+    return y_train, y_test, X_train, X_test
 
 
 def _fit_and_score(fold, estimator, y, X, scorer, train, test, verbose,
@@ -81,10 +80,10 @@ def _fit_and_score(fold, estimator, y, X, scorer, train, test, verbose,
         print("[CV] %s %s" % (msg, (64 - len(msg)) * '.'))
 
     start_time = time.time()
-    y_train, y_test, exog_train, exog_test = _safe_split(y, X, train, test)
+    y_train, y_test, X_train, X_test = _safe_split(y, X, train, test)
 
     try:
-        estimator.fit(y_train, X=exog_train)
+        estimator.fit(y_train, X=X_train)
 
     except Exception as e:
         fit_time = time.time() - start_time
@@ -103,7 +102,7 @@ def _fit_and_score(fold, estimator, y, X, scorer, train, test, verbose,
         fit_time = time.time() - start_time
 
         # forecast h periods into the future and compute the score
-        preds = estimator.predict(n_periods=len(test), X=exog_test)
+        preds = estimator.predict(n_periods=len(test), X=X_test)
         test_scores = scorer(y_test, preds)
         score_time = time.time() - start_time - fit_time
 
@@ -123,15 +122,15 @@ def _fit_and_predict(fold, estimator, y, X, train, test, verbose):
         print("[CV] %s %s" % (msg, (64 - len(msg)) * '.'))
 
     start_time = time.time()
-    y_train, _, exog_train, exog_test = _safe_split(y, X, train, test)
+    y_train, _, X_train, X_test = _safe_split(y, X, train, test)
 
     # scikit doesn't handle failures on cv predict, so we won't either.
-    estimator.fit(y_train, X=exog_train)
+    estimator.fit(y_train, X=X_train)
     fit_time = time.time() - start_time
 
     # forecast h periods into the future
     start_time = time.time()
-    preds = estimator.predict(n_periods=len(test), X=exog_test)
+    preds = estimator.predict(n_periods=len(test), X=X_test)
     pred_time = time.time() - start_time
 
     if verbose > 2:

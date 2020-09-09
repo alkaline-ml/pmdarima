@@ -819,8 +819,10 @@ class ARIMA(BaseARIMA):
             n_exog, exog_dim = X.shape
 
             if X.shape[1] != k_exog:
-                raise ValueError("Dim mismatch in fit X (%i) and new "
-                                 "X (%i)" % (k_exog, exog_dim))
+                raise ValueError(
+                    f"Dim mismatch in fit `X` ({k_exog}) and new "
+                    f"`X` ({exog_dim})"
+                )
 
             # make sure the number of samples in X match the number
             # of samples in the endog
