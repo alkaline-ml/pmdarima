@@ -196,7 +196,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.preprocessing" title="pmdarima.preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code></a>.FourierFeaturizer<a class="headerlink" href="#pmdarima-preprocessing-fourierfeaturizer" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pmdarima.preprocessing.FourierFeaturizer">
-<em class="property">class </em><code class="descclassname">pmdarima.preprocessing.</code><code class="descname">FourierFeaturizer</code><span class="sig-paren">(</span><em>m</em>, <em>k=None</em>, <em>prefix=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/efde8bf2/pmdarima/preprocessing/exog/fourier.py#L27"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pmdarima.preprocessing.</code><code class="descname">FourierFeaturizer</code><span class="sig-paren">(</span><em>m</em>, <em>k=None</em>, <em>prefix=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/d6678205/pmdarima/preprocessing/exog/fourier.py#L27"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fourier terms for modeling seasonality</p>
 <p>This transformer creates an exogenous matrix containing terms from a
 Fourier series, up to order <code class="docutils literal notranslate"><span class="pre">k</span></code>. It is based on <code class="docutils literal notranslate"><span class="pre">R::forecast</span> <span class="pre">code</span></code> [1].
@@ -266,8 +266,8 @@ seems to take a very long time to fit a model.</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_wineind</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">load_wineind</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">trans</span> <span class="o">=</span> <span class="n">FourierFeaturizer</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_prime</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exog</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_prime</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 <span class="go">   FOURIER_S12-0     FOURIER_C12-0    ...     FOURIER_S12-3  FOURIER_C12-3</span>
 <span class="go">0       0.500000      8.660254e-01    ...      8.660254e-01           -0.5</span>
 <span class="go">1       0.866025      5.000000e-01    ...     -8.660255e-01           -0.5</span>
@@ -283,10 +283,10 @@ seems to take a very long time to fit a model.</li>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.preprocessing.FourierFeaturizer.fit" title="pmdarima.preprocessing.FourierFeaturizer.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(y[,&nbsp;exogenous])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.preprocessing.FourierFeaturizer.fit" title="pmdarima.preprocessing.FourierFeaturizer.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(y[,&nbsp;X])</td>
 <td>Fit the transformer</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pmdarima.preprocessing.FourierFeaturizer.fit_transform" title="pmdarima.preprocessing.FourierFeaturizer.fit_transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_transform</span></code></a>(y[,&nbsp;exogenous])</td>
+<tr class="row-even"><td><a class="reference internal" href="#pmdarima.preprocessing.FourierFeaturizer.fit_transform" title="pmdarima.preprocessing.FourierFeaturizer.fit_transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_transform</span></code></a>(y[,&nbsp;X])</td>
 <td>Fit and transform the arrays</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#pmdarima.preprocessing.FourierFeaturizer.get_params" title="pmdarima.preprocessing.FourierFeaturizer.get_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code></a>([deep])</td>
@@ -295,23 +295,23 @@ seems to take a very long time to fit a model.</li>
 <tr class="row-even"><td><a class="reference internal" href="#pmdarima.preprocessing.FourierFeaturizer.set_params" title="pmdarima.preprocessing.FourierFeaturizer.set_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code></a>(**params)</td>
 <td>Set the parameters of this estimator.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.preprocessing.FourierFeaturizer.transform" title="pmdarima.preprocessing.FourierFeaturizer.transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code></a>(y[,&nbsp;exogenous,&nbsp;n_periods])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pmdarima.preprocessing.FourierFeaturizer.transform" title="pmdarima.preprocessing.FourierFeaturizer.transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code></a>(y[,&nbsp;X,&nbsp;n_periods])</td>
 <td>Create Fourier term features</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#pmdarima.preprocessing.FourierFeaturizer.update_and_transform" title="pmdarima.preprocessing.FourierFeaturizer.update_and_transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_and_transform</span></code></a>(y,&nbsp;exogenous,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#pmdarima.preprocessing.FourierFeaturizer.update_and_transform" title="pmdarima.preprocessing.FourierFeaturizer.update_and_transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_and_transform</span></code></a>(y[,&nbsp;X])</td>
 <td>Update the params and return the transformed arrays</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>m</em>, <em>k=None</em>, <em>prefix=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/efde8bf2/pmdarima/preprocessing/exog/fourier.py#L93"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>m</em>, <em>k=None</em>, <em>prefix=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/d6678205/pmdarima/preprocessing/exog/fourier.py#L93"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/efde8bf2/pmdarima/preprocessing/exog/fourier.py#L116"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>y</em>, <em>X=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/d6678205/pmdarima/preprocessing/exog/fourier.py#L116"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the transformer</p>
 <p>Computes the periods of all the Fourier terms. The values of <code class="docutils literal notranslate"><span class="pre">y</span></code> are
 not actually used; only the periodicity is used when computing Fourier
@@ -324,7 +324,7 @@ terms.</p>
 <blockquote>
 <div><p>The endogenous (time-series) array.</p>
 </div></blockquote>
-<p><strong>exogenous</strong> : array-like or None, shape=(n_samples, n_features), optional</p>
+<p><strong>X</strong> : array-like or None, shape=(n_samples, n_features), optional</p>
 <blockquote class="last">
 <div><p>The exogenous array of additional covariates. If specified, the
 Fourier terms will be column-bound on the right side of the matrix.
@@ -339,7 +339,7 @@ array.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.fit_transform">
-<code class="descname">fit_transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>**transform_kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/efde8bf2/pmdarima/preprocessing/base.py#L43"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.fit_transform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit_transform</code><span class="sig-paren">(</span><em>y</em>, <em>X=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/d6678205/pmdarima/preprocessing/base.py#L42"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit and transform the arrays</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -349,11 +349,11 @@ array.</p>
 <blockquote>
 <div><p>The endogenous (time-series) array.</p>
 </div></blockquote>
-<p><strong>exogenous</strong> : array-like or None, shape=(n_samples, n_features), optional</p>
+<p><strong>X</strong> : array-like or None, shape=(n_samples, n_features), optional</p>
 <blockquote>
 <div><p>The exogenous array of additional covariates.</p>
 </div></blockquote>
-<p><strong>**transform_kwargs</strong> : keyword args</p>
+<p><strong>**kwargs</strong> : keyword args</p>
 <blockquote class="last">
 <div><p>Keyword arguments required by the transform function.</p>
 </div></blockquote>
@@ -365,7 +365,7 @@ array.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.get_params">
-<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/efde8bf2/pmdarima/../sklearn/base.py#L189"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.get_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_params</code><span class="sig-paren">(</span><em>deep=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/d6678205/pmdarima/../sklearn/base.py#L189"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -390,7 +390,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.set_params">
-<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/efde8bf2/pmdarima/../sklearn/base.py#L221"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.set_params" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_params</code><span class="sig-paren">(</span><em>**params</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/d6678205/pmdarima/../sklearn/base.py#L221"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.set_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as pipelines). The latter have parameters of the form
@@ -418,7 +418,7 @@ component of a nested object.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous=None</em>, <em>n_periods=0</em>, <em>**_</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/efde8bf2/pmdarima/preprocessing/exog/fourier.py#L158"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.transform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">transform</code><span class="sig-paren">(</span><em>y</em>, <em>X=None</em>, <em>n_periods=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/d6678205/pmdarima/preprocessing/exog/fourier.py#L162"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create Fourier term features</p>
 <p>When an ARIMA is fit with an exogenous array, it must be forecasted
 with one also. Since at <code class="docutils literal notranslate"><span class="pre">predict</span></code> time in a pipeline we won’t have
@@ -438,7 +438,7 @@ so this does not pose a risk of data leakage.</p>
 optional for the Fourier terms, since it uses the pre-computed
 <code class="docutils literal notranslate"><span class="pre">n</span></code> to calculate the seasonal Fourier terms.</p>
 </div></blockquote>
-<p><strong>exogenous</strong> : array-like or None, shape=(n_samples, n_features), optional</p>
+<p><strong>X</strong> : array-like or None, shape=(n_samples, n_features), optional</p>
 <blockquote>
 <div><p>The exogenous array of additional covariates. If specified, the
 Fourier terms will be column-bound on the right side of the matrix.
@@ -460,7 +460,7 @@ returned.</p>
 
 <dl class="method">
 <dt id="pmdarima.preprocessing.FourierFeaturizer.update_and_transform">
-<code class="descname">update_and_transform</code><span class="sig-paren">(</span><em>y</em>, <em>exogenous</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/efde8bf2/pmdarima/preprocessing/exog/fourier.py#L211"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.update_and_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.update_and_transform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update_and_transform</code><span class="sig-paren">(</span><em>y</em>, <em>X=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/d6678205/pmdarima/preprocessing/exog/fourier.py#L220"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/fourier.html#FourierFeaturizer.update_and_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.preprocessing.FourierFeaturizer.update_and_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the params and return the transformed arrays</p>
 <p>Since no parameters really get updated in the Fourier featurizer, all
 we do is compose forecasts for <code class="docutils literal notranslate"><span class="pre">n_periods=len(y)</span></code> and then update
@@ -473,7 +473,7 @@ we do is compose forecasts for <code class="docutils literal notranslate"><span 
 <blockquote>
 <div><p>The endogenous (time-series) array.</p>
 </div></blockquote>
-<p><strong>exogenous</strong> : array-like or None, shape=(n_samples, n_features)</p>
+<p><strong>X</strong> : array-like or None, shape=(n_samples, n_features)</p>
 <blockquote>
 <div><p>The exogenous array of additional covariates.</p>
 </div></blockquote>

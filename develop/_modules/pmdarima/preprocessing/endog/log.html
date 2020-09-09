@@ -206,7 +206,7 @@
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">lmbda2</span><span class="o">=</span><span class="n">lmbda</span><span class="p">,</span> <span class="n">neg_action</span><span class="o">=</span><span class="n">neg_action</span><span class="p">,</span> <span class="n">floor</span><span class="o">=</span><span class="n">floor</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LogEndogTransformer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="LogEndogTransformer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># TODO: kwargs go away</span>
         <span class="sd">&quot;&quot;&quot;Fit the transformer</span>
 
 <span class="sd">        Must be called before ``transform``.</span>
@@ -216,14 +216,14 @@
 <span class="sd">        y : array-like or None, shape=(n_samples,)</span>
 <span class="sd">            The endogenous (time-series) array.</span>
 
-<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">        X : array-like or None, shape=(n_samples, n_features), optional</span>
 <span class="sd">            The exogenous array of additional covariates. Not used for</span>
 <span class="sd">            endogenous transformers. Default is None, and non-None values will</span>
 <span class="sd">            serve as pass-through arrays.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LogEndogTransformer.transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">transform_kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="LogEndogTransformer.transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">transform_kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Apply the log transform to the array</span>
 
 <span class="sd">        Parameters</span>
@@ -231,7 +231,7 @@
 <span class="sd">        y : array-like or None, shape=(n_samples,)</span>
 <span class="sd">            The endogenous (time-series) array.</span>
 
-<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">        X : array-like or None, shape=(n_samples, n_features), optional</span>
 <span class="sd">            The exogenous array of additional covariates. Not used for</span>
 <span class="sd">            endogenous transformers. Default is None, and non-None values will</span>
 <span class="sd">            serve as pass-through arrays.</span>
@@ -241,12 +241,12 @@
 <span class="sd">        y_transform : array-like or None</span>
 <span class="sd">            The log transformed y array</span>
 
-<span class="sd">        exogenous : array-like or None</span>
+<span class="sd">        X : array-like or None</span>
 <span class="sd">            The exog array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">,</span> <span class="o">**</span><span class="n">transform_kwargs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">transform_kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LogEndogTransformer.inverse_transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer.inverse_transform">[docs]</a>    <span class="k">def</span> <span class="nf">inverse_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="LogEndogTransformer.inverse_transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer.inverse_transform">[docs]</a>    <span class="k">def</span> <span class="nf">inverse_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># TODO: kwargs go away</span>
         <span class="sd">&quot;&quot;&quot;Inverse transform a transformed array</span>
 
 <span class="sd">        Inverse the log transformation on the transformed array. Note that</span>
@@ -257,22 +257,22 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        y : array-like or None, shape=(n_samples,)</span>
-<span class="sd">        The transformed endogenous (time-series) array.</span>
+<span class="sd">            The transformed endogenous (time-series) array.</span>
 
-<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
-<span class="sd">        The exogenous array of additional covariates. Not used for</span>
-<span class="sd">        endogenous transformers. Default is None, and non-None values will</span>
-<span class="sd">        serve as pass-through arrays.</span>
+<span class="sd">        X : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">            The exogenous array of additional covariates. Not used for</span>
+<span class="sd">            endogenous transformers. Default is None, and non-None values will</span>
+<span class="sd">            serve as pass-through arrays.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        y : array-like or None</span>
-<span class="sd">        The inverse-transformed y array</span>
+<span class="sd">            The inverse-transformed y array</span>
 
-<span class="sd">        exogenous : array-like or None</span>
-<span class="sd">        The inverse-transformed exogenous array</span>
+<span class="sd">        X : array-like or None</span>
+<span class="sd">            The inverse-transformed exogenous array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exogenous</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

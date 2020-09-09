@@ -191,6 +191,7 @@
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">check_endog</span>
 <span class="kn">from</span> <span class="nn">..arima.warnings</span> <span class="kn">import</span> <span class="n">ModelFitWarning</span>
 <span class="kn">from</span> <span class="nn">..compat.sklearn</span> <span class="kn">import</span> <span class="n">safe_indexing</span>
+<span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">pmdarima</span> <span class="k">as</span> <span class="n">pm_compat</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;cross_validate&#39;</span><span class="p">,</span>
@@ -233,18 +234,17 @@
     <span class="k">return</span> <span class="n">_check_callables</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="n">_valid_scoring</span><span class="p">,</span> <span class="s2">&quot;metric&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_safe_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_safe_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Performs the CV indexing given the indices&quot;&quot;&quot;</span>
     <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">train</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">exog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">exog_train</span> <span class="o">=</span> <span class="n">exog_test</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">X_train</span> <span class="o">=</span> <span class="n">X_test</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">exog_train</span><span class="p">,</span> <span class="n">exog_test</span> <span class="o">=</span> \
-            <span class="n">safe_indexing</span><span class="p">(</span><span class="n">exog</span><span class="p">,</span> <span class="n">train</span><span class="p">),</span> <span class="n">safe_indexing</span><span class="p">(</span><span class="n">exog</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">exog_train</span><span class="p">,</span> <span class="n">exog_test</span>
+        <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">safe_indexing</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">train</span><span class="p">),</span> <span class="n">safe_indexing</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span>
 
 
-<span class="k">def</span> <span class="nf">_fit_and_score</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="p">,</span> <span class="n">scorer</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span>
+<span class="k">def</span> <span class="nf">_fit_and_score</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">scorer</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span>
                    <span class="n">error_score</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit estimator and compute scores for a given dataset split.&quot;&quot;&quot;</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;fold=</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fold</span>
@@ -252,10 +252,10 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[CV] </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="p">(</span><span class="mi">64</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span> <span class="o">*</span> <span class="s1">&#39;.&#39;</span><span class="p">))</span>
 
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">exog_train</span><span class="p">,</span> <span class="n">exog_test</span> <span class="o">=</span> <span class="n">_safe_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+    <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">_safe_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exog_train</span><span class="p">)</span>
+        <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">fit_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
@@ -274,7 +274,7 @@
         <span class="n">fit_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
 
         <span class="c1"># forecast h periods into the future and compute the score</span>
-        <span class="n">preds</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exog_test</span><span class="p">)</span>
+        <span class="n">preds</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="n">X</span><span class="o">=</span><span class="n">X_test</span><span class="p">)</span>
         <span class="n">test_scores</span> <span class="o">=</span> <span class="n">scorer</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
         <span class="n">score_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">-</span> <span class="n">fit_time</span>
 
@@ -287,22 +287,22 @@
     <span class="k">return</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span>
 
 
-<span class="k">def</span> <span class="nf">_fit_and_predict</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_fit_and_predict</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit estimator and compute scores for a given dataset split.&quot;&quot;&quot;</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;fold=</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fold</span>
     <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[CV] </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="p">(</span><span class="mi">64</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span> <span class="o">*</span> <span class="s1">&#39;.&#39;</span><span class="p">))</span>
 
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">y_train</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">exog_train</span><span class="p">,</span> <span class="n">exog_test</span> <span class="o">=</span> <span class="n">_safe_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+    <span class="n">y_train</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">_safe_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
 
     <span class="c1"># scikit doesn&#39;t handle failures on cv predict, so we won&#39;t either.</span>
-    <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exog_train</span><span class="p">)</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">)</span>
     <span class="n">fit_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
 
     <span class="c1"># forecast h periods into the future</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">preds</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exog_test</span><span class="p">)</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">n_periods</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="n">X</span><span class="o">=</span><span class="n">X_test</span><span class="p">)</span>
     <span class="n">pred_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
 
     <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
@@ -313,8 +313,14 @@
     <span class="k">return</span> <span class="n">preds</span><span class="p">,</span> <span class="n">test</span>
 
 
-<div class="viewcode-block" id="cross_validate"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.cross_validate.html#pmdarima.model_selection.cross_validate">[docs]</a><span class="k">def</span> <span class="nf">cross_validate</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                   <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">error_score</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">):</span>
+<div class="viewcode-block" id="cross_validate"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.cross_validate.html#pmdarima.model_selection.cross_validate">[docs]</a><span class="k">def</span> <span class="nf">cross_validate</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span>
+                   <span class="n">y</span><span class="p">,</span>
+                   <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                   <span class="n">error_score</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                   <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># TODO: remove kwargs</span>
     <span class="sd">&quot;&quot;&quot;Evaluate metric(s) by cross-validation and also record fit/score times.</span>
 
 <span class="sd">    Parameters</span>
@@ -325,7 +331,7 @@
 <span class="sd">    y : array-like or iterable, shape=(n_samples,)</span>
 <span class="sd">            The time-series array.</span>
 
-<span class="sd">    exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">    X : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
 <span class="sd">        An optional 2-d array of exogenous variables.</span>
 
 <span class="sd">    scoring : str or callable, optional (default=None)</span>
@@ -348,7 +354,10 @@
 <span class="sd">        If a numeric value is given, ModelFitWarning is raised. This parameter</span>
 <span class="sd">        does not affect the refit step, which will always raise the error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">y</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="n">indexable</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
+    <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">indexable</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">cv</span> <span class="o">=</span> <span class="n">check_cv</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
@@ -363,13 +372,16 @@
     <span class="c1">#   . could cause cross threads in parallelism..</span>
 
     <span class="n">results</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">_fit_and_score</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">estimator</span><span class="p">),</span> <span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="p">,</span>
+        <span class="n">_fit_and_score</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span>
+                       <span class="n">base</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">estimator</span><span class="p">),</span>
+                       <span class="n">y</span><span class="p">,</span>
+                       <span class="n">X</span><span class="p">,</span>
                        <span class="n">scorer</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
                        <span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span>
                        <span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span>
                        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
                        <span class="n">error_score</span><span class="o">=</span><span class="n">error_score</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">fold</span><span class="p">,</span> <span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="p">))]</span>
+        <span class="k">for</span> <span class="n">fold</span><span class="p">,</span> <span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">))]</span>
     <span class="n">scores</span><span class="p">,</span> <span class="n">fit_times</span><span class="p">,</span> <span class="n">score_times</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">))</span>
 
     <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span>
@@ -380,8 +392,13 @@
     <span class="k">return</span> <span class="n">ret</span></div>
 
 
-<div class="viewcode-block" id="cross_val_predict"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.cross_val_predict.html#pmdarima.model_selection.cross_val_predict">[docs]</a><span class="k">def</span> <span class="nf">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                      <span class="n">averaging</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="cross_val_predict"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.cross_val_predict.html#pmdarima.model_selection.cross_val_predict">[docs]</a><span class="k">def</span> <span class="nf">cross_val_predict</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span>
+                      <span class="n">y</span><span class="p">,</span>
+                      <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                      <span class="n">averaging</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                      <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># TODO: remove kwargs</span>
     <span class="sd">&quot;&quot;&quot;Generate cross-validated estimates for each input data point</span>
 
 <span class="sd">    Parameters</span>
@@ -392,7 +409,7 @@
 <span class="sd">    y : array-like or iterable, shape=(n_samples,)</span>
 <span class="sd">            The time-series array.</span>
 
-<span class="sd">    exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">    X : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
 <span class="sd">        An optional 2-d array of exogenous variables.</span>
 
 <span class="sd">    cv : BaseTSCrossValidator or None, optional (default=None)</span>
@@ -435,7 +452,10 @@
 <span class="sd">    array([30710.45743168, 34902.94929722, 17994.16587163, 22127.71167249,</span>
 <span class="sd">           25473.60876435])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">y</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="n">indexable</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
+    <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">indexable</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">cv</span> <span class="o">=</span> <span class="n">check_cv</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
     <span class="n">avgfunc</span> <span class="o">=</span> <span class="n">_check_averaging</span><span class="p">(</span><span class="n">averaging</span><span class="p">)</span>
@@ -462,11 +482,14 @@
 
     <span class="c1"># clone estimator to make sure all folds are independent</span>
     <span class="n">prediction_blocks</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">_fit_and_predict</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">estimator</span><span class="p">),</span> <span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="p">,</span>
+        <span class="n">_fit_and_predict</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span>
+                         <span class="n">base</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">estimator</span><span class="p">),</span>
+                         <span class="n">y</span><span class="p">,</span>
+                         <span class="n">X</span><span class="p">,</span>
                          <span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span>
                          <span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span>
                          <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,)</span>  <span class="c1"># TODO: fit params?</span>
-        <span class="k">for</span> <span class="n">fold</span><span class="p">,</span> <span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exog</span><span class="p">))]</span>
+        <span class="k">for</span> <span class="n">fold</span><span class="p">,</span> <span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">))]</span>
 
     <span class="c1"># Unlike normal CV, time series CV might have different folds (windows)</span>
     <span class="c1"># forecasting the same time step. In this stage, we build a matrix of</span>
@@ -483,8 +506,14 @@
     <span class="k">return</span> <span class="n">avgfunc</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="cross_val_score"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score">[docs]</a><span class="k">def</span> <span class="nf">cross_val_score</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">error_score</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">):</span>
+<div class="viewcode-block" id="cross_val_score"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score">[docs]</a><span class="k">def</span> <span class="nf">cross_val_score</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span>
+                    <span class="n">y</span><span class="p">,</span>
+                    <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">error_score</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># TODO: remove kwargs</span>
     <span class="sd">&quot;&quot;&quot;Evaluate a score by cross-validation</span>
 
 <span class="sd">    Parameters</span>
@@ -495,7 +524,7 @@
 <span class="sd">    y : array-like or iterable, shape=(n_samples,)</span>
 <span class="sd">            The time-series array.</span>
 
-<span class="sd">    exogenous : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
+<span class="sd">    X : array-like, shape=[n_obs, n_vars], optional (default=None)</span>
 <span class="sd">        An optional 2-d array of exogenous variables.</span>
 
 <span class="sd">    scoring : str or callable, optional (default=None)</span>
@@ -518,8 +547,14 @@
 <span class="sd">        If a numeric value is given, ModelFitWarning is raised. This parameter</span>
 <span class="sd">        does not affect the refit step, which will always raise the error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cv_results</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="n">exogenous</span><span class="p">,</span>
-                                <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+    <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">cv_results</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+                                <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                                <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+                                <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
+                                <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
                                 <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
                                 <span class="n">error_score</span><span class="o">=</span><span class="n">error_score</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">cv_results</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">]</span></div>

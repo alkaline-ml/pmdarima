@@ -200,7 +200,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.cross_validate<a class="headerlink" href="#pmdarima-model-selection-cross-validate" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.model_selection.cross_validate">
-<code class="descclassname">pmdarima.model_selection.</code><code class="descname">cross_validate</code><span class="sig-paren">(</span><em>estimator</em>, <em>y</em>, <em>exogenous=None</em>, <em>scoring=None</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>error_score=nan</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/efde8bf2/pmdarima/model_selection/_validation.py#L144"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.cross_validate" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.model_selection.</code><code class="descname">cross_validate</code><span class="sig-paren">(</span><em>estimator</em>, <em>y</em>, <em>X=None</em>, <em>scoring=None</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>error_score=nan</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/d6678205/pmdarima/model_selection/_validation.py#L144"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.cross_validate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate metric(s) by cross-validation and also record fit/score times.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -214,7 +214,7 @@
 <blockquote>
 <div><p>The time-series array.</p>
 </div></blockquote>
-<p><strong>exogenous</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
+<p><strong>X</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
 <blockquote>
 <div><p>An optional 2-d array of exogenous variables.</p>
 </div></blockquote>

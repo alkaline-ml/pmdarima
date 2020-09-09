@@ -177,8 +177,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">pmdarima.compat</span> <span class="kn">import</span> <span class="n">check_is_fitted</span>
-
+<span class="kn">from</span> <span class="nn">...compat</span> <span class="kn">import</span> <span class="n">check_is_fitted</span><span class="p">,</span> <span class="n">pmdarima</span> <span class="k">as</span> <span class="n">pm_compat</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseEndogTransformer</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BoxCoxEndogTransformer&#39;</span><span class="p">]</span>
@@ -222,7 +221,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">neg_action</span> <span class="o">=</span> <span class="n">neg_action</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">floor</span> <span class="o">=</span> <span class="n">floor</span></div>
 
-<div class="viewcode-block" id="BoxCoxEndogTransformer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BoxCoxEndogTransformer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># TODO: kwargs go away</span>
         <span class="sd">&quot;&quot;&quot;Fit the transformer</span>
 
 <span class="sd">        Learns the value of ``lmbda``, if not specified in the constructor.</span>
@@ -233,7 +232,7 @@
 <span class="sd">        y : array-like or None, shape=(n_samples,)</span>
 <span class="sd">            The endogenous (time-series) array.</span>
 
-<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">        X : array-like or None, shape=(n_samples, n_features), optional</span>
 <span class="sd">            The exogenous array of additional covariates. Not used for</span>
 <span class="sd">            endogenous transformers. Default is None, and non-None values will</span>
 <span class="sd">            serve as pass-through arrays.</span>
@@ -241,18 +240,21 @@
         <span class="n">lam1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span>
         <span class="n">lam2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmbda2</span>
 
+        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">lam2</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;lmbda2 must be a non-negative scalar value&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">lam1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">y</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
+            <span class="n">y</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_X</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">lam1</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">boxcox</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">lam2</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lam1_</span> <span class="o">=</span> <span class="n">lam1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lam2_</span> <span class="o">=</span> <span class="n">lam2</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="BoxCoxEndogTransformer.transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">):</span>
+<div class="viewcode-block" id="BoxCoxEndogTransformer.transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Transform the new array</span>
 
 <span class="sd">        Apply the Box-Cox transformation to the array after learning the</span>
@@ -263,7 +265,7 @@
 <span class="sd">        y : array-like or None, shape=(n_samples,)</span>
 <span class="sd">            The endogenous (time-series) array.</span>
 
-<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">        X : array-like or None, shape=(n_samples, n_features), optional</span>
 <span class="sd">            The exogenous array of additional covariates. Not used for</span>
 <span class="sd">            endogenous transformers. Default is None, and non-None values will</span>
 <span class="sd">            serve as pass-through arrays.</span>
@@ -273,14 +275,18 @@
 <span class="sd">        y_transform : array-like or None</span>
 <span class="sd">            The Box-Cox transformed y array</span>
 
-<span class="sd">        exogenous : array-like or None</span>
-<span class="sd">            The exog array</span>
+<span class="sd">        X : array-like or None</span>
+<span class="sd">            The X array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lam1_&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
         <span class="n">lam1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam1_</span>
         <span class="n">lam2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam2_</span>
 
-        <span class="n">y</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_X</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">+=</span> <span class="n">lam2</span>
 
         <span class="n">neg_mask</span> <span class="o">=</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mf">0.</span>
@@ -297,7 +303,7 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">exog</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">y</span> <span class="o">**</span> <span class="n">lam1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">lam1</span><span class="p">,</span> <span class="n">exog</span></div>
 
-<div class="viewcode-block" id="BoxCoxEndogTransformer.inverse_transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.inverse_transform">[docs]</a>    <span class="k">def</span> <span class="nf">inverse_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BoxCoxEndogTransformer.inverse_transform"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.BoxCoxEndogTransformer.html#pmdarima.preprocessing.BoxCoxEndogTransformer.inverse_transform">[docs]</a>    <span class="k">def</span> <span class="nf">inverse_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># TODO: kwargs go away</span>
         <span class="sd">&quot;&quot;&quot;Inverse transform a transformed array</span>
 
 <span class="sd">        Inverse the Box-Cox transformation on the transformed array. Note that</span>
@@ -310,7 +316,7 @@
 <span class="sd">        y : array-like or None, shape=(n_samples,)</span>
 <span class="sd">            The transformed endogenous (time-series) array.</span>
 
-<span class="sd">        exogenous : array-like or None, shape=(n_samples, n_features), optional</span>
+<span class="sd">        X : array-like or None, shape=(n_samples, n_features), optional</span>
 <span class="sd">            The exogenous array of additional covariates. Not used for</span>
 <span class="sd">            endogenous transformers. Default is None, and non-None values will</span>
 <span class="sd">            serve as pass-through arrays.</span>
@@ -320,14 +326,18 @@
 <span class="sd">        y : array-like or None</span>
 <span class="sd">            The inverse-transformed y array</span>
 
-<span class="sd">        exogenous : array-like or None</span>
-<span class="sd">            The inverse-transformed exogenous array</span>
+<span class="sd">        X : array-like or None</span>
+<span class="sd">            The inverse-transformed X array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lam1_&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
         <span class="n">lam1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam1_</span>
         <span class="n">lam2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam2_</span>
 
-        <span class="n">y</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_exog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">exogenous</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">,</span> <span class="n">exog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_X</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">lam1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">lam2</span><span class="p">,</span> <span class="n">exog</span>
 
