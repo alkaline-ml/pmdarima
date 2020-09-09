@@ -177,7 +177,7 @@ _AUTO_ARIMA_DOCSTR = \
         The args to pass to the constructor of the seasonal offset (``D``)
         test. See ``pmdarima.arima.seasonality`` for more details.
 
-    suppress_warnings : bool, optional (default=False)
+    suppress_warnings : bool, optional (default=True)
         Many warnings might be thrown inside of statsmodels. If
         ``suppress_warnings`` is True, all of the warnings coming from
         ``ARIMA`` will be squelched. Note that this will not suppress

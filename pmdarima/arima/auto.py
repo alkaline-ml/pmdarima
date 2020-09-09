@@ -82,7 +82,7 @@ class AutoARIMA(BaseARIMA):
                  maxiter=50,
                  offset_test_args=None,
                  seasonal_test_args=None,
-                 suppress_warnings=False,
+                 suppress_warnings=True,
                  error_action='trace',
                  trace=False,
                  random=False,
@@ -372,7 +372,7 @@ def auto_arima(y,
                maxiter=50,
                offset_test_args=None,
                seasonal_test_args=None,
-               suppress_warnings=False,
+               suppress_warnings=True,
                error_action='trace',
                trace=False,
                random=False,
@@ -464,7 +464,7 @@ def auto_arima(y,
             solvers._sort_and_filter_fits(
                 fit_partial(
                     y,
-                    xreg=X,
+                    X=X,
                     order=(0, 0, 0),
                     seasonal_order=(0, 0, 0, 0),
                     with_intercept=val.auto_intercept(
@@ -560,11 +560,13 @@ def auto_arima(y,
     # determine/set the order of differencing by estimating the number of
     # orders it would take in order to make the TS stationary.
     if d is None:
-        d = ndiffs(dx,
-                   test=test,
-                   alpha=alpha,
-                   max_d=max_d,
-                   **offset_test_args)
+        d = ndiffs(
+            dx,
+            test=test,
+            alpha=alpha,
+            max_d=max_d,
+            **offset_test_args,
+        )
 
         if d > 0 and X is not None:
             diffxreg = diff(diffxreg, differences=d, lag=1)
@@ -617,7 +619,7 @@ def auto_arima(y,
             solvers._sort_and_filter_fits(
                 fit_partial(
                     y,
-                    xreg=X,
+                    X=X,
                     order=(0, d, 0),
                     seasonal_order=ssn,
                     with_intercept=with_intercept,

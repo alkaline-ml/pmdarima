@@ -22,6 +22,10 @@ v0.8.1) will document the latest features.
 
 * Random searches now perform unit root tests to prevent models with near non-invertible parameters
 
+* The default value of ``suppress_warnings`` has changed to ``True``. The primary reason for this is that
+  most warnings emitted come from unit root tests, which are very noisy. ``DeprecationWarnings`` and other
+  warnings generated from user input will still be emitted.
+
 
 `v1.7.1 <http://alkaline-ml.com/pmdarima/1.7.1/>`_
 --------------------------------------------------

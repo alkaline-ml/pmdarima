@@ -164,7 +164,7 @@ class _StepwiseFitWrapper(_SolverMixin):
         # Create a partial of the fit call so we don't have arg bloat all over
         self._fit_arima = functools.partial(
             _fit_candidate_model,
-            x=y,
+            y=y,
             X=X,
             start_params=start_params,
             trend=trend,
