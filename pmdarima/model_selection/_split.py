@@ -242,10 +242,15 @@ class RollingForecastCV(BaseTSCrossValidator):
         # Determine the number of iterations that will take place. Must
         # guarantee that the forecasting horizon will not over-index the series
         all_indices = np.arange(n_samples)
-        for train_step_size in range(0, n_samples - h - initial + 1, step):
-            train_size = initial + train_step_size
-            train_indices = all_indices[:train_size]
-            test_indices = all_indices[train_size: train_size + h]
+        window_start = 0
+        while True:
+            window_end = window_start + initial
+            if window_end + h > n_samples:
+                break
+
+            train_indices = all_indices[window_start: window_end]
+            test_indices = all_indices[window_end: window_end + h]
+            window_start += step
 
             yield train_indices, test_indices
 

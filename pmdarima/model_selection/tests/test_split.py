@@ -127,3 +127,28 @@ def test_issue_364_bad_splits():
     # assert no extra splits
     with pytest.raises(StopIteration):
         next(gen)
+
+
+def test_rolling_forecast_cv_bad_splits():
+    endog = y[:100]
+    cv = RollingForecastCV(initial=90, step=1, h=4)
+    gen = cv.split(endog)
+
+    expected = [
+        (np.arange(0, 90), np.array([90, 91, 92, 93])),
+        (np.arange(1, 91), np.array([91, 92, 93, 94])),
+        (np.arange(2, 92), np.array([92, 93, 94, 95])),
+        (np.arange(3, 93), np.array([93, 94, 95, 96])),
+        (np.arange(4, 94), np.array([94, 95, 96, 97])),
+        (np.arange(5, 95), np.array([95, 96, 97, 98])),
+        (np.arange(6, 96), np.array([96, 97, 98, 99])),
+    ]
+
+    # should be 7
+    for i, (train, test) in enumerate(gen):
+        assert_array_equal(train, expected[i][0])
+        assert_array_equal(test, expected[i][1])
+
+    # assert no extra splits
+    with pytest.raises(StopIteration):
+        next(gen)
