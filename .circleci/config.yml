@@ -89,6 +89,13 @@ jobs:
     steps:
       - make-unit-test
 
+  cpython39:
+    docker:
+      - image: python:3.9
+    working_directory: ~/pmdarima
+    steps:
+      - make-unit-test
+
   build-doc:
     docker:
       - image: alkalineml/pmdarima-doc-base:latest
@@ -222,6 +229,8 @@ workflows:
         - cpython37:
             filters: *test-filters
         - cpython38:
+            filters: *test-filters
+        - cpython39:
             filters: *test-filters
         - build-doc:
             filters: *test-filters
