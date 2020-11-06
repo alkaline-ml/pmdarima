@@ -18,7 +18,7 @@ from . import _validation as val
 from .utils import ndiffs, is_constant, nsdiffs
 from ..utils import diff, is_iterable, check_endog
 from ..utils.metaestimators import if_has_delegate
-from .warnings import ModelFitWarning
+from ..warnings import ModelFitWarning
 from ._context import AbstractContext, ContextType
 # Import as a namespace so we can mock
 from . import _auto_solvers as solvers
@@ -577,15 +577,7 @@ def auto_arima(y,
 
     # check differences (do we want to warn?...)
     if not suppress_warnings:  # TODO: context manager for entire block  # noqa: E501
-        if D >= 2:
-            warnings.warn("Having more than one seasonal differences is "
-                          "not recommended. Please consider using only one "
-                          "seasonal difference.", ModelFitWarning)
-        # if D is -1, this will be off, so we include the OR
-        elif D + d > 2 or d > 2:
-            warnings.warn("Having 3 or more differencing operations is not "
-                          "recommended. Please consider reducing the total "
-                          "number of differences.", ModelFitWarning)
+        val.warn_for_D(d=d, D=D)
 
     if d > 0:
         dx = diff(dx, differences=d, lag=1)

@@ -5,6 +5,7 @@ import pytest
 
 from pmdarima.compat.pytest import pytest_warning_messages, pytest_error_str
 from pmdarima.arima import _validation as val
+from pmdarima.warnings import ModelFitWarning
 
 
 @pytest.mark.parametrize(
@@ -179,3 +180,24 @@ def test_valid_metrics(metric, expected_error, expected_error_msg):
         with pytest.raises(expected_error) as err:
             val.get_scoring_metric(metric)
         assert expected_error_msg in pytest_error_str(err)
+
+
+@pytest.mark.parametrize(
+    'd,D,expected', [
+        pytest.param(0, 1, None),
+        pytest.param(0, 2, "Having more than one"),
+        pytest.param(2, 1, "Having 3 or more"),
+        pytest.param(3, 1, "Having 3 or more"),
+    ]
+)
+def test_warn_for_D(d, D, expected):
+    if expected:
+        with pytest.warns(ModelFitWarning) as mfw:
+            val.warn_for_D(d=d, D=D)
+
+            warning_msgs = pytest_warning_messages(mfw)
+            assert any(expected in w for w in warning_msgs)
+
+    else:
+        with pytest.warns(None):
+            val.warn_for_D(d=d, D=D)

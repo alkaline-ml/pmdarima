@@ -16,7 +16,7 @@ import warnings
 import traceback
 
 from .arima import ARIMA
-from .warnings import ModelFitWarning
+from ..warnings import ModelFitWarning
 from ._context import ContextType, ContextStore
 from . import _validation
 from ..compat import statsmodels as sm_compat

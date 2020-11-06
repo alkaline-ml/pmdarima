@@ -6,7 +6,6 @@ from .approx import *
 from .arima import *
 from .auto import *
 from .utils import *
-from .warnings import *
 
 # These need to be top-level since 0.7.0 for the documentation
 from .seasonality import decompose

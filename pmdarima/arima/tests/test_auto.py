@@ -10,7 +10,7 @@ import pandas as pd
 import pmdarima as pm
 from pmdarima.arima import auto
 from pmdarima.arima.utils import nsdiffs
-from pmdarima.arima.warnings import ModelFitWarning
+from pmdarima.warnings import ModelFitWarning
 from pmdarima.compat.pytest import pytest_error_str, pytest_warning_messages
 
 from numpy.testing import assert_array_almost_equal
@@ -113,15 +113,11 @@ def test_force_polynomial_error():
     d = 3
     xreg = None
 
-    with pytest.raises(ValueError) as ve, \
-            pytest.warns(ModelFitWarning) as mfw:
+    with pytest.raises(ValueError) as ve:
         pm.auto_arima(x, d=d, D=0, seasonal=False, X=xreg, trace=2)
 
     err_msg = pytest_error_str(ve)
     assert 'simple polynomial' in err_msg, err_msg
-
-    warning_msgs = pytest_warning_messages(mfw)
-    assert any('more differencing operation' in w for w in warning_msgs)
 
 
 # Show that we can complete when max order is None

@@ -17,7 +17,7 @@ from sklearn.utils import indexable
 from ._split import check_cv
 from .. import metrics
 from ..utils import check_endog
-from ..arima.warnings import ModelFitWarning
+from ..warnings import ModelFitWarning
 from ..compat.sklearn import safe_indexing
 from ..compat import pmdarima as pm_compat
 
