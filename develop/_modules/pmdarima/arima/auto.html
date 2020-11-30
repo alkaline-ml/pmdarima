@@ -178,8 +178,6 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_random_state</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
 
 <span class="kn">import</span> <span class="nn">functools</span>
@@ -192,7 +190,7 @@
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">ndiffs</span><span class="p">,</span> <span class="n">is_constant</span><span class="p">,</span> <span class="n">nsdiffs</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">diff</span><span class="p">,</span> <span class="n">is_iterable</span><span class="p">,</span> <span class="n">check_endog</span>
 <span class="kn">from</span> <span class="nn">..utils.metaestimators</span> <span class="kn">import</span> <span class="n">if_has_delegate</span>
-<span class="kn">from</span> <span class="nn">.warnings</span> <span class="kn">import</span> <span class="n">ModelFitWarning</span>
+<span class="kn">from</span> <span class="nn">..warnings</span> <span class="kn">import</span> <span class="n">ModelFitWarning</span>
 <span class="kn">from</span> <span class="nn">._context</span> <span class="kn">import</span> <span class="n">AbstractContext</span><span class="p">,</span> <span class="n">ContextType</span>
 <span class="c1"># Import as a namespace so we can mock</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_auto_solvers</span> <span class="k">as</span> <span class="n">solvers</span>
@@ -256,7 +254,7 @@
                  <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
                  <span class="n">offset_test_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">seasonal_test_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;trace&#39;</span><span class="p">,</span>
                  <span class="n">trace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">random</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -546,7 +544,7 @@
                <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
                <span class="n">offset_test_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="n">seasonal_test_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-               <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;trace&#39;</span><span class="p">,</span>
                <span class="n">trace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                <span class="n">random</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -638,7 +636,7 @@
             <span class="n">solvers</span><span class="o">.</span><span class="n">_sort_and_filter_fits</span><span class="p">(</span>
                 <span class="n">fit_partial</span><span class="p">(</span>
                     <span class="n">y</span><span class="p">,</span>
-                    <span class="n">xreg</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+                    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
                     <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
                     <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
                     <span class="n">with_intercept</span><span class="o">=</span><span class="n">val</span><span class="o">.</span><span class="n">auto_intercept</span><span class="p">(</span>
@@ -734,11 +732,13 @@
     <span class="c1"># determine/set the order of differencing by estimating the number of</span>
     <span class="c1"># orders it would take in order to make the TS stationary.</span>
     <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">ndiffs</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span>
-                   <span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span>
-                   <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
-                   <span class="n">max_d</span><span class="o">=</span><span class="n">max_d</span><span class="p">,</span>
-                   <span class="o">**</span><span class="n">offset_test_args</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">ndiffs</span><span class="p">(</span>
+            <span class="n">dx</span><span class="p">,</span>
+            <span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">max_d</span><span class="o">=</span><span class="n">max_d</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">offset_test_args</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">X</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">diffxreg</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">diffxreg</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -749,15 +749,7 @@
 
     <span class="c1"># check differences (do we want to warn?...)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">suppress_warnings</span><span class="p">:</span>  <span class="c1"># TODO: context manager for entire block  # noqa: E501</span>
-        <span class="k">if</span> <span class="n">D</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Having more than one seasonal differences is &quot;</span>
-                          <span class="s2">&quot;not recommended. Please consider using only one &quot;</span>
-                          <span class="s2">&quot;seasonal difference.&quot;</span><span class="p">,</span> <span class="n">ModelFitWarning</span><span class="p">)</span>
-        <span class="c1"># if D is -1, this will be off, so we include the OR</span>
-        <span class="k">elif</span> <span class="n">D</span> <span class="o">+</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Having 3 or more differencing operations is not &quot;</span>
-                          <span class="s2">&quot;recommended. Please consider reducing the total &quot;</span>
-                          <span class="s2">&quot;number of differences.&quot;</span><span class="p">,</span> <span class="n">ModelFitWarning</span><span class="p">)</span>
+        <span class="n">val</span><span class="o">.</span><span class="n">warn_for_D</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -791,7 +783,7 @@
             <span class="n">solvers</span><span class="o">.</span><span class="n">_sort_and_filter_fits</span><span class="p">(</span>
                 <span class="n">fit_partial</span><span class="p">(</span>
                     <span class="n">y</span><span class="p">,</span>
-                    <span class="n">xreg</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+                    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
                     <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
                     <span class="n">seasonal_order</span><span class="o">=</span><span class="n">ssn</span><span class="p">,</span>
                     <span class="n">with_intercept</span><span class="o">=</span><span class="n">with_intercept</span><span class="p">,</span>
@@ -828,84 +820,73 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_order must be None or a positive &#39;</span>
                              <span class="s1">&#39;integer (&gt;= 0)&#39;</span><span class="p">)</span>
 
-        <span class="c1"># NOTE: pre-1.5.2, we started at start_p, start_q, etc. However, when</span>
-        <span class="c1"># using stepwise=FALSE in R, hyndman starts at 0. He only uses start_*</span>
-        <span class="c1"># when stepwise=TRUE.</span>
-
-        <span class="c1"># generate the set of (p, q, P, Q) FIRST, since it is contingent</span>
-        <span class="c1"># on whether or not the user is interested in a seasonal ARIMA result.</span>
-        <span class="c1"># This will reduce the search space for non-seasonal ARIMA models.</span>
-        <span class="c1"># loop p, q. Make sure to loop at +1 interval,</span>
-        <span class="c1"># since max_{p|q} is inclusive.</span>
-        <span class="k">if</span> <span class="n">seasonal</span><span class="p">:</span>
-            <span class="n">gen</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
-                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_P</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">Q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_Q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">+</span> <span class="n">P</span> <span class="o">+</span> <span class="n">Q</span> <span class="o">&lt;=</span> <span class="n">max_order</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># otherwise it&#39;s not seasonal and we don&#39;t need the seasonal pieces</span>
-            <span class="n">gen</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="p">((</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">p</span> <span class="o">+</span> <span class="n">q</span> <span class="o">&lt;=</span> <span class="n">max_order</span>
-            <span class="p">)</span>
-
-        <span class="c1"># if we are fitting a random search rather than an exhaustive one, we</span>
-        <span class="c1"># will scramble up the generator (as a list) and only fit n_iter ARIMAs</span>
-        <span class="k">if</span> <span class="n">random</span><span class="p">:</span>
-            <span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
-
-            <span class="c1"># make a list to scramble...</span>
-            <span class="n">gen</span> <span class="o">=</span> <span class="n">random_state</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gen</span><span class="p">))[:</span><span class="n">n_fits</span><span class="p">]</span>
-
-        <span class="c1"># get results in parallel</span>
-        <span class="n">all_res</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)(</span>
-            <span class="n">delayed</span><span class="p">(</span><span class="n">fit_partial</span><span class="p">)(</span>
-                <span class="n">y</span><span class="p">,</span>
-                <span class="n">xreg</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-                <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
-                <span class="n">seasonal_order</span><span class="o">=</span><span class="n">seasonal_order</span><span class="p">,</span>
-                <span class="n">with_intercept</span><span class="o">=</span><span class="n">with_intercept</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span> <span class="ow">in</span> <span class="n">gen</span><span class="p">)</span>
-
-        <span class="c1"># filter the non-successful ones and sort</span>
-        <span class="n">sorted_res</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">_sort_and_filter_fits</span><span class="p">(</span><span class="n">all_res</span><span class="p">)</span>
+        <span class="n">search</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">_RandomFitWrapper</span><span class="p">(</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+            <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+            <span class="n">fit_partial</span><span class="o">=</span><span class="n">fit_partial</span><span class="p">,</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span>
+            <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span>
+            <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
+            <span class="n">max_order</span><span class="o">=</span><span class="n">max_order</span><span class="p">,</span>
+            <span class="n">max_p</span><span class="o">=</span><span class="n">max_p</span><span class="p">,</span>
+            <span class="n">max_q</span><span class="o">=</span><span class="n">max_q</span><span class="p">,</span>
+            <span class="n">max_P</span><span class="o">=</span><span class="n">max_P</span><span class="p">,</span>
+            <span class="n">max_Q</span><span class="o">=</span><span class="n">max_Q</span><span class="p">,</span>
+            <span class="n">random</span><span class="o">=</span><span class="n">random</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="n">n_fits</span><span class="o">=</span><span class="n">n_fits</span><span class="p">,</span>
+            <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span>
+            <span class="n">seasonal</span><span class="o">=</span><span class="n">seasonal</span><span class="p">,</span>
+            <span class="n">trace</span><span class="o">=</span><span class="n">trace</span><span class="p">,</span>
+            <span class="n">with_intercept</span><span class="o">=</span><span class="n">with_intercept</span><span class="p">,</span>
+            <span class="n">sarimax_kwargs</span><span class="o">=</span><span class="n">sarimax_kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># otherwise, we&#39;re fitting the stepwise algorithm...</span>
         <span class="k">if</span> <span class="n">n_samples</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
             <span class="n">start_p</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">start_q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">start_P</span> <span class="o">=</span> <span class="n">start_Q</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="c1"># adjust to p, q, P, Q vals</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">start_p</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span><span class="p">)</span>
-        <span class="n">q</span> <span class="o">=</span> <span class="n">start_q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span><span class="p">)</span>
-        <span class="n">P</span> <span class="o">=</span> <span class="n">start_P</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_P</span><span class="p">,</span> <span class="n">max_P</span><span class="p">)</span>
-        <span class="n">Q</span> <span class="o">=</span> <span class="n">start_Q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_Q</span><span class="p">,</span> <span class="n">max_Q</span><span class="p">)</span>
+        <span class="c1"># seed p, q, P, Q vals</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_p</span><span class="p">,</span> <span class="n">max_p</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_q</span><span class="p">,</span> <span class="n">max_q</span><span class="p">)</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_P</span><span class="p">,</span> <span class="n">max_P</span><span class="p">)</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_Q</span><span class="p">,</span> <span class="n">max_Q</span><span class="p">)</span>
 
         <span class="c1"># init the stepwise model wrapper</span>
-        <span class="n">stepwise_wrapper</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">_StepwiseFitWrapper</span><span class="p">(</span>
-            <span class="n">y</span><span class="p">,</span> <span class="n">xreg</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span> <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
-            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span> <span class="n">fit_params</span><span class="o">=</span><span class="n">fit_args</span><span class="p">,</span>
-            <span class="n">suppress_warnings</span><span class="o">=</span><span class="n">suppress_warnings</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="n">trace</span><span class="p">,</span>
-            <span class="n">error_action</span><span class="o">=</span><span class="n">error_action</span><span class="p">,</span> <span class="n">out_of_sample_size</span><span class="o">=</span><span class="n">out_of_sample_size</span><span class="p">,</span>
-            <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">scoring_args</span><span class="o">=</span><span class="n">scoring_args</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
-            <span class="n">P</span><span class="o">=</span><span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">start_p</span><span class="o">=</span><span class="n">start_p</span><span class="p">,</span> <span class="n">start_q</span><span class="o">=</span><span class="n">start_q</span><span class="p">,</span>
-            <span class="n">start_P</span><span class="o">=</span><span class="n">start_P</span><span class="p">,</span> <span class="n">start_Q</span><span class="o">=</span><span class="n">start_Q</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="n">max_p</span><span class="p">,</span> <span class="n">max_q</span><span class="o">=</span><span class="n">max_q</span><span class="p">,</span>
-            <span class="n">max_P</span><span class="o">=</span><span class="n">max_P</span><span class="p">,</span> <span class="n">max_Q</span><span class="o">=</span><span class="n">max_Q</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="n">seasonal</span><span class="p">,</span>
+        <span class="n">search</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">_StepwiseFitWrapper</span><span class="p">(</span>
+            <span class="n">y</span><span class="p">,</span>
+            <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+            <span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span>
+            <span class="n">trend</span><span class="o">=</span><span class="n">trend</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span>
+            <span class="n">fit_params</span><span class="o">=</span><span class="n">fit_args</span><span class="p">,</span>
+            <span class="n">suppress_warnings</span><span class="o">=</span><span class="n">suppress_warnings</span><span class="p">,</span>
+            <span class="n">trace</span><span class="o">=</span><span class="n">trace</span><span class="p">,</span>
+            <span class="n">error_action</span><span class="o">=</span><span class="n">error_action</span><span class="p">,</span>
+            <span class="n">out_of_sample_size</span><span class="o">=</span><span class="n">out_of_sample_size</span><span class="p">,</span>
+            <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
+            <span class="n">scoring_args</span><span class="o">=</span><span class="n">scoring_args</span><span class="p">,</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span>
+            <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">P</span><span class="o">=</span><span class="n">P</span><span class="p">,</span>
+            <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">,</span>
+            <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span>
+            <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
+            <span class="n">max_p</span><span class="o">=</span><span class="n">max_p</span><span class="p">,</span>
+            <span class="n">max_q</span><span class="o">=</span><span class="n">max_q</span><span class="p">,</span>
+            <span class="n">max_P</span><span class="o">=</span><span class="n">max_P</span><span class="p">,</span>
+            <span class="n">max_Q</span><span class="o">=</span><span class="n">max_Q</span><span class="p">,</span>
+            <span class="n">seasonal</span><span class="o">=</span><span class="n">seasonal</span><span class="p">,</span>
             <span class="n">information_criterion</span><span class="o">=</span><span class="n">information_criterion</span><span class="p">,</span>
-            <span class="n">with_intercept</span><span class="o">=</span><span class="n">with_intercept</span><span class="p">,</span> <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">)</span>
+            <span class="n">with_intercept</span><span class="o">=</span><span class="n">with_intercept</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="c1"># do the step-through...</span>
-        <span class="n">sorted_res</span> <span class="o">=</span> <span class="n">stepwise_wrapper</span><span class="o">.</span><span class="n">solve_stepwise</span><span class="p">()</span>
-
+    <span class="n">sorted_res</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">_return_wrapper</span><span class="p">(</span><span class="n">sorted_res</span><span class="p">,</span> <span class="n">return_valid_fits</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span></div>
 
 

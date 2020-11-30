@@ -203,6 +203,15 @@ v0.8.1) will document the latest features.</p>
 <ul class="simple">
 <li>Wheels are no longer built for <code class="docutils literal notranslate"><span class="pre">pmdarima</span></code> on Python &lt;3.6, and backward-compatibility
 is no longer guaranteed for older python versions.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> argument has been deprecated in favor of <code class="docutils literal notranslate"><span class="pre">X</span></code> - See <a class="reference external" href="https://github.com/alkaline-ml/pmdarima/pull/372">the RFC</a> and
+<a class="reference external" href="https://github.com/alkaline-ml/pmdarima/pull/385">the PR</a> for more information. Beginning in version 2.0,
+the <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> argument will raise an error.</li>
+<li>Migrate random searches into the auto-solvers interface</li>
+<li>Random searches now perform unit root tests to prevent models with near non-invertible parameters</li>
+<li>The default value of <code class="docutils literal notranslate"><span class="pre">suppress_warnings</span></code> has changed to <code class="docutils literal notranslate"><span class="pre">True</span></code>. The primary reason for this is that
+most warnings emitted come from unit root tests, which are very noisy. <code class="docutils literal notranslate"><span class="pre">DeprecationWarnings</span></code> and other
+warnings generated from user input will still be emitted.</li>
+<li>Move <code class="docutils literal notranslate"><span class="pre">ModelFitWarning</span></code> from <code class="docutils literal notranslate"><span class="pre">pmdarima.arima.warnings</span></code> to <code class="docutils literal notranslate"><span class="pre">pmdarima.warnings</span></code></li>
 </ul>
 </div>
 <div class="section" id="id2">
