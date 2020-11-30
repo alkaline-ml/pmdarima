@@ -414,10 +414,15 @@
         <span class="c1"># Determine the number of iterations that will take place. Must</span>
         <span class="c1"># guarantee that the forecasting horizon will not over-index the series</span>
         <span class="n">all_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">train_step_size</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">-</span> <span class="n">h</span> <span class="o">-</span> <span class="n">initial</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
-            <span class="n">train_size</span> <span class="o">=</span> <span class="n">initial</span> <span class="o">+</span> <span class="n">train_step_size</span>
-            <span class="n">train_indices</span> <span class="o">=</span> <span class="n">all_indices</span><span class="p">[:</span><span class="n">train_size</span><span class="p">]</span>
-            <span class="n">test_indices</span> <span class="o">=</span> <span class="n">all_indices</span><span class="p">[</span><span class="n">train_size</span><span class="p">:</span> <span class="n">train_size</span> <span class="o">+</span> <span class="n">h</span><span class="p">]</span>
+        <span class="n">window_start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">window_end</span> <span class="o">=</span> <span class="n">window_start</span> <span class="o">+</span> <span class="n">initial</span>
+            <span class="k">if</span> <span class="n">window_end</span> <span class="o">+</span> <span class="n">h</span> <span class="o">&gt;</span> <span class="n">n_samples</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="n">train_indices</span> <span class="o">=</span> <span class="n">all_indices</span><span class="p">[</span><span class="n">window_start</span><span class="p">:</span> <span class="n">window_end</span><span class="p">]</span>
+            <span class="n">test_indices</span> <span class="o">=</span> <span class="n">all_indices</span><span class="p">[</span><span class="n">window_end</span><span class="p">:</span> <span class="n">window_end</span> <span class="o">+</span> <span class="n">h</span><span class="p">]</span>
+            <span class="n">window_start</span> <span class="o">+=</span> <span class="n">step</span>
 
             <span class="k">yield</span> <span class="n">train_indices</span><span class="p">,</span> <span class="n">test_indices</span></div>
 
