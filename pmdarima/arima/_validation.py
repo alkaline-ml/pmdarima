@@ -9,6 +9,8 @@ import numpy as np
 import warnings
 from sklearn import metrics
 
+from pmdarima.warnings import ModelFitWarning
+
 # The valid information criteria
 VALID_CRITERIA = {'aic', 'aicc', 'bic', 'hqic', 'oob'}
 
@@ -136,3 +138,17 @@ def get_scoring_metric(metric):
 
     # TODO: warn for potentially invalid signature?
     return metric
+
+
+def warn_for_D(d, D):
+    """Warn for large values of D"""
+    if D >= 2:
+        warnings.warn("Having more than one seasonal differences is "
+                      "not recommended. Please consider using only one "
+                      "seasonal difference.", ModelFitWarning)
+    # if D is -1, this will be off, so we include the OR
+    # TODO: @FutureTayTay.. how can D be -1?
+    elif D + d > 2 or d > 2:
+        warnings.warn("Having 3 or more differencing operations is not "
+                      "recommended. Please consider reducing the total "
+                      "number of differences.", ModelFitWarning)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pmdarima.arima import ARIMA
-from pmdarima.arima.warnings import ModelFitWarning
+from pmdarima.warnings import ModelFitWarning
 from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.pipeline import Pipeline
 from pmdarima.preprocessing import FourierFeaturizer

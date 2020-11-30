@@ -14,6 +14,20 @@ v0.8.1) will document the latest features.
 * Wheels are no longer built for ``pmdarima`` on Python <3.6, and backward-compatibility
   is no longer guaranteed for older python versions.
 
+* The ``exogenous`` argument has been deprecated in favor of ``X`` - See `the RFC <https://github.com/alkaline-ml/pmdarima/pull/372>`_ and
+  `the PR <https://github.com/alkaline-ml/pmdarima/pull/385>`_ for more information. Beginning in version 2.0,
+  the ``exogenous`` argument will raise an error.
+
+* Migrate random searches into the auto-solvers interface
+
+* Random searches now perform unit root tests to prevent models with near non-invertible parameters
+
+* The default value of ``suppress_warnings`` has changed to ``True``. The primary reason for this is that
+  most warnings emitted come from unit root tests, which are very noisy. ``DeprecationWarnings`` and other
+  warnings generated from user input will still be emitted.
+
+* Move ``ModelFitWarning`` from ``pmdarima.arima.warnings`` to ``pmdarima.warnings``
+
 
 `v1.7.1 <http://alkaline-ml.com/pmdarima/1.7.1/>`_
 --------------------------------------------------

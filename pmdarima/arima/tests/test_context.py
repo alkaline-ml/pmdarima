@@ -4,10 +4,12 @@ from pmdarima.arima.auto import StepwiseContext, auto_arima
 from pmdarima.arima._context import ContextStore, ContextType
 from pmdarima.arima import _context as context_lib
 from pmdarima.datasets import load_lynx, load_wineind
+
 from unittest import mock
 import threading
 import collections
 import pytest
+import warnings
 
 lynx = load_lynx()
 wineind = load_wineind()
@@ -82,12 +84,12 @@ def test_subsequent_contexts():
         auto_arima(lynx, stepwise=True)
 
     # Out of scope, should be EMPTY
-    assert ContextStore.get_or_empty(ContextType.STEPWISE).get_type() \
-        is ContextType.EMPTY
+    ctx = ContextStore.get_or_empty(ContextType.STEPWISE)
+    assert ctx.get_type() is ContextType.EMPTY
 
     # Now show that we DON'T hit early termination by time here
     with StepwiseContext(max_steps=100), \
-            pytest.warns(UserWarning) as uw:
+            warnings.catch_warnings(record=True) as uw:
 
         ctx = ContextStore.get_or_empty(ContextType.STEPWISE)
         assert ctx.get_type() is ContextType.STEPWISE
@@ -95,8 +97,9 @@ def test_subsequent_contexts():
 
         auto_arima(lynx, stepwise=True)
         # assert that max_dur was NOT reached
-        assert not any(str(w.message)
-                       .startswith('early termination') for w in uw)
+        if uw:
+            assert not any(str(w.message)
+                           .startswith('early termination') for w in uw)
 
 
 # test param validation of ContextStore's add, get and remove members
