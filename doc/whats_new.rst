@@ -26,6 +26,8 @@ v0.8.1) will document the latest features.
   most warnings emitted come from unit root tests, which are very noisy. ``DeprecationWarnings`` and other
   warnings generated from user input will still be emitted.
 
+* Move ``ModelFitWarning`` from ``pmdarima.arima.warnings`` to ``pmdarima.warnings``
+
 
 `v1.7.1 <http://alkaline-ml.com/pmdarima/1.7.1/>`_
 --------------------------------------------------
