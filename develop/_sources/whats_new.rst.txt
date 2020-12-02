@@ -28,6 +28,15 @@ v0.8.1) will document the latest features.
 
 * Move ``ModelFitWarning`` from ``pmdarima.arima.warnings`` to ``pmdarima.warnings``
 
+* Fix a bug where the :class:`pmdarima.model_selection.RollingForecastCV` could produce
+  too few splits for the given input data.
+
+* Change pin for ``setuptools`` from ``<50.0.0`` to ``!=50.0.0``, addressing
+  `#401 <https://github.com/alkaline-ml/pmdarima/issues/401>`_
+
+* Change pin for ``statsmodels`` from ``<0.12.0`` to ``!=0.12.0``, addressing
+  `#376 <https://github.com/alkaline-ml/pmdarima/issues/376>`_
+
 
 `v1.7.1 <http://alkaline-ml.com/pmdarima/1.7.1/>`_
 --------------------------------------------------
