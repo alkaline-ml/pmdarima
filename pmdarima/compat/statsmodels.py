@@ -2,7 +2,6 @@
 #
 # Handle inconsistencies in the statsmodels API versions
 
-from collections import abc
 from pkg_resources import parse_version
 import statsmodels as sm
 
