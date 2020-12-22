@@ -2,6 +2,7 @@
 #
 # Handle inconsistencies in the statsmodels API versions
 
+from collections.abc import Iterable
 from pkg_resources import parse_version
 import statsmodels as sm
 
@@ -46,18 +47,15 @@ def check_seasonal_order(order):
         The existing seasonal order
     """
 
-    try:
-        # Assume an iterable for order[0].
-        # If order[0] is then we don't perform check.
-        # issue#370: https://github.com/alkaline-ml/pmdarima/issues/370
-        for _ in order[0]:
-            pass
+    # If order[0] is an iterable, but not a string then we don't perform check.
+    # Otherwise we perform the check and override order if it satisfies check.
+    # See issue#370: https://github.com/alkaline-ml/pmdarima/issues/370
+    if isinstance(order[0], Iterable) and not isinstance(order[0], str):
         return order
-    except TypeError:
-        # If order[0] is not iterable we perform the check
+    else:
         if sum(order[:3]) == 0 and order[-1] == 1:
             order = (0, 0, 0, 0)
 
-    # user's order may still be invalid, but we'll let statsmodels' validation
-    # handle that.
-    return order
+        # user's order may be invalid, but we'll let statsmodels' validation
+        # handle that.
+        return order
