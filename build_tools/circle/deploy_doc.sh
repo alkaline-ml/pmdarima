@@ -45,15 +45,15 @@ ls -la
 # On both of these, we'll need to remove the artifacts from the package
 # build itself. The _configtest files are added in the latest version of
 # numpy...
-declare -a leftover=("benchmarks"
+declare -a leftover=("_configtest"
+                     "_configtest.c"
+                     "_configtest.o"
+                     "benchmarks"
                      "build"
                      "dist"
                      "doc"
                      "pmdarima"
-                     "pmdarima.egg-info"
-                     "_configtest"
-                     "_configtest.c"
-                     "_configtest.o")
+                     "pmdarima.egg-info")
 
 # check for each left over file/dir and remove it
 for left in "${leftover[@]}"
@@ -91,6 +91,7 @@ else
                         "auto_examples"
                         "includes"
                         "modules"
+                        "rfc"
                         "usecases")
 
   for artifact in "${artifacts[@]}"
