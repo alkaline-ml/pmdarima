@@ -11,6 +11,9 @@ v0.8.1) will document the latest features.
 `v1.8.1 <http://alkaline-ml.com/pmdarima/1.8.1/>`_
 --------------------------------------------------
 
+* Address `issue 370 <https://github.com/alkaline-ml/pmdarima/issues/370>`_ where
+  iterables were not accepted in the ARIMA order.
+
 * Address `issue 407 <https://github.com/alkaline-ml/pmdarima/issues/407>`_ where
   the ``LogEndogTransformer`` could not be cloned in a pipeline.
 
