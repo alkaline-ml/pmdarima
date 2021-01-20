@@ -17,6 +17,8 @@ v0.8.1) will document the latest features.
 * Address `issue 407 <https://github.com/alkaline-ml/pmdarima/issues/407>`_ where
   the ``LogEndogTransformer`` could not be cloned in a pipeline.
 
+* No longer pin Cython to ``<0.29.18``
+
 
 `v1.8.0 <http://alkaline-ml.com/pmdarima/1.8.0/>`_
 --------------------------------------------------
