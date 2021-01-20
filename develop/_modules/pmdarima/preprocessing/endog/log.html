@@ -204,7 +204,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="LogEndogTransformer.__init__"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">neg_action</span><span class="o">=</span><span class="s2">&quot;raise&quot;</span><span class="p">,</span> <span class="n">floor</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">lmbda2</span><span class="o">=</span><span class="n">lmbda</span><span class="p">,</span> <span class="n">neg_action</span><span class="o">=</span><span class="n">neg_action</span><span class="p">,</span> <span class="n">floor</span><span class="o">=</span><span class="n">floor</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">neg_action</span><span class="o">=</span><span class="n">neg_action</span><span class="p">,</span> <span class="n">floor</span><span class="o">=</span><span class="n">floor</span><span class="p">)</span>
+
+        <span class="c1"># See: https://github.com/alkaline-ml/pmdarima/issues/407</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmbda2</span> <span class="o">=</span> <span class="n">lmbda</span></div>
 
 <div class="viewcode-block" id="LogEndogTransformer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># TODO: kwargs go away</span>
         <span class="sd">&quot;&quot;&quot;Fit the transformer</span>
@@ -272,7 +276,30 @@
 <span class="sd">        X : array-like or None</span>
 <span class="sd">            The inverse-transformed exogenous array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LogEndogTransformer.get_params"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.LogEndogTransformer.html#pmdarima.preprocessing.LogEndogTransformer.get_params">[docs]</a>    <span class="k">def</span> <span class="nf">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get parameters for this estimator.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        deep : bool, default=True</span>
+<span class="sd">            If True, will return the parameters for this estimator and</span>
+<span class="sd">            contained subobjects that are estimators.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        params : mapping of string to any</span>
+<span class="sd">            Parameter names mapped to their values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># this method is shadowed because we shadow the the lmbda parameter</span>
+        <span class="c1"># name. Instead of setting lmbda, this transformer stores the parameter</span>
+        <span class="c1"># as lmbda2</span>
+        <span class="c1"># See: https://github.com/alkaline-ml/pmdarima/issues/407</span>
+        <span class="c1"># Thanks to @jseabold</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_params</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="n">deep</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;lmbda&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmbda2</span>
+        <span class="k">return</span> <span class="n">params</span></div></div>
 </pre></div>
 
            </div>
