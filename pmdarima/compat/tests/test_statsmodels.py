@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pmdarima.compat.statsmodels import bind_df_model
+from pmdarima.compat.statsmodels import bind_df_model, check_seasonal_order
 
 
 # Test binding the degrees of freedom to a class in place. It's hard to test
@@ -28,3 +28,15 @@ def test_bind_df_model():
     # Now it should
     assert hasattr(res, 'df_model')
     assert res.df_model == 11, res.df_model
+
+
+def test_check_seasonal_order():
+    # issue370, using an iterable at position 0 returns
+    order = ([1, 2, 3, 52], 0, 1, 7)
+    checked_order = check_seasonal_order(order)
+    assert order == checked_order
+
+    # Special case where we override the seasonal order that is passed in.
+    order = (0, 0, 0, 1)
+    checked_order = check_seasonal_order(order)
+    assert checked_order == (0, 0, 0, 0)
