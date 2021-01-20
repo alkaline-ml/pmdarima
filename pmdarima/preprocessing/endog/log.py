@@ -32,7 +32,11 @@ class LogEndogTransformer(BoxCoxEndogTransformer):
     """
     def __init__(self, lmbda=0, neg_action="raise", floor=1e-16):
 
-        super().__init__(0, lmbda2=lmbda, neg_action=neg_action, floor=floor)
+        super().__init__(neg_action=neg_action, floor=floor)
+
+        # See: https://github.com/alkaline-ml/pmdarima/issues/407
+        self.lmbda = 0
+        self.lmbda2 = lmbda
 
     def fit(self, y, X=None, **kwargs):  # TODO: kwargs go away
         """Fit the transformer
@@ -101,3 +105,26 @@ class LogEndogTransformer(BoxCoxEndogTransformer):
             The inverse-transformed exogenous array
         """
         return super().inverse_transform(y, X, **kwargs)
+
+    def get_params(self, deep=True):
+        """Get parameters for this estimator.
+
+        Parameters
+        ----------
+        deep : bool, default=True
+            If True, will return the parameters for this estimator and
+            contained subobjects that are estimators.
+
+        Returns
+        -------
+        params : mapping of string to any
+            Parameter names mapped to their values.
+        """
+        # this method is shadowed because we shadow the the lmbda parameter
+        # name. Instead of setting lmbda, this transformer stores the parameter
+        # as lmbda2
+        # See: https://github.com/alkaline-ml/pmdarima/issues/407
+        # Thanks to @jseabold
+        params = super().get_params(deep=deep)
+        params['lmbda'] = self.lmbda2
+        return params
