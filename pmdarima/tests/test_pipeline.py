@@ -4,7 +4,7 @@ from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.model_selection import train_test_split
 from pmdarima.pipeline import Pipeline, _warn_for_deprecated
 from pmdarima.preprocessing import BoxCoxEndogTransformer, FourierFeaturizer, \
-    DateFeaturizer
+    DateFeaturizer, LogEndogTransformer
 from pmdarima.arima import ARIMA, AutoARIMA
 from pmdarima.datasets import load_wineind
 from pmdarima.datasets._base import load_date_example
@@ -169,6 +169,11 @@ def test_pipeline_behavior():
 
     Pipeline([
         ("fourier", FourierFeaturizer(m=12)),
+        ("arima", ARIMA(order=(2, 1, 0)))
+    ]),
+
+    Pipeline([
+        ("log", LogEndogTransformer(lmbda=10)),
         ("arima", ARIMA(order=(2, 1, 0)))
     ]),
 
