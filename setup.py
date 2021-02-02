@@ -130,9 +130,11 @@ cmdclass = {'clean': CleanCommand}
 # build_ext has to be imported after setuptools
 try:
     import numpy as np
+    import numpy.lib.NumpyVersion
     from numpy.distutils.command.build_ext import build_ext  # noqa
 
-    if sys.platform == 'darwin' and np.__version__ >= '1.20.0':
+    # This is the preferred way to check numpy version: https://git.io/JtEIb
+    if sys.platform == 'darwin' and NumpyVersion(np.__version__) >= '1.20.0':
         os.environ['NPY_BLAS_ORDER'] = ''
         os.environ['NPY_LAPACK_ORDER'] = ''
 
