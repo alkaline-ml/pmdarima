@@ -131,6 +131,10 @@ cmdclass = {'clean': CleanCommand}
 try:
     from numpy.distutils.command.build_ext import build_ext  # noqa
 
+    if sys.platform == 'darwin':
+        os.environ['NPY_BLAS_ORDER'] = ''
+        os.environ['NPY_LAPACK_ORDER'] = ''
+
     class build_ext_subclass(build_ext):
         def build_extensions(self):
             build_ext.build_extensions(self)
