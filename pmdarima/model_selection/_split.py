@@ -243,14 +243,14 @@ class RollingForecastCV(BaseTSCrossValidator):
         # guarantee that the forecasting horizon will not over-index the series
         all_indices = np.arange(n_samples)
         window_start = 0
+        window_end = initial
         while True:
-            window_end = window_start + initial
             if window_end + h > n_samples:
                 break
 
             train_indices = all_indices[window_start: window_end]
             test_indices = all_indices[window_end: window_end + h]
-            window_start += step
+            window_end += step
 
             yield train_indices, test_indices
 
