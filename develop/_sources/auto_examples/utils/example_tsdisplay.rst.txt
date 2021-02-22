@@ -85,7 +85,7 @@ critical statistics of a time series object.
     using a Box-Cox transformation may prove useful prior to fitting your model.
     """)
 
-**Total running time of the script:** ( 0 minutes  0.503 seconds)
+**Total running time of the script:** ( 0 minutes  0.241 seconds)
 
 
 

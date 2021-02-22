@@ -29,7 +29,7 @@ y = pm.datasets.load_wineind()
 est = pm.ARIMA(order=(1, 1, 2),
                seasonal_order=(0, 1, 1, 12),
                suppress_warnings=True)
-cv = model_selection.SlidingWindowForecastCV(window_size=100, step=1, h=4)
+cv = model_selection.SlidingWindowForecastCV(window_size=150, step=4, h=4)
 predictions = model_selection.cross_val_predict(
     est, y, cv=cv, verbose=2, averaging="median")
 
