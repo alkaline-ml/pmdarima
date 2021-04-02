@@ -14,6 +14,7 @@ from pmdarima.warnings import ModelFitWarning
 from pmdarima.compat.pytest import pytest_error_str, pytest_warning_messages
 
 from numpy.testing import assert_array_almost_equal
+from numpy.testing import assert_allclose
 
 import os
 from os.path import abspath, dirname
@@ -363,6 +364,45 @@ def test_stepwise_with_simple_differencing():
     assert simple.order == seasonal_fit.order
     assert simple.seasonal_order == seasonal_fit.seasonal_order
 
+def test_stepwise_with_simple_differencing2():
+    def do_fit(simple_differencing):
+        return pm.auto_arima(wineind, start_p=1, start_q=1, max_p=1,
+                             max_q=2, m=12, start_P=0,
+                             seasonal=True,
+                             d=1, D=1, stepwise=True,
+                             error_action='ignore',
+                             sarimax_kwargs={
+                                 'simple_differencing': simple_differencing
+                             },
+                             maxiter=2,
+                             trace=True)
+
+    # show that we can forecast even after the
+    # pickling (this was fit in parallel)
+    seasonal_fit = do_fit(False)
+    seasonal_fit.predict(n_periods=60)
+
+    # ensure summary still works
+    seasonal_fit.summary()
+
+    # Show we can predict on seasonal where conf_int is true
+    prediction = seasonal_fit.predict(n_periods=60, return_conf_int=True)
+    pred_mid = prediction[0]
+    pred_conf_int = prediction[1]
+    df_pred = pd.DataFrame(np.hstack((pred_mid[:,None],pred_conf_int[:,0][:,None],pred_conf_int[:,1][:,None])), columns=("mid", "CIleft", "CIright"))
+    df_pred.to_csv("prediction.csv")
+
+    # We should get the same order when simple_differencing
+    simple = do_fit(True)
+    prediction_simple = simple.predict(n_periods=60, return_conf_int=True)
+    pred_simple_mid = prediction_simple[0]
+    pred_simple_conf_int = prediction_simple[1]
+    df_pred_simple = pd.DataFrame(np.hstack((pred_simple_mid[:,None],pred_simple_conf_int[:,0][:,None],pred_simple_conf_int[:,1][:,None])), columns=("mid", "CIleft", "CIright"))
+    df_pred_simple.to_csv("prediction_simple.csv")
+    assert_allclose(pred_mid, pred_simple_mid, rtol = 0.5)
+    ave = np.average(pred_simple_mid)
+    assert_allclose(pred_conf_int[:, 0], pred_simple_conf_int[:, 0], atol = 0.7*ave)
+    assert_allclose(pred_conf_int[:, 1], pred_simple_conf_int[:, 1], atol = 0.4*ave)
 
 def test_with_seasonality2():
     # show we can estimate D even when it's not there...
