@@ -89,6 +89,13 @@ jobs:
     steps:
       - make-unit-test
 
+  cpython39:
+    docker:
+      - image: python:3.9
+    working_directory: ~/pmdarima
+    steps:
+      - make-unit-test
+
   build-doc:
     docker:
       - image: alkalineml/pmdarima-doc-base:latest
@@ -179,6 +186,16 @@ jobs:
           pythonversion: "3.8"
       - deploy-to-pypi
 
+  deploy-cpython39-whl:
+    machine:
+      image: circleci/classic:latest
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - build-whl-file:
+          pythonversion: "3.9"
+      - deploy-to-pypi
+
   # For documentation deployment. You'll need the following environment vars
   # in your Circle CI settings, otherwise this will not work.
   #
@@ -213,6 +230,8 @@ workflows:
             filters: *test-filters
         - cpython38:
             filters: *test-filters
+        - cpython39:
+            filters: *test-filters
         - build-doc:
             filters: *test-filters
         - test-linting:
@@ -224,6 +243,7 @@ workflows:
                 - cpython36
                 - cpython37
                 - cpython38
+                - cpython39
                 - build-doc
                 - test-linting
                 - test-install-from-sdist
@@ -247,6 +267,11 @@ workflows:
                 - deploy-doc
 
         - deploy-cpython38-whl:
+            filters: *deploy-filters
+            requires:
+              - deploy-doc
+
+        - deploy-cpython39-whl:
             filters: *deploy-filters
             requires:
               - deploy-doc

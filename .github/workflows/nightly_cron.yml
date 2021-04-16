@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        python-version: ['3.8']
+        python-version: ['3.9']
         architecture: ['x86', 'x64']
         exclude:
           # Don't build 32-bit on Mac or Linux
@@ -83,7 +83,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.pip-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/dependencies_key.txt') }}
+          key: ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/dependencies_key.txt') }}
 
       # We install one-by-one because some dependencies depend on others
       - name: Installing dependencies
