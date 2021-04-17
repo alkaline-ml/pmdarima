@@ -19,6 +19,8 @@ v0.8.1) will document the latest features.
 
 * No longer pin Cython to ``<0.29.18``
 
+* Add support for Python 3.9
+
 
 `v1.8.0 <http://alkaline-ml.com/pmdarima/1.8.0/>`_
 --------------------------------------------------
