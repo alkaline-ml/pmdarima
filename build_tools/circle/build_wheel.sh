@@ -9,7 +9,7 @@ function build_wheel {
 
     # https://www.python.org/dev/peps/pep-0513/#ucs-2-vs-ucs-4-builds
     ucs_tag="m"
-    if [ "$pyver" = "3.8"  || "$pyver" = "3.9" ]; then
+    if [ "$pyver" = "3.8" ] || [ "$pyver" = "3.9" ]; then
         ucs_tag=""
     elif [ "$ucs_setting" = "ucs4" ]; then
         ucs_tag="${ucs_tag}u"
@@ -23,8 +23,7 @@ function build_wheel {
 
     DOCKER_CONTAINER_NAME=wheel_builder_$(uuidgen)
 
-    # Pin this image because wheel versions in later tags conflict
-    ML_IMAGE="quay.io/pypa/manylinux1_${arch}:2020-01-31-d8fa357"
+    ML_IMAGE="quay.io/pypa/manylinux1_${arch}:2021-04-10-43e4a61" # `latest` as of 2021-04-18
     PMDARIMA_VERSION=`cat ~/pmdarima/pmdarima/VERSION`
 
     docker pull "${ML_IMAGE}"
