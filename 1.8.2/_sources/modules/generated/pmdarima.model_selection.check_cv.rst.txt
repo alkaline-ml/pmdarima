@@ -1,0 +1,12 @@
+:mod:`pmdarima.model_selection`.check_cv
+=====================================================
+
+.. currentmodule:: pmdarima.model_selection
+
+.. autofunction:: check_cv
+
+.. include:: pmdarima.model_selection.check_cv.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
