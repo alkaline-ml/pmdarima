@@ -27,47 +27,47 @@ without knowing anything about our data or optimal hyper parameters.
  Out::
 
     Performing stepwise search to minimize aic
-     ARIMA(2,1,2)(1,0,1)[12] intercept   : AIC=2915.641, Time=6.90 sec
-     ARIMA(0,1,0)(0,0,0)[12] intercept   : AIC=3049.597, Time=0.10 sec
-     ARIMA(1,1,0)(1,0,0)[12] intercept   : AIC=2954.973, Time=2.01 sec
-     ARIMA(0,1,1)(0,0,1)[12] intercept   : AIC=2947.014, Time=3.10 sec
-     ARIMA(0,1,0)(0,0,0)[12]             : AIC=3047.612, Time=0.01 sec
-     ARIMA(2,1,2)(0,0,1)[12] intercept   : AIC=2938.457, Time=5.99 sec
-     ARIMA(2,1,2)(1,0,0)[12] intercept   : AIC=2915.636, Time=4.52 sec
-     ARIMA(2,1,2)(0,0,0)[12] intercept   : AIC=2984.606, Time=0.23 sec
-     ARIMA(2,1,2)(2,0,0)[12] intercept   : AIC=2915.168, Time=22.56 sec
-     ARIMA(2,1,2)(2,0,1)[12] intercept   : AIC=2917.256, Time=28.68 sec
-     ARIMA(1,1,2)(2,0,0)[12] intercept   : AIC=2924.379, Time=22.41 sec
-     ARIMA(2,1,1)(2,0,0)[12] intercept   : AIC=2911.007, Time=25.49 sec
-     ARIMA(2,1,1)(1,0,0)[12] intercept   : AIC=2911.505, Time=5.62 sec
-     ARIMA(2,1,1)(2,0,1)[12] intercept   : AIC=2912.933, Time=23.70 sec
-     ARIMA(2,1,1)(1,0,1)[12] intercept   : AIC=2911.904, Time=5.60 sec
-     ARIMA(1,1,1)(2,0,0)[12] intercept   : AIC=2919.168, Time=18.28 sec
-     ARIMA(2,1,0)(2,0,0)[12] intercept   : AIC=2927.636, Time=24.41 sec
-     ARIMA(3,1,1)(2,0,0)[12] intercept   : AIC=2912.748, Time=31.71 sec
-     ARIMA(1,1,0)(2,0,0)[12] intercept   : AIC=2954.725, Time=18.99 sec
-     ARIMA(3,1,0)(2,0,0)[12] intercept   : AIC=2914.169, Time=28.90 sec
-     ARIMA(3,1,2)(2,0,0)[12] intercept   : AIC=2915.130, Time=32.59 sec
-     ARIMA(2,1,1)(2,0,0)[12]             : AIC=2908.085, Time=22.99 sec
-     ARIMA(2,1,1)(1,0,0)[12]             : AIC=2908.791, Time=6.22 sec
-     ARIMA(2,1,1)(2,0,1)[12]             : AIC=2909.997, Time=22.39 sec
-     ARIMA(2,1,1)(1,0,1)[12]             : AIC=2907.980, Time=5.11 sec
-     ARIMA(2,1,1)(0,0,1)[12]             : AIC=2932.875, Time=4.20 sec
-     ARIMA(2,1,1)(1,0,2)[12]             : AIC=2909.946, Time=25.49 sec
-     ARIMA(2,1,1)(0,0,0)[12]             : AIC=2979.838, Time=0.15 sec
-     ARIMA(2,1,1)(0,0,2)[12]             : AIC=2920.616, Time=20.74 sec
-     ARIMA(2,1,1)(2,0,2)[12]             : AIC=2911.929, Time=26.41 sec
-     ARIMA(1,1,1)(1,0,1)[12]             : AIC=2915.102, Time=4.66 sec
-     ARIMA(2,1,0)(1,0,1)[12]             : AIC=2925.280, Time=5.81 sec
-     ARIMA(3,1,1)(1,0,1)[12]             : AIC=2910.007, Time=7.90 sec
-     ARIMA(2,1,2)(1,0,1)[12]             : AIC=2913.030, Time=8.13 sec
-     ARIMA(1,1,0)(1,0,1)[12]             : AIC=2952.472, Time=3.29 sec
-     ARIMA(1,1,2)(1,0,1)[12]             : AIC=2922.341, Time=5.80 sec
-     ARIMA(3,1,0)(1,0,1)[12]             : AIC=2912.111, Time=4.99 sec
-     ARIMA(3,1,2)(1,0,1)[12]             : AIC=2913.230, Time=7.61 sec
+     ARIMA(2,1,2)(1,0,1)[12] intercept   : AIC=2915.641, Time=6.30 sec
+     ARIMA(0,1,0)(0,0,0)[12] intercept   : AIC=3049.597, Time=0.07 sec
+     ARIMA(1,1,0)(1,0,0)[12] intercept   : AIC=2954.973, Time=2.93 sec
+     ARIMA(0,1,1)(0,0,1)[12] intercept   : AIC=2947.014, Time=3.18 sec
+     ARIMA(0,1,0)(0,0,0)[12]             : AIC=3047.612, Time=0.08 sec
+     ARIMA(2,1,2)(0,0,1)[12] intercept   : AIC=2938.457, Time=5.24 sec
+     ARIMA(2,1,2)(1,0,0)[12] intercept   : AIC=2915.636, Time=5.50 sec
+     ARIMA(2,1,2)(0,0,0)[12] intercept   : AIC=2984.606, Time=0.30 sec
+     ARIMA(2,1,2)(2,0,0)[12] intercept   : AIC=2915.168, Time=25.26 sec
+     ARIMA(2,1,2)(2,0,1)[12] intercept   : AIC=2917.256, Time=30.51 sec
+     ARIMA(1,1,2)(2,0,0)[12] intercept   : AIC=2924.379, Time=26.28 sec
+     ARIMA(2,1,1)(2,0,0)[12] intercept   : AIC=2911.007, Time=25.68 sec
+     ARIMA(2,1,1)(1,0,0)[12] intercept   : AIC=2911.505, Time=6.60 sec
+     ARIMA(2,1,1)(2,0,1)[12] intercept   : AIC=2912.933, Time=26.10 sec
+     ARIMA(2,1,1)(1,0,1)[12] intercept   : AIC=2911.904, Time=5.73 sec
+     ARIMA(1,1,1)(2,0,0)[12] intercept   : AIC=2919.168, Time=19.08 sec
+     ARIMA(2,1,0)(2,0,0)[12] intercept   : AIC=2927.636, Time=26.66 sec
+     ARIMA(3,1,1)(2,0,0)[12] intercept   : AIC=2912.748, Time=32.70 sec
+     ARIMA(1,1,0)(2,0,0)[12] intercept   : AIC=2954.725, Time=21.04 sec
+     ARIMA(3,1,0)(2,0,0)[12] intercept   : AIC=2914.169, Time=30.07 sec
+     ARIMA(3,1,2)(2,0,0)[12] intercept   : AIC=2915.130, Time=36.99 sec
+     ARIMA(2,1,1)(2,0,0)[12]             : AIC=2908.085, Time=20.03 sec
+     ARIMA(2,1,1)(1,0,0)[12]             : AIC=2908.791, Time=4.97 sec
+     ARIMA(2,1,1)(2,0,1)[12]             : AIC=2909.997, Time=18.63 sec
+     ARIMA(2,1,1)(1,0,1)[12]             : AIC=2907.980, Time=4.97 sec
+     ARIMA(2,1,1)(0,0,1)[12]             : AIC=2932.875, Time=4.92 sec
+     ARIMA(2,1,1)(1,0,2)[12]             : AIC=2909.946, Time=21.77 sec
+     ARIMA(2,1,1)(0,0,0)[12]             : AIC=2979.838, Time=0.08 sec
+     ARIMA(2,1,1)(0,0,2)[12]             : AIC=2920.616, Time=18.73 sec
+     ARIMA(2,1,1)(2,0,2)[12]             : AIC=2911.929, Time=21.70 sec
+     ARIMA(1,1,1)(1,0,1)[12]             : AIC=2915.102, Time=4.13 sec
+     ARIMA(2,1,0)(1,0,1)[12]             : AIC=2925.280, Time=3.85 sec
+     ARIMA(3,1,1)(1,0,1)[12]             : AIC=2910.007, Time=6.29 sec
+     ARIMA(2,1,2)(1,0,1)[12]             : AIC=2913.030, Time=6.92 sec
+     ARIMA(1,1,0)(1,0,1)[12]             : AIC=2952.472, Time=3.53 sec
+     ARIMA(1,1,2)(1,0,1)[12]             : AIC=2922.341, Time=5.95 sec
+     ARIMA(3,1,0)(1,0,1)[12]             : AIC=2912.111, Time=6.13 sec
+     ARIMA(3,1,2)(1,0,1)[12]             : AIC=2913.230, Time=6.72 sec
 
     Best model:  ARIMA(2,1,1)(1,0,1)[12]          
-    Total fit time: 493.926 seconds
+    Total fit time: 495.731 seconds
 
 
 
@@ -104,7 +104,7 @@ without knowing anything about our data or optimal hyper parameters.
     plt.title('Actual test samples vs. forecasts')
     plt.show()
 
-**Total running time of the script:** ( 8 minutes  13.964 seconds)
+**Total running time of the script:** ( 8 minutes  15.879 seconds)
 
 
 
