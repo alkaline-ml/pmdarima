@@ -269,7 +269,7 @@ def cross_val_predict(estimator,
         prediction results.
 
     return_raw_predictions : bool (default=False)
-        If True, raw predictions are returned instead of averaged ones. 
+        If True, raw predictions are returned instead of averaged ones.
         This results in a y x h matrix. For example, if h=3, and step=1 then:
 
             nan nan nan # training samples
@@ -283,7 +283,7 @@ def cross_val_predict(estimator,
             nan nan nan
 
         First column contains all one-step-ahead-predictions, second column all
-        two-step-ahead-predictions etc. Further metrics can then be calculated 
+        two-step-ahead-predictions etc. Further metrics can then be calculated
         as desired.
     
 

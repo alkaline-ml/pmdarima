@@ -70,7 +70,7 @@ def test_cv_scores(cv, est, verbose, X):
 @pytest.mark.parametrize('return_raw_predictions', [True, False])
 def test_cv_predictions(cv, est, avg, return_raw_predictions):
     preds = cross_val_predict(
-        est, y, cv=cv, verbose=4, averaging=avg, 
+        est, y, cv=cv, verbose=4, averaging=avg,
         return_raw_predictions=return_raw_predictions)
     assert isinstance(preds, np.ndarray)
     if return_raw_predictions:
