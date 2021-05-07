@@ -200,7 +200,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.cross_val_predict<a class="headerlink" href="#pmdarima-model-selection-cross-val-predict" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.model_selection.cross_val_predict">
-<code class="descclassname">pmdarima.model_selection.</code><code class="descname">cross_val_predict</code><span class="sig-paren">(</span><em>estimator</em>, <em>y</em>, <em>X=None</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>averaging='mean'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/5bf84a2a/pmdarima/model_selection/_validation.py#L223"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_val_predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.cross_val_predict" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.model_selection.</code><code class="descname">cross_val_predict</code><span class="sig-paren">(</span><em>estimator</em>, <em>y</em>, <em>X=None</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>averaging='mean'</em>, <em>return_raw_predictions=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/82675cff/pmdarima/model_selection/_validation.py#L223"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_val_predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.cross_val_predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate cross-validated estimates for each input data point</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -229,7 +229,7 @@ the CV horizon, or there will be a gap between fold predictions.</p>
 <div><p>The verbosity level.</p>
 </div></blockquote>
 <p><strong>averaging</strong> : str or callable, one of [“median”, “mean”] (default=”mean”)</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Unlike normal CV, time series CV might have different folds (windows)
 forecasting the same time step. After all forecast windows are made,
 we build a matrix of y x n_folds, populating each fold’s forecasts like
@@ -247,6 +247,25 @@ so:</p>
 </div>
 <p>We then average each time step’s forecasts to end up with our final
 prediction results.</p>
+</div></blockquote>
+<p><strong>return_raw_predictions</strong> : bool (default=False)</p>
+<blockquote class="last">
+<div><p>If True, raw predictions are returned instead of averaged ones.
+This results in a y x h matrix. For example, if h=3, and step=1 then:</p>
+<blockquote>
+<div><p>nan nan nan # training samples
+nan nan nan
+nan nan nan
+nan nan nan
+1   4   2   # test samples
+2   5   7
+8   9   1
+nan nan nan
+nan nan nan</p>
+</div></blockquote>
+<p>First column contains all one-step-ahead-predictions, second column all
+two-step-ahead-predictions etc. Further metrics can then be calculated
+as desired.</p>
 </div></blockquote>
 </td>
 </tr>
