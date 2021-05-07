@@ -226,6 +226,7 @@ def cross_val_predict(estimator,
                       cv=None,
                       verbose=0,
                       averaging="mean",
+                      return_raw_predictions=False,
                       **kwargs):  # TODO: remove kwargs
     """Generate cross-validated estimates for each input data point
 
@@ -267,6 +268,25 @@ def cross_val_predict(estimator,
         We then average each time step's forecasts to end up with our final
         prediction results.
 
+    return_raw_predictions : bool (default=False)
+        If True, raw predictions are returned instead of averaged ones.
+        This results in a y x h matrix. For example, if h=3, and step=1 then:
+
+            nan nan nan # training samples
+            nan nan nan
+            nan nan nan
+            nan nan nan
+            1   4   2   # test samples
+            2   5   7
+            8   9   1
+            nan nan nan
+            nan nan nan
+
+        First column contains all one-step-ahead-predictions, second column all
+        two-step-ahead-predictions etc. Further metrics can then be calculated
+        as desired.
+    
+
     Examples
     --------
     >>> import pmdarima as pm
@@ -282,7 +302,7 @@ def cross_val_predict(estimator,
     """
     # Temporary shim until we remove `exogenous` support completely
     X, _ = pm_compat.get_X(X, **kwargs)
-
+    
     y, X = indexable(y, X)
     y = check_endog(y, copy=False)
     cv = check_cv(cv)
@@ -326,6 +346,12 @@ def cross_val_predict(estimator,
     pred_matrix = np.ones((y.shape[0], len(prediction_blocks))) * np.nan
     for i, (pred_block, test_indices) in enumerate(prediction_blocks):
         pred_matrix[test_indices, i] = pred_block
+
+    if return_raw_predictions:
+        predictions = np.ones((y.shape[0], cv.horizon)) * np.nan
+        for pred_block, test_indices in prediction_blocks:
+            predictions[test_indices[0]] = pred_block
+        return predictions
 
     # from there, we need to apply nanmean (or some other metric) along rows
     # to agree on a forecast for a sample.

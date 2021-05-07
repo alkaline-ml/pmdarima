@@ -67,11 +67,17 @@ def test_cv_scores(cv, est, verbose, X):
     ]
 )
 @pytest.mark.parametrize('avg', ["mean", "median"])
-def test_cv_predictions(cv, est, avg):
+@pytest.mark.parametrize('return_raw_predictions', [True, False])
+def test_cv_predictions(cv, est, avg, return_raw_predictions):
     preds = cross_val_predict(
-        est, y, cv=cv, verbose=4, averaging=avg)
+        est, y, cv=cv, verbose=4, averaging=avg,
+        return_raw_predictions=return_raw_predictions)
     assert isinstance(preds, np.ndarray)
-    assert preds.ndim == 1
+    if return_raw_predictions:
+        assert preds.shape[0] == len(y)
+        assert preds.shape[1] == cv.horizon
+    else:
+        assert preds.ndim == 1
 
 
 def test_check_scoring():
