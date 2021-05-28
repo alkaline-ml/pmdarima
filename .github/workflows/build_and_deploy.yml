@@ -141,3 +141,54 @@ jobs:
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+
+  build-and-deploy-aarch64:
+    name: "Build and Deploy (aarch64 ${{ matrix.pyver }})"
+    strategy:
+      matrix:
+        pyver: [cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
+        arch: [aarch64]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    env:
+      py: /opt/python/${{ matrix.pyver }}/bin/python
+      img: quay.io/pypa/manylinux2014_${{ matrix.arch }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up QEMU
+      id: qemu
+      uses: docker/setup-qemu-action@v1
+    - name: Build Wheel
+      run: |
+            docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+            ${{ env.img }} \
+            bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
+            source .env/bin/activate && \
+            python -m pip install --upgrade pip && \
+            pip install -r requirements.txt && \
+            pip install -r build_tools/build_requirements.txt && \
+            make version bdist_wheel && \
+            pip install --pre --no-index --find-links dist/ pmdarima && \
+            pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip && \
+            deactivate'
+    - name: Ensuring VERSION file existis
+      id: version_check  # Need this to refer to output below
+      run: |
+          if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
+            echo "VERSION file exists"
+            echo "::set-output name=version_exists::true"
+          else
+            echo "VERSION file does not exist"
+            echo "::set-output name=version_exists::false"
+          fi
+      shell: bash
+    - name: Deploying to PyPI
+      if: startsWith(github.ref, 'refs/tags') && success() && steps.version_check.outputs.version_exists == 'true'
+      run: |
+          chmod +x build_tools/github/deploy.sh
+          ./build_tools/github/deploy.sh
+      shell: bash
+      env:
+          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
