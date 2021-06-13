@@ -41,29 +41,12 @@ def ARMAtoMA(ar, ma, max_deg):
     MA coefficients are cut off at max_deg.
     The same function as ARMAtoMA() in stats library of R
 
-    ARMA model is defined as
-    x_t - ar_1*x_{t-1} - ar_2*x_{t-2} - ... - ar_p*x_{t-p}
-        = e_t + ma_1*e_{t-1} + ma_2*e_{t-2} + ... + ma_q*e_{t-q}
-    namely
-    (1 - \Sum_{i=1~p}[ar_i*B^i]) x_t = (1 + \Sum_{i=1~q}[ma_i*B^i]) e_t
-
-    Equivalent MA model is
-        x_t = (1 - \Sum_{i=1~p}[ar_i*B^i])^{-1} (1 + \Sum_{i=1~q}[ma_i*B^i]) e_t
-        = (1 + \Sum_{i=1}[ema_i*B^i]) e_t
-    where ema_i is a coefficient of equivalent MA model. The ema_i satisfies
-        (1 - \Sum_{i=1~p}[ar_i*B^i]) * (1 + \Sum_{i=1}[ema_i*B^i]) = 1 + \Sum_{i=1~q}[ma_i*B^i]
-    thus
-        \Sum_{i=1}[ema_i*B^i] = \Sum_{i=1~p}[ar_i*B^i] + \Sum_{i=1~p}[ar_i*B^i] * \Sum_{j=1}[ema_j*B^j] + \Sum_{i=1~q}[ma_i*B^i]
-    therefore
-        ema_i = ar_i(but 0 if i>p) + \Sum_{j=1~min(i-1,p)}[ar_j*ema_{i-j}] + ma_i(but 0 if i>q)
-              = \Sum_{j=1~min(i,p)}[ar_j*ema_{i-j}(but 1 if j=i)] + ma_i(but 0 if i>q)
-
     Parameters
     ----------
-    ar_coeffs : array-like, shape=(AR order p)
+    ar_coeffs : array-like, shape=(n_orders,)
         The array of AR coefficients
 
-    ma_coeffs : array-like, shape=(MA order q)
+    ma_coeffs : array-like, shape=(n_orders,)
         The array of MA coefficients
 
     max_deg : int
@@ -73,6 +56,32 @@ def ARMAtoMA(ar, ma, max_deg):
     -------
     res : np.ndarray, shape=(max_deg)
         Equivalent MA coefficients
+
+    Notes
+    -----
+    Here is the derivation. Suppose ARMA model is defined as
+    .. math::
+    x_t - ar_1*x_{t-1} - ar_2*x_{t-2} - ... - ar_p*x_{t-p}\\
+        = e_t + ma_1*e_{t-1} + ma_2*e_{t-2} + ... + ma_q*e_{t-q}
+    namely
+    .. math::
+    (1 - \sum_{i=1}^p[ar_i*B^i]) x_t = (1 + \sum_{i=1}^q[ma_i*B^i]) e_t
+    where :math:`B` is a backward operator.
+
+    Equivalent MA model is
+    .. math::
+        x_t = (1 - \sum_{i=1}^p[ar_i*B^i])^{-1} (1 + \sum_{i=1}^q[ma_i*B^i]) e_t\\
+        = (1 + \sum_{i=1}[ema_i*B^i]) e_t
+    where :math:``ema_i`` is a coefficient of equivalent MA model. The :math:``ema_i`` satisfies
+    .. math::
+        (1 - \sum_{i=1}^p[ar_i*B^i]) * (1 + \sum_{i=1}[ema_i*B^i]) = 1 + \sum_{i=1}^q[ma_i*B^i]
+    thus
+    .. math::
+        \sum_{i=1}[ema_i*B^i] = \sum_{i=1}^p[ar_i*B^i] + \sum_{i=1}^p[ar_i*B^i] * \sum_{j=1}[ema_j*B^j] + \Sum_{i=1}^q[ma_i*B^i]
+    therefore
+    .. math::
+        ema_i = ar_i (but 0 if i>p) + \Sum_{j=1}^{min(i-1,p)}[ar_j*ema_{i-j}] + ma_i(but 0 if i>q)\\
+              = \sum_{j=1}{min(i,p)}[ar_j*ema_{i-j}(but 1 if j=i)] + ma_i(but 0 if i>q)
     """
     p = len(ar)
     q = len(ma)
@@ -138,9 +147,9 @@ def _seasonal_prediction_with_confidence(arima_res,
     f = results.predicted_mean
     conf_int = results.conf_int(alpha=alpha)
     if arima_res.specification['simple_differencing']:
-        # if simple_differencing == True, statemodels.get_prediction returns
+        # If simple_differencing == True, statemodels.get_prediction returns
         # mid and confidence intervals on differenced time series.
-        # we have to invert differencing the mid and confidence intervals
+        # We have to invert differencing the mid and confidence intervals
         y_org = arima_res.model.orig_endog
         d = arima_res.model.orig_k_diff
         D = arima_res.model.orig_k_seasonal_diff
