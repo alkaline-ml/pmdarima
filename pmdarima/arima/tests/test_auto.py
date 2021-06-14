@@ -366,6 +366,35 @@ def test_stepwise_with_simple_differencing():
 
 def test_stepwise_with_simple_differencing2():
     def do_fit(simple_differencing):
+        return pm.auto_arima(austres, start_p=1, start_q=1, max_p=1,
+                             max_q=2, seasonal=False, d=1, stepwise=True,
+                             error_action='ignore',
+                             sarimax_kwargs={
+                                 'simple_differencing': simple_differencing
+                             },
+                             maxiter=2,
+                             trace=True)
+
+    # Without simple_differencing
+    fit = do_fit(False)
+    pred = fit.predict(n_periods=10, return_conf_int=True)
+    pred_mid = pred[0]
+    pred_conf_int = pred[1]
+
+    # With simple_differencing
+    fit_sd = do_fit(True)
+    pred_sd = fit_sd.predict(n_periods=10, return_conf_int=True)
+    pred_sd_mid = pred_sd[0]
+    pred_sd_conf_int = pred_sd[1]
+
+    # Expecting similar predictions with or without simple_differencing
+    assert_allclose(pred_mid, pred_sd_mid, rtol = 0.01)
+    assert_allclose(pred_conf_int[:, 0], pred_sd_conf_int[:, 0], rtol = 0.01)
+    assert_allclose(pred_conf_int[:, 1], pred_sd_conf_int[:, 1], rtol = 0.01)
+
+# SARIMA with/without simple_differencing
+def test_stepwise_with_simple_differencing3():
+    def do_fit(simple_differencing):
         return pm.auto_arima(wineind, start_p=1, start_q=1, max_p=1,
                              max_q=2, m=12, start_P=0,
                              seasonal=True,
@@ -377,30 +406,25 @@ def test_stepwise_with_simple_differencing2():
                              maxiter=2,
                              trace=True)
 
-    # show that we can forecast even after the
-    # pickling (this was fit in parallel)
-    seasonal_fit = do_fit(False)
-    seasonal_fit.predict(n_periods=60)
+    # Without simple_differencing
+    fit = do_fit(False)
+    pred = fit.predict(n_periods=24, return_conf_int=True)
+    pred_mid = pred[0]
+    pred_conf_int = pred[1]
 
-    # ensure summary still works
-    seasonal_fit.summary()
+    # With simple_differencing
+    fit_sd = do_fit(True)
+    pred_sd = fit_sd.predict(n_periods=24, return_conf_int=True)
+    pred_sd_mid = pred_sd[0]
+    pred_sd_conf_int = pred_sd[1]
 
-    # Show we can predict on seasonal where conf_int is true
-    prediction = seasonal_fit.predict(n_periods=24, return_conf_int=True)
-    pred_mid = prediction[0]
-    pred_conf_int = prediction[1]
-
-    # We should get the same order when simple_differencing
-    simple = do_fit(True)
-    prediction_simple = simple.predict(n_periods=24, return_conf_int=True)
-    pred_simple_mid = prediction_simple[0]
-    pred_simple_conf_int = prediction_simple[1]
+    # Expecting similar predictions with or without simple_differencing
     ave = np.average(pred_mid)
-    assert_allclose(pred_mid, pred_simple_mid, atol = ave * 0.15)
+    assert_allclose(pred_mid, pred_sd_mid, atol = ave * 0.15)
     ave0 = np.average(pred_conf_int[:, 0])
     ave1 = np.average(pred_conf_int[:, 1])
-    assert_allclose(pred_conf_int[:, 0], pred_simple_conf_int[:, 0], atol = 0.35*ave0)
-    assert_allclose(pred_conf_int[:, 1], pred_simple_conf_int[:, 1], atol = 0.15*ave1)
+    assert_allclose(pred_conf_int[:, 0], pred_sd_conf_int[:, 0], atol = 0.35*ave0)
+    assert_allclose(pred_conf_int[:, 1], pred_sd_conf_int[:, 1], atol = 0.15*ave1)
 
 def test_with_seasonality2():
     # show we can estimate D even when it's not there...
