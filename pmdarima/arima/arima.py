@@ -35,7 +35,8 @@ __all__ = [
 ]
 
 def ARMAtoMA(ar, ma, max_deg):
-    """Convert ARMA coefficients to infinite MA coefficients.
+    """
+    Convert ARMA coefficients to infinite MA coefficients.
 
     Compute coefficients of MA model equivalent to given ARMA model.
     MA coefficients are cut off at max_deg.
@@ -43,19 +44,19 @@ def ARMAtoMA(ar, ma, max_deg):
 
     Parameters
     ----------
-    ar_coeffs : array-like, shape=(n_orders,)
-        The array of AR coefficients
+    ar : array-like, shape=(n_orders,)
+        The array of AR coefficients.
 
-    ma_coeffs : array-like, shape=(n_orders,)
-        The array of MA coefficients
+    ma : array-like, shape=(n_orders,)
+        The array of MA coefficients.
 
     max_deg : int
-        Coefficients are computed up to the order of max_deg
+        Coefficients are computed up to the order of max_deg.
 
     Returns
     -------
-    res : np.ndarray, shape=(max_deg)
-        Equivalent MA coefficients
+    np.ndarray, shape=(max_deg,)
+        Equivalent MA coefficients.
 
     Notes
     -----
@@ -82,6 +83,13 @@ def ARMAtoMA(ar, ma, max_deg):
     .. math::
         ema_i = ar_i (but 0 if i>p) + \Sum_{j=1}^{min(i-1,p)}[ar_j*ema_{i-j}] + ma_i(but 0 if i>q)\\
               = \sum_{j=1}{min(i,p)}[ar_j*ema_{i-j}(but 1 if j=i)] + ma_i(but 0 if i>q)
+
+    Examples
+    --------
+    >>> ar = np.array([0.1])
+    >>> ma = np.empty(0)
+    >>> ARMAtoMA(ar, ma, 3)
+    array[0.1, 0.01, 0.001]
     """
     p = len(ar)
     q = len(ma)

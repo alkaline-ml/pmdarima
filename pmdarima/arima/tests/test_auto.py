@@ -13,8 +13,8 @@ from pmdarima.arima.utils import nsdiffs
 from pmdarima.warnings import ModelFitWarning
 from pmdarima.compat.pytest import pytest_error_str, pytest_warning_messages
 
-from numpy.testing import assert_array_almost_equal
 from numpy.testing import assert_allclose
+from numpy.testing import assert_array_almost_equal
 
 import os
 from os.path import abspath, dirname
@@ -386,23 +386,21 @@ def test_stepwise_with_simple_differencing2():
     seasonal_fit.summary()
 
     # Show we can predict on seasonal where conf_int is true
-    prediction = seasonal_fit.predict(n_periods=60, return_conf_int=True)
+    prediction = seasonal_fit.predict(n_periods=24, return_conf_int=True)
     pred_mid = prediction[0]
     pred_conf_int = prediction[1]
-    df_pred = pd.DataFrame(np.hstack((pred_mid[:,None],pred_conf_int[:,0][:,None],pred_conf_int[:,1][:,None])), columns=("mid", "CIleft", "CIright"))
-    df_pred.to_csv("prediction.csv")
 
     # We should get the same order when simple_differencing
     simple = do_fit(True)
-    prediction_simple = simple.predict(n_periods=60, return_conf_int=True)
+    prediction_simple = simple.predict(n_periods=24, return_conf_int=True)
     pred_simple_mid = prediction_simple[0]
     pred_simple_conf_int = prediction_simple[1]
-    df_pred_simple = pd.DataFrame(np.hstack((pred_simple_mid[:,None],pred_simple_conf_int[:,0][:,None],pred_simple_conf_int[:,1][:,None])), columns=("mid", "CIleft", "CIright"))
-    df_pred_simple.to_csv("prediction_simple.csv")
-    assert_allclose(pred_mid, pred_simple_mid, rtol = 0.5)
-    ave = np.average(pred_simple_mid)
-    assert_allclose(pred_conf_int[:, 0], pred_simple_conf_int[:, 0], atol = 0.7*ave)
-    assert_allclose(pred_conf_int[:, 1], pred_simple_conf_int[:, 1], atol = 0.4*ave)
+    ave = np.average(pred_mid)
+    assert_allclose(pred_mid, pred_simple_mid, atol = ave * 0.15)
+    ave0 = np.average(pred_conf_int[:, 0])
+    ave1 = np.average(pred_conf_int[:, 1])
+    assert_allclose(pred_conf_int[:, 0], pred_simple_conf_int[:, 0], atol = 0.35*ave0)
+    assert_allclose(pred_conf_int[:, 1], pred_simple_conf_int[:, 1], atol = 0.15*ave1)
 
 def test_with_seasonality2():
     # show we can estimate D even when it's not there...
