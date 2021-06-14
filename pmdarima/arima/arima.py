@@ -155,7 +155,7 @@ def _seasonal_prediction_with_confidence(arima_res,
     f = results.predicted_mean
     conf_int = results.conf_int(alpha=alpha)
     if arima_res.specification['simple_differencing']:
-        # If simple_differencing == True, statemodels.get_prediction returns
+        # If simple_differencing == True, statsmodels.get_prediction returns
         # mid and confidence intervals on differenced time series.
         # We have to invert differencing the mid and confidence intervals
         y_org = arima_res.model.orig_endog
