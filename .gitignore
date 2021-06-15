@@ -129,9 +129,3 @@ ENV/
 
 # We want this to only be created on CI/CD platforms
 VERSION
-/.vs
-/pmdarima/arima/tests/temp.py
-/pmdarima/arima/tests/SARIMA_simple_differencing.xlsx
-/pmdarima/arima/tests/prediction_simple_old.csv
-/pmdarima/arima/tests/prediction_simple.csv
-/pmdarima/arima/tests/prediction.csv
