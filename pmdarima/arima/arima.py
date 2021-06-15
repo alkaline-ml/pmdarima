@@ -167,10 +167,10 @@ def _seasonal_prediction_with_confidence(arima_res,
             y_seasonal_diff = y_org if D == 0 else diff(y_org, lag = period, differences = D)
             f_temp = np.append(y_seasonal_diff[-d:], f)
             f_temp = diff_inv(f_temp, lag = 1, differences = d)
-            f = f_temp[(2*d):]
+            f = f_temp[(2 * d):]
         # Forecast mid: undifferencing seasonal part
         if D > 0 and period > 1:
-            f_temp = np.append(y_org[-(D*period):], f)
+            f_temp = np.append(y_org[-(D * period):], f)
             f_temp = diff_inv(f_temp, lag = period, differences = D)
             f = f_temp[(2*D*period):]
         # confidence interval
@@ -184,10 +184,7 @@ def _seasonal_prediction_with_confidence(arima_res,
         ema =  ARMAtoMA(ar, ma, n_predMinus1)
         sigma2 = arima_res._params_variance[0]
         var = np.cumsum(np.append(1., ema * ema)) * sigma2
-        if arima_res.use_t:
-            q = results.dist.ppf(1.-alpha/2,results.dist_args)
-        else:
-            q = results.dist.ppf(1.-alpha/2)
+        q = results.dist.ppf(1. - alpha / 2, *results.dist_args)
         conf_int[:,0] = f - q * np.sqrt(var)
         conf_int[:,1] = f + q * np.sqrt(var)
 

@@ -408,13 +408,13 @@ def test_stepwise_with_simple_differencing3():
 
     # Without simple_differencing
     fit = do_fit(False)
-    pred = fit.predict(n_periods=24, return_conf_int=True)
+    pred = fit.predict(n_periods = 24, return_conf_int = True)
     pred_mid = pred[0]
     pred_conf_int = pred[1]
 
     # With simple_differencing
     fit_sd = do_fit(True)
-    pred_sd = fit_sd.predict(n_periods=24, return_conf_int=True)
+    pred_sd = fit_sd.predict(n_periods = 24, return_conf_int = True)
     pred_sd_mid = pred_sd[0]
     pred_sd_conf_int = pred_sd[1]
 
