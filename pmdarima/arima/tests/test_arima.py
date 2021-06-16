@@ -713,10 +713,11 @@ def test_update_1_iter(model):
     # They should be close
     assert np.allclose(params1, params2, atol=0.05)
 
+
 def test_ARMAtoMA():
     ar = np.array([0.5, 0.6])
     ma = np.array([0.4, 0.3, 0.1, 0.05])
-    max_deg = 10
+    max_deg = 6
     equivalent_ma = ARMAtoMA(ar, ma, max_deg)
-    ema_expected = np.array([0.900000, 1.350000, 1.315000, 1.517500, 1.547750, 1.684375, 1.770837, 1.896044, 2.010524, 2.142888])
-    assert_array_almost_equal(equivalent_ma, ema_expected, decimal = 4)
+    ema_expected = np.array([0.9000, 1.3500, 1.3150, 1.5175, 1.5477, 1.6843])
+    assert_array_almost_equal(equivalent_ma, ema_expected, decimal=4)
