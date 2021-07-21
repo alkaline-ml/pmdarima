@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# EXECUTED IN QUAY DOCKER IMAGE WHERE /io IS A MOUNTED VOLUME OF PMDARIMA ROOT
+
 # Modify permissions on file
 set -e -x
 
@@ -11,8 +13,6 @@ PIP="/opt/python/${PYTHON_VERSION}/bin/pip"
 # function from the package after 0.31.1 and it fails for Python 3.6?!
 ${PIP} install --upgrade pip wheel==0.31.1
 ${PIP} install --upgrade "setuptools>=38.6.0,!=50.0.0"
-${PIP} install --upgrade cython
-${PIP} install --upgrade numpy
 
 # NOW we can install requirements
 ${PIP} install -r /io/requirements.txt
@@ -25,7 +25,7 @@ ${PIP} wheel /io/ -w /io/dist/
 
 # Bundle external shared libraries into the wheels.
 for whl in /io/dist/*.whl; do
-    if [[ "$whl" =~ "$PYMODULE" ]]; then
+    if [[ "$whl" =~ "pmdarima" ]]; then
         auditwheel repair $whl -w /io/dist/ #repair pmdarima wheel and output to /io/dist
     fi
 

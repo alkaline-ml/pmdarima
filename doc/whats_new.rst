@@ -7,6 +7,14 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v1.8.3` <http://alkaline-ml.com/pmdarima/1.8.3/>`_
+--------------------------------------------------
+
+* Fix a bug in ``tsdisplay`` where a value of ``lag_max`` larger than the length of the series would create a cryptic numpy
+  broadcasting error. This precondition will still cause an error, but now it is one the user can better understand.
+  See `#440 <https://github.com/alkaline-ml/pmdarima/issues/440>`_
+
+
 `v1.8.2` <http://alkaline-ml.com/pmdarima/1.8.2/>`_
 --------------------------------------------------
 

@@ -31,20 +31,12 @@ function build_wheel {
     docker run \
         --name "${DOCKER_CONTAINER_NAME}" \
         -v `pwd`:/io \
-        -e "PYMODULE=pmdarima" \
         -e "PYTHON_VERSION=${ML_PYTHON_VERSION}" \
         -e "PMDARIMA_VERSION=${PMDARIMA_VERSION}" \
-        "${ML_IMAGE}" "/io/build_tools/circle/build_manylinux_wheel.sh"
+        "${ML_IMAGE}" "/io/build_tools/circle/dind/build_manylinux_wheel.sh"
     sudo docker cp "${DOCKER_CONTAINER_NAME}:/io/dist/." "${_root}/dist/"
     docker rm $(docker ps -a -f status=exited -q)
 }
-
-# Guarantee we have the VERSION file before continuing
-if [[ ! -f ~/pmdarima/pmdarima/VERSION ]]; then
-    echo "VERSION file was not created as expected"
-    ls -la
-    exit 2
-fi
 
 # Create base directory
 pushd $(dirname $0) > /dev/null
