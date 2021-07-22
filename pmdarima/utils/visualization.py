@@ -4,6 +4,7 @@
 #
 # Plotting wrapper functions
 
+from .array import check_endog
 from ..compat.pandas import plotting as pd_plotting
 from ..compat.matplotlib import get_compatible_pyplot
 
@@ -370,6 +371,15 @@ def tsdisplay(y, lag_max=50, figsize=(8, 6), title=None, bins=25,
     ax0 = fig.add_subplot(gs[0:2, 0:])
     ax1 = fig.add_subplot(gs[2:, 0])
     ax2 = fig.add_subplot(gs[2:, 1])
+
+    # make sure y is a np array
+    y = check_endog(y, copy=False)
+
+    if lag_max >= y.shape[0]:
+        raise ValueError(
+            f"lag_max ({lag_max}) must be < length of the "
+            f"series ({y.shape[0]})"
+        )
 
     # ax0 is simply the series itself
     x0 = np.arange(y.shape[0])

@@ -7,13 +7,6 @@ test-filters: &test-filters
     branches:
         only: /.*/
 
-# This will trigger ONLY on branches
-test-only-filters: &test-only-filters
-    tags:
-        ignore: /.*/
-    branches:
-        only: /.*/
-
 # This will ignore for ALL branches, and only trigger on tags
 deploy-filters: &deploy-filters
     tags:
@@ -31,17 +24,9 @@ deploy-filters: &deploy-filters
 #
 # ############################################
 commands:
-  make-unit-test:
-    description: "Build and run unit tests using the Makefile"
-    steps:
-      - checkout
-      - run: make develop
-      - run: make testing-requirements
-      - run: make test-unit
-      - run: codecov || echo "codecov upload failed"
 
-  build-whl-file:
-    description: "Build a wheel file"
+  build-test-and-persist:
+    description: "Build a wheel file, run unit tests, and then persist the wheel file"
     parameters:
       pythonversion:
         type: string
@@ -51,8 +36,41 @@ commands:
           name: Create VERSION file
           command: python build_tools/get_tag.py
       - run:
+          name: Check VERSION file
+          command: |
+            if [[ ! -f ~/pmdarima/pmdarima/VERSION ]]; then
+                echo "VERSION file was not created, using 0.0.0"
+                echo "0.0.0" > ~/pmdarima/pmdarima/VERSION
+            fi
+      - run:
           name: Build wheel file
           command: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>
+      - run: 
+          name: Install and run unit tests
+          command: ./build_tools/circle/test_unit.sh << parameters.pythonversion >>
+      # Move the `dist` folder to a new folder keyed on the Python version, then persist it
+      # to the workspace. This allows us to transport data between multiple jobs
+      - run:
+          name: Create workspace
+          command: mkdir -p << parameters.pythonversion >> && cp -R dist << parameters.pythonversion >>/dist
+      - run:
+          name: Inspect workspace
+          command: ls -l << parameters.pythonversion >>/dist
+      - persist_to_workspace:
+          root: << parameters.pythonversion >>
+          paths:
+            - dist
+
+  # Fetch the previously-created `dist` folder keyed on the Python version for deploying
+  restore-whl-file:
+    description: "Fetch the whl artifact we previously persisted"
+    parameters:
+      key:
+        type: string
+    steps:
+      - attach_workspace:
+          at: << parameters.key >>
+      - run: mv << parameters.key >>/dist dist
 
   deploy-to-pypi:
     description: "Deploy the contents of dist/ to PyPi"
@@ -68,33 +86,88 @@ commands:
 
 jobs:
 
-  cpython36:
+  # Singular sanity test of miscellaneous items:
+  # - linting
+  # - installing from sdist
+  # - version tagging
+  # This is performed in a single, small job to avoid Circle CI concurrency limiting for
+  # larger unit tests, and to avoid multiple setup steps that can slow the pipeline down
+  test-sanity:
     docker:
       - image: python:3.6
     working_directory: ~/pmdarima
     steps:
-    - make-unit-test
+    - checkout
+    - run:
+        name: Install requirements
+        command: |
+          make lint-requirements
+    - run:
+        name: Test lint
+        command: make test-lint
+    - run:
+        name: Test version tagging
+        command: |
+          pip install pathlib
+          CIRCLE_TAG=0.99.999 python ~/pmdarima/build_tools/get_tag.py
 
-  cpython37:
-    docker:
-      - image: python:3.7
+          if [[ ! -f ~/pmdarima/pmdarima/VERSION ]]; then
+              echo "Expected VERSION file"
+              exit 4
+          fi
+    - run:
+        name: Test install from sdist
+        command: |
+          echo "0.0.0" > ~/pmdarima/pmdarima/VERSION
+
+          # we'll need numpy and cython to build this. let install_requires do all the
+          # rest of the work.
+          pip install "numpy~=1.19.0" "cython>=0.29,!=0.29.18"
+          python setup.py sdist
+
+          cd dist
+          pip install pmdarima-0.0.0.tar.gz
+          python -c 'import pmdarima as pm; print(pm.__version__)'
+
+  # --- Unit tests ---
+  # These are all executed on `machine` executors, since they require DinD to build the whl
+  # files and perform the whl repair for manylinux support.
+  test-unit-cpython36:
+    machine:
+      image: circleci/classic:latest
     working_directory: ~/pmdarima
     steps:
-    - make-unit-test
+      - checkout
+      - build-test-and-persist:
+          pythonversion: "3.6"
 
-  cpython38:
-    docker:
-      - image: python:3.8
+  test-unit-cpython37:
+    machine:
+      image: circleci/classic:latest
     working_directory: ~/pmdarima
     steps:
-      - make-unit-test
+      - checkout
+      - build-test-and-persist:
+          pythonversion: "3.7"
 
-  cpython39:
-    docker:
-      - image: python:3.9
+  test-unit-cpython38:
+    machine:
+      image: circleci/classic:latest
     working_directory: ~/pmdarima
     steps:
-      - make-unit-test
+      - checkout
+      - build-test-and-persist:
+          pythonversion: "3.8"
+
+  test-unit-cpython39:
+    machine:
+      image: circleci/classic:latest
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - build-test-and-persist:
+          pythonversion: "3.9"
+  # --- /Unit tests ---
 
   build-doc:
     docker:
@@ -109,34 +182,6 @@ jobs:
           root: doc
           paths:
             - _build/html
-
-  # For testing lint
-  test-linting:
-    docker:
-      - image: python:3.6
-    working_directory: ~/pmdarima
-    steps:
-    - checkout
-    - run: make lint-requirements
-    - run: make test-lint
-
-  # Test env vars from tags produce VERSION file
-  test-version-tagging:
-    docker:
-      - image: python:3.6
-    working_directory: ~/pmdarima
-    steps:
-    - checkout
-    - run: ./build_tools/circle/test_version_tagging.sh
-
-  # test we can install from sdist
-  test-install-from-sdist:
-    docker:
-      - image: python:3.6
-    working_directory: ~/pmdarima
-    steps:
-    - checkout
-    - run: ./build_tools/circle/install_from_sdist.sh
 
   # Simple job that passes when all other tests have passed
   testing-passed:
@@ -162,8 +207,8 @@ jobs:
     working_directory: ~/pmdarima
     steps:
       - checkout
-      - build-whl-file:
-          pythonversion: "3.6"
+      - restore-whl-file:
+          key: "3.6"
       - deploy-to-pypi
 
   deploy-cpython37-whl:
@@ -172,8 +217,8 @@ jobs:
     working_directory: ~/pmdarima
     steps:
       - checkout
-      - build-whl-file:
-          pythonversion: "3.7"
+      - restore-whl-file:
+          key: "3.7"
       - deploy-to-pypi
 
   deploy-cpython38-whl:
@@ -182,8 +227,8 @@ jobs:
     working_directory: ~/pmdarima
     steps:
       - checkout
-      - build-whl-file:
-          pythonversion: "3.8"
+      - restore-whl-file:
+          key: "3.8"
       - deploy-to-pypi
 
   deploy-cpython39-whl:
@@ -192,8 +237,8 @@ jobs:
     working_directory: ~/pmdarima
     steps:
       - checkout
-      - build-whl-file:
-          pythonversion: "3.9"
+      - restore-whl-file:
+          key: "3.9"
       - deploy-to-pypi
 
   # For documentation deployment. You'll need the following environment vars
@@ -219,34 +264,28 @@ workflows:
   version: 2
   pmdarima-pipeline:
     jobs:
-        # this is only run in tests
-        - test-version-tagging:
-            filters: *test-only-filters
 
         # run on test and tag
-        - cpython36:
+        - test-sanity:
             filters: *test-filters
-        - cpython37:
+        - test-unit-cpython36:
             filters: *test-filters
-        - cpython38:
+        - test-unit-cpython37:
             filters: *test-filters
-        - cpython39:
+        - test-unit-cpython38:
+            filters: *test-filters
+        - test-unit-cpython39:
             filters: *test-filters
         - build-doc:
             filters: *test-filters
-        - test-linting:
-            filters: *test-filters
-        - test-install-from-sdist:
-            filters: *test-filters
         - testing-passed:
             requires:
-                - cpython36
-                - cpython37
-                - cpython38
-                - cpython39
+                - test-sanity
+                - test-unit-cpython36
+                - test-unit-cpython37
+                - test-unit-cpython38
+                - test-unit-cpython39
                 - build-doc
-                - test-linting
-                - test-install-from-sdist
             filters: *test-filters
 
         # All deployment jobs

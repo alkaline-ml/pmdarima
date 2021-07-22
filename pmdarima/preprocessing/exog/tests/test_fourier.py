@@ -96,7 +96,7 @@ def test_hyndman_blog():
     arima = pm.auto_arima(y,
                           X=xreg,
                           seasonal=False,
-                          maxiter=2,  # very short
+                          maxiter=1,  # very short
                           start_p=4,
                           max_p=5,
                           d=0,
