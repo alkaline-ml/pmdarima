@@ -49,6 +49,8 @@ Other versions
 
 Documentation for other release versions of ``pmdarima``:
 
+* `v1.8.3 <http://alkaline-ml.com/pmdarima/1.8.3>`_
+* `v1.8.2 <http://alkaline-ml.com/pmdarima/1.8.2>`_
 * `v1.8.1 <http://alkaline-ml.com/pmdarima/1.8.1>`_
 * `v1.8.0 <http://alkaline-ml.com/pmdarima/1.8.0>`_
 * `v1.7.1 <http://alkaline-ml.com/pmdarima/1.7.1>`_

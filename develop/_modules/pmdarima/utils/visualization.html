@@ -176,6 +176,7 @@
 <span class="c1">#</span>
 <span class="c1"># Plotting wrapper functions</span>
 
+<span class="kn">from</span> <span class="nn">.array</span> <span class="kn">import</span> <span class="n">check_endog</span>
 <span class="kn">from</span> <span class="nn">..compat.pandas</span> <span class="kn">import</span> <span class="n">plotting</span> <span class="k">as</span> <span class="n">pd_plotting</span>
 <span class="kn">from</span> <span class="nn">..compat.matplotlib</span> <span class="kn">import</span> <span class="n">get_compatible_pyplot</span>
 
@@ -542,6 +543,15 @@
     <span class="n">ax0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:])</span>
     <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
     <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># make sure y is a np array</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">lag_max</span> <span class="o">&gt;=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;lag_max (</span><span class="si">{</span><span class="n">lag_max</span><span class="si">}</span><span class="s2">) must be &lt; length of the &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;series (</span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="p">)</span>
 
     <span class="c1"># ax0 is simply the series itself</span>
     <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>

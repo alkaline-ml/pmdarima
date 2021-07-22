@@ -27,7 +27,7 @@ train, test = model_selection.train_test_split(data, train_size=150)
 
 # Fit a simple auto_arima model
 arima = pm.auto_arima(train, error_action='ignore', trace=True,
-                      suppress_warnings=True, maxiter=10,
+                      suppress_warnings=True, maxiter=5,
                       seasonal=True, m=12)
 
 # #############################################################################
