@@ -377,7 +377,7 @@ def tsdisplay(y, lag_max=50, figsize=(8, 6), title=None, bins=25,
 
     if lag_max >= y.shape[0]:
         raise ValueError(
-            f"lag_max ({lag_max}) must be < than length of the "
+            f"lag_max ({lag_max}) must be < length of the "
             f"series ({y.shape[0]})"
         )
 
