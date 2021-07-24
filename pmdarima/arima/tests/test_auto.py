@@ -13,6 +13,7 @@ from pmdarima.arima.utils import nsdiffs
 from pmdarima.warnings import ModelFitWarning
 from pmdarima.compat.pytest import pytest_error_str, pytest_warning_messages
 
+from numpy.testing import assert_allclose
 from numpy.testing import assert_array_almost_equal
 
 import os
@@ -362,6 +363,70 @@ def test_stepwise_with_simple_differencing():
     simple = do_fit(True)
     assert simple.order == seasonal_fit.order
     assert simple.seasonal_order == seasonal_fit.seasonal_order
+
+
+def test_stepwise_with_simple_differencing2():
+    def do_fit(simple_differencing):
+        return pm.auto_arima(austres, start_p=1, start_q=1, max_p=1,
+                             max_q=2, seasonal=False, d=1, stepwise=True,
+                             error_action='ignore',
+                             sarimax_kwargs={
+                                 'simple_differencing': simple_differencing
+                             },
+                             maxiter=2,
+                             trace=True)
+
+    # Without simple_differencing
+    fit = do_fit(False)
+    pred = fit.predict(n_periods=10, return_conf_int=True)
+    pred_mid = pred[0]
+    pred_ci = pred[1]
+
+    # With simple_differencing
+    fit_sd = do_fit(True)
+    pred_sd = fit_sd.predict(n_periods=10, return_conf_int=True)
+    pred_sd_mid = pred_sd[0]
+    pred_sd_ci = pred_sd[1]
+
+    # Expecting similar predictions with or without simple_differencing
+    assert_allclose(pred_mid, pred_sd_mid, rtol=0.01)
+    assert_allclose(pred_ci[:, 0], pred_sd_ci[:, 0], rtol=0.01)
+    assert_allclose(pred_ci[:, 1], pred_sd_ci[:, 1], rtol=0.01)
+
+
+# SARIMA with/without simple_differencing
+def test_stepwise_with_simple_differencing3():
+    def do_fit(simple_differencing):
+        return pm.auto_arima(wineind, start_p=1, start_q=1, max_p=1,
+                             max_q=2, m=12, start_P=0,
+                             seasonal=True,
+                             d=1, D=1, stepwise=True,
+                             error_action='ignore',
+                             sarimax_kwargs={
+                                 'simple_differencing': simple_differencing
+                             },
+                             maxiter=2,
+                             trace=True)
+
+    # Without simple_differencing
+    fit = do_fit(False)
+    pred = fit.predict(n_periods=24, return_conf_int=True)
+    pred_mid = pred[0]
+    pred_ci = pred[1]
+
+    # With simple_differencing
+    fit_sd = do_fit(True)
+    pred_sd = fit_sd.predict(n_periods=24, return_conf_int=True)
+    pred_sd_mid = pred_sd[0]
+    pred_sd_ci = pred_sd[1]
+
+    # Expecting similar predictions with or without simple_differencing
+    ave = np.average(pred_mid)
+    assert_allclose(pred_mid, pred_sd_mid, atol=ave * 0.15)
+    ave0 = np.average(pred_ci[:, 0])
+    ave1 = np.average(pred_ci[:, 1])
+    assert_allclose(pred_ci[:, 0], pred_sd_ci[:, 0], atol=0.35 * ave0)
+    assert_allclose(pred_ci[:, 1], pred_sd_ci[:, 1], atol=0.15 * ave1)
 
 
 def test_with_seasonality2():

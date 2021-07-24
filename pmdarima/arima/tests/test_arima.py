@@ -7,7 +7,7 @@ Tests of the ARIMA class
 import numpy as np
 import pandas as pd
 
-from pmdarima.arima import ARIMA, auto_arima, AutoARIMA
+from pmdarima.arima import ARIMA, auto_arima, AutoARIMA, ARMAtoMA
 from pmdarima.arima import _validation as val
 from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.datasets import load_lynx, load_wineind, load_heartrate
@@ -712,3 +712,12 @@ def test_update_1_iter(model):
 
     # They should be close
     assert np.allclose(params1, params2, atol=0.05)
+
+
+def test_ARMAtoMA():
+    ar = np.array([0.5, 0.6])
+    ma = np.array([0.4, 0.3, 0.1, 0.05])
+    max_deg = 6
+    equivalent_ma = ARMAtoMA(ar, ma, max_deg)
+    ema_expected = np.array([0.9000, 1.3500, 1.3150, 1.5175, 1.5477, 1.6843])
+    assert_array_almost_equal(equivalent_ma, ema_expected, decimal=4)

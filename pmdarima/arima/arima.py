@@ -12,6 +12,7 @@ from statsmodels import api as sm
 
 from scipy.stats import gaussian_kde, norm
 import numpy as np
+import numpy.polynomial.polynomial as np_polynomial
 import warnings
 
 from . import _validation as val
@@ -23,13 +24,90 @@ from ..compat import matplotlib as mpl_compat
 from ..compat import pmdarima as pm_compat
 from ..utils import if_has_delegate, is_iterable, check_endog, check_exog
 from ..utils.visualization import _get_plt
+from ..utils.array import diff_inv, diff
 
 # Get the version
 import pmdarima
 
 __all__ = [
-    'ARIMA'
+    'ARIMA',
+    'ARMAtoMA'
 ]
+
+
+def ARMAtoMA(ar, ma, max_deg):
+    r"""
+    Convert ARMA coefficients to infinite MA coefficients.
+
+    Compute coefficients of MA model equivalent to given ARMA model.
+    MA coefficients are cut off at max_deg.
+    The same function as ARMAtoMA() in stats library of R
+
+    Parameters
+    ----------
+    ar : array-like, shape=(n_orders,)
+        The array of AR coefficients.
+
+    ma : array-like, shape=(n_orders,)
+        The array of MA coefficients.
+
+    max_deg : int
+        Coefficients are computed up to the order of max_deg.
+
+    Returns
+    -------
+    np.ndarray, shape=(max_deg,)
+        Equivalent MA coefficients.
+
+    Notes
+    -----
+    Here is the derivation. Suppose ARMA model is defined as
+    .. math::
+    x_t - ar_1*x_{t-1} - ar_2*x_{t-2} - ... - ar_p*x_{t-p}\\
+        = e_t + ma_1*e_{t-1} + ma_2*e_{t-2} + ... + ma_q*e_{t-q}
+    namely
+    .. math::
+    (1 - \sum_{i=1}^p[ar_i*B^i]) x_t = (1 + \sum_{i=1}^q[ma_i*B^i]) e_t
+    where :math:`B` is a backward operator.
+
+    Equivalent MA model is
+    .. math::
+        x_t = (1 - \sum_{i=1}^p[ar_i*B^i])^{-1}\\
+        * (1 + \sum_{i=1}^q[ma_i*B^i]) e_t\\
+        = (1 + \sum_{i=1}[ema_i*B^i]) e_t
+    where :math:``ema_i`` is a coefficient of equivalent MA model.
+    The :math:``ema_i`` satisfies
+    .. math::
+        (1 - \sum_{i=1}^p[ar_i*B^i]) * (1 + \sum_{i=1}[ema_i*B^i]) \\
+        = 1 + \sum_{i=1}^q[ma_i*B^i]
+    thus
+    .. math::
+        \sum_{i=1}[ema_i*B^i] = \sum_{i=1}^p[ar_i*B^i] \\
+        + \sum_{i=1}^p[ar_i*B^i] * \sum_{j=1}[ema_j*B^j] \\
+        + \Sum_{i=1}^q[ma_i*B^i]
+    therefore
+    .. math::
+        ema_i = ar_i (but 0 if i>p) \\
+        + \Sum_{j=1}^{min(i-1,p)}[ar_j*ema_{i-j}] + ma_i(but 0 if i>q) \\
+        = \sum_{j=1}{min(i,p)}[ar_j*ema_{i-j}(but 1 if j=i)] \\
+        + ma_i(but 0 if i>q)
+
+    Examples
+    --------
+    >>> ar = np.array([0.1])
+    >>> ma = np.empty(0)
+    >>> ARMAtoMA(ar, ma, 3)
+    array[0.1, 0.01, 0.001]
+    """
+    p = len(ar)
+    q = len(ma)
+    ema = np.empty(max_deg)
+    for i in range(0, max_deg):
+        temp = ma[i] if i < q else 0.0
+        for j in range(0, min(i + 1, p)):
+            temp += ar[j] * (ema[i - j - 1] if i - j - 1 >= 0 else 1.0)
+        ema[i] = temp
+    return ema
 
 
 def _aicc(model_results, nobs, add_constant):
@@ -84,6 +162,42 @@ def _seasonal_prediction_with_confidence(arima_res,
 
     f = results.predicted_mean
     conf_int = results.conf_int(alpha=alpha)
+    if arima_res.specification['simple_differencing']:
+        # If simple_differencing == True, statsmodels.get_prediction returns
+        # mid and confidence intervals on differenced time series.
+        # We have to invert differencing the mid and confidence intervals
+        y_org = arima_res.model.orig_endog
+        d = arima_res.model.orig_k_diff
+        D = arima_res.model.orig_k_seasonal_diff
+        period = arima_res.model.seasonal_periods
+        # Forecast mid: undifferencing non-seasonal part
+        if d > 0:
+            y_sdiff = y_org if D == 0 else diff(y_org, period, D)
+            f_temp = np.append(y_sdiff[-d:], f)
+            f_temp = diff_inv(f_temp, 1, d)
+            f = f_temp[(2 * d):]
+        # Forecast mid: undifferencing seasonal part
+        if D > 0 and period > 1:
+            f_temp = np.append(y_org[-(D * period):], f)
+            f_temp = diff_inv(f_temp, period, D)
+            f = f_temp[(2 * D * period):]
+        # confidence interval
+        ar_poly = arima_res.polynomial_reduced_ar
+        poly_diff = np_polynomial.polypow(np.array([1., -1.]), d)
+        sdiff = np.zeros(period + 1)
+        sdiff[0] = 1.
+        sdiff[-1] = 1.
+        poly_sdiff = np_polynomial.polypow(sdiff, D)
+        ar = -np.polymul(ar_poly, np.polymul(poly_diff, poly_sdiff))[1:]
+        ma = arima_res.polynomial_reduced_ma[1:]
+        n_predMinus1 = end - start
+        ema = ARMAtoMA(ar, ma, n_predMinus1)
+        sigma2 = arima_res._params_variance[0]
+        var = np.cumsum(np.append(1., ema * ema)) * sigma2
+        q = results.dist.ppf(1. - alpha / 2, *results.dist_args)
+        conf_int[:, 0] = f - q * np.sqrt(var)
+        conf_int[:, 1] = f + q * np.sqrt(var)
+
     return check_endog(f, dtype=None, copy=False), \
         check_array(conf_int, copy=False, dtype=None)
 
