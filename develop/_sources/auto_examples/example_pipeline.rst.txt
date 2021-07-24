@@ -35,20 +35,20 @@ which greatly simplifies your life.
 
     pmdarima version: 0.0.0
     Performing stepwise search to minimize aic
-     ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=2819.938, Time=0.68 sec
-     ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2942.625, Time=0.02 sec
-     ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2867.514, Time=0.10 sec
-     ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2830.585, Time=0.27 sec
-     ARIMA(0,1,0)(0,0,0)[0]             : AIC=2940.651, Time=0.09 sec
-     ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=2817.535, Time=0.59 sec
-     ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2814.904, Time=0.58 sec
-     ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2818.704, Time=1.03 sec
-     ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=2817.377, Time=0.36 sec
-     ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=1.23 sec
-     ARIMA(0,1,2)(0,0,0)[0]             : AIC=2815.283, Time=0.35 sec
+     ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=2819.938, Time=0.91 sec
+     ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2942.625, Time=0.05 sec
+     ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2867.514, Time=0.08 sec
+     ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2830.585, Time=0.29 sec
+     ARIMA(0,1,0)(0,0,0)[0]             : AIC=2940.651, Time=0.11 sec
+     ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=2817.535, Time=0.68 sec
+     ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2814.904, Time=0.68 sec
+     ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2818.704, Time=1.49 sec
+     ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=2817.377, Time=0.41 sec
+     ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=1.50 sec
+     ARIMA(0,1,2)(0,0,0)[0]             : AIC=2815.283, Time=0.39 sec
 
     Best model:  ARIMA(0,1,2)(0,0,0)[0] intercept
-    Total fit time: 5.308 seconds
+    Total fit time: 6.596 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
                     ('arima',
@@ -156,7 +156,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  5.705 seconds)
+**Total running time of the script:** ( 0 minutes  6.915 seconds)
 
 
 

@@ -184,6 +184,7 @@
 
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">gaussian_kde</span><span class="p">,</span> <span class="n">norm</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.polynomial.polynomial</span> <span class="k">as</span> <span class="nn">np_polynomial</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_validation</span> <span class="k">as</span> <span class="n">val</span>
@@ -195,13 +196,90 @@
 <span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">pmdarima</span> <span class="k">as</span> <span class="n">pm_compat</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">if_has_delegate</span><span class="p">,</span> <span class="n">is_iterable</span><span class="p">,</span> <span class="n">check_endog</span><span class="p">,</span> <span class="n">check_exog</span>
 <span class="kn">from</span> <span class="nn">..utils.visualization</span> <span class="kn">import</span> <span class="n">_get_plt</span>
+<span class="kn">from</span> <span class="nn">..utils.array</span> <span class="kn">import</span> <span class="n">diff_inv</span><span class="p">,</span> <span class="n">diff</span>
 
 <span class="c1"># Get the version</span>
 <span class="kn">import</span> <span class="nn">pmdarima</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;ARIMA&#39;</span>
+    <span class="s1">&#39;ARIMA&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ARMAtoMA&#39;</span>
 <span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">ARMAtoMA</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">max_deg</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert ARMA coefficients to infinite MA coefficients.</span>
+
+<span class="sd">    Compute coefficients of MA model equivalent to given ARMA model.</span>
+<span class="sd">    MA coefficients are cut off at max_deg.</span>
+<span class="sd">    The same function as ARMAtoMA() in stats library of R</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ar : array-like, shape=(n_orders,)</span>
+<span class="sd">        The array of AR coefficients.</span>
+
+<span class="sd">    ma : array-like, shape=(n_orders,)</span>
+<span class="sd">        The array of MA coefficients.</span>
+
+<span class="sd">    max_deg : int</span>
+<span class="sd">        Coefficients are computed up to the order of max_deg.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray, shape=(max_deg,)</span>
+<span class="sd">        Equivalent MA coefficients.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Here is the derivation. Suppose ARMA model is defined as</span>
+<span class="sd">    .. math::</span>
+<span class="sd">    x_t - ar_1*x_{t-1} - ar_2*x_{t-2} - ... - ar_p*x_{t-p}\\</span>
+<span class="sd">        = e_t + ma_1*e_{t-1} + ma_2*e_{t-2} + ... + ma_q*e_{t-q}</span>
+<span class="sd">    namely</span>
+<span class="sd">    .. math::</span>
+<span class="sd">    (1 - \sum_{i=1}^p[ar_i*B^i]) x_t = (1 + \sum_{i=1}^q[ma_i*B^i]) e_t</span>
+<span class="sd">    where :math:`B` is a backward operator.</span>
+
+<span class="sd">    Equivalent MA model is</span>
+<span class="sd">    .. math::</span>
+<span class="sd">        x_t = (1 - \sum_{i=1}^p[ar_i*B^i])^{-1}\\</span>
+<span class="sd">        * (1 + \sum_{i=1}^q[ma_i*B^i]) e_t\\</span>
+<span class="sd">        = (1 + \sum_{i=1}[ema_i*B^i]) e_t</span>
+<span class="sd">    where :math:``ema_i`` is a coefficient of equivalent MA model.</span>
+<span class="sd">    The :math:``ema_i`` satisfies</span>
+<span class="sd">    .. math::</span>
+<span class="sd">        (1 - \sum_{i=1}^p[ar_i*B^i]) * (1 + \sum_{i=1}[ema_i*B^i]) \\</span>
+<span class="sd">        = 1 + \sum_{i=1}^q[ma_i*B^i]</span>
+<span class="sd">    thus</span>
+<span class="sd">    .. math::</span>
+<span class="sd">        \sum_{i=1}[ema_i*B^i] = \sum_{i=1}^p[ar_i*B^i] \\</span>
+<span class="sd">        + \sum_{i=1}^p[ar_i*B^i] * \sum_{j=1}[ema_j*B^j] \\</span>
+<span class="sd">        + \Sum_{i=1}^q[ma_i*B^i]</span>
+<span class="sd">    therefore</span>
+<span class="sd">    .. math::</span>
+<span class="sd">        ema_i = ar_i (but 0 if i&gt;p) \\</span>
+<span class="sd">        + \Sum_{j=1}^{min(i-1,p)}[ar_j*ema_{i-j}] + ma_i(but 0 if i&gt;q) \\</span>
+<span class="sd">        = \sum_{j=1}{min(i,p)}[ar_j*ema_{i-j}(but 1 if j=i)] \\</span>
+<span class="sd">        + ma_i(but 0 if i&gt;q)</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; ar = np.array([0.1])</span>
+<span class="sd">    &gt;&gt;&gt; ma = np.empty(0)</span>
+<span class="sd">    &gt;&gt;&gt; ARMAtoMA(ar, ma, 3)</span>
+<span class="sd">    array[0.1, 0.01, 0.001]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ar</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span>
+    <span class="n">ema</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">max_deg</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_deg</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">ma</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">q</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">)):</span>
+            <span class="n">temp</span> <span class="o">+=</span> <span class="n">ar</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">ema</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">ema</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
+    <span class="k">return</span> <span class="n">ema</span>
 
 
 <span class="k">def</span> <span class="nf">_aicc</span><span class="p">(</span><span class="n">model_results</span><span class="p">,</span> <span class="n">nobs</span><span class="p">,</span> <span class="n">add_constant</span><span class="p">):</span>
@@ -256,6 +334,42 @@
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">predicted_mean</span>
     <span class="n">conf_int</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">conf_int</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">arima_res</span><span class="o">.</span><span class="n">specification</span><span class="p">[</span><span class="s1">&#39;simple_differencing&#39;</span><span class="p">]:</span>
+        <span class="c1"># If simple_differencing == True, statsmodels.get_prediction returns</span>
+        <span class="c1"># mid and confidence intervals on differenced time series.</span>
+        <span class="c1"># We have to invert differencing the mid and confidence intervals</span>
+        <span class="n">y_org</span> <span class="o">=</span> <span class="n">arima_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">orig_endog</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">arima_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">orig_k_diff</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">arima_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">orig_k_seasonal_diff</span>
+        <span class="n">period</span> <span class="o">=</span> <span class="n">arima_res</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">seasonal_periods</span>
+        <span class="c1"># Forecast mid: undifferencing non-seasonal part</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">y_sdiff</span> <span class="o">=</span> <span class="n">y_org</span> <span class="k">if</span> <span class="n">D</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">diff</span><span class="p">(</span><span class="n">y_org</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+            <span class="n">f_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_sdiff</span><span class="p">[</span><span class="o">-</span><span class="n">d</span><span class="p">:],</span> <span class="n">f</span><span class="p">)</span>
+            <span class="n">f_temp</span> <span class="o">=</span> <span class="n">diff_inv</span><span class="p">(</span><span class="n">f_temp</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">f_temp</span><span class="p">[(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">d</span><span class="p">):]</span>
+        <span class="c1"># Forecast mid: undifferencing seasonal part</span>
+        <span class="k">if</span> <span class="n">D</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">period</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">f_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_org</span><span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">D</span> <span class="o">*</span> <span class="n">period</span><span class="p">):],</span> <span class="n">f</span><span class="p">)</span>
+            <span class="n">f_temp</span> <span class="o">=</span> <span class="n">diff_inv</span><span class="p">(</span><span class="n">f_temp</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">f_temp</span><span class="p">[(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">D</span> <span class="o">*</span> <span class="n">period</span><span class="p">):]</span>
+        <span class="c1"># confidence interval</span>
+        <span class="n">ar_poly</span> <span class="o">=</span> <span class="n">arima_res</span><span class="o">.</span><span class="n">polynomial_reduced_ar</span>
+        <span class="n">poly_diff</span> <span class="o">=</span> <span class="n">np_polynomial</span><span class="o">.</span><span class="n">polypow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">]),</span> <span class="n">d</span><span class="p">)</span>
+        <span class="n">sdiff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">period</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">sdiff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="n">sdiff</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="n">poly_sdiff</span> <span class="o">=</span> <span class="n">np_polynomial</span><span class="o">.</span><span class="n">polypow</span><span class="p">(</span><span class="n">sdiff</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+        <span class="n">ar</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">polymul</span><span class="p">(</span><span class="n">ar_poly</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">polymul</span><span class="p">(</span><span class="n">poly_diff</span><span class="p">,</span> <span class="n">poly_sdiff</span><span class="p">))[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">ma</span> <span class="o">=</span> <span class="n">arima_res</span><span class="o">.</span><span class="n">polynomial_reduced_ma</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">n_predMinus1</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="n">ema</span> <span class="o">=</span> <span class="n">ARMAtoMA</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">n_predMinus1</span><span class="p">)</span>
+        <span class="n">sigma2</span> <span class="o">=</span> <span class="n">arima_res</span><span class="o">.</span><span class="n">_params_variance</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">ema</span> <span class="o">*</span> <span class="n">ema</span><span class="p">))</span> <span class="o">*</span> <span class="n">sigma2</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">dist</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="o">*</span><span class="n">results</span><span class="o">.</span><span class="n">dist_args</span><span class="p">)</span>
+        <span class="n">conf_int</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span> <span class="o">-</span> <span class="n">q</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+        <span class="n">conf_int</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="n">q</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> \
         <span class="n">check_array</span><span class="p">(</span><span class="n">conf_int</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
