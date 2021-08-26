@@ -18,4 +18,5 @@ include README.md
 include requirements.txt
 global-exclude __pycache__
 # GitHub Actions includes some random absolute-paths to numpy header files, so we need to filter those
-global-exclude **/numpy/*.h
+# If we actually need to include header files in the future, then we should change this...
+global-exclude *.h
