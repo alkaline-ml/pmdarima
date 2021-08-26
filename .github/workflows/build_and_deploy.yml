@@ -15,7 +15,6 @@ jobs:
   build-and-deploy:
     name: Build and Deploy
     strategy:
-      fail-fast: false
       matrix:
         os: [windows-latest, macos-latest]
         python-version: ['3.6', '3.7', '3.8', '3.9']
