@@ -103,6 +103,12 @@ jobs:
         run: make version sdist
         shell: bash
 
+      - name: "DEBUG: Check SOURCES.txt"
+        run: |
+          cd dist
+          tar xzf $(ls | grep tar)
+          cat pmdarima-0.0.0/pmdarima.egg-info/SOURCES.txt
+
       - name: Checking README compatibility
         run: |
           if python -c "from twine.commands.check import check; check(['dist/*'])" | grep  "warning"; then
