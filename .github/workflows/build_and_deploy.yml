@@ -82,6 +82,18 @@ jobs:
           pip install -r build_tools/build_requirements.txt
         shell: bash
 
+      # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
+      # We build it first because of this: https://github.com/alkaline-ml/pmdarima/issues/448
+      - name: Building source distribution
+        run: make version sdist
+        shell: bash
+
+      - name: "DEBUG: Check SOURCES.txt"
+        run: |
+          cd dist
+          tar xzf $(ls | grep tar)
+          cat pmdarima-0.0.0/pmdarima.egg-info/SOURCES.txt
+
       - name: Building wheel
         run: make version bdist_wheel
         shell: bash
@@ -98,17 +110,6 @@ jobs:
           pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
         shell: bash
 
-      # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
-      - name: Building source distribution
-        run: make version sdist
-        shell: bash
-
-      - name: "DEBUG: Check SOURCES.txt"
-        run: |
-          cd dist
-          tar xzf $(ls | grep tar)
-          cat pmdarima-0.0.0/pmdarima.egg-info/SOURCES.txt
-
       - name: Checking README compatibility
         run: |
           if python -c "from twine.commands.check import check; check(['dist/*'])" | grep  "warning"; then
@@ -118,6 +119,11 @@ jobs:
               echo "README rendered appropriately"
           fi
         shell: bash
+
+      - name: "DEBUG: Check SOURCES.txt (again)"
+        run: |
+          cd dist
+          cat pmdarima-0.0.0/pmdarima.egg-info/SOURCES.txt
 
       - name: Ensuring sdist can be installed
         run: pip install dist/$(ls dist | grep tar)
