@@ -89,12 +89,6 @@ jobs:
         run: make version sdist
         shell: bash
 
-      - name: "DEBUG: Check SOURCES.txt"
-        run: |
-          cd dist
-          tar xzf $(ls | grep tar)
-          cat pmdarima-0.0.0/pmdarima.egg-info/SOURCES.txt
-
       - name: Building wheel
         run: make version bdist_wheel
         shell: bash
@@ -121,10 +115,21 @@ jobs:
           fi
         shell: bash
 
-      - name: "DEBUG: Check SOURCES.txt (again)"
+      # See https://github.com/alkaline-ml/pmdarima/issues/448
+      - name: Ensuring sdist SOURCES.txt has no absolute paths
         run: |
           cd dist
-          cat pmdarima-0.0.0/pmdarima.egg-info/SOURCES.txt
+          TAR_FILE=$(find . -name "*.tar.gz")
+          tar xzf $TAR_FILE
+          OUTPUT_DIRECTORY=$(find . -type d -name "pmdarima-*")
+          if grep -q "^/" ${OUTPUT_DIRECTORY}/pmdarima.egg-info/SOURCES.txt; then
+            echo "SOURCES.txt contains absolute paths in sdist"
+            exit 1
+          else
+            echo "SOURCES.txt looks good"
+            rm -rf "$OUTPUT_DIRECTORY"
+          fi
+        shell: bash
 
       - name: Ensuring sdist can be installed
         run: pip install dist/$(ls dist | grep tar)
