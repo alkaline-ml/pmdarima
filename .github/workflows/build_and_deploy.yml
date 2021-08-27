@@ -82,6 +82,12 @@ jobs:
           pip install -r build_tools/build_requirements.txt
         shell: bash
 
+      # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
+      # We build it first because of this: https://github.com/alkaline-ml/pmdarima/issues/448
+      - name: Building source distribution
+        run: make version sdist
+        shell: bash
+
       - name: Building wheel
         run: make version bdist_wheel
         shell: bash
@@ -98,11 +104,6 @@ jobs:
           pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
         shell: bash
 
-      # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
-      - name: Building source distribution
-        run: make version sdist
-        shell: bash
-
       - name: Checking README compatibility
         run: |
           if python -c "from twine.commands.check import check; check(['dist/*'])" | grep  "warning"; then
@@ -110,6 +111,22 @@ jobs:
               exit 1
           else
               echo "README rendered appropriately"
+          fi
+        shell: bash
+
+      # See https://github.com/alkaline-ml/pmdarima/issues/448
+      - name: Ensuring sdist SOURCES.txt has no absolute paths
+        run: |
+          cd dist
+          TAR_FILE=$(find . -name "*.tar.gz")
+          tar xzf $TAR_FILE
+          OUTPUT_DIRECTORY=$(find . -type d -name "pmdarima-*")
+          if grep -q "^/" ${OUTPUT_DIRECTORY}/pmdarima.egg-info/SOURCES.txt; then
+            echo "SOURCES.txt contains absolute paths in sdist"
+            exit 1
+          else
+            echo "SOURCES.txt looks good"
+            rm -rf "$OUTPUT_DIRECTORY"
           fi
         shell: bash
 
