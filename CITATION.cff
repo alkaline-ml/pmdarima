@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you would like to include pmdarima in your published work, please cite it as follows"
+authors:
+- family-names: "Smith"
+  given-names: "Taylor G."
+keywords:
+  - python
+  - "machine learning"
+  - "time series"
+  - econometrics
+  - forecasting
+  - arima
+  - "forecasting models"
+  - sarimax
+title: "pmdarima"
+version: 1.8.2
+date-released: 2021-04-19
+license: MIT
+repository-artifact: https://pypi.org/project/pmdarima
+repository-code: https://github.com/alkaline-ml/pmdarima
