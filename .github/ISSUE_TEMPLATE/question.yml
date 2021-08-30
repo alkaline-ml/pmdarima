@@ -1,4 +1,4 @@
-name: Question
+name: Question for Maintainers
 description: Ask a question about pmdarima
 labels: [':grey_question: : question']
 body:
@@ -13,7 +13,7 @@ body:
   - type: textarea
     id: question
     attributes:
-      label: Question
+      label: Describe the question you have
       description: A clear and concise description of the issue you're experiencing, and under what conditions.
     validations:
       required: true
