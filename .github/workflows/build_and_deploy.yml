@@ -71,15 +71,15 @@ jobs:
       - name: Preinstalling Cython, numpy, and scipy (Windows only)
         if: startsWith(runner.os, 'Windows')
         run: |
-          pip install "$(cat requirements.txt | grep Cython)"
-          pip install "$(cat requirements.txt | grep numpy)"
-          pip install "$(cat requirements.txt | grep scipy)"
+          pip install "$(cat build_tools/build_requirements.txt | grep cython)"
+          pip install "$(cat build_tools/build_requirements.txt | grep numpy)"
+          pip install "$(cat build_tools/build_requirements.txt | grep scipy)"
         shell: bash
 
       - name: Installing requirements
         run: |
-          pip install -r requirements.txt
           pip install -r build_tools/build_requirements.txt
+          pip install -r requirements.txt
         shell: bash
 
       # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
@@ -103,6 +103,14 @@ jobs:
           fi
           pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
         shell: bash
+
+      - name: Checking for numpy regression
+        run: |
+          pip install --upgrade numpy
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+            export PMD_MPL_BACKEND=TkAgg
+          fi
+          pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
 
       - name: Checking README compatibility
         run: |
