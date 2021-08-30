@@ -1,0 +1,38 @@
+name: Question
+description: Ask a question about pmdarima
+labels: [':grey_question: : question']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before asking a question, please consult our closed issues and docs to see
+        if we have already addressed it:
+
+        https://github.com/alkaline-ml/pmdarima/issues?q=is%3Aissue+is%3Aclosed
+        https://www.alkaline-ml.com/pmdarima/
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: A clear and concise description of the issue you're experiencing, and under what conditions.
+    validations:
+      required: true
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions (if necessary)
+      placeholder: |
+        Please run the following snippet and paste the output here.
+        import pmdarima; pmdarima.show_versions()
+
+        For pmdarima versions <1.5.2 use this:
+        import platform; print(platform.platform())
+        import sys; print("Python", sys.version)
+        import pmdarima; print("pmdarima", pmdarima.__version__)
+        import numpy; print("NumPy", numpy.__version__)
+        import scipy; print("SciPy", scipy.__version__)
+        import sklearn; print("Scikit-Learn", sklearn.__version__)
+        import statsmodels; print("Statsmodels", statsmodels.__version__)
+      render: shell
+    validations:
+      required: false
