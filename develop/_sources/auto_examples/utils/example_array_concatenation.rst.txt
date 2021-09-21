@@ -44,7 +44,7 @@ the package, but one you should understand if you're contributing.
     array_flat = pm.c(1, 2, 3, [4, 5])
     assert np.array_equal(array_flat, np.arange(5) + 1)
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+**Total running time of the script:** ( 0 minutes  0.001 seconds)
 
 
 
