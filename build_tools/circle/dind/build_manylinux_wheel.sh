@@ -15,6 +15,7 @@ ${PIP} install --upgrade pip wheel==0.31.1
 ${PIP} install --upgrade "setuptools>=38.6.0,!=50.0.0"
 
 # NOW we can install requirements
+${PIP} install -r /io/build_tools/build_requirements.txt
 ${PIP} install -r /io/requirements.txt
 make -C /io/ PYTHON="${PYTHON}"
 

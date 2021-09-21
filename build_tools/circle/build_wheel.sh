@@ -23,7 +23,7 @@ function build_wheel {
 
     DOCKER_CONTAINER_NAME=wheel_builder_$(uuidgen)
 
-    ML_IMAGE="quay.io/pypa/manylinux1_${arch}:2021-04-10-43e4a61" # `latest` as of 2021-04-18
+    ML_IMAGE="quay.io/pypa/manylinux_2_24_${arch}:2021-08-29-ad54d32" # `latest` as of 2021-08-30
     PMDARIMA_VERSION=`cat ~/pmdarima/pmdarima/VERSION`
 
     docker pull "${ML_IMAGE}"
