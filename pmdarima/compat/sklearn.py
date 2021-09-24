@@ -65,7 +65,9 @@ def _estimator_has(attr):
 
     Returns
     -------
-        fn : A function that will either raise an `AttributeError` if the attribute does not exist, or True if it does.
+        fn : callable
+            A function that will either raise an `AttributeError` if the
+            attribute does not exist, or True if it does.
     """
     def check(self):
         # raise original `AttributeError` if `attr` does not exist
@@ -76,14 +78,15 @@ def _estimator_has(attr):
 
 
 def if_delegate_has_method(attr):
-    """Compatibility method to replace `sklearn.utils.metaestimators.if_delegate_has`
+    """Compat method to replace `sklearn.utils.metaestimators.if_delegate_has`
 
-    Older versions (<= 0.24.2) of sklearn support it, but newer versions use `available_if` instead.
+    Older versions (<= 0.24.2) of sklearn support it, but newer versions use
+    `available_if` instead.
 
     References
     ----------
-    .. [1] https://github.com/scikit-learn/scikit-learn/issues/20506
-    .. [2] https://github.com/scikit-learn/scikit-learn/issues/21144#issuecomment-926729714
+    .. [1] https://git.io/JzKiv
+    .. [2] https://git.io/JzKiJ
     """
     if sklearn.__version__ <= "0.24.2":
         from sklearn.utils.metaestimators import if_delegate_has_method
