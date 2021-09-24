@@ -17,7 +17,9 @@ import warnings
 from . import _validation as val
 from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
-from ..compat.sklearn import check_is_fitted, if_delegate_has_method, safe_indexing
+from ..compat.sklearn import (
+    check_is_fitted, if_delegate_has_method, safe_indexing
+)
 from ..compat import statsmodels as sm_compat
 from ..compat import matplotlib as mpl_compat
 from ..compat import pmdarima as pm_compat

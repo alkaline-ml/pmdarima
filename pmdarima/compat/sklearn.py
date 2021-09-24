@@ -55,7 +55,9 @@ def safe_indexing(X, indices):
 
 def _estimator_has(attr):
     def check(self):
-        return hasattr(self.estimator, attr)
+        # raise original `AttributeError` if `attr` does not exist
+        getattr(self, attr)
+        return True
 
     return check
 
