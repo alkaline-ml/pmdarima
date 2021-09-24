@@ -109,7 +109,8 @@
 <li class="toctree-l2"><a class="reference internal" href="about.html">1. About the project</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">2. Setup</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#install-from-pypi">2.1. Install from PyPi</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#build-from-source">2.2. Build from source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-from-conda">2.2. Install from Conda</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-from-source">2.3. Build from source</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
@@ -220,8 +221,20 @@ the following module in python:</p>
 <p>If you encounter an <code class="docutils literal notranslate"><span class="pre">ImportError</span></code>, try updating numpy and re-installing. Outdated
 numpy versions have been observed to break the pmdarima build.</p>
 </div>
+<div class="section" id="install-from-conda">
+<h2>2.2. Install from Conda<a class="headerlink" href="#install-from-conda" title="Permalink to this headline">¶</a></h2>
+<p>Pmdarima is on conda under the channel <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> and package name <code class="docutils literal notranslate"><span class="pre">pmdarima</span></code>. It can be downloaded via <code class="docutils literal notranslate"><span class="pre">conda</span></code>
+like so:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ conda config --add channels conda-forge
+$ conda config --set channel_priority strict
+$ conda install pmdarima
+</pre></div>
+</div>
+<p><strong>Note:</strong> We do not maintain our own Conda binaries, they are maintained at <a class="reference external" href="https://github.com/conda-forge/pmdarima-feedstock">https://github.com/conda-forge/pmdarima-feedstock</a>.
+See that repo for further documentation on working with Pmdarima on Conda.</p>
+</div>
 <div class="section" id="build-from-source">
-<h2>2.2. Build from source<a class="headerlink" href="#build-from-source" title="Permalink to this headline">¶</a></h2>
+<h2>2.3. Build from source<a class="headerlink" href="#build-from-source" title="Permalink to this headline">¶</a></h2>
 <p>If you’d like to install a development or bleeding edge version of pmdarima,
 you can always build it from the git source. First clone it from Git:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/alkaline-ml/pmdarima.git
