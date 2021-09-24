@@ -80,7 +80,7 @@ def _estimator_has(attr):
 def if_delegate_has_method(attr):
     """Compat method to replace `sklearn.utils.metaestimators.if_delegate_has`
 
-    Older versions (<= 0.24.2) of sklearn support it, but newer versions use
+    Older versions (< 1.0.0) of sklearn support it, but newer versions use
     `available_if` instead.
 
     References
@@ -88,7 +88,7 @@ def if_delegate_has_method(attr):
     .. [1] https://git.io/JzKiv
     .. [2] https://git.io/JzKiJ
     """
-    if sklearn.__version__ <= "0.24.2":
+    if sklearn.__version__ < "1.0.0":
         from sklearn.utils.metaestimators import if_delegate_has_method
         return if_delegate_has_method(attr)
     else:

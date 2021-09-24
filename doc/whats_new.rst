@@ -14,6 +14,12 @@ v0.8.1) will document the latest features.
   broadcasting error. This precondition will still cause an error, but now it is one the user can better understand.
   See `#440 <https://github.com/alkaline-ml/pmdarima/issues/440>`_
 
+* Change ``numpy`` pin to ``numpy>=1.19.3`` (and build on lowest supported version) to no longer limit users' NumPy
+  versions. This addresses `#449 <https://github.com/alkaline-ml/pmdarima/issues/449>`_
+
+* Fix a bug where ``scikit-learn`` version ``1.0.0`` was raising ``ValueError`` when calling ``if_delegate_has_method``,
+  addressing `#454 <https://github.com/alkaline-ml/pmdarima/issues/454>`_
+
 
 `v1.8.2` <http://alkaline-ml.com/pmdarima/1.8.2/>`_
 --------------------------------------------------
