@@ -88,9 +88,9 @@ def if_delegate_has_method(attr):
     .. [1] https://git.io/JzKiv
     .. [2] https://git.io/JzKiJ
     """
-    if sklearn.__version__ < "1.0.0":
-        from sklearn.utils.metaestimators import if_delegate_has_method
-        return if_delegate_has_method(attr)
-    else:
+    if sklearn.__version__ >= "1.0.0":
         from sklearn.utils.metaestimators import available_if
         return available_if(_estimator_has(attr))
+    else:
+        from sklearn.utils.metaestimators import if_delegate_has_method
+        return if_delegate_has_method(attr)
