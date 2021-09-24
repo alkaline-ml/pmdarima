@@ -7,7 +7,7 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
-`v1.8.3` <http://alkaline-ml.com/pmdarima/1.8.3/>`_
+`v1.8.3 <http://alkaline-ml.com/pmdarima/1.8.3/>`_
 --------------------------------------------------
 
 * Fix a bug in ``tsdisplay`` where a value of ``lag_max`` larger than the length of the series would create a cryptic numpy
@@ -21,7 +21,7 @@ v0.8.1) will document the latest features.
   addressing `#454 <https://github.com/alkaline-ml/pmdarima/issues/454>`_
 
 
-`v1.8.2` <http://alkaline-ml.com/pmdarima/1.8.2/>`_
+`v1.8.2 <http://alkaline-ml.com/pmdarima/1.8.2/>`_
 --------------------------------------------------
 
 * Change ``numpy`` pin to ``~=1.19.0`` to avoid incompatibility issues, addressing `#423 <https://github.com/alkaline-ml/pmdarima/issues/423>`_
