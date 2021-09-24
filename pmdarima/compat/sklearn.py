@@ -54,6 +54,19 @@ def safe_indexing(X, indices):
 
 
 def _estimator_has(attr):
+    """Checks if the model has a given attribute.
+
+    Meant to be used along with `sklearn.utils.metaestimators.available_if`
+
+    Parameters
+    ----------
+    attr : str
+        The attribute to check the calling object for
+
+    Returns
+    -------
+        fn : A function that will either raise an `AttributeError` if the attribute does not exist, or True if it does.
+    """
     def check(self):
         # raise original `AttributeError` if `attr` does not exist
         getattr(self, attr)
@@ -63,6 +76,15 @@ def _estimator_has(attr):
 
 
 def if_delegate_has_method(attr):
+    """Compatibility method to replace `sklearn.utils.metaestimators.if_delegate_has`
+
+    Older versions (<= 0.24.2) of sklearn support it, but newer versions use `available_if` instead.
+
+    References
+    ----------
+    .. [1] https://github.com/scikit-learn/scikit-learn/issues/20506
+    .. [2] https://github.com/scikit-learn/scikit-learn/issues/21144#issuecomment-926729714
+    """
     if sklearn.__version__ <= "0.24.2":
         from sklearn.utils.metaestimators import if_delegate_has_method
         return if_delegate_has_method(attr)
