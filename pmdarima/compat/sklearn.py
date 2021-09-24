@@ -11,7 +11,7 @@ from sklearn.exceptions import NotFittedError
 
 __all__ = [
     'check_is_fitted',
-    "if_delegate_has_method",
+    'if_delegate_has_method',
     'safe_indexing',
 ]
 
