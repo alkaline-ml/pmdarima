@@ -177,7 +177,6 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">clone</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="kn">import</span> <span class="n">if_delegate_has_method</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseARIMA</span>
 <span class="kn">from</span> <span class="nn">.preprocessing.base</span> <span class="kn">import</span> <span class="n">BaseTransformer</span>
@@ -186,6 +185,7 @@
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">check_endog</span>
 <span class="kn">from</span> <span class="nn">.compat</span> <span class="kn">import</span> <span class="n">DTYPE</span><span class="p">,</span> <span class="n">check_is_fitted</span>
 <span class="kn">from</span> <span class="nn">.compat</span> <span class="kn">import</span> <span class="n">pmdarima</span> <span class="k">as</span> <span class="n">pm_compat</span>
+<span class="kn">from</span> <span class="nn">.compat.sklearn</span> <span class="kn">import</span> <span class="n">if_delegate_has_method</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Pipeline&#39;</span><span class="p">]</span>
 

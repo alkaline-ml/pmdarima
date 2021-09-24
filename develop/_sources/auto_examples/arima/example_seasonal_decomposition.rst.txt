@@ -107,7 +107,7 @@ equivalent that inspired this example go `here <https://anomaly.io/seasonal-tren
                                  show=False)
     axes[0].set_title("Airpassengers Seasonal Decomposition")
 
-**Total running time of the script:** ( 0 minutes  0.077 seconds)
+**Total running time of the script:** ( 0 minutes  0.075 seconds)
 
 
 
