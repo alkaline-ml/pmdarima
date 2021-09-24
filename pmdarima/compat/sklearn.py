@@ -50,3 +50,10 @@ def safe_indexing(X, indices):
         return X[indices, :]
     # list or 1d array
     return X[indices]
+
+
+def estimator_has(attr):
+    def check(self):
+        return hasattr(self.estimator, attr)
+
+    return check

@@ -5,7 +5,7 @@
 # A user-friendly wrapper to the statsmodels ARIMA that mimics the familiar
 # sklearn interface.
 
-from sklearn.utils.metaestimators import if_delegate_has_method
+from sklearn.utils.metaestimators import available_if
 from sklearn.utils.validation import check_array
 
 from statsmodels import api as sm
@@ -18,7 +18,7 @@ import warnings
 from . import _validation as val
 from ..base import BaseARIMA
 from ..compat.numpy import DTYPE  # DTYPE for arrays
-from ..compat.sklearn import check_is_fitted, safe_indexing
+from ..compat.sklearn import check_is_fitted, estimator_has, safe_indexing
 from ..compat import statsmodels as sm_compat
 from ..compat import matplotlib as mpl_compat
 from ..compat import pmdarima as pm_compat
@@ -972,7 +972,7 @@ class ARIMA(BaseARIMA):
         # Behaves like `fit`
         return self
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def aic(self):
         """Get the AIC, the Akaike Information Criterion:
 
@@ -1021,7 +1021,7 @@ class ARIMA(BaseARIMA):
                      self.nobs_,
                      not self.with_intercept)
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def arparams(self):
         """Get the parameters associated with the AR coefficients in the model.
 
@@ -1032,7 +1032,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.arparams
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def arroots(self):
         """The roots of the AR coefficients are the solution to:
 
@@ -1049,7 +1049,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.arroots
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def bic(self):
         """Get the BIC, the Bayes Information Criterion:
 
@@ -1070,7 +1070,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.bic
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def bse(self):
         """Get the standard errors of the parameters. These are
         computed using the numerical Hessian.
@@ -1082,7 +1082,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.bse
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def conf_int(self, alpha=0.05, **kwargs):
         r"""Returns the confidence interval of the fitted parameters.
 
@@ -1098,7 +1098,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.conf_int(alpha=alpha, **kwargs)
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def df_model(self):
         """The model degrees of freedom: ``k_exog`` + ``k_trend`` +
         ``k_ar`` + ``k_ma``.
@@ -1110,7 +1110,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.df_model
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def df_resid(self):
         """Get the residual degrees of freedom:
 
@@ -1123,7 +1123,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.df_resid
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def hqic(self):
         """Get the Hannan-Quinn Information Criterion:
 
@@ -1143,7 +1143,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.hqic
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def maparams(self):
         """Get the value of the moving average coefficients.
 
@@ -1154,7 +1154,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.maparams
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def maroots(self):
         """The roots of the MA coefficients are the solution to:
 
@@ -1182,7 +1182,7 @@ class ARIMA(BaseARIMA):
         """
         return self.oob_
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def params(self):
         """Get the parameters of the model. The order of variables is the trend
         coefficients and the :func:`k_exog` exogenous coefficients, then the
@@ -1196,7 +1196,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.params
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def pvalues(self):
         """Get the p-values associated with the t-values of the coefficients.
         Note that the coefficients are assumed to have a Student's T
@@ -1209,7 +1209,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.pvalues
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def resid(self):
         """Get the model residuals. If the model is fit using 'mle', then the
         residuals are created via the Kalman Filter. If the model is fit
@@ -1224,7 +1224,7 @@ class ARIMA(BaseARIMA):
         """
         return self.arima_res_.resid
 
-    @if_delegate_has_method('arima_res_')
+    @available_if(estimator_has('arima_res_'))
     def summary(self):
         """Get a summary of the ARIMA model"""
         return self.arima_res_.summary()
