@@ -4,6 +4,8 @@
 #
 # Patch backend for sklearn
 
+from pkg_resources import parse_version
+
 import sklearn
 from sklearn.exceptions import NotFittedError
 
@@ -88,9 +90,9 @@ def if_delegate_has_method(attr):
     .. [1] https://git.io/JzKiv
     .. [2] https://git.io/JzKiJ
     """
-    if sklearn.__version__ >= "1.0.0":
-        from sklearn.utils.metaestimators import available_if
-        return available_if(_estimator_has(attr))
-    else:
+    if parse_version(sklearn.__version__) < parse_version("1.0.0"):
         from sklearn.utils.metaestimators import if_delegate_has_method
         return if_delegate_has_method(attr)
+    else:
+        from sklearn.utils.metaestimators import available_if
+        return available_if(_estimator_has(attr))
