@@ -8,8 +8,8 @@ body:
         Before asking a question, please consult our closed issues and docs to see
         if we have already addressed it:
 
-        https://github.com/alkaline-ml/pmdarima/issues?q=is%3Aissue+is%3Aclosed
-        https://www.alkaline-ml.com/pmdarima/
+        - [Closed Issues](https://github.com/alkaline-ml/pmdarima/issues?q=is%3Aissue+is%3Aclosed)
+        - [Documentation](https://www.alkaline-ml.com/pmdarima/)
   - type: textarea
     id: question
     attributes:
@@ -21,11 +21,16 @@ body:
     id: versions
     attributes:
       label: Versions (if necessary)
-      placeholder: |
-        Please run the following snippet and paste the output here.
+      description: |
+        <details closed><summary>Instructions to get necessary versions</summary>
+        <p>
+
+        Please run the following snippet and paste the output below.
+
+        ```python
         import pmdarima; pmdarima.show_versions()
 
-        For pmdarima versions <1.5.2 use this:
+        # For pmdarima versions <1.5.2 use this:
         import platform; print(platform.platform())
         import sys; print("Python", sys.version)
         import pmdarima; print("pmdarima", pmdarima.__version__)
@@ -33,6 +38,13 @@ body:
         import scipy; print("SciPy", scipy.__version__)
         import sklearn; print("Scikit-Learn", sklearn.__version__)
         import statsmodels; print("Statsmodels", statsmodels.__version__)
+        ```
+
+        </p>
+        </details
+      placeholder: |
+        See drop down above for instructions on retrieving the versions necessary for answering your question. These
+        will be automatically converted to code, so no need for back ticks
       render: shell
     validations:
       required: false

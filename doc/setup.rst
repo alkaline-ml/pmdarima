@@ -33,6 +33,21 @@ the following module in python:
 If you encounter an ``ImportError``, try updating numpy and re-installing. Outdated
 numpy versions have been observed to break the pmdarima build.
 
+Install from Conda
+------------------
+
+Pmdarima is on conda under the channel ``conda-forge`` and package name ``pmdarima``. It can be downloaded via ``conda``
+like so:
+
+.. code-block:: bash
+
+    $ conda config --add channels conda-forge
+    $ conda config --set channel_priority strict
+    $ conda install pmdarima
+
+**Note:** We do not maintain our own Conda binaries, they are maintained at https://github.com/conda-forge/pmdarima-feedstock.
+See that repo for further documentation on working with Pmdarima on Conda.
+
 Build from source
 -----------------
 

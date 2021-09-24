@@ -26,12 +26,27 @@ from a scikit-learn background.
 
 ## Installation
 
+### pip
+
 Pmdarima has binary and source distributions for Windows, Mac and Linux (`manylinux`) on pypi
 under the package name `pmdarima` and can be downloaded via `pip`:
 
 ```bash
-$ pip install pmdarima
+pip install pmdarima
 ```
+
+### conda
+
+Pmdarima also has Mac and Linux builds available via `conda` and can be installed like so:
+
+```bash
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+conda install pmdarima
+```
+
+**Note:** We do not maintain our own Conda binaries, they are maintained at https://github.com/conda-forge/pmdarima-feedstock.
+See that repo for further documentation on working with Pmdarima on Conda.
 
 ## Quickstart Examples
 

@@ -24,11 +24,16 @@ body:
     id: versions
     attributes:
       label: Versions
-      placeholder: |
-        Please run the following snippet and paste the output here.
+      description: |
+        <details closed><summary>Instructions to get necessary versions</summary>
+        <p>
+
+        Please run the following snippet and paste the output below.
+
+        ```python
         import pmdarima; pmdarima.show_versions()
 
-        For pmdarima versions <1.5.2 use this:
+        # For pmdarima versions <1.5.2 use this:
         import platform; print(platform.platform())
         import sys; print("Python", sys.version)
         import pmdarima; print("pmdarima", pmdarima.__version__)
@@ -36,6 +41,13 @@ body:
         import scipy; print("SciPy", scipy.__version__)
         import sklearn; print("Scikit-Learn", sklearn.__version__)
         import statsmodels; print("Statsmodels", statsmodels.__version__)
+        ```
+
+        </p>
+        </details
+      placeholder: |
+        See drop down above for instructions on retrieving the versions necessary for debugging. These will be
+        automatically converted to code, so no need for back ticks
       render: shell
     validations:
       required: true
