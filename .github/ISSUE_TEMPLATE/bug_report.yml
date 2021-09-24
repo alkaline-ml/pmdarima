@@ -45,7 +45,10 @@ body:
 
         </p>
         </details
-      placeholder: See drop down above for instructions on retrieving the versions necessary for debugging
+      placeholder: |
+        See drop down above for instructions on retrieving the versions necessary for debugging. These will be
+        automatically converted to code, so no need for back ticks
+      render: shell
     validations:
       required: true
   - type: textarea

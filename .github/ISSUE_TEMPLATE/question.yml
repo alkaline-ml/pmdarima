@@ -42,6 +42,9 @@ body:
 
         </p>
         </details
-      placeholder: See drop down above for instructions on retrieving the versions necessary for answering your question
+      placeholder: |
+        See drop down above for instructions on retrieving the versions necessary for answering your question. These
+        will be automatically converted to code, so no need for back ticks
+      render: shell
     validations:
       required: false
