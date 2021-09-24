@@ -4,6 +4,7 @@
 #
 # Patch backend for sklearn
 
+import sklearn
 from sklearn.exceptions import NotFittedError
 
 __all__ = [
@@ -52,8 +53,17 @@ def safe_indexing(X, indices):
     return X[indices]
 
 
-def estimator_has(attr):
+def _estimator_has(attr):
     def check(self):
         return hasattr(self.estimator, attr)
 
     return check
+
+
+def if_delegate_has_method(attr):
+    if sklearn.__version__ <= "0.24.2":
+        from sklearn.utils.metaestimators import if_delegate_has_method
+        return if_delegate_has_method(attr)
+    else:
+        from sklearn.utils.metaestimators import available_if
+        return available_if(_estimator_has(attr))

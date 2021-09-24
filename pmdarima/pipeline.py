@@ -5,7 +5,6 @@ import pandas as pd
 import warnings
 
 from sklearn.base import BaseEstimator, clone
-from sklearn.utils.metaestimators import available_if
 
 from .base import BaseARIMA
 from .preprocessing.base import BaseTransformer
@@ -14,7 +13,7 @@ from .preprocessing.exog.base import BaseExogTransformer, BaseExogFeaturizer
 from .utils import check_endog
 from .compat import DTYPE, check_is_fitted
 from .compat import pmdarima as pm_compat
-from .compat.sklearn import estimator_has
+from .compat.sklearn import if_delegate_has_method
 
 __all__ = ['Pipeline']
 
@@ -498,7 +497,7 @@ class Pipeline(BaseEstimator):
             return y_pred, conf_ints
         return y_pred
 
-    @available_if(estimator_has('_final_estimator'))
+    @if_delegate_has_method('_final_estimator')
     def summary(self):
         """Get a summary of the ARIMA model"""
         return self._final_estimator.summary()
