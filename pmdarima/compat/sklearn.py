@@ -4,10 +4,14 @@
 #
 # Patch backend for sklearn
 
+from pkg_resources import parse_version
+
+import sklearn
 from sklearn.exceptions import NotFittedError
 
 __all__ = [
     'check_is_fitted',
+    "if_delegate_has_method",
     'safe_indexing',
 ]
 
@@ -50,3 +54,46 @@ def safe_indexing(X, indices):
         return X[indices, :]
     # list or 1d array
     return X[indices]
+
+
+def _estimator_has(attr):
+    """Checks if the model has a given attribute.
+
+    Meant to be used along with `sklearn.utils.metaestimators.available_if`
+
+    Parameters
+    ----------
+    attr : str
+        The attribute to check the calling object for
+
+    Returns
+    -------
+    fn : callable
+        A function that will either raise an `AttributeError` if the attribute
+        does not exist, or True if it does.
+    """
+    def check(self):
+        # raise original `AttributeError` if `attr` does not exist
+        getattr(self, attr)
+        return True
+
+    return check
+
+
+def if_delegate_has_method(attr):
+    """Compat method to replace `sklearn.utils.metaestimators.if_delegate_has`
+
+    Older versions (< 1.0.0) of sklearn support it, but newer versions use
+    `available_if` instead.
+
+    References
+    ----------
+    .. [1] https://git.io/JzKiv
+    .. [2] https://git.io/JzKiJ
+    """
+    if parse_version(sklearn.__version__) < parse_version("1.0.0"):
+        from sklearn.utils.metaestimators import if_delegate_has_method
+        return if_delegate_has_method(attr)
+    else:
+        from sklearn.utils.metaestimators import available_if
+        return available_if(_estimator_has(attr))
