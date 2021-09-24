@@ -65,9 +65,9 @@ def _estimator_has(attr):
 
     Returns
     -------
-        fn : callable
-            A function that will either raise an `AttributeError` if the
-            attribute does not exist, or True if it does.
+    fn : callable
+        A function that will either raise an `AttributeError` if the attribute
+        does not exist, or True if it does.
     """
     def check(self):
         # raise original `AttributeError` if `attr` does not exist
