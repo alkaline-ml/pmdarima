@@ -91,14 +91,25 @@ def acf(x, unbiased=None, nlags=None, qstat=False, fft=True,
 
 
 @inheritdoc(parent=sm_pacf)
-def pacf(x, nlags=40, method='ywunbiased', alpha=None):
+def pacf(x, nlags=None, method='ywunbiased', alpha=None):
     # Handle kwarg deprecation in statsmodels 0.13.0
-    if parse_version(statsmodels.__version__) >= parse_version("0.13.0") and "unbiased" in method:
-        warnings.warn(
-            "The `*unbiased` methods have been deprecated in "
-            "statsmodels >= 0.13.0. Please use `*adjusted` instead.",
-            DeprecationWarning
-        )
-        method = method.replace("unbiased", "adjusted")
+    if parse_version(statsmodels.__version__) >= parse_version("0.13.0"):
+        if "unbiased" in method:
+            warnings.warn(
+                "The `*unbiased` methods have been deprecated in "
+                "statsmodels >= 0.13.0. Please use `*adjusted` instead.",
+                DeprecationWarning
+            )
+            method = method.replace("unbiased", "adjusted")
+        elif method in ("ydu", "ywu", "ldu"):
+            warnings.warn(
+                "The `ydu`, `ywu`, and `ldu` methods have been deprecated in "
+                "statsmodels >= 0.13.0. Please use `yda`, `ywa`, and `lda` "
+                "instead.",
+                DeprecationWarning
+            )
+            method = method.replace("u", "a")
+    else:
+        nlags = 40
 
     return sm_pacf(x=x, nlags=nlags, method=method, alpha=alpha)
