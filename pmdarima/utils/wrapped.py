@@ -56,7 +56,7 @@ def inheritdoc(parent):
 
 
 @inheritdoc(parent=sm_acf)
-def acf(x, unbiased=None, nlags=40, qstat=False, fft=False,
+def acf(x, unbiased=None, nlags=None, qstat=False, fft=True,
         alpha=None, missing='none', adjusted=False):
     kwargs = {
         "x": x,
@@ -79,6 +79,9 @@ def acf(x, unbiased=None, nlags=40, qstat=False, fft=False,
         else:
             kwargs["adjusted"] = adjusted
     else:
+        kwargs["nlags"] = 40  # Becomes `None` in 0.13.0
+        kwargs["fft"] = False  # Becomes `True` in 0.13.0
+
         if unbiased is not None:
             kwargs["unbiased"] = unbiased
         else:
