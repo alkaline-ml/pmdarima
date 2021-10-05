@@ -10,6 +10,8 @@ import warnings
 from statsmodels.tsa.stattools import acf as sm_acf, pacf as sm_pacf
 import statsmodels
 
+from pmdarima.compat.statsmodels import _use_sm13
+
 __all__ = [
     'acf',
     'pacf'
@@ -68,7 +70,7 @@ def acf(x, unbiased=None, nlags=None, qstat=False, fft=True,
     }
 
     # Handle kwarg deprecation in statsmodels 0.13.0
-    if parse_version(statsmodels.__version__) >= parse_version("0.13.0"):
+    if _use_sm13():
         if unbiased is not None:
             warnings.warn(
                 "The `unbiased` key-word has been deprecated in "
@@ -93,7 +95,7 @@ def acf(x, unbiased=None, nlags=None, qstat=False, fft=True,
 @inheritdoc(parent=sm_pacf)
 def pacf(x, nlags=None, method='ywunbiased', alpha=None):
     # Handle kwarg deprecation in statsmodels 0.13.0
-    if parse_version(statsmodels.__version__) >= parse_version("0.13.0"):
+    if _use_sm13():
         if "unbiased" in method:
             warnings.warn(
                 "The `*unbiased` methods have been deprecated in "
