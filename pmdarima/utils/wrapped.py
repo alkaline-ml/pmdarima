@@ -112,6 +112,14 @@ def pacf(x, nlags=None, method='ywadjusted', alpha=None):
             )
             method = method.replace("u", "a")
     else:
-        nlags = 40
+        # Have to do the opposite of the above since we support statsmodels
+        # 0.11.0. 0.12.0 supports both `unbiased` and `adjusted`, but 0.11.0
+        # doesn't, so this works for anything < 0.13.0
+        if "adjusted" in method:
+            method = method.replace("adjusted", "unbiased")
+        elif method in ("yda", "ywa", "lda"):
+            method = method.replace("a", "w")
+
+        nlags = 40  # Becomes `None` in 0.13.0
 
     return sm_pacf(x=x, nlags=nlags, method=method, alpha=alpha)
