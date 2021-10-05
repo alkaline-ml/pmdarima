@@ -120,7 +120,7 @@ def pacf(x, nlags=None, method='ywadjusted', alpha=None):
         if "adjusted" in method:
             method = method.replace("adjusted", "unbiased")
         elif method in ("yda", "ywa", "lda"):
-            method = method.replace("a", "w")
+            method = method.replace("a", "u")
 
         nlags = nlags or 40  # Becomes `None` in 0.13.0
 
