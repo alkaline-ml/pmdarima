@@ -59,3 +59,7 @@ def check_seasonal_order(order):
         # user's order may be invalid, but we'll let statsmodels' validation
         # handle that.
         return order
+
+
+def _use_sm13():
+    return parse_version(sm.__version__) >= parse_version("0.13.0")
