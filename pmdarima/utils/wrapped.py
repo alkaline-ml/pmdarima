@@ -93,7 +93,7 @@ def acf(x, unbiased=None, nlags=None, qstat=False, fft=True,
 
 
 @inheritdoc(parent=sm_pacf)
-def pacf(x, nlags=None, method='ywunbiased', alpha=None):
+def pacf(x, nlags=None, method='ywadjusted', alpha=None):
     # Handle kwarg deprecation in statsmodels 0.13.0
     if _use_sm13():
         if "unbiased" in method:
