@@ -81,8 +81,8 @@ def acf(x, unbiased=None, nlags=None, qstat=False, fft=True,
         else:
             kwargs["adjusted"] = adjusted
     else:
-        kwargs["nlags"] = 40  # Becomes `None` in 0.13.0
-        kwargs["fft"] = False  # Becomes `True` in 0.13.0
+        kwargs["nlags"] = nlags or 40  # Becomes `None` in 0.13.0
+        kwargs["fft"] = fft or False  # Becomes `True` in 0.13.0
 
         if unbiased is not None:
             kwargs["unbiased"] = unbiased
@@ -120,6 +120,6 @@ def pacf(x, nlags=None, method='ywadjusted', alpha=None):
         elif method in ("yda", "ywa", "lda"):
             method = method.replace("a", "w")
 
-        nlags = 40  # Becomes `None` in 0.13.0
+        nlags = nlags or 40  # Becomes `None` in 0.13.0
 
     return sm_pacf(x=x, nlags=nlags, method=method, alpha=alpha)
