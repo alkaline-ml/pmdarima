@@ -63,9 +63,9 @@ jobs:
       - name: Preinstalling Cython, numpy, and scipy (Windows only)
         if: startsWith(runner.os, 'Windows')
         run: |
-          pip install "$(cat build_tools/build_requirements.txt | grep cython)"
-          pip install "$(cat build_tools/build_requirements.txt | grep numpy)"
-          pip install "$(cat build_tools/build_requirements.txt | grep scipy)"
+          pip install "$(grep cython build_tools/build_requirements.txt)"
+          pip install "$(grep numpy build_tools/build_requirements.txt)"
+          pip install "$(grep scipy build_tools/build_requirements.txt)"
 
       - name: Installing requirements
         run: |
@@ -111,8 +111,7 @@ jobs:
       - name: Ensuring sdist SOURCES.txt has no absolute paths
         run: |
           cd dist
-          TAR_FILE=$(find . -name "*.tar.gz")
-          tar xzf $TAR_FILE
+          tar xzf $(find . -name "*.tar.gz")
           OUTPUT_DIRECTORY=$(find . -type d -name "pmdarima-*")
           if grep -q "^/" ${OUTPUT_DIRECTORY}/pmdarima.egg-info/SOURCES.txt; then
             echo "SOURCES.txt contains absolute paths in sdist"
