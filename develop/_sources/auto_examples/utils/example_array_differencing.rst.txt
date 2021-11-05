@@ -61,7 +61,7 @@ in conjunction with the ``d`` term to lag a time series.
     # The lag parameter is controlled by `m`, which is the seasonal periodicity of
     # a time series. If your series is non-seasonal, lag will typically be 1.
 
-**Total running time of the script:** ( 0 minutes  0.002 seconds)
+**Total running time of the script:** ( 0 minutes  0.003 seconds)
 
 
 
