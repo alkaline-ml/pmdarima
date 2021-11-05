@@ -1,0 +1,12 @@
+:mod:`pmdarima.utils`.diff_inv
+===========================================
+
+.. currentmodule:: pmdarima.utils
+
+.. autofunction:: diff_inv
+
+.. include:: pmdarima.utils.diff_inv.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
