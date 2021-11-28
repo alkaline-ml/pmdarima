@@ -18,12 +18,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, macos-10.15, ubuntu-latest]
         python-version: ['3.9']
         architecture: ['x86', 'x64']
         exclude:
           # Don't build 32-bit on Mac or Linux
-          - os: macos-latest
+          - os: macos-10.15
             architecture: x86
 
           - os: ubuntu-latest
@@ -109,7 +109,7 @@ jobs:
       - name: Running unit tests
         if: steps.pip-cache.outputs.cache-hit != 'true'
         run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+          if [ "${{ matrix.os }}" == "macos-10.15" ]; then
             export PMD_MPL_BACKEND=TkAgg
           fi
           pytest --showlocals --durations=20 --pyargs pmdarima

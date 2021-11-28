@@ -16,12 +16,12 @@ jobs:
     name: Build and Deploy
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [windows-latest, macos-10.15]
         python-version: ['3.6', '3.7', '3.8', '3.9']
         architecture: ['x86', 'x64']
         exclude:
           # Don't build 32-bit on Mac
-          - os: macos-latest
+          - os: macos-10.15
             architecture: x86
     defaults:
       run:
@@ -34,16 +34,6 @@ jobs:
       # It is actually checking out the most recent version on this branch
       - name: Checkout
         uses: actions/checkout@master
-
-      # Visual Studio 2019 (windows-latest) doesn't include these files for some reason??
-      # Even stranger, it really only affects Python 3.5, but we run it across all versions for consistency
-      # https://social.msdn.microsoft.com/Forums/vstudio/en-US/06675e6d-9a0b-46f5-8de0-10237fab1ece/link-error-lnk1158?forum=vcgeneral
-      - name: Fix Windows
-        if: matrix.os == 'windows-latest'
-        run: |
-          Copy-Item "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\rc.exe" -Destination "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN"
-          Copy-Item "C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86\rcdll.dll" -Destination "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN"
-        shell: powershell
 
       - name: Setting up Python
         uses: actions/setup-python@v2
@@ -95,7 +85,7 @@ jobs:
 
       - name: Running unit tests
         run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+          if [ "${{ matrix.os }}" == "macos-10.15" ]; then
             export PMD_MPL_BACKEND=TkAgg
           fi
           pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
@@ -103,7 +93,7 @@ jobs:
       - name: Checking for numpy regression
         run: |
           pip install --upgrade numpy
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+          if [ "${{ matrix.os }}" == "macos-10.15" ]; then
             export PMD_MPL_BACKEND=TkAgg
           fi
           pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
