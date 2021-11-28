@@ -51,43 +51,43 @@ express seasonal trends without needing to fit a seasonal model.
     [5 rows x 8 columns]
     Performing stepwise search to minimize aic
     Near non-invertible roots for order (2, 1, 2)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
-     ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=inf, Time=2.99 sec
-     ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2864.731, Time=0.09 sec
+     ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=inf, Time=1.79 sec
+     ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2864.731, Time=0.03 sec
     First viable model found (2864.731)
-     ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2861.910, Time=0.65 sec
+     ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2861.910, Time=0.41 sec
     New best model found (2861.910 < 2864.731)
-     ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2859.092, Time=1.14 sec
+     ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2859.092, Time=0.52 sec
     New best model found (2859.092 < 2861.910)
-     ARIMA(0,1,0)(0,0,0)[0]             : AIC=2862.772, Time=0.37 sec
+     ARIMA(0,1,0)(0,0,0)[0]             : AIC=2862.772, Time=0.23 sec
     Near non-invertible roots for order (1, 1, 1)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.999)
-     ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=inf, Time=1.16 sec
-     ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2847.648, Time=2.66 sec
+     ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=inf, Time=0.61 sec
+     ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2847.648, Time=1.63 sec
     New best model found (2847.648 < 2859.092)
     Near non-invertible roots for order (1, 1, 2)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.997)
-     ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=inf, Time=2.98 sec
-     ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2844.490, Time=5.71 sec
+     ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=inf, Time=1.87 sec
+     ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2844.490, Time=2.82 sec
     New best model found (2844.490 < 2847.648)
     Near non-invertible roots for order (1, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.996)
-     ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=5.94 sec
-     ARIMA(0,1,4)(0,0,0)[0] intercept   : AIC=2844.554, Time=9.42 sec
-     ARIMA(1,1,4)(0,0,0)[0] intercept   : AIC=2846.572, Time=11.35 sec
-     ARIMA(0,1,3)(0,0,0)[0]             : AIC=2842.499, Time=4.38 sec
+     ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=3.08 sec
+     ARIMA(0,1,4)(0,0,0)[0] intercept   : AIC=2844.554, Time=4.97 sec
+     ARIMA(1,1,4)(0,0,0)[0] intercept   : AIC=2846.572, Time=6.14 sec
+     ARIMA(0,1,3)(0,0,0)[0]             : AIC=2842.499, Time=2.57 sec
     New best model found (2842.499 < 2844.490)
-     ARIMA(0,1,2)(0,0,0)[0]             : AIC=2845.649, Time=2.13 sec
-     ARIMA(1,1,3)(0,0,0)[0]             : AIC=2840.067, Time=6.20 sec
+     ARIMA(0,1,2)(0,0,0)[0]             : AIC=2845.649, Time=1.14 sec
+     ARIMA(1,1,3)(0,0,0)[0]             : AIC=2840.067, Time=3.28 sec
     New best model found (2840.067 < 2842.499)
-     ARIMA(1,1,2)(0,0,0)[0]             : AIC=2839.103, Time=2.11 sec
+     ARIMA(1,1,2)(0,0,0)[0]             : AIC=2839.103, Time=1.60 sec
     New best model found (2839.103 < 2840.067)
-     ARIMA(1,1,1)(0,0,0)[0]             : AIC=2837.109, Time=0.89 sec
+     ARIMA(1,1,1)(0,0,0)[0]             : AIC=2837.109, Time=0.50 sec
     New best model found (2837.109 < 2839.103)
-     ARIMA(0,1,1)(0,0,0)[0]             : AIC=2857.120, Time=0.86 sec
-     ARIMA(1,1,0)(0,0,0)[0]             : AIC=2859.946, Time=0.76 sec
-     ARIMA(2,1,1)(0,0,0)[0]             : AIC=2839.104, Time=1.43 sec
-     ARIMA(2,1,0)(0,0,0)[0]             : AIC=2854.995, Time=1.16 sec
-     ARIMA(2,1,2)(0,0,0)[0]             : AIC=2840.740, Time=3.16 sec
+     ARIMA(0,1,1)(0,0,0)[0]             : AIC=2857.120, Time=0.33 sec
+     ARIMA(1,1,0)(0,0,0)[0]             : AIC=2859.946, Time=0.38 sec
+     ARIMA(2,1,1)(0,0,0)[0]             : AIC=2839.104, Time=0.60 sec
+     ARIMA(2,1,0)(0,0,0)[0]             : AIC=2854.995, Time=0.56 sec
+     ARIMA(2,1,2)(0,0,0)[0]             : AIC=2840.740, Time=1.54 sec
 
     Best model:  ARIMA(1,1,1)(0,0,0)[0]          
-    Total fit time: 67.567 seconds
+    Total fit time: 36.622 seconds
 
 
 
@@ -169,7 +169,7 @@ express seasonal trends without needing to fit a seasonal model.
     # What next? Try combining different featurizers in your pipeline to enhance
     # a model's predictive power.
 
-**Total running time of the script:** ( 1 minutes  7.974 seconds)
+**Total running time of the script:** ( 0 minutes  36.829 seconds)
 
 
 
