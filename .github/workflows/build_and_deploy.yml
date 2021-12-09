@@ -64,14 +64,6 @@ jobs:
       - name: Updating pip
         run: python -m pip install --upgrade pip
 
-#      # statsmodels throws a fit on Windows and Python 3.8 if we don't preinstall these
-#      - name: Preinstalling Cython, numpy, and scipy (Windows only)
-#        if: startsWith(runner.os, 'Windows')
-#        run: |
-#          pip install "$(grep cython build_tools/build_requirements.txt)"
-#          pip install "$(grep numpy build_tools/build_requirements.txt)"
-#          pip install "$(grep scipy build_tools/build_requirements.txt)"
-
       - name: Installing requirements
         run: |
           pip install -r build_tools/build_requirements.txt
