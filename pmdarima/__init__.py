@@ -3,9 +3,9 @@
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 #
 # The pmdarima module
-
 from pathlib import Path
 import os as _os
+import struct
 import sys as _sys
 import warnings as _warnings
 
@@ -40,6 +40,7 @@ except NameError:
 
 if __PMDARIMA_SETUP__:
     import sys
+
     sys.stderr.write('Partial import of pmdarima during the build process.%s'
                      % _os.linesep)
 else:
@@ -99,6 +100,13 @@ else:
                 _min_version[0], _min_version[1],
                 _py_version.major, _py_version.minor, _py_version.micro,
             )
+        )
+
+    # https://www.dev2qa.com/how-to-check-if-python-is-32-or-64-bit-windows
+    if struct.calcsize('P') * 8 != 64:
+        _warnings.warn(
+            "pmdarima support for 32-bit systems is ending with Python 3.10."
+            "Your system is not guaranteed to work going forward"
         )
 
     # Delete unwanted variables from global
