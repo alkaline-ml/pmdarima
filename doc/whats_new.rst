@@ -7,10 +7,17 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v1.8.5 <http://alkaline-ml.com/pmdarima/1.8.5>`_
+-------------------------------------------------
+
+* Add support for Python 3.10
+
+
 `v1.8.4 <http://alkaline-ml.com/pmdarima/1.8.4/>`_
 --------------------------------------------------
 
 * Add compatibility for ``statsmodels`` 0.13 and higher
+
 
 `v1.8.3 <http://alkaline-ml.com/pmdarima/1.8.3/>`_
 --------------------------------------------------

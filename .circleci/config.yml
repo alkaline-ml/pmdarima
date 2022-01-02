@@ -167,6 +167,15 @@ jobs:
       - checkout
       - build-test-and-persist:
           pythonversion: "3.9"
+
+  test-unit-cpython310:
+    machine:
+      image: circleci/classic:latest
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - build-test-and-persist:
+          pythonversion: "3.10"
   # --- /Unit tests ---
 
   build-doc:
@@ -241,6 +250,16 @@ jobs:
           key: "3.9"
       - deploy-to-pypi
 
+  deploy-cpython310-whl:
+    machine:
+      image: circleci/classic:latest
+    working_directory: ~/pmdarima
+    steps:
+      - checkout
+      - restore-whl-file:
+          key: "3.10"
+      - deploy-to-pypi
+
   # For documentation deployment. You'll need the following environment vars
   # in your Circle CI settings, otherwise this will not work.
   #
@@ -276,6 +295,8 @@ workflows:
             filters: *test-filters
         - test-unit-cpython39:
             filters: *test-filters
+        - test-unit-cpython310:
+            filters: *test-filters
         - build-doc:
             filters: *test-filters
         - testing-passed:
@@ -285,6 +306,7 @@ workflows:
                 - test-unit-cpython37
                 - test-unit-cpython38
                 - test-unit-cpython39
+                - test-unit-cpython310
                 - build-doc
             filters: *test-filters
 
@@ -311,6 +333,11 @@ workflows:
               - deploy-doc
 
         - deploy-cpython39-whl:
+            filters: *deploy-filters
+            requires:
+              - deploy-doc
+
+        - deploy-cpython310-whl:
             filters: *deploy-filters
             requires:
               - deploy-doc
