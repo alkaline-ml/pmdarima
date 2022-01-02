@@ -94,7 +94,7 @@ jobs:
   # larger unit tests, and to avoid multiple setup steps that can slow the pipeline down
   test-sanity:
     docker:
-      - image: python:3.6
+      - image: python:3.7
     working_directory: ~/pmdarima
     steps:
     - checkout
@@ -132,15 +132,6 @@ jobs:
   # --- Unit tests ---
   # These are all executed on `machine` executors, since they require DinD to build the whl
   # files and perform the whl repair for manylinux support.
-  test-unit-cpython36:
-    machine:
-      image: circleci/classic:latest
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - build-test-and-persist:
-          pythonversion: "3.6"
-
   test-unit-cpython37:
     machine:
       image: circleci/classic:latest
@@ -210,16 +201,6 @@ jobs:
   #
   # ############################################
 
-  deploy-cpython36-whl:
-    machine:
-      image: circleci/classic:latest
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - restore-whl-file:
-          key: "3.6"
-      - deploy-to-pypi
-
   deploy-cpython37-whl:
     machine:
       image: circleci/classic:latest
@@ -268,7 +249,7 @@ jobs:
   # GH_TOKEN (the personal Git token with pushes enabled)
   deploy-doc:
     docker:
-      - image: python:3.6
+      - image: python:3.7
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -287,8 +268,6 @@ workflows:
         # run on test and tag
         - test-sanity:
             filters: *test-filters
-        - test-unit-cpython36:
-            filters: *test-filters
         - test-unit-cpython37:
             filters: *test-filters
         - test-unit-cpython38:
@@ -302,7 +281,6 @@ workflows:
         - testing-passed:
             requires:
                 - test-sanity
-                - test-unit-cpython36
                 - test-unit-cpython37
                 - test-unit-cpython38
                 - test-unit-cpython39
@@ -316,11 +294,6 @@ workflows:
                 - build-doc
                 - testing-passed
             filters: *test-filters
-
-        - deploy-cpython36-whl:
-            filters: *deploy-filters
-            requires:
-                - deploy-doc
 
         - deploy-cpython37-whl:
             filters: *deploy-filters

@@ -12,6 +12,8 @@ v0.8.1) will document the latest features.
 
 * Add support for Python 3.10
 
+* Remove support for Python 3.6
+
 
 `v1.8.4 <http://alkaline-ml.com/pmdarima/1.8.4/>`_
 --------------------------------------------------
