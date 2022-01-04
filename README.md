@@ -118,7 +118,7 @@ with open('model.pkl', 'rb') as pkl:
 
 ### Availability
 
-`pmdarima` is available on PyPi in pre-built Wheel files for Python 3.6+ for the following platforms:
+`pmdarima` is available on PyPi in pre-built Wheel files for Python 3.7+ for the following platforms:
 
 * Mac (64-bit)
 * Linux (64-bit manylinux)
