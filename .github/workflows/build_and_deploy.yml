@@ -141,3 +141,51 @@ jobs:
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+
+  build-and-deploy-aarch64:
+    name: 'Build and Deploy (aarch64)'
+    strategy:
+      matrix:
+        python-version: [cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
+    env:
+      python: /opt/python/${{ matrix.python-version }}/bin/python
+      image: quay.io/pypa/manylinux2014_aarch64
+    defaults:
+      run:
+        shell: bash
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Build and Test
+        run: |
+          chmod +x .github/utils/build_and_test_aarch64.sh
+          docker run --rm -v ${{ github.workspace }}:/workspace:rw --workdir=/workspace \
+            ${{ env.image }} .github/utils/build_and_test_aarch64.sh ${{ env.python }}
+
+      - name: Ensuring VERSION file existis
+        id: version_check  # Need this to refer to output below
+        run: |
+          if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
+            echo "VERSION file exists"
+            echo "::set-output name=version_exists::true"
+          else
+            echo "VERSION file does not exist"
+            echo "::set-output name=version_exists::false"
+          fi
+
+      - name: Deploying to PyPI
+        # Only deploy on tags and when VERSION file created
+        if: startsWith(github.ref, 'refs/tags') && success() && steps.version_check.outputs.version_exists == 'true'
+        run: |
+          chmod +x build_tools/github/deploy.sh
+          ./build_tools/github/deploy.sh
+        env:
+          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
