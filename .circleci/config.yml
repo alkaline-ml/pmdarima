@@ -134,7 +134,7 @@ jobs:
   # files and perform the whl repair for manylinux support.
   test-unit-cpython37:
     machine:
-      image: circleci/classic:latest
+      image: ubuntu-2004:202111-02
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -143,7 +143,7 @@ jobs:
 
   test-unit-cpython38:
     machine:
-      image: circleci/classic:latest
+      image: ubuntu-2004:202111-02
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -152,7 +152,7 @@ jobs:
 
   test-unit-cpython39:
     machine:
-      image: circleci/classic:latest
+      image: ubuntu-2004:202111-02
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -161,7 +161,7 @@ jobs:
 
   test-unit-cpython310:
     machine:
-      image: circleci/classic:latest
+      image: ubuntu-2004:202111-02
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -203,7 +203,7 @@ jobs:
 
   deploy-cpython37-whl:
     machine:
-      image: circleci/classic:latest
+      image: ubuntu-2004:202111-02
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -213,7 +213,7 @@ jobs:
 
   deploy-cpython38-whl:
     machine:
-      image: circleci/classic:latest
+      image: ubuntu-2004:202111-02
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -223,7 +223,7 @@ jobs:
 
   deploy-cpython39-whl:
     machine:
-      image: circleci/classic:latest
+      image: ubuntu-2004:202111-02
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -233,7 +233,7 @@ jobs:
 
   deploy-cpython310-whl:
     machine:
-      image: circleci/classic:latest
+      image: ubuntu-2004:202111-02
     working_directory: ~/pmdarima
     steps:
       - checkout
