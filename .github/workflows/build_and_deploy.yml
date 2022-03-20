@@ -149,7 +149,7 @@ jobs:
         python-version: [cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
     env:
       python: /opt/python/${{ matrix.python-version }}/bin/python
-      image: quay.io/pypa/manylinux2014_aarch64
+#      image: quay.io/pypa/manylinux2014_aarch64
     defaults:
       run:
         shell: bash
@@ -159,15 +159,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+#
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v1
 
       - name: Build and Test
-        run: |
-          chmod +x .github/utils/build_and_test_aarch64.sh
-          docker run --rm -v ${{ github.workspace }}:/workspace:rw --workdir=/workspace \
-            ${{ env.image }} .github/utils/build_and_test_aarch64.sh ${{ env.python }}
+        uses: uraimo/run-on-arch-action@v2.1.1
+        with:
+          arch: aarch64
+          distro: ubuntu20.04
+          # Used for caching containers in our repo's package registry
+          githubToken: ${{ github.token }}
+          dockerRunArgs: --volume ${{ github.workspace }}:/workspace:rw --workdir=/workspace
+          run: ./.github/utils/build_and_test_aarch64.sh ${{ env.python }}
+
+#      - name: Build and Test
+#        run: |
+#          chmod +x .github/utils/build_and_test_aarch64.sh
+#          docker run --rm -v ${{ github.workspace }}:/workspace:rw --workdir=/workspace \
+#            ${{ env.image }} .github/utils/build_and_test_aarch64.sh ${{ env.python }}
 
       - name: Ensuring VERSION file existis
         id: version_check  # Need this to refer to output below
