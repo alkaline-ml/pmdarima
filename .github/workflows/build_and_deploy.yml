@@ -146,7 +146,7 @@ jobs:
     name: 'Build and Deploy (aarch64)'
     strategy:
       matrix:
-        python-version: [cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
+        python-version: [3.7.13, 3.8.13, 3.9.11, 3.10.3]
     env:
       python: /opt/python/${{ matrix.python-version }}/bin/python
 #      image: quay.io/pypa/manylinux2014_aarch64
@@ -170,26 +170,47 @@ jobs:
           distro: ubuntu20.04
           # Used for caching containers in our repo's package registry
           githubToken: ${{ github.token }}
-          dockerRunArgs: --volume ${{ github.workspace }}:/workspace:rw --workdir=/workspace
-          run: ls /opt
-#            PYTHON=${{ env.python }}
-#
-#            # Set up virtual env
-#            $PYTHON -m pip install virtualenv
-#            $PYTHON -m venv .env
-#            source .env/bin/activate
-#
-#            # Install requirements
-#            pip install --upgrade pip
-#            pip install -r build_tools/build_requirements.txt
-#            pip install -r requirements.txt
-#
-#            # Make our wheel
-#            make version bdist_wheel
-#
-#            # Install and run tests
-#            pip install --pre --no-index --find-links dist/ pmdarima
-#            pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
+          dockerRunArgs: |
+            --volume ${{ github.workspace }}:/workspace:rw --workdir=/workspace
+
+          env: |
+            PYTHON: ${{ matrix.python-version }}
+
+          # These get cached in the built image, so we install all non-variable items
+          # including all Python versions to make subsequent builds fast
+          install: |
+            # Intall git
+            apt-get update -q -y
+            apt-get install -q -y git
+
+            # Install pyenv
+            curl https://pyenv.run | bash
+            export PATH="${HOME}/.pyenv/bin:$PATH"
+            eval "$(pyenv init -)"
+            eval "$(pyenv virtualenv-init -)"
+
+            # Install all python versions we support
+            # TODO: Keep in sync with YAML file
+            pyenv install 3.7.13
+            pyenv install 3.8.13
+            pyenv install 3.9.11
+            pyenv install 3.10.3
+
+          run: |
+            # Set our python version
+            pyenv global $PYTHON
+
+            # Install requirements
+            pip install --upgrade pip
+            pip install -r build_tools/build_requirements.txt
+            pip install -r requirements.txt
+
+            # Make our wheel
+            make version bdist_wheel
+
+            # Install and run tests
+            pip install --pre --no-index --find-links dist/ pmdarima
+            pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
 
 #      - name: Build and Test
 #        run: |
