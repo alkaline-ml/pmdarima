@@ -171,7 +171,7 @@ jobs:
           # Used for caching containers in our repo's package registry
           githubToken: ${{ github.token }}
           dockerRunArgs: --volume ${{ github.workspace }}:/workspace:rw --workdir=/workspace
-          run: ./.github/utils/build_and_test_aarch64.sh ${{ env.python }}
+          run: .github/utils/build_and_test_aarch64.sh ${{ env.python }}
 
 #      - name: Build and Test
 #        run: |
