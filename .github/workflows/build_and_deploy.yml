@@ -181,7 +181,7 @@ jobs:
           install: |
             # Intall git
             apt-get update -q -y
-            apt-get install -q -y git
+            apt-get install -q -y git curl
 
             # Install pyenv
             curl https://pyenv.run | bash
