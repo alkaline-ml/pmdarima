@@ -167,7 +167,7 @@ jobs:
           dockerRunArgs: |
             --volume ${{ github.workspace }}:/workspace:rw \
             --workdir=/workspace \
-            --env PYTHON=${{ matric.pythion-version }}
+            --env PYTHON=${{ matrix.pythion-version }}
 
           # These get cached in the built image, so we install all non-variable items
           # including all Python versions to make subsequent builds fast
