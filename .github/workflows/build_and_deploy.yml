@@ -174,7 +174,7 @@ jobs:
             --volume ${{ github.workspace }}:/workspace:rw --workdir=/workspace
 
           env: |
-            PYTHON: ${{ matrix.python-version }}
+            python_version: ${{ matrix.python-version }}
 
           # These get cached in the built image, so we install all non-variable items
           # including all Python versions to make subsequent builds fast
@@ -202,7 +202,7 @@ jobs:
             export PATH="${HOME}/.pyenv/bin:$PATH"
             eval "$(pyenv init -)"
             eval "$(pyenv virtualenv-init -)"
-            pyenv global $PYTHON
+            pyenv global ${python_version}
 
             # Install requirements
             python -m pip install --upgrade pip
