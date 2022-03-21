@@ -191,6 +191,7 @@ jobs:
             pyenv install 3.10.3
 
           run: |
+            env
             # Set our python version
             export PATH="${HOME}/.pyenv/bin:$PATH"
             eval "$(pyenv init -)"
