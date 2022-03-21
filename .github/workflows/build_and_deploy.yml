@@ -180,8 +180,6 @@ jobs:
             # Install pyenv
             curl https://pyenv.run | bash
             export PATH="${HOME}/.pyenv/bin:$PATH"
-            eval "$(pyenv init -)"
-            eval "$(pyenv virtualenv-init -)"
 
             # Install all python versions we support
             # TODO: Keep in sync with YAML file
@@ -194,11 +192,12 @@ jobs:
             # Set our python version
             export PATH="${HOME}/.pyenv/bin:$PATH"
             export PATH="${HOME}/.pyenv/shims:$PATH"
-            eval "$(pyenv init -)"
             pyenv global ${PYTHON}
 
             # Install requirements
             pip install --upgrade pip
+            # Need this installed in case we have to build from source
+            pip install "$(grep 'setuptools' build_tools/build_requirements.txt)"
             pip install -r build_tools/build_requirements.txt
             pip install -r requirements.txt
 
