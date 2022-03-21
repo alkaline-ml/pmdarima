@@ -179,9 +179,10 @@ jobs:
           # These get cached in the built image, so we install all non-variable items
           # including all Python versions to make subsequent builds fast
           install: |
-            # Intall git
+            # Intall OS dependencies
             apt-get update -q -y
-            apt-get install -q -y git curl build-essential
+            apt-get install -q -y git curl build-essential zlib1g
+            apt-get clean
 
             # Install pyenv
             curl https://pyenv.run | bash
