@@ -193,8 +193,8 @@ jobs:
           run: |
             # Set our python version
             export PATH="${HOME}/.pyenv/bin:$PATH"
+            export PATH="${HOME}/.pyenv/shims:$PATH"
             eval "$(pyenv init -)"
-            eval "$(pyenv virtualenv-init -)"
             pyenv global ${PYTHON}
 
             # Install requirements
