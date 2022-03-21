@@ -174,7 +174,25 @@ jobs:
           install: |
             # Intall OS dependencies
             apt-get update -q -y
-            apt-get install -q -y git curl build-essential zlib1g-dev bzip2 libssl-dev readline-common
+            apt-get install -q -y \
+              git \
+              make \
+              build-essential \
+              libssl-dev \
+              zlib1g-dev \
+              libbz2-dev \
+              libreadline-dev \
+              libsqlite3-dev \
+              wget \
+              curl \
+              llvm \
+              libncursesw5-dev \
+              xz-utils \
+              tk-dev \
+              libxml2-dev \
+              libxmlsec1-dev \
+              libffi-dev \
+              liblzma-dev
             apt-get clean
 
             # Install pyenv
@@ -197,7 +215,6 @@ jobs:
             # Install requirements
             pip install --upgrade pip
             # Need this installed in case we have to build from source
-            pip install "$(grep 'setuptools' build_tools/build_requirements.txt)"
             pip install -r build_tools/build_requirements.txt
             pip install -r requirements.txt
 
