@@ -181,7 +181,7 @@ jobs:
           install: |
             # Intall OS dependencies
             apt-get update -q -y
-            apt-get install -q -y git curl build-essential zlib1g-dev
+            apt-get install -q -y git curl build-essential zlib1g-dev bzip2 libssl-dev readline-common
             apt-get clean
 
             # Install pyenv
