@@ -146,10 +146,7 @@ jobs:
     name: 'Build and Deploy (aarch64)'
     strategy:
       matrix:
-        python-version: [3.7.13, 3.8.13, 3.9.11, 3.10.3]
-    env:
-      python: /opt/python/${{ matrix.python-version }}/bin/python
-#      image: quay.io/pypa/manylinux2014_aarch64
+        python-version: ['3.7.13', '3.8.13', '3.9.11', '3.10.3']
     defaults:
       run:
         shell: bash
@@ -159,9 +156,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-#
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v1
 
       - name: Build and Test
         uses: uraimo/run-on-arch-action@v2.1.1
@@ -171,10 +165,9 @@ jobs:
           # Used for caching containers in our repo's package registry
           githubToken: ${{ github.token }}
           dockerRunArgs: |
-            --volume ${{ github.workspace }}:/workspace:rw --workdir=/workspace
-
-          env: |
-            python_version: ${{ matrix.python-version }}
+            --volume ${{ github.workspace }}:/workspace:rw \
+            --workdir=/workspace \
+            --env PYTHON=${{ matric.pythion-version }}
 
           # These get cached in the built image, so we install all non-variable items
           # including all Python versions to make subsequent builds fast
@@ -202,25 +195,19 @@ jobs:
             export PATH="${HOME}/.pyenv/bin:$PATH"
             eval "$(pyenv init -)"
             eval "$(pyenv virtualenv-init -)"
-            pyenv global ${python_version}
+            pyenv global ${PYTHON}
 
             # Install requirements
-            python -m pip install --upgrade pip
-            python -m pip install -r build_tools/build_requirements.txt
-            python -m pip install -r requirements.txt
+            pip install --upgrade pip
+            pip install -r build_tools/build_requirements.txt
+            pip install -r requirements.txt
 
             # Make our wheel
             make version bdist_wheel
 
             # Install and run tests
-            python -m pip install --pre --no-index --find-links dist/ pmdarima
-            python -m pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
-
-#      - name: Build and Test
-#        run: |
-#          chmod +x .github/utils/build_and_test_aarch64.sh
-#          docker run --rm -v ${{ github.workspace }}:/workspace:rw --workdir=/workspace \
-#            ${{ env.image }} .github/utils/build_and_test_aarch64.sh ${{ env.python }}
+            pip install --pre --no-index --find-links dist/ pmdarima
+            pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
 
       - name: Ensuring VERSION file existis
         id: version_check  # Need this to refer to output below
