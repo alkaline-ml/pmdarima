@@ -167,7 +167,7 @@ jobs:
           dockerRunArgs: |
             --volume ${{ github.workspace }}:/workspace:rw \
             --workdir=/workspace \
-            --env PYTHON=${{ matrix.python-version }}
+            --env PY_VERSION=${{ matrix.python-version }}
 
           # These get cached in the built image, so we install all non-variable items
           # including all Python versions to make subsequent builds fast
@@ -210,7 +210,7 @@ jobs:
             # Set our python version
             export PATH="${HOME}/.pyenv/bin:$PATH"
             export PATH="${HOME}/.pyenv/shims:$PATH"
-            pyenv global ${PYTHON}
+            pyenv global ${PY_VERSION}
 
             # Install requirements
             pip install --upgrade pip
