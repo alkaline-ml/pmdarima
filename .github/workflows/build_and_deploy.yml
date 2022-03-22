@@ -146,84 +146,98 @@ jobs:
     name: 'Build and Deploy (aarch64)'
     strategy:
       matrix:
-        python-version: ['3.7.13', '3.8.13', '3.9.11', '3.10.3']
+        python-version: [cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
     defaults:
       run:
         shell: bash
 
     runs-on: ubuntu-latest
+    container: quay.io/pypa/manylinux_2_24_aarch64
 
     steps:
       - name: Checkout
         uses: actions/checkout@master
 
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v1
+
       - name: Build and Test
-        uses: uraimo/run-on-arch-action@v2.1.1
-        with:
-          arch: aarch64
-          distro: ubuntu20.04
-          # Used for caching containers in our repo's package registry
-          githubToken: ${{ github.token }}
-          dockerRunArgs: |
-            --volume ${{ github.workspace }}:/workspace:rw \
-            --workdir=/workspace \
-            --env PY_VERSION=${{ matrix.python-version }}
+        run: |
+          PYTHON=/opt/python/${{ matrix.python-version }}/bin/python
+          $PYTHON -m pip install --upgrade install pip
+          pip install -r build_tools/build_requirements.txt
+          pip install -r requirements.txt
+          make version bdist_wheel
+          pip install --pre --no-index --find-links dist/ pmdarima
+          pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
 
-          # These get cached in the built image, so we install all non-variable items
-          # including all Python versions to make subsequent builds fast
-          install: |
-            # Intall OS dependencies
-            apt-get update -q -y
-            apt-get install -q -y \
-              git \
-              make \
-              build-essential \
-              libssl-dev \
-              zlib1g-dev \
-              libbz2-dev \
-              libreadline-dev \
-              libsqlite3-dev \
-              wget \
-              curl \
-              llvm \
-              libncursesw5-dev \
-              xz-utils \
-              tk-dev \
-              libxml2-dev \
-              libxmlsec1-dev \
-              libffi-dev \
-              liblzma-dev
-            apt-get clean
-
-            # Install pyenv
-            curl https://pyenv.run | bash
-            export PATH="${HOME}/.pyenv/bin:$PATH"
-
-            # Install all python versions we support
-            # TODO: Keep in sync with YAML file
-            pyenv install 3.7.13
-            pyenv install 3.8.13
-            pyenv install 3.9.11
-            pyenv install 3.10.3
-
-          run: |
-            # Set our python version
-            export PATH="${HOME}/.pyenv/bin:$PATH"
-            export PATH="${HOME}/.pyenv/shims:$PATH"
-            pyenv global ${PY_VERSION}
-
-            # Install requirements
-            pip install --upgrade pip
-            # Need this installed in case we have to build from source
-            pip install -r build_tools/build_requirements.txt
-            pip install -r requirements.txt
-
-            # Make our wheel
-            make version bdist_wheel
-
-            # Install and run tests
-            pip install --pre --no-index --find-links dist/ pmdarima
-            pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
+#      - name: Build and Test
+#        uses: uraimo/run-on-arch-action@v2.1.1
+#        with:
+#          arch: aarch64
+#          distro: ubuntu20.04
+#          # Used for caching containers in our repo's package registry
+#          githubToken: ${{ github.token }}
+#          dockerRunArgs: |
+#            --volume ${{ github.workspace }}:/workspace:rw \
+#            --workdir=/workspace \
+#            --env PY_VERSION=${{ matrix.python-version }}
+#
+#          # These get cached in the built image, so we install all non-variable items
+#          # including all Python versions to make subsequent builds fast
+#          install: |
+#            # Intall OS dependencies
+#            apt-get update -q -y
+#            apt-get install -q -y \
+#              git \
+#              make \
+#              build-essential \
+#              libssl-dev \
+#              zlib1g-dev \
+#              libbz2-dev \
+#              libreadline-dev \
+#              libsqlite3-dev \
+#              wget \
+#              curl \
+#              llvm \
+#              libncursesw5-dev \
+#              xz-utils \
+#              tk-dev \
+#              libxml2-dev \
+#              libxmlsec1-dev \
+#              libffi-dev \
+#              liblzma-dev
+#            apt-get clean
+#
+#            # Install pyenv
+#            curl https://pyenv.run | bash
+#            export PATH="${HOME}/.pyenv/bin:$PATH"
+#
+#            # Install all python versions we support
+#            # TODO: Keep in sync with YAML file
+#            pyenv install 3.7.13
+#            pyenv install 3.8.13
+#            pyenv install 3.9.11
+#            pyenv install 3.10.3
+#
+#          run: |
+#            # Set our python version
+#            export PATH="${HOME}/.pyenv/bin:$PATH"
+#            export PATH="${HOME}/.pyenv/shims:$PATH"
+#            pyenv global ${PY_VERSION}
+#
+#            # Install requirements
+#            pip install --upgrade pip
+#            # Need this installed in case we have to build from source
+#            pip install -r build_tools/build_requirements.txt
+#            pip install -r requirements.txt
+#
+#            # Make our wheel
+#            make version bdist_wheel
+#
+#            # Install and run tests
+#            pip install --pre --no-index --find-links dist/ pmdarima
+#            pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
 
       - name: Ensuring VERSION file existis
         id: version_check  # Need this to refer to output below
