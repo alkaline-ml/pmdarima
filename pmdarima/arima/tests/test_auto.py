@@ -83,7 +83,7 @@ def test_corner_cases():
                              return_valid_fits=True)
         assert hasattr(fits, '__iter__')
 
-    # show we fail for n_iter < 0
+    # show we fail for n_fits < 0
     with pytest.raises(ValueError):
         pm.auto_arima(np.ones(10), random=True, n_fits=-1)
 

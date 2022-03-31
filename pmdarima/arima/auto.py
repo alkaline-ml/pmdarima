@@ -420,9 +420,9 @@ def auto_arima(y,
                 raise ValueError('d & D must be None or a positive '
                                  'integer (>= 0)')
 
-    # check on n_iter
+    # check on n_fits
     if random and n_fits < 0:
-        raise ValueError('n_iter must be a positive integer '
+        raise ValueError('n_fits must be a positive integer '
                          'for a random search')
 
     # validate error action
