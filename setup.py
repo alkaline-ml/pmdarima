@@ -249,8 +249,6 @@ def do_setup():
                     cmdclass=cmdclass,
                     python_requires=f'>={MIN_PYTHON[0]}.{MIN_PYTHON[1]}',
                     install_requires=REQUIREMENTS,
-                    # Explicitly declare packages so setuptools does not attempt
-                    # auto discovery.
                     # Adapted from: https://github.com/inmanta/inmanta/pull/83
                     # See also: https://github.com/pypa/setuptools/issues/3197
                     packages=find_packages(),
