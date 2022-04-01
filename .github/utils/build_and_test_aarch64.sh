@@ -24,8 +24,11 @@ for whl in dist/*.whl; do
     rm "$whl" # remove original wheel
 done
 
-# Testing on aarch64 takes too long, so we simply import the package as a spot test
 pip install --pre --no-index --find-links dist/ pmdarima
-cd .github # Can't be in the top-level directory for import or it will fail
+
+# Can't be in the top-level directory for import or it will fail
+cd .github
+
+# Testing on aarch64 takes too long, so we simply import the package as a spot test
 # Don't use $PYTHON here because we are in a virtual env
 python -c 'import pmdarima; pmdarima.show_versions()'
