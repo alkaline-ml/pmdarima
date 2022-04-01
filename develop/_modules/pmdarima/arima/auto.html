@@ -592,9 +592,9 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;d &amp; D must be None or a positive &#39;</span>
                                  <span class="s1">&#39;integer (&gt;= 0)&#39;</span><span class="p">)</span>
 
-    <span class="c1"># check on n_iter</span>
+    <span class="c1"># check on n_fits</span>
     <span class="k">if</span> <span class="n">random</span> <span class="ow">and</span> <span class="n">n_fits</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;n_iter must be a positive integer &#39;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;n_fits must be a positive integer &#39;</span>
                          <span class="s1">&#39;for a random search&#39;</span><span class="p">)</span>
 
     <span class="c1"># validate error action</span>
