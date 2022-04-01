@@ -95,7 +95,7 @@ class _RandomFitWrapper(_SolverMixin):
             )
 
         # if we are fitting a random search rather than an exhaustive one, we
-        # will scramble up the generator (as a list) and only fit n_iter ARIMAs
+        # will scramble up the generator (as a list) and only fit n_fits ARIMAs
         if random:
             random_state = check_random_state(random_state)
 

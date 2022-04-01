@@ -214,7 +214,7 @@ _AUTO_ARIMA_DOCSTR = \
 
     n_fits : int, optional (default=10)
         If ``random`` is True and a "random search" is going to be performed,
-        ``n_iter`` is the number of ARIMA models to be fit.
+        ``n_fits`` is the number of ARIMA models to be fit.
     {return_valid_fits}
     out_of_sample_size : int, optional (default=0)
         The ``ARIMA`` class can fit only a portion of the data if specified,
