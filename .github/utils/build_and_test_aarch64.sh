@@ -26,5 +26,5 @@ done
 
 # Testing on aarch64 takes too long, so we simply import the package as a spot test
 pip install --pre --no-index --find-links dist/ pmdarima
-cd
+cd .github # Can't be in the top-level directory for import or it will fail
 $PYTHON -c 'import pmdarima; pmdarima.show_versions()'
