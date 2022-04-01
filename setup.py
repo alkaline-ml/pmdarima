@@ -13,6 +13,7 @@ import shutil
 
 from distutils.command.clean import clean as Clean
 from pkg_resources import parse_version
+from setuptools import find_packages
 import traceback
 import importlib
 
@@ -252,7 +253,7 @@ def do_setup():
                     # auto discovery.
                     # Adapted from: https://github.com/inmanta/inmanta/pull/83
                     # See also: https://github.com/pypa/setuptools/issues/3197
-                    packages=[],
+                    packages=find_packages(),
                     # We have a MANIFEST.in, so I'm not convinced this is fully
                     # necessary, but better to be safe since we've had sdist
                     # problems in the past...
