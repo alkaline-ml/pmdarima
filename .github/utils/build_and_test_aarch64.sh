@@ -15,6 +15,6 @@ pip install -r requirements.txt
 # Make our wheel
 make version bdist_wheel
 
-# Install and run tests
+# Testing on aarch64 takes too long, so we simply import the package as a spot test
 pip install --pre --no-index --find-links dist/ pmdarima
-pytest --showlocals --durations=20 --pyargs pmdarima --benchmark-skip
+$PYTHON -c 'import pmdarima; pmdarima.show_versions()'
