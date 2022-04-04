@@ -7,6 +7,11 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v1.8.6 <http://alkaline-ml.com/pmdarima/1.8.6>`_
+-------------------------------------------------
+
+* Add support for ARM64 architecture. See `#434 <https://github.com/alkaline-ml/pmdarima/issues/434>`_
+
 `v1.8.5 <http://alkaline-ml.com/pmdarima/1.8.5>`_
 -------------------------------------------------
 
