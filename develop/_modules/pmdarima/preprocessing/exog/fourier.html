@@ -174,10 +174,9 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseExogFeaturizer</span>
 <span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">UpdatableMixin</span>
-<span class="kn">from</span> <span class="nn">...compat</span> <span class="kn">import</span> <span class="n">check_is_fitted</span><span class="p">,</span> <span class="n">pmdarima</span> <span class="k">as</span> <span class="n">pm_compat</span>
+<span class="kn">from</span> <span class="nn">...compat</span> <span class="kn">import</span> <span class="n">check_is_fitted</span>
 <span class="kn">from</span> <span class="nn">._fourier</span> <span class="kn">import</span> <span class="n">C_fourier_terms</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;FourierFeaturizer&#39;</span><span class="p">]</span>
@@ -285,7 +284,7 @@
                 <span class="n">i</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
 
-<div class="viewcode-block" id="FourierFeaturizer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># TODO: kwargs go away</span>
+<div class="viewcode-block" id="FourierFeaturizer.fit"><a class="viewcode-back" href="../../../../modules/generated/pmdarima.preprocessing.FourierFeaturizer.html#pmdarima.preprocessing.FourierFeaturizer.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fit the transformer</span>
 
 <span class="sd">        Computes the periods of all the Fourier terms. The values of ``y`` are</span>
@@ -303,10 +302,6 @@
 <span class="sd">            Otherwise, the Fourier terms will be returned as the new exogenous</span>
 <span class="sd">            array.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
         <span class="c1"># Since we don&#39;t fit any params here, we can just check the params</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_X</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">null_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -364,9 +359,6 @@
 <span class="sd">            returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;p_&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_X</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">null_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">n_periods</span> <span class="ow">and</span> <span class="n">X</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -408,9 +400,6 @@
 <span class="sd">            Keyword arguments required by the transform function.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;p_&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">Xt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">n_periods</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>

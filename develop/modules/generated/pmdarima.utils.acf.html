@@ -116,7 +116,6 @@
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.as_series.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.as_series</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.c.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.c</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.check_endog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_endog</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.check_exog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_exog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.diff.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.diff_inv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff_inv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.if_has_delegate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.if_has_delegate</a></li>
@@ -204,7 +203,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.acf<a class="headerlink" href="#pmdarima-utils-acf" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.utils.acf">
-<code class="descclassname">pmdarima.utils.</code><code class="descname">acf</code><span class="sig-paren">(</span><em>x</em>, <em>unbiased=None</em>, <em>nlags=None</em>, <em>qstat=False</em>, <em>fft=None</em>, <em>alpha=None</em>, <em>missing='none'</em>, <em>adjusted=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/62b82c4f/pmdarima/utils/wrapped.py#L60"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#acf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.acf" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.utils.</code><code class="descname">acf</code><span class="sig-paren">(</span><em>x</em>, <em>nlags=None</em>, <em>qstat=False</em>, <em>fft=None</em>, <em>alpha=None</em>, <em>missing='none'</em>, <em>adjusted=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/c6ace441/pmdarima/utils/wrapped.py#L60"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#acf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.acf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the autocorrelation function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -214,53 +213,85 @@
 <blockquote>
 <div><p>The time series data.</p>
 </div></blockquote>
-<p><strong>unbiased</strong> : bool</p>
+<p><strong>adjusted</strong> : bool, default False</p>
 <blockquote>
 <div><p>If True, then denominators for autocovariance are n-k, otherwise n.</p>
 </div></blockquote>
 <p><strong>nlags</strong> : int, optional</p>
 <blockquote>
-<div><p>Number of lags to return autocorrelation for.</p>
+<div><p>Number of lags to return autocorrelation for. If not provided,
+uses min(10 * np.log10(nobs), nobs - 1). The returned value
+includes lag 0 (ie., 1) so size of the acf vector is (nlags + 1,).</p>
 </div></blockquote>
-<p><strong>qstat</strong> : bool, optional</p>
+<p><strong>qstat</strong> : bool, default False</p>
 <blockquote>
 <div><p>If True, returns the Ljung-Box q statistic for each autocorrelation
 coefficient.  See q_stat for more information.</p>
 </div></blockquote>
-<p><strong>fft</strong> : bool, optional</p>
+<p><strong>fft</strong> : bool, default True</p>
 <blockquote>
 <div><p>If True, computes the ACF via FFT.</p>
 </div></blockquote>
-<p><strong>alpha</strong> : scalar, optional</p>
+<p><strong>alpha</strong> : scalar, default None</p>
 <blockquote>
 <div><p>If a number is given, the confidence intervals for the given level are
 returned. For instance if alpha=.05, 95 % confidence intervals are
 returned where the standard deviation is computed according to
-Bartlett’s formula.</p>
+Bartlett”s formula.</p>
 </div></blockquote>
-<p><strong>missing</strong> : str, optional</p>
+<p><strong>bartlett_confint</strong> : bool, default True</p>
 <blockquote>
-<div><p>A string in [‘none’, ‘raise’, ‘conservative’, ‘drop’] specifying how the NaNs
-are to be treated.</p>
+<div><p>Confidence intervals for ACF values are generally placed at 2
+standard errors around r_k. The formula used for standard error
+depends upon the situation. If the autocorrelations are being used
+to test for randomness of residuals as part of the ARIMA routine,
+the standard errors are determined assuming the residuals are white
+noise. The approximate formula for any lag is that standard error
+of each r_k = 1/sqrt(N). See section 9.4 of [2] for more details on
+the 1/sqrt(N) result. For more elementary discussion, see section 5.3.2
+in [3].
+For the ACF of raw data, the standard error at a lag k is
+found as if the right model was an MA(k-1). This allows the possible
+interpretation that if all autocorrelations past a certain lag are
+within the limits, the model might be an MA of order defined by the
+last significant autocorrelation. In this case, a moving average
+model is assumed for the data and the standard errors for the
+confidence intervals should be generated using Bartlett’s formula.
+For more details on Bartlett formula result, see section 7.2 in [2].</p>
+</div></blockquote>
+<p><strong>missing</strong> : str, default “none”</p>
+<blockquote>
+<div><p>A string in [“none”, “raise”, “conservative”, “drop”] specifying how
+the NaNs are to be treated. “none” performs no checks. “raise” raises
+an exception if NaN values are found. “drop” removes the missing
+observations and then estimates the autocovariances treating the
+non-missing as contiguous. “conservative” computes the autocovariance
+using nan-ops so that nans are removed when computing the mean
+and cross-products that are used to estimate the autocovariance.
+When using “conservative”, n is set to the number of non-missing
+observations.</p>
 </div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>acf</strong> : ndarray</p>
 <blockquote>
-<div><p>The autocorrelation function.</p>
+<div><p>The autocorrelation function for lags 0, 1, …, nlags. Shape
+(nlags+1,).</p>
 </div></blockquote>
 <p><strong>confint</strong> : ndarray, optional</p>
 <blockquote>
-<div><p>Confidence intervals for the ACF. Returned if alpha is not None.</p>
+<div><p>Confidence intervals for the ACF at lags 0, 1, …, nlags. Shape
+(nlags + 1, 2). Returned if alpha is not None.</p>
 </div></blockquote>
 <p><strong>qstat</strong> : ndarray, optional</p>
 <blockquote>
-<div><p>The Ljung-Box Q-Statistic.  Returned if q_stat is True.</p>
+<div><p>The Ljung-Box Q-Statistic for lags 1, 2, …, nlags (excludes lag
+zero). Returned if q_stat is True.</p>
 </div></blockquote>
 <p><strong>pvalues</strong> : ndarray, optional</p>
 <blockquote class="last">
-<div><p>The p-values associated with the Q-statistics.  Returned if q_stat is
-True.</p>
+<div><p>The p-values associated with the Q-statistics for lags 1, 2, …,
+nlags (excludes lag zero). Returned if q_stat is True.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -273,15 +304,28 @@ When fft is False uses a simple, direct estimator of the autocovariances
 that only computes the first nlag + 1 values. This can be much faster when
 the time series is long and only a small number of autocovariances are
 needed.</p>
-<p>If unbiased is true, the denominator for the autocovariance is adjusted
-but the autocorrelation is not an unbiased estimator.</p>
+<p>If adjusted is true, the denominator for the autocovariance is adjusted
+for the loss of data.</p>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r91" rules="none">
+<table class="docutils citation" frame="void" id="r94" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R91]</a></td><td>Parzen, E., 1963. On spectral analysis with missing observations
+<tr><td class="label"><a class="fn-backref" href="#id1">[R94]</a></td><td>Parzen, E., 1963. On spectral analysis with missing observations
 and amplitude modulation. Sankhya: The Indian Journal of
 Statistics, Series A, pp.383-392.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r95" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R95]</a></td><td>Brockwell and Davis, 1987. Time Series Theory and Methods</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r96" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[R96]</a></td><td>Brockwell and Davis, 2010. Introduction to Time Series and
+Forecasting, 2nd edition.</td></tr>
 </tbody>
 </table>
 </dd></dl>

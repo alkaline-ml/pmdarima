@@ -184,7 +184,6 @@
 <span class="kn">from</span> <span class="nn">.preprocessing.exog.base</span> <span class="kn">import</span> <span class="n">BaseExogTransformer</span><span class="p">,</span> <span class="n">BaseExogFeaturizer</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">check_endog</span>
 <span class="kn">from</span> <span class="nn">.compat</span> <span class="kn">import</span> <span class="n">DTYPE</span><span class="p">,</span> <span class="n">check_is_fitted</span>
-<span class="kn">from</span> <span class="nn">.compat</span> <span class="kn">import</span> <span class="n">pmdarima</span> <span class="k">as</span> <span class="n">pm_compat</span>
 <span class="kn">from</span> <span class="nn">.compat.sklearn</span> <span class="kn">import</span> <span class="n">if_delegate_has_method</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Pipeline&#39;</span><span class="p">]</span>
@@ -370,9 +369,6 @@
         <span class="c1"># Shallow copy</span>
         <span class="n">steps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_steps</span><span class="p">()</span>
 
-        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">fit_kwargs</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_kwargs</span><span class="p">)</span>
-
         <span class="n">yt</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">Xt</span> <span class="o">=</span> <span class="n">X</span>
         <span class="n">named_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">fit_kwargs</span><span class="p">)</span>
@@ -469,9 +465,6 @@
 <span class="sd">        X_prime : pd.DataFrame</span>
 <span class="sd">            The transformed exog array.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
         <span class="n">n_periods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_n_periods</span><span class="p">(</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_warn_for_deprecated</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">Xt</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_predict</span><span class="p">(</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -546,9 +539,6 @@
 <span class="sd">            The confidence intervals for the predictions. Only returned if</span>
 <span class="sd">            ``return_conf_int`` is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
         <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_warn_for_deprecated</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">Xt</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">predict_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_predict</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -620,9 +610,6 @@
 <span class="sd">            The confidence intervals for the forecasts. Only returned if</span>
 <span class="sd">            ``return_conf_int`` is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
         <span class="n">n_periods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_n_periods</span><span class="p">(</span><span class="n">n_periods</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_warn_for_deprecated</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">Xt</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">predict_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_predict</span><span class="p">(</span>
@@ -705,9 +692,6 @@
 <span class="sd">            separated by a &quot;__&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;steps_&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># Push the arrays through all of the transformer steps that have the</span>
         <span class="c1"># appropriate update_and_transform method</span>

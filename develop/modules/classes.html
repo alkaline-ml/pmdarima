@@ -195,7 +195,6 @@
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.as_series.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.as_series</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.c.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.c</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.check_endog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_endog</a></li>
-<li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.check_exog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_exog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.diff.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.diff_inv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff_inv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="generated/pmdarima.utils.if_has_delegate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.if_has_delegate</a></li>
@@ -588,7 +587,7 @@ classes for pre-processing time series or exogenous arrays.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.acf.html#pmdarima.utils.acf" title="pmdarima.utils.acf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.acf</span></code></a>(x[,&nbsp;unbiased,&nbsp;nlags,&nbsp;qstat,&nbsp;fft,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.acf.html#pmdarima.utils.acf" title="pmdarima.utils.acf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.acf</span></code></a>(x[,&nbsp;nlags,&nbsp;qstat,&nbsp;fft,&nbsp;alpha,&nbsp;…])</td>
 <td>Calculate the autocorrelation function.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.as_series.html#pmdarima.utils.as_series" title="pmdarima.utils.as_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.as_series</span></code></a>(x)</td>
@@ -600,22 +599,19 @@ classes for pre-processing time series or exogenous arrays.</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.check_endog.html#pmdarima.utils.check_endog" title="pmdarima.utils.check_endog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.check_endog</span></code></a>(y[,&nbsp;dtype,&nbsp;copy,&nbsp;…])</td>
 <td>Wrapper for <code class="docutils literal notranslate"><span class="pre">check_array</span></code> and <code class="docutils literal notranslate"><span class="pre">column_or_1d</span></code> from sklearn</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.check_exog.html#pmdarima.utils.check_exog" title="pmdarima.utils.check_exog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.check_exog</span></code></a>(X[,&nbsp;dtype,&nbsp;copy,&nbsp;…])</td>
-<td>A wrapper for <code class="docutils literal notranslate"><span class="pre">check_array</span></code> for 2D arrays</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="pmdarima.utils.diff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.diff</span></code></a>(x[,&nbsp;lag,&nbsp;differences])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="pmdarima.utils.diff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.diff</span></code></a>(x[,&nbsp;lag,&nbsp;differences])</td>
 <td>Difference an array.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.diff_inv.html#pmdarima.utils.diff_inv" title="pmdarima.utils.diff_inv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.diff_inv</span></code></a>(x[,&nbsp;lag,&nbsp;differences,&nbsp;xi])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.diff_inv.html#pmdarima.utils.diff_inv" title="pmdarima.utils.diff_inv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.diff_inv</span></code></a>(x[,&nbsp;lag,&nbsp;differences,&nbsp;xi])</td>
 <td>Inverse the difference of an array.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.if_has_delegate.html#pmdarima.utils.if_has_delegate" title="pmdarima.utils.if_has_delegate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.if_has_delegate</span></code></a>(delegate)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.if_has_delegate.html#pmdarima.utils.if_has_delegate" title="pmdarima.utils.if_has_delegate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.if_has_delegate</span></code></a>(delegate)</td>
 <td>Wrap a delegated instance attribute function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.is_iterable.html#pmdarima.utils.is_iterable" title="pmdarima.utils.is_iterable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.is_iterable</span></code></a>(x)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.is_iterable.html#pmdarima.utils.is_iterable" title="pmdarima.utils.is_iterable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.is_iterable</span></code></a>(x)</td>
 <td>Test a variable for iterability.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pmdarima.utils.pacf.html#pmdarima.utils.pacf" title="pmdarima.utils.pacf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.pacf</span></code></a>(x[,&nbsp;nlags,&nbsp;method,&nbsp;alpha])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pmdarima.utils.pacf.html#pmdarima.utils.pacf" title="pmdarima.utils.pacf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils.pacf</span></code></a>(x[,&nbsp;nlags,&nbsp;method,&nbsp;alpha])</td>
 <td>Partial autocorrelation estimate.</td>
 </tr>
 </tbody>

@@ -194,19 +194,19 @@
 <p>This example demonstrates how we can persist an ARIMA model to disk after
 fitting it. It can then be loaded back up and used to generate forecasts.</p>
 <br/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Predictions</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">21966.6971736</span> <span class="p">,</span> <span class="mf">25983.70921864</span><span class="p">,</span> <span class="mf">30225.30980326</span><span class="p">,</span> <span class="mf">35417.124979</span>  <span class="p">,</span>
-       <span class="mf">13011.36189291</span><span class="p">,</span> <span class="mf">19639.41029709</span><span class="p">,</span> <span class="mf">21506.58177915</span><span class="p">,</span> <span class="mf">23674.34000393</span><span class="p">,</span>
-       <span class="mf">21685.76396166</span><span class="p">,</span> <span class="mf">23669.77821406</span><span class="p">,</span> <span class="mf">26955.35258175</span><span class="p">,</span> <span class="mf">22755.25063648</span><span class="p">,</span>
-       <span class="mf">19808.16135114</span><span class="p">,</span> <span class="mf">23578.78188153</span><span class="p">,</span> <span class="mf">27845.86723055</span><span class="p">,</span> <span class="mf">32923.89429994</span><span class="p">,</span>
-       <span class="mf">10475.68781103</span><span class="p">,</span> <span class="mf">17024.74537358</span><span class="p">,</span> <span class="mf">18831.64801043</span><span class="p">,</span> <span class="mf">20929.54675489</span><span class="p">,</span>
-       <span class="mf">18876.02418493</span><span class="p">,</span> <span class="mf">20792.57517292</span><span class="p">,</span> <span class="mf">24011.9755139</span> <span class="p">,</span> <span class="mf">19745.03910977</span><span class="p">,</span>
-       <span class="mf">16731.45368225</span><span class="p">,</span> <span class="mf">20435.40476246</span><span class="p">,</span> <span class="mf">24635.90944103</span><span class="p">,</span> <span class="mf">29647.31036116</span><span class="p">,</span>
-        <span class="mf">7132.50102023</span><span class="p">,</span> <span class="mf">13614.94379639</span><span class="p">,</span> <span class="mf">15355.2377604</span> <span class="p">,</span> <span class="mf">17386.52470027</span><span class="p">,</span>
-       <span class="mf">15266.39193001</span><span class="p">,</span> <span class="mf">17116.33189588</span><span class="p">,</span> <span class="mf">20269.12163572</span><span class="p">,</span> <span class="mf">15935.5744148</span> <span class="p">,</span>
-       <span class="mf">12855.37828096</span><span class="p">,</span> <span class="mf">16492.71859826</span><span class="p">,</span> <span class="mf">20626.61254291</span><span class="p">,</span> <span class="mf">25571.40271427</span><span class="p">,</span>
-        <span class="mf">2989.98263217</span><span class="p">,</span>  <span class="mf">9405.81466327</span><span class="p">,</span> <span class="mf">11079.49788422</span><span class="p">,</span> <span class="mf">13044.17408</span>   <span class="p">,</span>
-       <span class="mf">10857.43056618</span><span class="p">,</span> <span class="mf">12640.75978821</span><span class="p">,</span> <span class="mf">15726.93878436</span><span class="p">,</span> <span class="mf">11326.78081968</span><span class="p">,</span>
-        <span class="mf">8179.97394211</span><span class="p">,</span> <span class="mf">11750.70351566</span><span class="p">,</span> <span class="mf">15817.98671658</span><span class="p">])</span>
+<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Predictions</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">21966.69715246</span><span class="p">,</span> <span class="mf">25983.70920499</span><span class="p">,</span> <span class="mf">30225.30978813</span><span class="p">,</span> <span class="mf">35417.12496193</span><span class="p">,</span>
+       <span class="mf">13011.36187904</span><span class="p">,</span> <span class="mf">19639.41027751</span><span class="p">,</span> <span class="mf">21506.5817612</span> <span class="p">,</span> <span class="mf">23674.33998338</span><span class="p">,</span>
+       <span class="mf">21685.76394161</span><span class="p">,</span> <span class="mf">23669.77819054</span><span class="p">,</span> <span class="mf">26955.35255987</span><span class="p">,</span> <span class="mf">22755.25061552</span><span class="p">,</span>
+       <span class="mf">19808.16131653</span><span class="p">,</span> <span class="mf">23578.78184917</span><span class="p">,</span> <span class="mf">27845.86719676</span><span class="p">,</span> <span class="mf">32923.89426449</span><span class="p">,</span>
+       <span class="mf">10475.68777743</span><span class="p">,</span> <span class="mf">17024.74533454</span><span class="p">,</span> <span class="mf">18831.64797205</span><span class="p">,</span> <span class="mf">20929.54671378</span><span class="p">,</span>
+       <span class="mf">18876.02414367</span><span class="p">,</span> <span class="mf">20792.57512786</span><span class="p">,</span> <span class="mf">24011.97546995</span><span class="p">,</span> <span class="mf">19745.03906632</span><span class="p">,</span>
+       <span class="mf">16731.45362468</span><span class="p">,</span> <span class="mf">20435.4047067</span> <span class="p">,</span> <span class="mf">24635.90938337</span><span class="p">,</span> <span class="mf">29647.3103014</span> <span class="p">,</span>
+        <span class="mf">7132.50096185</span><span class="p">,</span> <span class="mf">13614.94373211</span><span class="p">,</span> <span class="mf">15355.23769634</span><span class="p">,</span> <span class="mf">17386.52463301</span><span class="p">,</span>
+       <span class="mf">15266.39186215</span><span class="p">,</span> <span class="mf">17116.33182376</span><span class="p">,</span> <span class="mf">20269.12156426</span><span class="p">,</span> <span class="mf">15935.57434338</span><span class="p">,</span>
+       <span class="mf">12855.37819496</span><span class="p">,</span> <span class="mf">16492.71851361</span><span class="p">,</span> <span class="mf">20626.61245591</span><span class="p">,</span> <span class="mf">25571.40262471</span><span class="p">,</span>
+        <span class="mf">2989.98254355</span><span class="p">,</span>  <span class="mf">9405.81456829</span><span class="p">,</span> <span class="mf">11079.497789</span>  <span class="p">,</span> <span class="mf">13044.17398113</span><span class="p">,</span>
+       <span class="mf">10857.43046625</span><span class="p">,</span> <span class="mf">12640.75968356</span><span class="p">,</span> <span class="mf">15726.93867992</span><span class="p">,</span> <span class="mf">11326.78071482</span><span class="p">,</span>
+        <span class="mf">8179.97382221</span><span class="p">,</span> <span class="mf">11750.70339666</span><span class="p">,</span> <span class="mf">15817.98659477</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -250,7 +250,7 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
         <span class="k">pass</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  4.250 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  3.292 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../../_downloads/example_persisting_a_model.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_persisting_a_model.py</span></code></a></div>

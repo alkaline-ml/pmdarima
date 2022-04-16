@@ -267,7 +267,6 @@ Array helper functions & metaestimators
     utils.as_series
     utils.c
     utils.check_endog
-    utils.check_exog
     utils.diff
     utils.diff_inv
     utils.if_has_delegate

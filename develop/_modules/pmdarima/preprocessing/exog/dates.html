@@ -173,7 +173,6 @@
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseExogFeaturizer</span>
-<span class="kn">from</span> <span class="nn">...compat</span> <span class="kn">import</span> <span class="n">pmdarima</span> <span class="k">as</span> <span class="n">pm_compat</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -312,9 +311,6 @@
 <span class="sd">            The exogenous array of additional covariates. Must include the</span>
 <span class="sd">            ``column_name`` feature, which must be a pd.Timestamp dtype.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
         <span class="n">y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_X</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">null_allowed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># enforce pd.DataFrame</span>
@@ -347,10 +343,6 @@
 <span class="sd">            The exogenous array of additional covariates. The ``column_name``</span>
 <span class="sd">            feature must be present, and of dtype pd.Timestamp</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># Temporary shim until we remove `exogenous` support completely</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pm_compat</span><span class="o">.</span><span class="n">get_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
         <span class="n">y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_y_X</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">null_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># enforce pd.DataFrame</span>

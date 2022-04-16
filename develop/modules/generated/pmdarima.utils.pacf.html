@@ -116,7 +116,6 @@
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.as_series.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.as_series</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.c.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.c</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.check_endog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_endog</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.check_exog.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.check_exog</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.diff.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.diff_inv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.diff_inv</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pmdarima.utils.if_has_delegate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>.if_has_delegate</a></li>
@@ -204,7 +203,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.pacf<a class="headerlink" href="#pmdarima-utils-pacf" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.utils.pacf">
-<code class="descclassname">pmdarima.utils.</code><code class="descname">pacf</code><span class="sig-paren">(</span><em>x</em>, <em>nlags=None</em>, <em>method='ywadjusted'</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/62b82c4f/pmdarima/utils/wrapped.py#L97"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#pacf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.pacf" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.utils.</code><code class="descname">pacf</code><span class="sig-paren">(</span><em>x</em>, <em>nlags=None</em>, <em>method='ywadjusted'</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/c6ace441/pmdarima/utils/wrapped.py#L81"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#pacf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.pacf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partial autocorrelation estimate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -216,23 +215,25 @@
 </div></blockquote>
 <p><strong>nlags</strong> : int, optional</p>
 <blockquote>
-<div><p>The largest lag for which the pacf is returned.</p>
+<div><p>Number of lags to return autocorrelation for. If not provided,
+uses min(10 * np.log10(nobs), nobs // 2 - 1). The returned value
+includes lag 0 (ie., 1) so size of the pacf vector is (nlags + 1,).</p>
 </div></blockquote>
-<p><strong>method</strong> : str, optional</p>
+<p><strong>method</strong> : str, default “ywunbiased”</p>
 <blockquote>
 <div><p>Specifies which method for the calculations to use.</p>
 <ul class="simple">
-<li>‘yw’ or ‘ywunbiased’ : Yule-Walker with bias correction in
+<li>“yw” or “ywadjusted” : Yule-Walker with sample-size adjustment in
 denominator for acovf. Default.</li>
-<li>‘ywm’ or ‘ywmle’ : Yule-Walker without bias correction.</li>
-<li>‘ols’ : regression of time series on lags of it and on constant.</li>
-<li>‘ols-inefficient’ : regression of time series on lags using a single
+<li>“ywm” or “ywmle” : Yule-Walker without adjustment.</li>
+<li>“ols” : regression of time series on lags of it and on constant.</li>
+<li>“ols-inefficient” : regression of time series on lags using a single
 common sample to estimate all pacf coefficients.</li>
-<li>‘ols-unbiased’ : regression of time series on lags with a bias
+<li>“ols-adjusted” : regression of time series on lags with a bias
 adjustment.</li>
-<li>‘ld’ or ‘ldunbiased’ : Levinson-Durbin recursion with bias
+<li>“ld” or “ldadjusted” : Levinson-Durbin recursion with bias
 correction.</li>
-<li>‘ldb’ or ‘ldbiased’ : Levinson-Durbin recursion without bias
+<li>“ldb” or “ldbiased” : Levinson-Durbin recursion without bias
 correction.</li>
 </ul>
 </div></blockquote>
@@ -247,11 +248,13 @@ returned where the standard deviation is computed according to
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>pacf</strong> : ndarray</p>
 <blockquote>
-<div><p>Partial autocorrelations, nlags elements, including lag zero.</p>
+<div><p>The partial autocorrelations for lags 0, 1, …, nlags. Shape
+(nlags+1,).</p>
 </div></blockquote>
 <p><strong>confint</strong> : ndarray, optional</p>
 <blockquote class="last">
-<div><p>Confidence intervals for the PACF. Returned if confint is not None.</p>
+<div><p>Confidence intervals for the PACF at lags 0, 1, …, nlags. Shape
+(nlags + 1, 2). Returned if alpha is not None.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -269,15 +272,15 @@ returned where the standard deviation is computed according to
 <dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">statsmodels.tsa.stattools.pacf_ols</span></code></dt>
 <dd>Partial autocorrelation estimation using OLS.</dd>
 <dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">statsmodels.tsa.stattools.pacf_burg</span></code></dt>
-<dd>Partial autocorrelation estimation using Burg’s method.</dd>
+<dd>Partial autocorrelation estimation using Burg”s method.</dd>
 </dl>
 </div>
 <p class="rubric">Notes</p>
 <p>Based on simulation evidence across a range of low-order ARMA models,
 the best methods based on root MSE are Yule-Walker (MLW), Levinson-Durbin
 (MLE) and Burg, respectively. The estimators with the lowest bias included
-included these three in addition to OLS and OLS-unbiased.</p>
-<p>Yule-Walker (unbiased) and Levinson-Durbin (unbiased) performed
+included these three in addition to OLS and OLS-adjusted.</p>
+<p>Yule-Walker (adjusted) and Levinson-Durbin (adjusted) performed
 consistently worse than the other options.</p>
 </dd></dl>
 
