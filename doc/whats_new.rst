@@ -18,9 +18,6 @@ v0.8.1) will document the latest features.
 
 * Expose ``fittedvalues`` in the public API. See `#493 <https://github.com/alkaline-ml/pmdarima/issues/493>`_
 
-`v1.8.6 <http://alkaline-ml.com/pmdarima/1.8.6>`_
--------------------------------------------------
-
 * Add support for ARM64 architecture. See `#434 <https://github.com/alkaline-ml/pmdarima/issues/434>`_
 
 `v1.8.5 <http://alkaline-ml.com/pmdarima/1.8.5>`_
