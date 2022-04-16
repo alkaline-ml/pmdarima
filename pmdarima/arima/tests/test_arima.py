@@ -350,7 +350,7 @@ def _try_get_attrs(arima):
     attrs = {
         'aic', 'aicc', 'arparams', 'arroots', 'bic', 'bse', 'conf_int',
         'df_model', 'df_resid', 'hqic', 'maparams', 'maroots',
-        'params', 'pvalues', 'resid',
+        'params', 'pvalues', 'resid', 'fittedvalues',
     }
 
     # this just shows all of these attrs work.
