@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from .base import BaseExogFeaturizer
-from ...compat import pmdarima as pm_compat
 
 import numpy as np
 import pandas as pd
@@ -140,9 +139,6 @@ class DateFeaturizer(BaseExogFeaturizer):
             The exogenous array of additional covariates. Must include the
             ``column_name`` feature, which must be a pd.Timestamp dtype.
         """
-        # Temporary shim until we remove `exogenous` support completely
-        X, _ = pm_compat.get_X(X, **kwargs)
-
         y, X = self._check_y_X(y, X, null_allowed=False)
 
         # enforce pd.DataFrame
@@ -175,10 +171,6 @@ class DateFeaturizer(BaseExogFeaturizer):
             The exogenous array of additional covariates. The ``column_name``
             feature must be present, and of dtype pd.Timestamp
         """
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, _ = pm_compat.get_X(X, **kwargs)
-
         y, X = self._check_y_X(y, X, null_allowed=True)
 
         # enforce pd.DataFrame

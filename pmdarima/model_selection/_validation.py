@@ -19,7 +19,6 @@ from .. import metrics
 from ..utils import check_endog
 from ..warnings import ModelFitWarning
 from ..compat.sklearn import safe_indexing
-from ..compat import pmdarima as pm_compat
 
 __all__ = [
     'cross_validate',
@@ -141,14 +140,15 @@ def _fit_and_predict(fold, estimator, y, X, train, test, verbose):
     return preds, test
 
 
-def cross_validate(estimator,
-                   y,
-                   X=None,
-                   scoring=None,
-                   cv=None,
-                   verbose=0,
-                   error_score=np.nan,
-                   **kwargs):  # TODO: remove kwargs
+def cross_validate(
+    estimator,
+    y,
+    X=None,
+    scoring=None,
+    cv=None,
+    verbose=0,
+    error_score=np.nan,
+):
     """Evaluate metric(s) by cross-validation and also record fit/score times.
 
     Parameters
@@ -182,9 +182,6 @@ def cross_validate(estimator,
         If a numeric value is given, ModelFitWarning is raised. This parameter
         does not affect the refit step, which will always raise the error.
     """
-    # Temporary shim until we remove `exogenous` support completely
-    X, _ = pm_compat.get_X(X, **kwargs)
-
     y, X = indexable(y, X)
     y = check_endog(y, copy=False)
 
@@ -220,14 +217,15 @@ def cross_validate(estimator,
     return ret
 
 
-def cross_val_predict(estimator,
-                      y,
-                      X=None,
-                      cv=None,
-                      verbose=0,
-                      averaging="mean",
-                      return_raw_predictions=False,
-                      **kwargs):  # TODO: remove kwargs
+def cross_val_predict(
+    estimator,
+    y,
+    X=None,
+    cv=None,
+    verbose=0,
+    averaging="mean",
+    return_raw_predictions=False,
+):
     """Generate cross-validated estimates for each input data point
 
     Parameters
@@ -300,9 +298,6 @@ def cross_val_predict(estimator,
     array([30710.45743168, 34902.94929722, 17994.16587163, 22127.71167249,
            25473.60876435])
     """
-    # Temporary shim until we remove `exogenous` support completely
-    X, _ = pm_compat.get_X(X, **kwargs)
-    
     y, X = indexable(y, X)
     y = check_endog(y, copy=False)
     cv = check_cv(cv)
@@ -360,14 +355,15 @@ def cross_val_predict(estimator,
     return avgfunc(predictions, axis=1)
 
 
-def cross_val_score(estimator,
-                    y,
-                    X=None,
-                    scoring=None,
-                    cv=None,
-                    verbose=0,
-                    error_score=np.nan,
-                    **kwargs):  # TODO: remove kwargs
+def cross_val_score(
+    estimator,
+    y,
+    X=None,
+    scoring=None,
+    cv=None,
+    verbose=0,
+    error_score=np.nan,
+):
     """Evaluate a score by cross-validation
 
     Parameters
@@ -401,14 +397,13 @@ def cross_val_score(estimator,
         If a numeric value is given, ModelFitWarning is raised. This parameter
         does not affect the refit step, which will always raise the error.
     """
-    # Temporary shim until we remove `exogenous` support completely
-    X, _ = pm_compat.get_X(X, **kwargs)
-
-    cv_results = cross_validate(estimator=estimator,
-                                y=y,
-                                X=X,
-                                scoring=scoring,
-                                cv=cv,
-                                verbose=verbose,
-                                error_score=error_score)
+    cv_results = cross_validate(
+        estimator=estimator,
+        y=y,
+        X=X,
+        scoring=scoring,
+        cv=cv,
+        verbose=verbose,
+        error_score=error_score,
+    )
     return cv_results['test_score']

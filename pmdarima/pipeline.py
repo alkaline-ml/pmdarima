@@ -12,7 +12,6 @@ from .preprocessing.endog.base import BaseEndogTransformer
 from .preprocessing.exog.base import BaseExogTransformer, BaseExogFeaturizer
 from .utils import check_endog
 from .compat import DTYPE, check_is_fitted
-from .compat import pmdarima as pm_compat
 from .compat.sklearn import if_delegate_has_method
 
 __all__ = ['Pipeline']
@@ -198,9 +197,6 @@ class Pipeline(BaseEstimator):
         # Shallow copy
         steps = self.steps_ = self._validate_steps()
 
-        # Temporary shim until we remove `exogenous` support completely
-        X, fit_kwargs = pm_compat.get_X(X, **fit_kwargs)
-
         yt = check_endog(y, dtype=DTYPE, copy=False)
         Xt = X
         named_kwargs = self._get_kwargs(**fit_kwargs)
@@ -297,9 +293,6 @@ class Pipeline(BaseEstimator):
         X_prime : pd.DataFrame
             The transformed exog array.
         """
-        # Temporary shim until we remove `exogenous` support completely
-        X, kwargs = pm_compat.get_X(X, **kwargs)
-
         n_periods = self._check_n_periods(n_periods, X)
         kwargs = _warn_for_deprecated(**kwargs)
         Xt, _, _ = self._pre_predict(n_periods, X, **kwargs)
@@ -374,9 +367,6 @@ class Pipeline(BaseEstimator):
             The confidence intervals for the predictions. Only returned if
             ``return_conf_int`` is True.
         """
-        # Temporary shim until we remove `exogenous` support completely
-        X, kwargs = pm_compat.get_X(X, **kwargs)
-
         kwargs = _warn_for_deprecated(**kwargs)
         Xt, est, predict_kwargs = self._pre_predict(0, X, **kwargs)
 
@@ -448,9 +438,6 @@ class Pipeline(BaseEstimator):
             The confidence intervals for the forecasts. Only returned if
             ``return_conf_int`` is True.
         """
-        # Temporary shim until we remove `exogenous` support completely
-        X, kwargs = pm_compat.get_X(X, **kwargs)
-
         n_periods = self._check_n_periods(n_periods, X)
         kwargs = _warn_for_deprecated(**kwargs)
         Xt, est, predict_kwargs = self._pre_predict(
@@ -533,9 +520,6 @@ class Pipeline(BaseEstimator):
             separated by a "__".
         """
         check_is_fitted(self, "steps_")
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, kwargs = pm_compat.get_X(X, **kwargs)
 
         # Push the arrays through all of the transformer steps that have the
         # appropriate update_and_transform method

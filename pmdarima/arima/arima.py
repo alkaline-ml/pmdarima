@@ -22,7 +22,6 @@ from ..compat.sklearn import (
 )
 from ..compat import statsmodels as sm_compat
 from ..compat import matplotlib as mpl_compat
-from ..compat import pmdarima as pm_compat
 from ..utils import if_has_delegate, is_iterable, check_endog, check_exog
 from ..utils.visualization import _get_plt
 from ..utils.array import diff_inv, diff
@@ -446,9 +445,6 @@ class ARIMA(BaseARIMA):
     def _fit(self, y, X=None, **fit_args):
         """Internal fit"""
 
-        # Temporary shim until we remove `exogenous` support completely
-        X, fit_args = pm_compat.get_X(X, **fit_args)
-
         # This wrapper is used for fitting either an ARIMA or a SARIMAX
         def _fit_wrapper():
             # these might change depending on which one
@@ -559,9 +555,6 @@ class ARIMA(BaseARIMA):
         """
         y = check_endog(y, dtype=DTYPE)
         n_samples = y.shape[0]
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, fit_args = pm_compat.get_X(X, **fit_args)
 
         # if exog was included, check the array...
         if X is not None:
@@ -684,15 +677,6 @@ class ARIMA(BaseARIMA):
         """
         check_is_fitted(self, 'arima_res_')
 
-        # Temporary shim until we remove `exogenous` support completely
-        X, kwargs = pm_compat.get_X(X, **kwargs)
-
-        # TODO: remove this, it's a compat check
-        if kwargs.pop("typ", None):
-            warnings.warn("As of version 1.5.0 'typ' is no longer a valid "
-                          "arg for predict. In future versions this will "
-                          "raise a TypeError.")
-
         # issue #286: we cannot produce valid predictions for a period earlier
         # than the differencing value
         d = self.order[1]
@@ -775,9 +759,6 @@ class ARIMA(BaseARIMA):
         check_is_fitted(self, 'arima_res_')
         if not isinstance(n_periods, int):
             raise TypeError("n_periods must be an int")
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, _ = pm_compat.get_X(X, **kwargs)
 
         # if we fit with exog, make sure one was passed:
         X = self._check_exog(X)  # type: np.ndarray
@@ -912,9 +893,6 @@ class ARIMA(BaseARIMA):
         """
         check_is_fitted(self, 'arima_res_')
         model_res = self.arima_res_
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, kwargs = pm_compat.get_X(X, **kwargs)
 
         # Allow updating with a scalar if the user is just adding a single
         # sample.
