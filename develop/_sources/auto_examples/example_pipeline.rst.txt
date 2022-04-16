@@ -35,32 +35,32 @@ which greatly simplifies your life.
 
     pmdarima version: 0.0.0
     Performing stepwise search to minimize aic
-     ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=2819.938, Time=0.61 sec
+     ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=2819.938, Time=0.62 sec
      ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2942.625, Time=0.02 sec
      ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2867.514, Time=0.09 sec
-     ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2830.585, Time=0.23 sec
+     ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2830.585, Time=0.24 sec
      ARIMA(0,1,0)(0,0,0)[0]             : AIC=2940.651, Time=0.09 sec
-     ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=2817.535, Time=0.46 sec
+     ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=2817.535, Time=0.47 sec
      ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2814.904, Time=0.42 sec
-     ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2818.704, Time=0.79 sec
-     ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=2817.377, Time=0.33 sec
-     ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=0.98 sec
-     ARIMA(0,1,2)(0,0,0)[0]             : AIC=2815.283, Time=0.32 sec
+     ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2818.704, Time=0.84 sec
+     ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=2817.377, Time=0.32 sec
+     ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=0.99 sec
+     ARIMA(0,1,2)(0,0,0)[0]             : AIC=2815.283, Time=0.29 sec
 
     Best model:  ARIMA(0,1,2)(0,0,0)[0] intercept
-    Total fit time: 4.343 seconds
+    Total fit time: 4.402 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
                     ('arima',
                      AutoARIMA(error_action='ignore', seasonal=False, trace=1))])
 
     Forecasts:
-    [28518.72114244 29963.37823217 25827.05007898 25060.7833522
-     34235.80171435 33509.06606949 21083.19892357 19764.89573486
-     25895.79321563 25434.06573214]
-    [26536.09083609 34421.90634763 33695.16353314 21269.29476773
-     19950.99644074 26081.89343747 25620.1632287  24414.26212121
-     26098.85404942 28871.61928941 30770.64090112]
+    [28518.67502417 29963.34880476 25827.01425854 25060.74045774
+     34235.75233642 33509.01730742 21083.14833978 19764.83173312
+     25895.71911445 25433.98948705]
+    [26536.04037596 34421.87140168 33695.1292036  21269.25861648
+     19950.94687283 26081.8337719  25620.10142007 24414.19371364
+     26098.77730109 28871.5376828  30770.55340036]
 
 
 
@@ -156,7 +156,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  4.616 seconds)
+**Total running time of the script:** ( 0 minutes  4.630 seconds)
 
 
 

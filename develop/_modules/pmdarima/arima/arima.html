@@ -1274,6 +1274,17 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">df_resid</span></div>
 
+<div class="viewcode-block" id="ARIMA.fittedvalues"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.fittedvalues">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">fittedvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the fitted values from the model</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fittedvalues : array-like</span>
+<span class="sd">            The predicted values for the original series</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">fittedvalues</span></div>
+
 <div class="viewcode-block" id="ARIMA.hqic"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.hqic">[docs]</a>    <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">hqic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the Hannan-Quinn Information Criterion:</span>
