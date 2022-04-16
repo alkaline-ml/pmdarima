@@ -7,6 +7,17 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v2.0.0 <http://alkaline-ml.com/pmdarima/2.0.0>`_
+-------------------------------------------------
+
+* Remove deprecation warnings for the ``exogenous`` keyword introduced in 1.8.0
+
+* Remove deprecation warnings for the ``sarimax_kwargs`` keyword introduced in 1.5.1
+
+* Bump numpy dependency to >= 1.21
+
+* Expose ``fittedvalues`` in the public API. See `#493 <https://github.com/alkaline-ml/pmdarima/issues/493>`_
+
 `v1.8.6 <http://alkaline-ml.com/pmdarima/1.8.6>`_
 -------------------------------------------------
 
