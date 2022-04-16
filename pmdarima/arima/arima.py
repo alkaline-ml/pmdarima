@@ -1103,6 +1103,17 @@ class ARIMA(BaseARIMA):
         return self.arima_res_.df_resid
 
     @if_delegate_has_method('arima_res_')
+    def fittedvalues(self):
+        """Get the fitted values from the model
+
+        Returns
+        -------
+        fittedvalues : array-like
+            The predicted values for the original series
+        """
+        return self.arima_res_.fittedvalues
+
+    @if_delegate_has_method('arima_res_')
     def hqic(self):
         """Get the Hannan-Quinn Information Criterion:
 
