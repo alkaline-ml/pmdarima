@@ -5,7 +5,7 @@ from scipy import stats
 import numpy as np
 import warnings
 
-from ...compat import check_is_fitted, pmdarima as pm_compat
+from ...compat import check_is_fitted
 from .base import BaseEndogTransformer
 
 __all__ = ['BoxCoxEndogTransformer']
@@ -49,7 +49,7 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
         self.neg_action = neg_action
         self.floor = floor
 
-    def fit(self, y, X=None, **kwargs):  # TODO: kwargs go away
+    def fit(self, y, X=None):
         """Fit the transformer
 
         Learns the value of ``lmbda``, if not specified in the constructor.
@@ -67,9 +67,6 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
         """
         lam1 = self.lmbda
         lam2 = self.lmbda2
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, _ = pm_compat.get_X(X, **kwargs)
 
         if lam2 < 0:
             raise ValueError("lmbda2 must be a non-negative scalar value")
@@ -108,9 +105,6 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
         """
         check_is_fitted(self, "lam1_")
 
-        # Temporary shim until we remove `exogenous` support completely
-        X, _ = pm_compat.get_X(X, **kwargs)
-
         lam1 = self.lam1_
         lam2 = self.lam2_
 
@@ -131,7 +125,7 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
             return np.log(y), exog
         return (y ** lam1 - 1) / lam1, exog
 
-    def inverse_transform(self, y, X=None, **kwargs):  # TODO: kwargs go away
+    def inverse_transform(self, y, X=None):
         """Inverse transform a transformed array
 
         Inverse the Box-Cox transformation on the transformed array. Note that
@@ -158,9 +152,6 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
             The inverse-transformed X array
         """
         check_is_fitted(self, "lam1_")
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, _ = pm_compat.get_X(X, **kwargs)
 
         lam1 = self.lam1_
         lam2 = self.lam2_

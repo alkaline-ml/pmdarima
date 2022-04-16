@@ -55,13 +55,13 @@ lint-requirements:
 	$(PYTHON) -m pip install flake8
 
 testing-requirements:
-	$(PYTHON) -m pip install pytest flake8 matplotlib pytest-mpl pytest-benchmark coverage pytest-cov codecov
+	$(PYTHON) -m pip install pytest flake8 matplotlib pytest-mpl coverage pytest-cov codecov
 
 test-lint:
 	$(PYTHON) -m flake8 pmdarima --filename='*.py' --ignore F401,F403,W293,W504
 
 test-unit:
-	$(PYTHON) -m pytest -v --durations=20 --cov-config .coveragerc --cov pmdarima -p no:logging --benchmark-skip
+	$(PYTHON) -m pytest -v --durations=20 --cov-config .coveragerc --cov pmdarima -p no:logging
 
 test: test-unit test-lint
 	# Coverage creates all these random little artifacts we don't want

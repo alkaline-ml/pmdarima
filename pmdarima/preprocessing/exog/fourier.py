@@ -2,10 +2,9 @@
 
 import numpy as np
 
-
 from .base import BaseExogFeaturizer
 from ..base import UpdatableMixin
-from ...compat import check_is_fitted, pmdarima as pm_compat
+from ...compat import check_is_fitted
 from ._fourier import C_fourier_terms
 
 __all__ = ['FourierFeaturizer']
@@ -113,7 +112,7 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
                 i // 2)
             for i in range(X.shape[1])]
 
-    def fit(self, y, X=None, **kwargs):  # TODO: kwargs go away
+    def fit(self, y, X=None):
         """Fit the transformer
 
         Computes the periods of all the Fourier terms. The values of ``y`` are
@@ -131,10 +130,6 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
             Otherwise, the Fourier terms will be returned as the new exogenous
             array.
         """
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, _ = pm_compat.get_X(X, **kwargs)
-
         # Since we don't fit any params here, we can just check the params
         _, _ = self._check_y_X(y, X, null_allowed=True)
 
@@ -192,9 +187,6 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
             returned.
         """
         check_is_fitted(self, "p_")
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, _ = pm_compat.get_X(X, **kwargs)
         _, X = self._check_y_X(y, X, null_allowed=True)
 
         if n_periods and X is not None:
@@ -236,9 +228,6 @@ class FourierFeaturizer(BaseExogFeaturizer, UpdatableMixin):
             Keyword arguments required by the transform function.
         """
         check_is_fitted(self, "p_")
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, kwargs = pm_compat.get_X(X, **kwargs)
 
         self._check_endog(y)
         _, Xt = self.transform(y, X, n_periods=len(y), **kwargs)

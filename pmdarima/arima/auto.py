@@ -18,13 +18,12 @@ from . import _validation as val
 from .utils import ndiffs, is_constant, nsdiffs
 from ..utils import diff, is_iterable, check_endog
 from ..utils.metaestimators import if_has_delegate
-from ..warnings import ModelFitWarning
 from ._context import AbstractContext, ContextType
+
 # Import as a namespace so we can mock
 from . import _auto_solvers as solvers
 from ..compat.numpy import DTYPE
 from ..compat import statsmodels as sm_compat
-from ..compat import pmdarima as pm_compat
 
 __all__ = [
     'auto_arima',
@@ -53,46 +52,48 @@ class AutoARIMA(BaseARIMA):
         sarimax_kwargs=_doc._KWARGS_DOCSTR)
 
     # todo: someday store defaults somewhere else for single source of truth
-    def __init__(self,
-                 start_p=2,
-                 d=None,
-                 start_q=2,
-                 max_p=5,
-                 max_d=2,
-                 max_q=5,
-                 start_P=1,
-                 D=None,
-                 start_Q=1,
-                 max_P=2,
-                 max_D=1,
-                 max_Q=2,
-                 max_order=5,
-                 m=1,
-                 seasonal=True,
-                 stationary=False,
-                 information_criterion='aic',
-                 alpha=0.05,
-                 test='kpss',
-                 seasonal_test='ocsb',
-                 stepwise=True,
-                 n_jobs=1,
-                 start_params=None,
-                 trend=None,
-                 method='lbfgs',
-                 maxiter=50,
-                 offset_test_args=None,
-                 seasonal_test_args=None,
-                 suppress_warnings=True,
-                 error_action='trace',
-                 trace=False,
-                 random=False,
-                 random_state=None,
-                 n_fits=10,
-                 out_of_sample_size=0,
-                 scoring='mse',
-                 scoring_args=None,
-                 with_intercept="auto",
-                 **kwargs):
+    def __init__(
+        self,
+        start_p=2,
+        d=None,
+        start_q=2,
+        max_p=5,
+        max_d=2,
+        max_q=5,
+        start_P=1,
+        D=None,
+        start_Q=1,
+        max_P=2,
+        max_D=1,
+        max_Q=2,
+        max_order=5,
+        m=1,
+        seasonal=True,
+        stationary=False,
+        information_criterion='aic',
+        alpha=0.05,
+        test='kpss',
+        seasonal_test='ocsb',
+        stepwise=True,
+        n_jobs=1,
+        start_params=None,
+        trend=None,
+        method='lbfgs',
+        maxiter=50,
+        offset_test_args=None,
+        seasonal_test_args=None,
+        suppress_warnings=True,
+        error_action='trace',
+        trace=False,
+        random=False,
+        random_state=None,
+        n_fits=10,
+        out_of_sample_size=0,
+        scoring='mse',
+        scoring_args=None,
+        with_intercept="auto",
+        **kwargs,
+    ):
 
         self.start_p = start_p
         self.d = d
@@ -133,15 +134,6 @@ class AutoARIMA(BaseARIMA):
         self.scoring_args = scoring_args
         self.with_intercept = with_intercept
 
-        # TODO: pop out the deprecated vars for now, but remove in a later vsn
-        smx = kwargs.pop('sarimax_kwargs', None)
-        if smx:
-            kwargs = smx
-            warnings.warn("The 'sarimax_kwargs' keyword arg has been "
-                          "deprecated in favor of simply passing **kwargs. "
-                          "This will raise in future versions",
-                          DeprecationWarning)
-
         kwargs = _warn_for_deprecations(**kwargs)
         self.kwargs = kwargs
 
@@ -172,8 +164,6 @@ class AutoARIMA(BaseARIMA):
         """
         sarimax_kwargs = {} if not self.kwargs else self.kwargs
 
-        # Temporary shim until we remove `exogenous` support completely
-        X, fit_kwargs = pm_compat.get_X(X, **fit_args)
         self.model_ = auto_arima(
             y,
             X=X,
@@ -222,18 +212,16 @@ class AutoARIMA(BaseARIMA):
         return self
 
     @if_has_delegate("model_")
-    def predict_in_sample(self,
-                          X=None,
-                          start=None,
-                          end=None,
-                          dynamic=False,
-                          return_conf_int=False,
-                          alpha=0.05,
-                          typ='levels',
-                          **kwargs):  # TODO: remove kwargs when exog goes
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, _ = pm_compat.get_X(X, **kwargs)
+    def predict_in_sample(
+        self,
+        X=None,
+        start=None,
+        end=None,
+        dynamic=False,
+        return_conf_int=False,
+        alpha=0.05,
+        typ='levels',
+    ):
         return self.model_.predict_in_sample(
             X=X,
             start=start,
@@ -245,15 +233,13 @@ class AutoARIMA(BaseARIMA):
         )
 
     @if_has_delegate("model_")
-    def predict(self,
-                n_periods=10,
-                X=None,
-                return_conf_int=False,
-                alpha=0.05,
-                **kwargs):  # TODO: remove kwargs when exog goes
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, _ = pm_compat.get_X(X, **kwargs)
+    def predict(
+        self,
+        n_periods=10,
+        X=None,
+        return_conf_int=False,
+        alpha=0.05,
+    ):
         return self.model_.predict(
             n_periods=n_periods,
             X=X,
@@ -262,14 +248,13 @@ class AutoARIMA(BaseARIMA):
         )
 
     @if_has_delegate("model_")
-    def update(self,
-               y,
-               X=None,
-               maxiter=None,
-               **kwargs):
-
-        # Temporary shim until we remove `exogenous` support completely
-        X, kwargs = pm_compat.get_X(X, **kwargs)
+    def update(
+        self,
+        y,
+        X=None,
+        maxiter=None,
+        **kwargs,
+    ):
         return self.model_.update(
             y,
             X=X,
@@ -342,54 +327,53 @@ class StepwiseContext(AbstractContext):
         return ContextType.STEPWISE
 
 
-def auto_arima(y,
-               X=None,
-               start_p=2,
-               d=None,
-               start_q=2,
-               max_p=5,
-               max_d=2,
-               max_q=5,
-               start_P=1,
-               D=None,
-               start_Q=1,
-               max_P=2,
-               max_D=1,
-               max_Q=2,
-               max_order=5,
-               m=1,
-               seasonal=True,
-               stationary=False,
-               information_criterion='aic',
-               alpha=0.05,
-               test='kpss',
-               seasonal_test='ocsb',
-               stepwise=True,
-               n_jobs=1,
-               start_params=None,
-               trend=None,
-               method='lbfgs',
-               maxiter=50,
-               offset_test_args=None,
-               seasonal_test_args=None,
-               suppress_warnings=True,
-               error_action='trace',
-               trace=False,
-               random=False,
-               random_state=None,
-               n_fits=10,
-               return_valid_fits=False,
-               out_of_sample_size=0,
-               scoring='mse',
-               scoring_args=None,
-               with_intercept="auto",
-               sarimax_kwargs=None,
-               **fit_args):
+def auto_arima(
+    y,
+    X=None,
+    start_p=2,
+    d=None,
+    start_q=2,
+    max_p=5,
+    max_d=2,
+    max_q=5,
+    start_P=1,
+    D=None,
+    start_Q=1,
+    max_P=2,
+    max_D=1,
+    max_Q=2,
+    max_order=5,
+    m=1,
+    seasonal=True,
+    stationary=False,
+    information_criterion='aic',
+    alpha=0.05,
+    test='kpss',
+    seasonal_test='ocsb',
+    stepwise=True,
+    n_jobs=1,
+    start_params=None,
+    trend=None,
+    method='lbfgs',
+    maxiter=50,
+    offset_test_args=None,
+    seasonal_test_args=None,
+    suppress_warnings=True,
+    error_action='trace',
+    trace=False,
+    random=False,
+    random_state=None,
+    n_fits=10,
+    return_valid_fits=False,
+    out_of_sample_size=0,
+    scoring='mse',
+    scoring_args=None,
+    with_intercept="auto",
+    sarimax_kwargs=None,
+    **fit_args,
+):
 
     # NOTE: Doc is assigned BELOW this function
-
-    # Temporary shim until we remove `exogenous` support completely
-    X, fit_args = pm_compat.get_X(X, **fit_args)
 
     # pop out the deprecated kwargs
     fit_args = _warn_for_deprecations(**fit_args)

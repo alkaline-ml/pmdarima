@@ -16,7 +16,7 @@ class BaseEndogTransformer(BaseTransformer, metaclass=abc.ABCMeta):
         return y, X
 
     @abc.abstractmethod
-    def inverse_transform(self, y, X=None, **kwargs):  # TODO: remove kwargs
+    def inverse_transform(self, y, X=None):
         """Inverse transform a transformed array
 
         Inverse the transformation on the transformed array.

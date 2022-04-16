@@ -101,12 +101,6 @@ def test_deprecation_warnings():
     assert we
 
 
-def test_deprecation_warnings_on_class():
-    with pytest.warns(DeprecationWarning) as we:
-        auto.AutoARIMA(sarimax_kwargs={"simple_differencing": True})
-    assert we
-
-
 # Force case where data is simple polynomial after differencing
 @pytest.mark.filterwarnings('ignore:divide by zero')  # Expected, so ignore
 def test_force_polynomial_error():

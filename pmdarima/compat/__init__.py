@@ -6,7 +6,6 @@ to other portions of pmdarima and to remove circular dependencies.
 
 from .matplotlib import *
 from .pandas import *
-from .pmdarima import *
 from .numpy import *
 from .sklearn import *
 from .statsmodels import *
