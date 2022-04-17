@@ -118,8 +118,8 @@ class BaseTSCrossValidator(BaseEstimator, metaclass=abc.ABCMeta):
     def _iter_train_test_masks(self, y, X):
         """Generate boolean masks corresponding to test sets"""
         for train_index, test_index in self._iter_train_test_indices(y, X):
-            train_mask = np.zeros(y.shape[0], dtype=np.bool)
-            test_mask = np.zeros(y.shape[0], dtype=np.bool)
+            train_mask = np.zeros(y.shape[0], dtype=bool)
+            test_mask = np.zeros(y.shape[0], dtype=bool)
 
             train_mask[train_index] = True
             test_mask[test_index] = True

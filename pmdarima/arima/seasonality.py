@@ -8,6 +8,8 @@ from collections import namedtuple
 
 import math
 from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 from scipy.linalg import svd
 from statsmodels import api as sm
@@ -226,12 +228,15 @@ class CHTest(_SeasonalStationarityTest):
 
         # no use checking, because this is an internal method
         # if n <= s:  raise ValueError('too few samples (%i<=%i)' % (n, s))
-        frec = np.ones(int((s + 1) / 2), dtype=np.int)
+        frec = np.ones(int((s + 1) / 2), dtype=int)
         ltrunc = int(np.round(s * ((n / 100.0) ** 0.25)))
         R1 = CHTest._seas_dummy(wts, s)
 
         # fit model, get residuals
-        lmch = LinearRegression(normalize=True).fit(R1, wts)
+        lmch = make_pipeline(
+            StandardScaler(with_mean=False),
+            LinearRegression()
+        ).fit(R1, wts)
         # lmch = sm.OLS(wts, R1).fit(method='qr')
         residuals = wts - lmch.predict(R1)
 
