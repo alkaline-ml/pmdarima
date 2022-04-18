@@ -135,7 +135,7 @@ def test_diff():
 )
 def test_diff_inv(arr, lag, differences, xi, expected):
     res = diff_inv(arr, lag=lag, differences=differences, xi=xi)
-    expected = np.array(expected, dtype=np.float)
+    expected = np.array(expected, dtype=float)
     assert_array_equal(expected, res)
 
 

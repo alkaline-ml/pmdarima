@@ -11,6 +11,11 @@ on:
     branches:
       - '*'
 
+# Cancel older runs of the same workflow on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     name: Build and Deploy

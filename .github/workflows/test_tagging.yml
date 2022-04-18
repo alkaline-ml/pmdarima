@@ -9,6 +9,11 @@ on:
     branches:
       - '*'
 
+# Cancel older runs of the same workflow on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test-tagging:
     name: Test VERSION tagging

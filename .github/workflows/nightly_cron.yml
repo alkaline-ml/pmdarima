@@ -12,6 +12,11 @@ on:
   schedule:
     - cron: '0 7 * * *'  # Every day at 07:00 UTC (1AM CST or 2AM CDT)
 
+# Cancel older runs of the same workflow on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build against latest dependencies
