@@ -175,7 +175,12 @@ _AUTO_ARIMA_DOCSTR = \
 
     seasonal_test_args : dict, optional (default=None)
         The args to pass to the constructor of the seasonal offset (``D``)
-        test. See ``pmdarima.arima.seasonality`` for more details.
+        test. See ``pmdarima.arima.seasonality`` for more details. Examples of
+        valid kwargs will vary based on the test. For the ``OCSBTest``
+        (default) they include:
+        
+        - 'lag_method'
+        - 'max_lag'
 
     suppress_warnings : bool, optional (default=True)
         Many warnings might be thrown inside of statsmodels. If

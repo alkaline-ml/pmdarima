@@ -447,19 +447,11 @@ class ARIMA(BaseARIMA):
 
         # This wrapper is used for fitting either an ARIMA or a SARIMAX
         def _fit_wrapper():
-            # these might change depending on which one
             method = self.method
-
-            # If it's in kwargs, we'll use it
             trend = self.trend
 
-            # TODO: remove this check. this is a compat warning for when we
-            #   . moved to sarimax only
             if method is None:
-                warnings.warn("As of version 1.5.0, the default value of "
-                              "'method' is 'lbfgs'. Explicitly setting None "
-                              "will raise in future versions", UserWarning)
-                method = 'lbfgs'
+                raise ValueError("Expected non-None value for `method`")
 
             # this considers `with_intercept` truthy, so if auto_arima gets
             # here without explicitly changing `with_intercept` from 'auto' we
@@ -486,12 +478,7 @@ class ARIMA(BaseARIMA):
             # passed as a fit arg, if a user does it explicitly.
             _maxiter = self.maxiter
             if _maxiter is None:
-                # TODO: remove this check. this is a compat warning for when we
-                #   . moved to sarimax only
-                warnings.warn("As of version 1.5.0, the default value of "
-                              "'maxiter' is 50. Explicitly setting None "
-                              "will raise in future versions", UserWarning)
-                _maxiter = 50
+                raise ValueError("Expected non-None value for `maxiter`")
 
             # If maxiter is provided in the fit_args by a savvy user or the
             # update method, we should default to their preference
