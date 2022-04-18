@@ -619,19 +619,11 @@
 
         <span class="c1"># This wrapper is used for fitting either an ARIMA or a SARIMAX</span>
         <span class="k">def</span> <span class="nf">_fit_wrapper</span><span class="p">():</span>
-            <span class="c1"># these might change depending on which one</span>
             <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
-
-            <span class="c1"># If it&#39;s in kwargs, we&#39;ll use it</span>
             <span class="n">trend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trend</span>
 
-            <span class="c1"># TODO: remove this check. this is a compat warning for when we</span>
-            <span class="c1">#   . moved to sarimax only</span>
             <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;As of version 1.5.0, the default value of &quot;</span>
-                              <span class="s2">&quot;&#39;method&#39; is &#39;lbfgs&#39;. Explicitly setting None &quot;</span>
-                              <span class="s2">&quot;will raise in future versions&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
-                <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;lbfgs&#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected non-None value for `method`&quot;</span><span class="p">)</span>
 
             <span class="c1"># this considers `with_intercept` truthy, so if auto_arima gets</span>
             <span class="c1"># here without explicitly changing `with_intercept` from &#39;auto&#39; we</span>
@@ -658,12 +650,7 @@
             <span class="c1"># passed as a fit arg, if a user does it explicitly.</span>
             <span class="n">_maxiter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxiter</span>
             <span class="k">if</span> <span class="n">_maxiter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="c1"># TODO: remove this check. this is a compat warning for when we</span>
-                <span class="c1">#   . moved to sarimax only</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;As of version 1.5.0, the default value of &quot;</span>
-                              <span class="s2">&quot;&#39;maxiter&#39; is 50. Explicitly setting None &quot;</span>
-                              <span class="s2">&quot;will raise in future versions&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
-                <span class="n">_maxiter</span> <span class="o">=</span> <span class="mi">50</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected non-None value for `maxiter`&quot;</span><span class="p">)</span>
 
             <span class="c1"># If maxiter is provided in the fit_args by a savvy user or the</span>
             <span class="c1"># update method, we should default to their preference</span>

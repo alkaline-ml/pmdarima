@@ -10,9 +10,15 @@ v0.8.1) will document the latest features.
 `v2.0.0 <http://alkaline-ml.com/pmdarima/2.0.0>`_
 -------------------------------------------------
 
-* Remove deprecation warnings for the ``exogenous`` keyword introduced in 1.8.0
+* Potentially breaking changes:
 
-* Remove deprecation warnings for the ``sarimax_kwargs`` keyword introduced in 1.5.1
+  - Use of the ``exogenous`` keyword (deprecated in 1.8.0) will now raise a ``TypeError``
+
+  - Use of the ``sarimax_kwargs`` keyword (deprecated in 1.5.1) will now raise a ``TypeError``
+
+  - A falsey value for ARIMA's ``method`` argument (deprecated pre-1.5.0) will now raise a ``ValueError``
+
+  - A falsey value for ARIMA's ``maxiter`` argument will now raise a ``ValueError`` (warning since 1.5.0)
 
 * Bump numpy dependency to >= 1.21
 
