@@ -122,8 +122,8 @@ with open('model.pkl', 'rb') as pkl:
 
 * Mac (64-bit)
 * Linux (64-bit manylinux)
-* Windows (32 & 64-bit)
-  * 32-bit is only supported for Python versions below 3.10
+* Windows (64-bit)
+  * 32-bit wheels are available for pmdarima versions below 2.0.0 and Python versions below 3.10
 
 If a wheel doesn't exist for your platform, you can still `pip install` and it
 will build from the source distribution tarball, however you'll need `cython>=0.29`
