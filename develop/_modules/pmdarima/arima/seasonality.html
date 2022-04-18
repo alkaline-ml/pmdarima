@@ -180,6 +180,8 @@
 
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
 
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">svd</span>
 <span class="kn">from</span> <span class="nn">statsmodels</span> <span class="kn">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">sm</span>
@@ -398,12 +400,15 @@
 
         <span class="c1"># no use checking, because this is an internal method</span>
         <span class="c1"># if n &lt;= s:  raise ValueError(&#39;too few samples (%i&lt;=%i)&#39; % (n, s))</span>
-        <span class="n">frec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="n">frec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">ltrunc</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="p">((</span><span class="n">n</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span><span class="p">)))</span>
         <span class="n">R1</span> <span class="o">=</span> <span class="n">CHTest</span><span class="o">.</span><span class="n">_seas_dummy</span><span class="p">(</span><span class="n">wts</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
 
         <span class="c1"># fit model, get residuals</span>
-        <span class="n">lmch</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">R1</span><span class="p">,</span> <span class="n">wts</span><span class="p">)</span>
+        <span class="n">lmch</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
+            <span class="n">StandardScaler</span><span class="p">(</span><span class="n">with_mean</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">LinearRegression</span><span class="p">()</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">R1</span><span class="p">,</span> <span class="n">wts</span><span class="p">)</span>
         <span class="c1"># lmch = sm.OLS(wts, R1).fit(method=&#39;qr&#39;)</span>
         <span class="n">residuals</span> <span class="o">=</span> <span class="n">wts</span> <span class="o">-</span> <span class="n">lmch</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">R1</span><span class="p">)</span>
 
