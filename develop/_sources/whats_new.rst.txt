@@ -20,6 +20,8 @@ v0.8.1) will document the latest features.
 
   - A falsey value for ARIMA's ``maxiter`` argument will now raise a ``ValueError`` (warning since 1.5.0)
 
+  - ``pmdarima`` is no longer built for 32-bit architectures
+
 * Bump numpy dependency to >= 1.21
 
 * Expose ``fittedvalues`` in the public API. See `#493 <https://github.com/alkaline-ml/pmdarima/issues/493>`_
