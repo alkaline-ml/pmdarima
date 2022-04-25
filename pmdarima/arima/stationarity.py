@@ -162,7 +162,7 @@ class KPSSTest(_DifferencingStationarityTest):
             return np.nan, False
 
         # ensure vector
-        x = check_endog(x, dtype=DTYPE)
+        x = check_endog(x, dtype=DTYPE, preserve_series=False)
         n = x.shape[0]
 
         # check on status of null
@@ -321,7 +321,7 @@ class ADFTest(_DifferencingStationarityTest):
             return np.nan, False
 
         # ensure vector
-        x = check_endog(x, dtype=DTYPE)
+        x = check_endog(x, dtype=DTYPE, preserve_series=False)
 
         # if k is none...
         k = self.k
@@ -436,7 +436,7 @@ class PPTest(_DifferencingStationarityTest):
             return np.nan, False
 
         # ensure vector
-        x = check_endog(x, dtype=DTYPE)
+        x = check_endog(x, dtype=DTYPE, preserve_series=False)
 
         # embed the vector. This is some funkiness that goes on in the R
         # code... basically, make a matrix where the column (rows if not T)

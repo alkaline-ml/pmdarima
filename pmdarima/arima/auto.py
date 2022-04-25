@@ -419,7 +419,7 @@ def auto_arima(
     start = time.time()
 
     # copy array
-    y = check_endog(y, dtype=DTYPE)
+    y = check_endog(y, dtype=DTYPE, preserve_series=True)
     n_samples = y.shape[0]
 
     # the workhorse of the model fits

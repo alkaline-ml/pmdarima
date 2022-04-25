@@ -373,7 +373,7 @@ def tsdisplay(y, lag_max=50, figsize=(8, 6), title=None, bins=25,
     ax2 = fig.add_subplot(gs[2:, 1])
 
     # make sure y is a np array
-    y = check_endog(y, copy=False)
+    y = check_endog(y, copy=False, preserve_series=True)
 
     if lag_max >= y.shape[0]:
         raise ValueError(

@@ -183,7 +183,7 @@ def cross_validate(
         does not affect the refit step, which will always raise the error.
     """
     y, X = indexable(y, X)
-    y = check_endog(y, copy=False)
+    y = check_endog(y, copy=False, preserve_series=True)
 
     cv = check_cv(cv)
     scoring = _check_scoring(scoring)
@@ -299,7 +299,7 @@ def cross_val_predict(
            25473.60876435])
     """
     y, X = indexable(y, X)
-    y = check_endog(y, copy=False)
+    y = check_endog(y, copy=False, preserve_series=True)
     cv = check_cv(cv)
     avgfunc = _check_averaging(averaging)
 

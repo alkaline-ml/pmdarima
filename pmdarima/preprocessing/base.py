@@ -33,10 +33,21 @@ class BaseTransformer(BaseEstimator, TransformerMixin, metaclass=abc.ABCMeta):
         """Validate input"""
         # Do not force finite, since a transformer's goal may be imputation.
         if y is not None:
-            y = check_endog(y, dtype=DTYPE, copy=True, force_all_finite=False)
+            y = check_endog(
+                y,
+                dtype=DTYPE,
+                copy=True,
+                force_all_finite=False,
+                preserve_series=False,
+            )
 
         if X is not None:
-            X = check_exog(X, dtype=None, copy=True, force_all_finite=False)
+            X = check_exog(
+                X,
+                dtype=None,
+                copy=True,
+                force_all_finite=False,
+            )
         return y, X
 
     def fit_transform(self, y, X=None, **kwargs):

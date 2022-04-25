@@ -45,7 +45,15 @@ def smape(y_true, y_pred):
     ----------
     .. [1] https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error
     """    # noqa: E501
-    y_true = check_endog(y_true)  # type: np.ndarray
-    y_pred = check_endog(y_pred)  # type: np.ndarray
+    y_true = check_endog(
+        y_true,
+        copy=False,
+        preserve_series=False,
+    )
+    y_pred = check_endog(
+        y_pred,
+        copy=False,
+        preserve_series=False,
+    )
     abs_diff = np.abs(y_pred - y_true)
     return np.mean((abs_diff * 200 / (np.abs(y_pred) + np.abs(y_true))))

@@ -2,17 +2,18 @@
 #
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 #
-# A user-friendly wrapper to the statsmodels ARIMA that mimics the familiar
+# A user-friendly wrapper to the statsmodels ARIMA that matches the familiar
 # sklearn interface.
 
-from sklearn.utils.validation import check_array
-
-from statsmodels import api as sm
-
-from scipy.stats import gaussian_kde, norm
+import pandas as pd
 import numpy as np
+
 import numpy.polynomial.polynomial as np_polynomial
+import numbers
 import warnings
+from scipy.stats import gaussian_kde, norm
+from sklearn.utils.validation import check_array
+from statsmodels import api as sm
 
 from . import _validation as val
 from ..base import BaseARIMA
@@ -138,12 +139,14 @@ def _append_to_endog(endog, new_y):
         np.concatenate((endog.ravel(), new_y))[:, np.newaxis]
 
 
-def _seasonal_prediction_with_confidence(arima_res,
-                                         start,
-                                         end,
-                                         X,
-                                         alpha,
-                                         **kwargs):
+def _seasonal_prediction_with_confidence(
+    arima_res,
+    start,
+    end,
+    X,
+    alpha,
+    **kwargs,
+):
     """Compute the prediction for a SARIMAX and get a conf interval
 
     Unfortunately, SARIMAX does not really provide a nice way to get the
@@ -198,8 +201,10 @@ def _seasonal_prediction_with_confidence(arima_res,
         conf_int[:, 0] = f - q * np.sqrt(var)
         conf_int[:, 1] = f + q * np.sqrt(var)
 
-    return check_endog(f, dtype=None, copy=False), \
-        check_array(conf_int, copy=False, dtype=None)
+    y_pred = check_endog(f, dtype=None, copy=False, preserve_series=True)
+    conf_int = check_array(conf_int, copy=False, dtype=None)
+
+    return y_pred, conf_int
 
 
 class ARIMA(BaseARIMA):
@@ -383,6 +388,11 @@ class ARIMA(BaseARIMA):
     ----------
     arima_res_ : ModelResultsWrapper
         The model results, per statsmodels
+        
+    endog_index_ : pd.Series or None
+        If the fitted endog array is a ``pd.Series``, this value will be
+        non-None and is used to validate args for in-sample predictions with
+        non-integer start/end indices
 
     oob_ : float
         The MAE or MSE of the out-of-sample records, if ``out_of_sample_size``
@@ -407,12 +417,24 @@ class ARIMA(BaseARIMA):
     ----------
     .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average
     """  # noqa: E501
-    def __init__(self, order, seasonal_order=(0, 0, 0, 0), start_params=None,
-                 method='lbfgs', maxiter=50, suppress_warnings=False,
-                 out_of_sample_size=0, scoring='mse', scoring_args=None,
-                 trend=None, with_intercept=True, **sarimax_kwargs):
+    def __init__(
+        self,
+        order,
+        seasonal_order=(0, 0, 0, 0),
+        start_params=None,
+        method='lbfgs',
+        maxiter=50,
+        suppress_warnings=False,
+        out_of_sample_size=0,
+        scoring='mse',
+        scoring_args=None,
+        trend=None,
+        with_intercept=True,
+        **sarimax_kwargs,
+    ):
 
-        # XXX: This isn't actually required--sklearn doesn't need a super call
+        # Future proofing: this isn't currently required--sklearn doesn't
+        # need a super call
         super(ARIMA, self).__init__()
 
         self.order = order
@@ -484,15 +506,16 @@ class ARIMA(BaseARIMA):
             # update method, we should default to their preference
             _maxiter = fit_args.pop("maxiter", _maxiter)
 
-            # kwargs that might be in fit args, but if not we override the
-            # defaults
             disp = fit_args.pop("disp", 0)
+            fitted = arima.fit(
+                start_params=start_params,
+                method=method,
+                maxiter=_maxiter,
+                disp=disp,
+                **fit_args,
+            )
 
-            return arima, arima.fit(start_params=start_params,
-                                    method=method,
-                                    maxiter=_maxiter,
-                                    disp=disp,
-                                    **fit_args)
+            return arima, fitted
 
         # sometimes too many warnings...
         if self.suppress_warnings:
@@ -540,8 +563,11 @@ class ARIMA(BaseARIMA):
         **fit_args : dict or kwargs
             Any keyword arguments to pass to the statsmodels ARIMA fit.
         """
-        y = check_endog(y, dtype=DTYPE)
+        y = check_endog(y, dtype=DTYPE, preserve_series=True)
         n_samples = y.shape[0]
+
+        # See issue 499
+        self.endog_index_ = y.index if isinstance(y, pd.Series) else None
 
         # if exog was included, check the array...
         if X is not None:
@@ -607,14 +633,16 @@ class ARIMA(BaseARIMA):
                 return check_exog(X, force_all_finite=True, dtype=DTYPE)
         return None
 
-    def predict_in_sample(self,
-                          X=None,
-                          start=None,
-                          end=None,
-                          dynamic=False,
-                          return_conf_int=False,
-                          alpha=0.05,
-                          **kwargs):
+    def predict_in_sample(
+        self,
+        X=None,
+        start=None,
+        end=None,
+        dynamic=False,
+        return_conf_int=False,
+        alpha=0.05,
+        **kwargs,
+    ):
         """Generate in-sample predictions from the fit ARIMA model.
 
         Predicts the original training (in-sample) time series values. This can
@@ -631,14 +659,18 @@ class ARIMA(BaseARIMA):
             if an ``ARIMA`` is fit on exogenous features, it must be provided
             exogenous features for making predictions.
 
-        start : int, optional (default=None)
+        start : int or object, optional (default=None)
             Zero-indexed observation number at which to start forecasting, ie.,
             the first forecast is start. Note that if this value is less than
             ``d``, the order of differencing, an error will be raised.
+            Alternatively, a non-int value can be given if the model was fit
+            on a ``pd.Series`` with an object-type index, like a timestamp.
 
-        end : int, optional (default=None)
+        end : int or object, optional (default=None)
             Zero-indexed observation number at which to end forecasting, ie.,
-            the first forecast is start.
+            the first forecast is start. Alternatively, a non-int value can be
+            given if the model was fit on a ``pd.Series`` with an object-type
+            index, like a timestamp.
 
         dynamic : bool, optional (default=False)
             The `dynamic` keyword affects in-sample prediction. If dynamic
@@ -664,12 +696,14 @@ class ARIMA(BaseARIMA):
         """
         check_is_fitted(self, 'arima_res_')
 
-        # issue #286: we cannot produce valid predictions for a period earlier
-        # than the differencing value
+        # issue #499: support prediction with non-integer start/end indices
+        # issue #286: we can't produce valid preds for start < diff value
+        # we can only do the validation for issue 286 if `start` is an int
         d = self.order[1]
-        if start is not None and start < d:
-            raise ValueError("In-sample predictions undefined for start={0} "
-                             "when d={1}".format(start, d))
+        if isinstance(start, numbers.Integral) and start < d:
+            raise ValueError(
+                f"In-sample predictions undefined for start={start} when d={d}"
+            )
 
         # if we fit with exog, make sure one was passed:
         X = self._check_exog(X)  # type: np.ndarray
@@ -887,7 +921,7 @@ class ARIMA(BaseARIMA):
             y = [y]
 
         # validate the new samples to add
-        y = check_endog(y, dtype=DTYPE)
+        y = check_endog(y, dtype=DTYPE, preserve_series=True)
         n_samples = y.shape[0]
 
         # if X is None and new X provided, or vice versa, raise

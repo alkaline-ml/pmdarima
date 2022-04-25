@@ -53,7 +53,7 @@ def _regularize(x, y, ties):
         One of {'ordered', 'mean'}, handles the ties.
     """
     x, y = [
-        check_endog(arr, dtype=DTYPE)
+        check_endog(arr, dtype=DTYPE, preserve_series=False)
         for arr in (x, y)
     ]
 
