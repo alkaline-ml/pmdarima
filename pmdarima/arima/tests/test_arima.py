@@ -18,6 +18,7 @@ from numpy.testing import assert_array_almost_equal, assert_almost_equal, \
 from statsmodels import api as sm
 from sklearn.metrics import mean_squared_error
 
+import datetime
 import joblib
 import os
 import pickle
@@ -49,6 +50,17 @@ abc = np.array([4.439524, 4.769823, 6.558708, 5.070508,
 hr = load_heartrate(as_series=True)
 wineind = load_wineind()
 lynx = load_lynx()
+
+
+def series_with_dt_index(n):
+    """Helper fn to create a monotonic series with Datetime index"""
+    time_column = []
+    date = datetime.date(2022, 1, 1)
+
+    for i in range(n):
+        time_column.append(date + datetime.timedelta(days=i))
+
+    return pd.Series(range(n), index=time_column)
 
 
 def test_basic_arma():
@@ -130,6 +142,32 @@ def test_predict_in_sample_conf_int(model):
     preds, confints = model.predict_in_sample(return_conf_int=True, alpha=0.05)
     assert preds.shape[0] == expected_m_dim
     assert confints.shape == (expected_m_dim, 2)
+
+
+@pytest.mark.parametrize(
+    'y,model,start,end,exp_len',
+    [
+        pytest.param(
+            series_with_dt_index(30),
+            ARIMA(order=(0, 1, 0)),
+            2,
+            5,
+            4,
+        ),
+        pytest.param(
+            series_with_dt_index(30),
+            ARIMA(order=(0, 1, 0)),
+            "20220103",
+            "20220106",
+            4,
+        ),
+    ]
+)
+def test_predict_in_sample_non_int_index(y, model, start, end, exp_len):
+    # issue 499
+    model.fit(y)
+    preds = model.predict_in_sample(start=start, end=end)
+    assert preds.shape[0] == exp_len
 
 
 @pytest.mark.parametrize(

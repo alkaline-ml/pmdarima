@@ -356,7 +356,7 @@ class CHTest(_SeasonalStationarityTest):
             return 0
 
         # ensure vector
-        x = check_endog(x, dtype=DTYPE)
+        x = check_endog(x, dtype=DTYPE, preserve_series=False)
 
         n = x.shape[0]
         m = int(self.m)
@@ -591,7 +591,7 @@ class OCSBTest(_SeasonalStationarityTest):
             return 0
 
         # ensure vector
-        x = check_endog(x, dtype=DTYPE)
+        x = check_endog(x, dtype=DTYPE, preserve_series=False)
 
         # Get the critical value for m
         stat = self._compute_test_statistic(x)

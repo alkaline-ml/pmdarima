@@ -4,7 +4,7 @@
 #
 # Array utilities
 
-from sklearn.utils.validation import check_array, column_or_1d
+from sklearn.utils import validation as skval
 
 import numpy as np
 import pandas as pd
@@ -23,7 +23,7 @@ __all__ = [
 ]
 
 
-def as_series(x):
+def as_series(x, **kwargs):
     """Cast as pandas Series.
 
     Cast an iterable to a Pandas Series object. Note that the index
@@ -63,7 +63,7 @@ def as_series(x):
     """
     if isinstance(x, pd.Series):
         return x
-    return pd.Series(column_or_1d(x))
+    return pd.Series(skval.column_or_1d(x), **kwargs)
 
 
 def c(*args):
@@ -138,7 +138,13 @@ def c(*args):
     return np.concatenate([a if is_iterable(a) else [a] for a in args])
 
 
-def check_endog(y, dtype=DTYPE, copy=True, force_all_finite=False):
+def check_endog(
+    y,
+    dtype=DTYPE,
+    copy=True,
+    force_all_finite=False,
+    preserve_series=True,
+):
     """Wrapper for ``check_array`` and ``column_or_1d`` from sklearn
 
     Parameters
@@ -161,14 +167,35 @@ def check_endog(y, dtype=DTYPE, copy=True, force_all_finite=False):
         - True: Force all values of array to be finite.
         - False: accept both np.inf and np.nan in array.
 
+    preserve_series : bool, optional
+        Whether to preserve a ``pd.Series`` object. Will also attempt to
+        squeeze a dataframe into a ``pd.Series``.
+
     Returns
     -------
-    y : np.ndarray, shape=(n_samples,)
+    y : np.ndarray or pd.Series, shape=(n_samples,)
         A 1d numpy ndarray
     """
-    return column_or_1d(
-        check_array(y, ensure_2d=False, force_all_finite=force_all_finite,
-                    copy=copy, dtype=dtype))  # type: np.ndarray
+    endog = skval.check_array(
+        y,
+        ensure_2d=False,
+        force_all_finite=force_all_finite,
+        copy=copy,
+        dtype=dtype,
+    )
+
+    endog = skval.column_or_1d(endog)
+    if not preserve_series:
+        return endog
+
+    # possibly restore index information, if it was present, assigning
+    # checked/casted values back into the series
+    if isinstance(y, pd.DataFrame):
+        y = y.squeeze()  # dtype: pd.Series
+
+    if isinstance(y, pd.Series):
+        endog = pd.Series(endog, index=y.index)
+    return endog
 
 
 def check_exog(X, dtype=DTYPE, copy=True, force_all_finite=True):
@@ -212,8 +239,13 @@ def check_exog(X, dtype=DTYPE, copy=True, force_all_finite=True):
         return X
 
     # otherwise just a pass-through to the scikit-learn method
-    return check_array(X, ensure_2d=True, dtype=DTYPE,
-                       copy=copy, force_all_finite=force_all_finite)
+    return skval.check_array(
+        X,
+        ensure_2d=True,
+        dtype=DTYPE,
+        copy=copy,
+        force_all_finite=force_all_finite,
+    )
 
 
 def _diff_vector(x, lag):
@@ -298,7 +330,7 @@ def diff(x, lag=1, differences=1):
     if any(v < 1 for v in (lag, differences)):
         raise ValueError('lag and differences must be positive (> 0) integers')
 
-    x = check_array(x, ensure_2d=False, dtype=DTYPE, copy=False)
+    x = skval.check_array(x, ensure_2d=False, dtype=DTYPE, copy=False)
     fun = _diff_vector if x.ndim == 1 else _diff_matrix
     res = x
 
@@ -319,7 +351,13 @@ def _diff_inv_vector(x, lag, differences, xi):
     if xi is None:
         xi = np.zeros(lag * differences, dtype=DTYPE)
     else:
-        xi = check_endog(xi, dtype=DTYPE, copy=False, force_all_finite=False)
+        xi = check_endog(
+            xi,
+            dtype=DTYPE,
+            copy=False,
+            force_all_finite=False,
+            preserve_series=False,
+        )
         if xi.shape[0] != lag * differences:
             raise IndexError('"xi" does not have the right length')
 
@@ -347,9 +385,13 @@ def _diff_inv_matrix(x, lag, differences, xi):
         if xi is None:
             xi = np.zeros((lag * differences, m), dtype=DTYPE)
         else:
-            xi = check_array(
-                xi, dtype=DTYPE, copy=False, force_all_finite=False,
-                ensure_2d=True)
+            xi = skval.check_array(
+                xi,
+                dtype=DTYPE,
+                copy=False,
+                force_all_finite=False,
+                ensure_2d=True,
+            )
             if xi.shape != (lag * differences, m):
                 raise IndexError('"xi" does not have the right shape')
 
@@ -429,8 +471,13 @@ def diff_inv(x, lag=1, differences=1, xi=None):
     ----------
     .. [1] https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html
     """  # noqa: E501
-    x = check_array(
-        x, dtype=DTYPE, copy=False, force_all_finite=False, ensure_2d=False)
+    x = skval.check_array(
+        x,
+        dtype=DTYPE,
+        copy=False,
+        force_all_finite=False,
+        ensure_2d=False,
+    )
 
     # R code: if (lag < 1L || differences < 1L)
     # R code: stop ("bad value for 'lag' or 'differences'")

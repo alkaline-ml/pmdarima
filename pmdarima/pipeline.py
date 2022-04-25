@@ -197,7 +197,7 @@ class Pipeline(BaseEstimator):
         # Shallow copy
         steps = self.steps_ = self._validate_steps()
 
-        yt = check_endog(y, dtype=DTYPE, copy=False)
+        yt = check_endog(y, dtype=DTYPE, copy=False, preserve_series=True)
         Xt = X
         named_kwargs = self._get_kwargs(**fit_kwargs)
 

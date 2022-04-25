@@ -1,9 +1,10 @@
 
 from pmdarima.utils.array import diff, diff_inv, c, is_iterable, as_series, \
-    check_exog
+    check_exog, check_endog
 from pmdarima.utils import get_callable
 from numpy.testing import assert_array_equal, assert_array_almost_equal
 
+import datetime
 import pytest
 import pandas as pd
 import numpy as np
@@ -24,6 +25,17 @@ X_inf.loc[0, 'a'] = np.inf
 
 # for diffinv
 x_mat = (np.arange(9) + 1).reshape(3, 3).T
+
+
+def series_with_dt_index(n):
+    """Helper fn to create a monotonic series with Datetime index"""
+    time_column = []
+    date = datetime.date(2022, 1, 1)
+
+    for i in range(n):
+        time_column.append(date + datetime.timedelta(days=i))
+
+    return pd.Series(range(n), index=time_column)
 
 
 def test_diff():
@@ -137,6 +149,65 @@ def test_diff_inv(arr, lag, differences, xi, expected):
     res = diff_inv(arr, lag=lag, differences=differences, xi=xi)
     expected = np.array(expected, dtype=float)
     assert_array_equal(expected, res)
+
+
+@pytest.mark.parametrize(
+    'y,preserve_series,exp,exp_error',
+    [
+        # base case, preserve=True, but not a series
+        pytest.param(
+            np.arange(5),
+            True,
+            np.arange(5),
+            None,
+        ),
+
+        # base case, preserve=False, but not a series
+        pytest.param(
+            np.arange(5),
+            False,
+            np.arange(5),
+            None,
+        ),
+
+        # series, with preserve=True
+        pytest.param(
+            series_with_dt_index(5),
+            True,
+            series_with_dt_index(5),
+            None,
+        ),
+
+        # series, with preserve=False
+        pytest.param(
+            series_with_dt_index(5),
+            False,
+            np.arange(5),
+            None,
+        ),
+
+        # dataframe w n_cols>1. assert error
+        pytest.param(
+            pd.DataFrame([[1, 2, 3], [4, 5, 6]]),
+            True,
+            None,
+            ValueError,  # raised by sklearn
+        ),
+    ]
+)
+def test_check_endog(y, preserve_series, exp, exp_error):
+    if exp_error is not None:
+        with pytest.raises(exp_error):
+            check_endog(y, preserve_series=preserve_series)
+    else:
+        got = check_endog(y, preserve_series=preserve_series)
+
+        # pd.series
+        if hasattr(got, "eq"):
+            assert isinstance(exp, pd.Series)
+            assert exp.eq(got).all()
+        else:
+            assert_array_equal(exp, got)
 
 
 def test_concatenate():
