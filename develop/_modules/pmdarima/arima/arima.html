@@ -174,17 +174,18 @@
 <span class="c1">#</span>
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 <span class="c1">#</span>
-<span class="c1"># A user-friendly wrapper to the statsmodels ARIMA that mimics the familiar</span>
+<span class="c1"># A user-friendly wrapper to the statsmodels ARIMA that matches the familiar</span>
 <span class="c1"># sklearn interface.</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_array</span>
-
-<span class="kn">from</span> <span class="nn">statsmodels</span> <span class="kn">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">sm</span>
-
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">gaussian_kde</span><span class="p">,</span> <span class="n">norm</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 <span class="kn">import</span> <span class="nn">numpy.polynomial.polynomial</span> <span class="k">as</span> <span class="nn">np_polynomial</span>
+<span class="kn">import</span> <span class="nn">numbers</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">gaussian_kde</span><span class="p">,</span> <span class="n">norm</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_array</span>
+<span class="kn">from</span> <span class="nn">statsmodels</span> <span class="kn">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">sm</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_validation</span> <span class="k">as</span> <span class="n">val</span>
 <span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">BaseARIMA</span>
@@ -310,12 +311,14 @@
         <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">endog</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">new_y</span><span class="p">))[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_seasonal_prediction_with_confidence</span><span class="p">(</span><span class="n">arima_res</span><span class="p">,</span>
-                                         <span class="n">start</span><span class="p">,</span>
-                                         <span class="n">end</span><span class="p">,</span>
-                                         <span class="n">X</span><span class="p">,</span>
-                                         <span class="n">alpha</span><span class="p">,</span>
-                                         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_seasonal_prediction_with_confidence</span><span class="p">(</span>
+    <span class="n">arima_res</span><span class="p">,</span>
+    <span class="n">start</span><span class="p">,</span>
+    <span class="n">end</span><span class="p">,</span>
+    <span class="n">X</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute the prediction for a SARIMAX and get a conf interval</span>
 
 <span class="sd">    Unfortunately, SARIMAX does not really provide a nice way to get the</span>
@@ -370,8 +373,10 @@
         <span class="n">conf_int</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span> <span class="o">-</span> <span class="n">q</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
         <span class="n">conf_int</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="n">q</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> \
-        <span class="n">check_array</span><span class="p">(</span><span class="n">conf_int</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">preserve_series</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">conf_int</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">conf_int</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">conf_int</span>
 
 
 <div class="viewcode-block" id="ARIMA"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA">[docs]</a><span class="k">class</span> <span class="nc">ARIMA</span><span class="p">(</span><span class="n">BaseARIMA</span><span class="p">):</span>
@@ -555,6 +560,11 @@
 <span class="sd">    ----------</span>
 <span class="sd">    arima_res_ : ModelResultsWrapper</span>
 <span class="sd">        The model results, per statsmodels</span>
+<span class="sd">        </span>
+<span class="sd">    endog_index_ : pd.Series or None</span>
+<span class="sd">        If the fitted endog array is a ``pd.Series``, this value will be</span>
+<span class="sd">        non-None and is used to validate args for in-sample predictions with</span>
+<span class="sd">        non-integer start/end indices</span>
 
 <span class="sd">    oob_ : float</span>
 <span class="sd">        The MAE or MSE of the out-of-sample records, if ``out_of_sample_size``</span>
@@ -579,12 +589,24 @@
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</span>
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
-<div class="viewcode-block" id="ARIMA.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">method</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">out_of_sample_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span> <span class="n">scoring_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">trend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">with_intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">order</span><span class="p">,</span>
+        <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">start_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span>
+        <span class="n">maxiter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">out_of_sample_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span>
+        <span class="n">scoring_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">trend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">with_intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">sarimax_kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
 
-        <span class="c1"># XXX: This isn&#39;t actually required--sklearn doesn&#39;t need a super call</span>
+        <span class="c1"># Future proofing: this isn&#39;t currently required--sklearn doesn&#39;t</span>
+        <span class="c1"># need a super call</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ARIMA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
@@ -656,15 +678,16 @@
             <span class="c1"># update method, we should default to their preference</span>
             <span class="n">_maxiter</span> <span class="o">=</span> <span class="n">fit_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;maxiter&quot;</span><span class="p">,</span> <span class="n">_maxiter</span><span class="p">)</span>
 
-            <span class="c1"># kwargs that might be in fit args, but if not we override the</span>
-            <span class="c1"># defaults</span>
             <span class="n">disp</span> <span class="o">=</span> <span class="n">fit_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;disp&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">fitted</span> <span class="o">=</span> <span class="n">arima</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+                <span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span>
+                <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                <span class="n">maxiter</span><span class="o">=</span><span class="n">_maxiter</span><span class="p">,</span>
+                <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">fit_args</span><span class="p">,</span>
+            <span class="p">)</span>
 
-            <span class="k">return</span> <span class="n">arima</span><span class="p">,</span> <span class="n">arima</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">start_params</span><span class="o">=</span><span class="n">start_params</span><span class="p">,</span>
-                                    <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
-                                    <span class="n">maxiter</span><span class="o">=</span><span class="n">_maxiter</span><span class="p">,</span>
-                                    <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span>
-                                    <span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">arima</span><span class="p">,</span> <span class="n">fitted</span>
 
         <span class="c1"># sometimes too many warnings...</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">suppress_warnings</span><span class="p">:</span>
@@ -712,8 +735,11 @@
 <span class="sd">        **fit_args : dict or kwargs</span>
 <span class="sd">            Any keyword arguments to pass to the statsmodels ARIMA fit.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">preserve_series</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">n_samples</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># See issue 499</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endog_index_</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">index</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
 
         <span class="c1"># if exog was included, check the array...</span>
         <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -779,14 +805,16 @@
                 <span class="k">return</span> <span class="n">check_exog</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="ARIMA.predict_in_sample"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.predict_in_sample">[docs]</a>    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                          <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                          <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                          <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                          <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-                          <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ARIMA.predict_in_sample"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.predict_in_sample">[docs]</a>    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dynamic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate in-sample predictions from the fit ARIMA model.</span>
 
 <span class="sd">        Predicts the original training (in-sample) time series values. This can</span>
@@ -803,14 +831,18 @@
 <span class="sd">            if an ``ARIMA`` is fit on exogenous features, it must be provided</span>
 <span class="sd">            exogenous features for making predictions.</span>
 
-<span class="sd">        start : int, optional (default=None)</span>
+<span class="sd">        start : int or object, optional (default=None)</span>
 <span class="sd">            Zero-indexed observation number at which to start forecasting, ie.,</span>
 <span class="sd">            the first forecast is start. Note that if this value is less than</span>
 <span class="sd">            ``d``, the order of differencing, an error will be raised.</span>
+<span class="sd">            Alternatively, a non-int value can be given if the model was fit</span>
+<span class="sd">            on a ``pd.Series`` with an object-type index, like a timestamp.</span>
 
-<span class="sd">        end : int, optional (default=None)</span>
+<span class="sd">        end : int or object, optional (default=None)</span>
 <span class="sd">            Zero-indexed observation number at which to end forecasting, ie.,</span>
-<span class="sd">            the first forecast is start.</span>
+<span class="sd">            the first forecast is start. Alternatively, a non-int value can be</span>
+<span class="sd">            given if the model was fit on a ``pd.Series`` with an object-type</span>
+<span class="sd">            index, like a timestamp.</span>
 
 <span class="sd">        dynamic : bool, optional (default=False)</span>
 <span class="sd">            The `dynamic` keyword affects in-sample prediction. If dynamic</span>
@@ -836,12 +868,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
 
-        <span class="c1"># issue #286: we cannot produce valid predictions for a period earlier</span>
-        <span class="c1"># than the differencing value</span>
+        <span class="c1"># issue #499: support prediction with non-integer start/end indices</span>
+        <span class="c1"># issue #286: we can&#39;t produce valid preds for start &lt; diff value</span>
+        <span class="c1"># we can only do the validation for issue 286 if `start` is an int</span>
         <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">d</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;In-sample predictions undefined for start=</span><span class="si">{0}</span><span class="s2"> &quot;</span>
-                             <span class="s2">&quot;when d=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Integral</span><span class="p">)</span> <span class="ow">and</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">d</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;In-sample predictions undefined for start=</span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2"> when d=</span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># if we fit with exog, make sure one was passed:</span>
         <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_exog</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
@@ -1059,7 +1093,7 @@
             <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
 
         <span class="c1"># validate the new samples to add</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">preserve_series</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">n_samples</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># if X is None and new X provided, or vice versa, raise</span>

@@ -369,7 +369,7 @@
         <span class="c1"># Shallow copy</span>
         <span class="n">steps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_steps</span><span class="p">()</span>
 
-        <span class="n">yt</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">yt</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">preserve_series</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">Xt</span> <span class="o">=</span> <span class="n">X</span>
         <span class="n">named_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">fit_kwargs</span><span class="p">)</span>
 

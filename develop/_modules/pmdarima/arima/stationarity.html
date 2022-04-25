@@ -334,7 +334,7 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">False</span>
 
         <span class="c1"># ensure vector</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">preserve_series</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># check on status of null</span>
@@ -493,7 +493,7 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">False</span>
 
         <span class="c1"># ensure vector</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">preserve_series</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># if k is none...</span>
         <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
@@ -608,7 +608,7 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="kc">False</span>
 
         <span class="c1"># ensure vector</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">preserve_series</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># embed the vector. This is some funkiness that goes on in the R</span>
         <span class="c1"># code... basically, make a matrix where the column (rows if not T)</span>

@@ -217,8 +217,16 @@
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error</span>
 <span class="sd">    &quot;&quot;&quot;</span>    <span class="c1"># noqa: E501</span>
-    <span class="n">y_true</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
-    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
+    <span class="n">y_true</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span>
+        <span class="n">y_true</span><span class="p">,</span>
+        <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">preserve_series</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span>
+        <span class="n">y_pred</span><span class="p">,</span>
+        <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">preserve_series</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">abs_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y_true</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">abs_diff</span> <span class="o">*</span> <span class="mi">200</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_true</span><span class="p">))))</span></div>
 </pre></div>

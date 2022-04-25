@@ -203,7 +203,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.check_endog<a class="headerlink" href="#pmdarima-utils-check-endog" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pmdarima.utils.check_endog">
-<code class="descclassname">pmdarima.utils.</code><code class="descname">check_endog</code><span class="sig-paren">(</span><em>y</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em>, <em>copy=True</em>, <em>force_all_finite=False</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/ec55ac55/pmdarima/utils/array.py#L141"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#check_endog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.check_endog" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pmdarima.utils.</code><code class="descname">check_endog</code><span class="sig-paren">(</span><em>y</em>, <em>dtype=&lt;class 'numpy.float64'&gt;</em>, <em>copy=True</em>, <em>force_all_finite=False</em>, <em>preserve_series=True</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/30311b27/pmdarima/utils/array.py#L141"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#check_endog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.utils.check_endog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper for <code class="docutils literal notranslate"><span class="pre">check_array</span></code> and <code class="docutils literal notranslate"><span class="pre">column_or_1d</span></code> from sklearn</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -232,9 +232,14 @@ possibilities are:</p>
 <li>False: accept both np.inf and np.nan in array.</li>
 </ul>
 </div></blockquote>
+<p><strong>preserve_series</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to preserve a <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code> object. Will also attempt to
+squeeze a dataframe into a <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code>.</p>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>y</strong> : np.ndarray, shape=(n_samples,)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>y</strong> : np.ndarray or pd.Series, shape=(n_samples,)</p>
 <blockquote class="last">
 <div><p>A 1d numpy ndarray</p>
 </div></blockquote>

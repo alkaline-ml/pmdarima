@@ -591,7 +591,7 @@
     <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
     <span class="c1"># copy array</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">preserve_series</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">n_samples</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># the workhorse of the model fits</span>

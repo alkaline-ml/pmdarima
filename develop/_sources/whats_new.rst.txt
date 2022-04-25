@@ -28,6 +28,9 @@ v0.8.1) will document the latest features.
 
 * Add support for ARM64 architecture. See `#434 <https://github.com/alkaline-ml/pmdarima/issues/434>`_
 
+* Introduce new arg, ``preserve_series``, to ``pmdarima.utils.check_endog`` that will preserve or squeeze
+  a Pandas ``Series`` object to preserve index information.
+
 `v1.8.5 <http://alkaline-ml.com/pmdarima/1.8.5>`_
 -------------------------------------------------
 

@@ -355,7 +355,7 @@
 <span class="sd">        does not affect the refit step, which will always raise the error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">indexable</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">preserve_series</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">cv</span> <span class="o">=</span> <span class="n">check_cv</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
     <span class="n">scoring</span> <span class="o">=</span> <span class="n">_check_scoring</span><span class="p">(</span><span class="n">scoring</span><span class="p">)</span>
@@ -471,7 +471,7 @@
 <span class="sd">           25473.60876435])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">indexable</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">preserve_series</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">cv</span> <span class="o">=</span> <span class="n">check_cv</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
     <span class="n">avgfunc</span> <span class="o">=</span> <span class="n">_check_averaging</span><span class="p">(</span><span class="n">averaging</span><span class="p">)</span>
 

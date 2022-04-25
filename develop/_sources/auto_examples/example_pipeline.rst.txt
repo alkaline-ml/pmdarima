@@ -35,29 +35,37 @@ which greatly simplifies your life.
 
     pmdarima version: 0.0.0
     Performing stepwise search to minimize aic
-     ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=2819.938, Time=0.61 sec
+     ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=2819.938, Time=0.69 sec
      ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2942.625, Time=0.02 sec
-     ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2867.514, Time=0.11 sec
-     ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2830.585, Time=0.25 sec
-     ARIMA(0,1,0)(0,0,0)[0]             : AIC=2940.651, Time=0.09 sec
-     ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=2817.535, Time=0.44 sec
-     ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2814.904, Time=0.47 sec
-     ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2818.704, Time=0.81 sec
-     ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=2817.377, Time=0.35 sec
-     ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=1.05 sec
-     ARIMA(0,1,2)(0,0,0)[0]             : AIC=2815.283, Time=0.32 sec
+     ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2867.514, Time=0.13 sec
+     ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2830.585, Time=0.27 sec
+     ARIMA(0,1,0)(0,0,0)[0]             : AIC=2940.651, Time=0.11 sec
+     ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=2817.535, Time=0.57 sec
+     ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2814.904, Time=0.52 sec
+     ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2818.704, Time=1.01 sec
+     ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=2817.377, Time=0.50 sec
+     ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=1.35 sec
+     ARIMA(0,1,2)(0,0,0)[0]             : AIC=2815.283, Time=0.30 sec
 
     Best model:  ARIMA(0,1,2)(0,0,0)[0] intercept
-    Total fit time: 4.524 seconds
+    Total fit time: 5.488 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
                     ('arima',
                      AutoARIMA(error_action='ignore', seasonal=False, trace=1))])
 
     Forecasts:
-    [28518.67502417 29963.34880476 25827.01425854 25060.74045774
-     34235.75233642 33509.01730742 21083.14833978 19764.83173312
-     25895.71911445 25433.98948705]
+    150    28518.675024
+    151    29963.348805
+    152    25827.014259
+    153    25060.740458
+    154    34235.752336
+    155    33509.017307
+    156    21083.148340
+    157    19764.831733
+    158    25895.719114
+    159    25433.989487
+    dtype: float64
     [26536.04037596 34421.87140168 33695.1292036  21269.25861648
      19950.94687283 26081.8337719  25620.10142007 24414.19371364
      26098.77730109 28871.5376828  30770.55340036]
@@ -156,7 +164,7 @@ which greatly simplifies your life.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  4.823 seconds)
+**Total running time of the script:** ( 0 minutes  5.816 seconds)
 
 
 

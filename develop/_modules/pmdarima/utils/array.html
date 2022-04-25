@@ -176,7 +176,7 @@
 <span class="c1">#</span>
 <span class="c1"># Array utilities</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">column_or_1d</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">validation</span> <span class="k">as</span> <span class="n">skval</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -195,7 +195,7 @@
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="as_series"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.as_series.html#pmdarima.utils.as_series">[docs]</a><span class="k">def</span> <span class="nf">as_series</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="as_series"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.as_series.html#pmdarima.utils.as_series">[docs]</a><span class="k">def</span> <span class="nf">as_series</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Cast as pandas Series.</span>
 
 <span class="sd">    Cast an iterable to a Pandas Series object. Note that the index</span>
@@ -235,7 +235,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">x</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">column_or_1d</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">skval</span><span class="o">.</span><span class="n">column_or_1d</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="c"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.c.html#pmdarima.utils.c">[docs]</a><span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -310,7 +310,13 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">a</span> <span class="k">if</span> <span class="n">is_iterable</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="check_endog"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.check_endog.html#pmdarima.utils.check_endog">[docs]</a><span class="k">def</span> <span class="nf">check_endog</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="check_endog"><a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.check_endog.html#pmdarima.utils.check_endog">[docs]</a><span class="k">def</span> <span class="nf">check_endog</span><span class="p">(</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
+    <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">preserve_series</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wrapper for ``check_array`` and ``column_or_1d`` from sklearn</span>
 
 <span class="sd">    Parameters</span>
@@ -333,14 +339,35 @@
 <span class="sd">        - True: Force all values of array to be finite.</span>
 <span class="sd">        - False: accept both np.inf and np.nan in array.</span>
 
+<span class="sd">    preserve_series : bool, optional</span>
+<span class="sd">        Whether to preserve a ``pd.Series`` object. Will also attempt to</span>
+<span class="sd">        squeeze a dataframe into a ``pd.Series``.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    y : np.ndarray, shape=(n_samples,)</span>
+<span class="sd">    y : np.ndarray or pd.Series, shape=(n_samples,)</span>
 <span class="sd">        A 1d numpy ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">column_or_1d</span><span class="p">(</span>
-        <span class="n">check_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="n">force_all_finite</span><span class="p">,</span>
-                    <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>  <span class="c1"># type: np.ndarray</span></div>
+    <span class="n">endog</span> <span class="o">=</span> <span class="n">skval</span><span class="o">.</span><span class="n">check_array</span><span class="p">(</span>
+        <span class="n">y</span><span class="p">,</span>
+        <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">force_all_finite</span><span class="o">=</span><span class="n">force_all_finite</span><span class="p">,</span>
+        <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">endog</span> <span class="o">=</span> <span class="n">skval</span><span class="o">.</span><span class="n">column_or_1d</span><span class="p">(</span><span class="n">endog</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">preserve_series</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">endog</span>
+
+    <span class="c1"># possibly restore index information, if it was present, assigning</span>
+    <span class="c1"># checked/casted values back into the series</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>  <span class="c1"># dtype: pd.Series</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+        <span class="n">endog</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">endog</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">endog</span></div>
 
 
 <span class="k">def</span> <span class="nf">check_exog</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -384,8 +411,13 @@
         <span class="k">return</span> <span class="n">X</span>
 
     <span class="c1"># otherwise just a pass-through to the scikit-learn method</span>
-    <span class="k">return</span> <span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
-                       <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="n">force_all_finite</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">skval</span><span class="o">.</span><span class="n">check_array</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span>
+        <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
+        <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span>
+        <span class="n">force_all_finite</span><span class="o">=</span><span class="n">force_all_finite</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_diff_vector</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="p">):</span>
@@ -470,7 +502,7 @@
     <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">lag</span><span class="p">,</span> <span class="n">differences</span><span class="p">)):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;lag and differences must be positive (&gt; 0) integers&#39;</span><span class="p">)</span>
 
-    <span class="n">x</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">skval</span><span class="o">.</span><span class="n">check_array</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">fun</span> <span class="o">=</span> <span class="n">_diff_vector</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">_diff_matrix</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">x</span>
 
@@ -491,7 +523,13 @@
     <span class="k">if</span> <span class="n">xi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">lag</span> <span class="o">*</span> <span class="n">differences</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">xi</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">xi</span> <span class="o">=</span> <span class="n">check_endog</span><span class="p">(</span>
+            <span class="n">xi</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
+            <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">preserve_series</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">xi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">lag</span> <span class="o">*</span> <span class="n">differences</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;&quot;xi&quot; does not have the right length&#39;</span><span class="p">)</span>
 
@@ -519,9 +557,13 @@
         <span class="k">if</span> <span class="n">xi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">lag</span> <span class="o">*</span> <span class="n">differences</span><span class="p">,</span> <span class="n">m</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">xi</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span>
-                <span class="n">xi</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">xi</span> <span class="o">=</span> <span class="n">skval</span><span class="o">.</span><span class="n">check_array</span><span class="p">(</span>
+                <span class="n">xi</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
+                <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">xi</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">lag</span> <span class="o">*</span> <span class="n">differences</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;&quot;xi&quot; does not have the right shape&#39;</span><span class="p">)</span>
 
@@ -601,8 +643,13 @@
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html</span>
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">skval</span><span class="o">.</span><span class="n">check_array</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
+        <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">ensure_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># R code: if (lag &lt; 1L || differences &lt; 1L)</span>
     <span class="c1"># R code: stop (&quot;bad value for &#39;lag&#39; or &#39;differences&#39;&quot;)</span>
