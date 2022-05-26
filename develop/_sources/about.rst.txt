@@ -10,7 +10,7 @@ as possible.
 
 The project emerged as a result of a long-standing personal debate between
 my colleagues and `me <https://github.com/tgsmith61591>`_ about why python is
-vastly superior to R. Since R's forecasting capabilities far superceded those of Python's
+vastly superior to R. Since R's forecasting capabilities far superseded those of Python's
 existing libraries, ``pmdarima`` was created to close that gap and give analysts/researchers
 one less reason why R is a viable language for practical machine learning.
 
