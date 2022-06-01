@@ -71,7 +71,7 @@ Examining the data
 ------------------
 
 Pmdarima 1.5.2 introduced a handy utility for visualizing your time series data:
-:func:`pmdarima.utils.vizualization.tsdisplay`. We can use this to visalize our data,
+:func:`pmdarima.utils.visualization.tsdisplay`. We can use this to visualize our data,
 take a look at the auto-correlation plot, and see the histogram of values:
 
 .. code-block:: python

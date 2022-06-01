@@ -289,7 +289,7 @@ class StepwiseContext(AbstractContext):
     max_dur : int, optional (default=None)
         The maximum duration in seconds to try to find a best fit.
         When the cumulative fit duration exceeds this number, the
-        stepwiese process will stop and the best fit model at that
+        stepwise process will stop and the best fit model at that
         time will be returned. Please note that this is a soft limit.
 
     Notes

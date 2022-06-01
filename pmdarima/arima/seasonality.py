@@ -207,7 +207,7 @@ class CHTest(_SeasonalStationarityTest):
     References
     ----------
     .. [1] Testing for seasonal stability using the Canova
-           and Hansen test statisic: http://bit.ly/2wKkrZo
+           and Hansen test statistic: http://bit.ly/2wKkrZo
 
     .. [2] R source code for CH test:
            https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L148
