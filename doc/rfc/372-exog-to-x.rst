@@ -14,7 +14,7 @@ Why?
 
 * **It's typo-prone**. We've received several issues lately with people asking why the ``exogenous``
   argument was not doing anything. Upon close inspection, it was evident they were misspelling the
-  arg as "exogenous", and the presence of ``**kwargs`` in the function signature allowed
+  arg as "exogeneous", and the presence of ``**kwargs`` in the function signature allowed
   the argument through without raising a ``TypeError``.
 
 * **It's clunky**. Typing ``exogenous`` when other APIs have simplified this to the ubiquitous
