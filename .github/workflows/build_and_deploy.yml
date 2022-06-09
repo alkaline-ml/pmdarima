@@ -144,7 +144,7 @@ jobs:
         python-version: [cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
     env:
       python: /opt/python/${{ matrix.python-version }}/bin/python
-      image: quay.io/pypa/manylinux2014_aarch64
+      image: quay.io/pypa/manylinux_2_28_aarch64
     defaults:
       run:
         shell: bash
