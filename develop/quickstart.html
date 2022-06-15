@@ -230,39 +230,57 @@ Common functions and tools are elevated to the top-level of the package:</p>
                              <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># set to stepwise</span>
 </pre></div>
 </div>
-<p>It’s easy to examine your model fit results. Simply use the <code class="docutils literal notranslate"><span class="pre">summary</span></code> method:</p>
+<p>It’s easy to examine your model fit results. Simply use the <code class="docutils literal notranslate"><span class="pre">summary</span></code><sup>[1]</sup> method:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stepwise_fit</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 <span class="go">&lt;class &#39;statsmodels.iolib.summary.Summary&#39;&gt;</span>
 <span class="go">&quot;&quot;&quot;</span>
-<span class="go">                                 Statespace Model Results</span>
-<span class="go">==========================================================================================</span>
-<span class="go">Dep. Variable:                                  y   No. Observations:                  176</span>
-<span class="go">Model:             SARIMAX(1, 1, 2)x(0, 1, 1, 12)   Log Likelihood               -1527.386</span>
-<span class="go">Date:                            Mon, 04 Sep 2017   AIC                           3066.771</span>
-<span class="go">Time:                                    13:59:01   BIC                           3085.794</span>
-<span class="go">Sample:                                         0   HQIC                          3074.487</span>
-<span class="go">                                            - 176</span>
-<span class="go">Covariance Type:                              opg</span>
+<span class="go">                                      SARIMAX Results</span>
+<span class="go">============================================================================================</span>
+<span class="go">Dep. Variable:                                    y   No. Observations:                  176</span>
+<span class="go">Model:             SARIMAX(0, 1, 2)x(0, 1, [1], 12)   Log Likelihood               -1528.766</span>
+<span class="go">Date:                              Wed, 15 Jun 2022   AIC                           3065.533</span>
+<span class="go">Time:                                      12:38:14   BIC                           3077.908</span>
+<span class="go">Sample:                                           0   HQIC                          3070.557</span>
+<span class="go">                                              - 176</span>
+<span class="go">Covariance Type:                                opg</span>
 <span class="go">==============================================================================</span>
 <span class="go">                 coef    std err          z      P&gt;|z|      [0.025      0.975]</span>
 <span class="go">------------------------------------------------------------------------------</span>
-<span class="go">intercept   -100.7446     72.306     -1.393      0.164    -242.462      40.973</span>
-<span class="go">ar.L1         -0.5139      0.390     -1.319      0.187      -1.278       0.250</span>
-<span class="go">ma.L1         -0.0791      0.403     -0.196      0.844      -0.869       0.710</span>
-<span class="go">ma.L2         -0.4438      0.223     -1.988      0.047      -0.881      -0.006</span>
-<span class="go">ma.S.L12      -0.4021      0.054     -7.448      0.000      -0.508      -0.296</span>
-<span class="go">sigma2      7.663e+06    7.3e+05     10.500      0.000    6.23e+06    9.09e+06</span>
+<span class="go">ma.L1         -0.5756      0.041    -13.952      0.000      -0.656      -0.495</span>
+<span class="go">ma.L2         -0.1065      0.048     -2.224      0.026      -0.200      -0.013</span>
+<span class="go">ma.S.L12      -0.3848      0.054     -7.156      0.000      -0.490      -0.279</span>
+<span class="go">sigma2      7.866e+06   7.01e+05     11.228      0.000    6.49e+06    9.24e+06</span>
 <span class="go">===================================================================================</span>
-<span class="go">Ljung-Box (Q):                       48.66   Jarque-Bera (JB):                21.62</span>
-<span class="go">Prob(Q):                              0.16   Prob(JB):                         0.00</span>
-<span class="go">Heteroskedasticity (H):               1.18   Skew:                            -0.61</span>
-<span class="go">Prob(H) (two-sided):                  0.54   Kurtosis:                         4.31</span>
+<span class="go">Ljung-Box (L1) (Q):                   2.84   Jarque-Bera (JB):                18.05</span>
+<span class="go">Prob(Q):                              0.09   Prob(JB):                         0.00</span>
+<span class="go">Heteroskedasticity (H):               1.17   Skew:                            -0.55</span>
+<span class="go">Prob(H) (two-sided):                  0.56   Kurtosis:                         4.21</span>
 <span class="go">===================================================================================</span>
 
 <span class="go">Warnings:</span>
 <span class="go">[1] Covariance matrix calculated using the outer product of gradients (complex-step).</span>
-<span class="go">[2] Covariance matrix is singular or near-singular, with condition number 8.15e+14. Standard errors may be unstable.</span>
-<span class="go">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>[1] The summary output was generated using the following versions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">show_versions</span><span class="p">()</span>
+
+<span class="go">System:</span>
+<span class="go">    python: 3.9.7 (default, Nov 10 2021, 08:50:17)  [Clang 13.0.0 (clang-1300.0.29.3)]</span>
+<span class="go">executable: /Users/asmith/venv/bin/python</span>
+<span class="go">   machine: macOS-11.6.6-x86_64-i386-64bit</span>
+
+<span class="go">Python dependencies:</span>
+<span class="go">        pip: 21.2.3</span>
+<span class="go"> setuptools: 57.4.0</span>
+<span class="go">    sklearn: 1.1.1</span>
+<span class="go">statsmodels: 0.13.2</span>
+<span class="go">      numpy: 1.22.4</span>
+<span class="go">      scipy: 1.8.1</span>
+<span class="go">     Cython: 0.29.30</span>
+<span class="go">     pandas: 1.4.2</span>
+<span class="go">     joblib: 1.1.0</span>
+<span class="go">   pmdarima: 1.8.5</span>
 </pre></div>
 </div>
 </div>
