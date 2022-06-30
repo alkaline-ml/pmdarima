@@ -54,7 +54,7 @@ def compile_test_program(code, extra_preargs=[], extra_postargs=[]):
                 # Run test program if not cross compiling
                 # will raise a CalledProcessError if return code was non-zero
                 output = subprocess.check_output('./test_program')
-                output = output.decode(sys.stdout.encoding or 'utf-8').splitlines()
+                output = output.decode(sys.stdout.encoding or 'utf-8').splitlines() # noqa
             else:
                 output = []
         except Exception:
