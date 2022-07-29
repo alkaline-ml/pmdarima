@@ -122,7 +122,7 @@ jobs:
 
           # we'll need numpy and cython to build this. let install_requires do all the
           # rest of the work. We build with our lowest supported numpy version to make sure there is no regression
-          pip install "numpy~=1.19.3" "cython>=0.29,!=0.29.18"
+          pip install "numpy~=1.19.3" "cython>=0.29,!=0.29.18,!=0.29.31"
           python setup.py sdist
 
           cd dist
