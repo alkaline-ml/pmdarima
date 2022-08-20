@@ -21,15 +21,19 @@ jobs:
     name: Build and Deploy
     strategy:
       matrix:
+        python: [cp37, cp38, cp39, cp310]
         os: [windows-latest, macos-latest]
     env:
       CIBW_ARCHS_LINUX: "x86_64 aarch64"
       CIBW_ARCHS_MACOS: "x86_64 arm64"
+      CIBW_BUILD: "${{ matrix.python }}-*"
       CIBW_TEST_COMMAND: >
         if [ "${{ matrix.os }}" == "macos-latest" ]; then
           export PMD_MPL_BACKEND=TkAgg
         fi
         pytest --showlocals --durations=20 --pyargs pmdarima
+      # Avoid testing on emulated architectures
+      CIBW_TEST_SKIP: "*-*linux_{aarch64,ppc64le,s390x}"
     defaults:
       run:
         shell: bash
@@ -76,11 +80,10 @@ jobs:
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.9.0
 
-      - name: Building and testing wheel
+      - name: Building and testing wheels
         run: |
           make version
           python -m cibuildwheel --output-dir dist
-
 
 #      - name: Installing generated wheel
 #        run: pip install --pre --no-index --find-links dist/ pmdarima
