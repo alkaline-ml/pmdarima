@@ -21,7 +21,7 @@ jobs:
     name: Build and Deploy
     strategy:
       matrix:
-        os: [windows-latest, macos-10.15]
+        os: [windows-latest, macos-latest]
         python-version: ['3.7', '3.8', '3.9', '3.10']
     defaults:
       run:
@@ -76,7 +76,7 @@ jobs:
 
       - name: Running unit tests
         run: |
-          if [ "${{ matrix.os }}" == "macos-10.15" ]; then
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
             export PMD_MPL_BACKEND=TkAgg
           fi
           pytest --showlocals --durations=20 --pyargs pmdarima
@@ -84,7 +84,7 @@ jobs:
       - name: Checking for numpy regression
         run: |
           pip install --upgrade numpy
-          if [ "${{ matrix.os }}" == "macos-10.15" ]; then
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
             export PMD_MPL_BACKEND=TkAgg
           fi
           pytest --showlocals --durations=20 --pyargs pmdarima
