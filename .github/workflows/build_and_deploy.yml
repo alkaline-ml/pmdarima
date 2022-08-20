@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         python: [cp37, cp38, cp39, cp310]
-        os: [windows-latest, macos-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     defaults:
       run:
         shell: bash
@@ -39,20 +39,27 @@ jobs:
       - name: Setting up Python
         uses: actions/setup-python@v3
 
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: all
+
       # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
       # We build it first because of this: https://github.com/alkaline-ml/pmdarima/issues/448
       - name: Building source distribution
         run: make version sdist
 
       - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.9.0
+        run: python -m pip install cibuildwheel==2.9.0 # TODO: Do we want this pinned?
 
       - name: Building and testing wheels
         run: |
           make version
           python -m cibuildwheel --output-dir dist
         env:
-          CIBW_ARCHS_LINUX: "x86_64 aarch64"
+          # TODO: Move x86_64 builds to GHA?
+          CIBW_ARCHS_LINUX: "aarch64"
           CIBW_ARCHS_MACOS: "x86_64 arm64"
           CIBW_ARCHS_WINDOWS: "AMD64"
           CIBW_BEFORE_BUILD: >
@@ -63,7 +70,7 @@ jobs:
             pip install -r build_tools/build_requirements.txt &&
             pip install -r requirements.txt
           CIBW_BUILD: "${{ matrix.python }}-*"
-          CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg
+          CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true
           # Runs tests and checks for a numpy regression by upgrading numpy and running tests again
           CIBW_TEST_COMMAND: >
             pytest --showlocals --durations=20 --pyargs pmdarima &&
