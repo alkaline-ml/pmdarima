@@ -30,7 +30,7 @@ jobs:
       PYTHON_EXECUTABLE: ${{ format('cp3{0}', matrix.python3-minor-version) }}
 
     runs-on: ${{ matrix.os }}
-    name: Build and Deploy (${{ matrix.os }}, Python 3.${{ matrix.python3-minor-version }})
+    name: Build and Deploy (${{ matrix.os }}, 3.${{ matrix.python3-minor-version }})
 
     steps:
       # This LOOKS like it is checking out 'master', but it is using the 'master' version of the checkout action
