@@ -31,6 +31,7 @@ jobs:
         python -m pip install --upgrade pip &&
         pip install -r build_tools/build_requirements.txt &&
         pip install -r requirements.txt
+      CIBW_BEFORE_TEST: pip install --pre --no-index --find-links dist/ pmdarima
       CIBW_BUILD: "${{ matrix.python }}-*"
       CIBW_TEST_COMMAND: >
         if [ "${{ matrix.os }}" == "macos-latest" ]; then
