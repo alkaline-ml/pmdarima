@@ -22,7 +22,14 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest]
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+    env:
+      CIBW_ARCHS_LINUX: "x86_64 aarch64"
+      CIBW_ARCHS_MACOS: "x86_64 arm64"
+      CIBW_TEST_COMMAND: >
+        if [ "${{ matrix.os }}" == "macos-latest" ]; then
+          export PMD_MPL_BACKEND=TkAgg
+        fi
+        pytest --showlocals --durations=20 --pyargs pmdarima
     defaults:
       run:
         shell: bash
@@ -36,9 +43,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setting up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
 
       # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
       - name: Checking for cached pip dependencies (macOS)
@@ -68,18 +73,24 @@ jobs:
       - name: Building source distribution
         run: make version sdist
 
-      - name: Building wheel
-        run: make version bdist_wheel
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.9.0
 
-      - name: Installing generated wheel
-        run: pip install --pre --no-index --find-links dist/ pmdarima
-
-      - name: Running unit tests
+      - name: Building and testing wheel
         run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            export PMD_MPL_BACKEND=TkAgg
-          fi
-          pytest --showlocals --durations=20 --pyargs pmdarima
+          make version
+          python -m cibuildwheel --output-dir dist
+
+
+#      - name: Installing generated wheel
+#        run: pip install --pre --no-index --find-links dist/ pmdarima
+
+#      - name: Running unit tests
+#        run: |
+#          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+#            export PMD_MPL_BACKEND=TkAgg
+#          fi
+#          pytest --showlocals --durations=20 --pyargs pmdarima
 
       - name: Checking for numpy regression
         run: |
@@ -115,7 +126,7 @@ jobs:
       - name: Ensuring sdist can be installed
         run: pip install dist/$(ls dist | grep tar)
 
-      - name: Ensuring VERSION file existis
+      - name: Ensuring VERSION file exists
         id: version_check  # Need this to refer to output below
         run: |
           if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
@@ -136,52 +147,52 @@ jobs:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
 
-  build-and-deploy-aarch64:
-    name: 'Build and Deploy (aarch64)'
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
-    env:
-      python: /opt/python/${{ matrix.python-version }}/bin/python
-      image: quay.io/pypa/manylinux_2_28_aarch64
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@master
-
-      - name: Setup QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Build and Test
-        run: |
-          chmod +x .github/utils/build_and_test_aarch64.sh
-          docker run --rm \
-            -v ${{ github.workspace }}:/workspace \
-            --workdir=/workspace \
-            ${{ env.image }} \
-            .github/utils/build_and_test_aarch64.sh ${{ env.python }}
-
-      - name: Ensuring VERSION file existis
-        id: version_check  # Need this to refer to output below
-        run: |
-          if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
-            echo "VERSION file exists"
-            echo "::set-output name=version_exists::true"
-          else
-            echo "VERSION file does not exist"
-            echo "::set-output name=version_exists::false"
-          fi
-
-      - name: Deploying to PyPI
-        # Only deploy on tags and when VERSION file created
-        if: startsWith(github.ref, 'refs/tags') && success() && steps.version_check.outputs.version_exists == 'true'
-        run: |
-          chmod +x build_tools/github/deploy.sh
-          ./build_tools/github/deploy.sh
-        env:
-          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+#  build-and-deploy-aarch64:
+#    name: 'Build and Deploy (aarch64)'
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        python-version: [cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
+#    env:
+#      python: /opt/python/${{ matrix.python-version }}/bin/python
+#      image: quay.io/pypa/manylinux_2_28_aarch64
+#    defaults:
+#      run:
+#        shell: bash
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@master
+#
+#      - name: Setup QEMU
+#        uses: docker/setup-qemu-action@v1
+#
+#      - name: Build and Test
+#        run: |
+#          chmod +x .github/utils/build_and_test_aarch64.sh
+#          docker run --rm \
+#            -v ${{ github.workspace }}:/workspace \
+#            --workdir=/workspace \
+#            ${{ env.image }} \
+#            .github/utils/build_and_test_aarch64.sh ${{ env.python }}
+#
+#      - name: Ensuring VERSION file existis
+#        id: version_check  # Need this to refer to output below
+#        run: |
+#          if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
+#            echo "VERSION file exists"
+#            echo "::set-output name=version_exists::true"
+#          else
+#            echo "VERSION file does not exist"
+#            echo "::set-output name=version_exists::false"
+#          fi
+#
+#      - name: Deploying to PyPI
+#        # Only deploy on tags and when VERSION file created
+#        if: startsWith(github.ref, 'refs/tags') && success() && steps.version_check.outputs.version_exists == 'true'
+#        run: |
+#          chmod +x build_tools/github/deploy.sh
+#          ./build_tools/github/deploy.sh
+#        env:
+#          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+#          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
