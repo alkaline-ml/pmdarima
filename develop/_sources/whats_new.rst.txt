@@ -22,6 +22,8 @@ v0.8.1) will document the latest features.
 
   - ``pmdarima`` is no longer built for 32-bit architectures
 
+  - macOS images are built using macOS 11 instead of macOS 10.15
+
 * Bump numpy dependency to >= 1.21
 
 * Expose ``fittedvalues`` in the public API. See `#493 <https://github.com/alkaline-ml/pmdarima/issues/493>`_
@@ -30,6 +32,8 @@ v0.8.1) will document the latest features.
 
 * Introduce new arg, ``preserve_series``, to ``pmdarima.utils.check_endog`` that will preserve or squeeze
   a Pandas ``Series`` object to preserve index information.
+
+* Update Cython pinned version to include ``!=0.29.31``
 
 `v1.8.5 <http://alkaline-ml.com/pmdarima/1.8.5>`_
 -------------------------------------------------
