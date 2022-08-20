@@ -26,6 +26,10 @@ jobs:
     env:
       CIBW_ARCHS_LINUX: "x86_64 aarch64"
       CIBW_ARCHS_MACOS: "x86_64 arm64"
+      CIBW_BEFORE_BUILD: >
+        python -m pip install --upgrade pip
+        pip install -r build_tools/build_requirements.txt
+        pip install -r requirements.txt
       CIBW_BUILD: "${{ matrix.python }}-*"
       CIBW_TEST_COMMAND: >
         if [ "${{ matrix.os }}" == "macos-latest" ]; then
@@ -64,13 +68,13 @@ jobs:
           path: ~\AppData\Local\pip\Cache
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
 
-      - name: Updating pip
-        run: python -m pip install --upgrade pip
-
-      - name: Installing requirements
-        run: |
-          pip install -r build_tools/build_requirements.txt
-          pip install -r requirements.txt
+#      - name: Updating pip
+#        run: python -m pip install --upgrade pip
+#
+#      - name: Installing requirements
+#        run: |
+#          pip install -r build_tools/build_requirements.txt
+#          pip install -r requirements.txt
 
       # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
       # We build it first because of this: https://github.com/alkaline-ml/pmdarima/issues/448
