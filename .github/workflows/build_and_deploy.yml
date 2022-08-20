@@ -31,7 +31,10 @@ jobs:
         python -m pip install --upgrade pip &&
         pip install -r build_tools/build_requirements.txt &&
         pip install -r requirements.txt
-      CIBW_BEFORE_TEST: pip install --pre --no-index --find-links dist/ pmdarima
+      # Tests are run in a separate virtual env, so we need to re-install deps
+      CIBW_BEFORE_TEST: >
+        pip install -r requirements.txt &&
+        pip install --pre --no-index --find-links dist/ pmdarima
       CIBW_BUILD: "${{ matrix.python }}-*"
       CIBW_TEST_COMMAND: >
         if [ "${{ matrix.os }}" == "macos-latest" ]; then
@@ -52,6 +55,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
+      # Python interpreter used by cibuildwheel, but it uses a different one internally
       - name: Setting up Python
         uses: actions/setup-python@v3
 
