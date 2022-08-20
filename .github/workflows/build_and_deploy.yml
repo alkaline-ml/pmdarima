@@ -27,12 +27,12 @@ jobs:
       CIBW_ARCHS_LINUX: "x86_64 aarch64"
       CIBW_ARCHS_MACOS: "x86_64 arm64"
       CIBW_ARCHS_WINDOWS: "AMD64"
-      CIBW_BEFORE_BUILD: >
+      CIBW_BEFORE_BUILD: |
         python -m pip install --upgrade pip
         pip install -r build_tools/build_requirements.txt
         pip install -r requirements.txt
       CIBW_BUILD: "${{ matrix.python }}-*"
-      CIBW_TEST_COMMAND: >
+      CIBW_TEST_COMMAND: |
         if [ "${{ matrix.os }}" == "macos-latest" ]; then
           export PMD_MPL_BACKEND=TkAgg
         fi
