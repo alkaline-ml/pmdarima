@@ -26,6 +26,7 @@ jobs:
     env:
       CIBW_ARCHS_LINUX: "x86_64 aarch64"
       CIBW_ARCHS_MACOS: "x86_64 arm64"
+      CIBW_ARCHS_WINDOWS: "AMD64"
       CIBW_BEFORE_BUILD: >
         python -m pip install --upgrade pip
         pip install -r build_tools/build_requirements.txt
