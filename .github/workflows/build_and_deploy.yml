@@ -27,8 +27,8 @@ jobs:
       run:
         shell: bash
     env:
-      PYTHON_VERSION: format('3.{0}', ${{ matrix.python3-minor-version }})
-      PYTHON_EXECUTABLE: format('cp3{0}', $${{ matrix.python3-minor-version }})
+      PYTHON_VERSION: ${{ format('3.{0}', matrix.python3-minor-version) }}
+      PYTHON_EXECUTABLE: ${{ format('cp3{0}', matrix.python3-minor-version) }}
 
     runs-on: ${{ matrix.os }}
 
