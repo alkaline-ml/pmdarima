@@ -79,13 +79,13 @@ jobs:
             for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do
               python -m pip install $dependency
             done
-          CIBW_BEFORE_BUILD_WINDOWS: FOR %%dependency in (${{ steps.dependencies.outputs.latest_dependencies }}) DO python -m pip install %%dependency
+          CIBW_BEFORE_BUILD_WINDOWS: FOR %dependency in (${{ steps.dependencies.outputs.latest_dependencies }}) DO python -m pip install %dependency
           # Tests are run in a separate virtual env, so we need to re-install deps
           CIBW_BEFORE_TEST: >
             for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do
               python -m pip install $dependency
             done
-          CIBW_BEFORE_TEST_WINDOWS: FOR %%dependency in (${{ steps.dependencies.outputs.latest_dependencies }}) DO python -m pip install %%dependency
+          CIBW_BEFORE_TEST_WINDOWS: FOR %dependency in (${{ steps.dependencies.outputs.latest_dependencies }}) DO python -m pip install %dependency
           CIBW_BUILD: "${{ matrix.python-executable }}-*"
           CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAGG
           # No support for pypy or musl
