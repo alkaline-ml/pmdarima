@@ -76,17 +76,16 @@ jobs:
           CIBW_ARCHS_MACOS: "x86_64"
           CIBW_ARCHS_WINDOWS: "AMD64"
           CIBW_BEFORE_BUILD: >
-            for dependency in $DEPENDENCIES; do
+            for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do
               python -m pip install $dependency
             done
           CIBW_BEFORE_TEST: >
-            for dependency in $DEPENDENCIES; do
+            for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do
               python -m pip install $dependency
             done
           CIBW_BUILD: "${{ matrix.python-executable }}-*"
           CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAGG
           CIBW_TEST_COMMAND: pytest --showlocals --durations=20 --pyargs pmdarima
-          DEPENDENCIES: ${{ steps.dependencies.outputs.latest_dependencies }}
 
       # https://github.com/marketplace/actions/action-slack#custom-notification
       - name: Posting to Slack
