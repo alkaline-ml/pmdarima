@@ -115,11 +115,6 @@ jobs:
                     short: false
                   },
                   {
-                    title: 'Architecture',
-                    value: '${{ matrix.architecture }}',
-                    short: false
-                  },
-                  {
                     title: 'Python Version',
                     value: '${{ matrix.python-version }}',
                     short: false
