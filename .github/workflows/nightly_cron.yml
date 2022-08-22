@@ -24,8 +24,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        python-version: [3.10]
-        python-executable: [cp310]
+        python-version: ['3.10']
+        python-executable: ['cp310']
     defaults:
       run:
         shell: bash
@@ -83,6 +83,7 @@ jobs:
             for dependency in $DEPENDENCIES; do
               python -m pip install $dependency
             done
+          CIBW_BUILD: "${{ matrix.python-executable }}-*"
           CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAGG
           CIBW_TEST_COMMAND: pytest --showlocals --durations=20 --pyargs pmdarima
           DEPENDENCIES: ${{ steps.dependencies.outputs.latest_dependencies }}
