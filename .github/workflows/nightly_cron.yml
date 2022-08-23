@@ -24,15 +24,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        python-version: ['3.9']
-        architecture: ['x86', 'x64']
-        exclude:
-          # Don't build 32-bit on Mac or Linux
-          - os: macos-latest
-            architecture: x86
-
-          - os: ubuntu-latest
-            architecture: x86
+        python-version: ['3.10']
+        python-executable: ['cp310']
+    defaults:
+      run:
+        shell: bash
 
     runs-on: ${{ matrix.os }}
 
@@ -44,19 +40,13 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setting up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: ${{ matrix.architecture }}
 
       - name: Set Run ID
         id: definition  # Needed to retrieve the output of this step later
         run: echo "::set-output name=run_id::$GITHUB_RUN_ID"
-        shell: bash
-
-      - name: Updating pip
-        run: python -m pip install --upgrade pip
-        shell: bash
 
       - name: Collecting naked dependencies
         id: dependencies  # Needed to retrieve the output of this step later
@@ -65,60 +55,43 @@ jobs:
           echo "::set-output name=latest_dependencies::$dependencies"
         shell: bash
 
-        # https://github.com/actions/cache/blob/master/examples.md#using-pip-to-get-cache-location
-      - name: Get pip cache dir
-        id: pip-cache-dir-path
-        run: echo "::set-output name=dir::$(pip cache dir)"
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.9.0 # TODO: Do we want this pinned?
 
-      - name: Generating cache key file
+      - name: Generating dependency table
         id: dependency-table  # Needed to set output of job
         run: |
           pip install requests tabulate
           table=$(python .github/utils/get_dependency_releases.py $DEPENDENCIES)
-          echo $table > dependencies_key.txt
 
           # This is used in the next job (if necessary) rather than re-running the above
           echo "::set-output name=table::$table"
-        shell: bash
         env:
           DEPENDENCIES: ${{ steps.dependencies.outputs.latest_dependencies }}
 
-      - name: Check for cache hit
-        id: pip-cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.pip-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/dependencies_key.txt') }}
-
-      # We install one-by-one because some dependencies depend on others
-      - name: Installing dependencies
-        if: steps.pip-cache.outputs.cache-hit != 'true'
-        run: |
-          for dependency in $DEPENDENCIES; do
-            python -m pip install $dependency
-          done
-        shell: bash
+      - name: Building and testing wheel
+        run: python -m cibuildwheel --output-dir dist
         env:
-          DEPENDENCIES: ${{ steps.dependencies.outputs.latest_dependencies }}
-
-      - name: Building wheel
-        if: steps.pip-cache.outputs.cache-hit != 'true'
-        run: make bdist_wheel
-        shell: bash
-
-      - name: Installing generated wheel
-        if: steps.pip-cache.outputs.cache-hit != 'true'
-        run: pip install --pre --no-index --find-links dist/ pmdarima
-        shell: bash
-
-      - name: Running unit tests
-        if: steps.pip-cache.outputs.cache-hit != 'true'
-        run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            export PMD_MPL_BACKEND=TkAgg
-          fi
-          pytest --showlocals --durations=20 --pyargs pmdarima
-        shell: bash
+          CIBW_ARCHS_LINUX: "x86_64"
+          CIBW_ARCHS_MACOS: "x86_64"
+          CIBW_ARCHS_WINDOWS: "AMD64"
+          CIBW_BEFORE_BUILD: >
+            for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do
+              pip install $dependency
+            done
+          # Windows runs a batch script that I couldn't get to work, so we just force it to run bash
+          CIBW_BEFORE_BUILD_WINDOWS: bash -c 'for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do pip install $dependency; done'
+          # Tests are run in a separate virtual env, so we need to re-install deps
+          CIBW_BEFORE_TEST: >
+            for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do
+              pip install $dependency
+            done
+          CIBW_BEFORE_TEST_WINDOWS: bash -c 'for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do pip install $dependency; done'
+          CIBW_BUILD: "${{ matrix.python-executable }}-*"
+          CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAGG
+          # No support for pypy or musl
+          CIBW_SKIP: "pp* *-musllinux_*"
+          CIBW_TEST_COMMAND: pytest --showlocals --durations=20 --pyargs pmdarima
 
       # https://github.com/marketplace/actions/action-slack#custom-notification
       - name: Posting to Slack
@@ -139,11 +112,6 @@ jobs:
                   {
                     title: 'OS',
                     value: '${{ matrix.os }}',
-                    short: false
-                  },
-                  {
-                    title: 'Architecture',
-                    value: '${{ matrix.architecture }}',
                     short: false
                   },
                   {

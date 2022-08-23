@@ -7,6 +7,11 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v2.0.1 <http://alkaline-ml.com/pmdarima/2.0.1>`_
+-------------------------------------------------
+
+* Add support for macOS with M1 chip
+
 `v2.0.0 <http://alkaline-ml.com/pmdarima/2.0.0>`_
 -------------------------------------------------
 

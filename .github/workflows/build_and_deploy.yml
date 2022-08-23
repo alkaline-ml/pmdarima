@@ -18,16 +18,19 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    name: Build and Deploy
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python3-minor-version: [7, 8, 9, 10]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     defaults:
       run:
         shell: bash
+    env:
+      PYTHON_VERSION: ${{ format('3.{0}', matrix.python3-minor-version) }}
+      PYTHON_EXECUTABLE: ${{ format('cp3{0}', matrix.python3-minor-version) }}
 
     runs-on: ${{ matrix.os }}
+    name: Build and Deploy (${{ matrix.os }}, 3.${{ matrix.python3-minor-version }})
 
     steps:
       # This LOOKS like it is checking out 'master', but it is using the 'master' version of the checkout action
@@ -35,62 +38,56 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
+      # Python interpreter used by cibuildwheel, but it uses a different one internally
       - name: Setting up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ env.PYTHON_VERSION }}
 
-      # https://github.com/actions/cache/blob/master/examples.md#multiple-oss-in-a-workflow
-      - name: Checking for cached pip dependencies (macOS)
-        if: startsWith(runner.os, 'macOS')
-        uses: actions/cache@v1
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v1
         with:
-          path: ~/Library/Caches/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-
-      - name: Checking for cached pip dependencies (Windows)
-        if: startsWith(runner.os, 'Windows')
-        uses: actions/cache@v1
-        with:
-          path: ~\AppData\Local\pip\Cache
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-
-      - name: Updating pip
-        run: python -m pip install --upgrade pip
-
-      - name: Installing requirements
-        run: |
-          pip install -r build_tools/build_requirements.txt
-          pip install -r requirements.txt
+          platforms: all
 
       # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
       # We build it first because of this: https://github.com/alkaline-ml/pmdarima/issues/448
       - name: Building source distribution
         run: make version sdist
 
-      - name: Building wheel
-        run: make version bdist_wheel
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.9.0 # TODO: Do we want this pinned?
 
-      - name: Installing generated wheel
-        run: pip install --pre --no-index --find-links dist/ pmdarima
-
-      - name: Running unit tests
-        run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            export PMD_MPL_BACKEND=TkAgg
-          fi
-          pytest --showlocals --durations=20 --pyargs pmdarima
-
-      - name: Checking for numpy regression
-        run: |
-          pip install --upgrade numpy
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            export PMD_MPL_BACKEND=TkAgg
-          fi
-          pytest --showlocals --durations=20 --pyargs pmdarima
+      - name: Building and testing wheels
+        run: python -m cibuildwheel --output-dir dist
+        env:
+          # TODO: Move Linux x86_64 builds to GHA?
+          CIBW_ARCHS_LINUX: "aarch64"
+          CIBW_ARCHS_MACOS: "x86_64 arm64"
+          CIBW_ARCHS_WINDOWS: "AMD64"
+          CIBW_BEFORE_ALL: make version
+          CIBW_BEFORE_BUILD: >
+            pip install -r build_tools/build_requirements.txt &&
+            pip install -r requirements.txt
+          # Tests are run in a separate virtual env, so we need to re-install deps
+          CIBW_BEFORE_TEST: >
+            pip install -r build_tools/build_requirements.txt &&
+            pip install -r requirements.txt
+          CIBW_BUILD: "${{ env.PYTHON_EXECUTABLE }}-*"
+          CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true
+          # No support for pypy or musl
+          CIBW_SKIP: "pp* *-musllinux_*"
+          # Runs tests and checks for a numpy regression by upgrading numpy and running tests again
+          CIBW_TEST_COMMAND: >
+            pytest --showlocals --durations=20 --pyargs pmdarima &&
+            pip install --upgrade numpy &&
+            pytest --showlocals --durations=20 --pyargs pmdarima
+          # Avoid testing on emulated architectures
+          CIBW_TEST_SKIP: "*-*linux_{aarch64,ppc64le,s390x} *-macosx_arm64"
 
       - name: Checking README compatibility
         run: |
+          python -m pip install "twine>=1.13.0" readme_renderer
           if python -c "from twine.commands.check import check; check(['dist/*'])" | grep  "warning"; then
               echo "README will not render properly on PyPI"
               exit 1
@@ -115,57 +112,7 @@ jobs:
       - name: Ensuring sdist can be installed
         run: pip install dist/$(ls dist | grep tar)
 
-      - name: Ensuring VERSION file existis
-        id: version_check  # Need this to refer to output below
-        run: |
-          if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
-            echo "VERSION file exists"
-            echo "::set-output name=version_exists::true"
-          else
-            echo "VERSION file does not exist"
-            echo "::set-output name=version_exists::false"
-          fi
-
-      - name: Deploying to PyPI
-        # Only deploy on tags and when VERSION file created
-        if: startsWith(github.ref, 'refs/tags') && success() && steps.version_check.outputs.version_exists == 'true'
-        run: |
-          chmod +x build_tools/github/deploy.sh
-          ./build_tools/github/deploy.sh
-        env:
-          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-
-  build-and-deploy-aarch64:
-    name: 'Build and Deploy (aarch64)'
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [cp37-cp37m, cp38-cp38, cp39-cp39, cp310-cp310]
-    env:
-      python: /opt/python/${{ matrix.python-version }}/bin/python
-      image: quay.io/pypa/manylinux_2_28_aarch64
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@master
-
-      - name: Setup QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Build and Test
-        run: |
-          chmod +x .github/utils/build_and_test_aarch64.sh
-          docker run --rm \
-            -v ${{ github.workspace }}:/workspace \
-            --workdir=/workspace \
-            ${{ env.image }} \
-            .github/utils/build_and_test_aarch64.sh ${{ env.python }}
-
-      - name: Ensuring VERSION file existis
+      - name: Ensuring VERSION file exists
         id: version_check  # Need this to refer to output below
         run: |
           if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
