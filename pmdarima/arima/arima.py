@@ -312,13 +312,13 @@ class ARIMA(BaseARIMA):
     scoring : str or callable, optional (default='mse')
         If performing validation (i.e., if ``out_of_sample_size`` > 0), the
         metric to use for scoring the out-of-sample data:
-        
+
             * If a string, must be a valid metric name importable from
               ``sklearn.metrics``.
             * If a callable, must adhere to the function signature::
-            
+
                 def foo_loss(y_true, y_pred)
-                
+
         Note that models are selected by *minimizing* loss. If using a
         maximizing metric (such as ``sklearn.metrics.r2_score``), it is the
         user's responsibility to wrap the function such that it returns a
@@ -388,7 +388,7 @@ class ARIMA(BaseARIMA):
     ----------
     arima_res_ : ModelResultsWrapper
         The model results, per statsmodels
-        
+
     endog_index_ : pd.Series or None
         If the fitted endog array is a ``pd.Series``, this value will be
         non-None and is used to validate args for in-sample predictions with
@@ -784,7 +784,10 @@ class ARIMA(BaseARIMA):
         # if we fit with exog, make sure one was passed:
         X = self._check_exog(X)  # type: np.ndarray
         if X is not None and X.shape[0] != n_periods:
-            raise ValueError('X array dims (n_rows) != n_periods')
+            raise ValueError(
+                f'X array dims (n_rows) != n_periods. Received '
+                f'n_rows={X.shape[0]} and n_periods={n_periods}'
+            )
 
         # f = self.arima_res_.forecast(steps=n_periods, exog=X)
         arima = self.arima_res_
