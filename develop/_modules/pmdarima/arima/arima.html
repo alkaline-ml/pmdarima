@@ -484,13 +484,13 @@
 <span class="sd">    scoring : str or callable, optional (default=&#39;mse&#39;)</span>
 <span class="sd">        If performing validation (i.e., if ``out_of_sample_size`` &gt; 0), the</span>
 <span class="sd">        metric to use for scoring the out-of-sample data:</span>
-<span class="sd">        </span>
+
 <span class="sd">            * If a string, must be a valid metric name importable from</span>
 <span class="sd">              ``sklearn.metrics``.</span>
 <span class="sd">            * If a callable, must adhere to the function signature::</span>
-<span class="sd">            </span>
+
 <span class="sd">                def foo_loss(y_true, y_pred)</span>
-<span class="sd">                </span>
+
 <span class="sd">        Note that models are selected by *minimizing* loss. If using a</span>
 <span class="sd">        maximizing metric (such as ``sklearn.metrics.r2_score``), it is the</span>
 <span class="sd">        user&#39;s responsibility to wrap the function such that it returns a</span>
@@ -560,7 +560,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    arima_res_ : ModelResultsWrapper</span>
 <span class="sd">        The model results, per statsmodels</span>
-<span class="sd">        </span>
+
 <span class="sd">    endog_index_ : pd.Series or None</span>
 <span class="sd">        If the fitted endog array is a ``pd.Series``, this value will be</span>
 <span class="sd">        non-None and is used to validate args for in-sample predictions with</span>
@@ -956,7 +956,10 @@
         <span class="c1"># if we fit with exog, make sure one was passed:</span>
         <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_exog</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># type: np.ndarray</span>
         <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n_periods</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;X array dims (n_rows) != n_periods&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;X array dims (n_rows) != n_periods. Received &#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;n_rows=</span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> and n_periods=</span><span class="si">{</span><span class="n">n_periods</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="p">)</span>
 
         <span class="c1"># f = self.arima_res_.forecast(steps=n_periods, exog=X)</span>
         <span class="n">arima</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span>
