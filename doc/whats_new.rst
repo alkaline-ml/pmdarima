@@ -11,7 +11,7 @@ v0.8.1) will document the latest features.
 -------------------------------------------------
 
 * Add support for Python 3.11
-* Change minimum numpy version to ``1.21.3``
+* Change minimum numpy version to ``1.21.2``
 
 `v2.0.1 <http://alkaline-ml.com/pmdarima/2.0.1>`_
 -------------------------------------------------
