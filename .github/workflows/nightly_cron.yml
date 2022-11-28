@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setting up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -143,7 +143,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setting up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.8'
 
