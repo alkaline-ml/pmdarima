@@ -21,10 +21,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # This LOOKS like it is checking out 'master', but it is using the 'master' version of the checkout action
-      # It is actually checking out the most recent version on this branch
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
       - name: Setting up Python
         uses: actions/setup-python@v4
