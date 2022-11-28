@@ -117,10 +117,10 @@ jobs:
         run: |
           if [ -f "${GITHUB_WORKSPACE}/pmdarima/VERSION" ]; then
             echo "VERSION file exists"
-            echo "::set-output name=version_exists::true"
+            echo "version_exists=true" >> $GITHUB_OUTPUT
           else
             echo "VERSION file does not exist"
-            echo "::set-output name=version_exists::false"
+            echo "version_exists=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Deploying to PyPI

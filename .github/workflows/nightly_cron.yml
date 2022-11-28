@@ -46,13 +46,13 @@ jobs:
 
       - name: Set Run ID
         id: definition  # Needed to retrieve the output of this step later
-        run: echo "::set-output name=run_id::$GITHUB_RUN_ID"
+        run: echo "run_id=$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
 
       - name: Collecting naked dependencies
         id: dependencies  # Needed to retrieve the output of this step later
         run: |
           dependencies=$(python build_tools/github/get_latest_dependencies.py)
-          echo "::set-output name=latest_dependencies::$dependencies"
+          echo "latest_dependencies=$dependencies" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Install cibuildwheel
@@ -65,7 +65,7 @@ jobs:
           table=$(python .github/utils/get_dependency_releases.py $DEPENDENCIES)
 
           # This is used in the next job (if necessary) rather than re-running the above
-          echo "::set-output name=table::$table"
+          echo "table=$table" >> $GITHUB_OUTPUT
         env:
           DEPENDENCIES: ${{ steps.dependencies.outputs.latest_dependencies }}
 
