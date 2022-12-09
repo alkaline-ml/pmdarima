@@ -19,7 +19,7 @@ loggamma = stats.loggamma.rvs(5, size=500) + 5
 )
 def test_invertible(X):
     trans = BoxCoxEndogTransformer()
-    y_t, e_t = trans.fit_transform(loggamma, X=X)
+    y_t, e_t = trans.fit_transform(loggamma, X)
     y_prime, e_prime = trans.inverse_transform(y_t, X=e_t)
 
     assert_array_almost_equal(loggamma, y_prime)

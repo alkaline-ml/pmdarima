@@ -79,7 +79,7 @@ class TestFourierREquivalency:
 
             # Test a bad forecast (X dim does not match n_periods dim)
             with pytest.raises(ValueError):
-                trans.transform(y, X=np.random.rand(5, 3), n_periods=2)
+                trans.transform(y, np.random.rand(5, 3), n_periods=2)
 
 
 def test_hyndman_blog():

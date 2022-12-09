@@ -533,7 +533,7 @@ class Pipeline(BaseEstimator):
                 yt, Xt = transformer.update_and_transform(
                     y=yt, X=Xt, **kw)
             else:
-                yt, Xt = transformer.transform(yt, X=Xt, **kw)
+                yt, Xt = transformer.transform(yt, Xt, **kw)
 
         if self.x_feats_ is not None:
             Xt = Xt[self.x_feats_]
