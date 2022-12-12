@@ -247,7 +247,7 @@ class Pipeline(BaseEstimator):
 
                 # TODO: manual check to ensure Xt shape == n_periods shape?
 
-                _, Xt = transformer.transform(y=None, X=Xt, **kw)
+                _, Xt = transformer.transform(None, Xt, **kw)
 
         # since some exog featurizers require exog input, and others don't,
         # feat orders may get wonky between fit & pred. Make sure we have them
@@ -533,7 +533,7 @@ class Pipeline(BaseEstimator):
                 yt, Xt = transformer.update_and_transform(
                     y=yt, X=Xt, **kw)
             else:
-                yt, Xt = transformer.transform(yt, X=Xt, **kw)
+                yt, Xt = transformer.transform(yt, Xt, **kw)
 
         if self.x_feats_ is not None:
             Xt = Xt[self.x_feats_]
