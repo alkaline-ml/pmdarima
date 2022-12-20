@@ -80,6 +80,7 @@ jobs:
           # Runs tests and checks for a numpy regression by upgrading numpy and running tests again
           CIBW_TEST_COMMAND: >
             pytest --showlocals --durations=20 --pyargs pmdarima &&
+            pip uninstall --y numpy &&
             pip install --upgrade numpy &&
             pytest --showlocals --durations=20 --pyargs pmdarima
           # Avoid testing on emulated architectures
