@@ -99,8 +99,10 @@ class _RandomFitWrapper(_SolverMixin):
         if random:
             random_state = check_random_state(random_state)
 
-            # make a list to scramble...
-            gen = random_state.permutation(list(gen))[:n_fits]
+            # make a list to scramble... `gen` may have a ragged nested
+            # sequence, so we have to explicitly use dtype='object', otherwise
+            # it will raise a ValueError on numpy >= 1.24
+            gen = random_state.permutation(np.array(list(gen), dtype='object'))[:n_fits]  # noqa: E501
 
         self.gen = gen
         self.n_jobs = n_jobs
