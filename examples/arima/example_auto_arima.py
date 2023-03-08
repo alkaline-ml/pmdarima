@@ -28,7 +28,7 @@ data = pm.datasets.load_lynx()
 train, test = model_selection.train_test_split(data, train_size=90)
 
 # Fit a simple auto_arima model
-modl = pm.auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
+model = pm.auto_arima(train, start_p=1, start_q=1, start_P=1, start_Q=1,
                      max_p=5, max_q=5, max_P=5, max_Q=5, seasonal=True,
                      stepwise=True, suppress_warnings=True, D=10, max_D=10,
                      error_action='ignore')
