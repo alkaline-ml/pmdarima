@@ -7,6 +7,12 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v2.0.3 <https://alkaline-ml.com/pmdarima/2.0.3>`_
+-------------------------------------------------
+
+* Fix a bug when generating permutations using ``numpy>=1.24.0``. See `#534 <https://github.com/alkaline-ml/pmdarima/pull/534>`_
+* Fix a bug in ``transform`` when using ``scikit-learn>=1.2.0``, addressing `#539 <https://github.com/alkaline-ml/pmdarima/issues/539>`_
+
 `v2.0.2 <http://alkaline-ml.com/pmdarima/2.0.2>`_
 -------------------------------------------------
 
