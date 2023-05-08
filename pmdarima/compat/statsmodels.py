@@ -3,7 +3,7 @@
 # Handle inconsistencies in the statsmodels API versions
 
 from collections.abc import Iterable
-from packaging.version import parse
+from packaging.version import Version
 import statsmodels as sm
 
 __all__ = [
@@ -62,4 +62,4 @@ def check_seasonal_order(order):
 
 
 def _use_sm13():
-    return parse(sm.__version__) >= parse("0.13.0")
+    return Version(sm.__version__) >= Version("0.13.0")

@@ -7,9 +7,6 @@ from functools import wraps
 import warnings
 
 from statsmodels.tsa.stattools import acf as sm_acf, pacf as sm_pacf
-import statsmodels
-
-from pmdarima.compat.statsmodels import _use_sm13
 
 __all__ = [
     'acf',
