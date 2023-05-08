@@ -17,6 +17,7 @@ pytest
 pytest-mpl
 pytest-benchmark
 setuptools>=38.6.0,!=50.0.0
+packaging>=17.1  # Bundled with setuptools, but want to be explicit
 wheel
 twine>=1.13.0
 readme_renderer
