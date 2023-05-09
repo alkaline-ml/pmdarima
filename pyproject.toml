@@ -12,4 +12,4 @@ requires = [
     "cython>=0.29,!=0.29.18,!=0.29.31",
     "setuptools",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "setuptools.build_meta:__legacy__" # TODO: Don't use legacy backend
