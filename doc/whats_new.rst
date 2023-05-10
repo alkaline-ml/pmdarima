@@ -11,6 +11,8 @@ v0.8.1) will document the latest features.
 -------------------------------------------------
 
 * Pin numpy to ``<2.0.0`` while work is done to support numpy ``>=2.0.0``
+* Remove support for Python 3.7 (end-of-life 2023-06-23)
+* Remove support for Python 3.8 (end-of-life 2024-10-07)
 
 `v2.0.3 <https://alkaline-ml.com/pmdarima/2.0.3>`_
 -------------------------------------------------
