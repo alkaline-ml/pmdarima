@@ -12,7 +12,7 @@ import platform
 import shutil
 
 from distutils.command.clean import clean as Clean
-from pkg_resources import parse_version
+from packaging.version import Version
 from setuptools import find_packages
 import traceback
 import importlib
@@ -189,8 +189,8 @@ def check_package_status(package, min_version):
     try:
         module = importlib.import_module(package)
         package_version = module.__version__
-        package_status['up_to_date'] = parse_version(
-            package_version) >= parse_version(min_version)
+        package_status['up_to_date'] = Version(
+            package_version) >= Version(min_version)
         package_status['version'] = package_version
     except ImportError:
         traceback.print_exc()

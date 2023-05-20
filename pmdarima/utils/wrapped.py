@@ -4,13 +4,9 @@
 #
 # Wrapped functions
 from functools import wraps
-from pkg_resources import parse_version
 import warnings
 
 from statsmodels.tsa.stattools import acf as sm_acf, pacf as sm_pacf
-import statsmodels
-
-from pmdarima.compat.statsmodels import _use_sm13
 
 __all__ = [
     'acf',

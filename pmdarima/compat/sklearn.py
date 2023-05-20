@@ -3,8 +3,7 @@
 # Author: Charles Drotar <drotarcharles@gmail.com>
 #
 # Patch backend for sklearn
-
-from pkg_resources import parse_version
+from packaging.version import Version
 
 import sklearn
 from sklearn.exceptions import NotFittedError
@@ -91,7 +90,7 @@ def if_delegate_has_method(attr):
     .. [1] https://git.io/JzKiv
     .. [2] https://git.io/JzKiJ
     """
-    if parse_version(sklearn.__version__) < parse_version("1.0.0"):
+    if Version(sklearn.__version__) < Version("1.0.0"):
         from sklearn.utils.metaestimators import if_delegate_has_method
         return if_delegate_has_method(attr)
     else:
