@@ -176,13 +176,9 @@
 <span class="c1">#</span>
 <span class="c1"># Wrapped functions</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-<span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">parse_version</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">statsmodels.tsa.stattools</span> <span class="kn">import</span> <span class="n">acf</span> <span class="k">as</span> <span class="n">sm_acf</span><span class="p">,</span> <span class="n">pacf</span> <span class="k">as</span> <span class="n">sm_pacf</span>
-<span class="kn">import</span> <span class="nn">statsmodels</span>
-
-<span class="kn">from</span> <span class="nn">pmdarima.compat.statsmodels</span> <span class="kn">import</span> <span class="n">_use_sm13</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;acf&#39;</span><span class="p">,</span>
