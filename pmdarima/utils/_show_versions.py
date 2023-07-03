@@ -8,7 +8,6 @@ adapted from ``sklearn.show_versions``
 
 import platform
 import sys
-import importlib
 
 _pmdarima_deps = (
     "pip",
@@ -52,22 +51,15 @@ def _get_deps_info(deps=_pmdarima_deps):
     deps_info: dict
         version information on relevant Python libraries
     """
-    def get_version(module):
-        return module.__version__
-
     deps_info = {}
+
+    from importlib.metadata import PackageNotFoundError, version
 
     for modname in deps:
         try:
-            if modname in sys.modules:
-                mod = sys.modules[modname]
-            else:
-                mod = importlib.import_module(modname)
-            ver = get_version(mod)
-            deps_info[modname] = ver
-        except ImportError:
+            deps_info[modname] = version(modname)
+        except PackageNotFoundError:
             deps_info[modname] = None
-
     return deps_info
 
 
