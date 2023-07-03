@@ -54,7 +54,7 @@ def _get_deps_info(deps=_pmdarima_deps):
     deps_info = {}
 
     # TODO: We can get rid of this when we deprecate 3.7
-    if platform.python_version() < '3.8':
+    if sys.version_info.minor <= 7:
         import importlib
 
         def get_version(module):
