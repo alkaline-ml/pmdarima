@@ -56,8 +56,15 @@ def _get_deps_info(deps=_pmdarima_deps):
     from importlib.metadata import PackageNotFoundError, version
 
     for modname in deps:
+        # Gotta do a little correction for scikit
+        normalized_modname: str
+        if modname == "sklearn":
+            normalized_modname = "scikit-learn"
+        else:
+            normalized_modname = modname
+
         try:
-            deps_info[modname] = version(modname)
+            deps_info[modname] = version(normalized_modname)
         except PackageNotFoundError:
             deps_info[modname] = None
     return deps_info
