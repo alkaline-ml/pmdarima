@@ -8,11 +8,11 @@ adapted from ``sklearn.show_versions``
 
 import platform
 import sys
-import importlib
 
 _pmdarima_deps = (
-    "pip",
+    # setuptools needs to be before pip: https://github.com/pypa/setuptools/issues/3044#issuecomment-1024972548 # noqa:E501
     "setuptools",
+    "pip",
     "sklearn",
     "statsmodels",
     "numpy",
@@ -22,6 +22,11 @@ _pmdarima_deps = (
     "joblib",
     "pmdarima",
 )
+
+# Packages that have a different import name than name on PyPI
+_install_mapping = {
+    "sklearn": "scikit-learn"
+}
 
 
 def _get_sys_info():
@@ -57,16 +62,29 @@ def _get_deps_info(deps=_pmdarima_deps):
 
     deps_info = {}
 
-    for modname in deps:
-        try:
-            if modname in sys.modules:
-                mod = sys.modules[modname]
-            else:
-                mod = importlib.import_module(modname)
-            ver = get_version(mod)
-            deps_info[modname] = ver
-        except ImportError:
-            deps_info[modname] = None
+    # TODO: We can get rid of this when we deprecate 3.7
+    if sys.version_info.minor <= 7:
+        import importlib
+
+        for modname in deps:
+            try:
+                if modname in sys.modules:
+                    mod = sys.modules[modname]
+                else:
+                    mod = importlib.import_module(modname)
+                ver = get_version(mod)
+                deps_info[modname] = ver
+            except ImportError:
+                deps_info[modname] = None
+
+    else:
+        from importlib.metadata import PackageNotFoundError, version
+
+        for modname in deps:
+            try:
+                deps_info[modname] = version(_install_mapping.get(modname, modname))  # noqa:E501
+            except PackageNotFoundError:
+                deps_info[modname] = None
 
     return deps_info
 
