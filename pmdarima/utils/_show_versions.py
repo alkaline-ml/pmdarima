@@ -4,6 +4,7 @@ Utility methods to print system info for debugging
 adapted from ``pandas.show_versions``
 adapted from ``sklearn.show_versions``
 """
+import os
 # License: BSD 3 clause
 
 import platform
@@ -21,6 +22,11 @@ _pmdarima_deps = (
     "joblib",
     "pmdarima",
 )
+
+# Packages that have a different import name than name on PyPI
+_install_mapping = {
+    "sklearn": "scikit-learn"
+}
 
 
 def _get_sys_info():
@@ -57,8 +63,9 @@ def _get_deps_info(deps=_pmdarima_deps):
     if sys.version_info.minor <= 7:
         import importlib
 
-        def get_version(module):
-            return module.__version__
+        # Needed if pip is imported before setuptools
+        # https://github.com/pypa/setuptools/issues/3044#issuecomment-1024972548
+        os.environ["SETUPTOOLS_USE_DISTUTILS"] = "stdlib"
 
         for modname in deps:
             try:
@@ -66,8 +73,8 @@ def _get_deps_info(deps=_pmdarima_deps):
                     mod = sys.modules[modname]
                 else:
                     mod = importlib.import_module(modname)
-                ver = get_version(mod)
-                deps_info[modname] = ver
+
+                deps_info[modname] = mod.__version__
             except ImportError:
                 deps_info[modname] = None
 
@@ -75,15 +82,8 @@ def _get_deps_info(deps=_pmdarima_deps):
         from importlib.metadata import PackageNotFoundError, version
 
         for modname in deps:
-            # Gotta do a little correction for scikit
-            normalized_modname: str
-            if modname == "sklearn":
-                normalized_modname = "scikit-learn"
-            else:
-                normalized_modname = modname
-
             try:
-                deps_info[modname] = version(normalized_modname)
+                deps_info[modname] = version(_install_mapping.get(modname, modname))
             except PackageNotFoundError:
                 deps_info[modname] = None
 
