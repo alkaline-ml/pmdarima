@@ -53,20 +53,40 @@ def _get_deps_info(deps=_pmdarima_deps):
     """
     deps_info = {}
 
-    from importlib.metadata import PackageNotFoundError, version
+    # TODO: We can get rid of this when we deprecate 3.7
+    if platform.python_version() < '3.8':
+        import importlib
 
-    for modname in deps:
-        # Gotta do a little correction for scikit
-        normalized_modname: str
-        if modname == "sklearn":
-            normalized_modname = "scikit-learn"
-        else:
-            normalized_modname = modname
+        def get_version(module):
+            return module.__version__
 
-        try:
-            deps_info[modname] = version(normalized_modname)
-        except PackageNotFoundError:
-            deps_info[modname] = None
+        for modname in deps:
+            try:
+                if modname in sys.modules:
+                    mod = sys.modules[modname]
+                else:
+                    mod = importlib.import_module(modname)
+                ver = get_version(mod)
+                deps_info[modname] = ver
+            except ImportError:
+                deps_info[modname] = None
+
+    else:
+        from importlib.metadata import PackageNotFoundError, version
+
+        for modname in deps:
+            # Gotta do a little correction for scikit
+            normalized_modname: str
+            if modname == "sklearn":
+                normalized_modname = "scikit-learn"
+            else:
+                normalized_modname = modname
+
+            try:
+                deps_info[modname] = version(normalized_modname)
+            except PackageNotFoundError:
+                deps_info[modname] = None
+
     return deps_info
 
 
