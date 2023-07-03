@@ -11,8 +11,8 @@ import platform
 import sys
 
 _pmdarima_deps = (
-    "pip",
     "setuptools",
+    "pip",
     "sklearn",
     "statsmodels",
     "numpy",
@@ -62,10 +62,6 @@ def _get_deps_info(deps=_pmdarima_deps):
     # TODO: We can get rid of this when we deprecate 3.7
     if sys.version_info.minor <= 7:
         import importlib
-
-        # Needed if pip is imported before setuptools
-        # https://github.com/pypa/setuptools/issues/3044#issuecomment-1024972548 # noqa:E501
-        os.environ["SETUPTOOLS_USE_DISTUTILS"] = "stdlib"
 
         for modname in deps:
             try:
