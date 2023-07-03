@@ -64,7 +64,7 @@ def _get_deps_info(deps=_pmdarima_deps):
         import importlib
 
         # Needed if pip is imported before setuptools
-        # https://github.com/pypa/setuptools/issues/3044#issuecomment-1024972548
+        # https://github.com/pypa/setuptools/issues/3044#issuecomment-1024972548 # noqa:E501
         os.environ["SETUPTOOLS_USE_DISTUTILS"] = "stdlib"
 
         for modname in deps:
