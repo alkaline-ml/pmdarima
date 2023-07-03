@@ -4,13 +4,13 @@ Utility methods to print system info for debugging
 adapted from ``pandas.show_versions``
 adapted from ``sklearn.show_versions``
 """
-import os
 # License: BSD 3 clause
 
 import platform
 import sys
 
 _pmdarima_deps = (
+    # setuptools needs to be before pip: https://github.com/pypa/setuptools/issues/3044#issuecomment-1024972548 # noqa:E501
     "setuptools",
     "pip",
     "sklearn",
@@ -57,6 +57,9 @@ def _get_deps_info(deps=_pmdarima_deps):
     deps_info: dict
         version information on relevant Python libraries
     """
+    def get_version(module):
+        return module.__version__
+
     deps_info = {}
 
     # TODO: We can get rid of this when we deprecate 3.7
@@ -69,8 +72,8 @@ def _get_deps_info(deps=_pmdarima_deps):
                     mod = sys.modules[modname]
                 else:
                     mod = importlib.import_module(modname)
-
-                deps_info[modname] = mod.__version__
+                ver = get_version(mod)
+                deps_info[modname] = ver
             except ImportError:
                 deps_info[modname] = None
 
@@ -79,7 +82,7 @@ def _get_deps_info(deps=_pmdarima_deps):
 
         for modname in deps:
             try:
-                deps_info[modname] = version(_install_mapping.get(modname, modname))
+                deps_info[modname] = version(_install_mapping.get(modname, modname))  # noqa:E501
             except PackageNotFoundError:
                 deps_info[modname] = None
 
