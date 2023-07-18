@@ -7,6 +7,11 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v2.0.4 <https://alkaline-ml.com/pmdarima/2.0.4>`_
+-------------------------------------------------
+
+* Remove support for Python 3.7 (end-of-life 2023-06-23)
+
 `v2.0.3 <https://alkaline-ml.com/pmdarima/2.0.3>`_
 -------------------------------------------------
 

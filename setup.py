@@ -20,7 +20,7 @@ import importlib
 import builtins
 
 # Minimum allowed version
-MIN_PYTHON = (3, 7)
+MIN_PYTHON = (3, 8)
 
 # Hacky (!!), adopted from sklearn. This sets a global variable
 # so pmdarima __init__ can detect if it's being loaded in the setup
@@ -239,7 +239,6 @@ def do_setup():
                         'Operating System :: Unix',
                         'Operating System :: MacOS',
                         'Programming Language :: Python :: 3',
-                        'Programming Language :: Python :: 3.7',
                         'Programming Language :: Python :: 3.8',
                         'Programming Language :: Python :: 3.9',
                         'Programming Language :: Python :: 3.10',

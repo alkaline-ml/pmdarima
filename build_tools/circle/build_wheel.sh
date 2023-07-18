@@ -9,9 +9,7 @@ function build_wheel {
 
     # https://www.python.org/dev/peps/pep-0513/#ucs-2-vs-ucs-4-builds
     ucs_tag=""
-    if [ "$pyver" = "3.7" ]; then
-        ucs_tag="m"
-    elif [ "$ucs_setting" = "ucs4" ]; then
+    if [ "$ucs_setting" = "ucs4" ]; then
         ucs_tag="${ucs_tag}u"
     fi
 
