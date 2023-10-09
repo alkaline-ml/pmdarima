@@ -316,6 +316,8 @@ workflows:
             filters: *test-filters
         - test-unit-cpython311:
             filters: *test-filters
+        - test-unit-cpython312:
+            filters: *test-filters
         - build-doc:
             filters: *test-filters
         - testing-passed:
