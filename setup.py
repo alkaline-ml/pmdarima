@@ -130,7 +130,7 @@ cmdclass = {'clean': CleanCommand}
 
 
 if IS_PYTHON_312:
-    from setuptools.command import build_ext
+    from setuptools.command.build_ext import build_ext
     cmdclass['build_ext'] = build_ext
 else:
     # build_ext has to be imported after setuptools
