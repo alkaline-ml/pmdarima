@@ -318,7 +318,8 @@ def do_setup():
             )
 
         # for sdist, use setuptools so we get the long_description_content_type
-        if 'sdist' in sys.argv:
+        # TODO: distutils is removed in Python 3.12+, so this should probably be the default
+        if 'sdist' in sys.argv or sys.version_info[1] >= 12:
             from setuptools import setup
             print("Setting up with setuptools")
         else:
