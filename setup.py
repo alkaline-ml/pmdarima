@@ -21,6 +21,7 @@ import builtins
 
 # Minimum allowed version
 MIN_PYTHON = (3, 7)
+IS_PYTHON_312 = sys.version_info[0] == 3 and sys.version_info[1] >= 12
 
 # Hacky (!!), adopted from sklearn. This sets a global variable
 # so pmdarima __init__ can detect if it's being loaded in the setup
@@ -128,27 +129,31 @@ class CleanCommand(Clean):
 cmdclass = {'clean': CleanCommand}
 
 
-# build_ext has to be imported after setuptools
-try:
-    import numpy as np
-    from numpy.distutils.command.build_ext import build_ext  # noqa
+if IS_PYTHON_312:
+    from setuptools.command import build_ext
+    cmdclass['build_ext'] = build_ext
+else:
+    # build_ext has to be imported after setuptools
+    try:
+        import numpy as np
+        from numpy.distutils.command.build_ext import build_ext  # noqa
 
-    # This is the preferred way to check numpy version: https://git.io/JtEIb
-    if sys.platform == 'darwin' and np.lib.NumpyVersion(np.__version__) >= '1.20.0':
-        # https://numpy.org/devdocs/user/building.html#disabling-atlas-and-other-accelerated-libraries
-        os.environ['NPY_BLAS_ORDER'] = ''
-        os.environ['NPY_LAPACK_ORDER'] = ''
+        # This is the preferred way to check numpy version: https://git.io/JtEIb
+        if sys.platform == 'darwin' and np.lib.NumpyVersion(np.__version__) >= '1.20.0':
+            # https://numpy.org/devdocs/user/building.html#disabling-atlas-and-other-accelerated-libraries
+            os.environ['NPY_BLAS_ORDER'] = ''
+            os.environ['NPY_LAPACK_ORDER'] = ''
 
-    class build_ext_subclass(build_ext):
-        def build_extensions(self):
-            build_ext.build_extensions(self)
+        class build_ext_subclass(build_ext):
+            def build_extensions(self):
+                build_ext.build_extensions(self)
 
-    cmdclass['build_ext'] = build_ext_subclass
+        cmdclass['build_ext'] = build_ext_subclass
 
-except ImportError:
-    # Numpy should not be a dependency just to be able to introspect
-    # that python 3.X is required.
-    pass
+    except ImportError:
+        # Numpy should not be a dependency just to be able to introspect
+        # that python 3.X is required.
+        pass
 
 # Here is where scikit configures the wheelhouse uploader, but we don't deal
 # with that currently. Maybe in the future...
@@ -320,7 +325,7 @@ def do_setup():
 
         # for sdist, use setuptools so we get the long_description_content_type
         # TODO: distutils is removed in Python 3.12+, so this should probably be the default
-        if 'sdist' in sys.argv or sys.version_info[1] >= 12:
+        if 'sdist' in sys.argv or IS_PYTHON_312:
             from setuptools import setup
             print("Setting up with setuptools")
         else:
