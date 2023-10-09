@@ -6,6 +6,8 @@ from os.path import abspath, dirname
 
 TOP_LEVEL = abspath(dirname(dirname(__file__)))
 OUT_FILE = os.path.join(TOP_LEVEL, 'pmdarima', 'VERSION')
+IS_CI = os.getenv('CI', False)
+DEFAULT_TAG = '0.0.0'
 
 
 def get_version_from_tag(tag):
@@ -29,5 +31,9 @@ elif os.getenv('GITHUB_REF') and \
 
 # Local or non-tagged commit, so we don't generate a VERSION file
 else:
-    print('Not a tagged commit, or not on a CI/CD platform. '
-          'Not writing VERSION file')
+    if IS_CI:
+        with open(OUT_FILE, 'w') as f:
+            f.write(DEFAULT_TAG)
+    else:
+        print('Not a tagged commit and not on a CI/CD platform. '
+              'Not writing VERSION file')
