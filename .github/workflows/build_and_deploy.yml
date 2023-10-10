@@ -72,6 +72,7 @@ jobs:
             pip install -r build_tools/build_requirements.txt &&
             pip install -r requirements.txt
           CIBW_BUILD: "${{ env.PYTHON_EXECUTABLE }}-*"
+          CIBW_ENVIRONMENT: CC=gcc
           CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true
           # No support for pypy or musl
           CIBW_SKIP: "pp* *-musllinux_*"

@@ -54,6 +54,7 @@ PROJECT_URLS = {
 
 # import restricted version of pmdarima that does not need the compiled code
 import pmdarima
+
 VERSION = pmdarima.__version__  # will be 0.0.0 unless tagging
 
 # get the installation requirements:
@@ -331,19 +332,18 @@ def do_setup():
 
                 import numpy
 
-
                 metadata['ext_modules'] = [
                     Extension(
-                        name='pmdarima.arima._arima',
+                        name='arima._arima',
                         sources=['pmdarima/arima/_arima.pyx'],
-                        include_dirs=numpy.get_include()
+                        include_dirs=[numpy.get_include()]
                     ),
                     Extension(
-                        name='pmdarima.preprocessing.exog._fourier',
+                        name='preprocessing.exog._fourier',
                         sources=['pmdarima/preprocessing/exog/_fourier.pyx']
                     ),
                     Extension(
-                        name='pmdarima.utils._array',
+                        name='utils._array',
                         sources=['pmdarima/utils/_array.pyx']
                     )
                 ]
