@@ -332,19 +332,22 @@ def do_setup():
 
                 import numpy
 
+                numpy_include = numpy.get_include()
                 metadata['ext_modules'] = [
                     Extension(
                         name='arima._arima',
                         sources=['pmdarima/arima/_arima.pyx'],
-                        include_dirs=[numpy.get_include()]
+                        include_dirs=[numpy_include]
                     ),
                     Extension(
                         name='preprocessing.exog._fourier',
-                        sources=['pmdarima/preprocessing/exog/_fourier.pyx']
+                        sources=['pmdarima/preprocessing/exog/_fourier.pyx'],
+                        include_dirs=[numpy_include]
                     ),
                     Extension(
                         name='utils._array',
-                        sources=['pmdarima/utils/_array.pyx']
+                        sources=['pmdarima/utils/_array.pyx'],
+                        include_dirs=[numpy_include]
                     )
                 ]
         else:
