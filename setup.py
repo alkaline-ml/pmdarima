@@ -128,32 +128,30 @@ class CleanCommand(Clean):
 
 cmdclass = {'clean': CleanCommand}
 
+# build_ext has to be imported after setuptools
+try:
+    import numpy as np
+    from numpy.distutils.command.build_ext import build_ext  # noqa
 
-if IS_PYTHON_312:
-    from setuptools.command.build_ext import build_ext
-    cmdclass['build_ext'] = build_ext
-else:
-    # build_ext has to be imported after setuptools
-    try:
-        import numpy as np
-        from numpy.distutils.command.build_ext import build_ext  # noqa
+    # This is the preferred way to check numpy version: https://git.io/JtEIb
+    if sys.platform == 'darwin' and np.lib.NumpyVersion(np.__version__) >= '1.20.0':
+        # https://numpy.org/devdocs/user/building.html#disabling-atlas-and-other-accelerated-libraries
+        os.environ['NPY_BLAS_ORDER'] = ''
+        os.environ['NPY_LAPACK_ORDER'] = ''
 
-        # This is the preferred way to check numpy version: https://git.io/JtEIb
-        if sys.platform == 'darwin' and np.lib.NumpyVersion(np.__version__) >= '1.20.0':
-            # https://numpy.org/devdocs/user/building.html#disabling-atlas-and-other-accelerated-libraries
-            os.environ['NPY_BLAS_ORDER'] = ''
-            os.environ['NPY_LAPACK_ORDER'] = ''
 
-        class build_ext_subclass(build_ext):
-            def build_extensions(self):
-                build_ext.build_extensions(self)
+    class build_ext_subclass(build_ext):
+        def build_extensions(self):
+            build_ext.build_extensions(self)
 
-        cmdclass['build_ext'] = build_ext_subclass
 
-    except ImportError:
-        # Numpy should not be a dependency just to be able to introspect
-        # that python 3.X is required.
-        pass
+    cmdclass['build_ext'] = build_ext_subclass
+
+except ImportError:
+    # Numpy should not be a dependency just to be able to introspect
+    # that python 3.X is required.
+    pass
+
 
 # Here is where scikit configures the wheelhouse uploader, but we don't deal
 # with that currently. Maybe in the future...
@@ -328,6 +326,13 @@ def do_setup():
         if 'sdist' in sys.argv or IS_PYTHON_312:
             from setuptools import setup
             print("Setting up with setuptools")
+            if IS_PYTHON_312:
+                from setuptools import Extension
+                metadata['ext_modules'] = [
+                    Extension(name='pmdarima.arima._arima', sources=['pmdarima/arima/_arima.pyx']),
+                    Extension(name='pmdarima.preprocessing.exog._fourier', sources=['pmdarima/preprocessing/exog/_fourier.pyx']),
+                    Extension(name='pmdarima.utils._array', sources=['pmdarima/utils/_array.pyx'])
+                ]
         else:
             # we should only need numpy for building. Everything else can be
             # collected via install_requires above
