@@ -54,7 +54,6 @@ PROJECT_URLS = {
 
 # import restricted version of pmdarima that does not need the compiled code
 import pmdarima
-
 VERSION = pmdarima.__version__  # will be 0.0.0 unless tagging
 
 # get the installation requirements:
@@ -140,11 +139,9 @@ try:
         os.environ['NPY_BLAS_ORDER'] = ''
         os.environ['NPY_LAPACK_ORDER'] = ''
 
-
     class build_ext_subclass(build_ext):
         def build_extensions(self):
             build_ext.build_extensions(self)
-
 
     cmdclass['build_ext'] = build_ext_subclass
 
@@ -152,7 +149,6 @@ except ImportError:
     # Numpy should not be a dependency just to be able to introspect
     # that python 3.X is required.
     pass
-
 
 # Here is where scikit configures the wheelhouse uploader, but we don't deal
 # with that currently. Maybe in the future...
@@ -323,10 +319,11 @@ def do_setup():
             )
 
         # for sdist, use setuptools so we get the long_description_content_type
-        # TODO: distutils is removed in Python 3.12+, so this should probably be the default
         if 'sdist' in sys.argv or IS_PYTHON_312:
             from setuptools import setup
             print("Setting up with setuptools")
+
+            # TODO: distutils is removed in Python 3.12+, so this should probably be the default
             if IS_PYTHON_312:
                 from setuptools import Extension
 
