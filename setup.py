@@ -328,10 +328,24 @@ def do_setup():
             print("Setting up with setuptools")
             if IS_PYTHON_312:
                 from setuptools import Extension
+
+                import numpy
+
+
                 metadata['ext_modules'] = [
-                    Extension(name='pmdarima.arima._arima', sources=['pmdarima/arima/_arima.pyx']),
-                    Extension(name='pmdarima.preprocessing.exog._fourier', sources=['pmdarima/preprocessing/exog/_fourier.pyx']),
-                    Extension(name='pmdarima.utils._array', sources=['pmdarima/utils/_array.pyx'])
+                    Extension(
+                        name='pmdarima.arima._arima',
+                        sources=['pmdarima/arima/_arima.pyx'],
+                        include_dirs=numpy.get_include()
+                    ),
+                    Extension(
+                        name='pmdarima.preprocessing.exog._fourier',
+                        sources=['pmdarima/preprocessing/exog/_fourier.pyx']
+                    ),
+                    Extension(
+                        name='pmdarima.utils._array',
+                        sources=['pmdarima/utils/_array.pyx']
+                    )
                 ]
         else:
             # we should only need numpy for building. Everything else can be
