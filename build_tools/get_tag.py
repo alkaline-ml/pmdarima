@@ -6,6 +6,7 @@ from os.path import abspath, dirname
 
 TOP_LEVEL = abspath(dirname(dirname(__file__)))
 OUT_FILE = os.path.join(TOP_LEVEL, 'pmdarima', 'VERSION')
+DEFAULT_TAG = '0.0.0'
 
 
 def get_version_from_tag(tag):
@@ -27,7 +28,7 @@ elif os.getenv('GITHUB_REF') and \
         tag = os.getenv('GITHUB_REF').split('/')[-1]
         f.write(get_version_from_tag(tag))
 
-# Local or non-tagged commit, so we don't generate a VERSION file
+# Local or non-tagged commit. setuptools requires a VERSION file, so just write a default one
 else:
-    print('Not a tagged commit, or not on a CI/CD platform. '
-          'Not writing VERSION file')
+    with open(OUT_FILE, 'w') as f:
+        f.write(DEFAULT_TAG)

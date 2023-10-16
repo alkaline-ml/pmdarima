@@ -21,6 +21,7 @@ import builtins
 
 # Minimum allowed version
 MIN_PYTHON = (3, 7)
+IS_PYTHON_312 = sys.version_info[0] == 3 and sys.version_info[1] >= 12
 
 # Hacky (!!), adopted from sklearn. This sets a global variable
 # so pmdarima __init__ can detect if it's being loaded in the setup
@@ -126,7 +127,6 @@ class CleanCommand(Clean):
 
 
 cmdclass = {'clean': CleanCommand}
-
 
 # build_ext has to be imported after setuptools
 try:
@@ -244,6 +244,7 @@ def do_setup():
                         'Programming Language :: Python :: 3.9',
                         'Programming Language :: Python :: 3.10',
                         'Programming Language :: Python :: 3.11',
+                        'Programming Language :: Python :: 3.12',
                         ('Programming Language :: Python :: '
                          'Implementation :: CPython'),
                     ],
@@ -318,9 +319,39 @@ def do_setup():
             )
 
         # for sdist, use setuptools so we get the long_description_content_type
-        if 'sdist' in sys.argv:
+        if 'sdist' in sys.argv or IS_PYTHON_312:
             from setuptools import setup
             print("Setting up with setuptools")
+
+            # TODO: distutils is removed in Python 3.12+, so this should probably be the default
+            if IS_PYTHON_312:
+                from setuptools import Extension
+
+                import numpy
+
+                include_dirs = [numpy.get_include()]
+                metadata['ext_modules'] = [
+                    Extension(
+                        name='pmdarima.arima._arima',
+                        sources=['pmdarima/arima/_arima.pyx'],
+                        include_dirs=include_dirs
+                    ),
+                    Extension(
+                        name='pmdarima.preprocessing.exog._fourier',
+                        sources=['pmdarima/preprocessing/exog/_fourier.pyx'],
+                        include_dirs=include_dirs
+                    ),
+                    Extension(
+                        name='pmdarima.utils._array',
+                        sources=['pmdarima/utils/_array.pyx'],
+                        include_dirs=include_dirs
+                    ),
+                    Extension(
+                        name='pmdarima.__check_build._check_build',
+                        sources=['pmdarima/__check_build/_check_build.pyx'],
+                        include_dirs=include_dirs
+                    )
+                ]
         else:
             # we should only need numpy for building. Everything else can be
             # collected via install_requires above
