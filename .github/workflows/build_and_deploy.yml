@@ -72,8 +72,9 @@ jobs:
             pip install -r build_tools/build_requirements.txt &&
             pip install -r requirements.txt
           CIBW_BUILD: "${{ env.PYTHON_EXECUTABLE }}-*"
-          CIBW_ENVIRONMENT: CC=gcc GITHUB_REF=${{ env.GITHUB_REF }}
+          CIBW_ENVIRONMENT: CC=gcc
           CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true
+          CIBW_ENVIRONMENT_PASS_LINUX: GITHUB_REF
           # No support for pypy or musl
           CIBW_SKIP: "pp* *-musllinux_*"
           # Runs tests and checks for a numpy regression by upgrading numpy and running tests again
