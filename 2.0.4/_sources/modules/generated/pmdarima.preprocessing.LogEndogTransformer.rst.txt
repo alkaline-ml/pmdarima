@@ -1,0 +1,16 @@
+:mod:`pmdarima.preprocessing`.LogEndogTransformer
+========================================================
+
+.. currentmodule:: pmdarima.preprocessing
+
+.. autoclass:: LogEndogTransformer
+
+   
+   .. automethod:: __init__
+   
+
+.. include:: pmdarima.preprocessing.LogEndogTransformer.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
