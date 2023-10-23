@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>RFC: exogenous -&gt; X &mdash; pmdarima 2.0.4 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/fields.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/gitcontrib.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'2.0.4',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="pmdarima RFCs" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What's New?</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">RFCs</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Renaming the &quot;exogenous&quot; argument</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#why">Why?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how">How?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#precedent">Precedent</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pmdarima</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">pmdarima RFCs</a> &raquo;</li>
+        
+      <li>RFC: <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">X</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rfc/372-exog-to-x.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rfc-exogenous-x">
+<span id="exog-to-x"></span><h1>RFC: <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">X</span></code><a class="headerlink" href="#rfc-exogenous-x" title="Permalink to this headline">¶</a></h1>
+<p>This RFC proposes the renaming of the <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> arg to <code class="docutils literal notranslate"><span class="pre">X</span></code>. While this would
+impact the public API, we would allow the current <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> argument to persist
+for several minor release cycles with a deprecation warning before completely removing it
+in the next major release (2.0).</p>
+<div class="section" id="why">
+<h2>Why?<a class="headerlink" href="#why" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>It’s typo-prone</strong>. We’ve received several issues lately with people asking why the <code class="docutils literal notranslate"><span class="pre">exogenous</span></code>
+argument was not doing anything. Upon close inspection, it was evident they were misspelling the
+arg as “exogeneous”, and the presence of <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> in the function signature allowed
+the argument through without raising a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</li>
+<li><strong>It’s clunky</strong>. Typing <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> when other APIs have simplified this to the ubiquitous
+<code class="docutils literal notranslate"><span class="pre">X</span></code> used in other scikit-style packages (scikit-learn, scikit-image, sktime) seems like
+a slightly annoying, arbitrary difference in signature definitions that keeps us from
+matching the signatures of other similar packages.</li>
+<li><strong>It can be confusing</strong>. Not all of our user base is familiar with the classical statistics
+terminology and may not realize what this argument permits them. Conversely, nearly all
+users are familiar with the idea of what <code class="docutils literal notranslate"><span class="pre">X</span></code> allows them.</li>
+</ul>
+</div>
+<div class="section" id="how">
+<h2>How?<a class="headerlink" href="#how" title="Permalink to this headline">¶</a></h2>
+<p>For a while, we’d allow the <code class="docutils literal notranslate"><span class="pre">exogenous</span></code> argument to be passed in <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>, and would simply
+warn if it were present. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;exogenous&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;`exogenous` is deprecated and will raise an error &quot;</span>
+                          <span class="s2">&quot;in version 2.0 - Use the `X` arg instead&quot;</span><span class="p">,</span>
+                          <span class="ne">DeprecationWarning</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This would ensure backwards compatibility for several minor release cycles before the
+change was made, and would give sufficient time to users to switch over to the new naming scheme.</p>
+</div>
+<div class="section" id="precedent">
+<h2>Precedent<a class="headerlink" href="#precedent" title="Permalink to this headline">¶</a></h2>
+<p>Scikit-learn has made similar package naming decisions in the name of package consistency and ubiquity,
+notably in migrating the <code class="docutils literal notranslate"><span class="pre">cross_validation</span></code> namespace to the <code class="docutils literal notranslate"><span class="pre">model_selection</span></code> namespace in version
+0.18. This was preceded by several minor releases that warned on imports.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="pmdarima RFCs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2017-2023, Taylor G Smith
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
