@@ -30,5 +30,6 @@ elif os.getenv('GITHUB_REF') and \
 
 # Local or non-tagged commit. setuptools requires a VERSION file, so just write a default one
 else:
+    print("Not a tagged commit or not on CI. Using default tag")
     with open(OUT_FILE, 'w') as f:
         f.write(DEFAULT_TAG)
