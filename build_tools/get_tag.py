@@ -8,6 +8,9 @@ TOP_LEVEL = abspath(dirname(dirname(__file__)))
 OUT_FILE = os.path.join(TOP_LEVEL, 'pmdarima', 'VERSION')
 DEFAULT_TAG = '0.0.0'
 
+print("DEBUG:")
+for k, v in os.environ.items():
+    print(f"{k}: {v}")
 
 def get_version_from_tag(tag):
     """Handles 1.5.0 or v1.5.0"""
@@ -30,5 +33,6 @@ elif os.getenv('GITHUB_REF') and \
 
 # Local or non-tagged commit. setuptools requires a VERSION file, so just write a default one
 else:
+    print("Not a tagged commit or not on CI. Using default tag")
     with open(OUT_FILE, 'w') as f:
         f.write(DEFAULT_TAG)
