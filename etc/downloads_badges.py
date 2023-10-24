@@ -71,8 +71,8 @@ DATE_FORMAT = '%Y-%m-%d'
 session = requests.Session()
 
 # Get the data for both the legacy namespace and our current one
-pyramid_arima = json.loads(session.get('https://api.pepy.tech/api/projects/pyramid-arima').text)
-pmdarima = json.loads(session.get('https://api.pepy.tech/api/projects/pmdarima').text)
+pyramid_arima = json.loads(session.get('https://api.pepy.tech/api/v2/projects/pyramid-arima').text)
+pmdarima = json.loads(session.get('https://api.pepy.tech/api/v2/projects/pmdarima').text)
 
 # Sum up pmdarima and pyramid-arima downloads to the past week
 pmdarima_downloads = 0
