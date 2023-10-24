@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import date, timedelta
 import json
 import math
@@ -43,6 +44,26 @@ def millify(n):
     return f'{final_output}{millnames[millidx]}'
 
 
+def downloads_per_day(downloads_per_version):
+    """Find the total number of downloads for a given day
+
+    Parameters
+    ----------
+    downloads_per_version: dict
+        A dict of versions and downloads for that version
+
+    Returns
+    -------
+    total : int
+        The total number of downloads on a given day across all versions.
+    """
+    total = 0
+    for download_stat in downloads_per_version.values():
+        total += download_stat
+
+    return total
+
+
 def get_default_value(downloads):
     """Find the default value (one day's worth of downloads) for a given input
 
@@ -58,7 +79,7 @@ def get_default_value(downloads):
         that are contained in the input dictionary.
     """
     last_7_keys = sorted(downloads.keys())[-7:]
-    default_value = int(mean([downloads[key] for key in last_7_keys]))
+    default_value = int(mean([downloads_per_day(downloads[key]) for key in last_7_keys]))
     return default_value
 
 
@@ -78,18 +99,20 @@ pmdarima = json.loads(session.get('https://api.pepy.tech/api/v2/projects/pmdarim
 pmdarima_downloads = 0
 default_pmdarima_value = get_default_value(pmdarima['downloads'])
 for i in range(7):
-    pmdarima_downloads += pmdarima['downloads'].get(
-        (last_week + timedelta(days=i)).strftime(DATE_FORMAT),
-        default_pmdarima_value
-    )
+    new_downloads = pmdarima['downloads'].get((last_week + timedelta(days=i)).strftime(DATE_FORMAT))
+    if new_downloads is not None:
+        pmdarima_downloads += downloads_per_day(new_downloads)
+    else:
+        pmdarima_downloads += default_pmdarima_value
 
 pyramid_arima_downloads = 0
 default_pyramid_arima_value = get_default_value(pyramid_arima['downloads'])
 for i in range(7):
-    pyramid_arima_downloads += pyramid_arima['downloads'].get(
-        (last_week + timedelta(days=i)).strftime(DATE_FORMAT),
-        default_pyramid_arima_value
-    )
+    new_downloads = pyramid_arima['downloads'].get((last_week + timedelta(days=i)).strftime(DATE_FORMAT))
+    if new_downloads is not None:
+        pyramid_arima_downloads += downloads_per_day(new_downloads)
+    else:
+        pyramid_arima_downloads += default_pyramid_arima_value
 
 # Millify the totals
 total_downloads = millify(pyramid_arima['total_downloads'] + pmdarima['total_downloads'])
