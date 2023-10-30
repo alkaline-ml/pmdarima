@@ -89,6 +89,7 @@ DATE_FORMAT = '%Y-%m-%d'
 
 # Open a session to save time
 session = requests.Session()
+session.headers.update({"X-Api-Key": os.getenv("PEPY_API_KEY")})
 
 # Get the data for both the legacy namespace and our current one
 pyramid_arima = json.loads(session.get('https://api.pepy.tech/api/v2/projects/pyramid-arima').text)
