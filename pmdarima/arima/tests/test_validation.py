@@ -201,5 +201,6 @@ def test_warn_for_D(d, D, expected):
             assert any(expected in w for w in warning_msgs)
 
     else:
-        with warnings.catch_warnings(record=True):
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")  # Ensure no warnings are emitted if not expected
             val.warn_for_D(d=d, D=D)
