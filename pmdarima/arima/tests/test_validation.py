@@ -202,5 +202,6 @@ def test_warn_for_D(d, D, expected):
 
     else:
         with warnings.catch_warnings():
-            warnings.simplefilter("error")  # Ensure no warnings are emitted if not expected
+            # Ensure no warnings are emitted if not expected
+            warnings.simplefilter("error")
             val.warn_for_D(d=d, D=D)
