@@ -78,6 +78,7 @@ jobs:
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_ARCHS_MACOS: "x86_64"
           CIBW_ARCHS_WINDOWS: "AMD64"
+          CIBW_BEFORE_ALL: make version
           CIBW_BEFORE_BUILD: >
             for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do
               pip install $dependency
