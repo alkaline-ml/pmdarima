@@ -201,5 +201,5 @@ def test_warn_for_D(d, D, expected):
             assert any(expected in w for w in warning_msgs)
 
     else:
-        with pytest.catch_warnings(record=True):
+        with warnings.catch_warnings(record=True):
             val.warn_for_D(d=d, D=D)
