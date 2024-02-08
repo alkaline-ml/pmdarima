@@ -27,8 +27,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        python-version: ['3.11']
-        python-executable: ['cp311']
+        python-version: ['3.12']
+        python-executable: ['cp312']
     defaults:
       run:
         shell: bash
