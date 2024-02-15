@@ -337,6 +337,18 @@ class CHTest(_SeasonalStationarityTest):
 
         return fmat[:, : m - 1]
 
+    @staticmethod
+    def _calc_ch_crit_val(m):
+        if m <= 12:
+            return CHTest.crit_vals[m - 2]
+        if m == 24:
+            return 5.098624
+        if m == 52:
+            return 10.341416
+        if m == 365:
+            return 65.44445
+        return 0.269 * (m**0.928)
+
     def estimate_seasonal_differencing_term(self, x):
         """Estimate the seasonal differencing term.
 
@@ -373,17 +385,8 @@ class CHTest(_SeasonalStationarityTest):
             return 0
 
         chstat = self._sd_test(x, m)
-
-        if m <= 12:
-            return int(chstat > self.crit_vals[m - 2])  # R does m - 1...
-        if m == 24:
-            return int(chstat > 5.098624)
-        if m == 52:
-            return int(chstat > 10.341416)
-        if m == 365:
-            return int(chstat > 65.44445)
-
-        return int(chstat > 0.269 * (m**0.928))
+        crit_val = self._calc_ch_crit_val(m)
+        return int(chstat > crit_val)
 
 
 class OCSBTest(_SeasonalStationarityTest):
