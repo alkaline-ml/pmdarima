@@ -27,8 +27,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        python-version: ['3.11']
-        python-executable: ['cp311']
+        python-version: ['3.12']
+        python-executable: ['cp312']
     defaults:
       run:
         shell: bash
@@ -59,7 +59,7 @@ jobs:
         shell: bash
 
       - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.9.0 # TODO: Do we want this pinned?
+        run: python -m pip install cibuildwheel
 
       - name: Generating dependency table
         id: dependency-table  # Needed to set output of job
@@ -78,6 +78,7 @@ jobs:
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_ARCHS_MACOS: "x86_64"
           CIBW_ARCHS_WINDOWS: "AMD64"
+          CIBW_BEFORE_ALL: make version
           CIBW_BEFORE_BUILD: >
             for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do
               pip install $dependency

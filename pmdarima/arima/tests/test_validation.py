@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import warnings
+
 import numpy as np
 import pytest
 
@@ -42,7 +44,7 @@ def test_check_information_criterion(ic,
             assert any('information_criterion cannot be' in s
                        for s in pytest_warning_messages(w))
         else:
-            with pytest.warns(None) as w:
+            with warnings.catch_warnings(record=True) as w:
                 res = val.check_information_criterion(ic, ooss)
             assert not w
 
@@ -90,7 +92,7 @@ def test_check_m(m, seasonal, expect_error, expect_warning, expected_val):
             assert any('set for non-seasonal fit' in s
                        for s in pytest_warning_messages(w))
         else:
-            with pytest.warns(None) as w:
+            with warnings.catch_warnings(record=True) as w:
                 res = val.check_m(m, seasonal)
             assert not w
 
@@ -114,7 +116,7 @@ def test_check_n_jobs(stepwise, n_jobs, expect_warning, expected_n_jobs):
         assert any('stepwise model cannot be fit in parallel' in s
                    for s in pytest_warning_messages(w))
     else:
-        with pytest.warns(None) as w:
+        with warnings.catch_warnings(record=True) as w:
             res = val.check_n_jobs(stepwise, n_jobs)
         assert not w
 
@@ -199,5 +201,7 @@ def test_warn_for_D(d, D, expected):
             assert any(expected in w for w in warning_msgs)
 
     else:
-        with pytest.warns(None):
+        with warnings.catch_warnings():
+            # Ensure no warnings are emitted if not expected
+            warnings.simplefilter("error")
             val.warn_for_D(d=d, D=D)
