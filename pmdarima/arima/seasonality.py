@@ -94,8 +94,8 @@ def decompose(x, type_, m, filter_=None):
     # to ask the user for the frequency.
     try:
         assert isinstance(m, int) and m > 1
-    except (ValueError, AssertionError):
-        raise ValueError("'f' should be a positive integer")
+    except (ValueError, AssertionError) as err:
+        raise ValueError("'f' should be a positive integer") from err
 
     if filter_ is None:
         filter_ = np.ones((m,)) / m
@@ -546,11 +546,11 @@ class OCSBTest(_SeasonalStationarityTest):
         if maxlag > 0 and method != "fixed":
             try:
                 icfunc = self._ic_method_map[method]
-            except KeyError:
+            except KeyError as err:
                 raise ValueError(
                     "'%s' is an invalid method. Must be one "
                     "of ('aic', 'aicc', 'bic', 'fixed')"
-                )
+                ) from err
 
             fits = []
             icvals = []
