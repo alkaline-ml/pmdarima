@@ -240,9 +240,9 @@ class CHTest(_SeasonalStationarityTest):
         R1 = CHTest._seas_dummy(wts, s)
 
         # fit model, get residuals
-        lmch = make_pipeline(StandardScaler(with_mean=False), LinearRegression()).fit(
-            R1, wts
-        )
+        lmch = make_pipeline(
+            StandardScaler(with_mean=False), LinearRegression()
+        ).fit(R1, wts)
         # lmch = sm.OLS(wts, R1).fit(method='qr')
         residuals = wts - lmch.predict(R1)
 
@@ -317,9 +317,10 @@ class CHTest(_SeasonalStationarityTest):
         n = x.shape[0]
 
         # assume m > 1 since this function called internally...
-        assert (
-            m > 1
-        ), "This function is called internally and should not encounter this issue"
+        assert m > 1, (
+            "This function is called internally and "
+            "should not encounter this issue"
+        )
 
         tt = np.arange(n) + 1
         fmat = np.ones((n, 2 * m)) * np.nan
@@ -448,10 +449,10 @@ class OCSBTest(_SeasonalStationarityTest):
         # 8c6b63b1274b064c84d7514838b26dd0acb98aee/R/unitRoot.R#L409
         log_m = np.log(m)
         return (
-            -0.2937411
-            * np.exp(
-                -0.2850853 * (log_m - 0.7656451)
-                + (-0.05983644) * ((log_m - 0.7656451) ** 2)
+            -0.2937411 * np.exp(
+                -0.2850853 * (log_m - 0.7656451) + (-0.05983644) * (
+                    (log_m - 0.7656451) ** 2
+                )
             )
             - 1.652202
         )
@@ -467,7 +468,7 @@ class OCSBTest(_SeasonalStationarityTest):
         # If there are tons of lags, this may not be super efficient...
         out = np.ones((n + (lag - 1), lag)) * np.nan
         for i in range(lag):
-            out[i : i + n, i] = y
+            out[i: i + n, i] = y
 
         if omit_na:
             out = out[~np.isnan(out).any(axis=1)]
@@ -510,7 +511,9 @@ class OCSBTest(_SeasonalStationarityTest):
 
         # Create Z4
         z4_y = y_first_order_diff[lag:]  # new endog
-        z4_lag = OCSBTest._gen_lags(y_first_order_diff, lag)[: z4_y.shape[0], :]
+        z4_lag = OCSBTest._gen_lags(y_first_order_diff, lag)[
+            : z4_y.shape[0], :
+        ]
         z4_preds = ar_fit.predict(add_constant(z4_lag))  # preds
         z4 = z4_y - z4_preds  # test residuals
 
@@ -525,7 +528,11 @@ class OCSBTest(_SeasonalStationarityTest):
 
         # Finally, fit a linear regression on mf with z4 & z5 features added
         data = np.hstack(
-            (mf, z4[: mf.shape[0]].reshape(-1, 1), z5[: mf.shape[0]].reshape(-1, 1))
+            (
+                mf,
+                z4[: mf.shape[0]].reshape(-1, 1),
+                z5[: mf.shape[0]].reshape(-1, 1),
+            )
         )
 
         return sm.OLS(y, data).fit(method="qr")
