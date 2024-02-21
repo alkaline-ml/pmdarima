@@ -453,8 +453,7 @@ class OCSBTest(_SeasonalStationarityTest):
                 -0.2850853 * (log_m - 0.7656451) + (-0.05983644) * (
                     (log_m - 0.7656451) ** 2
                 )
-            )
-            - 1.652202
+            ) - 1.652202
         )
 
     @staticmethod
