@@ -198,11 +198,7 @@
 
 <span class="kn">from</span> <span class="nn">._arima</span> <span class="kn">import</span> <span class="n">C_canova_hansen_sd_test</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;CHTest&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;decompose&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;OCSBTest&#39;</span>
-<span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CHTest&quot;</span><span class="p">,</span> <span class="s2">&quot;decompose&quot;</span><span class="p">,</span> <span class="s2">&quot;OCSBTest&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="decompose"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.decompose.html#pmdarima.arima.decompose">[docs]</a><span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -257,7 +253,7 @@
 
     <span class="n">multiplicative</span> <span class="o">=</span> <span class="s2">&quot;multiplicative&quot;</span>
     <span class="n">additive</span> <span class="o">=</span> <span class="s2">&quot;additive&quot;</span>
-    <span class="n">is_m_odd</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">is_m_odd</span> <span class="o">=</span> <span class="n">m</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>
 
     <span class="c1"># Helper function to stay consistent and concise based on &#39;type_&#39;</span>
     <span class="k">def</span> <span class="nf">_decomposer_helper</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
@@ -270,8 +266,8 @@
     <span class="c1"># to ask the user for the frequency.</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">1</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AssertionError</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;f&#39; should be a positive integer&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AssertionError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;f&#39; should be a positive integer&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
 
     <span class="k">if</span> <span class="n">filter_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">filter_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">m</span><span class="p">,))</span> <span class="o">/</span> <span class="n">m</span>
@@ -288,7 +284,7 @@
 
     <span class="c1"># Take half of m for the convolution / sma process.</span>
     <span class="n">half_m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">//</span> <span class="mi">2</span>
-    <span class="n">trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">filter_</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">)</span>
+    <span class="n">trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">filter_</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;valid&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">is_m_odd</span><span class="p">:</span>
         <span class="n">trend</span> <span class="o">=</span> <span class="n">trend</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># we remove the final index if m is even.</span>
@@ -325,7 +321,7 @@
     <span class="n">random</span> <span class="o">=</span> <span class="n">_decomposer_helper</span><span class="p">(</span><span class="n">_decomposer_helper</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">trend</span><span class="p">),</span> <span class="n">seasonal</span><span class="p">)</span>
 
     <span class="c1"># Create a namedtuple so the output mirrors the output of the R function.</span>
-    <span class="n">decomposed</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;decomposed&#39;</span><span class="p">,</span> <span class="s1">&#39;x trend seasonal random&#39;</span><span class="p">)</span>
+    <span class="n">decomposed</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;decomposed&quot;</span><span class="p">,</span> <span class="s2">&quot;x trend seasonal random&quot;</span><span class="p">)</span>
     <span class="n">decomposed_tuple</span> <span class="o">=</span> <span class="n">decomposed</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">trend</span><span class="p">,</span> <span class="n">seasonal</span><span class="p">,</span> <span class="n">random</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">decomposed_tuple</span></div>
@@ -336,10 +332,11 @@
 <span class="sd">    Canova-Hansen test and the Osborn-Chui-Smith-Birchenhall tests. These tests</span>
 <span class="sd">    are used to determine the seasonal differencing term for a time-series.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
         <span class="k">if</span> <span class="n">m</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;m must be &gt; 1&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;m must be &gt; 1&quot;</span><span class="p">)</span>
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">estimate_seasonal_differencing_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
@@ -384,10 +381,20 @@
 <span class="sd">    .. [2] R source code for CH test:</span>
 <span class="sd">           https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L148</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">crit_vals</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mf">0.4617146</span><span class="p">,</span> <span class="mf">0.7479655</span><span class="p">,</span> <span class="mf">1.0007818</span><span class="p">,</span>
-                  <span class="mf">1.2375350</span><span class="p">,</span> <span class="mf">1.4625240</span><span class="p">,</span> <span class="mf">1.6920200</span><span class="p">,</span>
-                  <span class="mf">1.9043096</span><span class="p">,</span> <span class="mf">2.1169602</span><span class="p">,</span> <span class="mf">2.3268562</span><span class="p">,</span>
-                  <span class="mf">2.5406922</span><span class="p">,</span> <span class="mf">2.7391007</span><span class="p">)</span>
+
+    <span class="n">crit_vals</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span>
+        <span class="mf">0.4617146</span><span class="p">,</span>
+        <span class="mf">0.7479655</span><span class="p">,</span>
+        <span class="mf">1.0007818</span><span class="p">,</span>
+        <span class="mf">1.2375350</span><span class="p">,</span>
+        <span class="mf">1.4625240</span><span class="p">,</span>
+        <span class="mf">1.6920200</span><span class="p">,</span>
+        <span class="mf">1.9043096</span><span class="p">,</span>
+        <span class="mf">2.1169602</span><span class="p">,</span>
+        <span class="mf">2.3268562</span><span class="p">,</span>
+        <span class="mf">2.5406922</span><span class="p">,</span>
+        <span class="mf">2.7391007</span><span class="p">,</span>
+    <span class="p">)</span>
 
 <div class="viewcode-block" id="CHTest.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.CHTest.html#pmdarima.arima.CHTest.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CHTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">)</span></div>
@@ -406,8 +413,7 @@
 
         <span class="c1"># fit model, get residuals</span>
         <span class="n">lmch</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
-            <span class="n">StandardScaler</span><span class="p">(</span><span class="n">with_mean</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-            <span class="n">LinearRegression</span><span class="p">()</span>
+            <span class="n">StandardScaler</span><span class="p">(</span><span class="n">with_mean</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">LinearRegression</span><span class="p">()</span>
         <span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">R1</span><span class="p">,</span> <span class="n">wts</span><span class="p">)</span>
         <span class="c1"># lmch = sm.OLS(wts, R1).fit(method=&#39;qr&#39;)</span>
         <span class="n">residuals</span> <span class="o">=</span> <span class="n">wts</span> <span class="o">-</span> <span class="n">lmch</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">R1</span><span class="p">)</span>
@@ -456,8 +462,9 @@
         <span class="c1"># https://github.com/robjhyndman/forecast/blob/master/R/arima.R#L321</span>
         <span class="n">Fhat</span> <span class="o">=</span> <span class="n">Fhataux</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">solved</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">AtOmfhatA</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">AtOmfhatA</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">solved</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
-            <span class="n">Fhat</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Fhat</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">solved</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Fhat</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Fhat</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+            <span class="n">A</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_seas_dummy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
@@ -482,8 +489,10 @@
         <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># assume m &gt; 1 since this function called internally...</span>
-        <span class="k">assert</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;This function is called internally and &#39;</span> \
-                      <span class="s1">&#39;should not encounter this issue&#39;</span>
+        <span class="k">assert</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s2">&quot;This function is called internally and &quot;</span>
+            <span class="s2">&quot;should not encounter this issue&quot;</span>
+        <span class="p">)</span>
 
         <span class="n">tt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">fmat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
@@ -499,7 +508,19 @@
             <span class="c1"># fmat[,2*(i-1)+1] &lt;- cos(2*pi*i*tt/m)</span>
             <span class="n">fmat</span><span class="p">[:,</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">i</span> <span class="o">*</span> <span class="n">tt</span> <span class="o">/</span> <span class="n">m</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">fmat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">fmat</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_calc_ch_crit_val</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">CHTest</span><span class="o">.</span><span class="n">crit_vals</span><span class="p">[</span><span class="n">m</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">24</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">5.098624</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">52</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">10.341416</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">365</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">65.44445</span>
+        <span class="k">return</span> <span class="mf">0.269</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span><span class="o">**</span><span class="mf">0.928</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CHTest.estimate_seasonal_differencing_term"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.CHTest.html#pmdarima.arima.CHTest.estimate_seasonal_differencing_term">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_seasonal_differencing_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Estimate the seasonal differencing term.</span>
@@ -537,17 +558,8 @@
             <span class="k">return</span> <span class="mi">0</span>
 
         <span class="n">chstat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sd_test</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">m</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">chstat</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">crit_vals</span><span class="p">[</span><span class="n">m</span> <span class="o">-</span> <span class="mi">2</span><span class="p">])</span>  <span class="c1"># R does m - 1...</span>
-        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">24</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">chstat</span> <span class="o">&gt;</span> <span class="mf">5.098624</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">52</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">chstat</span> <span class="o">&gt;</span> <span class="mf">10.341416</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">365</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">chstat</span> <span class="o">&gt;</span> <span class="mf">65.44445</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">chstat</span> <span class="o">&gt;</span> <span class="mf">0.269</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">**</span> <span class="mf">0.928</span><span class="p">))</span></div></div>
+        <span class="n">crit_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_ch_crit_val</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">chstat</span> <span class="o">&gt;</span> <span class="n">crit_val</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="OCSBTest"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.OCSBTest.html#pmdarima.arima.OCSBTest">[docs]</a><span class="k">class</span> <span class="nc">OCSBTest</span><span class="p">(</span><span class="n">_SeasonalStationarityTest</span><span class="p">):</span>
@@ -586,13 +598,13 @@
 
 <span class="sd">    .. [2] R&#39;s forecast::OCSB test source code: https://bit.ly/2QYQHno</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">_ic_method_map</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;aic&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">fit</span><span class="p">:</span> <span class="n">fit</span><span class="o">.</span><span class="n">aic</span><span class="p">,</span>
         <span class="s2">&quot;bic&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">fit</span><span class="p">:</span> <span class="n">fit</span><span class="o">.</span><span class="n">bic</span><span class="p">,</span>
-
         <span class="c1"># TODO: confirm False for add_constant, since the model fit contains</span>
         <span class="c1">#   . a constant term</span>
-        <span class="s2">&quot;aicc&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">fit</span><span class="p">:</span> <span class="n">_aicc</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">nobs</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="s2">&quot;aicc&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">fit</span><span class="p">:</span> <span class="n">_aicc</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">nobs</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
     <span class="p">}</span>
 
 <div class="viewcode-block" id="OCSBTest.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.OCSBTest.html#pmdarima.arima.OCSBTest.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lag_method</span><span class="o">=</span><span class="s2">&quot;aic&quot;</span><span class="p">,</span> <span class="n">max_lag</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
@@ -608,9 +620,13 @@
         <span class="c1"># https://github.com/robjhyndman/forecast/blob/</span>
         <span class="c1"># 8c6b63b1274b064c84d7514838b26dd0acb98aee/R/unitRoot.R#L409</span>
         <span class="n">log_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mf">0.2937411</span> <span class="o">*</span> \
-            <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2850853</span> <span class="o">*</span> <span class="p">(</span><span class="n">log_m</span> <span class="o">-</span> <span class="mf">0.7656451</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.05983644</span><span class="p">)</span> <span class="o">*</span>
-                   <span class="p">((</span><span class="n">log_m</span> <span class="o">-</span> <span class="mf">0.7656451</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.652202</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="o">-</span><span class="mf">0.2937411</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+                <span class="o">-</span><span class="mf">0.2850853</span> <span class="o">*</span> <span class="p">(</span><span class="n">log_m</span> <span class="o">-</span> <span class="mf">0.7656451</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.05983644</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="n">log_m</span> <span class="o">-</span> <span class="mf">0.7656451</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="p">)</span>
+            <span class="p">)</span> <span class="o">-</span> <span class="mf">1.652202</span>
+        <span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_do_lag</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">omit_na</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -623,7 +639,7 @@
         <span class="c1"># If there are tons of lags, this may not be super efficient...</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n</span> <span class="o">+</span> <span class="p">(</span><span class="n">lag</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">lag</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lag</span><span class="p">):</span>
-            <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
 
         <span class="k">if</span> <span class="n">omit_na</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
@@ -661,12 +677,14 @@
 
         <span class="c1"># A constant term is added in the R code&#39;s lm formula. We do that in</span>
         <span class="c1"># the linear model&#39;s constructor</span>
-        <span class="n">mf</span> <span class="o">=</span> <span class="n">ylag</span><span class="p">[:</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="n">ar_fit</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">add_constant</span><span class="p">(</span><span class="n">mf</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;qr&#39;</span><span class="p">)</span>
+        <span class="n">mf</span> <span class="o">=</span> <span class="n">ylag</span><span class="p">[:</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">ar_fit</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">add_constant</span><span class="p">(</span><span class="n">mf</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;qr&quot;</span><span class="p">)</span>
 
         <span class="c1"># Create Z4</span>
         <span class="n">z4_y</span> <span class="o">=</span> <span class="n">y_first_order_diff</span><span class="p">[</span><span class="n">lag</span><span class="p">:]</span>  <span class="c1"># new endog</span>
-        <span class="n">z4_lag</span> <span class="o">=</span> <span class="n">OCSBTest</span><span class="o">.</span><span class="n">_gen_lags</span><span class="p">(</span><span class="n">y_first_order_diff</span><span class="p">,</span> <span class="n">lag</span><span class="p">)[:</span><span class="n">z4_y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:]</span>
+        <span class="n">z4_lag</span> <span class="o">=</span> <span class="n">OCSBTest</span><span class="o">.</span><span class="n">_gen_lags</span><span class="p">(</span><span class="n">y_first_order_diff</span><span class="p">,</span> <span class="n">lag</span><span class="p">)[</span>
+            <span class="p">:</span> <span class="n">z4_y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:</span>
+        <span class="p">]</span>
         <span class="n">z4_preds</span> <span class="o">=</span> <span class="n">ar_fit</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">add_constant</span><span class="p">(</span><span class="n">z4_lag</span><span class="p">))</span>  <span class="c1"># preds</span>
         <span class="n">z4</span> <span class="o">=</span> <span class="n">z4_y</span> <span class="o">-</span> <span class="n">z4_preds</span>  <span class="c1"># test residuals</span>
 
@@ -675,18 +693,20 @@
         <span class="n">z5_y</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">z5_lag</span> <span class="o">=</span> <span class="n">OCSBTest</span><span class="o">.</span><span class="n">_gen_lags</span><span class="p">(</span><span class="n">z5_y</span><span class="p">,</span> <span class="n">lag</span><span class="p">)</span>
         <span class="n">z5_y</span> <span class="o">=</span> <span class="n">z5_y</span><span class="p">[</span><span class="n">lag</span><span class="p">:]</span>
-        <span class="n">z5_lag</span> <span class="o">=</span> <span class="n">z5_lag</span><span class="p">[:</span><span class="n">z5_y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:]</span>
+        <span class="n">z5_lag</span> <span class="o">=</span> <span class="n">z5_lag</span><span class="p">[:</span> <span class="n">z5_y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:]</span>
         <span class="n">z5_preds</span> <span class="o">=</span> <span class="n">ar_fit</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">add_constant</span><span class="p">(</span><span class="n">z5_lag</span><span class="p">))</span>
         <span class="n">z5</span> <span class="o">=</span> <span class="n">z5_y</span> <span class="o">-</span> <span class="n">z5_preds</span>
 
         <span class="c1"># Finally, fit a linear regression on mf with z4 &amp; z5 features added</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span>
-            <span class="n">mf</span><span class="p">,</span>
-            <span class="n">z4</span><span class="p">[:</span><span class="n">mf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="n">z5</span><span class="p">[:</span><span class="n">mf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="n">mf</span><span class="p">,</span>
+                <span class="n">z4</span><span class="p">[:</span> <span class="n">mf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">z5</span><span class="p">[:</span> <span class="n">mf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;qr&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;qr&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_compute_test_statistic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
@@ -695,12 +715,14 @@
 
         <span class="c1"># We might try multiple lags in this case</span>
         <span class="n">crit_regression</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">maxlag</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">method</span> <span class="o">!=</span> <span class="s1">&#39;fixed&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">maxlag</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">method</span> <span class="o">!=</span> <span class="s2">&quot;fixed&quot;</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">icfunc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ic_method_map</span><span class="p">[</span><span class="n">method</span><span class="p">]</span>
-            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is an invalid method. Must be one &quot;</span>
-                                 <span class="s2">&quot;of (&#39;aic&#39;, &#39;aicc&#39;, &#39;bic&#39;, &#39;fixed&#39;)&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is an invalid method. Must be one &quot;</span>
+                    <span class="s2">&quot;of (&#39;aic&#39;, &#39;aicc&#39;, &#39;bic&#39;, &#39;fixed&#39;)&quot;</span>
+                <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
 
             <span class="n">fits</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">icvals</span> <span class="o">=</span> <span class="p">[]</span>
@@ -715,10 +737,12 @@
 
             <span class="c1"># If they&#39;re all NaN, raise</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">icvals</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;All lag values up to &#39;maxlag&#39; produced &quot;</span>
-                                 <span class="s2">&quot;singular matrices. Consider using a longer &quot;</span>
-                                 <span class="s2">&quot;series, a different lag term or a different &quot;</span>
-                                 <span class="s2">&quot;test.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;All lag values up to &#39;maxlag&#39; produced &quot;</span>
+                    <span class="s2">&quot;singular matrices. Consider using a longer &quot;</span>
+                    <span class="s2">&quot;series, a different lag term or a different &quot;</span>
+                    <span class="s2">&quot;test.&quot;</span>
+                <span class="p">)</span>
 
             <span class="c1"># Compute the information criterion vals</span>
             <span class="n">best_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanargmin</span><span class="p">(</span><span class="n">icvals</span><span class="p">))</span>
@@ -730,14 +754,16 @@
         <span class="c1"># Compute the actual linear model used for determining the test stat</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">regression</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_ocsb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">maxlag</span><span class="p">,</span> <span class="n">maxlag</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">:</span>  <span class="c1"># Singular matrix</span>
+        <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>  <span class="c1"># Singular matrix</span>
             <span class="k">if</span> <span class="n">crit_regression</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">regression</span> <span class="o">=</span> <span class="n">crit_regression</span>
             <span class="c1"># Otherwise we have no solution to fall back on</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find a solution. Try a longer &quot;</span>
-                                 <span class="s2">&quot;series, different lag term, or a different &quot;</span>
-                                 <span class="s2">&quot;test.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Could not find a solution. Try a longer &quot;</span>
+                    <span class="s2">&quot;series, different lag term, or a different &quot;</span>
+                    <span class="s2">&quot;test.&quot;</span>
+                <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
 
         <span class="c1"># Get the coefficients for the z4 and z5 matrices</span>
         <span class="n">tvals</span> <span class="o">=</span> <span class="n">regression</span><span class="o">.</span><span class="n">tvalues</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>  <span class="c1"># len 2</span>
