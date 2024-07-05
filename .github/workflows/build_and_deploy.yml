@@ -21,7 +21,14 @@ jobs:
     strategy:
       matrix:
         python3-minor-version: [7, 8, 9, 10, 11, 12]
-        os: [macos-13, ubuntu-latest, windows-latest] # TODO
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        # TODO: Just need to remove Python 3.7 support entirely
+        include:
+          - os: macos-13
+            python3-minor-version: 7
+        exclude:
+          - os: macos-latest
+            python3-minor-version: 7
     defaults:
       run:
         shell: bash
