@@ -19,12 +19,10 @@ concurrency:
 jobs:
   build-and-deploy:
     strategy:
-      # TODO: Remove
-      fail-fast: false
       matrix:
         python3-minor-version: [7, 8, 9, 10, 11, 12]
-        # TODO: Figure out macos-14/macos-latest and windows-2022/windows-latest
-        os: [macos-13, ubuntu-latest, windows-2019]
+        # TODO: Figure out macos-14/macos-latest
+        os: [macos-13, ubuntu-latest, windows-latest]
     defaults:
       run:
         shell: bash
