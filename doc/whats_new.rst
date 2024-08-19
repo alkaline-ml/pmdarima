@@ -7,6 +7,11 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v2.0.4 <https://alkaline-ml.com/pmdarima/2.0.4>`_
+-------------------------------------------------
+
+* Pin numpy to ``<2.0.0`` while work is done to support numpy ``>=2.0.0``
+
 `v2.0.3 <https://alkaline-ml.com/pmdarima/2.0.3>`_
 -------------------------------------------------
 
