@@ -81,7 +81,7 @@ jobs:
           # Runs tests and checks for a numpy regression by upgrading numpy and running tests again
           CIBW_TEST_COMMAND: >
             pytest --showlocals --durations=20 --pyargs pmdarima &&
-            pip install --upgrade scipy numpy &&
+            pip install --upgrade scipy 'numpy<2.0.0' &&
             pytest --showlocals --durations=20 --pyargs pmdarima
           # Avoid testing on emulated architectures
           CIBW_TEST_SKIP: "*-*linux_{aarch64,ppc64le,s390x} *-macosx_arm64"
