@@ -118,7 +118,7 @@ jobs:
     - run:
         name: Test install from sdist
         command: |
-          echo "0.0.0" > ~/pmdarima/pmdarima/VERSION
+          # echo "0.0.0" > ~/pmdarima/pmdarima/VERSION
 
           # we'll need packaging, numpy, and cython to build this. let install_requires do all the
           # rest of the work. We build with our lowest supported numpy version to make sure there is no regression
@@ -126,7 +126,8 @@ jobs:
           python setup.py sdist
 
           cd dist
-          pip install pmdarima-0.0.0.tar.gz
+          python setup.py sdist
+          pip install pmdarima-*.tar.gz
           python -c 'import pmdarima as pm; print(pm.__version__)'
 
   # --- Unit tests ---
