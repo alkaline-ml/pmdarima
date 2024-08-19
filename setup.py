@@ -54,7 +54,9 @@ PROJECT_URLS = {
 
 # import restricted version of pmdarima that does not need the compiled code
 import pmdarima
-VERSION = pmdarima.__version__  # will be 0.0.0 unless tagging
+
+
+VERSION = pmdarima.__version__
 
 # get the installation requirements:
 with open('requirements.txt') as req:

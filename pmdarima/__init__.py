@@ -24,11 +24,8 @@ import warnings as _warnings
 #
 # We only create a VERSION file in CI/CD on tagged commits.
 # For local development, or non-tagged commits, we will use 0.0.0
-try:
-    version_path = Path(__file__).parent / 'VERSION'
-    __version__ = version_path.read_text().strip()
-except FileNotFoundError:
-    __version__ = '0.0.0'
+
+__version__ = '2.0.4'
 
 try:
     # this var is injected in the setup build to enable
