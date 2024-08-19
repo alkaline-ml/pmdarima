@@ -126,7 +126,6 @@ jobs:
           python setup.py sdist
 
           cd dist
-          python setup.py sdist
           pip install pmdarima-*.tar.gz
           python -c 'import pmdarima as pm; print(pm.__version__)'
 
