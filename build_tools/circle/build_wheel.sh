@@ -16,7 +16,7 @@ function build_wheel {
     fi
 
     distutils_version=""
-    if [ "$pyver" > "3.12" ]; then
+    if [ "$pyver" = "3.12" ]; then
       distutils_version="local"
     else
       distutils_version="stdlib"
