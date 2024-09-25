@@ -323,6 +323,7 @@ def do_setup():
             from setuptools import setup
             print("Setting up with setuptools")
 
+            # Needs to be unset when building sdist
             os.environ.pop("SETUPTOOLS_USE_DISTUTILS", None)
 
             # TODO: distutils is removed in Python 3.12+, so this should probably be the default
