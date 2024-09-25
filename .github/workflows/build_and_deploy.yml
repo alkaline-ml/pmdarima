@@ -19,6 +19,7 @@ concurrency:
 jobs:
   build-and-deploy:
     strategy:
+      fail-fast: false
       matrix:
         python3-minor-version: [7, 8, 9, 10, 11, 12]
         # TODO: Figure out macos-14/macos-latest
@@ -73,7 +74,7 @@ jobs:
             pip install -r build_tools/build_requirements.txt &&
             pip install -r requirements.txt
           CIBW_BUILD: "${{ env.PYTHON_EXECUTABLE }}-*"
-          CIBW_ENVIRONMENT: CC=gcc
+          CIBW_ENVIRONMENT: CC=gcc SETUPTOOLS_USE_DISTUTILS=stdlib
           CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true
           CIBW_ENVIRONMENT_PASS_LINUX: GITHUB_REF
           # No support for pypy or musl
