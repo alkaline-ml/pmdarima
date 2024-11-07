@@ -224,7 +224,7 @@ sphinx_gallery_conf = {
 def setup(app):
     def adds(pth):
         print("Adding stylesheet: %s" % pth)
-        app.add_stylesheet(pth)
+        app.add_css_file(pth)
 
     adds('css/fields.css')  # for parameters, etc.
     adds('css/gitcontrib.css')  # for git contributors

@@ -76,8 +76,8 @@ def mock_acf_plot(resid, ax, lags):
 def test_mock_plot_diagnostics(model_type, model):
     model.fit(lynx)
 
-    with patch('statsmodels.graphics.utils.create_mpl_fig', MockMPLFigure),\
-            patch('statsmodels.graphics.gofplots.qqplot', mock_qqplot),\
+    with patch('statsmodels.graphics.utils.create_mpl_fig', MockMPLFigure), \
+            patch('statsmodels.graphics.gofplots.qqplot', mock_qqplot), \
             patch('statsmodels.graphics.tsaplots.plot_acf', mock_acf_plot):
 
         diag = model.plot_diagnostics(figsize=(10, 12))

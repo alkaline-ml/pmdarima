@@ -81,7 +81,7 @@ commands:
             -v `pwd`:/app \
             -w /app \
             --env-file vars.env \
-            python:3.7 \
+            python:3.9 \
             ./build_tools/circle/deploy.sh
 
 jobs:
@@ -94,8 +94,10 @@ jobs:
   # larger unit tests, and to avoid multiple setup steps that can slow the pipeline down
   test-sanity:
     docker:
-      - image: python:3.7
+      - image: python:3.9
     working_directory: ~/pmdarima
+    environment:
+      SETUPTOOLS_USE_DISTUTILS: stdlib
     steps:
     - checkout
     - run:
@@ -130,26 +132,6 @@ jobs:
           python -c 'import pmdarima as pm; print(pm.__version__)'
 
   # --- Unit tests ---
-  # These are all executed on `machine` executors, since they require DinD to build the whl
-  # files and perform the whl repair for manylinux support.
-  test-unit-cpython37:
-    machine:
-      image: ubuntu-2004:202111-02
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - build-test-and-persist:
-          pythonversion: "3.7"
-
-  test-unit-cpython38:
-    machine:
-      image: ubuntu-2004:202111-02
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - build-test-and-persist:
-          pythonversion: "3.8"
-
   test-unit-cpython39:
     machine:
       image: ubuntu-2004:202111-02
@@ -219,16 +201,6 @@ jobs:
   #
   # ############################################
 
-  deploy-cpython37-whl:
-    machine:
-      image: ubuntu-2004:202111-02
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - restore-whl-file:
-          key: "3.7"
-      - deploy-to-pypi
-
   deploy-cpython38-whl:
     machine:
       image: ubuntu-2004:202111-02
@@ -287,7 +259,7 @@ jobs:
   # GH_TOKEN (the personal Git token with pushes enabled)
   deploy-doc:
     docker:
-      - image: python:3.7
+      - image: python:3.9
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -306,10 +278,6 @@ workflows:
         # run on test and tag
         - test-sanity:
             filters: *test-filters
-        - test-unit-cpython37:
-            filters: *test-filters
-        - test-unit-cpython38:
-            filters: *test-filters
         - test-unit-cpython39:
             filters: *test-filters
         - test-unit-cpython310:
@@ -323,8 +291,6 @@ workflows:
         - testing-passed:
             requires:
                 - test-sanity
-                - test-unit-cpython37
-                - test-unit-cpython38
                 - test-unit-cpython39
                 - test-unit-cpython310
                 - test-unit-cpython311
@@ -338,16 +304,6 @@ workflows:
                 - build-doc
                 - testing-passed
             filters: *test-filters
-
-        - deploy-cpython37-whl:
-            filters: *deploy-filters
-            requires:
-                - deploy-doc
-
-        - deploy-cpython38-whl:
-            filters: *deploy-filters
-            requires:
-              - deploy-doc
 
         - deploy-cpython39-whl:
             filters: *deploy-filters
