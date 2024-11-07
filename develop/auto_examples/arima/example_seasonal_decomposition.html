@@ -1,122 +1,77 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Seasonal decomposition of your time-series &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Dataset loading" href="../datasets/example_load_data.html" />
+    <link rel="next" title="Datasets examples" href="../datasets/index.html" />
     <link rel="prev" title="Adding new observations to your model" href="example_add_new_samples.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#id1">General examples</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#arima-examples">ARIMA examples</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="example_persisting_a_model.html">Persisting an ARIMA model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_auto_arima.html">Fitting an auto_arima model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_add_new_samples.html">Adding new observations to your model</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Seasonal decomposition of your time-series</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#arima-examples">ARIMA examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#datasets-examples">Datasets examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#cross-validation-examples">Cross-validation examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#preprocessing-examples">Preprocessing examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#utils-examples">Utils examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#utils-examples">Utils examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">ARIMA examples</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="example_persisting_a_model.html">Persisting an ARIMA model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_auto_arima.html">Fitting an auto_arima model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_add_new_samples.html">Adding new observations to your model</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Seasonal decomposition of your time-series</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../datasets/index.html">Datasets examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_selection/index.html">Cross-validation examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/index.html">Preprocessing examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/index.html">Utils examples</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
@@ -124,85 +79,55 @@
 <li class="toctree-l1"><a class="reference internal" href="../../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../index.html">Examples</a> &raquo;</li>
-        
-      <li>Seasonal decomposition of your time-series</li>
-    
-    
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Examples</a></li>
+          <li class="breadcrumb-item"><a href="index.html">ARIMA examples</a></li>
+      <li class="breadcrumb-item active">Seasonal decomposition of your time-series</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../../_sources/auto_examples/arima/example_seasonal_decomposition.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="seasonal-decomposition-of-your-time-series">
-<span id="sphx-glr-auto-examples-arima-example-seasonal-decomposition-py"></span><h1>Seasonal decomposition of your time-series<a class="headerlink" href="#seasonal-decomposition-of-your-time-series" title="Permalink to this headline">¶</a></h1>
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-arima-example-seasonal-decomposition-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="seasonal-decomposition-of-your-time-series">
+<span id="sphx-glr-auto-examples-arima-example-seasonal-decomposition-py"></span><h1>Seasonal decomposition of your time-series<a class="headerlink" href="#seasonal-decomposition-of-your-time-series" title="Link to this heading"></a></h1>
 <p>This example demonstrates how we can use the <code class="docutils literal notranslate"><span class="pre">decompose</span></code> function to extract
 the trend, seasonal, and random components of the time series and then
 plot them all using the <code class="docutils literal notranslate"><span class="pre">decomposed_plot</span></code> function. We’ll be plotting both
 <code class="docutils literal notranslate"><span class="pre">additive</span></code> and <code class="docutils literal notranslate"><span class="pre">multiplicative</span></code> examples of seasonality. To see the R
 equivalent that inspired this example go <a class="reference external" href="https://anomaly.io/seasonal-trend-decomposition-in-r/index.html">here</a>.</p>
 <br/><ul class="sphx-glr-horizontal">
-<li><a class="first reference internal image-reference" href="../../_images/sphx_glr_example_seasonal_decomposition_001.png"><img alt="../../_images/sphx_glr_example_seasonal_decomposition_001.png" src="../../_images/sphx_glr_example_seasonal_decomposition_001.png" style="width: 282.0px; height: 282.0px;" /></a>
-</li>
-<li><a class="first reference internal image-reference" href="../../_images/sphx_glr_example_seasonal_decomposition_002.png"><img alt="../../_images/sphx_glr_example_seasonal_decomposition_002.png" src="../../_images/sphx_glr_example_seasonal_decomposition_002.png" style="width: 282.0px; height: 282.0px;" /></a>
-</li>
+<li><img src="../../_images/sphx_glr_example_seasonal_decomposition_001.png" srcset="../../_images/sphx_glr_example_seasonal_decomposition_001.png" alt="Ausbeer Seasonal Decomposition" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_example_seasonal_decomposition_002.png" srcset="../../_images/sphx_glr_example_seasonal_decomposition_002.png" alt="Airpassengers Seasonal Decomposition" class = "sphx-glr-multi-img"/></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Airpassengers Seasonal Decomposition&#39;)
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Charles Drotar &lt;drotarcharles@gmail.com&gt;</span>
 
@@ -244,13 +169,13 @@ equivalent that inspired this example go <a class="reference external" href="htt
 <span class="n">tail_index</span> <span class="o">=</span> <span class="mi">17</span><span class="o">*</span><span class="mi">4</span><span class="o">-</span><span class="mi">4</span>
 <span class="n">first_index</span> <span class="o">=</span> <span class="n">head_index</span> <span class="o">-</span> <span class="n">tail_index</span>
 <span class="n">last_index</span> <span class="o">=</span> <span class="n">head_index</span>
-<span class="n">ausbeer</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_ausbeer.html#pmdarima.datasets.load_ausbeer" title="View documentation for pmdarima.datasets.load_ausbeer"><span class="n">datasets</span><span class="o">.</span><span class="n">load_ausbeer</span></a><span class="p">()</span>
+<span class="n">ausbeer</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_ausbeer.html#pmdarima.datasets.load_ausbeer" title="pmdarima.datasets.load_ausbeer" class="sphx-glr-backref-module-pmdarima-datasets sphx-glr-backref-type-py-function"><span class="n">datasets</span><span class="o">.</span><span class="n">load_ausbeer</span></a><span class="p">()</span>
 <span class="n">timeserie_beer</span> <span class="o">=</span> <span class="n">ausbeer</span><span class="p">[</span><span class="n">first_index</span><span class="p">:</span><span class="n">last_index</span><span class="p">]</span>
 <span class="n">decomposed</span> <span class="o">=</span> <span class="n">arima</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">timeserie_beer</span><span class="p">,</span> <span class="s1">&#39;additive&#39;</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="c1"># Plot the decomposed signal of ausbeer as a subplot</span>
 
-<span class="n">axes</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.utils.decomposed_plot.html#pmdarima.utils.decomposed_plot" title="View documentation for pmdarima.utils.decomposed_plot"><span class="n">utils</span><span class="o">.</span><span class="n">decomposed_plot</span></a><span class="p">(</span><span class="n">decomposed</span><span class="p">,</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="n">figure_kwargs</span><span class="p">,</span>
+<span class="n">axes</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.utils.decomposed_plot.html#pmdarima.utils.decomposed_plot" title="pmdarima.utils.decomposed_plot" class="sphx-glr-backref-module-pmdarima-utils sphx-glr-backref-type-py-function"><span class="n">utils</span><span class="o">.</span><span class="n">decomposed_plot</span></a><span class="p">(</span><span class="n">decomposed</span><span class="p">,</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="n">figure_kwargs</span><span class="p">,</span>
                              <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Ausbeer Seasonal Decomposition&quot;</span><span class="p">)</span>
 
@@ -260,80 +185,60 @@ equivalent that inspired this example go <a class="reference external" href="htt
 <span class="c1">#</span>
 
 <span class="c1"># Decompose the airpassengers dataset into trend, seasonal and random parts.</span>
-<span class="n">decomposed</span> <span class="o">=</span> <span class="n">arima</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><a href="../../modules/generated/pmdarima.datasets.load_airpassengers.html#pmdarima.datasets.load_airpassengers" title="View documentation for pmdarima.datasets.load_airpassengers"><span class="n">datasets</span><span class="o">.</span><span class="n">load_airpassengers</span></a><span class="p">(),</span>
+<span class="n">decomposed</span> <span class="o">=</span> <span class="n">arima</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><a href="../../modules/generated/pmdarima.datasets.load_airpassengers.html#pmdarima.datasets.load_airpassengers" title="pmdarima.datasets.load_airpassengers" class="sphx-glr-backref-module-pmdarima-datasets sphx-glr-backref-type-py-function"><span class="n">datasets</span><span class="o">.</span><span class="n">load_airpassengers</span></a><span class="p">(),</span>
                              <span class="s1">&#39;multiplicative&#39;</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 
 <span class="c1"># Plot the decomposed signal of airpassengers as a subplot</span>
 
-<span class="n">axes</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.utils.decomposed_plot.html#pmdarima.utils.decomposed_plot" title="View documentation for pmdarima.utils.decomposed_plot"><span class="n">utils</span><span class="o">.</span><span class="n">decomposed_plot</span></a><span class="p">(</span><span class="n">decomposed</span><span class="p">,</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="n">figure_kwargs</span><span class="p">,</span>
+<span class="n">axes</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.utils.decomposed_plot.html#pmdarima.utils.decomposed_plot" title="pmdarima.utils.decomposed_plot" class="sphx-glr-backref-module-pmdarima-utils sphx-glr-backref-type-py-function"><span class="n">utils</span><span class="o">.</span><span class="n">decomposed_plot</span></a><span class="p">(</span><span class="n">decomposed</span><span class="p">,</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="n">figure_kwargs</span><span class="p">,</span>
                              <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Airpassengers Seasonal Decomposition&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.054 seconds)</p>
-<div class="sphx-glr-footer docutils container">
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_seasonal_decomposition.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_seasonal_decomposition.py</span></code></a></div>
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_seasonal_decomposition.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_seasonal_decomposition.ipynb</span></code></a></div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.400 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-arima-example-seasonal-decomposition-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/8fd5aaab2e5926261e3927784ce4e7e7/example_seasonal_decomposition.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_seasonal_decomposition.ipynb</span></code></a></p>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/ad996d7e6ee7767114fb676e999637b6/example_seasonal_decomposition.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_seasonal_decomposition.py</span></code></a></p>
 </div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/52b107fd120fc184d707aca1742b3085/example_seasonal_decomposition.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_seasonal_decomposition.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../datasets/example_load_data.html" class="btn btn-neutral float-right" title="Dataset loading" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="example_add_new_samples.html" class="btn btn-neutral float-left" title="Adding new observations to your model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="example_add_new_samples.html" class="btn btn-neutral float-left" title="Adding new observations to your model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../datasets/index.html" class="btn btn-neutral float-right" title="Datasets examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

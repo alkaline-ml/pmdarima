@@ -1,4 +1,4 @@
-:mod:`pmdarima.utils`.diff_inv
+﻿:mod:`pmdarima.utils`.diff_inv
 ===========================================
 
 .. currentmodule:: pmdarima.utils

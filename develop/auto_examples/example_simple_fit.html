@@ -1,54 +1,29 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simple auto_arima model &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -56,52 +31,25 @@
     <link rel="prev" title="Examples" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
@@ -122,125 +70,88 @@
 <li class="toctree-l1"><a class="reference internal" href="../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="index.html">Examples</a> &raquo;</li>
-        
-      <li>Simple auto_arima model</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Examples</a></li>
+      <li class="breadcrumb-item active">Simple auto_arima model</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/auto_examples/example_simple_fit.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="simple-auto-arima-model">
-<span id="sphx-glr-auto-examples-example-simple-fit-py"></span><h1>Simple auto_arima model<a class="headerlink" href="#simple-auto-arima-model" title="Permalink to this headline">¶</a></h1>
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-example-simple-fit-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="simple-auto-arima-model">
+<span id="sphx-glr-auto-examples-example-simple-fit-py"></span><h1>Simple auto_arima model<a class="headerlink" href="#simple-auto-arima-model" title="Link to this heading"></a></h1>
 <p>This is a simple example of how we can fit an ARIMA model in several lines
 without knowing anything about our data or optimal hyper parameters.</p>
-<br/><img alt="../_images/sphx_glr_example_simple_fit_001.png" class="align-center" src="../_images/sphx_glr_example_simple_fit_001.png" />
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Performing</span> <span class="n">stepwise</span> <span class="n">search</span> <span class="n">to</span> <span class="n">minimize</span> <span class="n">aic</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2915.873</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.00</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">3049.597</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.10</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2954.975</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.51</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2947.028</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.70</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">3047.612</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.09</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2940.108</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.81</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2915.651</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.10</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2986.348</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.12</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2915.275</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">3.47</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2918.411</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">4.50</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2925.080</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">4.70</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2911.330</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">4.39</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2911.555</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.71</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2914.196</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">4.10</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2912.289</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.40</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2920.327</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">3.20</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2928.273</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">4.60</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2912.939</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">4.60</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2954.804</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">2.90</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2914.414</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">4.80</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span> <span class="n">intercept</span>   <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2915.331</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">5.41</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2908.221</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">3.80</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2909.011</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.70</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2910.144</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">3.20</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2908.093</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.30</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2933.343</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">1.09</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2910.039</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">3.60</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2980.096</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.02</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2921.090</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">3.38</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2912.081</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">2.71</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2915.531</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.50</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2925.551</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.90</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2911.034</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.70</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2913.397</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.80</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2952.580</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.31</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2922.527</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.60</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2912.590</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.60</span> <span class="n">sec</span>
- <span class="n">ARIMA</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>             <span class="p">:</span> <span class="n">AIC</span><span class="o">=</span><span class="mf">2913.867</span><span class="p">,</span> <span class="n">Time</span><span class="o">=</span><span class="mf">0.79</span> <span class="n">sec</span>
+<br/><img src="../_images/sphx_glr_example_simple_fit_001.png" srcset="../_images/sphx_glr_example_simple_fit_001.png" alt="Actual test samples vs. forecasts" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Performing stepwise search to minimize aic
+ ARIMA(2,1,2)(1,0,1)[12] intercept   : AIC=2915.873, Time=1.11 sec
+ ARIMA(0,1,0)(0,0,0)[12] intercept   : AIC=3049.597, Time=0.09 sec
+ ARIMA(1,1,0)(1,0,0)[12] intercept   : AIC=2954.975, Time=0.50 sec
+ ARIMA(0,1,1)(0,0,1)[12] intercept   : AIC=2947.028, Time=0.50 sec
+ ARIMA(0,1,0)(0,0,0)[12]             : AIC=3047.612, Time=0.10 sec
+ ARIMA(2,1,2)(0,0,1)[12] intercept   : AIC=2940.108, Time=0.61 sec
+ ARIMA(2,1,2)(1,0,0)[12] intercept   : AIC=2915.651, Time=0.69 sec
+ ARIMA(2,1,2)(0,0,0)[12] intercept   : AIC=2986.348, Time=0.12 sec
+ ARIMA(2,1,2)(2,0,0)[12] intercept   : AIC=2915.275, Time=7.38 sec
+ ARIMA(2,1,2)(2,0,1)[12] intercept   : AIC=2918.411, Time=13.90 sec
+ ARIMA(1,1,2)(2,0,0)[12] intercept   : AIC=2925.080, Time=7.20 sec
+ ARIMA(2,1,1)(2,0,0)[12] intercept   : AIC=2911.330, Time=10.01 sec
+ ARIMA(2,1,1)(1,0,0)[12] intercept   : AIC=2911.555, Time=3.70 sec
+ ARIMA(2,1,1)(2,0,1)[12] intercept   : AIC=2914.196, Time=9.09 sec
+ ARIMA(2,1,1)(1,0,1)[12] intercept   : AIC=2912.289, Time=0.90 sec
+ ARIMA(1,1,1)(2,0,0)[12] intercept   : AIC=2920.327, Time=10.40 sec
+ ARIMA(2,1,0)(2,0,0)[12] intercept   : AIC=2928.273, Time=6.69 sec
+ ARIMA(3,1,1)(2,0,0)[12] intercept   : AIC=2912.939, Time=13.60 sec
+ ARIMA(1,1,0)(2,0,0)[12] intercept   : AIC=2954.804, Time=14.40 sec
+ ARIMA(3,1,0)(2,0,0)[12] intercept   : AIC=2914.414, Time=11.19 sec
+ ARIMA(3,1,2)(2,0,0)[12] intercept   : AIC=2915.331, Time=11.91 sec
+ ARIMA(2,1,1)(2,0,0)[12]             : AIC=2908.221, Time=6.10 sec
+ ARIMA(2,1,1)(1,0,0)[12]             : AIC=2909.011, Time=1.10 sec
+ ARIMA(2,1,1)(2,0,1)[12]             : AIC=2910.144, Time=6.60 sec
+ ARIMA(2,1,1)(1,0,1)[12]             : AIC=2908.093, Time=0.59 sec
+ ARIMA(2,1,1)(0,0,1)[12]             : AIC=2933.343, Time=0.40 sec
+ ARIMA(2,1,1)(1,0,2)[12]             : AIC=2910.039, Time=4.59 sec
+ ARIMA(2,1,1)(0,0,0)[12]             : AIC=2980.096, Time=0.03 sec
+ ARIMA(2,1,1)(0,0,2)[12]             : AIC=2921.090, Time=7.28 sec
+ ARIMA(2,1,1)(2,0,2)[12]             : AIC=2912.081, Time=5.50 sec
+ ARIMA(1,1,1)(1,0,1)[12]             : AIC=2915.531, Time=0.40 sec
+ ARIMA(2,1,0)(1,0,1)[12]             : AIC=2925.551, Time=0.41 sec
+ ARIMA(3,1,1)(1,0,1)[12]             : AIC=2911.034, Time=0.59 sec
+ ARIMA(2,1,2)(1,0,1)[12]             : AIC=2913.397, Time=0.60 sec
+ ARIMA(1,1,0)(1,0,1)[12]             : AIC=2952.580, Time=0.39 sec
+ ARIMA(1,1,2)(1,0,1)[12]             : AIC=2922.527, Time=0.50 sec
+ ARIMA(3,1,0)(1,0,1)[12]             : AIC=2912.590, Time=1.10 sec
+ ARIMA(3,1,2)(1,0,1)[12]             : AIC=2913.867, Time=1.40 sec
 
-<span class="n">Best</span> <span class="n">model</span><span class="p">:</span>  <span class="n">ARIMA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">12</span><span class="p">]</span>
-<span class="n">Total</span> <span class="n">fit</span> <span class="n">time</span><span class="p">:</span> <span class="mf">78.460</span> <span class="n">seconds</span>
+Best model:  ARIMA(2,1,1)(1,0,1)[12]
+Total fit time: 161.829 seconds
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
@@ -251,8 +162,8 @@ without knowing anything about our data or optimal hyper parameters.</p>
 
 <span class="c1"># #############################################################################</span>
 <span class="c1"># Load the data and split it into separate pieces</span>
-<span class="n">data</span> <span class="o">=</span> <a href="../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="View documentation for pmdarima.datasets.load_wineind"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
-<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <a href="../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="View documentation for pmdarima.model_selection.train_test_split"><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <a href="../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind" class="sphx-glr-backref-module-pmdarima-datasets sphx-glr-backref-type-py-function"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <a href="../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="pmdarima.model_selection.train_test_split" class="sphx-glr-backref-module-pmdarima-model_selection sphx-glr-backref-type-py-function"><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
 
 <span class="c1"># Fit a simple auto_arima model</span>
 <span class="n">arima</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -268,70 +179,50 @@ without knowing anything about our data or optimal hyper parameters.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 1 minutes  18.562 seconds)</p>
-<div class="sphx-glr-footer docutils container">
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/example_simple_fit.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_simple_fit.py</span></code></a></div>
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/example_simple_fit.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_simple_fit.ipynb</span></code></a></div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 42.034 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-example-simple-fit-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/ab1b7ba0889f1408280223e74a93b06e/example_simple_fit.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_simple_fit.ipynb</span></code></a></p>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/1af360ac6f3c247db4026e8359ffdfa7/example_simple_fit.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_simple_fit.py</span></code></a></p>
 </div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/b8bf7c0e78fb06c8f9bc89af3500c0ca/example_simple_fit.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_simple_fit.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="example_pipeline.html" class="btn btn-neutral float-right" title="Pipelines with auto_arima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_pipeline.html" class="btn btn-neutral float-right" title="Pipelines with auto_arima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-:mod:`pmdarima.datasets`.load_ausbeer
+﻿:mod:`pmdarima.datasets`.load_ausbeer
 ==================================================
 
 .. currentmodule:: pmdarima.datasets

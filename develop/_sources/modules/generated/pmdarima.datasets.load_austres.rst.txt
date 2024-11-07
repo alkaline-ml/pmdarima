@@ -1,4 +1,4 @@
-:mod:`pmdarima.datasets`.load_austres
+﻿:mod:`pmdarima.datasets`.load_austres
 ==================================================
 
 .. currentmodule:: pmdarima.datasets

@@ -1,4 +1,4 @@
-:mod:`pmdarima.datasets`.load_msft
+﻿:mod:`pmdarima.datasets`.load_msft
 ===============================================
 
 .. currentmodule:: pmdarima.datasets

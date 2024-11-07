@@ -1,4 +1,4 @@
-:mod:`pmdarima.utils`.if_has_delegate
+﻿:mod:`pmdarima.utils`.if_has_delegate
 ==================================================
 
 .. currentmodule:: pmdarima.utils

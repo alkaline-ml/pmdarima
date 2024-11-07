@@ -1,4 +1,4 @@
-:mod:`pmdarima.utils`.acf
+﻿:mod:`pmdarima.utils`.acf
 ======================================
 
 .. currentmodule:: pmdarima.utils

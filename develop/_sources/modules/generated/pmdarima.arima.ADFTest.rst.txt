@@ -1,4 +1,4 @@
-:mod:`pmdarima.arima`.ADFTest
+﻿:mod:`pmdarima.arima`.ADFTest
 ====================================
 
 .. currentmodule:: pmdarima.arima

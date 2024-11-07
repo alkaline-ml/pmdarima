@@ -1,105 +1,52 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.seasonality &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../../../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
@@ -108,67 +55,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
-      <li>pmdarima.arima.seasonality</li>
-    
-    
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pmdarima.arima.seasonality</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for pmdarima.arima.seasonality</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1">#</span>
@@ -201,8 +111,10 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CHTest&quot;</span><span class="p">,</span> <span class="s2">&quot;decompose&quot;</span><span class="p">,</span> <span class="s2">&quot;OCSBTest&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="decompose"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.decompose.html#pmdarima.arima.decompose">[docs]</a><span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="decompose">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.decompose.html#pmdarima.arima.decompose">[docs]</a>
+<span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decompose the time series into trend, seasonal, and random components.</span>
 
 <span class="sd">    Parameters</span>
@@ -327,8 +239,9 @@
     <span class="k">return</span> <span class="n">decomposed_tuple</span></div>
 
 
+
 <span class="k">class</span> <span class="nc">_SeasonalStationarityTest</span><span class="p">(</span><span class="n">_BaseStationarityTest</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Provides the base class for seasonal differencing tests such as the</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides the base class for seasonal differencing tests such as the</span>
 <span class="sd">    Canova-Hansen test and the Osborn-Chui-Smith-Birchenhall tests. These tests</span>
 <span class="sd">    are used to determine the seasonal differencing term for a time-series.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -340,7 +253,7 @@
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">estimate_seasonal_differencing_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Estimate the seasonal differencing term.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Estimate the seasonal differencing term.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -349,8 +262,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="CHTest"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.CHTest.html#pmdarima.arima.CHTest">[docs]</a><span class="k">class</span> <span class="nc">CHTest</span><span class="p">(</span><span class="n">_SeasonalStationarityTest</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Conduct a CH test for seasonality.</span>
+<div class="viewcode-block" id="CHTest">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.CHTest.html#pmdarima.arima.CHTest">[docs]</a>
+<span class="k">class</span> <span class="nc">CHTest</span><span class="p">(</span><span class="n">_SeasonalStationarityTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conduct a CH test for seasonality.</span>
 
 <span class="sd">    The Canova-Hansen test for seasonal differences. Canova and Hansen</span>
 <span class="sd">    (1995) proposed a test statistic for the null hypothesis that the seasonal</span>
@@ -396,8 +311,11 @@
         <span class="mf">2.7391007</span><span class="p">,</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="CHTest.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.CHTest.html#pmdarima.arima.CHTest.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+<div class="viewcode-block" id="CHTest.__init__">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.CHTest.html#pmdarima.arima.CHTest.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CHTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">)</span></div>
+
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_sd_test</span><span class="p">(</span><span class="n">wts</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
@@ -522,8 +440,8 @@
             <span class="k">return</span> <span class="mf">65.44445</span>
         <span class="k">return</span> <span class="mf">0.269</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span><span class="o">**</span><span class="mf">0.928</span><span class="p">)</span>
 
-<div class="viewcode-block" id="CHTest.estimate_seasonal_differencing_term"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.CHTest.html#pmdarima.arima.CHTest.estimate_seasonal_differencing_term">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_seasonal_differencing_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Estimate the seasonal differencing term.</span>
+    <span class="k">def</span> <span class="nf">estimate_seasonal_differencing_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Estimate the seasonal differencing term.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -559,11 +477,14 @@
 
         <span class="n">chstat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sd_test</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
         <span class="n">crit_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_ch_crit_val</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">chstat</span> <span class="o">&gt;</span> <span class="n">crit_val</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">chstat</span> <span class="o">&gt;</span> <span class="n">crit_val</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="OCSBTest"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.OCSBTest.html#pmdarima.arima.OCSBTest">[docs]</a><span class="k">class</span> <span class="nc">OCSBTest</span><span class="p">(</span><span class="n">_SeasonalStationarityTest</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Perform an OCSB test of seasonality.</span>
+
+<div class="viewcode-block" id="OCSBTest">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.OCSBTest.html#pmdarima.arima.OCSBTest">[docs]</a>
+<span class="k">class</span> <span class="nc">OCSBTest</span><span class="p">(</span><span class="n">_SeasonalStationarityTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform an OCSB test of seasonality.</span>
 
 <span class="sd">    Compute the Osborn, Chui, Smith, and Birchenhall (OCSB) test for an input</span>
 <span class="sd">    time series to determine whether it needs seasonal differencing. The</span>
@@ -607,15 +528,18 @@
         <span class="s2">&quot;aicc&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">fit</span><span class="p">:</span> <span class="n">_aicc</span><span class="p">(</span><span class="n">fit</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">nobs</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
     <span class="p">}</span>
 
-<div class="viewcode-block" id="OCSBTest.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.OCSBTest.html#pmdarima.arima.OCSBTest.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lag_method</span><span class="o">=</span><span class="s2">&quot;aic&quot;</span><span class="p">,</span> <span class="n">max_lag</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<div class="viewcode-block" id="OCSBTest.__init__">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.OCSBTest.html#pmdarima.arima.OCSBTest.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lag_method</span><span class="o">=</span><span class="s2">&quot;aic&quot;</span><span class="p">,</span> <span class="n">max_lag</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">OCSBTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lag_method</span> <span class="o">=</span> <span class="n">lag_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_lag</span> <span class="o">=</span> <span class="n">max_lag</span></div>
 
+
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_calc_ocsb_crit_val</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute the OCSB critical value&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the OCSB critical value&quot;&quot;&quot;</span>
         <span class="c1"># See:</span>
         <span class="c1"># https://github.com/robjhyndman/forecast/blob/</span>
         <span class="c1"># 8c6b63b1274b064c84d7514838b26dd0acb98aee/R/unitRoot.R#L409</span>
@@ -630,7 +554,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_do_lag</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">omit_na</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Perform the TS lagging&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the TS lagging&quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">lag</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -647,7 +571,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_gen_lags</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">max_lag</span><span class="p">,</span> <span class="n">omit_na</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create the lagged exogenous array used to fit the linear model&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the lagged exogenous array used to fit the linear model&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">max_lag</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
@@ -656,7 +580,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_fit_ocsb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">max_lag</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Fit the linear model used to compute the test statistic&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the linear model used to compute the test statistic&quot;&quot;&quot;</span>
         <span class="n">y_first_order_diff</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
 
         <span class="c1"># if there are no more samples, we have to bail</span>
@@ -769,8 +693,8 @@
         <span class="n">tvals</span> <span class="o">=</span> <span class="n">regression</span><span class="o">.</span><span class="n">tvalues</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>  <span class="c1"># len 2</span>
         <span class="k">return</span> <span class="n">tvals</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># just z5, like R does it</span>
 
-<div class="viewcode-block" id="OCSBTest.estimate_seasonal_differencing_term"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.OCSBTest.html#pmdarima.arima.OCSBTest.estimate_seasonal_differencing_term">[docs]</a>    <span class="k">def</span> <span class="nf">estimate_seasonal_differencing_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Estimate the seasonal differencing term.</span>
+    <span class="k">def</span> <span class="nf">estimate_seasonal_differencing_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Estimate the seasonal differencing term.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -794,53 +718,35 @@
         <span class="c1"># Get the critical value for m</span>
         <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_test_statistic</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">crit_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_ocsb_crit_val</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">stat</span> <span class="o">&gt;</span> <span class="n">crit_val</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">stat</span> <span class="o">&gt;</span> <span class="n">crit_val</span><span class="p">)</span></div>
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

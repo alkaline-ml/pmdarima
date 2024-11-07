@@ -1,4 +1,4 @@
-:mod:`pmdarima.arima`.PPTest
+﻿:mod:`pmdarima.arima`.PPTest
 ===================================
 
 .. currentmodule:: pmdarima.arima

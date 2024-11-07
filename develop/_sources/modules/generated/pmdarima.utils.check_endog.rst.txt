@@ -1,4 +1,4 @@
-:mod:`pmdarima.utils`.check_endog
+﻿:mod:`pmdarima.utils`.check_endog
 ==============================================
 
 .. currentmodule:: pmdarima.utils

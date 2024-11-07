@@ -1,4 +1,4 @@
-:mod:`pmdarima.metrics`.smape
+﻿:mod:`pmdarima.metrics`.smape
 ==========================================
 
 .. currentmodule:: pmdarima.metrics

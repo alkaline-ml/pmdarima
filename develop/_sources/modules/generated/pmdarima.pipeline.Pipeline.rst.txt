@@ -1,4 +1,4 @@
-:mod:`pmdarima.pipeline`.Pipeline
+﻿:mod:`pmdarima.pipeline`.Pipeline
 ========================================
 
 .. currentmodule:: pmdarima.pipeline

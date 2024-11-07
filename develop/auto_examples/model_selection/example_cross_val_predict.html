@@ -1,120 +1,75 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cross-validation predictions &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Cross-validating your time series models" href="example_cross_validation.html" />
-    <link rel="prev" title="Dataset loading" href="../datasets/example_load_data.html" /> 
+    <link rel="prev" title="Cross-validation examples" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#id1">General examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#arima-examples">ARIMA examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#datasets-examples">Datasets examples</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#cross-validation-examples">Cross-validation examples</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Cross-validation predictions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_cross_validation.html">Cross-validating your time series models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#cross-validation-examples">Cross-validation examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#preprocessing-examples">Preprocessing examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#utils-examples">Utils examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../arima/index.html">ARIMA examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../datasets/index.html">Datasets examples</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Cross-validation examples</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Cross-validation predictions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_cross_validation.html">Cross-validating your time series models</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#preprocessing-examples">Preprocessing examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#utils-examples">Utils examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/index.html">Preprocessing examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/index.html">Utils examples</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
@@ -122,93 +77,57 @@
 <li class="toctree-l1"><a class="reference internal" href="../../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../index.html">Examples</a> &raquo;</li>
-        
-      <li>Cross-validation predictions</li>
-    
-    
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Examples</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Cross-validation examples</a></li>
+      <li class="breadcrumb-item active">Cross-validation predictions</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../../_sources/auto_examples/model_selection/example_cross_val_predict.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="cross-validation-predictions">
-<span id="sphx-glr-auto-examples-model-selection-example-cross-val-predict-py"></span><h1>Cross-validation predictions<a class="headerlink" href="#cross-validation-predictions" title="Permalink to this headline">¶</a></h1>
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-model-selection-example-cross-val-predict-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="cross-validation-predictions">
+<span id="sphx-glr-auto-examples-model-selection-example-cross-val-predict-py"></span><h1>Cross-validation predictions<a class="headerlink" href="#cross-validation-predictions" title="Link to this heading"></a></h1>
 <p>In addition to computing cross-validation scores, you can use cross-validation
 to produce predictions. Unlike traditional cross-validation, where folds are
 independent of one another, time-series folds may overlap (particularly in a
 sliding window). To account for this, folds that forecast the same time step
 average their forecasts using either a “mean” or “median” (tunable).</p>
-<br/><img alt="../../_images/sphx_glr_example_cross_val_predict_001.png" class="align-center" src="../../_images/sphx_glr_example_cross_val_predict_001.png" />
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pmdarima</span> <span class="n">version</span><span class="p">:</span> <span class="mf">0.0</span><span class="o">.</span><span class="mi">0</span>
-<span class="p">[</span><span class="n">CV</span><span class="p">]</span> <span class="n">fold</span><span class="o">=</span><span class="mi">0</span> <span class="o">..........................................................</span>
-<span class="p">[</span><span class="n">CV</span><span class="p">]</span> <span class="n">fold</span><span class="o">=</span><span class="mi">1</span> <span class="o">..........................................................</span>
-<span class="p">[</span><span class="n">CV</span><span class="p">]</span> <span class="n">fold</span><span class="o">=</span><span class="mi">2</span> <span class="o">..........................................................</span>
-<span class="p">[</span><span class="n">CV</span><span class="p">]</span> <span class="n">fold</span><span class="o">=</span><span class="mi">3</span> <span class="o">..........................................................</span>
-<span class="p">[</span><span class="n">CV</span><span class="p">]</span> <span class="n">fold</span><span class="o">=</span><span class="mi">4</span> <span class="o">..........................................................</span>
-<span class="p">[</span><span class="n">CV</span><span class="p">]</span> <span class="n">fold</span><span class="o">=</span><span class="mi">5</span> <span class="o">..........................................................</span>
+<br/><img src="../../_images/sphx_glr_example_cross_val_predict_001.png" srcset="../../_images/sphx_glr_example_cross_val_predict_001.png" alt="Cross-validated wineind forecasts" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>pmdarima version: 0.0.0
+[CV] fold=0 ..........................................................
+[CV] fold=1 ..........................................................
+[CV] fold=2 ..........................................................
+[CV] fold=3 ..........................................................
+[CV] fold=4 ..........................................................
+[CV] fold=5 ..........................................................
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
@@ -220,13 +139,13 @@ average their forecasts using either a “mean” or “median” (tunable).</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pmdarima version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pm</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 
 <span class="c1"># Load the data and split it into separate pieces</span>
-<span class="n">y</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="View documentation for pmdarima.datasets.load_wineind"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind" class="sphx-glr-backref-module-pmdarima-datasets sphx-glr-backref-type-py-function"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
 <span class="n">est</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">ARIMA</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
                <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
                <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">cv</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.SlidingWindowForecastCV.html#pmdarima.model_selection.SlidingWindowForecastCV" title="View documentation for pmdarima.model_selection.SlidingWindowForecastCV"><span class="n">model_selection</span><span class="o">.</span><span class="n">SlidingWindowForecastCV</span></a><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">predictions</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.cross_val_predict.html#pmdarima.model_selection.cross_val_predict" title="View documentation for pmdarima.model_selection.cross_val_predict"><span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_predict</span></a><span class="p">(</span>
-    <span class="n">est</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">averaging</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)</span>
+<a href="../../modules/generated/pmdarima.model_selection.SlidingWindowForecastCV.html#pmdarima.model_selection.SlidingWindowForecastCV" title="pmdarima.model_selection.SlidingWindowForecastCV" class="sphx-glr-backref-module-pmdarima-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cv</span></a> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.SlidingWindowForecastCV.html#pmdarima.model_selection.SlidingWindowForecastCV" title="pmdarima.model_selection.SlidingWindowForecastCV" class="sphx-glr-backref-module-pmdarima-model_selection sphx-glr-backref-type-py-class"><span class="n">model_selection</span><span class="o">.</span><span class="n">SlidingWindowForecastCV</span></a><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">predictions</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.cross_val_predict.html#pmdarima.model_selection.cross_val_predict" title="pmdarima.model_selection.cross_val_predict" class="sphx-glr-backref-module-pmdarima-model_selection sphx-glr-backref-type-py-function"><span class="n">model_selection</span><span class="o">.</span><span class="n">cross_val_predict</span></a><span class="p">(</span>
+    <span class="n">est</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <a href="../../modules/generated/pmdarima.model_selection.SlidingWindowForecastCV.html#pmdarima.model_selection.SlidingWindowForecastCV" title="pmdarima.model_selection.SlidingWindowForecastCV" class="sphx-glr-backref-module-pmdarima-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cv</span></a><span class="o">=</span><a href="../../modules/generated/pmdarima.model_selection.SlidingWindowForecastCV.html#pmdarima.model_selection.SlidingWindowForecastCV" title="pmdarima.model_selection.SlidingWindowForecastCV" class="sphx-glr-backref-module-pmdarima-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cv</span></a><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">averaging</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)</span>
 
 <span class="c1"># plot the predictions over the original series</span>
 <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -238,70 +157,50 @@ average their forecasts using either a “mean” or “median” (tunable).</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  29.441 seconds)</p>
-<div class="sphx-glr-footer docutils container">
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_cross_val_predict.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_cross_val_predict.py</span></code></a></div>
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_cross_val_predict.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_cross_val_predict.ipynb</span></code></a></div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 20.112 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-model-selection-example-cross-val-predict-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/478a3cf7751d1411285b78abe31f8193/example_cross_val_predict.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_cross_val_predict.ipynb</span></code></a></p>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/4a215a500b0ee426f4947a5c8937c839/example_cross_val_predict.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_cross_val_predict.py</span></code></a></p>
 </div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/fbc020b953395ab7458e0041d785ae56/example_cross_val_predict.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_cross_val_predict.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="example_cross_validation.html" class="btn btn-neutral float-right" title="Cross-validating your time series models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../datasets/example_load_data.html" class="btn btn-neutral float-left" title="Dataset loading" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Cross-validation examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_cross_validation.html" class="btn btn-neutral float-right" title="Cross-validating your time series models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

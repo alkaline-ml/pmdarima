@@ -1,4 +1,4 @@
-:mod:`pmdarima.model_selection`.train_test_split
+﻿:mod:`pmdarima.model_selection`.train_test_split
 =============================================================
 
 .. currentmodule:: pmdarima.model_selection

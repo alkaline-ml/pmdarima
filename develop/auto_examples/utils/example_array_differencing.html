@@ -1,54 +1,29 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Array differencing &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -56,52 +31,25 @@
     <link rel="prev" title="Displaying key timeseries statistics" href="example_tsdisplay.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
@@ -111,9 +59,16 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#cross-validation-examples">Cross-validation examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#preprocessing-examples">Preprocessing examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#utils-examples">Utils examples</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="example_array_concatenation.html">Array concatenation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_tsdisplay.html">Displaying key timeseries statistics</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Array differencing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../arima/index.html">ARIMA examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../datasets/index.html">Datasets examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_selection/index.html">Cross-validation examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/index.html">Preprocessing examples</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Utils examples</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="example_array_concatenation.html">Array concatenation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_tsdisplay.html">Displaying key timeseries statistics</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Array differencing</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -123,85 +78,50 @@
 <li class="toctree-l1"><a class="reference internal" href="../../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../index.html">Examples</a> &raquo;</li>
-        
-      <li>Array differencing</li>
-    
-    
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Examples</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Utils examples</a></li>
+      <li class="breadcrumb-item active">Array differencing</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../../_sources/auto_examples/utils/example_array_differencing.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="array-differencing">
-<span id="sphx-glr-auto-examples-utils-example-array-differencing-py"></span><h1>Array differencing<a class="headerlink" href="#array-differencing" title="Permalink to this headline">¶</a></h1>
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-utils-example-array-differencing-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="array-differencing">
+<span id="sphx-glr-auto-examples-utils-example-array-differencing-py"></span><h1>Array differencing<a class="headerlink" href="#array-differencing" title="Link to this heading"></a></h1>
 <p>In this example, we demonstrate pyramid’s array differencing, and how it’s used
 in conjunction with the <code class="docutils literal notranslate"><span class="pre">d</span></code> term to lag a time series.</p>
-<br/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">6.</span> <span class="o">-</span><span class="mf">2.</span>  <span class="mf">7.</span> <span class="mf">25.</span><span class="p">]</span>
-<span class="p">[</span> <span class="mf">4.</span>  <span class="mf">9.</span> <span class="mf">18.</span><span class="p">]</span>
-<span class="p">[</span><span class="o">-</span><span class="mf">8.</span>  <span class="mf">5.</span> <span class="mf">32.</span><span class="p">]</span>
+<br/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[-6. -2.  7. 25.]
+[ 4.  9. 18.]
+[-8.  5. 32.]
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
@@ -209,7 +129,7 @@ in conjunction with the <code class="docutils literal notranslate"><span class="
 
 <span class="c1"># Build an array and show first order differencing results</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
-<span class="n">lag_1</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="View documentation for pmdarima.utils.array.diff"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">lag_1</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="pmdarima.utils.diff" class="sphx-glr-backref-module-pmdarima-utils sphx-glr-backref-type-py-function"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># The result will be the same as: x[1:] - x[:-1]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">lag_1</span><span class="p">)</span>  <span class="c1"># [-6., -2., 7., 25.]</span>
@@ -218,80 +138,60 @@ in conjunction with the <code class="docutils literal notranslate"><span class="
 <span class="c1"># it performs the same differencing as above TWICE. Lag, therefore, controls</span>
 <span class="c1"># the number of steps backward the ts looks when it differences, and the</span>
 <span class="c1"># `differences` parameter controls how many times to repeat.</span>
-<span class="nb">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="View documentation for pmdarima.utils.array.diff"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># [4., 9., 18.]</span>
+<span class="nb">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="pmdarima.utils.diff" class="sphx-glr-backref-module-pmdarima-utils sphx-glr-backref-type-py-function"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># [4., 9., 18.]</span>
 
 <span class="c1"># Conversely, when we set lag to 2, the array looks two steps back for its</span>
 <span class="c1"># differencing operation (only one).</span>
-<span class="nb">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="View documentation for pmdarima.utils.array.diff"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># [-8., 5., 32.]</span>
+<span class="nb">print</span><span class="p">(</span><a href="../../modules/generated/pmdarima.utils.diff.html#pmdarima.utils.diff" title="pmdarima.utils.diff" class="sphx-glr-backref-module-pmdarima-utils sphx-glr-backref-type-py-function"><span class="n">array</span><span class="o">.</span><span class="n">diff</span></a><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># [-8., 5., 32.]</span>
 
 <span class="c1"># The lag parameter is controlled by `m`, which is the seasonal periodicity of</span>
 <span class="c1"># a time series. If your series is non-seasonal, lag will typically be 1.</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.001 seconds)</p>
-<div class="sphx-glr-footer docutils container">
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_array_differencing.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_array_differencing.py</span></code></a></div>
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_array_differencing.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_array_differencing.ipynb</span></code></a></div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.002 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-utils-example-array-differencing-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/61e043bb43975056cacd74a9a9d4a710/example_array_differencing.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_array_differencing.ipynb</span></code></a></p>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/59012ae3c8bcc105cfe01ab6f303318d/example_array_differencing.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_array_differencing.py</span></code></a></p>
 </div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/9daf350a64c909323d01a3460946bb1b/example_array_differencing.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_array_differencing.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../../user_guide.html" class="btn btn-neutral float-right" title="User Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="example_tsdisplay.html" class="btn btn-neutral float-left" title="Displaying key timeseries statistics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="example_tsdisplay.html" class="btn btn-neutral float-left" title="Displaying key timeseries statistics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../user_guide.html" class="btn btn-neutral float-right" title="User Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-:mod:`pmdarima.arima`.AutoARIMA
+﻿:mod:`pmdarima.arima`.AutoARIMA
 ======================================
 
 .. currentmodule:: pmdarima.arima

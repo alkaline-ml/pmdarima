@@ -1,54 +1,30 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stock market prediction &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -56,52 +32,25 @@
     <link rel="prev" title="10. Use cases" href="../usecases.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a></li>
@@ -138,81 +87,40 @@
 <li class="toctree-l1"><a class="reference internal" href="../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../user_guide.html">User Guide</a> &raquo;</li>
-        
-          <li><a href="../usecases.html">10. Use cases</a> &raquo;</li>
-        
-      <li>Stock market prediction</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../user_guide.html">User Guide</a></li>
+          <li class="breadcrumb-item"><a href="../usecases.html"><span class="section-number">10. </span>Use cases</a></li>
+      <li class="breadcrumb-item active">Stock market prediction</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/usecases/stocks.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="stock-market-prediction">
-<span id="stock-examples"></span><h1>10.1. Stock Market Prediction<a class="headerlink" href="#stock-market-prediction" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="stock-market-prediction">
+<span id="stock-examples"></span><h1><span class="section-number">10.1. </span>Stock Market Prediction<a class="headerlink" href="#stock-market-prediction" title="Link to this heading"></a></h1>
 <p>A recent post on <a class="reference external" href="https://towardsdatascience.com/stock-market-analysis-using-arima-8731ded2447a">Towards Data Science</a>
 (TDS) demonstrated the use of ARIMA models to predict stock market data with raw statsmodels.
 This post addresses the same problem using <code class="docutils literal notranslate"><span class="pre">pmdarima</span></code>’s auto-ARIMA, and ends up achieving a
 different result with an even lower error rate.</p>
-<div class="section" id="imports-data-loading">
-<h2>10.1.1. Imports &amp; data loading<a class="headerlink" href="#imports-data-loading" title="Permalink to this headline">¶</a></h2>
+<section id="imports-data-loading">
+<h2><span class="section-number">10.1.1. </span>Imports &amp; data loading<a class="headerlink" href="#imports-data-loading" title="Link to this heading"></a></h2>
 <p>For this example, all we’ll need is Numpy, Pandas and pmdarima. Matplotlib is optional,
 but highly encouraged in order to qualitatively validate the results of the model fit.
 To run this example, you’ll need pmdarima version 1.5.2 or greater. If you’re
@@ -238,95 +146,86 @@ the package:</p>
 <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
-<table border="1" class="docutils">
-<colgroup>
-<col width="18%" />
-<col width="13%" />
-<col width="13%" />
-<col width="13%" />
-<col width="13%" />
-<col width="18%" />
-<col width="13%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>Date</td>
-<td>Open</td>
-<td>High</td>
-<td>Low</td>
-<td>Close</td>
-<td>Volume</td>
-<td>OpenInt</td>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Date</p></td>
+<td><p>Open</p></td>
+<td><p>High</p></td>
+<td><p>Low</p></td>
+<td><p>Close</p></td>
+<td><p>Volume</p></td>
+<td><p>OpenInt</p></td>
 </tr>
-<tr class="row-even"><td>1986-03-13</td>
-<td>0.06720</td>
-<td>0.07533</td>
-<td>0.06720</td>
-<td>0.07533</td>
-<td>1371330506</td>
-<td>0</td>
+<tr class="row-even"><td><p>1986-03-13</p></td>
+<td><p>0.06720</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.06720</p></td>
+<td><p>0.07533</p></td>
+<td><p>1371330506</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td>1986-03-14</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>409569463</td>
-<td>0</td>
+<tr class="row-odd"><td><p>1986-03-14</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>409569463</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-even"><td>1986-03-17</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>176995245</td>
-<td>0</td>
+<tr class="row-even"><td><p>1986-03-17</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>176995245</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td>1986-03-18</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>90067008</td>
-<td>0</td>
+<tr class="row-odd"><td><p>1986-03-18</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>90067008</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-even"><td>1986-03-19</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>0.07533</td>
-<td>63655515</td>
-<td>0</td>
+<tr class="row-even"><td><p>1986-03-19</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>0.07533</p></td>
+<td><p>63655515</p></td>
+<td><p>0</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="data-splitting">
-<h2>10.1.2. Data splitting<a class="headerlink" href="#data-splitting" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="data-splitting">
+<h2><span class="section-number">10.1.2. </span>Data splitting<a class="headerlink" href="#data-splitting" title="Link to this heading"></a></h2>
 <p>As with all statistical and ML modeling, we need to make sure we’ve split our data so
 we can evaluate model performance on a hold-out set. However, unlike other traditional
 supervised learning, time series models intrinsically introduce endogenous temporality,
-meaning that the values at any given point <span class="math notranslate">\(y_{t}\)</span> in our time series likely have some
-effect on some future value, <span class="math notranslate">\(y_{t+n}\)</span>. Therefore, we cannot simply split our data
+meaning that the values at any given point <span class="math notranslate nohighlight">\(y_{t}\)</span> in our time series likely have some
+effect on some future value, <span class="math notranslate nohighlight">\(y_{t+n}\)</span>. Therefore, we cannot simply split our data
 randomly; we must make a clean split in our time series (and exogenous variables, if present).</p>
-<p>As in the TDS example, we’ll use <span class="math notranslate">\(0.8 * dataSize\)</span> as our training sample.</p>
-</div>
-<div class="section" id="pre-modeling-analysis">
-<h2>10.1.3. Pre-modeling analysis<a class="headerlink" href="#pre-modeling-analysis" title="Permalink to this headline">¶</a></h2>
+<p>As in the TDS example, we’ll use <span class="math notranslate nohighlight">\(0.8 * dataSize\)</span> as our training sample.</p>
+</section>
+<section id="pre-modeling-analysis">
+<h2><span class="section-number">10.1.3. </span>Pre-modeling analysis<a class="headerlink" href="#pre-modeling-analysis" title="Link to this heading"></a></h2>
 <p>As you may know (if not, venture over to <a class="reference internal" href="../tips_and_tricks.html#tips-and-tricks"><span class="std std-ref">Tips to using auto_arima</span></a> before continuing),
 an ARIMA model has 3 core hyper-parameters, known as “order”:</p>
 <ul class="simple">
-<li><span class="math notranslate">\(p\)</span>: The order of the auto-regressive (AR) model (i.e., the number of lag observations)</li>
-<li><span class="math notranslate">\(d\)</span>: The degree of differencing.</li>
-<li><span class="math notranslate">\(q\)</span>: The order of the moving average (MA) model. This is essentially the size of the “window” function over your time series data.</li>
+<li><p><span class="math notranslate nohighlight">\(p\)</span>: The order of the auto-regressive (AR) model (i.e., the number of lag observations)</p></li>
+<li><p><span class="math notranslate nohighlight">\(d\)</span>: The degree of differencing.</p></li>
+<li><p><span class="math notranslate nohighlight">\(q\)</span>: The order of the moving average (MA) model. This is essentially the size of the “window” function over your time series data.</p></li>
 </ul>
 <p>Part of the science behind the auto-arima approach is intelligently finding the proper
 combination of <code class="docutils literal notranslate"><span class="pre">p,</span> <span class="pre">d,</span> <span class="pre">q</span></code> such that you achieve the best fit. The TDS article took the
-approach of fixing the <span class="math notranslate">\(p\)</span> parameter at 5 after examining auto-correlations with
+approach of fixing the <span class="math notranslate nohighlight">\(p\)</span> parameter at 5 after examining auto-correlations with
 lag plots. A lag plot can provide clues about the underlying structure of your
 data <a class="reference external" href="https://www.statisticshowto.datasciencecentral.com/lag-plot/">[1]</a>:</p>
 <ul class="simple">
-<li>A linear shape to the plot suggests that an autoregressive model is probably a better choice.</li>
-<li>An elliptical plot suggests that the data comes from a single-cycle sinusoidal model.</li>
+<li><p>A linear shape to the plot suggests that an autoregressive model is probably a better choice.</p></li>
+<li><p>An elliptical plot suggests that the data comes from a single-cycle sinusoidal model.</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pandas.plotting</span> <span class="kn">import</span> <span class="n">lag_plot</span>
 
@@ -352,21 +251,22 @@ data <a class="reference external" href="https://www.statisticshowto.datascience
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/stock_lag_plot.png"><img alt="Lag plot" class="align-center" src="../_images/stock_lag_plot.png" style="width: 432.59999999999997px; height: 558.6px;" /></a>
+<a class="reference internal image-reference" href="../_images/stock_lag_plot.png"><img alt="Lag plot" class="align-center" src="../_images/stock_lag_plot.png" style="width: 432.59999999999997px; height: 558.6px;" />
+</a>
 <p>As you can see, all the lags look fairly linear, so it’s a good indicator that
 an auto-regressive model is a good choice. But since we don’t want to allow simple
 visual bias to impact our decision here, we’ll allow the <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> to select
 the proper lag term for us.</p>
-<div class="section" id="estimating-the-differencing-term">
-<h3>10.1.3.1. Estimating the differencing term<a class="headerlink" href="#estimating-the-differencing-term" title="Permalink to this headline">¶</a></h3>
-<p>The TDS article selected <span class="math notranslate">\(d=1\)</span> as the differencing term. But how did they
+<section id="estimating-the-differencing-term">
+<h3><span class="section-number">10.1.3.1. </span>Estimating the differencing term<a class="headerlink" href="#estimating-the-differencing-term" title="Link to this heading"></a></h3>
+<p>The TDS article selected <span class="math notranslate nohighlight">\(d=1\)</span> as the differencing term. But how did they
 make that choice? With pmdarima, we can run several differencing tests against the
 time series to select the best number of differences such that the time series will
 be stationary.</p>
 <p>Here, we’ll use the <a class="reference external" href="https://en.wikipedia.org/wiki/KPSS_test">KPSS test</a> and
 <a class="reference external" href="https://en.wikipedia.org/wiki/Augmented_Dickey–Fuller_test">ADF test</a>, selecting
 the maximum value between the two to be conservative. Fortunately, in this case, both
-tests indicated that <span class="math notranslate">\(d=1\)</span> was the best answer, but in the case where they disagreed,
+tests indicated that <span class="math notranslate nohighlight">\(d=1\)</span> was the best answer, but in the case where they disagreed,
 we could try both or allow <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> to auto-select the <code class="docutils literal notranslate"><span class="pre">d</span></code> term.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.arima</span> <span class="kn">import</span> <span class="n">ndiffs</span>
 
@@ -378,11 +278,11 @@ we could try both or allow <code class="docutils literal notranslate"><span clas
 <span class="c1"># Estimated differencing term: 1</span>
 </pre></div>
 </div>
-<p>Therefore, we will use <span class="math notranslate">\(d=1\)</span>.</p>
-</div>
-</div>
-<div class="section" id="fitting-our-model">
-<h2>10.1.4. Fitting our model<a class="headerlink" href="#fitting-our-model" title="Permalink to this headline">¶</a></h2>
+<p>Therefore, we will use <span class="math notranslate nohighlight">\(d=1\)</span>.</p>
+</section>
+</section>
+<section id="fitting-our-model">
+<h2><span class="section-number">10.1.4. </span>Fitting our model<a class="headerlink" href="#fitting-our-model" title="Link to this heading"></a></h2>
 <p>Now it’s time to let the <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> method do its magic:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">auto</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">n_diffs</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stepwise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                      <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">error_action</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">max_p</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
@@ -398,9 +298,9 @@ After a few seconds, we arrive at the following solution:</p>
 </div>
 <p>Where the TDS model was of order <code class="docutils literal notranslate"><span class="pre">(5,</span> <span class="pre">1,</span> <span class="pre">0)</span></code>, we ended up selecting a significantly
 more simple model. But how does it perform?</p>
-</div>
-<div class="section" id="updating-the-model">
-<h2>10.1.5. Updating the model<a class="headerlink" href="#updating-the-model" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="updating-the-model">
+<h2><span class="section-number">10.1.5. </span>Updating the model<a class="headerlink" href="#updating-the-model" title="Link to this heading"></a></h2>
 <p>Now that the heavy lifting of selecting model hyper-parameters has been performed,
 we can update our model by simulating days passing with our test set. For each new
 observation, we’ll let our model progress for several more iterations, allowing MLE to
@@ -428,37 +328,32 @@ measure the error on the forecasts:</p>
     <span class="c1"># Updates the existing model with a small number of MLE steps</span>
     <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_ob</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean squared error: </span><span class="si">{</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">forecasts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SMAPE: </span><span class="si">{</span><span class="n">smape</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">forecasts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean squared error: </span><span class="si">{</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="w"> </span><span class="n">forecasts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SMAPE: </span><span class="si">{</span><span class="n">smape</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="w"> </span><span class="n">forecasts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="c1"># Mean squared error: 0.34238951346274243</span>
 <span class="c1"># SMAPE: 0.9825490519101439</span>
 </pre></div>
 </div>
 <p>In the end, our model ended up way out-performing the TDS model!</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="39%" />
-<col width="25%" />
-<col width="36%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>Source</td>
-<td>MSE</td>
-<td>SMAPE</td>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Source</p></td>
+<td><p>MSE</p></td>
+<td><p>SMAPE</p></td>
 </tr>
-<tr class="row-even"><td>pmdarima</td>
-<td>0.342</td>
-<td>0.983 (!!)</td>
+<tr class="row-even"><td><p>pmdarima</p></td>
+<td><p>0.342</p></td>
+<td><p>0.983 (!!)</p></td>
 </tr>
-<tr class="row-odd"><td>TDS article</td>
-<td>0.343</td>
-<td>40.776</td>
+<tr class="row-odd"><td><p>TDS article</p></td>
+<td><p>0.343</p></td>
+<td><p>40.776</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="viewing-forecasts">
-<h2>10.1.6. Viewing forecasts<a class="headerlink" href="#viewing-forecasts" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="viewing-forecasts">
+<h2><span class="section-number">10.1.6. </span>Viewing forecasts<a class="headerlink" href="#viewing-forecasts" title="Link to this heading"></a></h2>
 <p>Let’s take a look at the forecasts our model produces overlaid on the actuals
 (in the first plot), and the confidence intervals of the forecasts (in the second plot):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
@@ -496,72 +391,48 @@ measure the error on the forecasts:</p>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/stock_forecasts.png"><img alt="Lag plot" class="align-center" src="../_images/stock_forecasts.png" style="width: 540.75px; height: 534.75px;" /></a>
-</div>
-<div class="section" id="conclusion">
-<h2>10.1.7. Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../_images/stock_forecasts.png"><img alt="Lag plot" class="align-center" src="../_images/stock_forecasts.png" style="width: 540.75px; height: 534.75px;" />
+</a>
+</section>
+<section id="conclusion">
+<h2><span class="section-number">10.1.7. </span>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading"></a></h2>
 <p>The TDS article provided an awesome example of how to use ARIMAs to predict stocks. Our
 hope in this example was to show how using pmdarima can simplify and enhance the models
 you build. If you’d like to run the already-setup notebook for yourself, head on over to
 the <a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/master/examples/stock_market_example.ipynb">project’s Git page</a>
 and grab the example notebook.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="sun-spots.html" class="btn btn-neutral float-right" title="10.2. An end-to-end time series analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../usecases.html" class="btn btn-neutral float-left" title="10. Use cases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../usecases.html" class="btn btn-neutral float-left" title="10. Use cases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sun-spots.html" class="btn btn-neutral float-right" title="10.2. An end-to-end time series analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-:mod:`pmdarima.model_selection`.check_cv
+﻿:mod:`pmdarima.model_selection`.check_cv
 =====================================================
 
 .. currentmodule:: pmdarima.model_selection

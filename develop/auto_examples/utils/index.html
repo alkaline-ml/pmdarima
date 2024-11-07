@@ -1,0 +1,154 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utils examples &mdash; pmdarima 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Array concatenation" href="example_array_concatenation.html" />
+    <link rel="prev" title="Modeling quasi-seasonal trends with date features" href="../preprocessing/example_date_featurizer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pmdarima
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../modules/classes.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#id1">General examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#arima-examples">ARIMA examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#datasets-examples">Datasets examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#cross-validation-examples">Cross-validation examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#preprocessing-examples">Preprocessing examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#utils-examples">Utils examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../arima/index.html">ARIMA examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../datasets/index.html">Datasets examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_selection/index.html">Cross-validation examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/index.html">Preprocessing examples</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Utils examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="example_array_concatenation.html">Array concatenation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_tsdisplay.html">Displaying key timeseries statistics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_array_differencing.html">Array differencing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What's New?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rfc/index.html">RFCs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pmdarima</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Examples</a></li>
+      <li class="breadcrumb-item active">Utils examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/auto_examples/utils/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="utils-examples">
+<span id="sphx-glr-auto-examples-utils"></span><span id="id1"></span><h1>Utils examples<a class="headerlink" href="#utils-examples" title="Link to this heading"></a></h1>
+<p>Examples of how to use the <a class="reference internal" href="../../modules/classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a> module to plot timeseries
+data, difference arrays, and more.</p>
+<br/><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s convenient c function, which is, in essence, the same as R&#x27;s. It&#x27;s nothing more than a convenience function in the package, but one you should understand if you&#x27;re contributing."><img alt="" src="../../_images/sphx_glr_example_array_concatenation_thumb.png" />
+<p><a class="reference internal" href="example_array_concatenation.html#sphx-glr-auto-examples-utils-example-array-concatenation-py"><span class="std std-ref">Array concatenation</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Array concatenation</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" Visualizing characteristics of a time series is a key component to effective forecasting. In this example, we&#x27;ll look at a very simple method to examine critical statistics of a time series object."><img alt="" src="../../_images/sphx_glr_example_tsdisplay_thumb.png" />
+<p><a class="reference internal" href="example_tsdisplay.html#sphx-glr-auto-examples-utils-example-tsdisplay-py"><span class="std std-ref">Displaying key timeseries statistics</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Displaying key timeseries statistics</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s array differencing, and how it&#x27;s used in conjunction with the d term to lag a time series."><img alt="" src="../../_images/sphx_glr_example_array_differencing_thumb.png" />
+<p><a class="reference internal" href="example_array_differencing.html#sphx-glr-auto-examples-utils-example-array-differencing-py"><span class="std std-ref">Array differencing</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Array differencing</div>
+</div></div><div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../preprocessing/example_date_featurizer.html" class="btn btn-neutral float-left" title="Modeling quasi-seasonal trends with date features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_array_concatenation.html" class="btn btn-neutral float-right" title="Array concatenation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,105 +1,52 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.model_selection._split &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../../../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
@@ -108,67 +55,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
-      <li>pmdarima.model_selection._split</li>
-    
-    
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pmdarima.model_selection._split</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for pmdarima.model_selection._split</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -187,8 +97,10 @@
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="train_test_split"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split">[docs]</a><span class="k">def</span> <span class="nf">train_test_split</span><span class="p">(</span><span class="o">*</span><span class="n">arrays</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Split arrays or matrices into sequential train and test subsets</span>
+<div class="viewcode-block" id="train_test_split">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split">[docs]</a>
+<span class="k">def</span> <span class="nf">train_test_split</span><span class="p">(</span><span class="o">*</span><span class="n">arrays</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split arrays or matrices into sequential train and test subsets</span>
 
 <span class="sd">    Creates train/test splits over endogenous arrays an optional exogenous</span>
 <span class="sd">    arrays. This is a wrapper of scikit-learn&#39;s ``train_test_split`` that</span>
@@ -241,8 +153,9 @@
         <span class="n">train_size</span><span class="o">=</span><span class="n">train_size</span><span class="p">)</span></div>
 
 
+
 <span class="k">class</span> <span class="nc">BaseTSCrossValidator</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base class for time series cross validators</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for time series cross validators</span>
 
 <span class="sd">    Based on the scikit-learn base cross-validator with alterations to fit the</span>
 <span class="sd">    time series interface.</span>
@@ -258,11 +171,11 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">horizon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The forecast horizon for the cross-validator&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The forecast horizon for the cross-validator&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span>
 
     <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generate indices to split data into training and test sets</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate indices to split data into training and test sets</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -288,7 +201,7 @@
             <span class="k">yield</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span>
 
     <span class="k">def</span> <span class="nf">_iter_train_test_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generate boolean masks corresponding to test sets&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate boolean masks corresponding to test sets&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter_train_test_indices</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
             <span class="n">train_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
             <span class="n">test_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
@@ -299,11 +212,13 @@
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">_iter_train_test_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Yields the train/test indices&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yields the train/test indices&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="RollingForecastCV"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.RollingForecastCV.html#pmdarima.model_selection.RollingForecastCV">[docs]</a><span class="k">class</span> <span class="nc">RollingForecastCV</span><span class="p">(</span><span class="n">BaseTSCrossValidator</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Use a rolling forecast to perform cross validation</span>
+<div class="viewcode-block" id="RollingForecastCV">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.RollingForecastCV.html#pmdarima.model_selection.RollingForecastCV">[docs]</a>
+<span class="k">class</span> <span class="nc">RollingForecastCV</span><span class="p">(</span><span class="n">BaseTSCrossValidator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Use a rolling forecast to perform cross validation</span>
 
 <span class="sd">    Sometimes called “evaluation on a rolling forecasting origin” [1], this</span>
 <span class="sd">    approach to CV incrementally grows the training size while using a single</span>
@@ -383,12 +298,15 @@
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] https://robjhyndman.com/hyndsight/tscv/</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="RollingForecastCV.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.RollingForecastCV.html#pmdarima.model_selection.RollingForecastCV.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RollingForecastCV.__init__">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.RollingForecastCV.html#pmdarima.model_selection.RollingForecastCV.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initial</span> <span class="o">=</span> <span class="n">initial</span></div>
 
+
     <span class="k">def</span> <span class="nf">_iter_train_test_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Yields the train/test indices&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yields the train/test indices&quot;&quot;&quot;</span>
         <span class="n">n_samples</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">initial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial</span>
         <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span>
@@ -422,8 +340,11 @@
             <span class="k">yield</span> <span class="n">train_indices</span><span class="p">,</span> <span class="n">test_indices</span></div>
 
 
-<div class="viewcode-block" id="SlidingWindowForecastCV"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.SlidingWindowForecastCV.html#pmdarima.model_selection.SlidingWindowForecastCV">[docs]</a><span class="k">class</span> <span class="nc">SlidingWindowForecastCV</span><span class="p">(</span><span class="n">BaseTSCrossValidator</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Use a sliding window to perform cross validation</span>
+
+<div class="viewcode-block" id="SlidingWindowForecastCV">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.SlidingWindowForecastCV.html#pmdarima.model_selection.SlidingWindowForecastCV">[docs]</a>
+<span class="k">class</span> <span class="nc">SlidingWindowForecastCV</span><span class="p">(</span><span class="n">BaseTSCrossValidator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Use a sliding window to perform cross validation</span>
 
 <span class="sd">    This approach to CV slides a window over the training samples while using</span>
 <span class="sd">    several future samples as a test set. While similar to the</span>
@@ -485,12 +406,15 @@
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] https://robjhyndman.com/hyndsight/tscv/</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="SlidingWindowForecastCV.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.SlidingWindowForecastCV.html#pmdarima.model_selection.SlidingWindowForecastCV.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SlidingWindowForecastCV.__init__">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.SlidingWindowForecastCV.html#pmdarima.model_selection.SlidingWindowForecastCV.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="n">window_size</span></div>
 
+
     <span class="k">def</span> <span class="nf">_iter_train_test_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Yields the train/test indices&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yields the train/test indices&quot;&quot;&quot;</span>
         <span class="n">n_samples</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">window_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span>
         <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span>
@@ -522,8 +446,11 @@
             <span class="k">yield</span> <span class="n">train_indices</span><span class="p">,</span> <span class="n">test_indices</span></div>
 
 
-<div class="viewcode-block" id="check_cv"><a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.check_cv.html#pmdarima.model_selection.check_cv">[docs]</a><span class="k">def</span> <span class="nf">check_cv</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Input checker utility for building a cross-validator</span>
+
+<div class="viewcode-block" id="check_cv">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.check_cv.html#pmdarima.model_selection.check_cv">[docs]</a>
+<span class="k">def</span> <span class="nf">check_cv</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Input checker utility for building a cross-validator</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -538,52 +465,34 @@
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;cv should be an instance of BaseTSCrossValidator or &quot;</span>
                         <span class="s2">&quot;None, but got </span><span class="si">%r</span><span class="s2"> (type=</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cv</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">cv</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">cv</span></div>
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

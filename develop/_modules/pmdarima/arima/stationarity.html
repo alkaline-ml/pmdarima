@@ -1,105 +1,52 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.stationarity &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../../../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../auto_examples/index.html">Examples</a></li>
@@ -108,67 +55,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
-      <li>pmdarima.arima.stationarity</li>
-    
-    
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pmdarima.arima.stationarity</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for pmdarima.arima.stationarity</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1">#</span>
@@ -224,7 +134,7 @@
 
 
 <span class="k">class</span> <span class="nc">_DifferencingStationarityTest</span><span class="p">(</span><span class="n">_BaseStationarityTest</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Provides the base class for stationarity tests such as the</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides the base class for stationarity tests such as the</span>
 <span class="sd">    Kwiatkowski–Phillips–Schmidt–Shin, Augmented Dickey-Fuller and the</span>
 <span class="sd">    Phillips–Perron tests. These tests are used to determine whether a time</span>
 <span class="sd">    series is stationary.</span>
@@ -234,7 +144,7 @@
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or it needs differencing.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or it needs differencing.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -254,7 +164,7 @@
     <span class="c1"># TODO: REMOVE ME in v1.4.0</span>
     <span class="nd">@deprecated</span><span class="p">(</span><span class="n">use_instead</span><span class="o">=</span><span class="s2">&quot;should_diff&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">is_stationary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test whether the time series is stationary.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -273,8 +183,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="KPSSTest"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.KPSSTest.html#pmdarima.arima.KPSSTest">[docs]</a><span class="k">class</span> <span class="nc">KPSSTest</span><span class="p">(</span><span class="n">_DifferencingStationarityTest</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Conduct a KPSS test for stationarity.</span>
+<div class="viewcode-block" id="KPSSTest">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.KPSSTest.html#pmdarima.arima.KPSSTest">[docs]</a>
+<span class="k">class</span> <span class="nc">KPSSTest</span><span class="p">(</span><span class="n">_DifferencingStationarityTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conduct a KPSS test for stationarity.</span>
 
 <span class="sd">    In econometrics, Kwiatkowski–Phillips–Schmidt–Shin (KPSS) tests are used</span>
 <span class="sd">    for testing a null hypothesis that an observable time series is stationary</span>
@@ -307,14 +219,17 @@
     <span class="n">_valid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;trend&#39;</span><span class="p">,</span> <span class="s1">&#39;null&#39;</span><span class="p">}</span>
     <span class="n">tablep</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">)</span>
 
-<div class="viewcode-block" id="KPSSTest.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.KPSSTest.html#pmdarima.arima.KPSSTest.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">lshort</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="KPSSTest.__init__">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.KPSSTest.html#pmdarima.arima.KPSSTest.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">lshort</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">KPSSTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">null</span> <span class="o">=</span> <span class="n">null</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lshort</span> <span class="o">=</span> <span class="n">lshort</span></div>
 
-<div class="viewcode-block" id="KPSSTest.should_diff"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.KPSSTest.html#pmdarima.arima.KPSSTest.should_diff">[docs]</a>    <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or needs differencing.</span>
+
+    <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or needs differencing.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -381,11 +296,14 @@
         <span class="c1"># R does a test for rule=1, but we don&#39;t want to do that, because they</span>
         <span class="c1"># just do it to issue a warning in case the P-value is smaller/greater</span>
         <span class="c1"># than the printed value is.</span>
-        <span class="k">return</span> <span class="n">pval</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pval</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span></div></div>
+        <span class="k">return</span> <span class="n">pval</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pval</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span></div>
 
 
-<div class="viewcode-block" id="ADFTest"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ADFTest.html#pmdarima.arima.ADFTest">[docs]</a><span class="k">class</span> <span class="nc">ADFTest</span><span class="p">(</span><span class="n">_DifferencingStationarityTest</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Conduct an ADF test for stationarity.</span>
+
+<div class="viewcode-block" id="ADFTest">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ADFTest.html#pmdarima.arima.ADFTest">[docs]</a>
+<span class="k">class</span> <span class="nc">ADFTest</span><span class="p">(</span><span class="n">_DifferencingStationarityTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conduct an ADF test for stationarity.</span>
 
 <span class="sd">    In statistics and econometrics, an augmented Dickey–Fuller test (ADF)</span>
 <span class="sd">    tests the null hypothesis of a unit root is present in a time series</span>
@@ -432,12 +350,15 @@
     <span class="n">tableT</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
     <span class="n">tablep</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.975</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ADFTest.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ADFTest.html#pmdarima.arima.ADFTest.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ADFTest.__init__">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ADFTest.html#pmdarima.arima.ADFTest.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ADFTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;k must be a positive integer (&gt;= 0)&#39;</span><span class="p">)</span></div>
+
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_ols</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
@@ -472,8 +393,8 @@
         <span class="n">stderrs</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">bse</span>  <span class="c1"># this was a pain in the ARSE to locate</span>
         <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">stderrs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-<div class="viewcode-block" id="ADFTest.should_diff"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ADFTest.html#pmdarima.arima.ADFTest.should_diff">[docs]</a>    <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or needs differencing.</span>
+    <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or needs differencing.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -532,11 +453,14 @@
         <span class="c1"># in the R code, here is where the P value warning is tested again...</span>
         <span class="c1"># else if (test == &quot;adf&quot;)</span>
         <span class="c1">#     suppressWarnings(dodiff &lt; - tseries::adf.test(x)$p.value &gt; alpha)</span>
-        <span class="k">return</span> <span class="n">pval</span><span class="p">,</span> <span class="n">pval</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>  <span class="c1"># &gt; since not 1-pval</span></div></div>
+        <span class="k">return</span> <span class="n">pval</span><span class="p">,</span> <span class="n">pval</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>  <span class="c1"># &gt; since not 1-pval</span></div>
 
 
-<div class="viewcode-block" id="PPTest"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.PPTest.html#pmdarima.arima.PPTest">[docs]</a><span class="k">class</span> <span class="nc">PPTest</span><span class="p">(</span><span class="n">_DifferencingStationarityTest</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Conduct a PP test for stationarity.</span>
+
+<div class="viewcode-block" id="PPTest">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.PPTest.html#pmdarima.arima.PPTest">[docs]</a>
+<span class="k">class</span> <span class="nc">PPTest</span><span class="p">(</span><span class="n">_DifferencingStationarityTest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conduct a PP test for stationarity.</span>
 
 <span class="sd">    In statistics, the Phillips–Perron test (named after Peter C. B.</span>
 <span class="sd">    Phillips and Pierre Perron) is a unit root test. It is used in time series</span>
@@ -582,13 +506,16 @@
     <span class="n">tableT</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">DTYPE</span><span class="p">)</span>
     <span class="n">tablep</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.975</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">)</span>
 
-<div class="viewcode-block" id="PPTest.__init__"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.PPTest.html#pmdarima.arima.PPTest.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">lshort</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PPTest.__init__">
+<a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.PPTest.html#pmdarima.arima.PPTest.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">lshort</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PPTest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lshort</span> <span class="o">=</span> <span class="n">lshort</span></div>
 
-<div class="viewcode-block" id="PPTest.should_diff"><a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.PPTest.html#pmdarima.arima.PPTest.should_diff">[docs]</a>    <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or needs differencing.</span>
+
+    <span class="k">def</span> <span class="nf">should_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test whether the time series is stationary or needs differencing.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -663,53 +590,35 @@
         <span class="n">pval</span> <span class="o">=</span> <span class="n">interpol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># in the R code, here is where the P value warning is tested again...</span>
-        <span class="k">return</span> <span class="n">pval</span><span class="p">,</span> <span class="n">pval</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span></div></div>
+        <span class="k">return</span> <span class="n">pval</span><span class="p">,</span> <span class="n">pval</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span></div>
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

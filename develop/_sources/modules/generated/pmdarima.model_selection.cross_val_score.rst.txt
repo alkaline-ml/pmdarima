@@ -1,4 +1,4 @@
-:mod:`pmdarima.model_selection`.cross_val_score
+﻿:mod:`pmdarima.model_selection`.cross_val_score
 ============================================================
 
 .. currentmodule:: pmdarima.model_selection

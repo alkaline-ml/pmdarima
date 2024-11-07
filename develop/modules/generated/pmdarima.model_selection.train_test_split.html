@@ -1,54 +1,29 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.model_selection.train_test_split &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -56,73 +31,46 @@
     <link rel="prev" title="pmdarima.model_selection.cross_val_score" href="pmdarima.model_selection.cross_val_score.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../classes.html">API Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-arima-arima-estimator-differencing-tests"><code class="docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-timeseries-datasets"><code class="docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-metrics-time-series-metrics"><code class="docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>: Time-series metrics</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pmdarima-model-selection-cross-validation-classes"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>: Cross-validation classes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-arima-arima-estimator-differencing-tests"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code>: ARIMA estimator &amp; differencing tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-datasets-toy-timeseries-datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code>: Toy timeseries datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-metrics-time-series-metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code>: Time-series metrics</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../classes.html#pmdarima-model-selection-cross-validation-classes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>: Cross-validation classes</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../classes.html#cross-validation-split-utilities">Cross validation &amp; split utilities</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.RollingForecastCV.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.RollingForecastCV</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.SlidingWindowForecastCV.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.SlidingWindowForecastCV</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.check_cv.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_validate.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_validate</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_val_predict.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_predict</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_val_score.html"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_score</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.train_test_split</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.RollingForecastCV.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.RollingForecastCV</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.SlidingWindowForecastCV.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.SlidingWindowForecastCV</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.check_cv.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.check_cv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_validate.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_validate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_val_predict.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pmdarima.model_selection.cross_val_score.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.cross_val_score</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.train_test_split</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-pipeline-pipelining-transformers-arimas"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code>: Pipelining transformers &amp; ARIMAs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-preprocessing-preprocessing-transformers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code>: Preprocessing transformers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classes.html#pmdarima-utils-utilities"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code>: Utilities</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
@@ -131,85 +79,43 @@
 <li class="toctree-l1"><a class="reference internal" href="../../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../classes.html">API Reference</a> &raquo;</li>
-        
-      <li><code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.train_test_split</li>
-    
-    
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../classes.html">API Reference</a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code>.train_test_split</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../../_sources/modules/generated/pmdarima.model_selection.train_test_split.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="pmdarima-model-selection-train-test-split">
-<h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.train_test_split<a class="headerlink" href="#pmdarima-model-selection-train-test-split" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pmdarima.model_selection.train_test_split">
-<code class="descclassname">pmdarima.model_selection.</code><code class="descname">train_test_split</code><span class="sig-paren">(</span><em>*arrays</em>, <em>test_size=None</em>, <em>train_size=None</em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/c33a0176/pmdarima/model_selection/_split.py#L18"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#train_test_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pmdarima.model_selection.train_test_split" title="Permalink to this definition">¶</a></dt>
+             
+  <section id="pmdarima-model-selection-train-test-split">
+<h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.train_test_split<a class="headerlink" href="#pmdarima-model-selection-train-test-split" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pmdarima.model_selection.train_test_split">
+<span class="sig-prename descclassname"><span class="pre">pmdarima.model_selection.</span></span><span class="sig-name descname"><span class="pre">train_test_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">arrays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/64cee309/pmdarima/model_selection/_split.py#L18"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#train_test_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.model_selection.train_test_split" title="Link to this definition"></a></dt>
 <dd><p>Split arrays or matrices into sequential train and test subsets</p>
 <p>Creates train/test splits over endogenous arrays an optional exogenous
 arrays. This is a wrapper of scikit-learn’s <code class="docutils literal notranslate"><span class="pre">train_test_split</span></code> that
 does not shuffle.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*arrays</strong> : sequence of indexables with same length / shape[0]</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*arrays</strong> : sequence of indexables with same length / shape[0]</p>
 <blockquote>
 <div><p>Allowed inputs are lists, numpy arrays, scipy-sparse
 matrices or pandas dataframes.</p>
@@ -229,18 +135,16 @@ proportion of the dataset to include in the train split. If
 int, represents the absolute number of train samples. If None,
 the value is automatically set to the complement of the test size.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>splitting</strong> : list, length=2 * len(arrays)</p>
-<blockquote class="last">
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>splitting</strong> : list, length=2 * len(arrays)</p>
+<blockquote>
 <div><p>List containing train-test split of inputs.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_sunspots</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
@@ -249,100 +153,68 @@ the value is automatically set to the complement of the test size.</p>
 </pre></div>
 </div>
 <p>The split is sequential:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy.testing</span> <span class="kn">import</span> <span class="n">assert_array_equal</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">assert_array_equal</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">]))</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<div class="section" id="examples-using-pmdarima-model-selection-train-test-split">
-<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection.train_test_split</span></code><a class="headerlink" href="#examples-using-pmdarima-model-selection-train-test-split" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip=" This is a simple example of how we can fit an ARIMA model in several lines without knowing any..."><div class="figure" id="id1">
-<img alt="../../_images/sphx_glr_example_simple_fit_thumb.png" src="../../_images/sphx_glr_example_simple_fit_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/example_simple_fit.html#sphx-glr-auto-examples-example-simple-fit-py"><span class="std std-ref">Simple auto_arima model</span></a></span></p>
-</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` can fit &quot;pipeline&quot; models. That is, a pipeline constitutes a l..."><div class="figure" id="id2">
-<img alt="../../_images/sphx_glr_example_pipeline_thumb.png" src="../../_images/sphx_glr_example_pipeline_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/example_pipeline.html#sphx-glr-auto-examples-example-pipeline-py"><span class="std std-ref">Pipelines with auto_arima</span></a></span></p>
-</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can persist an ARIMA model to disk after fitting it. It can t..."><div class="figure" id="id3">
-<img alt="../../_images/sphx_glr_example_persisting_a_model_thumb.png" src="../../_images/sphx_glr_example_persisting_a_model_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/arima/example_persisting_a_model.html#sphx-glr-auto-examples-arima-example-persisting-a-model-py"><span class="std std-ref">Persisting an ARIMA model</span></a></span></p>
-</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the ``auto_arima`` function to select an optimal time..."><div class="figure" id="id4">
-<img alt="../../_images/sphx_glr_example_auto_arima_thumb.png" src="../../_images/sphx_glr_example_auto_arima_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/arima/example_auto_arima.html#sphx-glr-auto-examples-arima-example-auto-arima-py"><span class="std std-ref">Fitting an auto_arima model</span></a></span></p>
-</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forec..."><div class="figure" id="id5">
-<img alt="../../_images/sphx_glr_example_add_new_samples_thumb.png" src="../../_images/sphx_glr_example_add_new_samples_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/arima/example_add_new_samples.html#sphx-glr-auto-examples-arima-example-add-new-samples-py"><span class="std std-ref">Adding new observations to your model</span></a></span></p>
-</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, ``pmdarima`` provides several different strategies for cross-validating you..."><div class="figure" id="id6">
-<img alt="../../_images/sphx_glr_example_cross_validation_thumb.png" src="../../_images/sphx_glr_example_cross_validation_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/model_selection/example_cross_validation.html#sphx-glr-auto-examples-model-selection-example-cross-validation-py"><span class="std std-ref">Cross-validating your time series models</span></a></span></p>
-</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip=" Some trends are common enough to appear seasonal, yet sporadic enough that approaching them fr..."><div class="figure" id="id7">
-<img alt="../../_images/sphx_glr_example_date_featurizer_thumb.png" src="../../_images/sphx_glr_example_date_featurizer_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../../auto_examples/preprocessing/example_date_featurizer.html#sphx-glr-auto-examples-preprocessing-example-date-featurizer-py"><span class="std std-ref">Modeling quasi-seasonal trends with date features</span></a></span></p>
-</div>
-</div><div class="clearer"></div></div>
-</div>
+<section id="examples-using-pmdarima-model-selection-train-test-split">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pmdarima.model_selection.train_test_split</span></code><a class="headerlink" href="#examples-using-pmdarima-model-selection-train-test-split" title="Link to this heading"></a></h2>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip=" This is a simple example of how we can fit an ARIMA model in several lines without knowing anything about our data or optimal hyper parameters."><img alt="" src="../../_images/sphx_glr_example_simple_fit_thumb.png" />
+<p><a class="reference internal" href="../../auto_examples/example_simple_fit.html#sphx-glr-auto-examples-example-simple-fit-py"><span class="std std-ref">Simple auto_arima model</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Simple auto_arima model</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, pmdarima can fit &quot;pipeline&quot; models. That is, a pipeline constitutes a list of arbitrary length comprised of any number of BaseTransformer objects strung together ordinally, and finished with an AutoARIMA object."><img alt="" src="../../_images/sphx_glr_example_pipeline_thumb.png" />
+<p><a class="reference internal" href="../../auto_examples/example_pipeline.html#sphx-glr-auto-examples-example-pipeline-py"><span class="std std-ref">Pipelines with auto_arima</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Pipelines with auto_arima</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can persist an ARIMA model to disk after fitting it. It can then be loaded back up and used to generate forecasts."><img alt="" src="../../_images/sphx_glr_example_persisting_a_model_thumb.png" />
+<p><a class="reference internal" href="../../auto_examples/arima/example_persisting_a_model.html#sphx-glr-auto-examples-arima-example-persisting-a-model-py"><span class="std std-ref">Persisting an ARIMA model</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Persisting an ARIMA model</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the auto_arima function to select an optimal time series model. We&#x27;ll be fitting our model on the lynx dataset available in the datasets submodule."><img alt="" src="../../_images/sphx_glr_example_auto_arima_thumb.png" />
+<p><a class="reference internal" href="../../auto_examples/arima/example_auto_arima.html#sphx-glr-auto-examples-arima-example-auto-arima-py"><span class="std std-ref">Fitting an auto_arima model</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Fitting an auto_arima model</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forecasting continues with respect to true, observed values. This also slightly updates the model parameters, taking several new steps from the existing model parameters."><img alt="" src="../../_images/sphx_glr_example_add_new_samples_thumb.png" />
+<p><a class="reference internal" href="../../auto_examples/arima/example_add_new_samples.html#sphx-glr-auto-examples-arima-example-add-new-samples-py"><span class="std std-ref">Adding new observations to your model</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Adding new observations to your model</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, pmdarima provides several different strategies for cross-validating your time series models. The interface was designed to behave as similarly as possible to that of scikit to make its usage as simple as possible."><img alt="" src="../../_images/sphx_glr_example_cross_validation_thumb.png" />
+<p><a class="reference internal" href="../../auto_examples/model_selection/example_cross_validation.html#sphx-glr-auto-examples-model-selection-example-cross-validation-py"><span class="std std-ref">Cross-validating your time series models</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Cross-validating your time series models</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip=" Some trends are common enough to appear seasonal, yet sporadic enough that approaching them from a seasonal perspective may not be valid. An example of this is the &quot;end-of-the-month&quot; effect. In this example, we&#x27;ll explore how we can create meaningful features that express seasonal trends without needing to fit a seasonal model."><img alt="" src="../../_images/sphx_glr_example_date_featurizer_thumb.png" />
+<p><a class="reference internal" href="../../auto_examples/preprocessing/example_date_featurizer.html#sphx-glr-auto-examples-preprocessing-example-date-featurizer-py"><span class="std std-ref">Modeling quasi-seasonal trends with date features</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Modeling quasi-seasonal trends with date features</div>
+</div></div><div class="clearer"></div></section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="pmdarima.pipeline.Pipeline.html" class="btn btn-neutral float-right" title="pmdarima.pipeline.Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="pmdarima.model_selection.cross_val_score.html" class="btn btn-neutral float-left" title="pmdarima.model_selection.cross_val_score" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pmdarima.model_selection.cross_val_score.html" class="btn btn-neutral float-left" title="pmdarima.model_selection.cross_val_score" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pmdarima.pipeline.Pipeline.html" class="btn btn-neutral float-right" title="pmdarima.pipeline.Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

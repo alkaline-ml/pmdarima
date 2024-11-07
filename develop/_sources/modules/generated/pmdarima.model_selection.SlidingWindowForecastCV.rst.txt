@@ -1,4 +1,4 @@
-:mod:`pmdarima.model_selection`.SlidingWindowForecastCV
+﻿:mod:`pmdarima.model_selection`.SlidingWindowForecastCV
 ==============================================================
 
 .. currentmodule:: pmdarima.model_selection

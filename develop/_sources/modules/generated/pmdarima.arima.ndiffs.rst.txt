@@ -1,4 +1,4 @@
-:mod:`pmdarima.arima`.ndiffs
+﻿:mod:`pmdarima.arima`.ndiffs
 =========================================
 
 .. currentmodule:: pmdarima.arima

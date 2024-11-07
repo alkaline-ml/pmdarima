@@ -1,122 +1,77 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Persisting an ARIMA model &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Fitting an auto_arima model" href="example_auto_arima.html" />
-    <link rel="prev" title="Pipelines with auto_arima" href="../example_pipeline.html" /> 
+    <link rel="prev" title="ARIMA examples" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#id1">General examples</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#arima-examples">ARIMA examples</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Persisting an ARIMA model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_auto_arima.html">Fitting an auto_arima model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_add_new_samples.html">Adding new observations to your model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="example_seasonal_decomposition.html">Seasonal decomposition of your time-series</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#arima-examples">ARIMA examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#datasets-examples">Datasets examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#cross-validation-examples">Cross-validation examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#preprocessing-examples">Preprocessing examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#utils-examples">Utils examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#utils-examples">Utils examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">ARIMA examples</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Persisting an ARIMA model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_auto_arima.html">Fitting an auto_arima model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_add_new_samples.html">Adding new observations to your model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="example_seasonal_decomposition.html">Seasonal decomposition of your time-series</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../datasets/index.html">Datasets examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../model_selection/index.html">Cross-validation examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../preprocessing/index.html">Preprocessing examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/index.html">Utils examples</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide.html">User Guide</a></li>
@@ -124,95 +79,60 @@
 <li class="toctree-l1"><a class="reference internal" href="../../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../index.html">Examples</a> &raquo;</li>
-        
-      <li>Persisting an ARIMA model</li>
-    
-    
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Examples</a></li>
+          <li class="breadcrumb-item"><a href="index.html">ARIMA examples</a></li>
+      <li class="breadcrumb-item active">Persisting an ARIMA model</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../../_sources/auto_examples/arima/example_persisting_a_model.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="persisting-an-arima-model">
-<span id="sphx-glr-auto-examples-arima-example-persisting-a-model-py"></span><h1>Persisting an ARIMA model<a class="headerlink" href="#persisting-an-arima-model" title="Permalink to this headline">¶</a></h1>
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-arima-example-persisting-a-model-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="persisting-an-arima-model">
+<span id="sphx-glr-auto-examples-arima-example-persisting-a-model-py"></span><h1>Persisting an ARIMA model<a class="headerlink" href="#persisting-an-arima-model" title="Link to this heading"></a></h1>
 <p>This example demonstrates how we can persist an ARIMA model to disk after
 fitting it. It can then be loaded back up and used to generate forecasts.</p>
-<br/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Predictions</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">21966.69715674</span><span class="p">,</span> <span class="mf">25983.70919719</span><span class="p">,</span> <span class="mf">30225.30978371</span><span class="p">,</span> <span class="mf">35417.12495804</span><span class="p">,</span>
-       <span class="mf">13011.36187769</span><span class="p">,</span> <span class="mf">19639.41027228</span><span class="p">,</span> <span class="mf">21506.58175753</span><span class="p">,</span> <span class="mf">23674.33997867</span><span class="p">,</span>
-       <span class="mf">21685.76393805</span><span class="p">,</span> <span class="mf">23669.778184</span>  <span class="p">,</span> <span class="mf">26955.35255653</span><span class="p">,</span> <span class="mf">22755.25061482</span><span class="p">,</span>
-       <span class="mf">19808.16131817</span><span class="p">,</span> <span class="mf">23578.78184187</span><span class="p">,</span> <span class="mf">27845.86719195</span><span class="p">,</span> <span class="mf">32923.89426059</span><span class="p">,</span>
-       <span class="mf">10475.68777621</span><span class="p">,</span> <span class="mf">17024.74532948</span><span class="p">,</span> <span class="mf">18831.64796876</span><span class="p">,</span> <span class="mf">20929.54670952</span><span class="p">,</span>
-       <span class="mf">18876.02414073</span><span class="p">,</span> <span class="mf">20792.57512203</span><span class="p">,</span> <span class="mf">24011.97546746</span><span class="p">,</span> <span class="mf">19745.0390666</span> <span class="p">,</span>
-       <span class="mf">16731.45362742</span><span class="p">,</span> <span class="mf">20435.40470062</span><span class="p">,</span> <span class="mf">24635.90937992</span><span class="p">,</span> <span class="mf">29647.31029897</span><span class="p">,</span>
-        <span class="mf">7132.50096224</span><span class="p">,</span> <span class="mf">13614.94372878</span><span class="p">,</span> <span class="mf">15355.23769491</span><span class="p">,</span> <span class="mf">17386.52463074</span><span class="p">,</span>
-       <span class="mf">15266.39186131</span><span class="p">,</span> <span class="mf">17116.33182016</span><span class="p">,</span> <span class="mf">20269.12156413</span><span class="p">,</span> <span class="mf">15935.57434614</span><span class="p">,</span>
-       <span class="mf">12855.37820032</span><span class="p">,</span> <span class="mf">16492.71851028</span><span class="p">,</span> <span class="mf">20626.61245533</span><span class="p">,</span> <span class="mf">25571.40262528</span><span class="p">,</span>
-        <span class="mf">2989.98254705</span><span class="p">,</span>  <span class="mf">9405.81456821</span><span class="p">,</span> <span class="mf">11079.49779094</span><span class="p">,</span> <span class="mf">13044.17398235</span><span class="p">,</span>
-       <span class="mf">10857.43046903</span><span class="p">,</span> <span class="mf">12640.75968372</span><span class="p">,</span> <span class="mf">15726.93868366</span><span class="p">,</span> <span class="mf">11326.78072158</span><span class="p">,</span>
-        <span class="mf">8179.9738317</span> <span class="p">,</span> <span class="mf">11750.70339758</span><span class="p">,</span> <span class="mf">15817.98659857</span><span class="p">])</span>
+<br/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Predictions: array([21966.69715327, 25983.70919042, 30225.30977757, 35417.12495208,
+       13011.3618736 , 19639.41026476, 21506.58175114, 23674.33997107,
+       21685.76393112, 23669.77817456, 26955.35254916, 22755.25060906,
+       19808.16130991, 23578.78183011, 27845.86718064, 32923.89424952,
+       10475.68776683, 17024.74531668, 18831.64795696, 20929.54669646,
+       18876.02412824, 20792.57510697, 24011.97545439, 19745.03905506,
+       16731.45361331, 20435.40468293, 24635.9093626 , 29647.31028183,
+        7132.5009467 , 13614.94370975, 15355.2376768 , 17386.52461129,
+       15266.39184237, 17116.33179857, 20269.12154445, 15935.57432792,
+       12855.37817945, 16492.71848576, 20626.6124311 , 25571.40260115,
+        2989.98252446,  9405.81454204, 11079.49776562, 13044.17395562,
+       10857.43044273, 12640.75965469, 15726.93865647, 11326.78069577,
+        8179.97380317, 11750.70336532, 15817.98656653])
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
@@ -223,8 +143,8 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
 
 <span class="c1"># #############################################################################</span>
 <span class="c1"># Load the data and split it into separate pieces</span>
-<span class="n">y</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="View documentation for pmdarima.datasets.load_wineind"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
-<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="View documentation for pmdarima.model_selection.train_test_split"><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mi">125</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_wineind.html#pmdarima.datasets.load_wineind" title="pmdarima.datasets.load_wineind" class="sphx-glr-backref-module-pmdarima-datasets sphx-glr-backref-type-py-function"><span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span></a><span class="p">()</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.model_selection.train_test_split.html#pmdarima.model_selection.train_test_split" title="pmdarima.model_selection.train_test_split" class="sphx-glr-backref-module-pmdarima-model_selection sphx-glr-backref-type-py-function"><span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="mi">125</span><span class="p">)</span>
 
 <span class="c1"># Fit an ARIMA</span>
 <span class="n">arima</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">ARIMA</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
@@ -250,70 +170,50 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
         <span class="k">pass</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  3.090 seconds)</p>
-<div class="sphx-glr-footer docutils container">
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_persisting_a_model.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_persisting_a_model.py</span></code></a></div>
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../../_downloads/example_persisting_a_model.ipynb" download=""><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_persisting_a_model.ipynb</span></code></a></div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.234 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-arima-example-persisting-a-model-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/1ebc147e93ac86fc0c6342606a7b485b/example_persisting_a_model.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_persisting_a_model.ipynb</span></code></a></p>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/15a1db4c0854e539f41992d962f74cdf/example_persisting_a_model.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_persisting_a_model.py</span></code></a></p>
 </div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/4f15dd1cf2efd986b5f65edb4db869bd/example_persisting_a_model.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">example_persisting_a_model.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="example_auto_arima.html" class="btn btn-neutral float-right" title="Fitting an auto_arima model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../example_pipeline.html" class="btn btn-neutral float-left" title="Pipelines with auto_arima" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="ARIMA examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_auto_arima.html" class="btn btn-neutral float-right" title="Fitting an auto_arima model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,54 +1,29 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Model selection with cross-validation &mdash; pmdarima 0.0.0 documentation</title>
-  
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/fields.css?v=3d9fdf7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/gitcontrib.css?v=d6822521" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
 
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/fields.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/gitcontrib.css" type="text/css" />
-
-  
   
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'0.0.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=7026087e"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -56,52 +31,25 @@
     <link rel="prev" title="10.1. Stock Market Prediction" href="stocks.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pmdarima
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            pmdarima
           </a>
-
-          
-            
-            
-              <div class="version">
-                0.0.0
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../modules/classes.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a></li>
@@ -138,75 +86,34 @@
 <li class="toctree-l1"><a class="reference internal" href="../rfc/index.html">RFCs</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pmdarima</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../user_guide.html">User Guide</a> &raquo;</li>
-        
-          <li><a href="../usecases.html">10. Use cases</a> &raquo;</li>
-        
-      <li>Model selection with cross-validation</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../user_guide.html">User Guide</a></li>
+          <li class="breadcrumb-item"><a href="../usecases.html"><span class="section-number">10. </span>Use cases</a></li>
+      <li class="breadcrumb-item active">Model selection with cross-validation</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/usecases/sun-spots.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="an-end-to-end-time-series-analysis">
-<span id="sun-spots"></span><h1>10.2. An end-to-end time series analysis<a class="headerlink" href="#an-end-to-end-time-series-analysis" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="an-end-to-end-time-series-analysis">
+<span id="sun-spots"></span><h1><span class="section-number">10.2. </span>An end-to-end time series analysis<a class="headerlink" href="#an-end-to-end-time-series-analysis" title="Link to this heading"></a></h1>
 <p>In this example, we’re going to look at why the <a class="reference internal" href="../modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima()</span></code></a> method
 should not be used as a silver bullet, and why qualitative investigation of the data
 may reveal important characteristics about it which may, in turn, affect how you approach
@@ -216,14 +123,14 @@ loads a seasonal time series of monthly mean relative sunspot numbers from 1749 
 <p>Here’s what you’ll need to run this example:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Pmdarima 1.5.2+ (many plotting utilities were added in this version)</li>
-<li>Matplotlib - It’s not a hard requirement of the package itself, but you’ll need it
-to run these examples (if you’re running this in a notebook, make sure to include <code class="docutils literal notranslate"><span class="pre">%matplotlib</span> <span class="pre">inline</span></code>)</li>
-<li>Python 3.6+</li>
+<li><p>Pmdarima 1.5.2+ (many plotting utilities were added in this version)</p></li>
+<li><p>Matplotlib - It’s not a hard requirement of the package itself, but you’ll need it
+to run these examples (if you’re running this in a notebook, make sure to include <code class="docutils literal notranslate"><span class="pre">%matplotlib</span> <span class="pre">inline</span></code>)</p></li>
+<li><p>Python 3.6+</p></li>
 </ul>
 </div></blockquote>
-<div class="section" id="imports-data-loading-splitting">
-<h2>10.2.1. Imports, data loading &amp; splitting<a class="headerlink" href="#imports-data-loading-splitting" title="Permalink to this headline">¶</a></h2>
+<section id="imports-data-loading-splitting">
+<h2><span class="section-number">10.2.1. </span>Imports, data loading &amp; splitting<a class="headerlink" href="#imports-data-loading-splitting" title="Link to this heading"></a></h2>
 <p>Here’s the set up for our problem. We’ll load the data and split it into our
 train/test sets:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -243,29 +150,25 @@ train/test sets:</p>
 <span class="n">y_train</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
-<table border="1" class="docutils">
-<colgroup>
-<col width="53%" />
-<col width="47%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>Jan 1749</td>
-<td>58.0</td>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Jan 1749</p></td>
+<td><p>58.0</p></td>
 </tr>
-<tr class="row-even"><td>Feb 1749</td>
-<td>62.6</td>
+<tr class="row-even"><td><p>Feb 1749</p></td>
+<td><p>62.6</p></td>
 </tr>
-<tr class="row-odd"><td>Mar 1749</td>
-<td>70.0</td>
+<tr class="row-odd"><td><p>Mar 1749</p></td>
+<td><p>70.0</p></td>
 </tr>
-<tr class="row-even"><td>Apr 1749</td>
-<td>55.7</td>
+<tr class="row-even"><td><p>Apr 1749</p></td>
+<td><p>55.7</p></td>
 </tr>
-<tr class="row-odd"><td>May 1749</td>
-<td>85.0</td>
+<tr class="row-odd"><td><p>May 1749</p></td>
+<td><p>85.0</p></td>
 </tr>
-<tr class="row-even"><td>dtype:</td>
-<td>float64</td>
+<tr class="row-even"><td><p>dtype:</p></td>
+<td><p>float64</p></td>
 </tr>
 </tbody>
 </table>
@@ -275,9 +178,9 @@ would expect our error to be for later forecasts, since our model won’t be abl
 effectively forecast for too many periods into the future.</p>
 <p>For this example, we’ll take the first 2750 samples for training, and leave the last
 70 as our test set.</p>
-</div>
-<div class="section" id="examining-the-data">
-<h2>10.2.2. Examining the data<a class="headerlink" href="#examining-the-data" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="examining-the-data">
+<h2><span class="section-number">10.2.2. </span>Examining the data<a class="headerlink" href="#examining-the-data" title="Link to this heading"></a></h2>
 <p>Pmdarima 1.5.2 introduced a handy utility for visualizing your time series data:
 <code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.utils.visualization.tsdisplay()</span></code>. We can use this to visualize our data,
 take a look at the auto-correlation plot, and see the histogram of values:</p>
@@ -286,19 +189,20 @@ take a look at the auto-correlation plot, and see the histogram of values:</p>
 <span class="n">tsdisplay</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/untransformed.png"><img alt="Untransformed Time Series" class="align-center" src="../_images/untransformed.png" style="width: 337.2px; height: 254.39999999999998px;" /></a>
+<a class="reference internal image-reference" href="../_images/untransformed.png"><img alt="Untransformed Time Series" class="align-center" src="../_images/untransformed.png" style="width: 337.2px; height: 254.39999999999998px;" />
+</a>
 <p>Reading this plot can give us several pieces of information:</p>
 <ul class="simple">
-<li>We are looking at a seasonal time series. Our apriori knowledge of the dataset informs
-us that this data has a seasonal periodicity of <code class="docutils literal notranslate"><span class="pre">m=12</span></code>.</li>
-<li>There seems to be some significant data skew, looking at the histogram. It is
+<li><p>We are looking at a seasonal time series. Our apriori knowledge of the dataset informs
+us that this data has a seasonal periodicity of <code class="docutils literal notranslate"><span class="pre">m=12</span></code>.</p></li>
+<li><p>There seems to be some significant data skew, looking at the histogram. It is
 very zero-inflated. A lot of the statistical techniques used in time series modeling
 behave better when the data is normally distributed, so this may be something to look
-into.</li>
+into.</p></li>
 </ul>
-</div>
-<div class="section" id="fitting-a-baseline">
-<h2>10.2.3. Fitting a baseline<a class="headerlink" href="#fitting-a-baseline" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="fitting-a-baseline">
+<h2><span class="section-number">10.2.3. </span>Fitting a baseline<a class="headerlink" href="#fitting-a-baseline" title="Link to this heading"></a></h2>
 <p>Before we start manipulating our data, let’s examine what would happen if we just
 fit a model straight out of the box:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fit1</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">auto_arima</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">suppress_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -372,9 +276,9 @@ fit a model straight out of the box:</p>
 <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">Covariance</span> <span class="n">matrix</span> <span class="n">calculated</span> <span class="n">using</span> <span class="n">the</span> <span class="n">outer</span> <span class="n">product</span> <span class="n">of</span> <span class="n">gradients</span> <span class="p">(</span><span class="nb">complex</span><span class="o">-</span><span class="n">step</span><span class="p">)</span><span class="o">.</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="transforming-our-data">
-<h2>10.2.4. Transforming our data<a class="headerlink" href="#transforming-our-data" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="transforming-our-data">
+<h2><span class="section-number">10.2.4. </span>Transforming our data<a class="headerlink" href="#transforming-our-data" title="Link to this heading"></a></h2>
 <p>Since we expect our model to perform better over more normal data, let’s experiment with log transformations and
 the <a class="reference external" href="https://en.wikipedia.org/wiki/Power_transform#Box–Cox_transformation">Box-Cox transformation</a>,
 each of which is provided as an endogenous transformer in the Pmdarima package.</p>
@@ -384,7 +288,8 @@ each of which is provided as an endogenous transformer in the Pmdarima package.<
 <span class="n">tsdisplay</span><span class="p">(</span><span class="n">y_train_log</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/log-transformed.png"><img alt="Log-transformed Time Series" class="align-center" src="../_images/log-transformed.png" style="width: 340.8px; height: 254.39999999999998px;" /></a>
+<a class="reference internal image-reference" href="../_images/log-transformed.png"><img alt="Log-transformed Time Series" class="align-center" src="../_images/log-transformed.png" style="width: 340.8px; height: 254.39999999999998px;" />
+</a>
 <p>Hmm… The log transformation didn’t seem to help too much. In fact, it seems like it just
 shifted the skew to the other tail. Let’s try the Box-Cox transformation. When <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> is called,
 it will learn the lambda transformation parameter:</p>
@@ -394,7 +299,8 @@ it will learn the lambda transformation parameter:</p>
 <span class="n">tsdisplay</span><span class="p">(</span><span class="n">y_train_bc</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/bc-transformed.png"><img alt="Box-Cox transformed Time Series" class="align-center" src="../_images/bc-transformed.png" style="width: 337.2px; height: 254.39999999999998px;" /></a>
+<a class="reference internal image-reference" href="../_images/bc-transformed.png"><img alt="Box-Cox transformed Time Series" class="align-center" src="../_images/bc-transformed.png" style="width: 337.2px; height: 254.39999999999998px;" />
+</a>
 <p>However, the Box-Cox transformation seems to work very well as a means to normalize the data!
 In fact, a test of normality shows overwhelmingly that this is a normal distribution:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">normaltest</span>
@@ -402,9 +308,9 @@ In fact, a test of normality shows overwhelmingly that this is a normal distribu
 <span class="c1"># 3.751017646057429e-14</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="fitting-the-transformed-data">
-<h2>10.2.5. Fitting the transformed data<a class="headerlink" href="#fitting-the-transformed-data" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="fitting-the-transformed-data">
+<h2><span class="section-number">10.2.5. </span>Fitting the transformed data<a class="headerlink" href="#fitting-the-transformed-data" title="Link to this heading"></a></h2>
 <p>Pmdarima implements a scikit-learn-esque pipeline used to chain transformations and
 estimators together. Using this, we can centralize the entire transformer/model fit into
 one metaestimator:</p>
@@ -493,9 +399,9 @@ one metaestimator:</p>
 <p>Notice that not only have our model parameters (predictably) changed, but the AIC is significantly
 lower! <em>But</em>, you say, <em>the data is on a different scale. Is AIC really a good measure?</em> Not per se.
 Let’s look at an apples-to-apples comparison.</p>
-</div>
-<div class="section" id="examining-forecasts">
-<h2>10.2.6. Examining forecasts<a class="headerlink" href="#examining-forecasts" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="examining-forecasts">
+<h2><span class="section-number">10.2.6. </span>Examining forecasts<a class="headerlink" href="#examining-forecasts" title="Link to this heading"></a></h2>
 <p>Let’s write a function that examines the forecasts over the next 70 periods and plots
 the residuals:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span> <span class="k">as</span> <span class="n">mse</span>
@@ -509,7 +415,7 @@ the residuals:</p>
     <span class="c1"># Plot the forecasts</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:],</span> <span class="n">forecasts</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
-    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Sunspots (RMSE=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mse</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">forecasts</span><span class="p">))</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Sunspots (RMSE=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mse</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="w"> </span><span class="n">forecasts</span><span class="p">))</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
     <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
 
     <span class="c1"># Plot the residuals</span>
@@ -524,89 +430,66 @@ the residuals:</p>
 </pre></div>
 </div>
 <p>Here’s what the model on the untransformed series produces:</p>
-<a class="reference internal image-reference" href="../_images/model-1.png"><img alt="Forecasts on the untransformed Time Series" class="align-center" src="../_images/model-1.png" style="width: 340.8px; height: 513.6px;" /></a>
+<a class="reference internal image-reference" href="../_images/model-1.png"><img alt="Forecasts on the untransformed Time Series" class="align-center" src="../_images/model-1.png" style="width: 340.8px; height: 513.6px;" />
+</a>
 <p>Notice that we are <em>not</em> using the SMAPE (symmetric mean absolute percentage error) as we
 normally might, because our time series contains zeros. When the actual or forecasted value is zero, SMAPE
 is known to produce misleadingly large error terms. Instead, we’re using the RMSE.</p>
 <p>The second image shows the distribution of the residuals. The normal test shows that they
 are not normally distributed (which was kind of expected). Here’s what the model over the
 transformed series produces:</p>
-<a class="reference internal image-reference" href="../_images/model-2.png"><img alt="Forecasts on the Box-Cox transformed Time Series" class="align-center" src="../_images/model-2.png" style="width: 340.8px; height: 513.6px;" /></a>
+<a class="reference internal image-reference" href="../_images/model-2.png"><img alt="Forecasts on the Box-Cox transformed Time Series" class="align-center" src="../_images/model-2.png" style="width: 340.8px; height: 513.6px;" />
+</a>
 <p>A few things to note:</p>
 <ul class="simple">
-<li>These forecasts are on the same scale as the original data. This is because the pipeline
+<li><p>These forecasts are on the same scale as the original data. This is because the pipeline
 is smart enough to inverse transform the forecasts back to the original scale when a
-transformer is used.</li>
-<li>There is a lower RMSE in the forecasts (also expected, given our hypothesis was that normal
-data will perform better)</li>
-<li>The residuals are not <em>quite</em> normally distributed, though they are closer than the untransformed model.</li>
+transformer is used.</p></li>
+<li><p>There is a lower RMSE in the forecasts (also expected, given our hypothesis was that normal
+data will perform better)</p></li>
+<li><p>The residuals are not <em>quite</em> normally distributed, though they are closer than the untransformed model.</p></li>
 </ul>
-</div>
-<div class="section" id="final-thoughts">
-<h2>10.2.7. Final thoughts<a class="headerlink" href="#final-thoughts" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="final-thoughts">
+<h2><span class="section-number">10.2.7. </span>Final thoughts<a class="headerlink" href="#final-thoughts" title="Link to this heading"></a></h2>
 <p>By simply transforming our data prior to fitting our model, we were able to produce
 better forecasts (lower RMSE), a more simple model (fewer parameters) that fit significantly
 faster, and one that also had a much lower AIC. The key to take away from this is that,
 although convenient, the <a class="reference internal" href="../modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima()</span></code></a> method should not be the first
 thing you throw at a time series. Take the time to understand your data, clean it up, and make
 necessary transformations before you begin training models.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../contributing.html" class="btn btn-neutral float-right" title="11. Contributing to pmdarima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="stocks.html" class="btn btn-neutral float-left" title="10.1. Stock Market Prediction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="stocks.html" class="btn btn-neutral float-left" title="10.1. Stock Market Prediction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contributing.html" class="btn btn-neutral float-right" title="11. Contributing to pmdarima" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2017-2024, Taylor G Smith
-
-    </p>
+    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
