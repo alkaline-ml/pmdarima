@@ -96,6 +96,8 @@ jobs:
     docker:
       - image: python:3.9
     working_directory: ~/pmdarima
+    environment:
+      SETUPTOOLS_USE_DISTUTILS: stdlib
     steps:
     - checkout
     - run:
