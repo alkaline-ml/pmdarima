@@ -67,7 +67,7 @@ def test_nested_context():
 # Test a context honors the max duration
 def test_max_dur():
     # set arbitrarily low to guarantee will always pass after one iter
-    with StepwiseContext(max_dur=.5), \
+    with StepwiseContext(max_dur=.1), \
             pytest.warns(UserWarning) as uw:
 
         auto_arima(lynx, stepwise=True)
@@ -79,7 +79,7 @@ def test_max_dur():
 # Test that a context after the first will not inherit the first's attrs
 def test_subsequent_contexts():
     # Force a very fast fit
-    with StepwiseContext(max_dur=.5), \
+    with StepwiseContext(max_dur=.1), \
             pytest.warns(UserWarning):
         auto_arima(lynx, stepwise=True)
 
