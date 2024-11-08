@@ -149,7 +149,7 @@ jobs:
       - name: Setting up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.9'
 
       - name: Posting to Slack
         uses: 8398a7/action-slack@v3
