@@ -53,7 +53,9 @@ jobs:
       # We build the source archive separately because of this: https://github.com/alkaline-ml/pmdarima/pull/136#discussion_r279781731
       # We build it first because of this: https://github.com/alkaline-ml/pmdarima/issues/448
       - name: Building source distribution
-        run: make version sdist
+        run: |
+          pip install -r build_tools/build_requirements.txt
+          make version sdist
 
       - name: Install cibuildwheel
         run: python -m pip install 'cibuildwheel<2.20.0'
