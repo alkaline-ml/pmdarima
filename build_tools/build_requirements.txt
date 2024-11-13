@@ -9,3 +9,5 @@ wheel
 twine>=1.13.0
 readme_renderer
 matplotlib
+setuptools>=38.6.0,!=50.0.0
+packaging>=17.1  # Bundled with setuptools, but want to be explicit
