@@ -1,5 +1,5 @@
 numpy==2.0.0
-scipy==1.10
+scipy==1.13.0
 cython==3.0.0
 patsy
 pytest
