@@ -124,7 +124,7 @@ jobs:
 
           # we'll need packaging, numpy, and cython to build this. let install_requires do all the
           # rest of the work. We build with our lowest supported numpy version to make sure there is no regression
-          pip install "packaging>=17.1" "numpy~=1.19.3" "cython>=0.29,!=0.29.18,!=0.29.31"
+          pip install "packaging>=17.1" "numpy~=2.0.0" "cython~=3.0.0"
           python setup.py sdist
 
           cd dist
@@ -208,7 +208,7 @@ jobs:
     steps:
       - checkout
       - restore-whl-file:
-          key: "3.8"
+          key: "3.9"
       - deploy-to-pypi
 
   deploy-cpython39-whl:
