@@ -1,4 +1,6 @@
-# Other requirements needed in CI / deploying only
+numpy==2.0.0
+scipy==1.10
+cython==3.0.0
 patsy
 pytest
 pytest-mpl
