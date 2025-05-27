@@ -16,17 +16,21 @@ import sklearn
 from sklearn.utils import check_array as _check_array
 
 
-# patched version of sklearn.utils.validation.check_array 
+# patched version of sklearn.utils.validation.check_array
 # until sklearn minimal version for this project is 1.6
 # to remove deprecation warning and ensure compatibility with sklearn 1.8
-sklearn_ver = list(map(int,sklearn.__version__.split(".")))
-_new_check_array_api = sklearn_ver[0]>=1 and sklearn_ver[1]>=6
+sklearn_ver = list(map(int, sklearn.__version__.split(".")))
+_new_check_array_api = sklearn_ver[0] >= 1 and sklearn_ver[1] >= 6
 
-def check_array(*args,ensure_all_finite=False,**kwargs):
+
+def check_array(*args, ensure_all_finite=False, **kwargs):
     if _new_check_array_api:
-        return _check_array(*args,ensure_all_finite=ensure_all_finite,**kwargs)
+        return _check_array(*args, ensure_all_finite=ensure_all_finite,
+                            **kwargs)
     else:
-        return _check_array(*args,force_all_finite=ensure_all_finite,**kwargs)
+        return _check_array(*args, force_all_finite=ensure_all_finite,
+                            **kwargs)
+
 
 __all__ = [
     'as_series',
@@ -37,7 +41,6 @@ __all__ = [
     'diff_inv',
     'is_iterable'
 ]
-
 
 
 def as_series(x, **kwargs):
