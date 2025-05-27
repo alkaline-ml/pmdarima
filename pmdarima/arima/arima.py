@@ -12,7 +12,6 @@ import numpy.polynomial.polynomial as np_polynomial
 import numbers
 import warnings
 from scipy.stats import gaussian_kde, norm
-from sklearn.utils.validation import check_array
 from statsmodels import api as sm
 
 from . import _validation as val
@@ -25,7 +24,7 @@ from ..compat import statsmodels as sm_compat
 from ..compat import matplotlib as mpl_compat
 from ..utils import if_has_delegate, is_iterable, check_endog, check_exog
 from ..utils.visualization import _get_plt
-from ..utils.array import diff_inv, diff
+from ..utils.array import diff_inv, diff, check_array
 
 # Get the version
 import pmdarima
@@ -804,7 +803,7 @@ class ARIMA(BaseARIMA):
             # The confidence intervals may be a Pandas frame if it comes from
             # SARIMAX & we want Numpy. We will to duck type it so we don't add
             # new explicit requirements for the package
-            return f, check_array(conf_int, force_all_finite=False)
+            return f, check_array(conf_int, ensure_all_finite=False)
         return f
 
     def __getstate__(self):
