@@ -361,7 +361,7 @@ def _diff_inv_vector(x, lag, differences, xi):
             xi,
             dtype=DTYPE,
             copy=False,
-            **{_CHECK_ARRAY_FINITE_PARAM: False},
+            force_all_finite=False,
             preserve_series=False,
         )
         if xi.shape[0] != lag * differences:
