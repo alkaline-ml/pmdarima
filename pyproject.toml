@@ -15,6 +15,6 @@ requires = [
     "statsmodels==0.13.3; python_version == '3.11'",
     "statsmodels==0.14.0; python_version == '3.12'",
     "cython>=0.29,!=0.29.18,!=0.29.31",
-    "setuptools",
+    "setuptools>=42",
 ]
 build-backend = "setuptools.build_meta:__legacy__" # TODO: Don't use legacy backend
