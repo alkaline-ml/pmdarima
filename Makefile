@@ -46,7 +46,7 @@ sdist: version
 	$(PYTHON) setup.py sdist
 
 develop: version
-	$(PYTHON) -m pip install --editable .
+	$(PYTHON) setup.py develop
 
 install: version
 	$(PYTHON) setup.py install
