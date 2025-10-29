@@ -46,7 +46,6 @@ sdist: version
 	$(PYTHON) setup.py sdist
 
 develop: version
-	$(PYTHON) setup.py develop
 ifeq ($(shell python -c 'import sys; print(sys.version_info >= (3,12))'), True)
 	$(PYTHON) pip install --editable .
 else
