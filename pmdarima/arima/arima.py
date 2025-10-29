@@ -42,6 +42,7 @@ _CHECK_ARRAY_FINITE_PARAM = (
     else "force_all_finite"
 )
 
+
 def ARMAtoMA(ar, ma, max_deg):
     r"""
     Convert ARMA coefficients to infinite MA coefficients.
@@ -810,7 +811,10 @@ class ARIMA(BaseARIMA):
             # The confidence intervals may be a Pandas frame if it comes from
             # SARIMAX & we want Numpy. We will to duck type it so we don't add
             # new explicit requirements for the package
-            return f, check_array(conf_int, **{_CHECK_ARRAY_FINITE_PARAM: False})
+            return f, check_array(
+                conf_int,
+                **{_CHECK_ARRAY_FINITE_PARAM: False}
+            )
         return f
 
     def __getstate__(self):
