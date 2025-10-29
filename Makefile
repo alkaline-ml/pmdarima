@@ -47,7 +47,7 @@ sdist: version
 
 develop: version
 ifeq ($(shell python -c 'import sys; print(sys.version_info >= (3,12))'), True)
-	$(PYTHON) -m pip install --editable .
+	$(PYTHON) -m pip install --editable . --no-build-isolation
 else
 	$(PYTHON) setup.py develop
 endif
