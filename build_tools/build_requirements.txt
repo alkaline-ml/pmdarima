@@ -12,7 +12,8 @@ scipy==1.11.2; python_version == '3.12'
 statsmodels==0.13.2; python_version <= '3.10'
 statsmodels==0.13.3; python_version == '3.11'
 statsmodels==0.14.0; python_version == '3.12'
-cython>=0.29,!=0.29.18,!=0.29.31
+cython>=0.29,!=0.29.18,!=0.29.31; python_version < '3.12'
+cython>=3.0; python_version >= '3.12'
 scikit-learn>=0.22
 pandas>=0.19
 patsy
