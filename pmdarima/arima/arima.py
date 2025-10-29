@@ -8,6 +8,7 @@
 import pandas as pd
 import numpy as np
 
+import inspect
 import numpy.polynomial.polynomial as np_polynomial
 import numbers
 import warnings
@@ -35,6 +36,11 @@ __all__ = [
     'ARMAtoMA'
 ]
 
+_CHECK_ARRAY_FINITE_PARAM = (
+    "ensure_all_finite"
+    if "ensure_all_finite" in inspect.signature(check_array).parameters
+    else "force_all_finite"
+)
 
 def ARMAtoMA(ar, ma, max_deg):
     r"""
@@ -571,7 +577,7 @@ class ARIMA(BaseARIMA):
 
         # if exog was included, check the array...
         if X is not None:
-            X = check_exog(X, force_all_finite=False, copy=False, dtype=DTYPE)
+            X = check_exog(X, =False, copy=False, dtype=DTYPE)
 
         # determine the CV args, if any
         cv = self.out_of_sample_size
@@ -630,7 +636,7 @@ class ARIMA(BaseARIMA):
                                  'array, it must also be provided one for '
                                  'predicting or updating observations.')
             else:
-                return check_exog(X, force_all_finite=True, dtype=DTYPE)
+                return check_exog(X, =True, dtype=DTYPE)
         return None
 
     def predict_in_sample(
@@ -804,7 +810,7 @@ class ARIMA(BaseARIMA):
             # The confidence intervals may be a Pandas frame if it comes from
             # SARIMAX & we want Numpy. We will to duck type it so we don't add
             # new explicit requirements for the package
-            return f, check_array(conf_int, force_all_finite=False)
+            return f, check_array(conf_int, **{_CHECK_ARRAY_FINITE_PARAM: False})
         return f
 
     def __getstate__(self):
