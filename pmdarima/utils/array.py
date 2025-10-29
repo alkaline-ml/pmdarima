@@ -29,6 +29,7 @@ _CHECK_ARRAY_FINITE_PARAM = (
     else "force_all_finite"
 )
 
+
 def as_series(x, **kwargs):
     """Cast as pandas Series.
 
