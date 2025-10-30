@@ -136,6 +136,8 @@ jobs:
     machine:
       image: ubuntu-2004:202111-02
     working_directory: ~/pmdarima
+    environment:
+      SETUPTOOLS_USE_DISTUTILS: stdlib
     steps:
       - checkout
       - build-test-and-persist:
