@@ -14,11 +14,11 @@ function build_wheel {
     fi
 
     distutils_version=""
-    if [ "$pyver" = "3.12" ]; then
-      distutils_version="local"
-    else
-      distutils_version="stdlib"
-    fi
+	if python -c "import sys; exit(0 if sys.version_info >= (3, 12) else 1)"; then
+	  distutils_version="local"
+	else
+	  distutils_version="stdlib"
+	fi
 
     ML_PYTHON_VERSION=$(python -c \
         "print('cp{maj}{min}-cp{maj}{min}{ucs}'.format( \
