@@ -13,7 +13,11 @@ function build_wheel {
         ucs_tag="${ucs_tag}u"
     fi
 
-	distutils_version=$(python -c "import sys; print('local' if sys.version_info[:2] >= (3,12) else 'stdlib')")
+	if [[ "$pyver" >= "3.11" ]]; then
+	    distutils_version="local"
+	else
+	    distutils_version="stdlib"
+	fi
 
     ML_PYTHON_VERSION=$(python -c \
         "print('cp{maj}{min}-cp{maj}{min}{ucs}'.format( \
