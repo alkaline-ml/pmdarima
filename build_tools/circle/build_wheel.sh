@@ -13,7 +13,7 @@ function build_wheel {
         ucs_tag="${ucs_tag}u"
     fi
 
-	if [[ "$pyver" >= "3.11" ]]; then
+	if [[ "$pyver" >= "3.12" ]]; then
 	    distutils_version="local"
 	else
 	    distutils_version="stdlib"
