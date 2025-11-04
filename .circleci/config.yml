@@ -175,6 +175,9 @@ jobs:
     working_directory: ~/pmdarima
     steps:
       - checkout
+      - run:
+          name: Upgrade dependencies for numpy 2.0+
+          command: pip install --upgrade "numpy>=2.0.0" "scipy>=1.13.0" "statsmodels>=0.14.2"
       - run: make install
       - run: ./build_tools/circle/build_doc.sh
       # This persists doc/_build/html for the deploy step
