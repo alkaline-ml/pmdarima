@@ -3,7 +3,7 @@ requires = [
     "numpy>=2.0.0",
     "scipy>=1.13.0",
     "statsmodels>=0.14.2",
-    "cython>=0.29,!=0.29.18,!=0.29.31",
+    "cython>=3.0.0",
     "setuptools",
 ]
 build-backend = "setuptools.build_meta:__legacy__" # TODO: Don't use legacy backend
