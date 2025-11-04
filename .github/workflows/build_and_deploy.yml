@@ -29,7 +29,7 @@ jobs:
     env:
       PYTHON_VERSION: ${{ format('3.{0}', matrix.python3-minor-version) }}
       PYTHON_EXECUTABLE: ${{ format('cp3{0}', matrix.python3-minor-version) }}
-      SETUPTOOLS_USE_DISTUTILS: ${{ matrix.python3-minor-version == 12 && 'local' || 'stdlib' }}
+      SETUPTOOLS_USE_DISTUTILS: local
 
     runs-on: ${{ matrix.os }}
     name: Build and Deploy (${{ matrix.os }}, 3.${{ matrix.python3-minor-version }})

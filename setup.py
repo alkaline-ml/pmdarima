@@ -20,7 +20,6 @@ import importlib
 import builtins
 
 # Minimum allowed version
-IS_PYTHON_312 = sys.version_info[0] == 3 and sys.version_info[1] >= 12
 MIN_PYTHON = (3, 9)
 
 # Hacky (!!), adopted from sklearn. This sets a global variable
@@ -131,19 +130,22 @@ cmdclass = {'clean': CleanCommand}
 # build_ext has to be imported after setuptools
 try:
     import numpy as np
-    from numpy.distutils.command.build_ext import build_ext  # noqa
 
-    # This is the preferred way to check numpy version: https://git.io/JtEIb
-    if sys.platform == 'darwin' and np.lib.NumpyVersion(np.__version__) >= '1.20.0':
+    # Check numpy version using packaging.version.Version
+    if sys.platform == 'darwin' and Version(np.__version__) >= Version('1.20.0'):
         # https://numpy.org/devdocs/user/building.html#disabling-atlas-and-other-accelerated-libraries
         os.environ['NPY_BLAS_ORDER'] = ''
         os.environ['NPY_LAPACK_ORDER'] = ''
 
-    class build_ext_subclass(build_ext):
-        def build_extensions(self):
-            build_ext.build_extensions(self)
+    # numpy.distutils was removed in numpy 2.0, so we only try to import it for older versions
+    if Version(np.__version__) < Version('2.0.0'):
+        from numpy.distutils.command.build_ext import build_ext  # noqa
 
-    cmdclass['build_ext'] = build_ext_subclass
+        class build_ext_subclass(build_ext):
+            def build_extensions(self):
+                build_ext.build_extensions(self)
+
+        cmdclass['build_ext'] = build_ext_subclass
 
 except ImportError:
     # Numpy should not be a dependency just to be able to introspect
@@ -316,53 +318,53 @@ def do_setup():
                 )
             )
 
-        # for sdist, use setuptools so we get the long_description_content_type
-        if 'sdist' in sys.argv or IS_PYTHON_312:
-            from setuptools import setup
+        # Check if we have numpy 2.0+ or Python 3.12+
+        # numpy.distutils was removed in numpy 2.0, and distutils was removed in Python 3.12+
+        import numpy
+        use_setuptools = (Version(numpy.__version__) >= Version('2.0.0') or
+                         sys.version_info[0] == 3 and sys.version_info[1] >= 12 or
+                         'sdist' in sys.argv)
+
+        if use_setuptools:
+            from setuptools import setup, Extension
             print("Setting up with setuptools")
 
             # Needs to be unset when building sdist
             os.environ.pop("SETUPTOOLS_USE_DISTUTILS", None)
 
-            # TODO: distutils is removed in Python 3.12+, so this should probably be the default
-            if IS_PYTHON_312:
-                from setuptools import Extension
-
-                import numpy
-
-                include_dirs = [numpy.get_include()]
-                metadata['ext_modules'] = [
-                    Extension(
-                        name='pmdarima.arima._arima',
-                        sources=['pmdarima/arima/_arima.pyx'],
-                        include_dirs=include_dirs
-                    ),
-                    Extension(
-                        name='pmdarima.preprocessing.exog._fourier',
-                        sources=['pmdarima/preprocessing/exog/_fourier.pyx'],
-                        include_dirs=include_dirs
-                    ),
-                    Extension(
-                        name='pmdarima.utils._array',
-                        sources=['pmdarima/utils/_array.pyx'],
-                        include_dirs=include_dirs
-                    ),
-                    Extension(
-                        name='pmdarima.__check_build._check_build',
-                        sources=['pmdarima/__check_build/_check_build.pyx'],
-                        include_dirs=include_dirs
-                    )
-                ]
+            include_dirs = [numpy.get_include()]
+            metadata['ext_modules'] = [
+                Extension(
+                    name='pmdarima.arima._arima',
+                    sources=['pmdarima/arima/_arima.pyx'],
+                    include_dirs=include_dirs
+                ),
+                Extension(
+                    name='pmdarima.preprocessing.exog._fourier',
+                    sources=['pmdarima/preprocessing/exog/_fourier.pyx'],
+                    include_dirs=include_dirs
+                ),
+                Extension(
+                    name='pmdarima.utils._array',
+                    sources=['pmdarima/utils/_array.pyx'],
+                    include_dirs=include_dirs
+                ),
+                Extension(
+                    name='pmdarima.__check_build._check_build',
+                    sources=['pmdarima/__check_build/_check_build.pyx'],
+                    include_dirs=include_dirs
+                )
+            ]
         else:
             # we should only need numpy for building. Everything else can be
             # collected via install_requires above
-            check_package_status('numpy', '1.16')
+            check_package_status('numpy', '2.0')
 
             from numpy.distutils.core import setup
             print("Setting up with numpy.distutils.core")
 
-        # add the config to the metadata
-        metadata['configuration'] = configuration
+            # add the config to the metadata
+            metadata['configuration'] = configuration
 
     # call setup on the dict
     setup(**metadata)
