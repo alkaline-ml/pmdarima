@@ -13,12 +13,8 @@ function build_wheel {
         ucs_tag="${ucs_tag}u"
     fi
 
-    distutils_version=""
-    if [ "$pyver" = "3.12" ]; then
-      distutils_version="local"
-    else
-      distutils_version="stdlib"
-    fi
+    # With numpy 2.0+, we always use local distutils since numpy.distutils is removed
+    distutils_version="local"
 
     ML_PYTHON_VERSION=$(python -c \
         "print('cp{maj}{min}-cp{maj}{min}{ucs}'.format( \
