@@ -166,7 +166,6 @@ jobs:
     working_directory: ~/pmdarima
     steps:
       - checkout
-      - run: make install
       - run: ./build_tools/circle/build_doc.sh
       # This persists doc/_build/html for the deploy step
       - persist_to_workspace:

@@ -2,6 +2,11 @@
 
 set -e
 
+# WIP
+pip install -r requirements.txt
+make install
+pip install pandas sphinx sphinx_gallery pytest-runner sphinx_rtd_theme "matplotlib>=2.2.0" "numpydoc==0.7.0" image
+
 # this is a hack, but we have to make sure we're only ever running this from
 # the top level of the package and not in the subdirectory...
 if [[ ! -d pmdarima/__check_build ]]; then
