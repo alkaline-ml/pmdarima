@@ -6,6 +6,7 @@
 
 from sklearn.utils import validation as skval
 
+import inspect
 import numpy as np
 import pandas as pd
 
@@ -21,6 +22,12 @@ __all__ = [
     'diff_inv',
     'is_iterable'
 ]
+
+_CHECK_ARRAY_FINITE_PARAM = (
+    "ensure_all_finite"
+    if "ensure_all_finite" in inspect.signature(skval.check_array).parameters
+    else "force_all_finite"
+)
 
 
 def as_series(x, **kwargs):
@@ -179,7 +186,7 @@ def check_endog(
     endog = skval.check_array(
         y,
         ensure_2d=False,
-        force_all_finite=force_all_finite,
+        **{_CHECK_ARRAY_FINITE_PARAM: force_all_finite},
         copy=copy,
         dtype=dtype,
     )
@@ -244,7 +251,7 @@ def check_exog(X, dtype=DTYPE, copy=True, force_all_finite=True):
         ensure_2d=True,
         dtype=DTYPE,
         copy=copy,
-        force_all_finite=force_all_finite,
+        **{_CHECK_ARRAY_FINITE_PARAM: force_all_finite},
     )
 
 
@@ -389,7 +396,7 @@ def _diff_inv_matrix(x, lag, differences, xi):
                 xi,
                 dtype=DTYPE,
                 copy=False,
-                force_all_finite=False,
+                **{_CHECK_ARRAY_FINITE_PARAM: False},
                 ensure_2d=True,
             )
             if xi.shape != (lag * differences, m):
@@ -475,7 +482,7 @@ def diff_inv(x, lag=1, differences=1, xi=None):
         x,
         dtype=DTYPE,
         copy=False,
-        force_all_finite=False,
+        **{_CHECK_ARRAY_FINITE_PARAM: False},
         ensure_2d=False,
     )
 

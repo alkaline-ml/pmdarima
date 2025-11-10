@@ -361,8 +361,8 @@ def do_setup():
             from numpy.distutils.core import setup
             print("Setting up with numpy.distutils.core")
 
-        # add the config to the metadata
-        metadata['configuration'] = configuration
+            # add the config to the metadata
+            metadata['configuration'] = configuration
 
     # call setup on the dict
     setup(**metadata)

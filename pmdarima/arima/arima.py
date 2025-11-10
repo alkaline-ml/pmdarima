@@ -8,6 +8,7 @@
 import pandas as pd
 import numpy as np
 
+import inspect
 import numpy.polynomial.polynomial as np_polynomial
 import numbers
 import warnings
@@ -34,6 +35,12 @@ __all__ = [
     'ARIMA',
     'ARMAtoMA'
 ]
+
+_CHECK_ARRAY_FINITE_PARAM = (
+    "ensure_all_finite"
+    if "ensure_all_finite" in inspect.signature(check_array).parameters
+    else "force_all_finite"
+)
 
 
 def ARMAtoMA(ar, ma, max_deg):
@@ -804,7 +811,10 @@ class ARIMA(BaseARIMA):
             # The confidence intervals may be a Pandas frame if it comes from
             # SARIMAX & we want Numpy. We will to duck type it so we don't add
             # new explicit requirements for the package
-            return f, check_array(conf_int, force_all_finite=False)
+            return f, check_array(
+                conf_int,
+                **{_CHECK_ARRAY_FINITE_PARAM: False}
+            )
         return f
 
     def __getstate__(self):

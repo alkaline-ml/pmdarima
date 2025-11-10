@@ -12,7 +12,7 @@ PIP="/opt/python/${PYTHON_VERSION}/bin/pip"
 # We have to use wheel < 0.32 since they inexplicably removed the open_for_csv
 # function from the package after 0.31.1 and it fails for Python 3.6?!
 ${PIP} install --upgrade pip wheel==0.31.1
-${PIP} install --upgrade "setuptools>=38.6.0,!=50.0.0"
+${PIP} install --upgrade "setuptools>=42,!=50.0.0"
 
 # NOW we can install requirements
 ${PIP} install -r /io/build_tools/build_requirements.txt
