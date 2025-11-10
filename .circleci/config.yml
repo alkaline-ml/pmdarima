@@ -81,7 +81,7 @@ commands:
             -v `pwd`:/app \
             -w /app \
             --env-file vars.env \
-            python:3.9 \
+            python:3.11 \
             ./build_tools/circle/deploy.sh
 
 jobs:
@@ -94,7 +94,7 @@ jobs:
   # larger unit tests, and to avoid multiple setup steps that can slow the pipeline down
   test-sanity:
     docker:
-      - image: python:3.9
+      - image: python:3.11
     working_directory: ~/pmdarima
     environment:
       SETUPTOOLS_USE_DISTUTILS: stdlib
@@ -132,15 +132,6 @@ jobs:
           python -c 'import pmdarima as pm; print(pm.__version__)'
 
   # --- Unit tests ---
-  test-unit-cpython39:
-    machine:
-      image: ubuntu-2004:202111-02
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - build-test-and-persist:
-          pythonversion: "3.9"
-
   test-unit-cpython310:
     machine:
       image: ubuntu-2004:202111-02
@@ -211,16 +202,6 @@ jobs:
           key: "3.8"
       - deploy-to-pypi
 
-  deploy-cpython39-whl:
-    machine:
-      image: ubuntu-2004:202111-02
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - restore-whl-file:
-          key: "3.9"
-      - deploy-to-pypi
-
   deploy-cpython310-whl:
     machine:
       image: ubuntu-2004:202111-02
@@ -259,7 +240,7 @@ jobs:
   # GH_TOKEN (the personal Git token with pushes enabled)
   deploy-doc:
     docker:
-      - image: python:3.9
+      - image: python:3.11
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -278,8 +259,6 @@ workflows:
         # run on test and tag
         - test-sanity:
             filters: *test-filters
-        - test-unit-cpython39:
-            filters: *test-filters
         - test-unit-cpython310:
             filters: *test-filters
         - test-unit-cpython311:
@@ -291,7 +270,6 @@ workflows:
         - testing-passed:
             requires:
                 - test-sanity
-                - test-unit-cpython39
                 - test-unit-cpython310
                 - test-unit-cpython311
                 - test-unit-cpython312
@@ -304,11 +282,6 @@ workflows:
                 - build-doc
                 - testing-passed
             filters: *test-filters
-
-        - deploy-cpython39-whl:
-            filters: *deploy-filters
-            requires:
-              - deploy-doc
 
         - deploy-cpython310-whl:
             filters: *deploy-filters

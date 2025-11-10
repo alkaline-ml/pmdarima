@@ -20,7 +20,7 @@ jobs:
   build-and-deploy:
     strategy:
       matrix:
-        python3-minor-version: [9, 10, 11, 12]
+        python3-minor-version: [10, 11, 12]
         # TODO: Figure out macos-14/macos-latest
         os: [macos-13, ubuntu-latest, windows-latest]
     defaults:
