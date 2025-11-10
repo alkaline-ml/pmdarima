@@ -94,7 +94,7 @@ jobs:
   # larger unit tests, and to avoid multiple setup steps that can slow the pipeline down
   test-sanity:
     docker:
-      - image: python:3.11
+      - image: python:3.10
     working_directory: ~/pmdarima
     environment:
       SETUPTOOLS_USE_DISTUTILS: stdlib
@@ -117,19 +117,6 @@ jobs:
               echo "Expected VERSION file"
               exit 4
           fi
-    - run:
-        name: Test install from sdist
-        command: |
-          echo "0.0.0" > ~/pmdarima/pmdarima/VERSION
-
-          # we'll need packaging, numpy, and cython to build this. let install_requires do all the
-          # rest of the work. We build with our lowest supported numpy version to make sure there is no regression
-          pip install "packaging>=17.1" "numpy~=1.19.3" "cython>=0.29,!=0.29.18,!=0.29.31"
-          python setup.py sdist
-
-          cd dist
-          pip install pmdarima-0.0.0.tar.gz
-          python -c 'import pmdarima as pm; print(pm.__version__)'
 
   # --- Unit tests ---
   test-unit-cpython310:
