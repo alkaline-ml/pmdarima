@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**03:32.803** total execution time for 13 files **from all galleries**:
+**04:22.895** total execution time for 13 files **from all galleries**:
 
 .. container::
 
@@ -33,34 +33,34 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_example_simple_fit.py` (``../examples/example_simple_fit.py``)
-     - 02:42.034
+     - 03:21.579
      - 0.0
    * - :ref:`sphx_glr_auto_examples_model_selection_example_cross_val_predict.py` (``../examples/model_selection/example_cross_val_predict.py``)
-     - 00:20.112
+     - 00:24.794
      - 0.0
    * - :ref:`sphx_glr_auto_examples_preprocessing_example_date_featurizer.py` (``../examples/preprocessing/example_date_featurizer.py``)
-     - 00:14.266
+     - 00:15.163
      - 0.0
    * - :ref:`sphx_glr_auto_examples_model_selection_example_cross_validation.py` (``../examples/model_selection/example_cross_validation.py``)
-     - 00:07.776
+     - 00:09.895
      - 0.0
    * - :ref:`sphx_glr_auto_examples_example_pipeline.py` (``../examples/example_pipeline.py``)
-     - 00:04.321
+     - 00:05.475
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_persisting_a_model.py` (``../examples/arima/example_persisting_a_model.py``)
-     - 00:02.234
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_utils_example_tsdisplay.py` (``../examples/utils/example_tsdisplay.py``)
-     - 00:00.668
+     - 00:03.622
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_add_new_samples.py` (``../examples/arima/example_add_new_samples.py``)
-     - 00:00.645
+     - 00:00.775
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_utils_example_tsdisplay.py` (``../examples/utils/example_tsdisplay.py``)
+     - 00:00.722
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_seasonal_decomposition.py` (``../examples/arima/example_seasonal_decomposition.py``)
-     - 00:00.400
+     - 00:00.433
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_auto_arima.py` (``../examples/arima/example_auto_arima.py``)
-     - 00:00.342
+     - 00:00.431
      - 0.0
    * - :ref:`sphx_glr_auto_examples_datasets_example_load_data.py` (``../examples/datasets/example_load_data.py``)
      - 00:00.003

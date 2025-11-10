@@ -90,6 +90,7 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">numpy.polynomial.polynomial</span> <span class="k">as</span> <span class="nn">np_polynomial</span>
 <span class="kn">import</span> <span class="nn">numbers</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -116,6 +117,12 @@
     <span class="s1">&#39;ARIMA&#39;</span><span class="p">,</span>
     <span class="s1">&#39;ARMAtoMA&#39;</span>
 <span class="p">]</span>
+
+<span class="n">_CHECK_ARRAY_FINITE_PARAM</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;ensure_all_finite&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;ensure_all_finite&quot;</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">check_array</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span>
+    <span class="k">else</span> <span class="s2">&quot;force_all_finite&quot;</span>
+<span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">ARMAtoMA</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">max_deg</span><span class="p">):</span>
@@ -891,7 +898,10 @@
             <span class="c1"># The confidence intervals may be a Pandas frame if it comes from</span>
             <span class="c1"># SARIMAX &amp; we want Numpy. We will to duck type it so we don&#39;t add</span>
             <span class="c1"># new explicit requirements for the package</span>
-            <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">check_array</span><span class="p">(</span><span class="n">conf_int</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">check_array</span><span class="p">(</span>
+                <span class="n">conf_int</span><span class="p">,</span>
+                <span class="o">**</span><span class="p">{</span><span class="n">_CHECK_ARRAY_FINITE_PARAM</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">f</span>
 
     <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1497,7 +1507,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
+    <p>&#169; Copyright 2017-2025, Taylor G Smith.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

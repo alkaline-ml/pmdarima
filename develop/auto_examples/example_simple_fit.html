@@ -105,47 +105,47 @@ to download the full example code.</p>
 <p>This is a simple example of how we can fit an ARIMA model in several lines
 without knowing anything about our data or optimal hyper parameters.</p>
 <br/><img src="../_images/sphx_glr_example_simple_fit_001.png" srcset="../_images/sphx_glr_example_simple_fit_001.png" alt="Actual test samples vs. forecasts" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Performing stepwise search to minimize aic
- ARIMA(2,1,2)(1,0,1)[12] intercept   : AIC=2915.873, Time=1.11 sec
- ARIMA(0,1,0)(0,0,0)[12] intercept   : AIC=3049.597, Time=0.09 sec
- ARIMA(1,1,0)(1,0,0)[12] intercept   : AIC=2954.975, Time=0.50 sec
+ ARIMA(2,1,2)(1,0,1)[12] intercept   : AIC=2915.873, Time=1.29 sec
+ ARIMA(0,1,0)(0,0,0)[12] intercept   : AIC=3049.597, Time=0.01 sec
+ ARIMA(1,1,0)(1,0,0)[12] intercept   : AIC=2954.975, Time=0.40 sec
  ARIMA(0,1,1)(0,0,1)[12] intercept   : AIC=2947.028, Time=0.50 sec
- ARIMA(0,1,0)(0,0,0)[12]             : AIC=3047.612, Time=0.10 sec
+ ARIMA(0,1,0)(0,0,0)[12]             : AIC=3047.612, Time=0.09 sec
  ARIMA(2,1,2)(0,0,1)[12] intercept   : AIC=2940.108, Time=0.61 sec
- ARIMA(2,1,2)(1,0,0)[12] intercept   : AIC=2915.651, Time=0.69 sec
- ARIMA(2,1,2)(0,0,0)[12] intercept   : AIC=2986.348, Time=0.12 sec
- ARIMA(2,1,2)(2,0,0)[12] intercept   : AIC=2915.275, Time=7.38 sec
- ARIMA(2,1,2)(2,0,1)[12] intercept   : AIC=2918.411, Time=13.90 sec
- ARIMA(1,1,2)(2,0,0)[12] intercept   : AIC=2925.080, Time=7.20 sec
- ARIMA(2,1,1)(2,0,0)[12] intercept   : AIC=2911.330, Time=10.01 sec
- ARIMA(2,1,1)(1,0,0)[12] intercept   : AIC=2911.555, Time=3.70 sec
- ARIMA(2,1,1)(2,0,1)[12] intercept   : AIC=2914.196, Time=9.09 sec
- ARIMA(2,1,1)(1,0,1)[12] intercept   : AIC=2912.289, Time=0.90 sec
- ARIMA(1,1,1)(2,0,0)[12] intercept   : AIC=2920.327, Time=10.40 sec
- ARIMA(2,1,0)(2,0,0)[12] intercept   : AIC=2928.273, Time=6.69 sec
- ARIMA(3,1,1)(2,0,0)[12] intercept   : AIC=2912.939, Time=13.60 sec
- ARIMA(1,1,0)(2,0,0)[12] intercept   : AIC=2954.804, Time=14.40 sec
- ARIMA(3,1,0)(2,0,0)[12] intercept   : AIC=2914.414, Time=11.19 sec
- ARIMA(3,1,2)(2,0,0)[12] intercept   : AIC=2915.331, Time=11.91 sec
- ARIMA(2,1,1)(2,0,0)[12]             : AIC=2908.221, Time=6.10 sec
- ARIMA(2,1,1)(1,0,0)[12]             : AIC=2909.011, Time=1.10 sec
- ARIMA(2,1,1)(2,0,1)[12]             : AIC=2910.144, Time=6.60 sec
- ARIMA(2,1,1)(1,0,1)[12]             : AIC=2908.093, Time=0.59 sec
- ARIMA(2,1,1)(0,0,1)[12]             : AIC=2933.343, Time=0.40 sec
- ARIMA(2,1,1)(1,0,2)[12]             : AIC=2910.039, Time=4.59 sec
- ARIMA(2,1,1)(0,0,0)[12]             : AIC=2980.096, Time=0.03 sec
- ARIMA(2,1,1)(0,0,2)[12]             : AIC=2921.090, Time=7.28 sec
- ARIMA(2,1,1)(2,0,2)[12]             : AIC=2912.081, Time=5.50 sec
+ ARIMA(2,1,2)(1,0,0)[12] intercept   : AIC=2915.651, Time=0.79 sec
+ ARIMA(2,1,2)(0,0,0)[12] intercept   : AIC=2986.348, Time=0.04 sec
+ ARIMA(2,1,2)(2,0,0)[12] intercept   : AIC=2915.275, Time=10.37 sec
+ ARIMA(2,1,2)(2,0,1)[12] intercept   : AIC=2918.411, Time=11.10 sec
+ ARIMA(1,1,2)(2,0,0)[12] intercept   : AIC=2925.080, Time=9.19 sec
+ ARIMA(2,1,1)(2,0,0)[12] intercept   : AIC=2911.330, Time=12.70 sec
+ ARIMA(2,1,1)(1,0,0)[12] intercept   : AIC=2911.555, Time=0.91 sec
+ ARIMA(2,1,1)(2,0,1)[12] intercept   : AIC=2914.196, Time=10.69 sec
+ ARIMA(2,1,1)(1,0,1)[12] intercept   : AIC=2912.289, Time=0.80 sec
+ ARIMA(1,1,1)(2,0,0)[12] intercept   : AIC=2920.327, Time=4.80 sec
+ ARIMA(2,1,0)(2,0,0)[12] intercept   : AIC=2928.273, Time=13.10 sec
+ ARIMA(3,1,1)(2,0,0)[12] intercept   : AIC=2912.939, Time=18.80 sec
+ ARIMA(1,1,0)(2,0,0)[12] intercept   : AIC=2954.804, Time=14.99 sec
+ ARIMA(3,1,0)(2,0,0)[12] intercept   : AIC=2914.414, Time=15.31 sec
+ ARIMA(3,1,2)(2,0,0)[12] intercept   : AIC=2915.331, Time=20.49 sec
+ ARIMA(2,1,1)(2,0,0)[12]             : AIC=2908.221, Time=12.00 sec
+ ARIMA(2,1,1)(1,0,0)[12]             : AIC=2909.011, Time=0.81 sec
+ ARIMA(2,1,1)(2,0,1)[12]             : AIC=2910.144, Time=8.40 sec
+ ARIMA(2,1,1)(1,0,1)[12]             : AIC=2908.093, Time=0.51 sec
+ ARIMA(2,1,1)(0,0,1)[12]             : AIC=2933.343, Time=0.50 sec
+ ARIMA(2,1,1)(1,0,2)[12]             : AIC=2910.039, Time=7.09 sec
+ ARIMA(2,1,1)(0,0,0)[12]             : AIC=2980.096, Time=0.02 sec
+ ARIMA(2,1,1)(0,0,2)[12]             : AIC=2921.090, Time=9.19 sec
+ ARIMA(2,1,1)(2,0,2)[12]             : AIC=2912.081, Time=9.20 sec
  ARIMA(1,1,1)(1,0,1)[12]             : AIC=2915.531, Time=0.40 sec
- ARIMA(2,1,0)(1,0,1)[12]             : AIC=2925.551, Time=0.41 sec
- ARIMA(3,1,1)(1,0,1)[12]             : AIC=2911.034, Time=0.59 sec
- ARIMA(2,1,2)(1,0,1)[12]             : AIC=2913.397, Time=0.60 sec
- ARIMA(1,1,0)(1,0,1)[12]             : AIC=2952.580, Time=0.39 sec
- ARIMA(1,1,2)(1,0,1)[12]             : AIC=2922.527, Time=0.50 sec
- ARIMA(3,1,0)(1,0,1)[12]             : AIC=2912.590, Time=1.10 sec
- ARIMA(3,1,2)(1,0,1)[12]             : AIC=2913.867, Time=1.40 sec
+ ARIMA(2,1,0)(1,0,1)[12]             : AIC=2925.551, Time=0.50 sec
+ ARIMA(3,1,1)(1,0,1)[12]             : AIC=2911.034, Time=1.00 sec
+ ARIMA(2,1,2)(1,0,1)[12]             : AIC=2913.397, Time=0.90 sec
+ ARIMA(1,1,0)(1,0,1)[12]             : AIC=2952.580, Time=0.60 sec
+ ARIMA(1,1,2)(1,0,1)[12]             : AIC=2922.527, Time=0.80 sec
+ ARIMA(3,1,0)(1,0,1)[12]             : AIC=2912.590, Time=1.00 sec
+ ARIMA(3,1,2)(1,0,1)[12]             : AIC=2913.867, Time=1.20 sec
 
 Best model:  ARIMA(2,1,1)(1,0,1)[12]
-Total fit time: 161.829 seconds
+Total fit time: 201.461 seconds
 </pre></div>
 </div>
 <div class="line-block">
@@ -179,7 +179,7 @@ Total fit time: 161.829 seconds
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 42.034 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (3 minutes 21.579 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-example-simple-fit-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/ab1b7ba0889f1408280223e74a93b06e/example_simple_fit.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_simple_fit.ipynb</span></code></a></p>
@@ -205,7 +205,7 @@ Total fit time: 161.829 seconds
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2017-2024, Taylor G Smith.</p>
+    <p>&#169; Copyright 2017-2025, Taylor G Smith.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
