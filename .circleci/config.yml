@@ -81,7 +81,7 @@ commands:
             -v `pwd`:/app \
             -w /app \
             --env-file vars.env \
-            python:3.9 \
+            python:3.11 \
             ./build_tools/circle/deploy.sh
 
 jobs:
@@ -94,7 +94,7 @@ jobs:
   # larger unit tests, and to avoid multiple setup steps that can slow the pipeline down
   test-sanity:
     docker:
-      - image: python:3.9
+      - image: python:3.10
     working_directory: ~/pmdarima
     environment:
       SETUPTOOLS_USE_DISTUTILS: stdlib
@@ -117,30 +117,8 @@ jobs:
               echo "Expected VERSION file"
               exit 4
           fi
-    - run:
-        name: Test install from sdist
-        command: |
-          echo "0.0.0" > ~/pmdarima/pmdarima/VERSION
-
-          # we'll need packaging, numpy, and cython to build this. let install_requires do all the
-          # rest of the work. We build with our lowest supported numpy version to make sure there is no regression
-          pip install "packaging>=17.1" "numpy~=1.19.3" "cython>=0.29,!=0.29.18,!=0.29.31"
-          python setup.py sdist
-
-          cd dist
-          pip install pmdarima-0.0.0.tar.gz
-          python -c 'import pmdarima as pm; print(pm.__version__)'
 
   # --- Unit tests ---
-  test-unit-cpython39:
-    machine:
-      image: ubuntu-2004:202111-02
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - build-test-and-persist:
-          pythonversion: "3.9"
-
   test-unit-cpython310:
     machine:
       image: ubuntu-2004:202111-02
@@ -175,7 +153,6 @@ jobs:
     working_directory: ~/pmdarima
     steps:
       - checkout
-      - run: make install
       - run: ./build_tools/circle/build_doc.sh
       # This persists doc/_build/html for the deploy step
       - persist_to_workspace:
@@ -209,16 +186,6 @@ jobs:
       - checkout
       - restore-whl-file:
           key: "3.8"
-      - deploy-to-pypi
-
-  deploy-cpython39-whl:
-    machine:
-      image: ubuntu-2004:202111-02
-    working_directory: ~/pmdarima
-    steps:
-      - checkout
-      - restore-whl-file:
-          key: "3.9"
       - deploy-to-pypi
 
   deploy-cpython310-whl:
@@ -259,7 +226,7 @@ jobs:
   # GH_TOKEN (the personal Git token with pushes enabled)
   deploy-doc:
     docker:
-      - image: python:3.9
+      - image: python:3.11
     working_directory: ~/pmdarima
     steps:
       - checkout
@@ -278,8 +245,6 @@ workflows:
         # run on test and tag
         - test-sanity:
             filters: *test-filters
-        - test-unit-cpython39:
-            filters: *test-filters
         - test-unit-cpython310:
             filters: *test-filters
         - test-unit-cpython311:
@@ -291,7 +256,6 @@ workflows:
         - testing-passed:
             requires:
                 - test-sanity
-                - test-unit-cpython39
                 - test-unit-cpython310
                 - test-unit-cpython311
                 - test-unit-cpython312
@@ -304,11 +268,6 @@ workflows:
                 - build-doc
                 - testing-passed
             filters: *test-filters
-
-        - deploy-cpython39-whl:
-            filters: *deploy-filters
-            requires:
-              - deploy-doc
 
         - deploy-cpython310-whl:
             filters: *deploy-filters

@@ -192,13 +192,14 @@ _AUTO_ARIMA_DOCSTR = \
         If unable to fit an ``ARIMA`` for whatever reason, this controls the
         error-handling behavior. Model fits can fail for linear algebra errors,
         convergence errors, or any number of problems related to stationarity
-        or input data.
-            - 'warn': Warns when an error is encountered (default)
-            - 'raise': Raises when an error is encountered
-            - 'ignore': Ignores errors (not recommended)
-            - 'trace': Logs the entire error stacktrace and continues the
-               search. This is the best option when trying to determine why a
-               model is failing.
+        or input data. Options:
+
+        - 'warn': Warns when an error is encountered (default)
+        - 'raise': Raises when an error is encountered
+        - 'ignore': Ignores errors (not recommended)
+        - 'trace': Logs the entire error stacktrace and continues the
+            search. This is the best option when trying to determine why a
+            model is failing.
 
     trace : bool or int, optional (default=False)
         Whether to print status on the fits. A value of False will print no

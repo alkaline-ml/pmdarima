@@ -7,19 +7,21 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
-`v2.0.5 <https://alkaline-ml.com/pmdarima/2.0.5>`_
--------------------------------------------------
+`v2.1.0 <https://alkaline-ml.com/pmdarima/2.1.0>`_
+--------------------------------------------------
 
 * Remove support for Python 3.7 (end-of-life 2023-06-23)
 * Remove support for Python 3.8 (end-of-life 2024-10-07)
+* Remove support for Python 3.9 (end-of-life 2025-10-31)
+* Add support for Numpy 2.x. See `#600 <https://github.com/alkaline-ml/pmdarima/pull/600>`_
 
 `v2.0.4 <https://alkaline-ml.com/pmdarima/2.0.4>`_
--------------------------------------------------
+--------------------------------------------------
 
 * Pin numpy to ``<2.0.0`` while work is done to support numpy ``>=2.0.0``
 
 `v2.0.3 <https://alkaline-ml.com/pmdarima/2.0.3>`_
--------------------------------------------------
+--------------------------------------------------
 
 * Fix a bug when generating permutations using ``numpy>=1.24.0``. See `#534 <https://github.com/alkaline-ml/pmdarima/pull/534>`_
 * Fix a bug in ``transform`` when using ``scikit-learn>=1.2.0``, addressing `#539 <https://github.com/alkaline-ml/pmdarima/issues/539>`_
