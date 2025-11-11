@@ -49,9 +49,9 @@ possible.
     [CV] fold=0 ..........................................................
     [CV] fold=1 ..........................................................
     [CV] fold=2 ..........................................................
-    Model 1 CV scores: [23.92897818479725, 22.28966613913752, 3.748408266173932]
-    Model 2 CV scores: [1.5099648179431617, 15.413427887673137, 5.572225778623241]
-    Lowest average SMAPE: 7.498539494746513 (model2)
+    Model 1 CV scores: [23.928976769042762, 22.289666136443607, 3.7484091943203715]
+    Model 2 CV scores: [1.4601922927777993, 15.413429034781762, 5.572225775629682]
+    Lowest average SMAPE: 7.481949034396415 (model2)
     Best model:  ARIMA(1,1,2)(0,1,1)[12] intercept
 
 
@@ -111,7 +111,7 @@ possible.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.895 seconds)
+   **Total running time of the script:** (0 minutes 16.596 seconds)
 
 
 .. _sphx_glr_download_auto_examples_model_selection_example_cross_validation.py:

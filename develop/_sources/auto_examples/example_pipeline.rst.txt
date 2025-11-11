@@ -54,40 +54,40 @@ which greatly simplifies your life.
 
     pmdarima version: 0.0.0
     Performing stepwise search to minimize aic
-     ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=2819.938, Time=0.66 sec
-     ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2942.625, Time=0.02 sec
+     ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=2819.938, Time=1.92 sec
+     ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2942.625, Time=0.01 sec
      ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2867.514, Time=0.09 sec
-     ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2830.585, Time=0.26 sec
-     ARIMA(0,1,0)(0,0,0)[0]             : AIC=2940.651, Time=0.10 sec
-     ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=2817.535, Time=0.47 sec
-     ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2814.904, Time=0.41 sec
-     ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2818.704, Time=0.94 sec
-     ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=2817.377, Time=0.39 sec
-     ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=1.22 sec
-     ARIMA(0,1,2)(0,0,0)[0]             : AIC=2815.283, Time=0.25 sec
+     ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2830.585, Time=1.09 sec
+     ARIMA(0,1,0)(0,0,0)[0]             : AIC=2940.651, Time=0.09 sec
+     ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=2817.535, Time=1.33 sec
+     ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2814.904, Time=1.29 sec
+     ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2818.704, Time=2.09 sec
+     ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=2817.377, Time=1.17 sec
+     ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=2.43 sec
+     ARIMA(0,1,2)(0,0,0)[0]             : AIC=2815.283, Time=0.67 sec
 
     Best model:  ARIMA(0,1,2)(0,0,0)[0] intercept
-    Total fit time: 4.829 seconds
+    Total fit time: 12.195 seconds
     Model fit:
     Pipeline(steps=[('fourier', FourierFeaturizer(k=4, m=12)),
                     ('arima',
                      AutoARIMA(error_action='ignore', seasonal=False, trace=1))])
 
     Forecasts:
-    150    28518.732322
-    151    29963.386607
-    152    25827.057363
-    153    25060.786065
-    154    34235.809073
-    155    33509.078657
-    156    21083.205580
-    157    19764.901633
-    158    25895.806693
-    159    25434.080172
+    150    28518.736577
+    151    29963.383481
+    152    25827.058743
+    153    25060.790250
+    154    34235.810665
+    155    33509.091014
+    156    21083.227735
+    157    19764.915039
+    158    25895.813887
+    159    25434.089589
     dtype: float64
-    [26536.09214882 34421.90896957 33695.17138342 21269.29668588
-     19950.99760081 26081.90217606 25620.17292927 24414.27048313
-     26098.8641561  28871.63031295 30770.65409768]
+    [26536.09906994 34421.91158771 33695.18476589 21269.31986782
+     19951.01203348 26081.9103971  25620.18337311 24414.28093422
+     26098.8774029  28871.64407025 30770.6640381 ]
 
 
 
@@ -187,7 +187,7 @@ which greatly simplifies your life.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 5.475 seconds)
+   **Total running time of the script:** (0 minutes 12.706 seconds)
 
 
 .. _sphx_glr_download_auto_examples_example_pipeline.py:

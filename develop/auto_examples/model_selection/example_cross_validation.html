@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cross-validating your time series models &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -121,9 +121,9 @@ possible.</p>
 [CV] fold=0 ..........................................................
 [CV] fold=1 ..........................................................
 [CV] fold=2 ..........................................................
-Model 1 CV scores: [23.92897818479725, 22.28966613913752, 3.748408266173932]
-Model 2 CV scores: [1.5099648179431617, 15.413427887673137, 5.572225778623241]
-Lowest average SMAPE: 7.498539494746513 (model2)
+Model 1 CV scores: [23.928976769042762, 22.289666136443607, 3.7484091943203715]
+Model 2 CV scores: [1.4601922927777993, 15.413429034781762, 5.572225775629682]
+Lowest average SMAPE: 7.481949034396415 (model2)
 Best model:  ARIMA(1,1,2)(0,1,1)[12] intercept
 </pre></div>
 </div>
@@ -134,9 +134,9 @@ Best model:  ARIMA(1,1,2)(0,1,1)[12] intercept
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">model_selection</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_selection</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pmdarima version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pm</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 
@@ -176,7 +176,7 @@ Best model:  ARIMA(1,1,2)(0,1,1)[12] intercept
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best model: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">models</span><span class="p">[</span><span class="n">better_index</span><span class="p">]))</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.895 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 16.596 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-model-selection-example-cross-validation-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/ff7c5aece62c186f6d08722507a88228/example_cross_validation.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_cross_validation.ipynb</span></code></a></p>

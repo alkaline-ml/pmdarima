@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Modeling quasi-seasonal trends with date features &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -119,56 +119,56 @@ express seasonal trends without needing to fit a seasonal model.</p>
 <li><img src="../../_images/sphx_glr_example_date_featurizer_002.png" srcset="../../_images/sphx_glr_example_date_featurizer_002.png" alt="Predicted Foo" class = "sphx-glr-multi-img"/></li>
 </ul>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>pmdarima version: 0.0.0
-/usr/local/lib/python3.9/site-packages/pmdarima-0.0.0-py3.9-linux-x86_64.egg/pmdarima/utils/visualization.py:220: FutureWarning: the &#39;unbiased&#39; keyword is deprecated, use &#39;adjusted&#39; instead.
+/usr/local/lib/python3.11/site-packages/pmdarima/utils/visualization.py:220: FutureWarning: the &#39;unbiased&#39; keyword is deprecated, use &#39;adjusted&#39; instead.
   res = tsaplots.plot_acf(
 Head of generated X features:
-   DATE-WEEKDAY-0  ...  DATE-DAY-OF-MONTH
-0               0  ...                  1
-1               0  ...                  2
-2               0  ...                  3
-3               0  ...                  4
-4               0  ...                  5
+   DATE-WEEKDAY-0  DATE-WEEKDAY-1  ...  DATE-WEEKDAY-6  DATE-DAY-OF-MONTH
+0               0               1  ...               0                  1
+1               0               0  ...               0                  2
+2               0               0  ...               0                  3
+3               0               0  ...               0                  4
+4               0               0  ...               0                  5
 
 [5 rows x 8 columns]
 Performing stepwise search to minimize aic
 Near non-invertible roots for order (2, 1, 2)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
- ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=inf, Time=1.06 sec
- ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2864.731, Time=0.02 sec
+ ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=inf, Time=2.99 sec
+ ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2864.731, Time=0.07 sec
 First viable model found (2864.731)
- ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2861.910, Time=0.29 sec
+ ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2861.910, Time=1.21 sec
 New best model found (2861.910 &lt; 2864.731)
- ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2859.092, Time=0.32 sec
+ ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2859.092, Time=1.80 sec
 New best model found (2859.092 &lt; 2861.910)
- ARIMA(0,1,0)(0,0,0)[0]             : AIC=2862.772, Time=0.14 sec
-Near non-invertible roots for order (1, 1, 1)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
- ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=inf, Time=0.36 sec
- ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2847.648, Time=0.78 sec
+ ARIMA(0,1,0)(0,0,0)[0]             : AIC=2862.772, Time=0.17 sec
+Near non-invertible roots for order (1, 1, 1)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.999)
+ ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=inf, Time=2.73 sec
+ ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2847.648, Time=2.71 sec
 New best model found (2847.648 &lt; 2859.092)
 Near non-invertible roots for order (1, 1, 2)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.997)
- ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=inf, Time=0.78 sec
- ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2844.490, Time=1.04 sec
+ ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=inf, Time=3.21 sec
+ ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2844.490, Time=3.09 sec
 New best model found (2844.490 &lt; 2847.648)
-Near non-invertible roots for order (1, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.996)
- ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=1.38 sec
- ARIMA(0,1,4)(0,0,0)[0] intercept   : AIC=2844.554, Time=1.49 sec
- ARIMA(1,1,4)(0,0,0)[0] intercept   : AIC=2846.572, Time=1.71 sec
- ARIMA(0,1,3)(0,0,0)[0]             : AIC=2842.499, Time=0.82 sec
+Near non-invertible roots for order (1, 1, 3)(0, 0, 0, 0); setting score to inf (at least one inverse root too close to the border of the unit circle: 0.998)
+ ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=3.71 sec
+ ARIMA(0,1,4)(0,0,0)[0] intercept   : AIC=2844.554, Time=3.75 sec
+ ARIMA(1,1,4)(0,0,0)[0] intercept   : AIC=2846.569, Time=3.85 sec
+ ARIMA(0,1,3)(0,0,0)[0]             : AIC=2842.499, Time=2.60 sec
 New best model found (2842.499 &lt; 2844.490)
- ARIMA(0,1,2)(0,0,0)[0]             : AIC=2845.649, Time=0.53 sec
- ARIMA(1,1,3)(0,0,0)[0]             : AIC=2840.067, Time=1.24 sec
+ ARIMA(0,1,2)(0,0,0)[0]             : AIC=2845.649, Time=2.25 sec
+ ARIMA(1,1,3)(0,0,0)[0]             : AIC=2840.067, Time=3.33 sec
 New best model found (2840.067 &lt; 2842.499)
- ARIMA(1,1,2)(0,0,0)[0]             : AIC=2839.103, Time=0.53 sec
+ ARIMA(1,1,2)(0,0,0)[0]             : AIC=2839.103, Time=2.10 sec
 New best model found (2839.103 &lt; 2840.067)
- ARIMA(1,1,1)(0,0,0)[0]             : AIC=2837.109, Time=0.30 sec
+ ARIMA(1,1,1)(0,0,0)[0]             : AIC=2837.109, Time=1.40 sec
 New best model found (2837.109 &lt; 2839.103)
- ARIMA(0,1,1)(0,0,0)[0]             : AIC=2857.120, Time=0.20 sec
- ARIMA(1,1,0)(0,0,0)[0]             : AIC=2859.946, Time=0.21 sec
- ARIMA(2,1,1)(0,0,0)[0]             : AIC=2839.104, Time=0.33 sec
- ARIMA(2,1,0)(0,0,0)[0]             : AIC=2854.994, Time=0.38 sec
- ARIMA(2,1,2)(0,0,0)[0]             : AIC=2840.740, Time=0.68 sec
+ ARIMA(0,1,1)(0,0,0)[0]             : AIC=2857.120, Time=0.98 sec
+ ARIMA(1,1,0)(0,0,0)[0]             : AIC=2859.946, Time=1.02 sec
+ ARIMA(2,1,1)(0,0,0)[0]             : AIC=2839.104, Time=1.60 sec
+ ARIMA(2,1,0)(0,0,0)[0]             : AIC=2854.994, Time=2.20 sec
+ ARIMA(2,1,2)(0,0,0)[0]             : AIC=2840.740, Time=2.62 sec
 
 Best model:  ARIMA(1,1,1)(0,0,0)[0]
-Total fit time: 14.583 seconds
+Total fit time: 49.390 seconds
 </pre></div>
 </div>
 <div class="line-block">
@@ -178,15 +178,15 @@ Total fit time: 14.583 seconds
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">arima</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">model_selection</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">pipeline</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">preprocessing</span>
-<span class="kn">from</span> <span class="nn">pmdarima.datasets._base</span> <span class="kn">import</span> <span class="n">load_date_example</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">arima</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_selection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">preprocessing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.datasets._base</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_date_example</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pmdarima version: </span><span class="si">{</span><span class="n">pm</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -247,7 +247,7 @@ Total fit time: 14.583 seconds
 <span class="c1"># a model&#39;s predictive power.</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 15.163 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 49.879 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-preprocessing-example-date-featurizer-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/2f1aa469ed36e7c1ece5ae8ede2939a3/example_date_featurizer.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_date_featurizer.ipynb</span></code></a></p>

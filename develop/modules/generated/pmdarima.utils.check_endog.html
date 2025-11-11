@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.utils.check_endog &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -111,44 +111,36 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.check_endog<a class="headerlink" href="#pmdarima-utils-check-endog" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.utils.check_endog">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">check_endog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_all_finite=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_series=True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/utils/array.py#L148"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#check_endog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.check_endog" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">check_endog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_all_finite=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_series=True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/utils/array.py#L148"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#check_endog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.check_endog" title="Link to this definition"></a></dt>
 <dd><p>Wrapper for <code class="docutils literal notranslate"><span class="pre">check_array</span></code> and <code class="docutils literal notranslate"><span class="pre">column_or_1d</span></code> from sklearn</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>y</strong> : array-like, shape=(n_samples,)</p>
-<blockquote>
-<div><p>The 1d endogenous array.</p>
-</div></blockquote>
-<p><strong>dtype</strong> : string, type or None (default=np.float64)</p>
-<blockquote>
-<div><p>Data type of result. If None, the dtype of the input is preserved.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">array-like, shape=(n_samples,)</span></dt><dd><p>The 1d endogenous array.</p>
+</dd>
+<dt><strong>dtype</strong><span class="classifier">string, type or None (default=np.float64)</span></dt><dd><p>Data type of result. If None, the dtype of the input is preserved.
 If “numeric”, dtype is preserved unless array.dtype is object.</p>
-</div></blockquote>
-<p><strong>copy</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>Whether a forced copy will be triggered. If copy=False, a copy might
+</dd>
+<dt><strong>copy</strong><span class="classifier">bool, optional (default=False)</span></dt><dd><p>Whether a forced copy will be triggered. If copy=False, a copy might
 still be triggered by a conversion.</p>
-</div></blockquote>
-<p><strong>force_all_finite</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>Whether to raise an error on np.inf and np.nan in an array. The
+</dd>
+<dt><strong>force_all_finite</strong><span class="classifier">bool, optional (default=False)</span></dt><dd><p>Whether to raise an error on np.inf and np.nan in an array. The
 possibilities are:</p>
 <ul class="simple">
 <li><p>True: Force all values of array to be finite.</p></li>
 <li><p>False: accept both np.inf and np.nan in array.</p></li>
 </ul>
-</div></blockquote>
-<p><strong>preserve_series</strong> : bool, optional</p>
-<blockquote>
-<div><p>Whether to preserve a <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code> object. Will also attempt to
+</dd>
+<dt><strong>preserve_series</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to preserve a <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code> object. Will also attempt to
 squeeze a dataframe into a <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>y</strong> : np.ndarray or pd.Series, shape=(n_samples,)</p>
-<blockquote>
-<div><p>A 1d numpy ndarray</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">np.ndarray or pd.Series, shape=(n_samples,)</span></dt><dd><p>A 1d numpy ndarray</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

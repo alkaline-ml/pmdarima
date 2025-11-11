@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.model_selection.SlidingWindowForecastCV &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -108,46 +108,42 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.SlidingWindowForecastCV<a class="headerlink" href="#pmdarima-model-selection-slidingwindowforecastcv" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pmdarima.model_selection.SlidingWindowForecastCV">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.model_selection.</span></span><span class="sig-name descname"><span class="pre">SlidingWindowForecastCV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/model_selection/_split.py#L253"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.model_selection.</span></span><span class="sig-name descname"><span class="pre">SlidingWindowForecastCV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/model_selection/_split.py#L253"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV" title="Link to this definition"></a></dt>
 <dd><p>Use a sliding window to perform cross validation</p>
 <p>This approach to CV slides a window over the training samples while using
 several future samples as a test set. While similar to the
 <a class="reference internal" href="pmdarima.model_selection.RollingForecastCV.html#pmdarima.model_selection.RollingForecastCV" title="pmdarima.model_selection.RollingForecastCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">RollingForecastCV</span></code></a>, it differs in that the train set does not grow,
 but rather shifts.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>h</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>The forecasting horizon, or the number of steps into the future after
+<dd class="field-odd"><dl class="simple">
+<dt><strong>h</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The forecasting horizon, or the number of steps into the future after
 the last training sample for the test set.</p>
-</div></blockquote>
-<p><strong>step</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>The size of step taken between training folds.</p>
-</div></blockquote>
-<p><strong>window_size</strong> : int or None, optional (default=None)</p>
-<blockquote>
-<div><p>The size of the rolling window to use. If None, a rolling window of
+</dd>
+<dt><strong>step</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The size of step taken between training folds.</p>
+</dd>
+<dt><strong>window_size</strong><span class="classifier">int or None, optional (default=None)</span></dt><dd><p>The size of the rolling window to use. If None, a rolling window of
 size n_samples // 5 will be used.</p>
-</div></blockquote>
 </dd>
 </dl>
-<p class="rubric">Attributes</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">horizon</span></code></p></td>
-<td><p>The forecast horizon for the cross-validator</p></td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">horizon</span></code></dt><dd><p>The forecast horizon for the cross-validator</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="pmdarima.model_selection.RollingForecastCV.html#pmdarima.model_selection.RollingForecastCV" title="pmdarima.model_selection.RollingForecastCV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RollingForecastCV</span></code></a></p>
+<dl class="simple">
+<dt><a class="reference internal" href="pmdarima.model_selection.RollingForecastCV.html#pmdarima.model_selection.RollingForecastCV" title="pmdarima.model_selection.RollingForecastCV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RollingForecastCV</span></code></a></dt><dd></dd>
+</dl>
 </div>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r85" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">R85</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r38a1a271ee27-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://robjhyndman.com/hyndsight/tscv/">https://robjhyndman.com/hyndsight/tscv/</a></p>
 </div>
 </div>
@@ -156,8 +152,8 @@ size n_samples // 5 will be used.</p>
 will grow by 1 for each step, and the test index will be 1 + the last
 training index. Notice the sliding window also adjusts where the training
 sample begins for each fold:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.model_selection</span> <span class="kn">import</span> <span class="n">SlidingWindowForecastCV</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">SlidingWindowForecastCV</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wineind</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">SlidingWindowForecastCV</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv_generator</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">wineind</span><span class="p">)</span>
@@ -203,7 +199,7 @@ the last index in the training fold:</p>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="pmdarima.model_selection.SlidingWindowForecastCV.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/model_selection/_split.py#L316"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/model_selection/_split.py#L316"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_split.html#SlidingWindowForecastCV.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.model_selection.SlidingWindowForecastCV.__init__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pipelines with auto_arima &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
@@ -112,40 +112,40 @@ stateful transformations into a single object that can call <code class="docutil
 which greatly simplifies your life.</p>
 <br/><img src="../_images/sphx_glr_example_pipeline_001.png" srcset="../_images/sphx_glr_example_pipeline_001.png" alt="Actual train samples vs. in-sample predictions, Actual test samples vs. forecasts, Actual test samples vs. forecasts" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>pmdarima version: 0.0.0
 Performing stepwise search to minimize aic
- ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=2819.938, Time=0.66 sec
- ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2942.625, Time=0.02 sec
+ ARIMA(2,1,2)(0,0,0)[0] intercept   : AIC=2819.938, Time=1.92 sec
+ ARIMA(0,1,0)(0,0,0)[0] intercept   : AIC=2942.625, Time=0.01 sec
  ARIMA(1,1,0)(0,0,0)[0] intercept   : AIC=2867.514, Time=0.09 sec
- ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2830.585, Time=0.26 sec
- ARIMA(0,1,0)(0,0,0)[0]             : AIC=2940.651, Time=0.10 sec
- ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=2817.535, Time=0.47 sec
- ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2814.904, Time=0.41 sec
- ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2818.704, Time=0.94 sec
- ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=2817.377, Time=0.39 sec
- ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=1.22 sec
- ARIMA(0,1,2)(0,0,0)[0]             : AIC=2815.283, Time=0.25 sec
+ ARIMA(0,1,1)(0,0,0)[0] intercept   : AIC=2830.585, Time=1.09 sec
+ ARIMA(0,1,0)(0,0,0)[0]             : AIC=2940.651, Time=0.09 sec
+ ARIMA(1,1,2)(0,0,0)[0] intercept   : AIC=2817.535, Time=1.33 sec
+ ARIMA(0,1,2)(0,0,0)[0] intercept   : AIC=2814.904, Time=1.29 sec
+ ARIMA(0,1,3)(0,0,0)[0] intercept   : AIC=2818.704, Time=2.09 sec
+ ARIMA(1,1,1)(0,0,0)[0] intercept   : AIC=2817.377, Time=1.17 sec
+ ARIMA(1,1,3)(0,0,0)[0] intercept   : AIC=inf, Time=2.43 sec
+ ARIMA(0,1,2)(0,0,0)[0]             : AIC=2815.283, Time=0.67 sec
 
 Best model:  ARIMA(0,1,2)(0,0,0)[0] intercept
-Total fit time: 4.829 seconds
+Total fit time: 12.195 seconds
 Model fit:
 Pipeline(steps=[(&#39;fourier&#39;, FourierFeaturizer(k=4, m=12)),
                 (&#39;arima&#39;,
                  AutoARIMA(error_action=&#39;ignore&#39;, seasonal=False, trace=1))])
 
 Forecasts:
-150    28518.732322
-151    29963.386607
-152    25827.057363
-153    25060.786065
-154    34235.809073
-155    33509.078657
-156    21083.205580
-157    19764.901633
-158    25895.806693
-159    25434.080172
+150    28518.736577
+151    29963.383481
+152    25827.058743
+153    25060.790250
+154    34235.810665
+155    33509.091014
+156    21083.227735
+157    19764.915039
+158    25895.813887
+159    25434.089589
 dtype: float64
-[26536.09214882 34421.90896957 33695.17138342 21269.29668588
- 19950.99760081 26081.90217606 25620.17292927 24414.27048313
- 26098.8641561  28871.63031295 30770.65409768]
+[26536.09906994 34421.91158771 33695.18476589 21269.31986782
+ 19951.01203348 26081.9103971  25620.18337311 24414.28093422
+ 26098.8774029  28871.64407025 30770.6640381 ]
 </pre></div>
 </div>
 <div class="line-block">
@@ -155,13 +155,13 @@ dtype: float64
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">pipeline</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">model_selection</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">preprocessing</span> <span class="k">as</span> <span class="n">ppc</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">arima</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_selection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">preprocessing</span> <span class="k">as</span> <span class="n">ppc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">arima</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pmdarima version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pm</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
 
@@ -238,7 +238,7 @@ dtype: float64
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 5.475 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 12.706 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-example-pipeline-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/ebdff9676032b56f748993ec3d0f5b6b/example_pipeline.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_pipeline.ipynb</span></code></a></p>

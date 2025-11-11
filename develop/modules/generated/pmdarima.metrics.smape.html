@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.metrics.smape &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -103,7 +103,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.metrics" title="pmdarima.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.metrics</span></code></a>.smape<a class="headerlink" href="#pmdarima-metrics-smape" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.metrics.smape">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.metrics.</span></span><span class="sig-name descname"><span class="pre">smape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/metrics.py#L9"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/metrics.html#smape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.metrics.smape" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.metrics.</span></span><span class="sig-name descname"><span class="pre">smape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/metrics.py#L9"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/metrics.html#smape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.metrics.smape" title="Link to this definition"></a></dt>
 <dd><p>Compute the Symmetric Mean Absolute Percentage Error.</p>
 <p>The symmetric mean absolute percentage error (SMAPE) is an accuracy measure
 based on percentage (or relative) errors. Defined as follows:</p>
@@ -113,22 +113,20 @@ based on percentage (or relative) errors. Defined as follows:</p>
 </div></blockquote>
 <p>Where a perfect SMAPE score is 0.0, and a higher score indicates a higher
 error rate.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>y_true</strong> : array-like, shape=(n_samples,)</p>
-<blockquote>
-<div><p>The true test values of y.</p>
-</div></blockquote>
-<p><strong>y_pred</strong> : array-like, shape=(n_samples,)</p>
-<blockquote>
-<div><p>The forecasted values of y.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y_true</strong><span class="classifier">array-like, shape=(n_samples,)</span></dt><dd><p>The true test values of y.</p>
+</dd>
+<dt><strong>y_pred</strong><span class="classifier">array-like, shape=(n_samples,)</span></dt><dd><p>The forecasted values of y.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r83" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">R83</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="rde92e86ffdc0-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error">https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error</a></p>
 </div>
 </div>

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.utils.c &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -111,7 +111,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.c<a class="headerlink" href="#pmdarima-utils-c" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.utils.c">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/utils/array.py#L76"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#c"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.c" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/utils/array.py#L76"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#c"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.c" title="Link to this definition"></a></dt>
 <dd><p>Imitates the <code class="docutils literal notranslate"><span class="pre">c</span></code> function from R.</p>
 <p>Since this whole library is aimed at re-creating in
 Python what R has already done so well, the <code class="docutils literal notranslate"><span class="pre">c</span></code> function was created to
@@ -121,8 +121,8 @@ this works with scalars, iterables, and any mix therein.</p>
 will fail!</p>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r93" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">R93</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="re29545b32dee-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/c.html">https://stat.ethz.ch/R-manual/R-devel/library/base/html/c.html</a></p>
 </div>
 </div>
@@ -138,7 +138,7 @@ will fail!</p>
 </pre></div>
 </div>
 <p>However, using <code class="docutils literal notranslate"><span class="pre">c</span></code> with multi-level lists will fail!</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>  
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
 <span class="go">ValueError: all the input arrays must have same number of dimensions</span>
 </pre></div>
 </div>

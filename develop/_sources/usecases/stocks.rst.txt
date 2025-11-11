@@ -70,6 +70,7 @@ randomly; we must make a clean split in our time series (and exogenous variables
 As in the TDS example, we'll use :math:`0.8 * dataSize` as our training sample.
 
 .. code-block:: python
+    
     from pmdarima.model_selection import train_test_split
 
     train_len = int(df.shape[0] * 0.8)

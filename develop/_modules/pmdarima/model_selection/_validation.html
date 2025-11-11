@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.model_selection._validation &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/gitcontrib.css?v=d6822521" />
@@ -20,7 +20,7 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
@@ -86,21 +86,21 @@
 <span class="sd">See: https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/model_selection/_validation.py</span>
 <span class="sd">&quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">numbers</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">format_exception_only</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numbers</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">traceback</span><span class="w"> </span><span class="kn">import</span> <span class="n">format_exception_only</span>
 
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">base</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">mean_squared_error</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">indexable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">base</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">mean_squared_error</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">indexable</span>
 
-<span class="kn">from</span> <span class="nn">._split</span> <span class="kn">import</span> <span class="n">check_cv</span>
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">metrics</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">check_endog</span>
-<span class="kn">from</span> <span class="nn">..warnings</span> <span class="kn">import</span> <span class="n">ModelFitWarning</span>
-<span class="kn">from</span> <span class="nn">..compat.sklearn</span> <span class="kn">import</span> <span class="n">safe_indexing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._split</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_cv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_endog</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelFitWarning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compat.sklearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">safe_indexing</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;cross_validate&#39;</span><span class="p">,</span>
@@ -121,7 +121,7 @@
 <span class="p">}</span>
 
 
-<span class="k">def</span> <span class="nf">_check_callables</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dct</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_callables</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dct</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">x</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -135,15 +135,15 @@
                     <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
 
 
-<span class="k">def</span> <span class="nf">_check_averaging</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_averaging</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">_check_callables</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">_valid_averaging</span><span class="p">,</span> <span class="s2">&quot;averaging&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_check_scoring</span><span class="p">(</span><span class="n">metric</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_scoring</span><span class="p">(</span><span class="n">metric</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">_check_callables</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="n">_valid_scoring</span><span class="p">,</span> <span class="s2">&quot;metric&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_safe_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_safe_split</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs the CV indexing given the indices&quot;&quot;&quot;</span>
     <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">train</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -153,7 +153,7 @@
     <span class="k">return</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span>
 
 
-<span class="k">def</span> <span class="nf">_fit_and_score</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">scorer</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_fit_and_score</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">scorer</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span>
                    <span class="n">error_score</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fit estimator and compute scores for a given dataset split.&quot;&quot;&quot;</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;fold=</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fold</span>
@@ -196,7 +196,7 @@
     <span class="k">return</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span>
 
 
-<span class="k">def</span> <span class="nf">_fit_and_predict</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_fit_and_predict</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fit estimator and compute scores for a given dataset split.&quot;&quot;&quot;</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;fold=</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fold</span>
     <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -224,7 +224,7 @@
 
 <div class="viewcode-block" id="cross_validate">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.cross_validate.html#pmdarima.model_selection.cross_validate">[docs]</a>
-<span class="k">def</span> <span class="nf">cross_validate</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cross_validate</span><span class="p">(</span>
     <span class="n">estimator</span><span class="p">,</span>
     <span class="n">y</span><span class="p">,</span>
     <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -304,7 +304,7 @@
 
 <div class="viewcode-block" id="cross_val_predict">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.cross_val_predict.html#pmdarima.model_selection.cross_val_predict">[docs]</a>
-<span class="k">def</span> <span class="nf">cross_val_predict</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cross_val_predict</span><span class="p">(</span>
     <span class="n">estimator</span><span class="p">,</span>
     <span class="n">y</span><span class="p">,</span>
     <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -445,7 +445,7 @@
 
 <div class="viewcode-block" id="cross_val_score">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.model_selection.cross_val_score.html#pmdarima.model_selection.cross_val_score">[docs]</a>
-<span class="k">def</span> <span class="nf">cross_val_score</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cross_val_score</span><span class="p">(</span>
     <span class="n">estimator</span><span class="p">,</span>
     <span class="n">y</span><span class="p">,</span>
     <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.arima &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/gitcontrib.css?v=d6822521" />
@@ -20,7 +20,7 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
@@ -87,31 +87,31 @@
 <span class="c1"># A user-friendly wrapper to the statsmodels ARIMA that matches the familiar</span>
 <span class="c1"># sklearn interface.</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">import</span> <span class="nn">numpy.polynomial.polynomial</span> <span class="k">as</span> <span class="nn">np_polynomial</span>
-<span class="kn">import</span> <span class="nn">numbers</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">gaussian_kde</span><span class="p">,</span> <span class="n">norm</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_array</span>
-<span class="kn">from</span> <span class="nn">statsmodels</span> <span class="kn">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">sm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy.polynomial.polynomial</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np_polynomial</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numbers</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">gaussian_kde</span><span class="p">,</span> <span class="n">norm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.utils.validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_array</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels</span><span class="w"> </span><span class="kn">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">sm</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_validation</span> <span class="k">as</span> <span class="n">val</span>
-<span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">BaseARIMA</span>
-<span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="kn">import</span> <span class="n">DTYPE</span>  <span class="c1"># DTYPE for arrays</span>
-<span class="kn">from</span> <span class="nn">..compat.sklearn</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validation</span> <span class="k">as</span> <span class="n">val</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseARIMA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compat.numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">DTYPE</span>  <span class="c1"># DTYPE for arrays</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compat.sklearn</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">check_is_fitted</span><span class="p">,</span> <span class="n">if_delegate_has_method</span><span class="p">,</span> <span class="n">safe_indexing</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
-<span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">matplotlib</span> <span class="k">as</span> <span class="n">mpl_compat</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">if_has_delegate</span><span class="p">,</span> <span class="n">is_iterable</span><span class="p">,</span> <span class="n">check_endog</span><span class="p">,</span> <span class="n">check_exog</span>
-<span class="kn">from</span> <span class="nn">..utils.visualization</span> <span class="kn">import</span> <span class="n">_get_plt</span>
-<span class="kn">from</span> <span class="nn">..utils.array</span> <span class="kn">import</span> <span class="n">diff_inv</span><span class="p">,</span> <span class="n">diff</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compat</span><span class="w"> </span><span class="kn">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compat</span><span class="w"> </span><span class="kn">import</span> <span class="n">matplotlib</span> <span class="k">as</span> <span class="n">mpl_compat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">if_has_delegate</span><span class="p">,</span> <span class="n">is_iterable</span><span class="p">,</span> <span class="n">check_endog</span><span class="p">,</span> <span class="n">check_exog</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.visualization</span><span class="w"> </span><span class="kn">import</span> <span class="n">_get_plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.array</span><span class="w"> </span><span class="kn">import</span> <span class="n">diff_inv</span><span class="p">,</span> <span class="n">diff</span>
 
 <span class="c1"># Get the version</span>
-<span class="kn">import</span> <span class="nn">pmdarima</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;ARIMA&#39;</span><span class="p">,</span>
@@ -125,7 +125,7 @@
 <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">ARMAtoMA</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">max_deg</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ARMAtoMA</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">max_deg</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert ARMA coefficients to infinite MA coefficients.</span>
 
@@ -200,7 +200,7 @@
     <span class="k">return</span> <span class="n">ema</span>
 
 
-<span class="k">def</span> <span class="nf">_aicc</span><span class="p">(</span><span class="n">model_results</span><span class="p">,</span> <span class="n">nobs</span><span class="p">,</span> <span class="n">add_constant</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_aicc</span><span class="p">(</span><span class="n">model_results</span><span class="p">,</span> <span class="n">nobs</span><span class="p">,</span> <span class="n">add_constant</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the corrected Akaike Information Criterion&quot;&quot;&quot;</span>
     <span class="n">aic</span> <span class="o">=</span> <span class="n">model_results</span><span class="o">.</span><span class="n">aic</span>
 
@@ -212,7 +212,7 @@
     <span class="k">return</span> <span class="n">aic</span> <span class="o">+</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">df_model</span> <span class="o">*</span> <span class="p">(</span><span class="n">nobs</span> <span class="o">/</span> <span class="p">(</span><span class="n">nobs</span> <span class="o">-</span> <span class="n">df_model</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_append_to_endog</span><span class="p">(</span><span class="n">endog</span><span class="p">,</span> <span class="n">new_y</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_append_to_endog</span><span class="p">(</span><span class="n">endog</span><span class="p">,</span> <span class="n">new_y</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Append to the endogenous array</span>
 
 <span class="sd">    Parameters</span>
@@ -228,7 +228,7 @@
         <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">endog</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">new_y</span><span class="p">))[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_seasonal_prediction_with_confidence</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_seasonal_prediction_with_confidence</span><span class="p">(</span>
     <span class="n">arima_res</span><span class="p">,</span>
     <span class="n">start</span><span class="p">,</span>
     <span class="n">end</span><span class="p">,</span>
@@ -298,7 +298,7 @@
 
 <div class="viewcode-block" id="ARIMA">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA">[docs]</a>
-<span class="k">class</span> <span class="nc">ARIMA</span><span class="p">(</span><span class="n">BaseARIMA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ARIMA</span><span class="p">(</span><span class="n">BaseARIMA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An ARIMA estimator.</span>
 
 <span class="sd">    An ARIMA, or autoregressive integrated moving average, is a</span>
@@ -510,7 +510,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
 <div class="viewcode-block" id="ARIMA.__init__">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">order</span><span class="p">,</span>
         <span class="n">seasonal_order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -558,11 +558,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sarimax_kwargs</span> <span class="o">=</span> <span class="n">sarimax_kwargs</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal fit&quot;&quot;&quot;</span>
 
         <span class="c1"># This wrapper is used for fitting either an ARIMA or a SARIMAX</span>
-        <span class="k">def</span> <span class="nf">_fit_wrapper</span><span class="p">():</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_fit_wrapper</span><span class="p">():</span>
             <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
             <span class="n">trend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trend</span>
 
@@ -634,7 +634,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pkg_version_</span> <span class="o">=</span> <span class="n">pmdarima</span><span class="o">.</span><span class="n">__version__</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit an ARIMA to a vector, ``y``, of observations with an</span>
 <span class="sd">        optional matrix of ``X`` variables.</span>
 
@@ -716,7 +716,7 @@
 
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">_check_exog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_exog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="c1"># if we fit with exog, make sure one was passed, or else fail out:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_with_exog_</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -727,7 +727,7 @@
                 <span class="k">return</span> <span class="n">check_exog</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict_in_sample</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -832,7 +832,7 @@
 
         <span class="k">return</span> <span class="n">preds</span><span class="p">,</span> <span class="n">conf_int</span>
 
-    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                 <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                 <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">return_conf_int</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -904,7 +904,7 @@
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">f</span>
 
-    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;I am being pickled...&quot;&quot;&quot;</span>
 
         <span class="c1"># In versions &lt;0.9.0, if this already contains a pointer to a</span>
@@ -919,7 +919,7 @@
         <span class="c1"># this subhook...</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
 
-    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;I am being unpickled...&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">state</span>
 
@@ -927,7 +927,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_warn_for_older_version</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">_warn_for_older_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_warn_for_older_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Added in v0.8.1 - check for the version pickled under and warn</span>
         <span class="c1"># if it&#39;s different from the current version</span>
         <span class="n">do_warn</span> <span class="o">=</span> <span class="kc">False</span>
@@ -959,7 +959,7 @@
                           <span class="s2">&quot;behavior.&quot;</span>
                           <span class="o">%</span> <span class="p">(</span><span class="n">modl_version</span><span class="p">,</span> <span class="n">this_version</span><span class="p">),</span> <span class="ne">UserWarning</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Different from __repr__, returns a debug string used in logging&quot;&quot;&quot;</span>
         <span class="n">p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span>
         <span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seasonal_order</span>
@@ -979,7 +979,7 @@
             <span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the model fit with additional observed endog/exog values.</span>
 
 <span class="sd">        Updating an ARIMA adds new observations to the model, updating the</span>
@@ -1073,7 +1073,7 @@
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">aic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the AIC, the Akaike Information Criterion:</span>
 
 <span class="sd">            :code:`-2 * llf + 2 * df_model`</span>
@@ -1095,7 +1095,7 @@
 
     <span class="c1"># TODO: this looks like it&#39;s implemented on statsmodels&#39; master</span>
     <span class="nd">@if_has_delegate</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">aicc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aicc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the AICc, the corrected Akaike Information Criterion:</span>
 
 <span class="sd">            :code:`AIC + 2 * df_model * (df_model + 1) / (nobs - df_model - 1)`</span>
@@ -1122,7 +1122,7 @@
                      <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_intercept</span><span class="p">)</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">arparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">arparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the parameters associated with the AR coefficients in the model.</span>
 
 <span class="sd">        Returns</span>
@@ -1133,7 +1133,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">arparams</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">arroots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">arroots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The roots of the AR coefficients are the solution to:</span>
 
 <span class="sd">            :code:`(1 - arparams[0] * z - arparams[1] * z^2 - ... - arparams[</span>
@@ -1150,7 +1150,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">arroots</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">bic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the BIC, the Bayes Information Criterion:</span>
 
 <span class="sd">            :code:`-2 * llf + log(nobs) * df_model`</span>
@@ -1171,7 +1171,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">bic</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">bse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the standard errors of the parameters. These are</span>
 <span class="sd">        computed using the numerical Hessian.</span>
 
@@ -1183,7 +1183,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">bse</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">conf_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">conf_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the confidence interval of the fitted parameters.</span>
 
 <span class="sd">        Returns</span>
@@ -1199,7 +1199,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">conf_int</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">df_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">df_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The model degrees of freedom: ``k_exog`` + ``k_trend`` +</span>
 <span class="sd">        ``k_ar`` + ``k_ma``.</span>
 
@@ -1211,7 +1211,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">df_model</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">df_resid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">df_resid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the residual degrees of freedom:</span>
 
 <span class="sd">            :code:`nobs - df_model`</span>
@@ -1224,7 +1224,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">df_resid</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">fittedvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fittedvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the fitted values from the model</span>
 
 <span class="sd">        Returns</span>
@@ -1235,7 +1235,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">fittedvalues</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">hqic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hqic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the Hannan-Quinn Information Criterion:</span>
 
 <span class="sd">            :code:`-2 * llf + 2 * (`df_model`) * log(log(nobs))`</span>
@@ -1255,7 +1255,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">hqic</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">maparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of the moving average coefficients.</span>
 
 <span class="sd">        Returns</span>
@@ -1266,7 +1266,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">maparams</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">maroots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">maroots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The roots of the MA coefficients are the solution to:</span>
 
 <span class="sd">            :code:`(1 + maparams[0] * z + maparams[1] * z^2 + ... + maparams[</span>
@@ -1282,7 +1282,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">maroots</span>
 
-    <span class="k">def</span> <span class="nf">oob</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">oob</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;If the model was built with ``out_of_sample_size`` &gt; 0, a validation</span>
 <span class="sd">        score will have been computed. Otherwise it will be np.nan.</span>
 
@@ -1294,7 +1294,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">oob_</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the parameters of the model. The order of variables is the trend</span>
 <span class="sd">        coefficients and the :func:`k_exog` exogenous coefficients, then the</span>
 <span class="sd">        :func:`k_ar` AR coefficients, and finally the :func:`k_ma` MA</span>
@@ -1308,7 +1308,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">params</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">pvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the p-values associated with the t-values of the coefficients.</span>
 <span class="sd">        Note that the coefficients are assumed to have a Student&#39;s T</span>
 <span class="sd">        distribution.</span>
@@ -1321,7 +1321,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">pvalues</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">resid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the model residuals. If the model is fit using &#39;mle&#39;, then the</span>
 <span class="sd">        residuals are created via the Kalman Filter. If the model is fit</span>
 <span class="sd">        using &#39;css&#39; then the residuals are obtained via</span>
@@ -1336,12 +1336,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">resid</span>
 
     <span class="nd">@if_delegate_has_method</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a summary of the ARIMA model&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 
     <span class="nd">@if_has_delegate</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the ARIMA model as a dictionary</span>
 
 <span class="sd">        Return the dictionary representation of the ARIMA model</span>
@@ -1366,7 +1366,7 @@
         <span class="p">}</span>
 
     <span class="nd">@if_has_delegate</span><span class="p">(</span><span class="s1">&#39;arima_res_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">plot_diagnostics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_diagnostics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot an ARIMA&#39;s diagnostics.</span>
 
 <span class="sd">        Diagnostic plots for standardized residuals of one endogenous variable</span>
@@ -1415,7 +1415,7 @@
         <span class="c1"># We originally delegated down to SARIMAX model wrapper, but</span>
         <span class="c1"># statsmodels makes it difficult to trust their API, so we just re-</span>
         <span class="c1"># implemented a common method for all results wrappers.</span>
-        <span class="kn">from</span> <span class="nn">statsmodels.graphics</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">sm_graphics</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.graphics</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">sm_graphics</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="n">sm_graphics</span><span class="o">.</span><span class="n">create_mpl_fig</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">figsize</span><span class="p">)</span>
 
         <span class="n">res_wpr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span>
@@ -1484,13 +1484,13 @@
 
         <span class="c1"># Bottom-left: QQ plot</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
-        <span class="kn">from</span> <span class="nn">statsmodels.graphics</span> <span class="kn">import</span> <span class="n">gofplots</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.graphics</span><span class="w"> </span><span class="kn">import</span> <span class="n">gofplots</span>
         <span class="n">gofplots</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">resid_nonmissing</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Normal Q-Q&#39;</span><span class="p">)</span>
 
         <span class="c1"># Bottom-right: Correlogram</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
-        <span class="kn">from</span> <span class="nn">statsmodels.graphics</span> <span class="kn">import</span> <span class="n">tsaplots</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.graphics</span><span class="w"> </span><span class="kn">import</span> <span class="n">tsaplots</span>
         <span class="n">tsaplots</span><span class="o">.</span><span class="n">plot_acf</span><span class="p">(</span><span class="n">resid</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">lags</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Correlogram&#39;</span><span class="p">)</span>
 

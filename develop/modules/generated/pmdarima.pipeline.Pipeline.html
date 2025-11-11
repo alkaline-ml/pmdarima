@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.pipeline.Pipeline &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -102,7 +102,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.pipeline" title="pmdarima.pipeline"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.pipeline</span></code></a>.Pipeline<a class="headerlink" href="#pmdarima-pipeline-pipeline" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pmdarima.pipeline.Pipeline">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.pipeline.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/pipeline.py#L30"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.pipeline.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/pipeline.py#L30"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline" title="Link to this definition"></a></dt>
 <dd><p>A pipeline of transformers with an optional final estimator stage</p>
 <p>The pipeline object chains together an arbitrary number of named, ordered
 transformations, passing the output from one as the input to the next. As
@@ -115,29 +115,27 @@ cross-validated together while setting different parameters.
 For this, it enables setting parameters of the various steps using their
 names and the parameter name separated by a <cite>‘__’</cite>, as in the example
 below.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>steps</strong> : list</p>
-<blockquote>
-<div><p>List of (name, transform) tuples (implementing fit/transform) that are
+<dd class="field-odd"><dl class="simple">
+<dt><strong>steps</strong><span class="classifier">list</span></dt><dd><p>List of (name, transform) tuples (implementing fit/transform) that are
 chained, in the order in which they are chained, with the last object
 an ARIMA or AutoARIMA estimator.</p>
-</div></blockquote>
 </dd>
 </dl>
-<p class="rubric">Attributes</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">named_steps</span></code></p></td>
-<td><p>Map the steps to a dictionary</p></td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">named_steps</span></code></dt><dd><p>Map the steps to a dictionary</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_wineind</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.arima</span> <span class="kn">import</span> <span class="n">AutoARIMA</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.preprocessing</span> <span class="kn">import</span> <span class="n">FourierFeaturizer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_wineind</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.arima</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoARIMA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">FourierFeaturizer</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wineind</span> <span class="o">=</span> <span class="n">load_wineind</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
@@ -182,10 +180,10 @@ an ARIMA or AutoARIMA estimator.</p>
 <td><p>Set the parameters of this estimator.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_predict_request</span></code>(*[, alpha, ...])</p></td>
-<td><p>Request metadata passed to the <code class="docutils literal notranslate"><span class="pre">predict</span></code> method.</p></td>
+<td><p>Configure whether metadata should be requested to be passed to the <code class="docutils literal notranslate"><span class="pre">predict</span></code> method.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_transform_request</span></code>(*[, n_periods])</p></td>
-<td><p>Request metadata passed to the <code class="docutils literal notranslate"><span class="pre">transform</span></code> method.</p></td>
+<td><p>Configure whether metadata should be requested to be passed to the <code class="docutils literal notranslate"><span class="pre">transform</span></code> method.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code>()</p></td>
 <td><p>Get a summary of the ARIMA model</p></td>
@@ -200,7 +198,7 @@ an ARIMA or AutoARIMA estimator.</p>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="pmdarima.pipeline.Pipeline.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/pipeline.py#L81"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/pipeline.py#L81"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/pipeline.html#Pipeline.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.pipeline.Pipeline.__init__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

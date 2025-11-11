@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.utils.acf &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -111,43 +111,30 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.acf<a class="headerlink" href="#pmdarima-utils-acf" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.utils.acf">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">acf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nlags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qstat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjusted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/utils/wrapped.py#L56"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#acf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.acf" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">acf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nlags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qstat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjusted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/utils/wrapped.py#L56"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#acf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.acf" title="Link to this definition"></a></dt>
 <dd><p>Calculate the autocorrelation function.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> : array_like</p>
-<blockquote>
-<div><p>The time series data.</p>
-</div></blockquote>
-<p><strong>adjusted</strong> : bool, default False</p>
-<blockquote>
-<div><p>If True, then denominators for autocovariance are n-k, otherwise n.</p>
-</div></blockquote>
-<p><strong>nlags</strong> : int, optional</p>
-<blockquote>
-<div><p>Number of lags to return autocorrelation for. If not provided,
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>The time series data.</p>
+</dd>
+<dt><strong>adjusted</strong><span class="classifier">bool, default False</span></dt><dd><p>If True, then denominators for autocovariance are n-k, otherwise n.</p>
+</dd>
+<dt><strong>nlags</strong><span class="classifier">int, optional</span></dt><dd><p>Number of lags to return autocorrelation for. If not provided,
 uses min(10 * np.log10(nobs), nobs - 1). The returned value
 includes lag 0 (ie., 1) so size of the acf vector is (nlags + 1,).</p>
-</div></blockquote>
-<p><strong>qstat</strong> : bool, default False</p>
-<blockquote>
-<div><p>If True, returns the Ljung-Box q statistic for each autocorrelation
+</dd>
+<dt><strong>qstat</strong><span class="classifier">bool, default False</span></dt><dd><p>If True, returns the Ljung-Box q statistic for each autocorrelation
 coefficient.  See q_stat for more information.</p>
-</div></blockquote>
-<p><strong>fft</strong> : bool, default True</p>
-<blockquote>
-<div><p>If True, computes the ACF via FFT.</p>
-</div></blockquote>
-<p><strong>alpha</strong> : scalar, default None</p>
-<blockquote>
-<div><p>If a number is given, the confidence intervals for the given level are
+</dd>
+<dt><strong>fft</strong><span class="classifier">bool, default True</span></dt><dd><p>If True, computes the ACF via FFT.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">scalar, default None</span></dt><dd><p>If a number is given, the confidence intervals for the given level are
 returned. For instance if alpha=.05, 95 % confidence intervals are
 returned where the standard deviation is computed according to
 Bartlett”s formula.</p>
-</div></blockquote>
-<p><strong>bartlett_confint</strong> : bool, default True</p>
-<blockquote>
-<div><p>Confidence intervals for ACF values are generally placed at 2
+</dd>
+<dt><strong>bartlett_confint</strong><span class="classifier">bool, default True</span></dt><dd><p>Confidence intervals for ACF values are generally placed at 2
 standard errors around r_k. The formula used for standard error
 depends upon the situation. If the autocorrelations are being used
 to test for randomness of residuals as part of the ARIMA routine,
@@ -164,10 +151,8 @@ last significant autocorrelation. In this case, a moving average
 model is assumed for the data and the standard errors for the
 confidence intervals should be generated using Bartlett’s formula.
 For more details on Bartlett formula result, see section 7.2 in [2].</p>
-</div></blockquote>
-<p><strong>missing</strong> : str, default “none”</p>
-<blockquote>
-<div><p>A string in [“none”, “raise”, “conservative”, “drop”] specifying how
+</dd>
+<dt><strong>missing</strong><span class="classifier">str, default “none”</span></dt><dd><p>A string in [“none”, “raise”, “conservative”, “drop”] specifying how
 the NaNs are to be treated. “none” performs no checks. “raise” raises
 an exception if NaN values are found. “drop” removes the missing
 observations and then estimates the autocovariances treating the
@@ -176,31 +161,26 @@ using nan-ops so that nans are removed when computing the mean
 and cross-products that are used to estimate the autocovariance.
 When using “conservative”, n is set to the number of non-missing
 observations.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>acf</strong> : ndarray</p>
-<blockquote>
-<div><p>The autocorrelation function for lags 0, 1, …, nlags. Shape
+<dd class="field-even"><dl class="simple">
+<dt><strong>acf</strong><span class="classifier">ndarray</span></dt><dd><p>The autocorrelation function for lags 0, 1, …, nlags. Shape
 (nlags+1,).</p>
-</div></blockquote>
-<p><strong>confint</strong> : ndarray, optional</p>
-<blockquote>
-<div><p>Confidence intervals for the ACF at lags 0, 1, …, nlags. Shape
+</dd>
+<dt><strong>confint</strong><span class="classifier">ndarray, optional</span></dt><dd><p>Confidence intervals for the ACF at lags 0, 1, …, nlags. Shape
 (nlags + 1, 2). Returned if alpha is not None. The confidence
 intervals are centered on the estimated ACF values. This behavior
 differs from plot_acf which centers the confidence intervals on 0.</p>
-</div></blockquote>
-<p><strong>qstat</strong> : ndarray, optional</p>
-<blockquote>
-<div><p>The Ljung-Box Q-Statistic for lags 1, 2, …, nlags (excludes lag
+</dd>
+<dt><strong>qstat</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The Ljung-Box Q-Statistic for lags 1, 2, …, nlags (excludes lag
 zero). Returned if q_stat is True.</p>
-</div></blockquote>
-<p><strong>pvalues</strong> : ndarray, optional</p>
-<blockquote>
-<div><p>The p-values associated with the Q-statistics for lags 1, 2, …,
+</dd>
+<dt><strong>pvalues</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The p-values associated with the Q-statistics for lags 1, 2, …,
 nlags (excludes lag zero). Returned if q_stat is True.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -223,18 +203,18 @@ needed.</p>
 for the loss of data.</p>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r89" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">R89</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="ra598f1c127ba-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p>Parzen, E., 1963. On spectral analysis with missing observations
 and amplitude modulation. Sankhya: The Indian Journal of
 Statistics, Series A, pp.383-392.</p>
 </div>
-<div class="citation" id="r90" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">R90</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="ra598f1c127ba-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
 <p>Brockwell and Davis, 1987. Time Series Theory and Methods</p>
 </div>
-<div class="citation" id="r91" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">R91</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="ra598f1c127ba-3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
 <p>Brockwell and Davis, 2010. Introduction to Time Series and
 Forecasting, 2nd edition.</p>
 </div>

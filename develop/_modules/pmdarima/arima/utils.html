@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.utils &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/gitcontrib.css?v=d6822521" />
@@ -20,7 +20,7 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
@@ -86,17 +86,17 @@
 <span class="c1">#</span>
 <span class="c1"># Common ARIMA functions</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">column_or_1d</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.utils.validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">column_or_1d</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">context_managers</span> <span class="k">as</span> <span class="n">ctx</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">get_callable</span>
-<span class="kn">from</span> <span class="nn">..utils.array</span> <span class="kn">import</span> <span class="n">diff</span><span class="p">,</span> <span class="n">check_endog</span>
-<span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="kn">import</span> <span class="n">DTYPE</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">stationarity</span> <span class="k">as</span> <span class="n">statest_lib</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">seasonality</span> <span class="k">as</span> <span class="n">seatest_lib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">context_managers</span> <span class="k">as</span> <span class="n">ctx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.array</span><span class="w"> </span><span class="kn">import</span> <span class="n">diff</span><span class="p">,</span> <span class="n">check_endog</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compat.numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">DTYPE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">stationarity</span> <span class="k">as</span> <span class="n">statest_lib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">seasonality</span> <span class="k">as</span> <span class="n">seatest_lib</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;is_constant&#39;</span><span class="p">,</span>
@@ -118,7 +118,7 @@
 
 <div class="viewcode-block" id="is_constant">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.is_constant.html#pmdarima.arima.is_constant">[docs]</a>
-<span class="k">def</span> <span class="nf">is_constant</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_constant</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test ``x`` for constancy.</span>
 
 <span class="sd">    Determine whether a vector is composed of all of the same elements</span>
@@ -144,7 +144,7 @@
 
 <div class="viewcode-block" id="nsdiffs">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.nsdiffs.html#pmdarima.arima.nsdiffs">[docs]</a>
-<span class="k">def</span> <span class="nf">nsdiffs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">max_D</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;ocsb&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">nsdiffs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">max_D</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;ocsb&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate the seasonal differencing term, ``D``.</span>
 
 <span class="sd">    Perform a test of seasonality for different levels of ``D`` to</span>
@@ -215,7 +215,7 @@
 
 <div class="viewcode-block" id="ndiffs">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.ndiffs.html#pmdarima.arima.ndiffs">[docs]</a>
-<span class="k">def</span> <span class="nf">ndiffs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;kpss&#39;</span><span class="p">,</span> <span class="n">max_d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ndiffs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;kpss&#39;</span><span class="p">,</span> <span class="n">max_d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate ARIMA differencing term, ``d``.</span>
 
 <span class="sd">    Perform a test of stationarity for different levels of ``d`` to</span>

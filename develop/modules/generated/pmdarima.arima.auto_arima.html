@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.auto_arima &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -105,7 +105,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.auto_arima<a class="headerlink" href="#pmdarima-arima-auto-arima" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.arima.auto_arima">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">auto_arima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stationary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">information_criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'aic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kpss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ocsb'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepwise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lbfgs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset_test_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal_test_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'trace'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_fits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_valid_fits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_of_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sarimax_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/arima/auto.py#L330"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">auto_arima</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stationary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">information_criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'aic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kpss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ocsb'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepwise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lbfgs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset_test_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal_test_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'trace'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_fits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_valid_fits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_of_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sarimax_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_args</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/arima/auto.py#L330"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#auto_arima"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.auto_arima" title="Link to this definition"></a></dt>
 <dd><p>Automatically discover the optimal order for an ARIMA model.</p>
 <p>The auto-ARIMA process seeks to identify the most optimal
 parameters for an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> model, settling on a single fitted ARIMA model.
@@ -134,156 +134,105 @@ especially for seasonal data. Stepwise algorithm is outlined in Hyndman and
 Khandakar (2008).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>y</strong> : array-like or iterable, shape=(n_samples,)</p>
-<blockquote>
-<div><p>The time-series to which to fit the <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> estimator. This may
+<dd class="field-odd"><dl>
+<dt><strong>y</strong><span class="classifier">array-like or iterable, shape=(n_samples,)</span></dt><dd><p>The time-series to which to fit the <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> estimator. This may
 either be a Pandas <code class="docutils literal notranslate"><span class="pre">Series</span></code> object (statsmodels can internally
 use the dates in the index), or a numpy array. This should be a
 one-dimensional array of floats, and should not contain any
 <code class="docutils literal notranslate"><span class="pre">np.nan</span></code> or <code class="docutils literal notranslate"><span class="pre">np.inf</span></code> values.</p>
-</div></blockquote>
-<p><strong>X</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
-<blockquote>
-<div><p>An optional 2-d array of exogenous variables. If provided, these
+</dd>
+<dt><strong>X</strong><span class="classifier">array-like, shape=[n_obs, n_vars], optional (default=None)</span></dt><dd><p>An optional 2-d array of exogenous variables. If provided, these
 variables are used as additional features in the regression
 operation. This should not include a constant or trend. Note that
 if an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> is fit on exogenous features, it must be provided
 exogenous features for making predictions.</p>
-</div></blockquote>
-<p><strong>start_p</strong> : int, optional (default=2)</p>
-<blockquote>
-<div><p>The starting value of <code class="docutils literal notranslate"><span class="pre">p</span></code>, the order (or number of time lags)
+</dd>
+<dt><strong>start_p</strong><span class="classifier">int, optional (default=2)</span></dt><dd><p>The starting value of <code class="docutils literal notranslate"><span class="pre">p</span></code>, the order (or number of time lags)
 of the auto-regressive (“AR”) model. Must be a positive integer.</p>
-</div></blockquote>
-<p><strong>d</strong> : int, optional (default=None)</p>
-<blockquote>
-<div><p>The order of first-differencing. If None (by default), the value
+</dd>
+<dt><strong>d</strong><span class="classifier">int, optional (default=None)</span></dt><dd><p>The order of first-differencing. If None (by default), the value
 will automatically be selected based on the results of the <code class="docutils literal notranslate"><span class="pre">test</span></code>
 (i.e., either the Kwiatkowski–Phillips–Schmidt–Shin, Augmented
 Dickey-Fuller or the Phillips–Perron test will be conducted to find
 the most probable value). Must be a positive integer or None. Note
 that if <code class="docutils literal notranslate"><span class="pre">d</span></code> is None, the runtime could be significantly longer.</p>
-</div></blockquote>
-<p><strong>start_q</strong> : int, optional (default=2)</p>
-<blockquote>
-<div><p>The starting value of <code class="docutils literal notranslate"><span class="pre">q</span></code>, the order of the moving-average
+</dd>
+<dt><strong>start_q</strong><span class="classifier">int, optional (default=2)</span></dt><dd><p>The starting value of <code class="docutils literal notranslate"><span class="pre">q</span></code>, the order of the moving-average
 (“MA”) model. Must be a positive integer.</p>
-</div></blockquote>
-<p><strong>max_p</strong> : int, optional (default=5)</p>
-<blockquote>
-<div><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">p</span></code>, inclusive. Must be a positive integer
+</dd>
+<dt><strong>max_p</strong><span class="classifier">int, optional (default=5)</span></dt><dd><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">p</span></code>, inclusive. Must be a positive integer
 greater than or equal to <code class="docutils literal notranslate"><span class="pre">start_p</span></code>.</p>
-</div></blockquote>
-<p><strong>max_d</strong> : int, optional (default=2)</p>
-<blockquote>
-<div><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">d</span></code>, or the maximum number of non-seasonal
+</dd>
+<dt><strong>max_d</strong><span class="classifier">int, optional (default=2)</span></dt><dd><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">d</span></code>, or the maximum number of non-seasonal
 differences. Must be a positive integer greater than or equal to <code class="docutils literal notranslate"><span class="pre">d</span></code>.</p>
-</div></blockquote>
-<p><strong>max_q</strong> : int, optional (default=5)</p>
-<blockquote>
-<div><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">q</span></code>, inclusive. Must be a positive integer
+</dd>
+<dt><strong>max_q</strong><span class="classifier">int, optional (default=5)</span></dt><dd><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">q</span></code>, inclusive. Must be a positive integer
 greater than <code class="docutils literal notranslate"><span class="pre">start_q</span></code>.</p>
-</div></blockquote>
-<p><strong>start_P</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>The starting value of <code class="docutils literal notranslate"><span class="pre">P</span></code>, the order of the auto-regressive portion
+</dd>
+<dt><strong>start_P</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The starting value of <code class="docutils literal notranslate"><span class="pre">P</span></code>, the order of the auto-regressive portion
 of the seasonal model.</p>
-</div></blockquote>
-<p><strong>D</strong> : int, optional (default=None)</p>
-<blockquote>
-<div><p>The order of the seasonal differencing. If None (by default, the value
+</dd>
+<dt><strong>D</strong><span class="classifier">int, optional (default=None)</span></dt><dd><p>The order of the seasonal differencing. If None (by default, the value
 will automatically be selected based on the results of the
 <code class="docutils literal notranslate"><span class="pre">seasonal_test</span></code>. Must be a positive integer or None.</p>
-</div></blockquote>
-<p><strong>start_Q</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>The starting value of <code class="docutils literal notranslate"><span class="pre">Q</span></code>, the order of the moving-average portion
+</dd>
+<dt><strong>start_Q</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The starting value of <code class="docutils literal notranslate"><span class="pre">Q</span></code>, the order of the moving-average portion
 of the seasonal model.</p>
-</div></blockquote>
-<p><strong>max_P</strong> : int, optional (default=2)</p>
-<blockquote>
-<div><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">P</span></code>, inclusive. Must be a positive integer
+</dd>
+<dt><strong>max_P</strong><span class="classifier">int, optional (default=2)</span></dt><dd><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">P</span></code>, inclusive. Must be a positive integer
 greater than <code class="docutils literal notranslate"><span class="pre">start_P</span></code>.</p>
-</div></blockquote>
-<p><strong>max_D</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">D</span></code>. Must be a positive integer greater
+</dd>
+<dt><strong>max_D</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">D</span></code>. Must be a positive integer greater
 than <code class="docutils literal notranslate"><span class="pre">D</span></code>.</p>
-</div></blockquote>
-<p><strong>max_Q</strong> : int, optional (default=2)</p>
-<blockquote>
-<div><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">Q</span></code>, inclusive. Must be a positive integer
+</dd>
+<dt><strong>max_Q</strong><span class="classifier">int, optional (default=2)</span></dt><dd><p>The maximum value of <code class="docutils literal notranslate"><span class="pre">Q</span></code>, inclusive. Must be a positive integer
 greater than <code class="docutils literal notranslate"><span class="pre">start_Q</span></code>.</p>
-</div></blockquote>
-<p><strong>max_order</strong> : int, optional (default=5)</p>
-<blockquote>
-<div><p>Maximum value of p+q+P+Q if model selection is not stepwise.
+</dd>
+<dt><strong>max_order</strong><span class="classifier">int, optional (default=5)</span></dt><dd><p>Maximum value of p+q+P+Q if model selection is not stepwise.
 If the sum of <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">q</span></code> is &gt;= <code class="docutils literal notranslate"><span class="pre">max_order</span></code>, a model will
 <em>not</em> be fit with those parameters, but will progress to the next
 combination. Default is 5. If <code class="docutils literal notranslate"><span class="pre">max_order</span></code> is None, it means there
 are no constraints on maximum order.</p>
-</div></blockquote>
-<p><strong>m</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>The period for seasonal differencing, <code class="docutils literal notranslate"><span class="pre">m</span></code> refers to the number of
+</dd>
+<dt><strong>m</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The period for seasonal differencing, <code class="docutils literal notranslate"><span class="pre">m</span></code> refers to the number of
 periods in each season. For example, <code class="docutils literal notranslate"><span class="pre">m</span></code> is 4 for quarterly data, 12
 for monthly data, or 1 for annual (non-seasonal) data. Default is 1.
 Note that if <code class="docutils literal notranslate"><span class="pre">m</span></code> == 1 (i.e., is non-seasonal), <code class="docutils literal notranslate"><span class="pre">seasonal</span></code> will be
 set to False. For more information on setting this parameter, see
 <a class="reference internal" href="../../tips_and_tricks.html#period"><span class="std std-ref">Setting m</span></a>.</p>
-</div></blockquote>
-<p><strong>seasonal</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to fit a seasonal ARIMA. Default is True. Note that if
+</dd>
+<dt><strong>seasonal</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether to fit a seasonal ARIMA. Default is True. Note that if
 <code class="docutils literal notranslate"><span class="pre">seasonal</span></code> is True and <code class="docutils literal notranslate"><span class="pre">m</span></code> == 1, <code class="docutils literal notranslate"><span class="pre">seasonal</span></code> will be set to False.</p>
-</div></blockquote>
-<p><strong>stationary</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>Whether the time-series is stationary and <code class="docutils literal notranslate"><span class="pre">d</span></code> should be set to zero.</p>
-</div></blockquote>
-<p><strong>information_criterion</strong> : str, optional (default=’aic’)</p>
-<blockquote>
-<div><p>The information criterion used to select the best ARIMA model. One of
+</dd>
+<dt><strong>stationary</strong><span class="classifier">bool, optional (default=False)</span></dt><dd><p>Whether the time-series is stationary and <code class="docutils literal notranslate"><span class="pre">d</span></code> should be set to zero.</p>
+</dd>
+<dt><strong>information_criterion</strong><span class="classifier">str, optional (default=’aic’)</span></dt><dd><p>The information criterion used to select the best ARIMA model. One of
 <code class="docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima.VALID_CRITERIA</span></code>, (‘aic’, ‘bic’, ‘hqic’,
 ‘oob’).</p>
-</div></blockquote>
-<p><strong>alpha</strong> : float, optional (default=0.05)</p>
-<blockquote>
-<div><p>Level of the test for testing significance.</p>
-</div></blockquote>
-<p><strong>test</strong> : str, optional (default=’kpss’)</p>
-<blockquote>
-<div><p>Type of unit root test to use in order to detect stationarity if
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, optional (default=0.05)</span></dt><dd><p>Level of the test for testing significance.</p>
+</dd>
+<dt><strong>test</strong><span class="classifier">str, optional (default=’kpss’)</span></dt><dd><p>Type of unit root test to use in order to detect stationarity if
 <code class="docutils literal notranslate"><span class="pre">stationary</span></code> is False and <code class="docutils literal notranslate"><span class="pre">d</span></code> is None. Default is ‘kpss’
 (Kwiatkowski–Phillips–Schmidt–Shin).</p>
-</div></blockquote>
-<p><strong>seasonal_test</strong> : str, optional (default=’ocsb’)</p>
-<blockquote>
-<div><p>This determines which seasonal unit root test is used if <code class="docutils literal notranslate"><span class="pre">seasonal</span></code>
+</dd>
+<dt><strong>seasonal_test</strong><span class="classifier">str, optional (default=’ocsb’)</span></dt><dd><p>This determines which seasonal unit root test is used if <code class="docutils literal notranslate"><span class="pre">seasonal</span></code>
 is True and <code class="docutils literal notranslate"><span class="pre">D</span></code> is None. Default is ‘OCSB’.</p>
-</div></blockquote>
-<p><strong>stepwise</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to use the stepwise algorithm outlined in Hyndman and Khandakar
+</dd>
+<dt><strong>stepwise</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether to use the stepwise algorithm outlined in Hyndman and Khandakar
 (2008) to identify the optimal model parameters. The stepwise algorithm
 can be significantly faster than fitting all (or a <code class="docutils literal notranslate"><span class="pre">random</span></code> subset
 of) hyper-parameter combinations and is less likely to over-fit
 the model.</p>
-</div></blockquote>
-<p><strong>n_jobs</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>The number of models to fit in parallel in the case of a grid search
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The number of models to fit in parallel in the case of a grid search
 (<code class="docutils literal notranslate"><span class="pre">stepwise=False</span></code>). Default is 1, but -1 can be used to designate
 “as many as possible”.</p>
-</div></blockquote>
-<p><strong>start_params</strong> : array-like, optional (default=None)</p>
-<blockquote>
-<div><p>Starting parameters for <code class="docutils literal notranslate"><span class="pre">ARMA(p,q)</span></code>.  If None, the default is given
+</dd>
+<dt><strong>start_params</strong><span class="classifier">array-like, optional (default=None)</span></dt><dd><p>Starting parameters for <code class="docutils literal notranslate"><span class="pre">ARMA(p,q)</span></code>.  If None, the default is given
 by <code class="docutils literal notranslate"><span class="pre">ARMA._fit_start_params</span></code>.</p>
-</div></blockquote>
-<p><strong>method</strong> : str, optional (default=’lbfgs’)</p>
-<blockquote>
-<div><p>The <code class="docutils literal notranslate"><span class="pre">method</span></code> determines which solver from <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code>
+</dd>
+<dt><strong>method</strong><span class="classifier">str, optional (default=’lbfgs’)</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">method</span></code> determines which solver from <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code>
 is used, and it can be chosen from among the following strings:</p>
 <ul class="simple">
 <li><p>‘newton’ for Newton-Raphson</p></li>
@@ -299,25 +248,17 @@ is used, and it can be chosen from among the following strings:</p>
 with the exception of the basin-hopping solver. Each
 solver has several optional arguments that are not the same across
 solvers. These can be passed as <a href="#id1"><span class="problematic" id="id2">**</span></a>fit_kwargs</p>
-</div></blockquote>
-<p><strong>trend</strong> : str or None, optional (default=None)</p>
-<blockquote>
-<div><p>The trend parameter. If <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> is True, <code class="docutils literal notranslate"><span class="pre">trend</span></code> will be
+</dd>
+<dt><strong>trend</strong><span class="classifier">str or None, optional (default=None)</span></dt><dd><p>The trend parameter. If <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> is True, <code class="docutils literal notranslate"><span class="pre">trend</span></code> will be
 used. If <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> is False, the trend will be set to a no-
 intercept value.</p>
-</div></blockquote>
-<p><strong>maxiter</strong> : int, optional (default=50)</p>
-<blockquote>
-<div><p>The maximum number of function evaluations. Default is 50.</p>
-</div></blockquote>
-<p><strong>offset_test_args</strong> : dict, optional (default=None)</p>
-<blockquote>
-<div><p>The args to pass to the constructor of the offset (<code class="docutils literal notranslate"><span class="pre">d</span></code>) test. See
+</dd>
+<dt><strong>maxiter</strong><span class="classifier">int, optional (default=50)</span></dt><dd><p>The maximum number of function evaluations. Default is 50.</p>
+</dd>
+<dt><strong>offset_test_args</strong><span class="classifier">dict, optional (default=None)</span></dt><dd><p>The args to pass to the constructor of the offset (<code class="docutils literal notranslate"><span class="pre">d</span></code>) test. See
 <code class="docutils literal notranslate"><span class="pre">pmdarima.arima.stationarity</span></code> for more details.</p>
-</div></blockquote>
-<p><strong>seasonal_test_args</strong> : dict, optional (default=None)</p>
-<blockquote>
-<div><p>The args to pass to the constructor of the seasonal offset (<code class="docutils literal notranslate"><span class="pre">D</span></code>)
+</dd>
+<dt><strong>seasonal_test_args</strong><span class="classifier">dict, optional (default=None)</span></dt><dd><p>The args to pass to the constructor of the seasonal offset (<code class="docutils literal notranslate"><span class="pre">D</span></code>)
 test. See <code class="docutils literal notranslate"><span class="pre">pmdarima.arima.seasonality</span></code> for more details. Examples of
 valid kwargs will vary based on the test. For the <code class="docutils literal notranslate"><span class="pre">OCSBTest</span></code>
 (default) they include:</p>
@@ -325,22 +266,17 @@ valid kwargs will vary based on the test. For the <code class="docutils literal 
 <li><p>‘lag_method’</p></li>
 <li><p>‘max_lag’</p></li>
 </ul>
-</div></blockquote>
-<p><strong>suppress_warnings</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Many warnings might be thrown inside of statsmodels. If
+</dd>
+<dt><strong>suppress_warnings</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Many warnings might be thrown inside of statsmodels. If
 <code class="docutils literal notranslate"><span class="pre">suppress_warnings</span></code> is True, all of the warnings coming from
 <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> will be squelched. Note that this will not suppress
 UserWarnings created by bad argument combinations.</p>
-</div></blockquote>
-<p><strong>error_action</strong> : str, optional (default=’warn’)</p>
-<blockquote>
-<div><p>If unable to fit an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> for whatever reason, this controls the
+</dd>
+<dt><strong>error_action</strong><span class="classifier">str, optional (default=’warn’)</span></dt><dd><p>If unable to fit an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> for whatever reason, this controls the
 error-handling behavior. Model fits can fail for linear algebra errors,
 convergence errors, or any number of problems related to stationarity
-or input data.</p>
-<blockquote>
-<div><ul class="simple">
+or input data. Options:</p>
+<ul class="simple">
 <li><p>‘warn’: Warns when an error is encountered (default)</p></li>
 <li><p>‘raise’: Raises when an error is encountered</p></li>
 <li><p>‘ignore’: Ignores errors (not recommended)</p></li>
@@ -351,41 +287,28 @@ model is failing.</p>
 </dl>
 </li>
 </ul>
-</div></blockquote>
-</div></blockquote>
-<p><strong>trace</strong> : bool or int, optional (default=False)</p>
-<blockquote>
-<div><p>Whether to print status on the fits. A value of False will print no
+</dd>
+<dt><strong>trace</strong><span class="classifier">bool or int, optional (default=False)</span></dt><dd><p>Whether to print status on the fits. A value of False will print no
 debugging information. A value of True will print some. Integer values
 exceeding 1 will print increasing amounts of debug information at each
 fit.</p>
-</div></blockquote>
-<p><strong>random</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>Similar to grid searches, <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> provides the capability to
+</dd>
+<dt><strong>random</strong><span class="classifier">bool, optional (default=False)</span></dt><dd><p>Similar to grid searches, <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code> provides the capability to
 perform a “random search” over a hyper-parameter space. If <code class="docutils literal notranslate"><span class="pre">random</span></code>
 is True, rather than perform an exhaustive search or <code class="docutils literal notranslate"><span class="pre">stepwise</span></code>
 search, only <code class="docutils literal notranslate"><span class="pre">n_fits</span></code> ARIMA models will be fit (<code class="docutils literal notranslate"><span class="pre">stepwise</span></code> must be
 False for this option to do anything).</p>
-</div></blockquote>
-<p><strong>random_state</strong> : int, long or numpy <code class="docutils literal notranslate"><span class="pre">RandomState</span></code>, optional (default=None)</p>
-<blockquote>
-<div><p>The PRNG for when <code class="docutils literal notranslate"><span class="pre">random=True</span></code>. Ensures replicable testing and
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int, long or numpy <code class="docutils literal notranslate"><span class="pre">RandomState</span></code>, optional (default=None)</span></dt><dd><p>The PRNG for when <code class="docutils literal notranslate"><span class="pre">random=True</span></code>. Ensures replicable testing and
 results.</p>
-</div></blockquote>
-<p><strong>n_fits</strong> : int, optional (default=10)</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">random</span></code> is True and a “random search” is going to be performed,
+</dd>
+<dt><strong>n_fits</strong><span class="classifier">int, optional (default=10)</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">random</span></code> is True and a “random search” is going to be performed,
 <code class="docutils literal notranslate"><span class="pre">n_fits</span></code> is the number of ARIMA models to be fit.</p>
-</div></blockquote>
-<p><strong>return_valid_fits</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>If True, will return all valid ARIMA fits in a list. If False (by
+</dd>
+<dt><strong>return_valid_fits</strong><span class="classifier">bool, optional (default=False)</span></dt><dd><p>If True, will return all valid ARIMA fits in a list. If False (by
 default), will only return the best fit.</p>
-</div></blockquote>
-<p><strong>out_of_sample_size</strong> : int, optional (default=0)</p>
-<blockquote>
-<div><p>The <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> class can fit only a portion of the data if specified,
+</dd>
+<dt><strong>out_of_sample_size</strong><span class="classifier">int, optional (default=0)</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> class can fit only a portion of the data if specified,
 in order to retain an “out of bag” sample score. This is the
 number of examples from the tail of the time series to hold out
 and use as validation examples. The model will not be fit on these
@@ -401,37 +324,30 @@ end of the endogenous vector.</p>
 <span class="o">&gt;</span> <span class="n">Append</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span> <span class="n">to</span> <span class="n">end</span> <span class="n">of</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">endog</span> <span class="n">values</span>
 </pre></div>
 </div>
-</div></blockquote>
-<p><strong>scoring</strong> : str, optional (default=’mse’)</p>
-<blockquote>
-<div><p>If performing validation (i.e., if <code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> &gt; 0), the
+</dd>
+<dt><strong>scoring</strong><span class="classifier">str, optional (default=’mse’)</span></dt><dd><p>If performing validation (i.e., if <code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> &gt; 0), the
 metric to use for scoring the out-of-sample data. One of (‘mse’, ‘mae’)</p>
-</div></blockquote>
-<p><strong>scoring_args</strong> : dict, optional (default=None)</p>
-<blockquote>
-<div><p>A dictionary of key-word arguments to be passed to the <code class="docutils literal notranslate"><span class="pre">scoring</span></code>
+</dd>
+<dt><strong>scoring_args</strong><span class="classifier">dict, optional (default=None)</span></dt><dd><p>A dictionary of key-word arguments to be passed to the <code class="docutils literal notranslate"><span class="pre">scoring</span></code>
 metric.</p>
-</div></blockquote>
-<p><strong>with_intercept</strong> : bool or str, optional (default=”auto”)</p>
-<blockquote>
-<div><p>Whether to include an intercept term. Default is “auto” which behaves
+</dd>
+<dt><strong>with_intercept</strong><span class="classifier">bool or str, optional (default=”auto”)</span></dt><dd><p>Whether to include an intercept term. Default is “auto” which behaves
 like True until a point in the search where the sum of differencing
 terms will explicitly set it to True or False.</p>
-</div></blockquote>
-<p><strong>sarimax_kwargs</strong> : dict or None, optional (default=None)</p>
-<blockquote>
-<div><p>Keyword arguments to pass to the ARIMA constructor.</p>
-</div></blockquote>
-<p><strong>**fit_args</strong> : dict, optional (default=None)</p>
-<blockquote>
-<div><p>A dictionary of keyword arguments to pass to the <code class="xref py py-func docutils literal notranslate"><span class="pre">ARIMA.fit()</span></code>
+</dd>
+<dt><strong>sarimax_kwargs</strong><span class="classifier">dict or None, optional (default=None)</span></dt><dd><p>Keyword arguments to pass to the ARIMA constructor.</p>
+</dd>
+<dt><strong>**fit_args</strong><span class="classifier">dict, optional (default=None)</span></dt><dd><p>A dictionary of keyword arguments to pass to the <code class="xref py py-func docutils literal notranslate"><span class="pre">ARIMA.fit()</span></code>
 method.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA" title="pmdarima.arima.ARIMA"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA()</span></code></a></p>
+<dl class="simple">
+<dt><a class="reference internal" href="pmdarima.arima.ARIMA.html#pmdarima.arima.ARIMA" title="pmdarima.arima.ARIMA"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.ARIMA()</span></code></a></dt><dd></dd>
+</dl>
 </div>
 <p class="rubric">Notes</p>
 <ul class="simple">
@@ -440,16 +356,16 @@ method.</p>
 </ul>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r63" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">R63</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r8908049d912f-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></p>
 </div>
-<div class="citation" id="r64" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">R64</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r8908049d912f-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
 <p>R’s auto-arima source code: <a class="reference external" href="https://github.com/robjhyndman/forecast/blob/master/R/arima.R">https://github.com/robjhyndman/forecast/blob/master/R/arima.R</a></p>
 </div>
-<div class="citation" id="r65" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">R65</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r8908049d912f-3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
 <p>R’s auto-arima documentation: <a class="reference external" href="https://www.rdocumentation.org/packages/forecast">https://www.rdocumentation.org/packages/forecast</a></p>
 </div>
 </div>

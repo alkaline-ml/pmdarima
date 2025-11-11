@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.utils.plot_acf &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -106,77 +106,55 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.plot_acf<a class="headerlink" href="#pmdarima-utils-plot-acf" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.utils.plot_acf">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">plot_acf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_vlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unbiased</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Autocorrelation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zero</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vlines_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/utils/visualization.py#L146"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/visualization.html#plot_acf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.plot_acf" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">plot_acf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_vlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unbiased</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Autocorrelation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zero</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vlines_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/utils/visualization.py#L146"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/visualization.html#plot_acf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.plot_acf" title="Link to this definition"></a></dt>
 <dd><p>Plot a series’ auto-correlation as a line plot.</p>
 <p>A wrapper method for the statsmodels <code class="docutils literal notranslate"><span class="pre">plot_acf</span></code> method.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>series</strong> : array-like, shape=(n_samples,)</p>
-<blockquote>
-<div><p>The series or numpy array for which to plot an auto-correlation.</p>
-</div></blockquote>
-<p><strong>ax</strong> : Matplotlib AxesSubplot instance, optional</p>
-<blockquote>
-<div><p>If given, this subplot is used to plot in instead of a new figure being
+<dd class="field-odd"><dl class="simple">
+<dt><strong>series</strong><span class="classifier">array-like, shape=(n_samples,)</span></dt><dd><p>The series or numpy array for which to plot an auto-correlation.</p>
+</dd>
+<dt><strong>ax</strong><span class="classifier">Matplotlib AxesSubplot instance, optional</span></dt><dd><p>If given, this subplot is used to plot in instead of a new figure being
 created.</p>
-</div></blockquote>
-<p><strong>lags</strong> : int, array-like or None, optional (default=None)</p>
-<blockquote>
-<div><p>int or Array of lag values, used on horizontal axis. Uses
+</dd>
+<dt><strong>lags</strong><span class="classifier">int, array-like or None, optional (default=None)</span></dt><dd><p>int or Array of lag values, used on horizontal axis. Uses
 np.arange(lags) when lags is an int.  If not provided,
 <code class="docutils literal notranslate"><span class="pre">lags=np.arange(len(corr))</span></code> is used.</p>
-</div></blockquote>
-<p><strong>alpha</strong> : scalar, optional (default=None)</p>
-<blockquote>
-<div><p>If a number is given, the confidence intervals for the given level are
+</dd>
+<dt><strong>alpha</strong><span class="classifier">scalar, optional (default=None)</span></dt><dd><p>If a number is given, the confidence intervals for the given level are
 returned. For instance if alpha=.05, 95 % confidence intervals are
 returned where the standard deviation is computed according to
 Bartlett’s formula. If None, no confidence intervals are plotted.</p>
-</div></blockquote>
-<p><strong>use_vlines</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>If True, vertical lines and markers are plotted.
+</dd>
+<dt><strong>use_vlines</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>If True, vertical lines and markers are plotted.
 If False, only markers are plotted.  The default marker is ‘o’; it can
 be overridden with a <code class="docutils literal notranslate"><span class="pre">marker</span></code> kwarg.</p>
-</div></blockquote>
-<p><strong>unbiased</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>If True, then denominators for autocovariance are n-k, otherwise n</p>
-</div></blockquote>
-<p><strong>fft</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>If True, computes the ACF via FFT.</p>
-</div></blockquote>
-<p><strong>title</strong> : str, optional (default=’Autocorrelation’)</p>
-<blockquote>
-<div><p>Title to place on plot. Default is ‘Autocorrelation’</p>
-</div></blockquote>
-<p><strong>zero</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Flag indicating whether to include the 0-lag autocorrelation.
+</dd>
+<dt><strong>unbiased</strong><span class="classifier">bool, optional (default=False)</span></dt><dd><p>If True, then denominators for autocovariance are n-k, otherwise n</p>
+</dd>
+<dt><strong>fft</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>If True, computes the ACF via FFT.</p>
+</dd>
+<dt><strong>title</strong><span class="classifier">str, optional (default=’Autocorrelation’)</span></dt><dd><p>Title to place on plot. Default is ‘Autocorrelation’</p>
+</dd>
+<dt><strong>zero</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Flag indicating whether to include the 0-lag autocorrelation.
 Default is True.</p>
-</div></blockquote>
-<p><strong>vlines_kwargs</strong> : dict, optional (default=None)</p>
-<blockquote>
-<div><p>Optional dictionary of keyword arguments that are passed to vlines.</p>
-</div></blockquote>
-<p><strong>show</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to show the plot after it’s been created. If not, will return
+</dd>
+<dt><strong>vlines_kwargs</strong><span class="classifier">dict, optional (default=None)</span></dt><dd><p>Optional dictionary of keyword arguments that are passed to vlines.</p>
+</dd>
+<dt><strong>show</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether to show the plot after it’s been created. If not, will return
 the plot as an Axis object instead.</p>
-</div></blockquote>
-<p><strong>**kwargs</strong> : kwargs, optional</p>
-<blockquote>
-<div><p>Optional keyword arguments that are directly passed on to the
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">kwargs, optional</span></dt><dd><p>Optional keyword arguments that are directly passed on to the
 Matplotlib <code class="docutils literal notranslate"><span class="pre">plot</span></code> and <code class="docutils literal notranslate"><span class="pre">axhline</span></code> functions.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>plt</strong> : Axis or None</p>
-<blockquote>
-<div><p>If <code class="docutils literal notranslate"><span class="pre">show</span></code> is True, does not return anything. If False, returns
+<dd class="field-even"><dl class="simple">
+<dt><strong>plt</strong><span class="classifier">Axis or None</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">show</span></code> is True, does not return anything. If False, returns
 the Axis object.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -184,7 +162,7 @@ the Axis object.</p>
 behavior). To simply get the axis back (say, to add to another canvas),
 use <code class="docutils literal notranslate"><span class="pre">show=False</span></code>.</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot_acf</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot_acf</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="go">&lt;matplotlib.figure.Figure object at 0x122fab4e0&gt;</span>
 </pre></div>
 </div>

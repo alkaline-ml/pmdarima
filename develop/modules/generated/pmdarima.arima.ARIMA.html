@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.ARIMA &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -113,7 +113,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.ARIMA<a class="headerlink" href="#pmdarima-arima-arima" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pmdarima.arima.ARIMA">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">ARIMA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lbfgs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_of_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">sarimax_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/arima/arima.py#L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.ARIMA" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">ARIMA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lbfgs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_of_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">sarimax_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/arima/arima.py#L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.ARIMA" title="Link to this definition"></a></dt>
 <dd><p>An ARIMA estimator.</p>
 <p>An ARIMA, or autoregressive integrated moving average, is a
 generalization of an autoregressive moving average (ARMA) and is fitted to
@@ -145,18 +145,15 @@ acronym describing the model. For example, <code class="docutils literal notrans
 <p>See notes for more practical information on the <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> class.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>order</strong> : iterable or array-like, shape=(3,)</p>
-<blockquote>
-<div><p>The (p,d,q) order of the model for the number of AR parameters,
+<dd class="field-odd"><dl>
+<dt><strong>order</strong><span class="classifier">iterable or array-like, shape=(3,)</span></dt><dd><p>The (p,d,q) order of the model for the number of AR parameters,
 differences, and MA parameters to use. <code class="docutils literal notranslate"><span class="pre">p</span></code> is the order (number of
 time lags) of the auto-regressive model, and is a non-negative integer.
 <code class="docutils literal notranslate"><span class="pre">d</span></code> is the degree of differencing (the number of times the data have
 had past values subtracted), and is a non-negative integer. <code class="docutils literal notranslate"><span class="pre">q</span></code> is
 the order of the moving-average model, and is a non-negative integer.</p>
-</div></blockquote>
-<p><strong>seasonal_order</strong> : array-like, shape=(4,), optional (default=(0, 0, 0, 0))</p>
-<blockquote>
-<div><p>The (P,D,Q,s) order of the seasonal component of the model for the
+</dd>
+<dt><strong>seasonal_order</strong><span class="classifier">array-like, shape=(4,), optional (default=(0, 0, 0, 0))</span></dt><dd><p>The (P,D,Q,s) order of the seasonal component of the model for the
 AR parameters, differences, MA parameters, and periodicity. <code class="docutils literal notranslate"><span class="pre">D</span></code> must
 be an integer indicating the integration order of the process, while
 <code class="docutils literal notranslate"><span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">Q</span></code> may either be an integers indicating the AR and MA
@@ -165,15 +162,11 @@ iterables giving specific AR and / or MA lags to include. <code class="docutils 
 integer giving the periodicity (number of periods in season), often it
 is 4 for quarterly data or 12 for monthly data. Default is no seasonal
 effect.</p>
-</div></blockquote>
-<p><strong>start_params</strong> : array-like, optional (default=None)</p>
-<blockquote>
-<div><p>Starting parameters for <code class="docutils literal notranslate"><span class="pre">ARMA(p,q)</span></code>.  If None, the default is given
+</dd>
+<dt><strong>start_params</strong><span class="classifier">array-like, optional (default=None)</span></dt><dd><p>Starting parameters for <code class="docutils literal notranslate"><span class="pre">ARMA(p,q)</span></code>.  If None, the default is given
 by <code class="docutils literal notranslate"><span class="pre">ARMA._fit_start_params</span></code>.</p>
-</div></blockquote>
-<p><strong>method</strong> : str, optional (default=’lbfgs’)</p>
-<blockquote>
-<div><p>The <code class="docutils literal notranslate"><span class="pre">method</span></code> determines which solver from <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code>
+</dd>
+<dt><strong>method</strong><span class="classifier">str, optional (default=’lbfgs’)</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">method</span></code> determines which solver from <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code>
 is used, and it can be chosen from among the following strings:</p>
 <ul class="simple">
 <li><p>‘newton’ for Newton-Raphson</p></li>
@@ -189,19 +182,13 @@ is used, and it can be chosen from among the following strings:</p>
 with the exception of the basin-hopping solver. Each
 solver has several optional arguments that are not the same across
 solvers. These can be passed as <a href="#id1"><span class="problematic" id="id2">**</span></a>fit_kwargs</p>
-</div></blockquote>
-<p><strong>maxiter</strong> : int, optional (default=50)</p>
-<blockquote>
-<div><p>The maximum number of function evaluations. Default is 50</p>
-</div></blockquote>
-<p><strong>suppress_warnings</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>Many warnings might be thrown inside of statsmodels. If
+</dd>
+<dt><strong>maxiter</strong><span class="classifier">int, optional (default=50)</span></dt><dd><p>The maximum number of function evaluations. Default is 50</p>
+</dd>
+<dt><strong>suppress_warnings</strong><span class="classifier">bool, optional (default=False)</span></dt><dd><p>Many warnings might be thrown inside of statsmodels. If
 <code class="docutils literal notranslate"><span class="pre">suppress_warnings</span></code> is True, all of these warnings will be squelched.</p>
-</div></blockquote>
-<p><strong>out_of_sample_size</strong> : int, optional (default=0)</p>
-<blockquote>
-<div><p>The number of examples from the tail of the time series to hold out
+</dd>
+<dt><strong>out_of_sample_size</strong><span class="classifier">int, optional (default=0)</span></dt><dd><p>The number of examples from the tail of the time series to hold out
 and use as validation examples. The model will not be fit on these
 samples, but the observations will be added into the model’s <code class="docutils literal notranslate"><span class="pre">endog</span></code>
 and <code class="docutils literal notranslate"><span class="pre">exog</span></code> arrays so that future forecast values originate from the
@@ -215,17 +202,15 @@ end of the endogenous vector. See <code class="xref py py-func docutils literal 
 <span class="o">&gt;</span> <span class="n">Append</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span> <span class="n">to</span> <span class="n">end</span> <span class="n">of</span> <span class="bp">self</span><span class="o">.</span><span class="n">arima_res_</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">endog</span> <span class="n">values</span>
 </pre></div>
 </div>
-</div></blockquote>
-<p><strong>scoring</strong> : str or callable, optional (default=’mse’)</p>
-<blockquote>
-<div><p>If performing validation (i.e., if <code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> &gt; 0), the
+</dd>
+<dt><strong>scoring</strong><span class="classifier">str or callable, optional (default=’mse’)</span></dt><dd><p>If performing validation (i.e., if <code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> &gt; 0), the
 metric to use for scoring the out-of-sample data:</p>
 <blockquote>
 <div><ul>
 <li><p>If a string, must be a valid metric name importable from
 <code class="docutils literal notranslate"><span class="pre">sklearn.metrics</span></code>.</p></li>
 <li><p>If a callable, must adhere to the function signature:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">foo_loss</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">foo_loss</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
@@ -235,26 +220,18 @@ metric to use for scoring the out-of-sample data:</p>
 maximizing metric (such as <code class="docutils literal notranslate"><span class="pre">sklearn.metrics.r2_score</span></code>), it is the
 user’s responsibility to wrap the function such that it returns a
 negative value for minimizing.</p>
-</div></blockquote>
-<p><strong>scoring_args</strong> : dict, optional (default=None)</p>
-<blockquote>
-<div><p>A dictionary of key-word arguments to be passed to the
+</dd>
+<dt><strong>scoring_args</strong><span class="classifier">dict, optional (default=None)</span></dt><dd><p>A dictionary of key-word arguments to be passed to the
 <code class="docutils literal notranslate"><span class="pre">scoring</span></code> metric.</p>
-</div></blockquote>
-<p><strong>trend</strong> : str or None, optional (default=None)</p>
-<blockquote>
-<div><p>The trend parameter. If <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> is True, <code class="docutils literal notranslate"><span class="pre">trend</span></code> will be
+</dd>
+<dt><strong>trend</strong><span class="classifier">str or None, optional (default=None)</span></dt><dd><p>The trend parameter. If <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> is True, <code class="docutils literal notranslate"><span class="pre">trend</span></code> will be
 used. If <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code> is False, the trend will be set to a no-
 intercept value. If None and <code class="docutils literal notranslate"><span class="pre">with_intercept</span></code>, ‘c’ will be used as
 a default.</p>
-</div></blockquote>
-<p><strong>with_intercept</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to include an intercept term. Default is True.</p>
-</div></blockquote>
-<p><strong>**sarimax_kwargs</strong> : keyword args, optional</p>
-<blockquote>
-<div><p>Optional arguments to pass to the SARIMAX constructor.
+</dd>
+<dt><strong>with_intercept</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether to include an intercept term. Default is True.</p>
+</dd>
+<dt><strong>**sarimax_kwargs</strong><span class="classifier">keyword args, optional</span></dt><dd><p>Optional arguments to pass to the SARIMAX constructor.
 Examples of potentially valuable kwargs:</p>
 <blockquote>
 <div><ul class="simple">
@@ -295,29 +272,31 @@ estimated by maximum likelihood by one, but standard errors will
 then not be available for the scale parameter.</p></li>
 </ul>
 </div></blockquote>
-</div></blockquote>
 </dd>
 </dl>
-<p class="rubric">Attributes</p>
-<table class="docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><strong>arima_res_</strong></p></td>
-<td><p>(ModelResultsWrapper) The model results, per statsmodels</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>endog_index_</strong></p></td>
-<td><p>(pd.Series or None) If the fitted endog array is a <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code>, this value will be non-None and is used to validate args for in-sample predictions with non-integer start/end indices</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>oob_</strong></p></td>
-<td><p>(float) The MAE or MSE of the out-of-sample records, if <code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> is &gt; 0, else np.nan</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>oob_preds_</strong></p></td>
-<td><p>(np.ndarray or None) The predictions for the out-of-sample records, if <code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> is &gt; 0, else None</p></td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>arima_res_</strong><span class="classifier">ModelResultsWrapper</span></dt><dd><p>The model results, per statsmodels</p>
+</dd>
+<dt><strong>endog_index_</strong><span class="classifier">pd.Series or None</span></dt><dd><p>If the fitted endog array is a <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code>, this value will be
+non-None and is used to validate args for in-sample predictions with
+non-integer start/end indices</p>
+</dd>
+<dt><strong>oob_</strong><span class="classifier">float</span></dt><dd><p>The MAE or MSE of the out-of-sample records, if <code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code>
+is &gt; 0, else np.nan</p>
+</dd>
+<dt><strong>oob_preds_</strong><span class="classifier">np.ndarray or None</span></dt><dd><p>The predictions for the out-of-sample records, if
+<code class="docutils literal notranslate"><span class="pre">out_of_sample_size</span></code> is &gt; 0, else None</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima()</span></code></a></p>
+<dl class="simple">
+<dt><a class="reference internal" href="pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.auto_arima()</span></code></a></dt><dd></dd>
+</dl>
 </div>
 <p class="rubric">Notes</p>
 <ul class="simple">
@@ -328,8 +307,8 @@ delegate methods which wrap the internal ARIMA results instance.</p></li>
 </ul>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r48" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">R48</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r8828a2924964-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></p>
 </div>
 </div>
@@ -412,7 +391,7 @@ delegate methods which wrap the internal ARIMA results instance.</p></li>
 <td><p>Set the parameters of this estimator.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_predict_request</span></code>(*[, alpha, n_periods, ...])</p></td>
-<td><p>Request metadata passed to the <code class="docutils literal notranslate"><span class="pre">predict</span></code> method.</p></td>
+<td><p>Configure whether metadata should be requested to be passed to the <code class="docutils literal notranslate"><span class="pre">predict</span></code> method.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">summary</span></code>()</p></td>
 <td><p>Get a summary of the ARIMA model</p></td>
@@ -427,7 +406,7 @@ delegate methods which wrap the internal ARIMA results instance.</p></li>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="pmdarima.arima.ARIMA.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lbfgs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_of_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">sarimax_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/arima/arima.py#L427"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lbfgs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_warnings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_of_sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">sarimax_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/arima/arima.py#L427"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/arima.html#ARIMA.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.ARIMA.__init__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

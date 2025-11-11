@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Model selection with cross-validation &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
@@ -133,14 +133,14 @@ to run these examples (if you’re running this in a notebook, make sure to incl
 <h2><span class="section-number">10.2.1. </span>Imports, data loading &amp; splitting<a class="headerlink" href="#imports-data-loading-splitting" title="Link to this heading"></a></h2>
 <p>Here’s the set up for our problem. We’ll load the data and split it into our
 train/test sets:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="c1"># %matplotlib inline</span>
 
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_sunspots</span>
-<span class="kn">from</span> <span class="nn">pmdarima.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_sunspots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using pmdarima </span><span class="si">{</span><span class="n">pm</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="c1"># Using pmdarima 1.5.2</span>
 
@@ -184,7 +184,7 @@ effectively forecast for too many periods into the future.</p>
 <p>Pmdarima 1.5.2 introduced a handy utility for visualizing your time series data:
 <code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.utils.visualization.tsdisplay()</span></code>. We can use this to visualize our data,
 take a look at the auto-correlation plot, and see the histogram of values:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.utils</span> <span class="kn">import</span> <span class="n">tsdisplay</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">tsdisplay</span>
 
 <span class="n">tsdisplay</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
@@ -282,7 +282,7 @@ fit a model straight out of the box:</p>
 <p>Since we expect our model to perform better over more normal data, let’s experiment with log transformations and
 the <a class="reference external" href="https://en.wikipedia.org/wiki/Power_transform#Box–Cox_transformation">Box-Cox transformation</a>,
 each of which is provided as an endogenous transformer in the Pmdarima package.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.preprocessing</span> <span class="kn">import</span> <span class="n">LogEndogTransformer</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogEndogTransformer</span>
 
 <span class="n">y_train_log</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">LogEndogTransformer</span><span class="p">(</span><span class="n">lmbda</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
 <span class="n">tsdisplay</span><span class="p">(</span><span class="n">y_train_log</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -293,7 +293,7 @@ each of which is provided as an endogenous transformer in the Pmdarima package.<
 <p>Hmm… The log transformation didn’t seem to help too much. In fact, it seems like it just
 shifted the skew to the other tail. Let’s try the Box-Cox transformation. When <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> is called,
 it will learn the lambda transformation parameter:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.preprocessing</span> <span class="kn">import</span> <span class="n">BoxCoxEndogTransformer</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoxCoxEndogTransformer</span>
 
 <span class="n">y_train_bc</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">BoxCoxEndogTransformer</span><span class="p">(</span><span class="n">lmbda2</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
 <span class="n">tsdisplay</span><span class="p">(</span><span class="n">y_train_bc</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -303,7 +303,7 @@ it will learn the lambda transformation parameter:</p>
 </a>
 <p>However, the Box-Cox transformation seems to work very well as a means to normalize the data!
 In fact, a test of normality shows overwhelmingly that this is a normal distribution:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">normaltest</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">normaltest</span>
 <span class="n">normaltest</span><span class="p">(</span><span class="n">y_train_bc</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 <span class="c1"># 3.751017646057429e-14</span>
 </pre></div>
@@ -314,7 +314,7 @@ In fact, a test of normality shows overwhelmingly that this is a normal distribu
 <p>Pmdarima implements a scikit-learn-esque pipeline used to chain transformations and
 estimators together. Using this, we can centralize the entire transformer/model fit into
 one metaestimator:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
 
 <span class="n">fit2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
     <span class="p">(</span><span class="s1">&#39;boxcox&#39;</span><span class="p">,</span> <span class="n">BoxCoxEndogTransformer</span><span class="p">(</span><span class="n">lmbda2</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)),</span>
@@ -404,10 +404,10 @@ Let’s look at an apples-to-apples comparison.</p>
 <h2><span class="section-number">10.2.6. </span>Examining forecasts<a class="headerlink" href="#examining-forecasts" title="Link to this heading"></a></h2>
 <p>Let’s write a function that examines the forecasts over the next 70 periods and plots
 the residuals:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span> <span class="k">as</span> <span class="n">mse</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_squared_error</span> <span class="k">as</span> <span class="n">mse</span>
 
 
-<span class="k">def</span> <span class="nf">plot_forecasts</span><span class="p">(</span><span class="n">forecasts</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">)):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_forecasts</span><span class="p">(</span><span class="n">forecasts</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">)):</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">forecasts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>

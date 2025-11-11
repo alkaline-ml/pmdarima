@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.model_selection.cross_val_predict &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -108,35 +108,24 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.cross_val_predict<a class="headerlink" href="#pmdarima-model-selection-cross-val-predict" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.model_selection.cross_val_predict">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.model_selection.</span></span><span class="sig-name descname"><span class="pre">cross_val_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">averaging</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_raw_predictions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/model_selection/_validation.py#L220"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_val_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.model_selection.cross_val_predict" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.model_selection.</span></span><span class="sig-name descname"><span class="pre">cross_val_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">averaging</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_raw_predictions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/model_selection/_validation.py#L220"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_val_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.model_selection.cross_val_predict" title="Link to this definition"></a></dt>
 <dd><p>Generate cross-validated estimates for each input data point</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>estimator</strong> : estimator</p>
-<blockquote>
-<div><p>An estimator object that implements the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like or iterable, shape=(n_samples,)</p>
-<blockquote>
-<div><p>The time-series array.</p>
-</div></blockquote>
-<p><strong>X</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
-<blockquote>
-<div><p>An optional 2-d array of exogenous variables.</p>
-</div></blockquote>
-<p><strong>cv</strong> : BaseTSCrossValidator or None, optional (default=None)</p>
-<blockquote>
-<div><p>An instance of cross-validation. If None, will use a RollingForecastCV.
+<dd class="field-odd"><dl>
+<dt><strong>estimator</strong><span class="classifier">estimator</span></dt><dd><p>An estimator object that implements the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like or iterable, shape=(n_samples,)</span></dt><dd><p>The time-series array.</p>
+</dd>
+<dt><strong>X</strong><span class="classifier">array-like, shape=[n_obs, n_vars], optional (default=None)</span></dt><dd><p>An optional 2-d array of exogenous variables.</p>
+</dd>
+<dt><strong>cv</strong><span class="classifier">BaseTSCrossValidator or None, optional (default=None)</span></dt><dd><p>An instance of cross-validation. If None, will use a RollingForecastCV.
 Note that for cross-validation predictions, the CV step cannot exceed
 the CV horizon, or there will be a gap between fold predictions.</p>
-</div></blockquote>
-<p><strong>verbose</strong> : integer, optional</p>
-<blockquote>
-<div><p>The verbosity level.</p>
-</div></blockquote>
-<p><strong>averaging</strong> : str or callable, one of [“median”, “mean”] (default=”mean”)</p>
-<blockquote>
-<div><p>Unlike normal CV, time series CV might have different folds (windows)
+</dd>
+<dt><strong>verbose</strong><span class="classifier">integer, optional</span></dt><dd><p>The verbosity level.</p>
+</dd>
+<dt><strong>averaging</strong><span class="classifier">str or callable, one of [“median”, “mean”] (default=”mean”)</span></dt><dd><p>Unlike normal CV, time series CV might have different folds (windows)
 forecasting the same time step. After all forecast windows are made,
 we build a matrix of y x n_folds, populating each fold’s forecasts like
 so:</p>
@@ -153,10 +142,8 @@ so:</p>
 </div>
 <p>We then average each time step’s forecasts to end up with our final
 prediction results.</p>
-</div></blockquote>
-<p><strong>return_raw_predictions</strong> : bool (default=False)</p>
-<blockquote>
-<div><p>If True, raw predictions are returned instead of averaged ones.
+</dd>
+<dt><strong>return_raw_predictions</strong><span class="classifier">bool (default=False)</span></dt><dd><p>If True, raw predictions are returned instead of averaged ones.
 This results in a y x h matrix. For example, if h=3, and step=1 then:</p>
 <blockquote>
 <div><p>nan nan nan # training samples
@@ -172,12 +159,13 @@ nan nan nan</p>
 <p>First column contains all one-step-ahead-predictions, second column all
 two-step-ahead-predictions etc. Further metrics can then be calculated
 as desired.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_predict</span><span class="p">,</span>    <span class="o">...</span>     <span class="n">RollingForecastCV</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_predict</span><span class="p">,</span>    <span class="o">...</span>     <span class="n">RollingForecastCV</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">RollingForecastCV</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">preds</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span>

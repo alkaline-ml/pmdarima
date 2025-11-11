@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.utils.pacf &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -111,23 +111,18 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.pacf<a class="headerlink" href="#pmdarima-utils-pacf" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.utils.pacf">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">pacf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nlags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ywadjusted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/utils/wrapped.py#L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#pacf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.pacf" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">pacf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nlags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ywadjusted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/utils/wrapped.py#L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/wrapped.html#pacf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.pacf" title="Link to this definition"></a></dt>
 <dd><p>Partial autocorrelation estimate.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> : array_like</p>
-<blockquote>
-<div><p>Observations of time series for which pacf is calculated.</p>
-</div></blockquote>
-<p><strong>nlags</strong> : int, optional</p>
-<blockquote>
-<div><p>Number of lags to return autocorrelation for. If not provided,
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array_like</span></dt><dd><p>Observations of time series for which pacf is calculated.</p>
+</dd>
+<dt><strong>nlags</strong><span class="classifier">int, optional</span></dt><dd><p>Number of lags to return autocorrelation for. If not provided,
 uses min(10 * np.log10(nobs), nobs // 2 - 1). The returned value
 includes lag 0 (ie., 1) so size of the pacf vector is (nlags + 1,).</p>
-</div></blockquote>
-<p><strong>method</strong> : str, default “ywunbiased”</p>
-<blockquote>
-<div><p>Specifies which method for the calculations to use.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">str, default “ywunbiased”</span></dt><dd><p>Specifies which method for the calculations to use.</p>
 <ul class="simple">
 <li><p>“yw” or “ywadjusted” : Yule-Walker with sample-size adjustment in
 denominator for acovf. Default.</p></li>
@@ -143,26 +138,23 @@ correction.</p></li>
 correction.</p></li>
 <li><p>“burg” :  Burg”s partial autocorrelation estimator.</p></li>
 </ul>
-</div></blockquote>
-<p><strong>alpha</strong> : float, optional</p>
-<blockquote>
-<div><p>If a number is given, the confidence intervals for the given level are
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, optional</span></dt><dd><p>If a number is given, the confidence intervals for the given level are
 returned. For instance if alpha=.05, 95 % confidence intervals are
 returned where the standard deviation is computed according to
 1/sqrt(len(x)).</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>pacf</strong> : ndarray</p>
-<blockquote>
-<div><p>The partial autocorrelations for lags 0, 1, …, nlags. Shape
+<dd class="field-even"><dl class="simple">
+<dt><strong>pacf</strong><span class="classifier">ndarray</span></dt><dd><p>The partial autocorrelations for lags 0, 1, …, nlags. Shape
 (nlags+1,).</p>
-</div></blockquote>
-<p><strong>confint</strong> : ndarray, optional</p>
-<blockquote>
-<div><p>Confidence intervals for the PACF at lags 0, 1, …, nlags. Shape
+</dd>
+<dt><strong>confint</strong><span class="classifier">ndarray, optional</span></dt><dd><p>Confidence intervals for the PACF at lags 0, 1, …, nlags. Shape
 (nlags + 1, 2). Returned if alpha is not None.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">

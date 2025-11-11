@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.PPTest &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -112,23 +112,21 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.PPTest<a class="headerlink" href="#pmdarima-arima-pptest" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pmdarima.arima.PPTest">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">PPTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lshort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/arima/stationarity.py#L366"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#PPTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.PPTest" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">PPTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lshort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/arima/stationarity.py#L366"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#PPTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.PPTest" title="Link to this definition"></a></dt>
 <dd><p>Conduct a PP test for stationarity.</p>
 <p>In statistics, the Phillips–Perron test (named after Peter C. B.
 Phillips and Pierre Perron) is a unit root test. It is used in time series
 analysis to test the null hypothesis that a time series is integrated of
 order 1. It builds on the Dickey–Fuller test of the null hypothesis
 <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">0</span></code>.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>alpha</strong> : float, optional (default=0.05)</p>
-<blockquote>
-<div><p>Level of the test</p>
-</div></blockquote>
-<p><strong>lshort</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether or not to truncate the <code class="docutils literal notranslate"><span class="pre">l</span></code> value in the C code.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>alpha</strong><span class="classifier">float, optional (default=0.05)</span></dt><dd><p>Level of the test</p>
+</dd>
+<dt><strong>lshort</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether or not to truncate the <code class="docutils literal notranslate"><span class="pre">l</span></code> value in the C code.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -141,8 +139,8 @@ model fit, <code class="docutils literal notranslate"><span class="pre">t_alpha<
 allow that variant.</p>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r62" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">R62</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r86186486c08b-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p>R’s tseries PP test source code: <a class="reference external" href="http://bit.ly/2wbzx6V">http://bit.ly/2wbzx6V</a></p>
 </div>
 </div>
@@ -168,7 +166,7 @@ allow that variant.</p>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="pmdarima.arima.PPTest.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lshort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/arima/stationarity.py#L413"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#PPTest.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.PPTest.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lshort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/arima/stationarity.py#L413"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#PPTest.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.PPTest.__init__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

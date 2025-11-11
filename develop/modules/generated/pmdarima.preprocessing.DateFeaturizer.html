@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.preprocessing.DateFeaturizer &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -104,7 +104,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.preprocessing" title="pmdarima.preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.preprocessing</span></code></a>.DateFeaturizer<a class="headerlink" href="#pmdarima-preprocessing-datefeaturizer" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pmdarima.preprocessing.DateFeaturizer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.preprocessing.</span></span><span class="sig-name descname"><span class="pre">DateFeaturizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_day_of_week</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_day_of_month</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/preprocessing/exog/dates.py#L23"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/dates.html#DateFeaturizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.preprocessing.DateFeaturizer" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.preprocessing.</span></span><span class="sig-name descname"><span class="pre">DateFeaturizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_day_of_week</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_day_of_month</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/preprocessing/exog/dates.py#L23"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/dates.html#DateFeaturizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.preprocessing.DateFeaturizer" title="Link to this definition"></a></dt>
 <dd><p>Create exogenous date features</p>
 <p>Given an exogenous feature of dtype TimeStamp, creates a set of dummy and
 ordinal variables indicating:</p>
@@ -127,25 +127,19 @@ budget cuts, and the last Friday of the month is heavy on spending.</p>
 <p>The motivation for this featurizer comes from a blog post by Rob Hyndman
 [1] on modeling quasi-seasonal patterns in time series. Note that an
 exogenous array _must_ be provided at inference.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>column_name</strong> : str</p>
-<blockquote>
-<div><p>The name of the date column. This forces the exogenous array to be a
+<dd class="field-odd"><dl class="simple">
+<dt><strong>column_name</strong><span class="classifier">str</span></dt><dd><p>The name of the date column. This forces the exogenous array to be a
 Pandas DataFrame, and does not permit a np.ndarray as others may.</p>
-</div></blockquote>
-<p><strong>with_day_of_week</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to include dummy variables for the day of the week (in {0, 1}).</p>
-</div></blockquote>
-<p><strong>with_day_of_month</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to include an ordinal feature for the day of the month (1-31).</p>
-</div></blockquote>
-<p><strong>prefix</strong> : str or None, optional (default=None)</p>
-<blockquote>
-<div><p>The feature prefix</p>
-</div></blockquote>
+</dd>
+<dt><strong>with_day_of_week</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether to include dummy variables for the day of the week (in {0, 1}).</p>
+</dd>
+<dt><strong>with_day_of_month</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether to include an ordinal feature for the day of the month (1-31).</p>
+</dd>
+<dt><strong>prefix</strong><span class="classifier">str or None, optional (default=None)</span></dt><dd><p>The feature prefix</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -159,13 +153,13 @@ dates for which you are forecasting as exog features.</p></li>
 </ul>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r86" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">R86</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r30069bf6e6bc-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://robjhyndman.com/hyndsight/monthly-seasonality/">https://robjhyndman.com/hyndsight/monthly-seasonality/</a></p>
 </div>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.datasets._base</span> <span class="kn">import</span> <span class="n">load_date_example</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.datasets._base</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_date_example</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">load_date_example</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">feat</span> <span class="o">=</span> <span class="n">DateFeaturizer</span><span class="p">(</span><span class="n">column_name</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">X_prime</span> <span class="o">=</span> <span class="n">feat</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
@@ -200,7 +194,7 @@ dates for which you are forecasting as exog features.</p></li>
 <td><p>Set the parameters of this estimator.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_transform_request</span></code>(*[, n_periods])</p></td>
-<td><p>Request metadata passed to the <code class="docutils literal notranslate"><span class="pre">transform</span></code> method.</p></td>
+<td><p>Configure whether metadata should be requested to be passed to the <code class="docutils literal notranslate"><span class="pre">transform</span></code> method.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code>(y[, X])</p></td>
 <td><p>Create date features</p></td>
@@ -209,7 +203,7 @@ dates for which you are forecasting as exog features.</p></li>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="pmdarima.preprocessing.DateFeaturizer.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_day_of_week</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_day_of_month</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/preprocessing/exog/dates.py#L85"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/dates.html#DateFeaturizer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.preprocessing.DateFeaturizer.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_day_of_week</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_day_of_month</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/preprocessing/exog/dates.py#L85"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/preprocessing/exog/dates.html#DateFeaturizer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.preprocessing.DateFeaturizer.__init__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

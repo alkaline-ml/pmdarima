@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Persisting an ARIMA model &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -114,19 +114,19 @@ to download the full example code.</p>
 <span id="sphx-glr-auto-examples-arima-example-persisting-a-model-py"></span><h1>Persisting an ARIMA model<a class="headerlink" href="#persisting-an-arima-model" title="Link to this heading"></a></h1>
 <p>This example demonstrates how we can persist an ARIMA model to disk after
 fitting it. It can then be loaded back up and used to generate forecasts.</p>
-<br/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Predictions: array([21966.69715327, 25983.70919042, 30225.30977757, 35417.12495208,
-       13011.3618736 , 19639.41026476, 21506.58175114, 23674.33997107,
-       21685.76393112, 23669.77817456, 26955.35254916, 22755.25060906,
-       19808.16130991, 23578.78183011, 27845.86718064, 32923.89424952,
-       10475.68776683, 17024.74531668, 18831.64795696, 20929.54669646,
-       18876.02412824, 20792.57510697, 24011.97545439, 19745.03905506,
-       16731.45361331, 20435.40468293, 24635.9093626 , 29647.31028183,
-        7132.5009467 , 13614.94370975, 15355.2376768 , 17386.52461129,
-       15266.39184237, 17116.33179857, 20269.12154445, 15935.57432792,
-       12855.37817945, 16492.71848576, 20626.6124311 , 25571.40260115,
-        2989.98252446,  9405.81454204, 11079.49776562, 13044.17395562,
-       10857.43044273, 12640.75965469, 15726.93865647, 11326.78069577,
-        8179.97380317, 11750.70336532, 15817.98656653])
+<br/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Predictions: array([21966.69716806, 25983.70920106, 30225.30978922, 35417.12496473,
+       13011.36188401, 19639.41027934, 21506.58176453, 23674.3399863 ,
+       21685.76394592, 23669.77819202, 26955.35256519, 22755.2506242 ,
+       19808.16133461, 23578.78185402, 27845.86720549, 32923.89427525,
+       10475.68779115, 17024.74534503, 18831.64798473, 20929.54672618,
+       18876.02415795, 20792.57513957, 24011.97548591, 19745.03908596,
+       16731.45365409, 20435.40472322, 24635.90940413, 29647.31032454,
+        7132.5009883 , 13614.94375569, 15355.23772246, 17386.5246592 ,
+       15266.39189057, 17116.33184996, 20269.12159506, 15935.57437822,
+       12855.37823992, 16492.71854604, 20626.61249293, 25571.40266446,
+        2989.98258695,  9405.81460918, 11079.49783278, 13044.17402533,
+       10857.43051304, 12640.75972849, 15726.93872979, 11326.78076908,
+        8179.97388695, 11750.70344922, 15817.98665226])
 </pre></div>
 </div>
 <div class="line-block">
@@ -136,10 +136,10 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">model_selection</span>
-<span class="kn">import</span> <span class="nn">joblib</span>  <span class="c1"># for persistence</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_selection</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>  <span class="c1"># for persistence</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <span class="c1"># #############################################################################</span>
 <span class="c1"># Load the data and split it into separate pieces</span>
@@ -170,7 +170,7 @@ fitting it. It can then be loaded back up and used to generate forecasts.</p>
         <span class="k">pass</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.622 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.076 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-arima-example-persisting-a-model-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/1ebc147e93ac86fc0c6342606a7b485b/example_persisting_a_model.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_persisting_a_model.ipynb</span></code></a></p>

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.decompose &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -105,42 +105,36 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.decompose<a class="headerlink" href="#pmdarima-arima-decompose" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.arima.decompose">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/arima/seasonality.py#L32"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#decompose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.decompose" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/arima/seasonality.py#L32"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/seasonality.html#decompose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.decompose" title="Link to this definition"></a></dt>
 <dd><p>Decompose the time series into trend, seasonal, and random components.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> : np.array, shape=(n_samples,)</p>
-<blockquote>
-<div><p>The time series of which the trend, seasonal, and noise/random
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">np.array, shape=(n_samples,)</span></dt><dd><p>The time series of which the trend, seasonal, and noise/random
 components will be extracted.</p>
-</div></blockquote>
-<p><strong>type_: str</strong></p>
-<blockquote>
-<div><p>The type of decomposition that will be performed - ‘multiplicative’ or
+</dd>
+<dt><strong>type_: str</strong></dt><dd><p>The type of decomposition that will be performed - ‘multiplicative’ or
 ‘additive’. We would use ‘multiplicative’ generally when we see an
 increasing trend. We use ‘additive’ when the trend is relatively
 stable over time.</p>
-</div></blockquote>
-<p><strong>m: int</strong></p>
-<blockquote>
-<div><p>The frequency in terms of number of observations. This behaves
+</dd>
+<dt><strong>m: int</strong></dt><dd><p>The frequency in terms of number of observations. This behaves
 similarly to R’s frequency for a time series (ts).</p>
-</div></blockquote>
-<p><strong>filter_: np.array, optional (default=None)</strong></p>
-<blockquote>
-<div><p>A filter by which the convolution will be performed.</p>
-</div></blockquote>
+</dd>
+<dt><strong>filter_: np.array, optional (default=None)</strong></dt><dd><p>A filter by which the convolution will be performed.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>decomposed_tuple</strong> : namedtuple</p>
-<blockquote>
-<div><p>A named tuple with <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">trend</span></code>, <code class="docutils literal notranslate"><span class="pre">seasonal</span></code>, and <code class="docutils literal notranslate"><span class="pre">random</span></code>
+<dd class="field-even"><dl class="simple">
+<dt><strong>decomposed_tuple</strong><span class="classifier">namedtuple</span></dt><dd><p>A named tuple with <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">trend</span></code>, <code class="docutils literal notranslate"><span class="pre">seasonal</span></code>, and <code class="docutils literal notranslate"><span class="pre">random</span></code>
 components where <code class="docutils literal notranslate"><span class="pre">x</span></code> is the input signal, <code class="docutils literal notranslate"><span class="pre">trend</span></code> is the overall
 trend, <code class="docutils literal notranslate"><span class="pre">seasonal</span></code> is the seasonal component, and <cite>random</cite> is the
 noisy component. The input signal <code class="docutils literal notranslate"><span class="pre">x</span></code> can be mostly reconstructed by
 the other three components with a number of points missing equal to
 <code class="docutils literal notranslate"><span class="pre">m</span></code>.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -151,13 +145,13 @@ the <code class="docutils literal notranslate"><span class="pre">examples</span>
 docs as well.</p>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r66" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">R66</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r5143ee537d9e-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p>Example of decompose using both multiplicative and additive types:
 <a class="reference external" href="https://anomaly.io/seasonal-trend-decomposition-in-r/index.html">https://anomaly.io/seasonal-trend-decomposition-in-r/index.html</a></p>
 </div>
-<div class="citation" id="r67" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">R67</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r5143ee537d9e-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
 <p>R documentation for decompose:
 <a class="reference external" href="https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose">https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/decompose</a></p>
 </div>

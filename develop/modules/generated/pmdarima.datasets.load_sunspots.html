@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.datasets.load_sunspots &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -112,29 +112,27 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.datasets" title="pmdarima.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.datasets</span></code></a>.load_sunspots<a class="headerlink" href="#pmdarima-datasets-load-sunspots" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.datasets.load_sunspots">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.datasets.</span></span><span class="sig-name descname"><span class="pre">load_sunspots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_series=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/datasets/sunspots.py#L21"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/sunspots.html#load_sunspots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.datasets.load_sunspots" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.datasets.</span></span><span class="sig-name descname"><span class="pre">load_sunspots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_series=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/datasets/sunspots.py#L21"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/datasets/sunspots.html#load_sunspots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.datasets.load_sunspots" title="Link to this definition"></a></dt>
 <dd><p>Monthly Sunspot Numbers, 1749 - 1983</p>
 <p>Monthly mean relative sunspot numbers from 1749 to 1983. Collected at Swiss
 Federal Observatory, Zurich until 1960, then Tokyo Astronomical
 Observatory.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>as_series</strong> : bool, optional (default=False)</p>
-<blockquote>
-<div><p>Whether to return a Pandas series. If True, the index will be set to
+<dd class="field-odd"><dl class="simple">
+<dt><strong>as_series</strong><span class="classifier">bool, optional (default=False)</span></dt><dd><p>Whether to return a Pandas series. If True, the index will be set to
 the observed years/months. If False, will return a 1d numpy array.</p>
-</div></blockquote>
-<p><strong>dtype</strong> : type, optional (default=np.float64)</p>
-<blockquote>
-<div><p>The type to return for the array. Default is np.float64, which is used
+</dd>
+<dt><strong>dtype</strong><span class="classifier">type, optional (default=np.float64)</span></dt><dd><p>The type to return for the array. Default is np.float64, which is used
 throughout the package as the default type.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>rslt</strong> : array-like, shape=(n_samples,)</p>
-<blockquote>
-<div><p>The sunspots dataset. There are 2820 observations.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>rslt</strong><span class="classifier">array-like, shape=(n_samples,)</span></dt><dd><p>The sunspots dataset. There are 2820 observations.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -142,13 +140,13 @@ throughout the package as the default type.</p>
 context.</p>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r78" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">R78</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="rc04ae7fac310-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots">https://www.rdocumentation.org/packages/datasets/versions/3.6.1/topics/sunspots</a></p>
 </div>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_sunspots</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_sunspots</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">load_sunspots</span><span class="p">()</span>
 <span class="go">array([58. , 62.6, 70. , ..., 55.8, 33.3, 33.4])</span>
 </pre></div>

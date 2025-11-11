@@ -66,9 +66,9 @@ critical statistics of a time series object.
     Apr 1749    55.7
     May 1749    85.0
     dtype: float64
-    /usr/local/lib/python3.9/site-packages/pmdarima-0.0.0-py3.9-linux-x86_64.egg/pmdarima/utils/visualization.py:220: FutureWarning: the 'unbiased' keyword is deprecated, use 'adjusted' instead.
+    /usr/local/lib/python3.11/site-packages/pmdarima/utils/visualization.py:220: FutureWarning: the 'unbiased' keyword is deprecated, use 'adjusted' instead.
       res = tsaplots.plot_acf(
-    /usr/local/lib/python3.9/site-packages/pmdarima-0.0.0-py3.9-linux-x86_64.egg/pmdarima/utils/visualization.py:220: FutureWarning: the 'unbiased' keyword is deprecated, use 'adjusted' instead.
+    /usr/local/lib/python3.11/site-packages/pmdarima/utils/visualization.py:220: FutureWarning: the 'unbiased' keyword is deprecated, use 'adjusted' instead.
       res = tsaplots.plot_acf(
 
     As evidenced by the more normally distributed values in the transformed series,
@@ -115,7 +115,7 @@ critical statistics of a time series object.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.722 seconds)
+   **Total running time of the script:** (0 minutes 0.727 seconds)
 
 
 .. _sphx_glr_download_auto_examples_utils_example_tsdisplay.py:

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>6. Tips to using auto_arima &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=7026087e"></script>
-      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -168,7 +168,7 @@ such as mean, variance, etc., are constant over time (i.e., it exhibits low
 its own, without having to worry about doing so manually.</p>
 <p>The value of <code class="docutils literal notranslate"><span class="pre">d</span></code> determines the number of periods to lag the response prior
 to computing differences. E.g.,</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.utils</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">diff</span>
 
 <span class="c1"># lag 1, diff 1</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
@@ -218,8 +218,8 @@ does not appear relatively stationary, your model will likely need a
 differencing term. These can be determined by using an Augmented Dickey-Fuller
 test, or various other statistical testing methods. Note that <code class="docutils literal notranslate"><span class="pre">auto_arima</span></code>
 will automatically determine the appropriate differencing term for you by default.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">datasets</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span>
 
 <span class="n">y</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_lynx</span><span class="p">()</span>
 <span class="n">pm</span><span class="o">.</span><span class="n">plot_acf</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
@@ -234,7 +234,7 @@ data in order to make it stationary, we can conduct a test of stationarity
 <p>Each of these tests is based on the R source code, and <strong>are primarily intended to</strong>
 <strong>be used internally</strong>. See <a class="reference external" href="https://github.com/alkaline-ml/pmdarima/issues/67">this issue</a>
 for more info. Here’s an example of an ADF test:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.arima.stationarity</span> <span class="kn">import</span> <span class="n">ADFTest</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.arima.stationarity</span><span class="w"> </span><span class="kn">import</span> <span class="n">ADFTest</span>
 
 <span class="c1"># Test whether we should difference at the alpha=0.05</span>
 <span class="c1"># significance level</span>
@@ -245,7 +245,7 @@ for more info. Here’s an example of an ADF test:</p>
 <p>The verdict, per the ADF test, is that we should <em>not</em> difference. Pmdarima also
 provides a more handy interface for estimating your <code class="docutils literal notranslate"><span class="pre">d</span></code> parameter more directly.
 This is the preferred public method for accessing tests of stationarity:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.arima.utils</span> <span class="kn">import</span> <span class="n">ndiffs</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.arima.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndiffs</span>
 
 <span class="c1"># Estimate the number of differences using an ADF test:</span>
 <span class="n">n_adf</span> <span class="o">=</span> <span class="n">ndiffs</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;adf&#39;</span><span class="p">)</span>  <span class="c1"># -&gt; 0</span>
@@ -295,8 +295,8 @@ may be related to weather patterns. In either case, seasonality is a real consid
 that must be made. The pmdarima package provides a test of seasonality for including
 seasonal terms in your ARIMA models.</p>
 <p>We can use a Canova-Hansen test to estimate our seasonal differencing term:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.datasets</span> <span class="kn">import</span> <span class="n">load_lynx</span>
-<span class="kn">from</span> <span class="nn">pmdarima.arima.utils</span> <span class="kn">import</span> <span class="n">nsdiffs</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_lynx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.arima.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">nsdiffs</span>
 
 <span class="c1"># load lynx</span>
 <span class="n">lynx</span> <span class="o">=</span> <span class="n">load_lynx</span><span class="p">()</span>
@@ -330,7 +330,7 @@ recurrent periodicity such as:</p>
 <p>Depending on how it’s set, it can dramatically impact the outcome of an
 ARIMA model. For instance, consider the wineind dataset when fit with
 <code class="docutils literal notranslate"><span class="pre">m=1</span></code> vs. <code class="docutils literal notranslate"><span class="pre">m=12</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span><span class="p">()</span>
 <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="mi">150</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">150</span><span class="p">:]</span>
@@ -341,7 +341,7 @@ ARIMA model. For instance, consider the wineind dataset when fit with
 </pre></div>
 </div>
 <p>The forecasts these two models will produce are wildly different (code to reproduce):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -411,8 +411,8 @@ with a lower information criterion or the process exceeds one of the execution t
 Please note that these are soft limits that are checked periodically during the stepwise search. The search will be
 stopped as soon as one of the thresholds are hit, and the best fit model at that time is returned. This may be helpful
 in scenarios that need to balance between best fit model and time constraints.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pmdarima.arima</span> <span class="kn">import</span> <span class="n">StepwiseContext</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.arima</span><span class="w"> </span><span class="kn">import</span> <span class="n">StepwiseContext</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span><span class="p">()</span>
 <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="mi">150</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">150</span><span class="p">:]</span>
@@ -455,9 +455,9 @@ be modeled-on. Similar to the <a class="reference external" href="https://scikit
 we provide our own modeling pipeline (see <a class="reference internal" href="modules/classes.html#pipeline-ref"><span class="std std-ref">pmdarima.pipeline: Pipelining transformers &amp; ARIMAs</span></a>). This will allow
 you to stack an arbitrary number of transformations together before being pushed
 into an <code class="docutils literal notranslate"><span class="pre">ARIMA</span></code> or <code class="docutils literal notranslate"><span class="pre">AutoARIMA</span></code> estimator:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pmdarima.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span> <span class="nn">pmdarima.preprocessing</span> <span class="kn">import</span> <span class="n">BoxCoxEndogTransformer</span>
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoxCoxEndogTransformer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
 
 <span class="n">wineind</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_wineind</span><span class="p">()</span>
 <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">wineind</span><span class="p">[:</span><span class="mi">150</span><span class="p">],</span> <span class="n">wineind</span><span class="p">[</span><span class="mi">150</span><span class="p">:]</span>

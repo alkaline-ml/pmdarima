@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Displaying key timeseries statistics &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -126,9 +126,9 @@ Mar 1749    70.0
 Apr 1749    55.7
 May 1749    85.0
 dtype: float64
-/usr/local/lib/python3.9/site-packages/pmdarima-0.0.0-py3.9-linux-x86_64.egg/pmdarima/utils/visualization.py:220: FutureWarning: the &#39;unbiased&#39; keyword is deprecated, use &#39;adjusted&#39; instead.
+/usr/local/lib/python3.11/site-packages/pmdarima/utils/visualization.py:220: FutureWarning: the &#39;unbiased&#39; keyword is deprecated, use &#39;adjusted&#39; instead.
   res = tsaplots.plot_acf(
-/usr/local/lib/python3.9/site-packages/pmdarima-0.0.0-py3.9-linux-x86_64.egg/pmdarima/utils/visualization.py:220: FutureWarning: the &#39;unbiased&#39; keyword is deprecated, use &#39;adjusted&#39; instead.
+/usr/local/lib/python3.11/site-packages/pmdarima/utils/visualization.py:220: FutureWarning: the &#39;unbiased&#39; keyword is deprecated, use &#39;adjusted&#39; instead.
   res = tsaplots.plot_acf(
 
 As evidenced by the more normally distributed values in the transformed series,
@@ -142,9 +142,9 @@ using a Box-Cox transformation may prove useful prior to fitting your model.
 
 <span class="c1"># Author: Taylor Smith &lt;taylor.smith@alkaline-ml.com&gt;</span>
 
-<span class="kn">import</span> <span class="nn">pmdarima</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">datasets</span>
-<span class="kn">from</span> <span class="nn">pmdarima</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pmdarima</span><span class="w"> </span><span class="kn">import</span> <span class="n">preprocessing</span>
 
 <span class="c1"># We&#39;ll use the sunspots dataset for this example</span>
 <span class="n">y</span> <span class="o">=</span> <a href="../../modules/generated/pmdarima.datasets.load_sunspots.html#pmdarima.datasets.load_sunspots" title="pmdarima.datasets.load_sunspots" class="sphx-glr-backref-module-pmdarima-datasets sphx-glr-backref-type-py-function"><span class="n">datasets</span><span class="o">.</span><span class="n">load_sunspots</span></a><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -167,7 +167,7 @@ using a Box-Cox transformation may prove useful prior to fitting your model.
 <span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.722 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.727 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-utils-example-tsdisplay-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/1d6dffe65c642b877aa014344db300bc/example_tsdisplay.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_tsdisplay.ipynb</span></code></a></p>

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.utils.decomposed_plot &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -106,26 +106,22 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.decomposed_plot<a class="headerlink" href="#pmdarima-utils-decomposed-plot" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.utils.decomposed_plot">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">decomposed_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decomposed_tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/utils/visualization.py#L63"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/visualization.html#decomposed_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.decomposed_plot" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">decomposed_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decomposed_tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/utils/visualization.py#L63"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/visualization.html#decomposed_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.decomposed_plot" title="Link to this definition"></a></dt>
 <dd><p>Plot the decomposition of a time series.</p>
 <p>Plots the results of the time series decomposition in four plots:
 the ‘x’, ‘trend’, ‘seasonal’, and ‘random’ components.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>decomposed_tuple</strong> : tuple, namedtuple or iterable</p>
-<blockquote>
-<div><p>Named tuple of series that consist of data, trend, seasonal, and
+<dd class="field-odd"><dl class="simple">
+<dt><strong>decomposed_tuple</strong><span class="classifier">tuple, namedtuple or iterable</span></dt><dd><p>Named tuple of series that consist of data, trend, seasonal, and
 random. Should be the result of <a class="reference internal" href="pmdarima.arima.decompose.html#pmdarima.arima.decompose" title="pmdarima.arima.decompose"><code class="xref py py-func docutils literal notranslate"><span class="pre">pmdarima.arima.decompose()</span></code></a>.</p>
-</div></blockquote>
-<p><strong>figure_kwargs</strong> : dict, optional (default=None)</p>
-<blockquote>
-<div><p>Optional dictionary of keyword arguments that are passed to figure.</p>
-</div></blockquote>
-<p><strong>show</strong> : bool, optional (default=True)</p>
-<blockquote>
-<div><p>Whether to show the plot after it’s been created. If not, will return
+</dd>
+<dt><strong>figure_kwargs</strong><span class="classifier">dict, optional (default=None)</span></dt><dd><p>Optional dictionary of keyword arguments that are passed to figure.</p>
+</dd>
+<dt><strong>show</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether to show the plot after it’s been created. If not, will return
 the plot as an Axis object instead.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.utils.visualization &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/gitcontrib.css?v=d6822521" />
@@ -20,7 +20,7 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
@@ -86,14 +86,14 @@
 <span class="c1">#</span>
 <span class="c1"># Plotting wrapper functions</span>
 
-<span class="kn">from</span> <span class="nn">.array</span> <span class="kn">import</span> <span class="n">check_endog</span>
-<span class="kn">from</span> <span class="nn">..compat.pandas</span> <span class="kn">import</span> <span class="n">plotting</span> <span class="k">as</span> <span class="n">pd_plotting</span>
-<span class="kn">from</span> <span class="nn">..compat.matplotlib</span> <span class="kn">import</span> <span class="n">get_compatible_pyplot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.array</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_endog</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compat.pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">plotting</span> <span class="k">as</span> <span class="n">pd_plotting</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compat.matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_compatible_pyplot</span>
 
-<span class="kn">from</span> <span class="nn">statsmodels.graphics</span> <span class="kn">import</span> <span class="n">tsaplots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.graphics</span><span class="w"> </span><span class="kn">import</span> <span class="n">tsaplots</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <span class="c1"># User may not have matplotlib</span>
 <span class="k">try</span><span class="p">:</span>
@@ -117,7 +117,7 @@
 <span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_err_for_no_mpl</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_err_for_no_mpl</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">mpl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Per Issue #47:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
@@ -125,13 +125,13 @@
             <span class="s2">&quot;create plots, you&#39;ll need to pip install matplotlib!&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_get_plt</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_plt</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get MPL pyplot if it exists or raise an error if not&quot;&quot;&quot;</span>
     <span class="n">_err_for_no_mpl</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">mpl</span>
 
 
-<span class="k">def</span> <span class="nf">_show_or_return</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_show_or_return</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">show</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
         <span class="c1"># We never cover this in tests, unfortunately. Even with the</span>
         <span class="c1"># cleanup tag, Travis doesn&#39;t play super nice with showing and</span>
@@ -144,7 +144,7 @@
 
 <div class="viewcode-block" id="decomposed_plot">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.decomposed_plot.html#pmdarima.utils.decomposed_plot">[docs]</a>
-<span class="k">def</span> <span class="nf">decomposed_plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="p">,</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">decomposed_plot</span><span class="p">(</span><span class="n">decomposed_tuple</span><span class="p">,</span> <span class="n">figure_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot the decomposition of a time series.</span>
 
 <span class="sd">    Plots the results of the time series decomposition in four plots:</span>
@@ -194,7 +194,7 @@
 
 <div class="viewcode-block" id="autocorr_plot">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.autocorr_plot.html#pmdarima.utils.autocorr_plot">[docs]</a>
-<span class="k">def</span> <span class="nf">autocorr_plot</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">autocorr_plot</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot a series&#39; auto-correlation.</span>
 
 <span class="sd">    A wrapper method for the Pandas ``autocorrelation_plot`` method.</span>
@@ -233,7 +233,7 @@
 
 <div class="viewcode-block" id="plot_acf">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.plot_acf.html#pmdarima.utils.plot_acf">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_acf</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_vlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_acf</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_vlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
              <span class="n">unbiased</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fft</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Autocorrelation&#39;</span><span class="p">,</span>
              <span class="n">zero</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">vlines_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot a series&#39; auto-correlation as a line plot.</span>
@@ -318,7 +318,7 @@
 
 <div class="viewcode-block" id="plot_pacf">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.plot_pacf.html#pmdarima.utils.plot_pacf">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_pacf</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;yw&#39;</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_pacf</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;yw&#39;</span><span class="p">,</span>
               <span class="n">use_vlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Partial Autocorrelation&#39;</span><span class="p">,</span> <span class="n">zero</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
               <span class="n">vlines_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot a series&#39; partial auto-correlation as a line plot.</span>
@@ -406,7 +406,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">tsdisplay</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tsdisplay</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lag_max</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
               <span class="n">series_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">acf_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hist_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
               <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Display the time series and some of its key statistics</span>
@@ -458,7 +458,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_err_for_no_mpl</span><span class="p">()</span>
-    <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">gridspec</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">gridspec</span>
 
     <span class="n">fig</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
     <span class="n">gs</span> <span class="o">=</span> <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>

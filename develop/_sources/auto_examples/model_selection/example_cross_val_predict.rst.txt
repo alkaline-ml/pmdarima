@@ -96,7 +96,7 @@ average their forecasts using either a "mean" or "median" (tunable).
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 24.794 seconds)
+   **Total running time of the script:** (0 minutes 40.479 seconds)
 
 
 .. _sphx_glr_download_auto_examples_model_selection_example_cross_val_predict.py:

@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.StepwiseContext &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -112,28 +112,26 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.StepwiseContext<a class="headerlink" href="#pmdarima-arima-stepwisecontext" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pmdarima.arima.StepwiseContext">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">StepwiseContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dur</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/arima/auto.py#L273"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">StepwiseContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dur</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/arima/auto.py#L273"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext" title="Link to this definition"></a></dt>
 <dd><p>Context manager to capture runtime context for stepwise mode.</p>
 <p><code class="docutils literal notranslate"><span class="pre">StepwiseContext</span></code> allows one to call <a class="reference internal" href="pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima" title="pmdarima.arima.auto_arima"><code class="xref py py-func docutils literal notranslate"><span class="pre">auto_arima()</span></code></a> in the context
 of a runtime configuration that offers additional level of
 control required in certain scenarios. Use cases that are either
 sensitive to duration and/or the number of attempts to
 find the best fit can use <code class="docutils literal notranslate"><span class="pre">StepwiseContext</span></code> to control them.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>max_steps</strong> : int, optional (default=100)</p>
-<blockquote>
-<div><p>The maximum number of steps to try to find a best fit. When
+<dd class="field-odd"><dl class="simple">
+<dt><strong>max_steps</strong><span class="classifier">int, optional (default=100)</span></dt><dd><p>The maximum number of steps to try to find a best fit. When
 the number of tries exceed this number, the stepwise process
 will stop and the best fit model at that time will be returned.</p>
-</div></blockquote>
-<p><strong>max_dur</strong> : int, optional (default=None)</p>
-<blockquote>
-<div><p>The maximum duration in seconds to try to find a best fit.
+</dd>
+<dt><strong>max_dur</strong><span class="classifier">int, optional (default=None)</span></dt><dd><p>The maximum duration in seconds to try to find a best fit.
 When the cumulative fit duration exceeds this number, the
 stepwise process will stop and the best fit model at that
 time will be returned. Please note that this is a soft limit.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -155,23 +153,27 @@ occurs first and the best fit model at that time will be returned</p>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_type</span></code>()</p></td>
 <td><p>Get the ContextType</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">items</span></code>()</p></td>
-<td><p></p></td>
+</tbody>
+</table>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>items</strong></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code>()</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><strong>keys</strong></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code>(other)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><strong>update</strong></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code>()</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><strong>values</strong></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="pmdarima.arima.StepwiseContext.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dur</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/arima/auto.py#L311"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_dur</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/arima/auto.py#L311"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/auto.html#StepwiseContext.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.StepwiseContext.__init__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

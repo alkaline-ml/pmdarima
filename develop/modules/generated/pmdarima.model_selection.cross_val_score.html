@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.model_selection.cross_val_score &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -108,47 +108,35 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.model_selection" title="pmdarima.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.model_selection</span></code></a>.cross_val_score<a class="headerlink" href="#pmdarima-model-selection-cross-val-score" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.model_selection.cross_val_score">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.model_selection.</span></span><span class="sig-name descname"><span class="pre">cross_val_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/model_selection/_validation.py#L358"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_val_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.model_selection.cross_val_score" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.model_selection.</span></span><span class="sig-name descname"><span class="pre">cross_val_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/model_selection/_validation.py#L358"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/model_selection/_validation.html#cross_val_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.model_selection.cross_val_score" title="Link to this definition"></a></dt>
 <dd><p>Evaluate a score by cross-validation</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>estimator</strong> : estimator</p>
-<blockquote>
-<div><p>An estimator object that implements the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method</p>
-</div></blockquote>
-<p><strong>y</strong> : array-like or iterable, shape=(n_samples,)</p>
-<blockquote>
-<div><p>The time-series array.</p>
-</div></blockquote>
-<p><strong>X</strong> : array-like, shape=[n_obs, n_vars], optional (default=None)</p>
-<blockquote>
-<div><p>An optional 2-d array of exogenous variables.</p>
-</div></blockquote>
-<p><strong>scoring</strong> : str or callable, optional (default=None)</p>
-<blockquote>
-<div><p>The scoring metric to use. If a callable, must adhere to the signature
+<dd class="field-odd"><dl class="simple">
+<dt><strong>estimator</strong><span class="classifier">estimator</span></dt><dd><p>An estimator object that implements the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like or iterable, shape=(n_samples,)</span></dt><dd><p>The time-series array.</p>
+</dd>
+<dt><strong>X</strong><span class="classifier">array-like, shape=[n_obs, n_vars], optional (default=None)</span></dt><dd><p>An optional 2-d array of exogenous variables.</p>
+</dd>
+<dt><strong>scoring</strong><span class="classifier">str or callable, optional (default=None)</span></dt><dd><p>The scoring metric to use. If a callable, must adhere to the signature
 <code class="docutils literal notranslate"><span class="pre">metric(true,</span> <span class="pre">predicted)</span></code>. Valid string scoring metrics include:</p>
 <ul class="simple">
 <li><p>‘smape’</p></li>
 <li><p>‘mean_absolute_error’</p></li>
 <li><p>‘mean_squared_error’</p></li>
 </ul>
-</div></blockquote>
-<p><strong>cv</strong> : BaseTSCrossValidator or None, optional (default=None)</p>
-<blockquote>
-<div><p>An instance of cross-validation. If None, will use a RollingForecastCV</p>
-</div></blockquote>
-<p><strong>verbose</strong> : integer, optional</p>
-<blockquote>
-<div><p>The verbosity level.</p>
-</div></blockquote>
-<p><strong>error_score</strong> : ‘raise’ or numeric</p>
-<blockquote>
-<div><p>Value to assign to the score if an error occurs in estimator fitting.
+</dd>
+<dt><strong>cv</strong><span class="classifier">BaseTSCrossValidator or None, optional (default=None)</span></dt><dd><p>An instance of cross-validation. If None, will use a RollingForecastCV</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">integer, optional</span></dt><dd><p>The verbosity level.</p>
+</dd>
+<dt><strong>error_score</strong><span class="classifier">‘raise’ or numeric</span></dt><dd><p>Value to assign to the score if an error occurs in estimator fitting.
 If set to ‘raise’, the error is raised.
 If a numeric value is given, ModelFitWarning is raised. This parameter
 does not affect the refit step, which will always raise the error.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

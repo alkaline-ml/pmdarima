@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.auto &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/gitcontrib.css?v=d6822521" />
@@ -20,7 +20,7 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
@@ -86,26 +86,26 @@
 <span class="c1">#</span>
 <span class="c1"># Automatically find optimal parameters for an ARIMA</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
 
-<span class="kn">import</span> <span class="nn">functools</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">BaseARIMA</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_doc</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_validation</span> <span class="k">as</span> <span class="n">val</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">ndiffs</span><span class="p">,</span> <span class="n">is_constant</span><span class="p">,</span> <span class="n">nsdiffs</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">diff</span><span class="p">,</span> <span class="n">is_iterable</span><span class="p">,</span> <span class="n">check_endog</span>
-<span class="kn">from</span> <span class="nn">..utils.metaestimators</span> <span class="kn">import</span> <span class="n">if_has_delegate</span>
-<span class="kn">from</span> <span class="nn">._context</span> <span class="kn">import</span> <span class="n">AbstractContext</span><span class="p">,</span> <span class="n">ContextType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseARIMA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_doc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validation</span> <span class="k">as</span> <span class="n">val</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndiffs</span><span class="p">,</span> <span class="n">is_constant</span><span class="p">,</span> <span class="n">nsdiffs</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">diff</span><span class="p">,</span> <span class="n">is_iterable</span><span class="p">,</span> <span class="n">check_endog</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.metaestimators</span><span class="w"> </span><span class="kn">import</span> <span class="n">if_has_delegate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._context</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractContext</span><span class="p">,</span> <span class="n">ContextType</span>
 
 <span class="c1"># Import as a namespace so we can mock</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_auto_solvers</span> <span class="k">as</span> <span class="n">solvers</span>
-<span class="kn">from</span> <span class="nn">..compat.numpy</span> <span class="kn">import</span> <span class="n">DTYPE</span>
-<span class="kn">from</span> <span class="nn">..compat</span> <span class="kn">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_auto_solvers</span> <span class="k">as</span> <span class="n">solvers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compat.numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">DTYPE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compat</span><span class="w"> </span><span class="kn">import</span> <span class="n">statsmodels</span> <span class="k">as</span> <span class="n">sm_compat</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;auto_arima&#39;</span><span class="p">,</span>
@@ -114,7 +114,7 @@
 <span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_warn_for_deprecations</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_warn_for_deprecations</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="c1"># TODO: remove these warnings in the future</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;solver&#39;</span><span class="p">,</span> <span class="s1">&#39;transparams&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
@@ -126,7 +126,7 @@
 
 <div class="viewcode-block" id="AutoARIMA">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.AutoARIMA.html#pmdarima.arima.AutoARIMA">[docs]</a>
-<span class="k">class</span> <span class="nc">AutoARIMA</span><span class="p">(</span><span class="n">BaseARIMA</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AutoARIMA</span><span class="p">(</span><span class="n">BaseARIMA</span><span class="p">):</span>
     <span class="c1"># Don&#39;t add the y, exog, etc. here since they are used in &#39;fit&#39;</span>
     <span class="vm">__doc__</span> <span class="o">=</span> <span class="n">_doc</span><span class="o">.</span><span class="n">_AUTO_ARIMA_DOCSTR</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <span class="n">y</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -138,7 +138,7 @@
     <span class="c1"># todo: someday store defaults somewhere else for single source of truth</span>
 <div class="viewcode-block" id="AutoARIMA.__init__">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.AutoARIMA.html#pmdarima.arima.AutoARIMA.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">start_p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -224,7 +224,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span></div>
 
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the auto-arima estimator</span>
 
 <span class="sd">        Fit an AutoARIMA to a vector, ``y``, of observations with an</span>
@@ -299,7 +299,7 @@
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="nd">@if_has_delegate</span><span class="p">(</span><span class="s2">&quot;model_&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">predict_in_sample</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict_in_sample</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -320,7 +320,7 @@
         <span class="p">)</span>
 
     <span class="nd">@if_has_delegate</span><span class="p">(</span><span class="s2">&quot;model_&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">n_periods</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
         <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -335,7 +335,7 @@
         <span class="p">)</span>
 
     <span class="nd">@if_has_delegate</span><span class="p">(</span><span class="s2">&quot;model_&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">y</span><span class="p">,</span>
         <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -350,7 +350,7 @@
         <span class="p">)</span>
 
     <span class="nd">@if_has_delegate</span><span class="p">(</span><span class="s1">&#39;model_&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a summary of the ARIMA model&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span></div>
 
@@ -360,7 +360,7 @@
 
 <div class="viewcode-block" id="StepwiseContext">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.StepwiseContext.html#pmdarima.arima.StepwiseContext">[docs]</a>
-<span class="k">class</span> <span class="nc">StepwiseContext</span><span class="p">(</span><span class="n">AbstractContext</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">StepwiseContext</span><span class="p">(</span><span class="n">AbstractContext</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Context manager to capture runtime context for stepwise mode.</span>
 
 <span class="sd">    ``StepwiseContext`` allows one to call :func:`auto_arima` in the context</span>
@@ -400,7 +400,7 @@
 
 <div class="viewcode-block" id="StepwiseContext.__init__">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.StepwiseContext.html#pmdarima.arima.StepwiseContext.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_dur</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_dur</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># TODO: do we want an upper limit on this?</span>
         <span class="k">if</span> <span class="n">max_steps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">max_steps</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;max_steps should be between 1 and 1000&#39;</span><span class="p">)</span>
@@ -416,14 +416,14 @@
 
 
     <span class="c1"># override base class member</span>
-    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">ContextType</span><span class="o">.</span><span class="n">STEPWISE</span></div>
 
 
 
 <div class="viewcode-block" id="auto_arima">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima">[docs]</a>
-<span class="k">def</span> <span class="nf">auto_arima</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">auto_arima</span><span class="p">(</span>
     <span class="n">y</span><span class="p">,</span>
     <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">start_p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -809,7 +809,7 @@
 <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_return_wrapper</span><span class="p">(</span><span class="n">fits</span><span class="p">,</span> <span class="n">return_all</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">trace</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_return_wrapper</span><span class="p">(</span><span class="n">fits</span><span class="p">,</span> <span class="n">return_all</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">trace</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;If the user wants to get all of the models back, this will</span>
 <span class="sd">    return a list of the ARIMA models, otherwise it will just return</span>
 <span class="sd">    the model. If this is called from the end of the function, ``fits``</span>

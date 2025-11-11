@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.utils.metaestimators &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/gitcontrib.css?v=d6822521" />
@@ -20,7 +20,7 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
@@ -87,15 +87,15 @@
 <span class="c1"># Metaestimators for the ARIMA class. These classes are derived from the</span>
 <span class="c1"># sklearn metaestimators, but adapted for more specific use with pmdarima.</span>
 
-<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">attrgetter</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">update_wrapper</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">attrgetter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">update_wrapper</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;if_has_delegate&#39;</span>
 <span class="p">]</span>
 
 
-<span class="k">class</span> <span class="nc">_IffHasDelegate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_IffHasDelegate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements a conditional property using the descriptor protocol.</span>
 <span class="sd">    Using this class to create a decorator will raise an ``AttributeError``</span>
 <span class="sd">    if none of the delegates (specified in ``delegate_names``) is an attribute</span>
@@ -109,14 +109,14 @@
 <span class="sd">    See https://docs.python.org/3/howto/descriptor.html for an explanation of</span>
 <span class="sd">    descriptors.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">delegate_names</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">delegate_names</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delegate_names</span> <span class="o">=</span> <span class="n">delegate_names</span>
 
         <span class="c1"># update the docstring of the descriptor</span>
         <span class="n">update_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># raise an AttributeError if the attribute is not present on the object</span>
         <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># delegate only on instances, not the classes.</span>
@@ -140,7 +140,7 @@
 
 <div class="viewcode-block" id="if_has_delegate">
 <a class="viewcode-back" href="../../../modules/generated/pmdarima.utils.if_has_delegate.html#pmdarima.utils.if_has_delegate">[docs]</a>
-<span class="k">def</span> <span class="nf">if_has_delegate</span><span class="p">(</span><span class="n">delegate</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">if_has_delegate</span><span class="p">(</span><span class="n">delegate</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrap a delegated instance attribute function.</span>
 
 <span class="sd">    Creates a decorator for methods that are delegated in the presence of a</span>

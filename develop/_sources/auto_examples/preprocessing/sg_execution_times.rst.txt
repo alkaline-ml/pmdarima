@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:15.163** total execution time for 1 file **from auto_examples/preprocessing**:
+**00:49.879** total execution time for 1 file **from auto_examples/preprocessing**:
 
 .. container::
 
@@ -33,5 +33,5 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_preprocessing_example_date_featurizer.py` (``example_date_featurizer.py``)
-     - 00:15.163
+     - 00:49.879
      - 0.0

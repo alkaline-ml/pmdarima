@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.arima.ADFTest &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
@@ -112,7 +112,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.arima" title="pmdarima.arima"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.arima</span></code></a>.ADFTest<a class="headerlink" href="#pmdarima-arima-adftest" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pmdarima.arima.ADFTest">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">ADFTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/arima/stationarity.py#L215"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#ADFTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.ADFTest" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pmdarima.arima.</span></span><span class="sig-name descname"><span class="pre">ADFTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/arima/stationarity.py#L215"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#ADFTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.ADFTest" title="Link to this definition"></a></dt>
 <dd><p>Conduct an ADF test for stationarity.</p>
 <p>In statistics and econometrics, an augmented Dickey–Fuller test (ADF)
 tests the null hypothesis of a unit root is present in a time series
@@ -120,17 +120,15 @@ sample. The alternative hypothesis is different depending on which version
 of the test is used, but is usually stationarity or trend-stationarity. It
 is an augmented version of the Dickey–Fuller test for a larger and more
 complicated set of time series models.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>alpha</strong> : float, optional (default=0.05)</p>
-<blockquote>
-<div><p>Level of the test</p>
-</div></blockquote>
-<p><strong>k</strong> : int, optional (default=None)</p>
-<blockquote>
-<div><p>The drift parameter. If <code class="docutils literal notranslate"><span class="pre">k</span></code> is None, it will be set to:
+<dd class="field-odd"><dl class="simple">
+<dt><strong>alpha</strong><span class="classifier">float, optional (default=0.05)</span></dt><dd><p>Level of the test</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int, optional (default=None)</span></dt><dd><p>The drift parameter. If <code class="docutils literal notranslate"><span class="pre">k</span></code> is None, it will be set to:
 <code class="docutils literal notranslate"><span class="pre">np.trunc(np.power(x.shape[0]</span> <span class="pre">-</span> <span class="pre">1,</span> <span class="pre">1</span> <span class="pre">/</span> <span class="pre">3.0))</span></code></p>
-</div></blockquote>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -143,12 +141,12 @@ regression for std err estimates rather than the more robust sklearn
 LinearRegression.</p>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r46" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">R46</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r3c04f48746b9-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://wikipedia.org/wiki/Augmented_Dickey">https://wikipedia.org/wiki/Augmented_Dickey</a>–Fuller_test</p>
 </div>
-<div class="citation" id="r47" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">R47</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r3c04f48746b9-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
 <p>R’s tseries ADF source code: <a class="reference external" href="https://bit.ly/2EnvM5V">https://bit.ly/2EnvM5V</a></p>
 </div>
 </div>
@@ -174,7 +172,7 @@ LinearRegression.</p>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="pmdarima.arima.ADFTest.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/arima/stationarity.py#L263"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#ADFTest.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/arima/stationarity.py#L263"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/arima/stationarity.html#ADFTest.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.arima.ADFTest.__init__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

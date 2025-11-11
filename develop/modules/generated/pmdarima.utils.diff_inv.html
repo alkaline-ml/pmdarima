@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pmdarima.utils.diff_inv &mdash; pmdarima 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/fields.css?v=3d9fdf7e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/gitcontrib.css?v=d6822521" />
@@ -21,7 +21,7 @@
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=7026087e"></script>
-      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -112,7 +112,7 @@
 <h1><a class="reference internal" href="../classes.html#module-pmdarima.utils" title="pmdarima.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pmdarima.utils</span></code></a>.diff_inv<a class="headerlink" href="#pmdarima-utils-diff-inv" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pmdarima.utils.diff_inv">
-<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">diff_inv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">differences</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/46158c14/pmdarima/utils/array.py#L412"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#diff_inv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.diff_inv" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pmdarima.utils.</span></span><span class="sig-name descname"><span class="pre">diff_inv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">differences</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/alkaline-ml/pmdarima/blob/daa6f265/pmdarima/utils/array.py#L412"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference internal" href="../../_modules/pmdarima/utils/array.html#diff_inv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pmdarima.utils.diff_inv" title="Link to this definition"></a></dt>
 <dd><p>Inverse the difference of an array.</p>
 <p>A python implementation of the R <code class="docutils literal notranslate"><span class="pre">diffinv</span></code> function [1]. This computes
 the inverse of lag differences from an array given a <code class="docutils literal notranslate"><span class="pre">lag</span></code>
@@ -120,32 +120,28 @@ and <code class="docutils literal notranslate"><span class="pre">differencing</s
 <p>If <code class="docutils literal notranslate"><span class="pre">x</span></code> is a vector of length <span class="math notranslate nohighlight">\(n\)</span>, <code class="docutils literal notranslate"><span class="pre">lag=1</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>,
 then the computed result is equal to the cumulative sum plus left-padding
 of zeros equal to <code class="docutils literal notranslate"><span class="pre">lag</span> <span class="pre">*</span> <span class="pre">differences</span></code>.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> : array-like, shape=(n_samples, [n_features])</p>
-<blockquote>
-<div><p>The array to difference.</p>
-</div></blockquote>
-<p><strong>lag</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>An integer &gt; 0 indicating which lag to use.</p>
-</div></blockquote>
-<p><strong>differences</strong> : int, optional (default=1)</p>
-<blockquote>
-<div><p>An integer &gt; 0 indicating the order of the difference.</p>
-</div></blockquote>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like, shape=(n_samples, [n_features])</span></dt><dd><p>The array to difference.</p>
+</dd>
+<dt><strong>lag</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>An integer &gt; 0 indicating which lag to use.</p>
+</dd>
+<dt><strong>differences</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>An integer &gt; 0 indicating the order of the difference.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>res</strong> : np.ndarray, shape=(n_samples, [n_features])</p>
-<blockquote>
-<div><p>The result of the inverse of the difference arrays.</p>
-</div></blockquote>
+<dd class="field-even"><dl class="simple">
+<dt><strong>res</strong><span class="classifier">np.ndarray, shape=(n_samples, [n_features])</span></dt><dd><p>The result of the inverse of the difference arrays.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
-<div class="citation" id="r95" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">R95</a><span class="fn-bracket">]</span></span>
+<div class="citation" id="r81d2955f30d9-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html">https://stat.ethz.ch/R-manual/R-devel/library/stats/html/diffinv.html</a></p>
 </div>
 </div>
@@ -175,7 +171,7 @@ of zeros equal to <code class="docutils literal notranslate"><span class="pre">l
 </pre></div>
 </div>
 <p>For a 2d array with <code class="docutils literal notranslate"><span class="pre">lag=1</span></code> and <code class="docutils literal notranslate"><span class="pre">differences=1</span></code>:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">diff_inv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
