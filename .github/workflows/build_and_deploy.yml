@@ -130,3 +130,4 @@ jobs:
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+          TEST_PYPI_PASSWORD: ${{ secrets.TEST_PYPI_PASSWORD }}
