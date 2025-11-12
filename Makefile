@@ -75,5 +75,5 @@ twine-check: bdist_wheel deploy-requirements
 	# Check that twine will parse the README acceptably
 	$(PYTHON) -m twine check dist/*
 
-version: requirements
+version:
 	@$(PYTHON) build_tools/get_tag.py
