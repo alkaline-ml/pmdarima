@@ -84,7 +84,7 @@ jobs:
             pytest --showlocals --durations=20 --pyargs pmdarima &&
             pip install --upgrade scipy numpy &&
             pytest --showlocals --durations=20 --pyargs pmdarima &&
-            pip install --force-reinstall 'numpy<2.0.0' &&
+            pip install --force-reinstall "numpy<2.0.0" &&
             pytest --showlocals --durations=20 --pyargs pmdarima
           # Avoid testing on emulated architectures
           CIBW_TEST_SKIP: "*-*linux_{aarch64,ppc64le,s390x} *-macosx_arm64"
