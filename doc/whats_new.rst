@@ -15,6 +15,10 @@ v0.8.1) will document the latest features.
 * Remove support for Python 3.9 (end-of-life 2025-10-31)
 * Add support for Numpy 2.x. See `#600 <https://github.com/alkaline-ml/pmdarima/pull/600>`_
 
+  - Remove support for Numpy 1.X (See `#607 <https://github.com/alkaline-ml/pmdarima/pull/607>`_)
+  - Bump minimum required Scipy to ``1.13.0`` (See `#607 <https://github.com/alkaline-ml/pmdarima/pull/607>`_)
+  - Bump minimum required statsmodels to ``1.14.5`` (See `#607 <https://github.com/alkaline-ml/pmdarima/pull/607>`_)
+
 `v2.0.4 <https://alkaline-ml.com/pmdarima/2.0.4>`_
 --------------------------------------------------
 
