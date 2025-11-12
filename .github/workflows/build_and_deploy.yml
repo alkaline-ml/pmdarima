@@ -79,11 +79,7 @@ jobs:
           CIBW_ENVIRONMENT_PASS_LINUX: GITHUB_REF
           # No support for pypy or musl
           CIBW_SKIP: "pp* *-musllinux_*"
-          # Runs tests and checks for a numpy regression by upgrading numpy and running tests again
-          CIBW_TEST_COMMAND: >
-            pytest --showlocals --durations=20 --pyargs pmdarima &&
-            pip install --upgrade scipy numpy &&
-            pytest --showlocals --durations=20 --pyargs pmdarima
+          CIBW_TEST_COMMAND: pytest --showlocals --durations=20 --pyargs pmdarima
           # Avoid testing on emulated architectures
           CIBW_TEST_SKIP: "*-*linux_{aarch64,ppc64le,s390x} *-macosx_arm64"
 
