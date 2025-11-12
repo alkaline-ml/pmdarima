@@ -235,7 +235,7 @@ class CHTest(_SeasonalStationarityTest):
 
         # no use checking, because this is an internal method
         # if n <= s:  raise ValueError('too few samples (%i<=%i)' % (n, s))
-        frec = np.ones(int((s + 1) / 2), dtype=int)
+        frec = np.ones(int((s + 1) / 2), dtype=np.intp)
         ltrunc = int(np.round(s * ((n / 100.0) ** 0.25)))
         R1 = CHTest._seas_dummy(wts, s)
 
