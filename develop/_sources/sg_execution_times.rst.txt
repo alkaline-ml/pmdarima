@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**04:46.472** total execution time for 13 files **from all galleries**:
+**03:34.719** total execution time for 13 files **from all galleries**:
 
 .. container::
 
@@ -33,40 +33,40 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_example_simple_fit.py` (``../examples/example_simple_fit.py``)
-     - 02:39.383
+     - 01:29.450
      - 0.0
    * - :ref:`sphx_glr_auto_examples_preprocessing_example_date_featurizer.py` (``../examples/preprocessing/example_date_featurizer.py``)
-     - 00:49.879
+     - 00:51.656
      - 0.0
    * - :ref:`sphx_glr_auto_examples_model_selection_example_cross_val_predict.py` (``../examples/model_selection/example_cross_val_predict.py``)
-     - 00:40.479
+     - 00:35.755
      - 0.0
    * - :ref:`sphx_glr_auto_examples_model_selection_example_cross_validation.py` (``../examples/model_selection/example_cross_validation.py``)
-     - 00:16.596
+     - 00:18.013
      - 0.0
    * - :ref:`sphx_glr_auto_examples_example_pipeline.py` (``../examples/example_pipeline.py``)
-     - 00:12.706
+     - 00:12.173
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_persisting_a_model.py` (``../examples/arima/example_persisting_a_model.py``)
-     - 00:04.076
+     - 00:04.015
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_add_new_samples.py` (``../examples/arima/example_add_new_samples.py``)
-     - 00:01.415
+     - 00:01.691
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_auto_arima.py` (``../examples/arima/example_auto_arima.py``)
-     - 00:00.899
+     - 00:01.094
      - 0.0
    * - :ref:`sphx_glr_auto_examples_utils_example_tsdisplay.py` (``../examples/utils/example_tsdisplay.py``)
-     - 00:00.727
+     - 00:00.528
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_seasonal_decomposition.py` (``../examples/arima/example_seasonal_decomposition.py``)
-     - 00:00.307
+     - 00:00.339
      - 0.0
    * - :ref:`sphx_glr_auto_examples_datasets_example_load_data.py` (``../examples/datasets/example_load_data.py``)
-     - 00:00.002
+     - 00:00.003
      - 0.0
    * - :ref:`sphx_glr_auto_examples_utils_example_array_differencing.py` (``../examples/utils/example_array_differencing.py``)
-     - 00:00.002
+     - 00:00.001
      - 0.0
    * - :ref:`sphx_glr_auto_examples_utils_example_array_concatenation.py` (``../examples/utils/example_array_concatenation.py``)
      - 00:00.001
