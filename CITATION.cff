@@ -13,8 +13,8 @@ keywords:
   - "forecasting models"
   - sarimax
 title: "pmdarima"
-version: 2.0.4
-date-released: 2023-10-23
+version: 2.1.0
+date-released: 2025-11-13
 license: MIT
 repository-artifact: https://pypi.org/project/pmdarima
 repository-code: https://github.com/alkaline-ml/pmdarima
