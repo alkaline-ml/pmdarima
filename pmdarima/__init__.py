@@ -21,14 +21,8 @@ import warnings as _warnings
 #   X.YbN   # Beta release
 #   X.YrcN  # Release Candidate
 #   X.Y     # Final release
-#
-# Version is now managed in pyproject.toml
-try:
-    from importlib.metadata import version as get_version
-    __version__ = get_version("pmdarima")
-except Exception:
-    # Fallback for development/editable installs
-    __version__ = "2.1.0"
+from importlib.metadata import version as get_version
+__version__ = get_version("pmdarima")
 
 try:
     # this var is injected in the setup build to enable
