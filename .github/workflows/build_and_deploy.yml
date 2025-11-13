@@ -21,8 +21,7 @@ jobs:
     strategy:
       matrix:
         python3-minor-version: [10, 11, 12]
-        # TODO: Figure out macos-14/macos-latest
-        os: [macos-13, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     defaults:
       run:
         shell: bash
@@ -67,6 +66,7 @@ jobs:
           CIBW_ARCHS_MACOS: "x86_64 arm64"
           CIBW_ARCHS_WINDOWS: "AMD64"
           CIBW_BEFORE_ALL_MACOS: brew install pkg-config
+          CIBW_BEFORE_TEST: pip install .[test]
           CIBW_BUILD: "${{ env.PYTHON_EXECUTABLE }}-*"
           CIBW_ENVIRONMENT: CC=gcc
           CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true
