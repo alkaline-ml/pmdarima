@@ -29,7 +29,6 @@ jobs:
     env:
       PYTHON_VERSION: ${{ format('3.{0}', matrix.python3-minor-version) }}
       PYTHON_EXECUTABLE: ${{ format('cp3{0}', matrix.python3-minor-version) }}
-      SETUPTOOLS_USE_DISTUTILS: ${{ matrix.python3-minor-version == 12 && 'local' || 'stdlib' }}
 
     runs-on: ${{ matrix.os }}
     name: Build and Deploy (${{ matrix.os }}, 3.${{ matrix.python3-minor-version }})
@@ -71,8 +70,8 @@ jobs:
           # Tests are run in a separate virtual env, so we need to re-install deps
           CIBW_BEFORE_TEST: pip install .[test]
           CIBW_BUILD: "${{ env.PYTHON_EXECUTABLE }}-*"
-          CIBW_ENVIRONMENT: CC=gcc SETUPTOOLS_USE_DISTUTILS=${{ env.SETUPTOOLS_USE_DISTUTILS }}
-          CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true SETUPTOOLS_USE_DISTUTILS=${{ env.SETUPTOOLS_USE_DISTUTILS }}
+          CIBW_ENVIRONMENT: CC=gcc
+          CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true
           CIBW_ENVIRONMENT_PASS_LINUX: GITHUB_REF
           # No support for pypy or musl
           CIBW_SKIP: "pp* *-musllinux_*"

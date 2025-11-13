@@ -1,7 +1,7 @@
 project(
   'pmdarima',
   'c', 'cython',
-  version: '2.1.0',
+  version: '2.1.1dev0',
   license: 'MIT',
   meson_version: '>= 1.1.0',
   default_options: [
