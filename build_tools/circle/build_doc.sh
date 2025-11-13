@@ -2,7 +2,7 @@
 
 set -e
 
-pip install --upgrade -r requirements.txt
+pip install --upgrade .
 make install
 pip install pandas sphinx sphinx_gallery pytest-runner sphinx_rtd_theme "matplotlib>=2.2.0" image
 pip install --upgrade numpydoc

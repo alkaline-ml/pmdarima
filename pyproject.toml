@@ -1,10 +1,144 @@
 [build-system]
 requires = [
-    "numpy==2.0.0",
-    "scipy==1.13.0",
-    "statsmodels==0.14.2",
+    "numpy>=2.0.0",
+    "scipy>=1.13.0",
+    "statsmodels>=0.14.2",
     "cython>=0.29,!=0.29.18,!=0.29.31",
-    "setuptools>=42,!=50.0.0,<60.0; python_version < '3.10'",
-    "setuptools>=42,!=50.0.0; python_version >= '3.10'",
+    "setuptools>=68",
 ]
-build-backend = "setuptools.build_meta:__legacy__" # TODO: Don't use legacy backend
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pmdarima"
+dynamic = ["version"]
+description = "Python's forecast::auto.arima equivalent"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    {name = "Taylor G. Smith", email = "taylor.smith@alkaline-ml.com"}
+]
+maintainers = [
+    {name = "Taylor G. Smith", email = "taylor.smith@alkaline-ml.com"}
+]
+keywords = [
+    "arima",
+    "timeseries",
+    "forecasting",
+    "pyramid",
+    "pmdarima",
+    "pyramid-arima",
+    "scikit-learn",
+    "statsmodels"
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Programming Language :: C",
+    "Programming Language :: Python",
+    "Topic :: Software Development",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+dependencies = [
+    "joblib>=0.11",
+    "Cython>=0.29,!=0.29.18,!=0.29.31",
+    "numpy>=1.21.6",
+    "pandas>=0.19",
+    "scikit-learn>=0.22",
+    "scipy>=1.13.0",
+    "statsmodels>=0.14.5",
+    "urllib3",
+    "setuptools>=42,!=50.0.0",
+    "packaging>=17.1",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-mpl",
+    "pytest-benchmark",
+    "matplotlib>=2.2.0",
+]
+dev = [
+    "wheel",
+    "twine>=1.13.0",
+    "readme_renderer",
+    "patsy",
+]
+all = [
+    # Test dependencies
+    "pytest",
+    "pytest-mpl",
+    "pytest-benchmark",
+    "matplotlib>=2.2.0",
+    # Dev dependencies
+    "wheel",
+    "twine>=1.13.0",
+    "readme_renderer",
+    "patsy",
+]
+
+[project.urls]
+Homepage = "http://alkaline-ml.com/pmdarima"
+Documentation = "http://alkaline-ml.com/pmdarima"
+Repository = "https://github.com/alkaline-ml/pmdarima"
+"Bug Tracker" = "https://github.com/alkaline-ml/pmdarima/issues"
+Download = "https://pypi.org/project/pmdarima/#files"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["pmdarima*"]
+
+[tool.setuptools.package-data]
+pmdarima = [
+    "*",
+    "VERSION",
+    "__check_build/*",
+    "_build_utils/*",
+    "arima/*",
+    "arima/tests/data/*",
+    "compat/*",
+    "datasets/*",
+    "datasets/data/*",
+    "model_selection/*",
+    "preprocessing/*",
+    "preprocessing/endog/*",
+    "preprocessing/exog/*",
+    "tests/*",
+    "utils/*",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "pmdarima.__version__"}
+
+[tool.cython]
+# Cython compiler directives
+language_level = "3"
+
+[tool.pytest.ini_options]
+testpaths = ["pmdarima"]
+filterwarnings = [
+    # Warnings that we raise:
+    "ignore::UserWarning",
+    # Warnings that statsmodels raises a lot of
+    "ignore::statsmodels.tools.sm_exceptions.HessianInversionWarning",
+    # statsmodels warning that doesn't apply to us
+    "ignore:fft=True",
+    # joblib warning that we can't control
+    "ignore:tostring.*is deprecated",
+    # Fixed in patsy
+    "ignore:Using or importing the ABCs",
+]
