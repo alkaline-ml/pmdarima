@@ -27,8 +27,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        python-version: ['3.12']
-        python-executable: ['cp312']
+        python-version: ['3.13']
+        python-executable: ['cp313']
     defaults:
       run:
         shell: bash
@@ -40,10 +40,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setting up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -78,7 +78,6 @@ jobs:
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_ARCHS_MACOS: "x86_64"
           CIBW_ARCHS_WINDOWS: "AMD64"
-          CIBW_BEFORE_ALL: make version
           CIBW_BEFORE_BUILD: >
             for dependency in ${{ steps.dependencies.outputs.latest_dependencies }}; do
               pip install $dependency
@@ -147,9 +146,9 @@ jobs:
         uses: actions/checkout@master
 
       - name: Setting up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.8'
+          python-version: '3.11'
 
       - name: Posting to Slack
         uses: 8398a7/action-slack@v3
