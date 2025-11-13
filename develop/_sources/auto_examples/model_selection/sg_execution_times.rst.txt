@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:53.768** total execution time for 2 files **from auto_examples/model_selection**:
+**01:09.992** total execution time for 2 files **from auto_examples/model_selection**:
 
 .. container::
 
@@ -33,8 +33,8 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_model_selection_example_cross_val_predict.py` (``example_cross_val_predict.py``)
-     - 00:35.755
+     - 00:49.069
      - 0.0
    * - :ref:`sphx_glr_auto_examples_model_selection_example_cross_validation.py` (``example_cross_validation.py``)
-     - 00:18.013
+     - 00:20.923
      - 0.0

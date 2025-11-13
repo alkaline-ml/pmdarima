@@ -101,7 +101,7 @@ the existing model parameters.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.691 seconds)
+   **Total running time of the script:** (0 minutes 1.423 seconds)
 
 
 .. _sphx_glr_download_auto_examples_arima_example_add_new_samples.py:

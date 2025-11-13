@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:07.138** total execution time for 4 files **from auto_examples/arima**:
+**00:07.381** total execution time for 4 files **from auto_examples/arima**:
 
 .. container::
 
@@ -33,14 +33,14 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_arima_example_persisting_a_model.py` (``example_persisting_a_model.py``)
-     - 00:04.015
+     - 00:04.531
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_add_new_samples.py` (``example_add_new_samples.py``)
-     - 00:01.691
+     - 00:01.423
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_auto_arima.py` (``example_auto_arima.py``)
-     - 00:01.094
+     - 00:01.137
      - 0.0
    * - :ref:`sphx_glr_auto_examples_arima_example_seasonal_decomposition.py` (``example_seasonal_decomposition.py``)
-     - 00:00.339
+     - 00:00.289
      - 0.0

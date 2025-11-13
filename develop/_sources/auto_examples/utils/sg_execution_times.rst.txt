@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.531** total execution time for 3 files **from auto_examples/utils**:
+**00:00.622** total execution time for 3 files **from auto_examples/utils**:
 
 .. container::
 
@@ -33,10 +33,10 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_auto_examples_utils_example_tsdisplay.py` (``example_tsdisplay.py``)
-     - 00:00.528
+     - 00:00.620
      - 0.0
    * - :ref:`sphx_glr_auto_examples_utils_example_array_differencing.py` (``example_array_differencing.py``)
-     - 00:00.001
+     - 00:00.002
      - 0.0
    * - :ref:`sphx_glr_auto_examples_utils_example_array_concatenation.py` (``example_array_concatenation.py``)
      - 00:00.001
