@@ -14,9 +14,13 @@ py = import('python').find_installation(pure: false)
 py_dep = py.dependency()
 
 # Get numpy dependency
-# Import numpy module to get include directories and dependencies
-numpy = import('numpy')
-np_dep = numpy.dependency()
+incdir_numpy = run_command(py,
+  ['-c', 'import numpy; print(numpy.get_include())'],
+  check: true
+).stdout().strip()
+
+inc_np = include_directories(incdir_numpy)
+np_dep = declare_dependency(include_directories: inc_np)
 
 # Add Cython as a dependency
 cython = find_program('cython')
