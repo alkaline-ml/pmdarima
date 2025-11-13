@@ -1,12 +1,10 @@
 [build-system]
 requires = [
+    "meson-python>=0.15.0",
     "numpy>=2.0.0",
-    "scipy>=1.13.0",
-    "statsmodels>=0.14.2",
     "cython>=0.29,!=0.29.18,!=0.29.31",
-    "setuptools>=68",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "mesonpy"
 
 [project]
 name = "pmdarima"
@@ -94,35 +92,6 @@ Documentation = "http://alkaline-ml.com/pmdarima"
 Repository = "https://github.com/alkaline-ml/pmdarima"
 "Bug Tracker" = "https://github.com/alkaline-ml/pmdarima/issues"
 Download = "https://pypi.org/project/pmdarima/#files"
-
-[tool.setuptools]
-zip-safe = false
-include-package-data = true
-
-[tool.setuptools.packages.find]
-include = ["pmdarima*"]
-
-[tool.setuptools.package-data]
-pmdarima = [
-    "*",
-    "__check_build/*",
-    "_build_utils/*",
-    "arima/*",
-    "arima/tests/data/*",
-    "compat/*",
-    "datasets/*",
-    "datasets/data/*",
-    "model_selection/*",
-    "preprocessing/*",
-    "preprocessing/endog/*",
-    "preprocessing/exog/*",
-    "tests/*",
-    "utils/*",
-]
-
-[tool.cython]
-# Cython compiler directives
-language_level = "3"
 
 [tool.pytest.ini_options]
 testpaths = ["pmdarima"]
