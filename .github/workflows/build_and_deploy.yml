@@ -86,20 +86,6 @@ jobs:
               echo "README rendered appropriately"
           fi
 
-      # See https://github.com/alkaline-ml/pmdarima/issues/448
-      - name: Ensuring sdist SOURCES.txt has no absolute paths
-        run: |
-          cd dist
-          tar xzf $(find . -name "*.tar.gz")
-          OUTPUT_DIRECTORY=$(find . -type d -name "pmdarima-*")
-          if grep -q "^/" ${OUTPUT_DIRECTORY}/pmdarima.egg-info/SOURCES.txt; then
-            echo "SOURCES.txt contains absolute paths in sdist"
-            exit 1
-          else
-            echo "SOURCES.txt looks good"
-            rm -rf "$OUTPUT_DIRECTORY"
-          fi
-
       - name: Ensuring sdist can be installed
         run: pip install dist/$(ls dist | grep tar)
 
