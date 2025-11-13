@@ -6,7 +6,7 @@ on:
     branches-ignore:
       - 'master'
     paths:
-    - 'requirements.txt'
+    - 'pyproject.toml'
     - '.github/workflows/nightly_cron.yml'
 
   schedule:

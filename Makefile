@@ -7,7 +7,7 @@ PYTHON ?= python
 DOCKER ?= docker
 HERE = $(shell pwd)
 
-.PHONY: clean develop test install bdist_wheel version
+.PHONY: clean develop test install bdist_wheel
 
 clean:
 	$(PYTHON) setup.py clean
@@ -15,7 +15,6 @@ clean:
 	rm -rf build
 	rm -rf .pytest_cache
 	rm -rf pmdarima.egg-info
-	rm -f pmdarima/VERSION
 	rm -f conda/meta.yaml
 	rm -rf .coverage.*
 
@@ -29,37 +28,33 @@ deploy-twine-test: bdist_wheel deploy-requirements
 		--username ${TWINE_USERNAME} \
 		--password ${TWINE_PASSWORD}
 
-documentation: version
+documentation:
 	$(DOCKER) run -v $(HERE):/pmdarima -w /pmdarima --rm alkalineml/pmdarima-doc-base:latest /bin/bash -c "make install docker-documentation"
 
 # This one assumes we are in the docker container, so it can either be called from above (locally), or directly (on CI)
-docker-documentation: version
+docker-documentation:
 	@make -C doc clean html EXAMPLES_PATTERN=example_* PMDARIMA_VERSION=$(PMDARIMA_VERSION)
 
 requirements:
-	$(PYTHON) -m pip install -r requirements.txt
+	$(PYTHON) -m pip install ".[all]"
 
-bdist_wheel: version
-	$(PYTHON) setup.py bdist_wheel
+bdist_wheel:
+	$(PYTHON) -m build --wheel
 
-sdist: version
-	$(PYTHON) setup.py sdist
+sdist:
+	$(PYTHON) -m build --sdist
 
-develop: version
-ifeq ($(shell python -c 'import sys; print(sys.version_info >= (3,12))'), True)
+develop:
 	$(PYTHON) -m pip install --editable . --no-build-isolation
-else
-	$(PYTHON) setup.py develop
-endif
 
-install: version
-	$(PYTHON) setup.py install
+install:
+	$(PYTHON) -m pip install .
 
 lint-requirements:
 	$(PYTHON) -m pip install flake8
 
 testing-requirements:
-	$(PYTHON) -m pip install pytest flake8 matplotlib pytest-mpl coverage pytest-cov codecov
+	$(PYTHON) -m pip install ".[test]" flake8 coverage pytest-cov codecov
 
 test-lint:
 	$(PYTHON) -m flake8 pmdarima --filename='*.py' --ignore F401,F403,W293,W504
@@ -74,6 +69,3 @@ test: test-unit test-lint
 twine-check: bdist_wheel deploy-requirements
 	# Check that twine will parse the README acceptably
 	$(PYTHON) -m twine check dist/*
-
-version: requirements
-	@$(PYTHON) build_tools/get_tag.py
