@@ -41,6 +41,7 @@ cdef fused floating_array_2d_t:
 cdef fused intp1d:
     int[::1]
     long[::1]
+    np.npy_intp[::1]
 
 cdef fused intp_array_2d_t:
     int_array_2d_t
