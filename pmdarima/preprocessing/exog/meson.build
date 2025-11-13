@@ -1,5 +1,8 @@
 python_sources = [
   '__init__.py',
+  'base.py',
+  'dates.py',
+  'fourier.py',
 ]
 
 py.install_sources(
