@@ -1,0 +1,53 @@
+
+
+.. _sphx_glr_auto_examples_datasets:
+
+.. _datasets_examples:
+
+Datasets examples
+-----------------
+
+Examples of how to use the :mod:`pmdarima.datasets` module to conveniently load
+toy time series data for model benchmarking and experimentation.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s built-in toy datasets that can be used for benchmarking or experimentation. Pyramid has several built-in datasets that exhibit seasonality, non-stationarity, and other time series nuances.">
+
+.. only:: html
+
+  .. image:: /auto_examples/datasets/images/thumb/sphx_glr_example_load_data_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_datasets_example_load_data.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Dataset loading</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/datasets/example_load_data
+

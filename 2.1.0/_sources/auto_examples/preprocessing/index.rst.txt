@@ -1,0 +1,53 @@
+
+
+.. _sphx_glr_auto_examples_preprocessing:
+
+.. _preprocessing_examples:
+
+Preprocessing examples
+----------------------
+
+Examples of how to use the :mod:`pmdarima.preprocessing` module to transform
+your time series or exog features inside or outside of a pipeline.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Some trends are common enough to appear seasonal, yet sporadic enough that approaching them from a seasonal perspective may not be valid. An example of this is the &quot;end-of-the-month&quot; effect. In this example, we&#x27;ll explore how we can create meaningful features that express seasonal trends without needing to fit a seasonal model.">
+
+.. only:: html
+
+  .. image:: /auto_examples/preprocessing/images/thumb/sphx_glr_example_date_featurizer_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_preprocessing_example_date_featurizer.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Modeling quasi-seasonal trends with date features</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/preprocessing/example_date_featurizer
+

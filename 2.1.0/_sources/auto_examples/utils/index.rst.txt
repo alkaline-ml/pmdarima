@@ -1,0 +1,89 @@
+
+
+.. _sphx_glr_auto_examples_utils:
+
+.. _utils_examples:
+
+Utils examples
+--------------
+
+Examples of how to use the :mod:`pmdarima.utils` module to plot timeseries
+data, difference arrays, and more.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s convenient c function, which is, in essence, the same as R&#x27;s. It&#x27;s nothing more than a convenience function in the package, but one you should understand if you&#x27;re contributing.">
+
+.. only:: html
+
+  .. image:: /auto_examples/utils/images/thumb/sphx_glr_example_array_concatenation_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_utils_example_array_concatenation.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Array concatenation</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Visualizing characteristics of a time series is a key component to effective forecasting. In this example, we&#x27;ll look at a very simple method to examine critical statistics of a time series object.">
+
+.. only:: html
+
+  .. image:: /auto_examples/utils/images/thumb/sphx_glr_example_tsdisplay_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_utils_example_tsdisplay.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Displaying key timeseries statistics</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s array differencing, and how it&#x27;s used in conjunction with the d term to lag a time series.">
+
+.. only:: html
+
+  .. image:: /auto_examples/utils/images/thumb/sphx_glr_example_array_differencing_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_utils_example_array_differencing.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Array differencing</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/utils/example_array_concatenation
+   /auto_examples/utils/example_tsdisplay
+   /auto_examples/utils/example_array_differencing
+
