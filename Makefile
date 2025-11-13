@@ -15,7 +15,6 @@ clean:
 	rm -rf build
 	rm -rf .pytest_cache
 	rm -rf pmdarima.egg-info
-	rm -f pmdarima/VERSION
 	rm -f conda/meta.yaml
 	rm -rf .coverage.*
 
@@ -75,5 +74,5 @@ twine-check: bdist_wheel deploy-requirements
 	# Check that twine will parse the README acceptably
 	$(PYTHON) -m twine check dist/*
 
-version: requirements
-	@$(PYTHON) build_tools/get_tag.py
+version:
+	@echo "Version is now managed in pyproject.toml"

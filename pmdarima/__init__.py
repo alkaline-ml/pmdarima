@@ -22,13 +22,13 @@ import warnings as _warnings
 #   X.YrcN  # Release Candidate
 #   X.Y     # Final release
 #
-# We only create a VERSION file in CI/CD on tagged commits.
-# For local development, or non-tagged commits, we will use 0.0.0
+# Version is now managed in pyproject.toml
 try:
-    version_path = Path(__file__).parent / 'VERSION'
-    __version__ = version_path.read_text().strip()
-except FileNotFoundError:
-    __version__ = '0.0.0'
+    from importlib.metadata import version as get_version
+    __version__ = get_version("pmdarima")
+except Exception:
+    # Fallback for development/editable installs
+    __version__ = "2.1.0"
 
 try:
     # this var is injected in the setup build to enable
