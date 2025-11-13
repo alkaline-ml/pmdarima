@@ -47,6 +47,7 @@ jobs:
           command: python -m cibuildwheel --output-dir wheelhouse
           environment:
             CIBW_BUILD: "cp<< parameters.python-version >>-*"
+            CIBW_ENVIRONMENT: "CIRCLECI=$CIRCLECI CIRCLE_TAG=$CIRCLE_TAG"
             CIBW_SKIP: "*-musllinux_* pp*"
             CIBW_ARCHS_LINUX: "x86_64"
             CIBW_BEFORE_TEST: pip install .[test]

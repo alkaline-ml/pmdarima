@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Extract version from git tag
-VERSION=$(echo ${GITHUB_REF} | sed 's/refs\/tags\/v\?//')
+VERSION=${GITHUB_REF#refs/tags/v}
 
 if [[ $VERSION =~ ^[0-9]+\.[0-9]+\.?[0-9]*[a-zA-Z]+[0-9]*$ ]]; then
   echo "Pre-release version: $VERSION - Uploading to test pypi"
