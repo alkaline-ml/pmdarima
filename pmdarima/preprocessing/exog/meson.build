@@ -16,10 +16,16 @@ if m_dep.found()
   _fourier_deps += [m_dep]
 endif
 
+_fourier_c_args = []
+if host_machine.system() == 'windows'
+  _fourier_c_args += ['-D_USE_MATH_DEFINES']
+endif
+
 py.extension_module(
   '_fourier',
   '_fourier.pyx',
   dependencies: _fourier_deps,
+  c_args: _fourier_c_args,
   install: true,
   subdir: 'pmdarima/preprocessing/exog'
 )
