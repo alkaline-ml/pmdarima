@@ -30,9 +30,6 @@ jobs:
     - run:
         name: Test lint
         command: make test-lint
-    - run:
-        name: Test version tagging
-        command: CIRCLE_TAG=0.99.999 python ~/pmdarima/build_tools/get_tag.py
 
   # Build Linux x86_64 wheels using cibuildwheel
   build-linux-x86:

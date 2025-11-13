@@ -14,8 +14,4 @@ if [[ ! -d pmdarima/__check_build ]]; then
     exit 3
 fi
 
-# Set ${version}
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source "${DIR}/get_version.sh"
-
-make docker-documentation PMDARIMA_VERSION=${version}
+make docker-documentation PMDARIMA_VERSION=$(build_tools/get_tag.py)

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 from os.path import abspath, dirname
 
@@ -13,23 +14,16 @@ def get_version_from_tag(tag):
     """Handles 1.5.0 or v1.5.0"""
     return tag[1:] if tag.startswith('v') else tag
 
+tag = DEFAULT_TAG
 
 # Circle is easy, since they give us the git tag
 if os.getenv('CIRCLECI', False) and os.getenv('CIRCLE_TAG', False):
-    print('Tagged commit on Circle CI. Writing to {0}'.format(OUT_FILE))
-    with open(OUT_FILE, 'w') as f:
-        tag = get_version_from_tag(os.getenv('CIRCLE_TAG'))
-        f.write(tag)
+    print(get_version_from_tag(os.getenv('CIRCLE_TAG')))
 
-elif os.getenv('GITHUB_REF') and \
-        os.getenv('GITHUB_REF').startswith('refs/tags/'):
-    print('Tagged commit on Github Actions. Writing to {0}'.format(OUT_FILE))
-    with open(OUT_FILE, 'w') as f:
-        tag = os.getenv('GITHUB_REF').split('/')[-1]
-        f.write(get_version_from_tag(tag))
+elif os.getenv('GITHUB_REF') and os.getenv('GITHUB_REF').startswith('refs/tags/'):
+    tag = os.getenv('GITHUB_REF').split('/')[-1]
+    print(get_version_from_tag(tag))
 
 # Local or non-tagged commit. setuptools requires a VERSION file, so just write a default one
 else:
-    print("Not a tagged commit or not on CI. Using default tag")
-    with open(OUT_FILE, 'w') as f:
-        f.write(DEFAULT_TAG)
+    print(DEFAULT_TAG)

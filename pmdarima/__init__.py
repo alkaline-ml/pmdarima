@@ -3,7 +3,6 @@
 # Author: Taylor Smith <taylor.smith@alkaline-ml.com>
 #
 # The pmdarima module
-from pathlib import Path
 import os as _os
 import struct
 import sys as _sys
