@@ -67,12 +67,9 @@ jobs:
           CIBW_ARCHS_LINUX: "aarch64"
           CIBW_ARCHS_MACOS: "x86_64 arm64"
           CIBW_ARCHS_WINDOWS: "AMD64"
-          CIBW_BEFORE_ALL: make version
-          CIBW_BEFORE_BUILD: >
-            pip install .[all]
+          CIBW_BEFORE_BUILD: pip install .[all]
           # Tests are run in a separate virtual env, so we need to re-install deps
-          CIBW_BEFORE_TEST: >
-            pip install .[test]
+          CIBW_BEFORE_TEST: pip install .[test]
           CIBW_BUILD: "${{ env.PYTHON_EXECUTABLE }}-*"
           CIBW_ENVIRONMENT: CC=gcc SETUPTOOLS_USE_DISTUTILS=${{ env.SETUPTOOLS_USE_DISTUTILS }}
           CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true SETUPTOOLS_USE_DISTUTILS=${{ env.SETUPTOOLS_USE_DISTUTILS }}
