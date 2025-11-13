@@ -36,6 +36,9 @@ jobs:
 
   # Build Linux x86_64 wheels using cibuildwheel
   build-linux-x86:
+    parameters:
+      python-version:
+        type: string
     docker:
       - image: cimg/python:3.12
     working_directory: ~/pmdarima
@@ -46,18 +49,21 @@ jobs:
           name: Install cibuildwheel
           command: python -m pip install cibuildwheel
       - run:
-          name: Build wheels
+          name: Build wheels for Python << parameters.python-version >>
           command: python -m cibuildwheel --output-dir wheelhouse
           environment:
-            CIBW_BUILD: "cp310-* cp311-* cp312-*"
+            CIBW_BUILD: "cp<< parameters.python-version >>-*"
             CIBW_SKIP: "*-musllinux_* pp*"
             CIBW_ARCHS_LINUX: "x86_64"
             CIBW_BEFORE_TEST: pip install .[test]
             CIBW_TEST_COMMAND: pytest --showlocals --durations=20 --pyargs pmdarima
       - store_artifacts:
           path: ./wheelhouse
+      - run:
+          name: Create versioned workspace
+          command: mkdir -p cp<< parameters.python-version >> && cp -R wheelhouse cp<< parameters.python-version >>/
       - persist_to_workspace:
-          root: .
+          root: cp<< parameters.python-version >>
           paths:
             - wheelhouse
 
@@ -83,7 +89,7 @@ jobs:
           name: pmdarima Testing passed
           command: echo "All tests passed"
 
-  # Deploy wheels and sdist to PyPI
+  # Deploy wheels to PyPI
   deploy-to-pypi:
     machine:
       image: ubuntu-2004:2024.01.1
@@ -91,10 +97,18 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: cp310
+      - attach_workspace:
+          at: cp311
+      - attach_workspace:
+          at: cp312
       - run:
-          name: Move wheels to dist directory
-          command: mkdir -p dist && mv wheelhouse/* dist/
+          name: Collect all wheels into dist directory
+          command: |
+            mkdir -p dist
+            cp cp310/wheelhouse/* dist/ || true
+            cp cp311/wheelhouse/* dist/ || true
+            cp cp312/wheelhouse/* dist/ || true
       - run:
           name: Deploy to PyPI
           command: |
@@ -125,13 +139,19 @@ workflows:
         - test-sanity:
             filters: *test-filters
         - build-linux-x86:
+            name: build-linux-x86-cp<< matrix.python-version >>
+            matrix:
+              parameters:
+                python-version: ["310", "311", "312"]
             filters: *test-filters
         - build-doc:
             filters: *test-filters
         - testing-passed:
             requires:
                 - test-sanity
-                - build-linux-x86
+                - build-linux-x86-cp310
+                - build-linux-x86-cp311
+                - build-linux-x86-cp312
                 - build-doc
             filters: *test-filters
 
