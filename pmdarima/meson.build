@@ -2,7 +2,12 @@
 py.install_sources(
   [
     '__init__.py',
+    'base.py',
+    'context_managers.py',
+    'decorators.py',
     'metrics.py',
+    'pipeline.py',
+    'warnings.py',
   ],
   subdir: 'pmdarima'
 )
