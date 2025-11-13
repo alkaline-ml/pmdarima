@@ -1,7 +1,7 @@
 project(
   'pmdarima',
   'c', 'cython',
-  version: '2.1.1dev0',
+  version: run_command(['build_tools/get_tag.py'], check: true).stdout().strip(),
   license: 'MIT',
   meson_version: '>= 1.1.0',
   default_options: [
