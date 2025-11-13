@@ -15,10 +15,7 @@ deploy-filters: &deploy-filters
         ignore: /.*/
 
 jobs:
-  # Singular sanity test of miscellaneous items:
-  # - linting
-  # - version tagging
-  test-sanity:
+  lint:
     docker:
       - image: python:3.10
     working_directory: ~/pmdarima
@@ -133,7 +130,7 @@ workflows:
   pmdarima-pipeline:
     jobs:
         # Test and build jobs (run on all branches and tags)
-        - test-sanity:
+        - lint:
             filters: *test-filters
         - build-linux-x86:
             name: build-linux-x86-cp<< matrix.python-version >>
@@ -145,7 +142,7 @@ workflows:
             filters: *test-filters
         - testing-passed:
             requires:
-                - test-sanity
+                - lint
                 - build-linux-x86-cp310
                 - build-linux-x86-cp311
                 - build-linux-x86-cp312
