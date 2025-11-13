@@ -70,6 +70,7 @@ jobs:
           # Tests are run in a separate virtual env, so we need to re-install deps
           CIBW_BEFORE_TEST: pip install .[test]
           CIBW_BUILD: "${{ env.PYTHON_EXECUTABLE }}-*"
+          CIBW_ENVIRONMENT: CC=gcc
           CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true
           CIBW_ENVIRONMENT_PASS_LINUX: GITHUB_REF
           # No support for pypy or musl
