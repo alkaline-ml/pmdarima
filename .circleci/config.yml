@@ -31,17 +31,6 @@ commands:
       pythonversion:
         type: string
     steps:
-      # does not use makefile, since will require python>=3.5
-      - run:
-          name: Create VERSION file
-          command: python build_tools/get_tag.py
-      - run:
-          name: Check VERSION file
-          command: |
-            if [[ ! -f ~/pmdarima/pmdarima/VERSION ]]; then
-                echo "VERSION file was not created, using 0.0.0"
-                echo "0.0.0" > ~/pmdarima/pmdarima/VERSION
-            fi
       - run:
           name: Build wheel file
           command: ./build_tools/circle/build_wheel.sh << parameters.pythonversion >>

@@ -9,19 +9,9 @@ set -e -x
 PYTHON="/opt/python/${PYTHON_VERSION}/bin/python"
 PIP="/opt/python/${PYTHON_VERSION}/bin/pip"
 
-# We have to use wheel < 0.32 since they inexplicably removed the open_for_csv
-# function from the package after 0.31.1 and it fails for Python 3.6?!
-${PIP} install --upgrade pip wheel==0.31.1
-${PIP} install --upgrade "setuptools>=42,!=50.0.0"
-
-# NOW we can install requirements
-${PIP} install /io[all]
-make -C /io/ PYTHON="${PYTHON}"
-
-# Make sure the VERSION file is present for this. For whatever reason, the
-# make -C call removes it
-echo ${PMDARIMA_VERSION} > /io/pmdarima/VERSION
-${PIP} wheel /io/ -w /io/dist/
+${PIP} install --upgrade pip build
+cd /io
+${PYTHON} -m build --wheel
 
 # Bundle external shared libraries into the wheels.
 for whl in /io/dist/*.whl; do
