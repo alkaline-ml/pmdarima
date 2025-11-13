@@ -44,7 +44,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: Install cibuildwheel
-          command: python -m pip install cibuildwheel==2.22.0
+          command: python -m pip install cibuildwheel
       - run:
           name: Build wheels
           command: python -m cibuildwheel --output-dir wheelhouse
