@@ -45,7 +45,7 @@ sdist:
 	$(PYTHON) -m build --sdist
 
 develop:
-    $(PYTHON) -m pip install --editable . --no-build-isolation
+	$(PYTHON) -m pip install --editable . --no-build-isolation
 
 install:
 	$(PYTHON) -m pip install .
