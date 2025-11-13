@@ -14,7 +14,8 @@ py = import('python').find_installation(pure: false)
 py_dep = py.dependency()
 
 # Get numpy dependency
-np_dep = dependency('numpy', required: true)
+# Use config-tool method for cross-platform compatibility (pkg-config not available on Windows)
+np_dep = dependency('numpy', method: 'config-tool', required: true)
 
 # Add Cython as a dependency
 cython = find_program('cython')
