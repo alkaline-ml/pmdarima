@@ -3,6 +3,7 @@ name: Update Downloads Badges
 on:
   schedule:
     - cron: '15 17 * * *'  # Every day at 5:15pm UTC
+  workflow_dispatch:
 
 jobs:
   update:
@@ -22,3 +23,4 @@ jobs:
         run: python etc/downloads_badges.py
         env:
           ZAPIER_SHA: ${{ secrets.ZAPIER_SHA }}
+          PEPY_API_KEY: ${{ secrets.PEPY_API_KEY }}
