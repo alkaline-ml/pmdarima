@@ -1,59 +1,39 @@
 # -*- coding: utf-8 -*-
-
 from .utils import check_endog
 import numpy as np
 
 __all__ = ['smape']
 
-
 def smape(y_true, y_pred):
-    r"""Compute the Symmetric Mean Absolute Percentage Error.
+    r"""Compute the Symmetric Mean Absolute Percentage Error (SMAPE).
 
-    The symmetric mean absolute percentage error (SMAPE) is an accuracy measure
-    based on percentage (or relative) errors. Defined as follows:
-
-        :math:`\frac{100\%}{n}\sum_{t=1}^{n}{\frac{|F_{t}-A_{t}|}{
-        (|A_{t}|+|F_{t}|)/2}}`
-
-    Where a perfect SMAPE score is 0.0, and a higher score indicates a higher
-    error rate.
+    SMAPE = (1/n) * sum( 2 * |y_pred - y_true| / (|y_pred| + |y_true|) ) * 100
+    A perfect score is 0.0; higher values mean higher error.
 
     Parameters
     ----------
-    y_true : array-like, shape=(n_samples,)
-        The true test values of y.
+    y_true : array-like
+        Actual values.
+    y_pred : array-like
+        Forecasted values.
 
-    y_pred : array-like, shape=(n_samples,)
-        The forecasted values of y.
+    Returns
+    -------
+    float
+        The SMAPE score.
+    """
+    # Convert inputs to NumPy arrays
+    y_true = np.asarray(check_endog(y_true, copy=False, preserve_series=False))
+    y_pred = np.asarray(check_endog(y_pred, copy=False, preserve_series=False))
 
-    Examples
-    --------
-    A typical case:
-    >>> import numpy as np
-    >>> y_true = np.array([0.07533, 0.07533, 0.07533, 0.07533,
-    ...                    0.07533, 0.07533, 0.0672, 0.0672])
-    >>> y_pred = np.array([0.102, 0.107, 0.047, 0.1,
-    ...                    0.032, 0.047, 0.108, 0.089])
-    >>> smape(y_true, y_pred)
-    42.60306631890196
-
-    A perfect score:
-    >>> smape(y_true, y_true)
-    0.0
-
-    References
-    ----------
-    .. [1] https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error
-    """    # noqa: E501
-    y_true = check_endog(
-        y_true,
-        copy=False,
-        preserve_series=False,
-    )
-    y_pred = check_endog(
-        y_pred,
-        copy=False,
-        preserve_series=False,
-    )
+    # Compute absolute differences
     abs_diff = np.abs(y_pred - y_true)
-    return np.mean((abs_diff * 200 / (np.abs(y_pred) + np.abs(y_true))))
+    denominator = np.abs(y_pred) + np.abs(y_true)
+
+    # Avoid division by zero
+    denominator_safe = np.where(denominator == 0, 1, denominator)
+
+    # Calculate SMAPE
+    smape_value = np.mean((abs_diff * 200) / denominator_safe)
+
+    return smape_value
