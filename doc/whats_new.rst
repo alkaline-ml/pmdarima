@@ -7,6 +7,11 @@ What's new in pmdarima
 As new releases of pmdarima are pushed out, the following list (introduced in
 v0.8.1) will document the latest features.
 
+`v2.1.1 <https://alkaline-ml.com/pmdarima/2.1.1>`_
+--------------------------------------------------
+
+* Add support for Python 3.14 (See `#614 <https://github.com/alkaline-ml/pmdarima/pull/614>`_)
+
 `v2.1.0 <https://alkaline-ml.com/pmdarima/2.1.0>`_
 --------------------------------------------------
 
