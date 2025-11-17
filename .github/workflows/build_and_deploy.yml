@@ -20,7 +20,7 @@ jobs:
   build-and-deploy:
     strategy:
       matrix:
-        python3-minor-version: [10, 11, 12, 13]
+        python3-minor-version: [10, 11, 12, 13, 14]
         os: [macos-latest, ubuntu-latest, windows-latest]
     defaults:
       run:
