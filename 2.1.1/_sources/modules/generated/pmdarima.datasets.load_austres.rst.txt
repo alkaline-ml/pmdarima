@@ -1,0 +1,12 @@
+﻿:mod:`pmdarima.datasets`.load_austres
+==================================================
+
+.. currentmodule:: pmdarima.datasets
+
+.. autofunction:: load_austres
+
+.. include:: pmdarima.datasets.load_austres.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

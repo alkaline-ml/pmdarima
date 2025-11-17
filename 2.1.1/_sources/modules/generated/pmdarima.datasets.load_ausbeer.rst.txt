@@ -1,0 +1,12 @@
+﻿:mod:`pmdarima.datasets`.load_ausbeer
+==================================================
+
+.. currentmodule:: pmdarima.datasets
+
+.. autofunction:: load_ausbeer
+
+.. include:: pmdarima.datasets.load_ausbeer.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

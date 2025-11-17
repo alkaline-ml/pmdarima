@@ -1,0 +1,12 @@
+﻿:mod:`pmdarima.model_selection`.cross_validate
+===========================================================
+
+.. currentmodule:: pmdarima.model_selection
+
+.. autofunction:: cross_validate
+
+.. include:: pmdarima.model_selection.cross_validate.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

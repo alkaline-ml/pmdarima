@@ -1,0 +1,12 @@
+﻿:mod:`pmdarima.datasets`.load_woolyrnq
+===================================================
+
+.. currentmodule:: pmdarima.datasets
+
+.. autofunction:: load_woolyrnq
+
+.. include:: pmdarima.datasets.load_woolyrnq.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

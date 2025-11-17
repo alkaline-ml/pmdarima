@@ -1,0 +1,12 @@
+﻿:mod:`pmdarima.utils`.acf
+======================================
+
+.. currentmodule:: pmdarima.utils
+
+.. autofunction:: acf
+
+.. include:: pmdarima.utils.acf.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

@@ -1,0 +1,415 @@
+:orphan:
+
+.. _general_examples:
+
+Examples
+========
+
+General examples
+----------------
+
+General-purpose and introductory examples for ``pmdarima``. These examples are
+designed to introduce you to the package style and layout.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This is a simple example of how we can fit an ARIMA model in several lines without knowing anything about our data or optimal hyper parameters.">
+
+.. only:: html
+
+  .. image:: /auto_examples/images/thumb/sphx_glr_example_simple_fit_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_example_simple_fit.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Simple auto_arima model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, pmdarima can fit &quot;pipeline&quot; models. That is, a pipeline constitutes a list of arbitrary length comprised of any number of BaseTransformer objects strung together ordinally, and finished with an AutoARIMA object.">
+
+.. only:: html
+
+  .. image:: /auto_examples/images/thumb/sphx_glr_example_pipeline_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_example_pipeline.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Pipelines with auto_arima</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/example_simple_fit
+   /auto_examples/example_pipeline
+
+
+ARIMA examples
+--------------
+
+Examples of how to use the :mod:`pmdarima.arima` module to fit timeseries
+models.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can persist an ARIMA model to disk after fitting it. It can then be loaded back up and used to generate forecasts.">
+
+.. only:: html
+
+  .. image:: /auto_examples/arima/images/thumb/sphx_glr_example_persisting_a_model_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_arima_example_persisting_a_model.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Persisting an ARIMA model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the auto_arima function to select an optimal time series model. We&#x27;ll be fitting our model on the lynx dataset available in the datasets submodule.">
+
+.. only:: html
+
+  .. image:: /auto_examples/arima/images/thumb/sphx_glr_example_auto_arima_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_arima_example_auto_arima.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fitting an auto_arima model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forecasting continues with respect to true, observed values. This also slightly updates the model parameters, taking several new steps from the existing model parameters.">
+
+.. only:: html
+
+  .. image:: /auto_examples/arima/images/thumb/sphx_glr_example_add_new_samples_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_arima_example_add_new_samples.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Adding new observations to your model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the decompose function to extract the trend, seasonal, and random components of the time series and then plot them all using the decomposed_plot function. We&#x27;ll be plotting both additive and multiplicative examples of seasonality. To see the R equivalent that inspired this example go here.">
+
+.. only:: html
+
+  .. image:: /auto_examples/arima/images/thumb/sphx_glr_example_seasonal_decomposition_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_arima_example_seasonal_decomposition.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Seasonal decomposition of your time-series</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Datasets examples
+-----------------
+
+Examples of how to use the :mod:`pmdarima.datasets` module to conveniently load
+toy time series data for model benchmarking and experimentation.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s built-in toy datasets that can be used for benchmarking or experimentation. Pyramid has several built-in datasets that exhibit seasonality, non-stationarity, and other time series nuances.">
+
+.. only:: html
+
+  .. image:: /auto_examples/datasets/images/thumb/sphx_glr_example_load_data_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_datasets_example_load_data.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Dataset loading</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Cross-validation examples
+-------------------------
+
+Examples of how to use the :mod:`pmdarima.model_selection` module to fit
+timeseries models in a cross-validated fashion.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In addition to computing cross-validation scores, you can use cross-validation to produce predictions. Unlike traditional cross-validation, where folds are independent of one another, time-series folds may overlap (particularly in a sliding window). To account for this, folds that forecast the same time step average their forecasts using either a &quot;mean&quot; or &quot;median&quot; (tunable).">
+
+.. only:: html
+
+  .. image:: /auto_examples/model_selection/images/thumb/sphx_glr_example_cross_val_predict_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_model_selection_example_cross_val_predict.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Cross-validation predictions</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Like scikit-learn, pmdarima provides several different strategies for cross-validating your time series models. The interface was designed to behave as similarly as possible to that of scikit to make its usage as simple as possible.">
+
+.. only:: html
+
+  .. image:: /auto_examples/model_selection/images/thumb/sphx_glr_example_cross_validation_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_model_selection_example_cross_validation.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Cross-validating your time series models</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Preprocessing examples
+----------------------
+
+Examples of how to use the :mod:`pmdarima.preprocessing` module to transform
+your time series or exog features inside or outside of a pipeline.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Some trends are common enough to appear seasonal, yet sporadic enough that approaching them from a seasonal perspective may not be valid. An example of this is the &quot;end-of-the-month&quot; effect. In this example, we&#x27;ll explore how we can create meaningful features that express seasonal trends without needing to fit a seasonal model.">
+
+.. only:: html
+
+  .. image:: /auto_examples/preprocessing/images/thumb/sphx_glr_example_date_featurizer_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_preprocessing_example_date_featurizer.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Modeling quasi-seasonal trends with date features</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Utils examples
+--------------
+
+Examples of how to use the :mod:`pmdarima.utils` module to plot timeseries
+data, difference arrays, and more.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s convenient c function, which is, in essence, the same as R&#x27;s. It&#x27;s nothing more than a convenience function in the package, but one you should understand if you&#x27;re contributing.">
+
+.. only:: html
+
+  .. image:: /auto_examples/utils/images/thumb/sphx_glr_example_array_concatenation_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_utils_example_array_concatenation.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Array concatenation</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" Visualizing characteristics of a time series is a key component to effective forecasting. In this example, we&#x27;ll look at a very simple method to examine critical statistics of a time series object.">
+
+.. only:: html
+
+  .. image:: /auto_examples/utils/images/thumb/sphx_glr_example_tsdisplay_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_utils_example_tsdisplay.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Displaying key timeseries statistics</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" In this example, we demonstrate pyramid&#x27;s array differencing, and how it&#x27;s used in conjunction with the d term to lag a time series.">
+
+.. only:: html
+
+  .. image:: /auto_examples/utils/images/thumb/sphx_glr_example_array_differencing_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_utils_example_array_differencing.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Array differencing</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+   :includehidden:
+
+
+   /auto_examples/arima/index.rst
+   /auto_examples/datasets/index.rst
+   /auto_examples/model_selection/index.rst
+   /auto_examples/preprocessing/index.rst
+   /auto_examples/utils/index.rst
+
+
+.. only:: html
+
+  .. container:: sphx-glr-footer sphx-glr-footer-gallery
+
+    .. container:: sphx-glr-download sphx-glr-download-python
+
+      :download:`Download all examples in Python source code: auto_examples_python.zip </auto_examples/auto_examples_python.zip>`
+
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+      :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip </auto_examples/auto_examples_jupyter.zip>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

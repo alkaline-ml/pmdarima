@@ -1,0 +1,12 @@
+﻿:mod:`pmdarima.datasets`.load_gasoline
+===================================================
+
+.. currentmodule:: pmdarima.datasets
+
+.. autofunction:: load_gasoline
+
+.. include:: pmdarima.datasets.load_gasoline.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

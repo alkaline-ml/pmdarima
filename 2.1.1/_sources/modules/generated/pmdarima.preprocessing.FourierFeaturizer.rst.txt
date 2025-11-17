@@ -1,0 +1,16 @@
+﻿:mod:`pmdarima.preprocessing`.FourierFeaturizer
+======================================================
+
+.. currentmodule:: pmdarima.preprocessing
+
+.. autoclass:: FourierFeaturizer
+
+   
+   .. automethod:: __init__
+   
+
+.. include:: pmdarima.preprocessing.FourierFeaturizer.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

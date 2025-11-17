@@ -1,0 +1,107 @@
+
+
+.. _sphx_glr_auto_examples_arima:
+
+.. _arima_examples:
+
+ARIMA examples
+--------------
+
+Examples of how to use the :mod:`pmdarima.arima` module to fit timeseries
+models.
+
+.. raw:: html
+
+   <br/>
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can persist an ARIMA model to disk after fitting it. It can then be loaded back up and used to generate forecasts.">
+
+.. only:: html
+
+  .. image:: /auto_examples/arima/images/thumb/sphx_glr_example_persisting_a_model_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_arima_example_persisting_a_model.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Persisting an ARIMA model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the auto_arima function to select an optimal time series model. We&#x27;ll be fitting our model on the lynx dataset available in the datasets submodule.">
+
+.. only:: html
+
+  .. image:: /auto_examples/arima/images/thumb/sphx_glr_example_auto_arima_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_arima_example_auto_arima.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fitting an auto_arima model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how to add new ground truth observations to your model so that forecasting continues with respect to true, observed values. This also slightly updates the model parameters, taking several new steps from the existing model parameters.">
+
+.. only:: html
+
+  .. image:: /auto_examples/arima/images/thumb/sphx_glr_example_add_new_samples_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_arima_example_add_new_samples.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Adding new observations to your model</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" This example demonstrates how we can use the decompose function to extract the trend, seasonal, and random components of the time series and then plot them all using the decomposed_plot function. We&#x27;ll be plotting both additive and multiplicative examples of seasonality. To see the R equivalent that inspired this example go here.">
+
+.. only:: html
+
+  .. image:: /auto_examples/arima/images/thumb/sphx_glr_example_seasonal_decomposition_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_arima_example_seasonal_decomposition.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Seasonal decomposition of your time-series</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/arima/example_persisting_a_model
+   /auto_examples/arima/example_auto_arima
+   /auto_examples/arima/example_add_new_samples
+   /auto_examples/arima/example_seasonal_decomposition
+

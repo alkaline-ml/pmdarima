@@ -1,0 +1,16 @@
+﻿:mod:`pmdarima.preprocessing`.DateFeaturizer
+===================================================
+
+.. currentmodule:: pmdarima.preprocessing
+
+.. autoclass:: DateFeaturizer
+
+   
+   .. automethod:: __init__
+   
+
+.. include:: pmdarima.preprocessing.DateFeaturizer.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

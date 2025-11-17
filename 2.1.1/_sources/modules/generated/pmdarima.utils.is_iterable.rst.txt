@@ -1,0 +1,12 @@
+﻿:mod:`pmdarima.utils`.is_iterable
+==============================================
+
+.. currentmodule:: pmdarima.utils
+
+.. autofunction:: is_iterable
+
+.. include:: pmdarima.utils.is_iterable.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

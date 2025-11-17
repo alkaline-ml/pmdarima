@@ -1,0 +1,12 @@
+﻿:mod:`pmdarima.model_selection`.cross_val_predict
+==============================================================
+
+.. currentmodule:: pmdarima.model_selection
+
+.. autofunction:: cross_val_predict
+
+.. include:: pmdarima.model_selection.cross_val_predict.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

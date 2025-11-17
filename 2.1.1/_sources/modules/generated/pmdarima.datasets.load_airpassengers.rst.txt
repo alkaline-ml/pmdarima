@@ -1,0 +1,12 @@
+﻿:mod:`pmdarima.datasets`.load_airpassengers
+========================================================
+
+.. currentmodule:: pmdarima.datasets
+
+.. autofunction:: load_airpassengers
+
+.. include:: pmdarima.datasets.load_airpassengers.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

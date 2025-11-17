@@ -1,0 +1,12 @@
+﻿:mod:`pmdarima.datasets`.load_sunspots
+===================================================
+
+.. currentmodule:: pmdarima.datasets
+
+.. autofunction:: load_sunspots
+
+.. include:: pmdarima.datasets.load_sunspots.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
