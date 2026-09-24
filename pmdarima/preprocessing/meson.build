@@ -5,3 +5,4 @@ py.install_sources(
 
 subdir('endog')
 subdir('exog')
+subdir('tests')
