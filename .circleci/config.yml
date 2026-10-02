@@ -92,8 +92,6 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: cp310
-      - attach_workspace:
           at: cp311
       - attach_workspace:
           at: cp312
@@ -101,15 +99,17 @@ jobs:
           at: cp313
       - attach_workspace:
           at: cp314
+      - attach_workspace:
+          at: cp315
       - run:
           name: Collect all wheels into dist directory
           command: |
             mkdir -p dist
-            cp cp310/wheelhouse/* dist/ || true
             cp cp311/wheelhouse/* dist/ || true
             cp cp312/wheelhouse/* dist/ || true
             cp cp313/wheelhouse/* dist/ || true
             cp cp314/wheelhouse/* dist/ || true
+            cp cp315/wheelhouse/* dist/ || true
       - run:
           name: Deploy to PyPI
           command: |
@@ -143,18 +143,18 @@ workflows:
             name: build-linux-x86-cp<< matrix.python-version >>
             matrix:
               parameters:
-                python-version: ["310", "311", "312", "313", "314"]
+                python-version: ["311", "312", "313", "314", "315"]
             filters: *test-filters
         - build-doc:
             filters: *test-filters
         - testing-passed:
             requires:
                 - lint
-                - build-linux-x86-cp310
                 - build-linux-x86-cp311
                 - build-linux-x86-cp312
                 - build-linux-x86-cp313
                 - build-linux-x86-cp314
+                - build-linux-x86-cp315
                 - build-doc
             filters: *test-filters
 
