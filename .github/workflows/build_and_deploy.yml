@@ -38,7 +38,7 @@ jobs:
 
       # Python interpreter used by cibuildwheel, but it uses a different one internally
       - name: Setting up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
