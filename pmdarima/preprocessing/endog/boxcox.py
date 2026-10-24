@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from scipy import stats
+from scipy.special import boxcox, inv_boxcox
 
-import numpy as np
 import warnings
 
 from ...compat import check_is_fitted
@@ -121,9 +121,7 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
                 warnings.warn(msg, UserWarning)
             y[neg_mask] = self.floor
 
-        if lam1 == 0:
-            return np.log(y), exog
-        return (y ** lam1 - 1) / lam1, exog
+        return boxcox(y, lam1), exog
 
     def inverse_transform(self, y, X=None):
         """Inverse transform a transformed array
@@ -157,10 +155,4 @@ class BoxCoxEndogTransformer(BaseEndogTransformer):
         lam2 = self.lam2_
 
         y, exog = self._check_y_X(y, X)
-        if lam1 == 0:
-            return np.exp(y) - lam2, exog
-
-        numer = y * lam1  # remove denominator
-        numer += 1.  # add 1 back to it
-        de_exp = numer ** (1. / lam1)  # de-exponentiate
-        return de_exp - lam2, exog
+        return inv_boxcox(y, lam1) - lam2, exog

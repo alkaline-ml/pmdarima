@@ -4,6 +4,7 @@ import numpy as np
 from numpy.testing import assert_array_almost_equal
 from scipy import stats
 import pytest
+from decimal import Decimal, localcontext
 
 from pmdarima.compat.pytest import pytest_error_str
 from pmdarima.preprocessing import BoxCoxEndogTransformer
@@ -38,6 +39,40 @@ def test_invertible_when_lambda_is_0():
     y_t, _ = trans.fit_transform(y)
     y_prime, _ = trans.inverse_transform(y_t)
     assert_array_almost_equal(y, y_prime)
+
+
+@pytest.mark.parametrize('lmbda', [1e-20, -1e-20, 1e-8, -1e-8, 0., .5])
+@pytest.mark.parametrize('shift', [0., 2.])
+def test_boxcox_precision_near_zero(lmbda, shift):
+    y = np.array([.25, 1., 4., 10.])
+    original = y.copy()
+    trans = BoxCoxEndogTransformer(lmbda=lmbda, lmbda2=shift)
+    actual, _ = trans.fit_transform(y)
+    with localcontext() as ctx:
+        ctx.prec = 80
+        lam = Decimal(str(lmbda))
+        logs = [Decimal(str(value + shift)).ln() for value in y]
+        expected = [float(((lam * log).exp() - 1) / lam)
+                    if lam else float(log) for log in logs]
+    np.testing.assert_allclose(actual, expected, rtol=2e-13, atol=1e-14)
+    np.testing.assert_array_equal(y, original)
+
+
+@pytest.mark.parametrize('lmbda', [1e-20, -1e-20, 1e-8, -1e-8, 0., .5])
+@pytest.mark.parametrize('shift', [0., 2.])
+def test_inverse_boxcox_precision_near_zero(lmbda, shift):
+    y = np.array([-.5, 0., .5, 1.])
+    original = y.copy()
+    trans = BoxCoxEndogTransformer(lmbda=lmbda, lmbda2=shift).fit([1., 2.])
+    actual, _ = trans.inverse_transform(y)
+    with localcontext() as ctx:
+        ctx.prec = 80
+        lam = Decimal(str(lmbda))
+        values = [Decimal(str(value)) for value in y]
+        expected = [float(((1 + lam * value).ln() / lam).exp()) - shift
+                    if lam else float(value.exp()) - shift for value in values]
+    np.testing.assert_allclose(actual, expected, rtol=2e-13, atol=1e-14)
+    np.testing.assert_array_equal(y, original)
 
 
 def test_value_error_on_neg_lambda():
