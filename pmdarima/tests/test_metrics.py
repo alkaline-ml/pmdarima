@@ -22,3 +22,15 @@ import pytest
 def test_smape(actual, forecasted, expected):
     err = smape(actual, forecasted)
     assert np.allclose(expected, err)
+
+
+@pytest.mark.parametrize('actual,forecasted,expected', [
+    ([0., 0.], [0., 0.], 0.),
+    ([0., 1.], [0., 2.], 100. / 3),
+    ([0., 1.], [1., 1.], 100.),
+    ([-1., 0.], [0., 0.], 100.),
+])
+def test_smape_zero_values(actual, forecasted, expected):
+    with np.errstate(divide='raise', invalid='raise'):
+        actual_score = smape(actual, forecasted)
+    assert actual_score == pytest.approx(expected)

@@ -18,6 +18,9 @@ def smape(y_true, y_pred):
     Where a perfect SMAPE score is 0.0, and a higher score indicates a higher
     error rate.
 
+    Observations where both the actual and forecast are zero contribute zero
+    error to the average.
+
     Parameters
     ----------
     y_true : array-like, shape=(n_samples,)
@@ -56,4 +59,7 @@ def smape(y_true, y_pred):
         preserve_series=False,
     )
     abs_diff = np.abs(y_pred - y_true)
-    return np.mean((abs_diff * 200 / (np.abs(y_pred) + np.abs(y_true))))
+    denominator = np.abs(y_pred) + np.abs(y_true)
+    errors = np.divide(abs_diff * 200, denominator,
+                       out=np.zeros_like(abs_diff), where=denominator != 0)
+    return np.mean(errors)
