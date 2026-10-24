@@ -467,6 +467,7 @@ class Pipeline(BaseEstimator):
         conf_ints = None
         if return_conf_int:
             y_pred, conf_ints = y_pred
+            conf_ints = conf_ints.copy()
 
         # step through transformers in the reverse order
         for name, transformer in self.steps_[::-1]:
