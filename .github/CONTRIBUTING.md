@@ -56,7 +56,7 @@ There are only a handful of core contributors to the `pmdarima` project, so any 
 Start by looking for the `help wanted` or `good first issue` tags to help you dive in.
 
 #### Developing Locally
-* To build `pmdarima` from source, you will require `cython>=0.29` and `gcc` (Mac/Linux) or `MinGW` (Windows).
+* To build `pmdarima` from source, you will require `cython>=0.29` and `gcc` (Mac/Linux) or Visual Studio / Build Tools for Visual Studio with the C++ workload (Windows).
 * _Always_ use a feature branch
 * Be sure to add tests for any new functionality you create
 * Make sure your change doesn't break anything else by running the test suite using one of the following:
