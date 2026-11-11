@@ -127,7 +127,8 @@ with open('model.pkl', 'rb') as pkl:
 
 If a wheel doesn't exist for your platform, you can still `pip install` and it
 will build from the source distribution tarball, however you'll need `cython>=0.29`
-and `gcc` (Mac/Linux) or `MinGW` (Windows) in order to build the package from source.
+and `gcc` (Mac/Linux) or Visual Studio / Build Tools for Visual Studio with the C++
+workload (Windows) in order to build the package from source.
 
 Note that legacy versions (<1.0.0) are available under the name
 "`pyramid-arima`" and can be pip installed via:

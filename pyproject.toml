@@ -94,6 +94,10 @@ Repository = "https://github.com/alkaline-ml/pmdarima"
 "Bug Tracker" = "https://github.com/alkaline-ml/pmdarima/issues"
 Download = "https://pypi.org/project/pmdarima/#files"
 
+[tool.meson-python.args]
+# On Windows, build with MSVC even if another compiler (e.g. MinGW gcc) is on PATH.
+setup = ["--vsenv"]
+
 [tool.pytest.ini_options]
 testpaths = ["pmdarima"]
 filterwarnings = [

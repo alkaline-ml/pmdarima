@@ -59,8 +59,8 @@ you can always build it from the git source. First clone it from Git:
     $ git clone https://github.com/alkaline-ml/pmdarima.git
     $ cd pmdarima
 
-Building the package will require ``gcc`` (unix) or a Windows equivalent, like
-``MinGW``. To build in development mode (for running unit tests):
+Building the package will require ``gcc`` (unix) or, on Windows, Visual Studio or
+Build Tools for Visual Studio with the C++ workload. To build in development mode (for running unit tests):
 
 .. code-block:: bash
 

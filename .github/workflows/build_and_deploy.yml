@@ -21,7 +21,15 @@ jobs:
     strategy:
       matrix:
         python3-minor-version: [10, 11, 12, 13, 14]
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest, windows-11-arm]
+        exclude:
+          # statsmodels has no Windows ARM64 wheels before Python 3.13
+          - os: windows-11-arm
+            python3-minor-version: 10
+          - os: windows-11-arm
+            python3-minor-version: 11
+          - os: windows-11-arm
+            python3-minor-version: 12
     defaults:
       run:
         shell: bash
@@ -64,10 +72,10 @@ jobs:
           # TODO: Move Linux x86_64 builds to GHA?
           CIBW_ARCHS_LINUX: "aarch64"
           CIBW_ARCHS_MACOS: "x86_64 arm64"
-          CIBW_ARCHS_WINDOWS: "AMD64"
+          CIBW_ARCHS_WINDOWS: "auto64"
           CIBW_BEFORE_TEST: pip install .[test]
           CIBW_BUILD: "${{ env.PYTHON_EXECUTABLE }}-*"
-          CIBW_ENVIRONMENT: CC=gcc
+          CIBW_ENVIRONMENT_LINUX: CC=gcc
           CIBW_ENVIRONMENT_MACOS: PMD_MPL_BACKEND=TkAgg PYTHON_CROSSENV=true
           CIBW_ENVIRONMENT_PASS_LINUX: GITHUB_REF
           # No support for pypy or musl
